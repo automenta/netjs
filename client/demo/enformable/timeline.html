@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Fukushima Timeline</title>
+		
+	    <script src="http://code.jquery.com/jquery.min.js"></script>
+	    <script src="/netention.js"></script> 
+		<script src="/spacegraph.chronozoom.js"></script> 
+
+	    <link type="text/css" rel="stylesheet" href="/chronozoom/Styles/cz.css"/>
+    	<link type="text/css" rel="stylesheet" href="/chronozoom/Styles/axis.css"/>
+
+
+		<style>
+		body {
+    		overflow: hidden;
+		}
+		
+		</style>
+		<script>		
+			$(document).ready(function() {
+				initNetention(function() {
+					initCZ(function() {
+						
+						var path = 'enformable-fukushima-timeline.json';
+						$.getJSON(path, function(data) {
+							graphCZ('axis', 'vc', function(root) {							
+								return graphEnformableTimelineCZ(data.events, 512, root);
+							});								
+						});				
+					});
+				});
+			});
+		
+		</script>
+	</head>
+		
+	<body>
+	    <div id="axis" style="width: 100%; height: 60px; background-color: black">
+	    </div>
+	    <div id="vc" style="background-image:url('/chronozoom/Images/Blueprint_Paper.jpg'); width: 100%; height: 100%; position: fixed">
+	        <div id="layerContents">
+	        </div>
+	    </div>
+	</body>
+</html>

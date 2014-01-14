@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+        <link rel='stylesheet' type='text/css' href='oshw.css' media='screen' />
+
+        <script src="/lib/jquery/jquery.js"></script>
+        <script src="/netention.js"></script> 
+
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js" type="text/javascript"></script>
+
+	<script type="text/javascript" src="/lib/slateboxjs/raphael/raphael.js"></script>
+
+	<script type="text/javascript" src="/lib/slateboxjs/slatebox.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/slatebox.slate.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/slatebox.node.js"></script>
+
+	<script type="text/javascript" src="/lib/slateboxjs/raphael/raphael.el.tooltip.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/raphael/raphael.el.loop.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/raphael/raphael.el.style.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/raphael/raphael.button.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/raphael/raphael.fn.connection.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/raphael/raphael.fn.objects.js"></script>
+
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.editor.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.shapes.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.menu.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.toolbar.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.context.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.colorpicker.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.links.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.connectors.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.relationships.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.images.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.template.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/node/Slatebox.node.resize.js"></script>
+
+	<script type="text/javascript" src="/lib/slateboxjs/spinner.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/emile/emile.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/notify.js"></script>
+
+	<script type="text/javascript" src="/lib/slateboxjs/slate/Slatebox.slate.canvas.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/slate/Slatebox.slate.message.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/slate/Slatebox.slate.multiselection.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/slate/Slatebox.slate.nodes.js"></script>
+
+	<script type="text/javascript" src="/lib/slateboxjs/slate/Slatebox.slate.zoomSlider.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/slate/Slatebox.slate.keyboard.js"></script>
+	<script type="text/javascript" src="/lib/slateboxjs/slate/Slatebox.slate.birdseye.js"></script>
+
+
+    <script>
+        (function ($, $s) {
+            $(document).ready(function(){
+                netention(function(self) {
+
+                var log = [], startTime = Math.round(new Date().getTime() / 1000);
+
+                function upd() {
+                    Slatebox.el("txtSlateJson").value = _mainSlate.exportJSON();
+                    Slatebox.el("txtSlateLastUpdated").innerHTML = "last updated <b>" + new Date().toString();
+                };
+
+
+                var mainSlate = $s.slate({
+                    id: 'firstSlateExample' //slate with the same ids can collaborate together.
+                    , container: 'slate'
+                    , viewPort: { width: 50000, height: 50000, allowDrag: true, left: 5000, top: 5000 }
+                    , showZoom: true
+                    , showBirdsEye: false
+                    , showStatus: false
+                    , showMultiSelect: false
+                    , onSlateChanged: function (subscriberCount) {
+                        upd();
+                    }
+                    ,nodeDoubleClicked: function(n) {
+                      alert('double clicked: ' + n);  
+                    }
+                    , collaboration: {
+                        allow: false
+/*                        , showPanel: false
+                        , url: 'http://slatebox.com'
+                        , jsonp: true
+                        , userName: "Tester"
+                        , userIP: 1
+                        , userProfile: ''
+                        , callbacks: {
+                            onCollaboration: function (name, msg) {
+                                var secs = Math.round(new Date().getTime() / 1000) - startTime;
+                                log.push(secs + " secs ago - " + name + ": " + msg.toLowerCase());
+                                Slatebox.el("slateMessage").innerHTML = log.reverse().join('<br/>');
+                                startTime = Math.round(new Date().getTime() / 1000);
+                                upd();
+                            }
+                        }
+*/
+
+                    }
+                }).canvas.init({ imageFolder: "/lib/slateboxjs/cursors/" });
+
+                var nodes = [ ];
+                
+                var green = '90-#ADD8C7-#a9f9b9';
+                var blue = '90-#ADC7D8-#b9b9ff';
+                var red = '90-#D8ADC7-#ffb9b9';
+                
+                function addNode(label, bgcolor, x, y) {
+                    nodes.push( $s.node({
+                        id: uuid(), 
+                        text: label,
+                        xPos: x, 
+                        yPos: y, 
+                        width: 80, 
+                        height: 40, 
+                        vectorPath: 'roundedrectangle', 
+                        backgroundColor: bgcolor, 
+                        lineColor: "black", 
+                        lineWidth: 4, 
+                        allowDrag: true, 
+                        allowMenu: true, 
+                        allowContext: true     
+                    }));
+                }
+                addNode('Gift', red, 5000, 5060);
+                addNode('Steel plate', blue, 5090, 5120);
+                addNode('Sawing', green, 5190, 5120);
+                addNode('Dropouts', blue, 5290, 5120);
+                addNode('Compwrapping', green, 5390, 5120);
+                addNode('Bamboo Frame', blue, 5490, 5120);
+                addNode('Hemp Fiber', blue, 5290, 5060);
+                
+                mainSlate.nodes.addRange(nodes);
+                //nodes[1].relationships.addParent(nodes[0], {});
+                nodes[1].relationships.addAssociation(nodes[0], {});
+                nodes[2].relationships.addAssociation(nodes[1], {});
+                mainSlate.init();
+              });
+          });
+        })(jQuery, new Slatebox());
+        
+    </script>
+</head>
+
+<body>
+    <div id="slateContainer">
+        <div id="slate">
+        </div>
+	<!--
+        <div id="slateJson">
+            <p>
+                Current JSON (can be used to save slate to a user's account at Slatebox.com)</p>
+            <textarea id='txtSlateJson'></textarea>
+            <div id="txtSlateLastUpdated">
+            </div>
+        </div>
+	-->
+    </div>
+    <a href="https://docs.google.com/presentation/d/1aBHJ1FS5oM5HHn5SyrjhqdF9bJNdBF6jz65D7divds8/edit#slide=id.gdda00e27_015">Presentation</a>
+    
+    <!--  <div id="slateMessage"></div> -->
+
+</body>
+</html>

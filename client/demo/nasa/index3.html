@@ -1,0 +1,169 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <script src="http://openlayers.org/dev/OpenLayers.js"></script>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.0.8/d3.min.js"></script>
+    <script src="d3-timeline.js"></script>
+    <script type="text/javascript" src="Cesium/Cesium.js"></script>
+
+    <script type="text/javascript">
+
+
+	function initMoon() {
+	    var widget = new Cesium.CesiumWidget('earthmap');
+
+	    var layers = widget.centralBody.getImageryLayers();
+	    layers.removeAll();
+
+	    var blackMarble = layers.addImageryProvider(new Cesium.WebMapServiceImageryProvider({
+		url : 'http://webmap.lroc.asu.edu/',
+		layers : 'luna_clem750',
+	//	layers: 'luna_wac_dtm',
+	//	layers: 'mars_viking',
+
+		maximumLevel : 8,
+		credit : 'Luna (Clementine 750 @ ASU.edu)'
+	    }));
+	    blackMarble.alpha = 1.0;
+	    blackMarble.brightness = 1.0;
+	}
+
+	function initMars() {
+	 	
+	    var widget = new Cesium.CesiumWidget('moonmap');
+
+	    var layers = widget.centralBody.getImageryLayers();
+	    layers.removeAll();
+
+	    var blackMarble = layers.addImageryProvider(new Cesium.WebMapServiceImageryProvider({
+		url : 'http://webmap.lroc.asu.edu/',
+	//	layers : 'luna_clem750',
+	//	layers: 'luna_wac_dtm',
+		layers: 'mars_viking',
+
+		maximumLevel : 8,
+		credit : 'Mars (Viking)'
+	    }));
+	    blackMarble.alpha = 1.0;
+	    blackMarble.brightness = 1.0;
+
+
+	}
+
+	function initTimeline() {
+		var testData = [
+		  {label: "person a", times: [
+		    {"starting_time": 1355752800000, "ending_time": 1355759900000}, 
+		    {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
+		  {label: "person b", times: [
+		    {"starting_time": 1355759910000, "ending_time": 1355761900000}]},
+		  {label: "person c", times: [
+		    {"starting_time": 1355761910000, "ending_time": 1355763910000}]},
+		  ];
+
+		var chart = d3.timeline();
+
+		var svg = d3.select("#timeline").append("svg").attr("width", 500)
+		  .datum(testData).call(chart);
+
+	}
+
+        function init(){
+		$(document).ready(function() {
+			initMoon();
+			initMars();
+			initTimeline();
+		});
+        }
+    </script>
+	<style>
+		body {
+			background-color: black;
+			font-family: Arial, sans;
+			color: white;
+		}
+		.cesium-widget canvas {
+			height: 100%;
+			width: 100%;
+		}
+		#earthmap, #moonmap, #menubar, #earthstat, #moonstat, #spacestat, #timeline {
+			position: fixed;
+		}
+		#earthmap, #moonmap {
+			width: 50%;
+			height: 60%;
+			margin: 5px;	
+			top: 0;
+		}
+		#earthmap {
+			left: 0;
+		}
+		#moonmap {
+			right: 0;
+		}
+		#menubar {
+			width: 100%;
+			bottom: 0;	
+		}
+		#earthstat, #moonstat, #spacestat {
+			margin-top: 1em;
+			top: 60%;
+			height: 15%;
+			width: 33%;
+			background-color: gray; 
+			color: white;
+		}
+		#earthstat { left: 0; }
+		#spacestat { left: 35%; width: 30%; text-align: center; }
+		#moonstat { right: 0; text-align: right; }
+		#timeline {
+			top: 75%;
+			height: 12%;
+			left: 0;
+			width: 100%;
+			background-color: #aaa;
+			text-align: center;			
+		}
+
+		
+		#menubar button { font-size: 130%; }
+		#menubar img { height: 2em; margin-bottom: -0.3em; }
+
+	</style>
+  </head>
+  <body onload="init()">
+
+    	<div id="earthmap"></div>
+	<div id="moonmap"></div>
+
+	<div id="earthstat">
+		<b>Lunar Industry</b><br/>
+		Factories - SpacePorts - Income - Robots
+	</div>
+	<div id="spacestat">
+		<b>Space Transport</b><br/>
+		Flights - Launches - Landings - Satellites - Solar Weather
+	</div>
+	<div id="moonstat">
+		<b>Mars Industry</b><br/>
+		Factories - SpacePorts - Income - Robots
+	</div>
+	<div id="timeline">
+
+	</div>
+
+    	<div id="menubar">
+		<img src="/theme/nasa-logo.gif"/>
+		<button>Build</button>
+		<button>Budget</button>
+		<button>Equipment</button>
+	</div>
+
+  </body>
+</html>
+

@@ -1,0 +1,16 @@
+@import url(http://fonts.googleapis.com/css?family=Play);
+
+@import url("/theme/dark.css");
+body {
+    background-image: url('/theme/n$a/logo.jpg'); 
+    background-attachment: fixed;
+    background-size: contain;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;    
+	background-color: black;
+	font-family: 'Play', sans-serif;
+}
+
+

@@ -1,0 +1,25 @@
+
+@import url("/theme/bright.css");
+
+body {
+    background-image: url('/theme/rainforest/rainforest.jpg'); 
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;    
+    
+}
+
+.objectView, #focus {
+    padding: 0.25em;
+    margin-bottom: 1.8em;
+    background-image: url('/theme/rainforest/mycelium-light.jpg');
+    border-left: 5px solid rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+}
+
+#ViewMenu {
+    background-color: #b1d34d;
+}

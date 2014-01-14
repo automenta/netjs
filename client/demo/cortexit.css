@@ -1,0 +1,41 @@
+.pHidden {
+	display: none;
+}
+
+
+.cortexitWrap {
+	background-color: gray;
+	padding: 0.5em;
+	padding-bottom: 2em;
+}
+
+.cortexitContent {
+	min-height: 20px;
+	background-color: black;
+	color: white;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+.cortexitMenu {
+	float: right;
+	color: white;
+	font-size: 2em;
+	font-family: Arial, sans;	
+}
+.cortexitSubMenu {
+	float: left;
+	color: white;
+	font-size: 1em;
+}
+.cortexitMenu span {
+	margin-left: 0.25em;
+	margin-right: 0.25em;
+}
+.cortexitMenuButton, .cortexitFontSizer {
+	cursor: pointer;
+	color: white;
+	text-decoration: none;
+}
+.cortexitMenuButton:hover { color: yellow; }
+.cortexitFontSizer:hover { color: orange; }

@@ -1,0 +1,37 @@
+@import url("/theme/bright.css");
+
+body {
+    background-image: url('/theme/scroogle/scroogle-faded.jpg'); 
+    background-attachment: fixed;
+    background-position: center bottom;
+    background-repeat: repeat;
+    margin: 0;
+    padding: 0;    
+
+}
+#ViewMenu {
+    background-color: #176dee;
+}
+.ui-widget-content {
+	background: white;
+	border: 3px solid #ccc;
+}
+
+#ViewControls label {
+	font-weight: bold;
+	color: black;
+	border: white;
+}
+#ViewControls form label:nth-child(2) {	background: #ffb403; }
+#ViewControls form label:nth-child(4) { background: #d33f2a; }
+#ViewControls form label:nth-child(6) {	background: #009b58; }
+#ViewControls form label:nth-child(8) {	background: #ffb403; }
+#ViewControls form label:nth-child(10) { background: #d33f2a; }
+#ViewControls form label:nth-child(12) { background: #009b58; }
+#ViewControls form label:nth-child(14) {	background: #ffb403; }
+#ViewControls form label:nth-child(16) { background: #d33f2a; }
+#ViewControls form label:nth-child(18) {	background: #009b58; }
+
+.ui-state-active {
+	color: whtie !important;
+}

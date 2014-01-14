@@ -1,0 +1,1 @@
+/* http://wikimapia.org/api/ */

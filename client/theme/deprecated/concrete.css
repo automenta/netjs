@@ -1,0 +1,42 @@
+/* 
+    Document   : terminal-green
+    Created on : Nov 10, 2010, 6:15:36 AM
+    Author     : me
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+@import url("default-black.css");
+@import url(http://fonts.googleapis.com/css?family=Gochi+Hand);
+
+#_Panel {
+    color: #d2a2F2;
+    font-family: 'Gochi Hand', cursive;
+}
+
+#_Panel a, #_Panel a:visited {
+    color: #bbbbff;
+    font-family: 'Gochi Hand', cursive;
+}
+
+body {
+    background: url('/themes/image/concrete.jpg')  no-repeat center center fixed;
+    background-size: cover;    
+    height: 100%;
+}
+
+Status {
+    color: white;
+}
+
+
+#Status a {
+    font-family: 'Gochi Hand', cursive;
+}
+#_Font a {
+    font-family: 'Gochi Hand', cursive;
+}

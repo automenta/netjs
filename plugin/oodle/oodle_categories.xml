@@ -1,0 +1,983 @@
+<!-- http://developer.oodle.com/files/xml/oodle_categories.xml -->
+
+
+    <categories>
+        <root name="Cars & Vehicles">
+            <category url="vehicle" name="Cars & Vehicles"/>
+            <category url="vehicle/airplane" name="Airplanes & Aviation"/>
+            <category url="vehicle/boat" name="Boats"/>
+            <category url="vehicle/boat/fishing" name="Fishing Boats"/>
+            <category url="vehicle/boat/jetski" name="JetSkis & Watercraft"/>
+            <category url="vehicle/boat/motor" name="Motorboats & Powerboats"/>
+            <category url="vehicle/boat/sailboat" name="Sailboats"/>
+            <category url="vehicle/boat/yacht" name="Yachts"/>
+            <category url="vehicle/car" name="Cars"/>
+            <category url="vehicle/car/convertible" name="Convertibles"/>
+            <category url="vehicle/car/coupe" name="Coupes"/>
+            <category url="vehicle/car/hybrid" name="Hybrids"/>
+            <category url="vehicle/car/mini_van" name="Mini-Vans"/>
+            <category url="vehicle/car/sedan" name="Sedans"/>
+            <category url="vehicle/car/station_wagon" name="Station Wagons"/>
+            <category url="vehicle/car/suv" name="SUVs"/>
+            <category url="vehicle/car/truck" name="Trucks"/>
+            <category url="vehicle/car/van" name="Vans"/>
+            <category url="vehicle/commercial_truck" name="Commercial Trucks & Trailers"/>
+            <category url="vehicle/commercial_truck/auto_carrier" name="Auto Carrier Trucks"/>
+            <category url="vehicle/commercial_truck/bucket" name="Bucket Trucks"/>
+            <category url="vehicle/commercial_truck/cab_and_chassis" name="Truck Cabs & Chassis"/>
+            <category url="vehicle/commercial_truck/cabover" name="Cabover Trucks"/>
+            <category url="vehicle/commercial_truck/cabover/sleeper" name="Cabover Sleeper Trucks"/>
+            <category url="vehicle/commercial_truck/construction_vocational" name="Construction & Vocational Trucks"/>
+            <category url="vehicle/commercial_truck/conventional_sleeper" name="Conventional Sleeper Trucks"/>
+            <category url="vehicle/commercial_truck/crane" name="Crane Trucks"/>
+            <category url="vehicle/commercial_truck/day_cab" name="Day Cab Trucks"/>
+            <category url="vehicle/commercial_truck/dump" name="Dump Trucks"/>
+            <category url="vehicle/commercial_truck/expeditor_hot_shot" name="Expeditor & Hot Shot Trucks"/>
+            <category url="vehicle/commercial_truck/flatbed" name="Flatbed Trucks"/>
+            <category url="vehicle/commercial_truck/grain" name="Grain Trucks"/>
+            <category url="vehicle/commercial_truck/logging" name="Logging Trucks"/>
+            <category url="vehicle/commercial_truck/mixers" name="Mixer Trucks"/>
+            <category url="vehicle/commercial_truck/other" name="Other Commercial Trucks"/>
+            <category url="vehicle/commercial_truck/refridgerated" name="Refrigerated Trucks"/>
+            <category url="vehicle/commercial_truck/refuse" name="Refuse Trucks"/>
+            <category url="vehicle/commercial_truck/refuse/front_loading" name="Front-Loading Refuse Trucks"/>
+            <category url="vehicle/commercial_truck/refuse/rear_loading" name="Rear-Loading Refuse Trucks"/>
+            <category url="vehicle/commercial_truck/refuse/recycling" name="Recycling Trucks"/>
+            <category url="vehicle/commercial_truck/rollback" name="Rollback Trucks"/>
+            <category url="vehicle/commercial_truck/rolloff" name="Roll Off Trucks"/>
+            <category url="vehicle/commercial_truck/service_utility" name="Service & Utility Trucks"/>
+            <category url="vehicle/commercial_truck/severe_duty" name="Severe Duty Trucks"/>
+            <category url="vehicle/commercial_truck/tank" name="Tank Trucks"/>
+            <category url="vehicle/commercial_truck/tow" name="Tow Trucks"/>
+            <category url="vehicle/commercial_truck/trailer" name="Commercial Truck Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/beam" name="Beam Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/belt" name="Belt Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/car_carrier" name="Car Carrier Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/chassis" name="Chassis Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/container" name="Container Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/converter_dollies" name="Flip, Converter Dollies & Jeep Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/curtainside" name="Curtainside Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/drop_deck" name="Drop Deck Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/drop_deck/double" name="Double Drop Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/drop_deck/expandable" name="Expandable Drop Deck Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/drop_deck/expandable_double" name="Expandable Double Drop Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/dump" name="Dump Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/equipment" name="Equipment Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/flatbed" name="Flatbed Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/flatbed/expandable" name="Expandable Flatbed Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/grain" name="Grain Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/hopper" name="Hopper Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/livestock" name="Horse & Livestock Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/log" name="Log Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/lowboy" name="Lowboy Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/open_top" name="Open Top Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/other" name="Other Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/platform" name="Platform Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/reefer" name="Reefer Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/rolloff" name="Roll Off Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/specialty" name="Specialty Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/storage" name="Storage Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/tag" name="Tag Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/tank" name="Tank Trailers"/>
+            <category url="vehicle/commercial_truck/trailer/van" name="Van Trailers"/>
+            <category url="vehicle/commercial_truck/van" name="Van Trucks"/>
+            <category url="vehicle/commercial_truck/yard" name="Yard Trucks"/>
+            <category url="vehicle/heavy_equipment" name="Heavy Equipment Vehicles"/>
+            <category url="vehicle/motorcycle" name="Motorcycles"/>
+            <category url="vehicle/motorcycle/offroad" name="Dirt & Offroad Bikes"/>
+            <category url="vehicle/motorcycle/road" name="Road Motor Bikes"/>
+            <category url="vehicle/motorcycle/scooter" name="Scooters & Mopeds"/>
+            <category url="vehicle/other" name="Other Vehicles"/>
+            <category url="vehicle/parts" name="Vehicle Parts, Accessories & Storage"/>
+            <category url="vehicle/parts/airplane" name="Aviation Parts & Accessories"/>
+            <category url="vehicle/parts/airplane/accessories" name="Aviation Accessories"/>
+            <category url="vehicle/parts/airplane/parts" name="Aviation Parts"/>
+            <category url="vehicle/parts/airplane/storage" name="Aviation Storage"/>
+            <category url="vehicle/parts/atv" name="ATV Parts & Accessories"/>
+            <category url="vehicle/parts/boat" name="Boat Parts & Accessories"/>
+            <category url="vehicle/parts/boat/accessories" name="Boat Accessories"/>
+            <category url="vehicle/parts/boat/parts" name="Boat Motors & Parts"/>
+            <category url="vehicle/parts/boat/storage" name="Boat Storage"/>
+            <category url="vehicle/parts/car" name="Car & Truck Parts & Accessories"/>
+            <category url="vehicle/parts/car/accessories" name="Car & Truck Accessories"/>
+            <category url="vehicle/parts/car/parts" name="Car & Truck Parts"/>
+            <category url="vehicle/parts/motorcycle" name="Motorcycle Parts & Accessories"/>
+            <category url="vehicle/parts/rv" name="RV Parts & Accessories"/>
+            <category url="vehicle/parts/rv/accessories" name="RV Accessories"/>
+            <category url="vehicle/parts/rv/parts" name="RV Motors & Parts"/>
+            <category url="vehicle/parts/rv/spaces" name="RV Parks & Spaces"/>
+            <category url="vehicle/parts/snowmobile" name="Snowmobile Parts & Accessories"/>
+            <category url="vehicle/powersports" name="Power Sports"/>
+            <category url="vehicle/powersports/atv" name="ATVs"/>
+            <category url="vehicle/powersports/snowmobile" name="Snowmobiles"/>
+            <category url="vehicle/rv" name="RVs & Motor Homes"/>
+        </root>
+        <root name="Services">
+            <category url="service" name="Services"/>
+            <category url="service/adult" name="Adult Services"/>
+            <category url="service/adult/chat" name="Adult Chat"/>
+            <category url="service/adult/friend" name="Adult Friendships"/>
+            <category url="service/adult/other" name="Other Adult"/>
+            <category url="service/adult/psychic" name="Adult Psychics"/>
+            <category url="service/adult/relax" name="Adult Relaxation"/>
+            <category url="service/adult/work" name="Adult Work Opportunities"/>
+            <category url="service/car" name="Auto & Other Vehicle Services"/>
+            <category url="service/car/detailing" name="Auto Detailing & Cleaning"/>
+            <category url="service/car/oil_change" name="Auto Lube & Oil Change"/>
+            <category url="service/car/rental" name="Vehicles for Rent"/>
+            <category url="service/car/repair" name="Auto Repair"/>
+            <category url="service/car/tires" name="Auto Tire Services"/>
+            <category url="service/care" name="Child & Elderly Care Services"/>
+            <category url="service/care/child" name="Child Care"/>
+            <category url="service/care/child/babysitter" name="Babysitters"/>
+            <category url="service/care/child_safety" name="Child Safety Services"/>
+            <category url="service/care/elderly" name="Elderly Care"/>
+            <category url="service/care/nurse" name="Home Nurse"/>
+            <category url="service/cleaning" name="Cleaning Services"/>
+            <category url="service/cleaning/carpet" name="Carpet & Upholstery Cleaning"/>
+            <category url="service/cleaning/chimney" name="Chimney & Fireplace Cleaning"/>
+            <category url="service/cleaning/exterior" name="Exterior Home Cleaning"/>
+            <category url="service/cleaning/interior" name="Home Cleaning & Maid Services"/>
+            <category url="service/cleaning/junk" name="Removal of Junk or Building Materials"/>
+            <category url="service/cleaning/window" name="Window Cleaning"/>
+            <category url="service/coupon" name="Coupons & Offers"/>
+            <category url="service/coupon/art" name="Art and Collectibles"/>
+            <category url="service/coupon/book" name="Books and Magazines"/>
+            <category url="service/coupon/car" name="Automotive"/>
+            <category url="service/coupon/clothes" name="Clothing and Accessories"/>
+            <category url="service/coupon/dining" name="Dining"/>
+            <category url="service/coupon/education" name="Education and Learning"/>
+            <category url="service/coupon/electronics" name="Computers and Electronics"/>
+            <category url="service/coupon/entertainment" name="Entertainment"/>
+            <category url="service/coupon/food" name="Groceries"/>
+            <category url="service/coupon/gift" name="Gifts, Flowers and Gourmet Foods"/>
+            <category url="service/coupon/health" name="Health and Beauty"/>
+            <category url="service/coupon/home" name="Home and Garden"/>
+            <category url="service/coupon/kid" name="Baby and Kids"/>
+            <category url="service/coupon/office" name="Office and Business"/>
+            <category url="service/coupon/other" name="Other"/>
+            <category url="service/coupon/pet" name="Pet Products and Services"/>
+            <category url="service/coupon/phone" name="Phone and Internet Services"/>
+            <category url="service/coupon/service" name="Services"/>
+            <category url="service/coupon/sport" name="Sports and Fitness"/>
+            <category url="service/coupon/travel" name="Travel"/>
+            <category url="service/creative" name="Creative Services"/>
+            <category url="service/creative/design" name="Design Services"/>
+            <category url="service/creative/film" name="Film/Production Services"/>
+            <category url="service/creative/music" name="Recording Services"/>
+            <category url="service/creative/other" name="Other Creative"/>
+            <category url="service/creative/photo" name="Photographic Services"/>
+            <category url="service/education" name="Lessons & Classes"/>
+            <category url="service/education/art" name="Arts & Craft Lessons"/>
+            <category url="service/education/cooking" name="Cooking Classes"/>
+            <category url="service/education/dance" name="Dance Lessons"/>
+            <category url="service/education/driving" name="Driving Instruction"/>
+            <category url="service/education/language" name="Language Lessons"/>
+            <category url="service/education/music" name="Music Lessons"/>
+            <category url="service/education/other" name="Other Lessons & Classes"/>
+            <category url="service/education/school" name="Instruction Schools"/>
+            <category url="service/education/sports" name="Sports Lessons"/>
+            <category url="service/education/sports/golf" name="Golf Lessons"/>
+            <category url="service/education/tech" name="Technology Classes"/>
+            <category url="service/education/tutor" name="Private Instruction & Tutoring"/>
+            <category url="service/entertainment" name="Party & Entertainment Services"/>
+            <category url="service/entertainment/catering" name="Catering"/>
+            <category url="service/entertainment/event" name="Event Planners"/>
+            <category url="service/entertainment/kid" name="Kids Parties"/>
+            <category url="service/entertainment/music" name="Music & DJs"/>
+            <category url="service/entertainment/other" name="Other Party & Entertainment Services"/>
+            <category url="service/entertainment/rental" name="Party Rentals"/>
+            <category url="service/finance" name="Financial & Legal Services"/>
+            <category url="service/finance/accountant" name="Accounting & Bookkeeping"/>
+            <category url="service/finance/credit" name="Help with Credit"/>
+            <category url="service/finance/financial" name="Financial Advisors"/>
+            <category url="service/finance/insurance" name="Insurance"/>
+            <category url="service/finance/investments" name="Investment Services"/>
+            <category url="service/finance/loans" name="Financial Loans"/>
+            <category url="service/finance/loans/auto" name="Auto Loans"/>
+            <category url="service/finance/loans/home" name="Home Loans"/>
+            <category url="service/finance/other" name="Other Financial & Legal Services"/>
+            <category url="service/finance/tax" name="Tax Preparation"/>
+            <category url="service/food" name="Restaurants, Clubs & Food"/>
+            <category url="service/food/bar" name="Bars, Pubs & Clubs"/>
+            <category url="service/food/restaurant" name="Restaurants"/>
+            <category url="service/health" name="Health & Beauty Services"/>
+            <category url="service/health/alternative" name="Alternative Medicine"/>
+            <category url="service/health/art" name="Body Art"/>
+            <category url="service/health/chiropractor" name="Chiropractors"/>
+            <category url="service/health/counseling" name="Counseling"/>
+            <category url="service/health/fitness" name="Exercise & Fitness Services"/>
+            <category url="service/health/hair" name="Hair Care & Styling"/>
+            <category url="service/health/massage" name="Massage Services"/>
+            <category url="service/health/medical" name="Medical Care"/>
+            <category url="service/health/other" name="Other Health & Beauty Services"/>
+            <category url="service/health/pedicure" name="Manicure & Pedicure"/>
+            <category url="service/health/skin_care" name="Skin Care, Cosmetics & Tanning"/>
+            <category url="service/home" name="Home Repair & Maintenance"/>
+            <category url="service/home/appliance" name="Appliance Repair & Installation"/>
+            <category url="service/home/appliance/install" name="Appliance Installation"/>
+            <category url="service/home/appliance/repair" name="Appliance Repair or Service"/>
+            <category url="service/home/construction" name="Construction & Remodeling"/>
+            <category url="service/home/construction/addition" name="Home Additions"/>
+            <category url="service/home/construction/demolition" name="Demolition"/>
+            <category url="service/home/construction/new" name="New Home Construction"/>
+            <category url="service/home/construction/professional" name="Home Construction Professionals"/>
+            <category url="service/home/construction/professional/appraiser" name="Appraisers"/>
+            <category url="service/home/construction/professional/architect" name="Architects"/>
+            <category url="service/home/construction/professional/engineer" name="Engineers"/>
+            <category url="service/home/construction/professional/other" name="Other Construction Professionals"/>
+            <category url="service/home/construction/professional/survey" name="Land Surveyor"/>
+            <category url="service/home/construction/remodel" name="Home Remodels & Renovations"/>
+            <category url="service/home/construction/sheds" name="Sheds & Exterior Structures"/>
+            <category url="service/home/decor" name="Home Decorating Services"/>
+            <category url="service/home/door" name="Windows & Doors"/>
+            <category url="service/home/door/cover" name="Awning & Patio Cover Services"/>
+            <category url="service/home/door/door" name="Door Installation & Repair"/>
+            <category url="service/home/door/garage" name="Garage Door Installation & Repair"/>
+            <category url="service/home/door/locks_screens" name="Door Hardware, Locks & Screens"/>
+            <category url="service/home/door/window" name="Window Sales, Installation & Repair"/>
+            <category url="service/home/door/window/tinting" name="Window Protection & Tinting"/>
+            <category url="service/home/door/window/treatment" name="Window Treatment Services"/>
+            <category url="service/home/electrical" name="Electrical & Lighting Services"/>
+            <category url="service/home/electrical/electrical" name="Electrical Services"/>
+            <category url="service/home/electrical/generator" name="Generator Installation & Repair"/>
+            <category url="service/home/electrical/lighting" name="Lighting Design & Installation"/>
+            <category url="service/home/electrical/lighting/holiday" name="Holiday Lighting Services"/>
+            <category url="service/home/electrical/security" name="Home Security & Alarm Services"/>
+            <category url="service/home/floor" name="Flooring"/>
+            <category url="service/home/floor/carpet" name="Carpet Installation"/>
+            <category url="service/home/floor/concrete" name="Concrete Floors"/>
+            <category url="service/home/floor/rock" name="Brick & Stone Floors"/>
+            <category url="service/home/floor/sport" name="Sport Surfaces"/>
+            <category url="service/home/floor/tile" name="Tile Flooring"/>
+            <category url="service/home/floor/vinyl" name="Vinyl & Laminate Floors"/>
+            <category url="service/home/floor/wood" name="Hardwood Floors"/>
+            <category url="service/home/furniture" name="Furniture Repair & Upholstery"/>
+            <category url="service/home/furniture/repair" name="Furniture Repair"/>
+            <category url="service/home/furniture/upholstry" name="Upholstery"/>
+            <category url="service/home/handyman" name="Handyman Services"/>
+            <category url="service/home/heat" name="Heating & Cooling Services"/>
+            <category url="service/home/heat/ac" name="Air Conditioning & Cooling"/>
+            <category url="service/home/heat/central" name="Central Heating Systems"/>
+            <category url="service/home/heat/ducts" name="Ducts & Vents"/>
+            <category url="service/home/heat/fan" name="Fans"/>
+            <category url="service/home/heat/fireplace" name="Gas Fireplaces & Inserts"/>
+            <category url="service/home/heat/fuel" name="Fuel Delivery & Storage"/>
+            <category url="service/home/heat/furnace" name="Furnace, Boilers & Radiators"/>
+            <category url="service/home/heat/hvac" name="Other HVAC"/>
+            <category url="service/home/heat/radiant" name="Radiant Heat Systems"/>
+            <category url="service/home/heat/thermostat" name="Thermostats & Accessories"/>
+            <category url="service/home/heat/water" name="Water Heater Services"/>
+            <category url="service/home/other" name="Other Home Services"/>
+            <category url="service/home/other/disable" name="Home Disability Services"/>
+            <category url="service/home/other/green" name="Asbestos, Lead, Mold & Radon Services"/>
+            <category url="service/home/other/metal" name="Metal Work & Sign Makers"/>
+            <category url="service/home/other/pest_control" name="Pest Control"/>
+            <category url="service/home/other/recovery" name="Recovery Services"/>
+            <category url="service/home/other/rental" name="Home Service Rentals"/>
+            <category url="service/home/other/security" name="Home Security & Safety"/>
+            <category url="service/home/paint" name="Painting & Staining Services"/>
+            <category url="service/home/paint/exterior" name="Exterior Painting or Staining"/>
+            <category url="service/home/paint/interior" name="Interior Painting or Staining"/>
+            <category url="service/home/paint/removal" name="Paint Removal & Cleaning"/>
+            <category url="service/home/paint/special" name="Special Paint Finishes"/>
+            <category url="service/home/plumbing" name="Plumbing Services"/>
+            <category url="service/home/plumbing/drain" name="Drain Clearing"/>
+            <category url="service/home/plumbing/fire_sprinkler" name="Fire Sprinkler Systems"/>
+            <category url="service/home/plumbing/fixtures" name="Faucets, Fixtures & Pipes"/>
+            <category url="service/home/plumbing/other" name="Other Plumbing Related Services"/>
+            <category url="service/home/plumbing/pump" name="Plumbing Pump Services"/>
+            <category url="service/home/plumbing/septic" name="Septic & Sewer Systems"/>
+            <category url="service/home/plumbing/water_softener" name="Water Softening & Purification"/>
+            <category url="service/home/rock" name="Concrete, Stone & Brick"/>
+            <category url="service/home/rock/driveway" name="Driveways, Patios & Walks"/>
+            <category url="service/home/rock/fireplace" name="Chimney, Fireplace, Stove & BBQ"/>
+            <category url="service/home/rock/floor" name="Foundations"/>
+            <category url="service/home/rock/other" name="Other Concrete & Masonry Services"/>
+            <category url="service/home/roof" name="Roofing, Siding & Gutters"/>
+            <category url="service/home/roof/cleaning" name="Gutter Cleaning"/>
+            <category url="service/home/roof/gutter" name="Gutter Installation & Repair"/>
+            <category url="service/home/roof/new" name="Roof Sales & Installation"/>
+            <category url="service/home/roof/repair" name="Roof Repair"/>
+            <category url="service/home/roof/siding" name="Siding Installation & Repair"/>
+            <category url="service/home/roof/skylight" name="Skylight Installation & Repair"/>
+            <category url="service/home/wall" name="Wall & Ceiling Services"/>
+            <category url="service/home/wall/ceiling" name="Ceilings"/>
+            <category url="service/home/wall/drywall" name="Drywall & Plaster"/>
+            <category url="service/home/wall/insulation" name="Insulation"/>
+            <category url="service/home/wall/wallpaper" name="Wallpapering"/>
+            <category url="service/home/wood" name="Carpentry & Cabinets"/>
+            <category url="service/home/wood/cabinet" name="Cabinetry Services"/>
+            <category url="service/home/wood/closet" name="Closet Design & Installation"/>
+            <category url="service/home/wood/countertop" name="Countertops"/>
+            <category url="service/home/wood/finish" name="Finish Carpentry"/>
+            <category url="service/home/wood/frame" name="House Framing"/>
+            <category url="service/home/wood/stair" name="Stairs & Railings"/>
+            <category url="service/job" name="Career Services"/>
+            <category url="service/lawn" name="Lawn & Garden Services"/>
+            <category url="service/lawn/blacktop" name="Blacktop & Paving"/>
+            <category url="service/lawn/deck" name="Decks"/>
+            <category url="service/lawn/fence" name="Fences"/>
+            <category url="service/lawn/fountain" name="Fountains, Ponds & Water Features"/>
+            <category url="service/lawn/gardener" name="Lawn Care & Gardening"/>
+            <category url="service/lawn/landscape" name="Landscaping"/>
+            <category url="service/lawn/landscape/design" name="Design & Installation"/>
+            <category url="service/lawn/landscape/sprinkler" name="Sprinkler Systems"/>
+            <category url="service/lawn/other" name="Other Lawn & Garden Services"/>
+            <category url="service/lawn/rock" name="Hardscaping"/>
+            <category url="service/lawn/rock/patio" name="Outdoor Patios, Steps & Walkways"/>
+            <category url="service/lawn/rock/wall" name="Outdoor Walls & Retaining Walls"/>
+            <category url="service/lawn/snow_removal" name="Snow Removal"/>
+            <category url="service/lawn/tree" name="Tree & Shrub Service"/>
+            <category url="service/legal" name="Legal Services"/>
+            <category url="service/move" name="Moving & Storage Services"/>
+            <category url="service/move/hauler" name="Hauling"/>
+            <category url="service/move/mover" name="Moving"/>
+            <category url="service/move/storage" name="Storage"/>
+            <category url="service/other" name="Other Services"/>
+            <category url="service/other/special" name="Special Offers on Services"/>
+            <category url="service/pet" name="Pet & Animal Services"/>
+            <category url="service/pet/grooming" name="Washing & Grooming"/>
+            <category url="service/pet/kennel" name="Kennels"/>
+            <category url="service/pet/other" name="Other Pet Services"/>
+            <category url="service/pet/sitter" name="Pet Sitting"/>
+            <category url="service/pet/veterinarian" name="Veterinarians"/>
+            <category url="service/pet/walker" name="Dog Walking"/>
+            <category url="service/pool" name="Pool, Spa & Sauna Services"/>
+            <category url="service/pool/pool" name="Swimming Pools"/>
+            <category url="service/pool/pool/maintenance" name="Pool Maintenance"/>
+            <category url="service/pool/pool/new" name="Pool Sales & Installation"/>
+            <category url="service/pool/pool/repair" name="Pool Repair"/>
+            <category url="service/pool/sauna" name="Saunas"/>
+            <category url="service/pool/sauna/maintenance" name="Sauna Maintenance"/>
+            <category url="service/pool/sauna/new" name="Sauna Sales & Installation"/>
+            <category url="service/pool/sauna/repair" name="Sauna Repair"/>
+            <category url="service/pool/tub" name="Hot Tubs & Spas"/>
+            <category url="service/pool/tub/maintenance" name="Spa Maintenance"/>
+            <category url="service/pool/tub/new" name="Spa Sales & Installation"/>
+            <category url="service/pool/tub/repair" name="Spa Repair"/>
+            <category url="service/psychic" name="Metaphysical & Psychic Services"/>
+            <category url="service/real_estate" name="Real Estate Agents & Services"/>
+            <category url="service/real_estate/agent" name="Real Estate Agents & Brokers"/>
+            <category url="service/real_estate/appraiser" name="Appraisal Services"/>
+            <category url="service/real_estate/inspector" name="Home Inspectors"/>
+            <category url="service/real_estate/inspector/pest" name="Pest Inspectors"/>
+            <category url="service/real_estate/inspector/roof" name="Roof Inspectors"/>
+            <category url="service/real_estate/inspector/water" name="Waterproofing Inspectors"/>
+            <category url="service/real_estate/other" name="Other Real Estate Services"/>
+            <category url="service/real_estate/staging" name="Staging Services"/>
+            <category url="service/tech" name="Technical Repair & Services"/>
+            <category url="service/tech/audio_video" name="Audio & Video Setup & Repair"/>
+            <category url="service/tech/computer" name="Computer Setup & Repair"/>
+            <category url="service/tech/home_network" name="Home Networking Services"/>
+            <category url="service/tech/repair" name="Electronics Repair"/>
+            <category url="service/transportation" name="Travel & Transportation Services"/>
+            <category url="service/transportation/transportation" name="Transportation Services"/>
+            <category url="service/transportation/travel" name="Travel Services"/>
+        </root>
+        <root name="Tickets">
+            <category url="sale/tickets" name="Tickets"/>
+            <category url="sale/tickets/concert" name="Concert Tickets"/>
+            <category url="sale/tickets/group" name="Group Events"/>
+            <category url="sale/tickets/group/business_networking" name="Business & Networking Events"/>
+            <category url="sale/tickets/group/class_workshop" name="Classes & Workshops"/>
+            <category url="sale/tickets/group/conference_seminar" name="Conferences & Seminars"/>
+            <category url="sale/tickets/group/dance" name="Dance Events"/>
+            <category url="sale/tickets/group/festival" name="Festivals"/>
+            <category url="sale/tickets/group/food_wine" name="Food & Wine Events"/>
+            <category url="sale/tickets/group/free" name="Free Events"/>
+            <category url="sale/tickets/group/health_spiritual" name="Health & Spiritual Events"/>
+            <category url="sale/tickets/group/kids_family" name="Kids & Family Events"/>
+            <category url="sale/tickets/group/other" name="Other Events"/>
+            <category url="sale/tickets/group/sports_outdoors" name="Sports & Outdoor Events"/>
+            <category url="sale/tickets/other" name="Other Tickets"/>
+            <category url="sale/tickets/other/movie" name="Movie & Film Event Tickets"/>
+            <category url="sale/tickets/other/travel" name="Travel Tickets"/>
+            <category url="sale/tickets/sports" name="Sports Tickets"/>
+            <category url="sale/tickets/sports/auto_racing" name="Auto Racing Tickets"/>
+            <category url="sale/tickets/sports/baseball" name="Baseball Tickets"/>
+            <category url="sale/tickets/sports/basketball" name="Basketball Tickets"/>
+            <category url="sale/tickets/sports/boxing" name="Boxing Tickets"/>
+            <category url="sale/tickets/sports/cricket" name="Cricket Tickets"/>
+            <category url="sale/tickets/sports/football" name="Football Tickets"/>
+            <category url="sale/tickets/sports/golf" name="Golf Tickets"/>
+            <category url="sale/tickets/sports/hockey" name="Hockey Tickets"/>
+            <category url="sale/tickets/sports/horse_racing" name="Horse Racing Tickets"/>
+            <category url="sale/tickets/sports/olympics" name="Olympics Tickets"/>
+            <category url="sale/tickets/sports/other" name="Other Sports Tickets"/>
+            <category url="sale/tickets/sports/rugby" name="Rugby Tickets"/>
+            <category url="sale/tickets/sports/soccer" name="Soccer Tickets"/>
+            <category url="sale/tickets/sports/tennis" name="Tennis Tickets"/>
+            <category url="sale/tickets/sports/track_field" name="Track and Field Tickets"/>
+            <category url="sale/tickets/sports/wrestling" name="Wrestling Tickets"/>
+            <category url="sale/tickets/theater" name="Theater Tickets"/>
+        </root>
+        <root name="Pets">
+            <category url="sale/pet" name="Pets"/>
+            <category url="sale/pet/bird" name="Birds"/>
+            <category url="sale/pet/cat" name="Cats"/>
+            <category url="sale/pet/dog" name="Dogs"/>
+            <category url="sale/pet/fish" name="Fish"/>
+            <category url="sale/pet/horse" name="Horses"/>
+            <category url="sale/pet/livestock" name="Livestock"/>
+            <category url="sale/pet/livestock/supply" name="Livestock Supplies"/>
+            <category url="sale/pet/other" name="Other Pets"/>
+            <category url="sale/pet/rabbit" name="Rabbits"/>
+            <category url="sale/pet/reptile" name="Reptiles"/>
+            <category url="sale/pet/small_furry" name="Small & Furry Animals"/>
+            <category url="sale/pet/supply" name="Pet Supplies"/>
+            <category url="sale/pet/supply/bird" name="Pet Supplies, Birds"/>
+            <category url="sale/pet/supply/cat" name="Pet Supplies, Cats"/>
+            <category url="sale/pet/supply/dog" name="Pet Supplies, Dogs"/>
+            <category url="sale/pet/supply/fish" name="Pet Supplies, Fish"/>
+            <category url="sale/pet/supply/horse" name="Pet Supplies, Horses"/>
+        </root>
+        <root name="Items for Sale">
+            <category url="sale" name="Items for Sale"/>
+            <category url="sale/adult" name="Adult Merchandise"/>
+            <category url="sale/book" name="Books & Magazines"/>
+            <category url="sale/book/audio" name="Audio Books"/>
+            <category url="sale/book/books" name="Books"/>
+            <category url="sale/book/kids" name="Kids Books"/>
+            <category url="sale/book/magazine" name="Magazines"/>
+            <category url="sale/book/manual" name="Books: Manuals"/>
+            <category url="sale/book/textbook" name="Textbooks"/>
+            <category url="sale/business" name="Office & Business"/>
+            <category url="sale/business/building" name="Building Supplies"/>
+            <category url="sale/business/farm" name="Agriculture & Forestry"/>
+            <category url="sale/business/medical" name="Medical Equip & Supplies"/>
+            <category url="sale/business/office" name="Office Equip & Supplies"/>
+            <category url="sale/business/retail" name="Restaurant & Retail"/>
+            <category url="sale/business/sale" name="Business for Sale"/>
+            <category url="sale/clothes" name="Clothes & Accessories"/>
+            <category url="sale/clothes/accessories" name="Accessories"/>
+            <category url="sale/clothes/accessories/backpack" name="Backpacks & Briefcases"/>
+            <category url="sale/clothes/accessories/belt" name="Belts"/>
+            <category url="sale/clothes/accessories/glove" name="Gloves & Mittens"/>
+            <category url="sale/clothes/accessories/hair" name="Hair Accessories"/>
+            <category url="sale/clothes/accessories/hats" name="Hats & Caps"/>
+            <category url="sale/clothes/accessories/luggage" name="Luggage"/>
+            <category url="sale/clothes/accessories/neckware" name="Neckware, Ties & Scarfs"/>
+            <category url="sale/clothes/accessories/sunglasses" name="Sunglasses"/>
+            <category url="sale/clothes/accessories/wallet" name="Wallets, Purses & Handbags"/>
+            <category url="sale/clothes/coats" name="Coats, Parkas & Wind Breakers"/>
+            <category url="sale/clothes/dresses" name="Dresses"/>
+            <category url="sale/clothes/exercise" name="Exercise & Fitness Clothes"/>
+            <category url="sale/clothes/jewelry" name="Jewelry"/>
+            <category url="sale/clothes/jewelry/bracelet" name="Bracelets"/>
+            <category url="sale/clothes/jewelry/earring" name="Earrings"/>
+            <category url="sale/clothes/jewelry/necklace" name="Necklaces"/>
+            <category url="sale/clothes/jewelry/ring" name="Rings"/>
+            <category url="sale/clothes/jewelry/watch" name="Watches"/>
+            <category url="sale/clothes/military" name="Military Gear & Surplus"/>
+            <category url="sale/clothes/other" name="Other Clothing"/>
+            <category url="sale/clothes/outfits" name="Outfits & Sets"/>
+            <category url="sale/clothes/pants" name="Pants & Jeans"/>
+            <category url="sale/clothes/shirts" name="Shirts & Tops"/>
+            <category url="sale/clothes/shoes" name="Shoes"/>
+            <category url="sale/clothes/shorts" name="Shorts"/>
+            <category url="sale/clothes/skirts" name="Skirts"/>
+            <category url="sale/clothes/sleepwear" name="Sleepwear & Underwear"/>
+            <category url="sale/clothes/socks" name="Socks & Hosiery"/>
+            <category url="sale/clothes/suits" name="Suits, Blazers & Jackets"/>
+            <category url="sale/clothes/sweater" name="Sweaters"/>
+            <category url="sale/clothes/swimming" name="Swimwear"/>
+            <category url="sale/clothes/wedding" name="Wedding Clothes & Accessories"/>
+            <category url="sale/collectible" name="Collectibles"/>
+            <category url="sale/collectible/antiques" name="Antique Collectibles"/>
+            <category url="sale/collectible/art" name="Art"/>
+            <category url="sale/collectible/cards" name="Trading Cards"/>
+            <category url="sale/collectible/coins" name="Coins"/>
+            <category url="sale/collectible/comics" name="Comics"/>
+            <category url="sale/collectible/military" name="Military Memorabilia"/>
+            <category url="sale/collectible/sports" name="Sports Memorabilia"/>
+            <category url="sale/collectible/stamps" name="Stamps"/>
+            <category url="sale/computer" name="Computers & Accessories"/>
+            <category url="sale/computer/component" name="Computer Components"/>
+            <category url="sale/computer/computer" name="Computers"/>
+            <category url="sale/computer/computer/desktop" name="Desktop PCs"/>
+            <category url="sale/computer/computer/laptop" name="Laptop Computers"/>
+            <category url="sale/computer/computer/server" name="Computer Servers"/>
+            <category url="sale/computer/input" name="Computer Input Devices"/>
+            <category url="sale/computer/input/keyboard" name="Computer Keyboards"/>
+            <category url="sale/computer/input/mouse" name="Computer Mouse"/>
+            <category url="sale/computer/monitor" name="Computer Monitors"/>
+            <category url="sale/computer/monitor/crt" name="CRT Monitors"/>
+            <category url="sale/computer/monitor/lcd" name="LCD Monitors"/>
+            <category url="sale/computer/network" name="Computer Networking"/>
+            <category url="sale/computer/network/hub" name="Computer Hubs"/>
+            <category url="sale/computer/network/load_balancer" name="Computer Load Balancers"/>
+            <category url="sale/computer/network/other" name="Other Networking Equipment"/>
+            <category url="sale/computer/network/router" name="Computer Routers"/>
+            <category url="sale/computer/network/switch" name="Computer Switches"/>
+            <category url="sale/computer/network/wifi" name="Wireless Networking"/>
+            <category url="sale/computer/other" name="Other Computer Equipment"/>
+            <category url="sale/computer/printer" name="Printers, Supplies & Accessories"/>
+            <category url="sale/computer/printer/all" name="All-in-One Printers"/>
+            <category url="sale/computer/printer/inkjet" name="Inkjet Printers"/>
+            <category url="sale/computer/printer/laser" name="Laser Printers"/>
+            <category url="sale/computer/printer/supply" name="Printer Supplies"/>
+            <category url="sale/computer/scanner" name="Scanners"/>
+            <category url="sale/computer/software" name="Computer Software"/>
+            <category url="sale/computer/storage" name="Computer Storage"/>
+            <category url="sale/computer/storage/cd" name="CD Drives"/>
+            <category url="sale/computer/storage/dvd" name="DVD Drives"/>
+            <category url="sale/computer/storage/flash" name="Flash Memory Drives"/>
+            <category url="sale/computer/storage/floppy" name="Floppy Drives"/>
+            <category url="sale/computer/storage/hard" name="Hard Drives"/>
+            <category url="sale/computer/storage/hard/external" name="External Hard Drives"/>
+            <category url="sale/computer/storage/hard/internal" name="Internal Hard Drives"/>
+            <category url="sale/computer/storage/media" name="Blank Media"/>
+            <category url="sale/electronics" name="Electronics"/>
+            <category url="sale/electronics/audio" name="Audio"/>
+            <category url="sale/electronics/audio/home" name="Home Audio"/>
+            <category url="sale/electronics/audio/home/accessories" name="Home Audio Accessories"/>
+            <category url="sale/electronics/audio/home/amplifier" name="Amplifiers & Preamps"/>
+            <category url="sale/electronics/audio/home/cassette_deck" name="Cassette Decks"/>
+            <category url="sale/electronics/audio/home/cd_player" name="CD Players"/>
+            <category url="sale/electronics/audio/home/equalizer" name="Equalizers"/>
+            <category url="sale/electronics/audio/home/media" name="Audio Media"/>
+            <category url="sale/electronics/audio/home/receiver" name="Receivers"/>
+            <category url="sale/electronics/audio/home/speaker" name="Speakers"/>
+            <category url="sale/electronics/audio/home/system" name="Home Theater System"/>
+            <category url="sale/electronics/audio/home/turntable" name="Turntables"/>
+            <category url="sale/electronics/audio/personal" name="Personal Audio"/>
+            <category url="sale/electronics/audio/personal/boombox" name="Boomboxes"/>
+            <category url="sale/electronics/audio/personal/cassette_player" name="Cassette Players"/>
+            <category url="sale/electronics/audio/personal/cd_player" name="Personal CD Players"/>
+            <category url="sale/electronics/audio/personal/clock_radio" name="Clock Radios"/>
+            <category url="sale/electronics/audio/personal/headphone" name="Headphones"/>
+            <category url="sale/electronics/audio/personal/mp3" name="MP3 Players"/>
+            <category url="sale/electronics/camera" name="Cameras"/>
+            <category url="sale/electronics/camera/accessories" name="Camera Accessories"/>
+            <category url="sale/electronics/camera/accessories/digital" name="Digital Camera Accessories"/>
+            <category url="sale/electronics/camera/accessories/video" name="Video Camera Accessories"/>
+            <category url="sale/electronics/camera/digital" name="Digital Cameras"/>
+            <category url="sale/electronics/camera/film" name="Film Cameras"/>
+            <category url="sale/electronics/camera/other" name="Telescopes & Binoculars"/>
+            <category url="sale/electronics/camera/video" name="Video Camcorders"/>
+            <category url="sale/electronics/car" name="Car Electronics"/>
+            <category url="sale/electronics/car/gps" name="Car Navigation Systems"/>
+            <category url="sale/electronics/car/radar" name="Radar Detectors"/>
+            <category url="sale/electronics/car/stereo" name="Car Stereo"/>
+            <category url="sale/electronics/dvd" name="DVD players"/>
+            <category url="sale/electronics/dvr" name="DVRs"/>
+            <category url="sale/electronics/gps" name="GPS Devices"/>
+            <category url="sale/electronics/other" name="Gadgets & Other Electronics"/>
+            <category url="sale/electronics/pda" name="PDAs"/>
+            <category url="sale/electronics/phone" name="Phones"/>
+            <category url="sale/electronics/phone/corded" name="Corded Phones"/>
+            <category url="sale/electronics/phone/cordless" name="Cordless Phones"/>
+            <category url="sale/electronics/phone/mobile" name="Mobile Phones"/>
+            <category url="sale/electronics/phone/office" name="Office Phones"/>
+            <category url="sale/electronics/satellite" name="Satellite Dishes & Receivers"/>
+            <category url="sale/electronics/tv" name="Televisions"/>
+            <category url="sale/electronics/vcr" name="VCRs"/>
+            <category url="sale/entertainment" name="Entertainment (Movies, Music, Video Games)"/>
+            <category url="sale/entertainment/movie" name="Movies (DVD & VHS)"/>
+            <category url="sale/entertainment/music" name="Music"/>
+            <category url="sale/entertainment/video_game" name="Video Games"/>
+            <category url="sale/free" name="Free Merchandise"/>
+            <category url="sale/furniture" name="Furniture"/>
+            <category url="sale/furniture/bed" name="Beds & Bedroom Sets"/>
+            <category url="sale/furniture/bed/bunk" name="Bunk Beds"/>
+            <category url="sale/furniture/bed/crib" name="Cribs"/>
+            <category url="sale/furniture/bed/water" name="Water Beds"/>
+            <category url="sale/furniture/bench" name="Benches & Stools"/>
+            <category url="sale/furniture/bench/bench" name="Benches"/>
+            <category url="sale/furniture/bench/stool" name="Stools"/>
+            <category url="sale/furniture/bookcase" name="Bookcases & Shelves"/>
+            <category url="sale/furniture/cabinet" name="Cabinets, Armoires & Cupboards"/>
+            <category url="sale/furniture/cabinet/armoire" name="Armoires"/>
+            <category url="sale/furniture/cabinet/cabinet" name="Cabinets"/>
+            <category url="sale/furniture/cabinet/cupboard" name="Cupboards"/>
+            <category url="sale/furniture/chair" name="Chairs"/>
+            <category url="sale/furniture/chair/recliner" name="Recliner Chairs"/>
+            <category url="sale/furniture/chair/rocking" name="Rocking Chairs"/>
+            <category url="sale/furniture/desk" name="Desks"/>
+            <category url="sale/furniture/dresser" name="Dresser & Vanities"/>
+            <category url="sale/furniture/other" name="Other Furniture"/>
+            <category url="sale/furniture/other/clock" name="Clocks"/>
+            <category url="sale/furniture/other/credenza" name="Credenza"/>
+            <category url="sale/furniture/other/lamp" name="Lamps"/>
+            <category url="sale/furniture/other/mirror" name="Mirrors"/>
+            <category url="sale/furniture/rug" name="Rugs"/>
+            <category url="sale/furniture/sofa" name="Sofas"/>
+            <category url="sale/furniture/sofa/couch" name="Couches"/>
+            <category url="sale/furniture/sofa/futon" name="Futons"/>
+            <category url="sale/furniture/sofa/loveseat" name="Love Seats"/>
+            <category url="sale/furniture/sofa/sectional" name="Sectional Sofas"/>
+            <category url="sale/furniture/sofa/sofabed" name="Sofa Beds & Sleepers"/>
+            <category url="sale/furniture/table" name="Tables & Stands"/>
+            <category url="sale/furniture/table/changing" name="Changing Tables"/>
+            <category url="sale/furniture/table/coffee" name="Coffee Tables"/>
+            <category url="sale/furniture/table/end" name="End Tables"/>
+            <category url="sale/furniture/table/stand" name="Stands"/>
+            <category url="sale/health" name="Health & Beauty"/>
+            <category url="sale/health/cosmetics" name="Makeup,Cosmetics"/>
+            <category url="sale/health/hair" name="Hair Products"/>
+            <category url="sale/health/skin_care" name="Skin Care"/>
+            <category url="sale/home" name="Home & Garden"/>
+            <category url="sale/home/appliance" name="Appliances"/>
+            <category url="sale/home/appliance/dishwasher" name="Dishwashers"/>
+            <category url="sale/home/appliance/microwave" name="Microwave Ovens"/>
+            <category url="sale/home/appliance/other" name="Other Appliances"/>
+            <category url="sale/home/appliance/oven" name="Cooktops, Ovens & Ranges"/>
+            <category url="sale/home/appliance/refrigerator" name="Refrigerators & Freezers"/>
+            <category url="sale/home/appliance/refrigerator/freezer" name="Freezers"/>
+            <category url="sale/home/appliance/refrigerator/refrigerator" name="Refrigerators"/>
+            <category url="sale/home/appliance/small" name="Small Appliances"/>
+            <category url="sale/home/appliance/small/blender" name="Blenders"/>
+            <category url="sale/home/appliance/small/bread_machine" name="Bread Machines"/>
+            <category url="sale/home/appliance/small/coffee_maker" name="Coffee Makers"/>
+            <category url="sale/home/appliance/small/food_processor" name="Food Processors"/>
+            <category url="sale/home/appliance/small/juicer" name="Juicers"/>
+            <category url="sale/home/appliance/small/mixer" name="Mixers"/>
+            <category url="sale/home/appliance/small/other" name="Other Small Appliances"/>
+            <category url="sale/home/appliance/small/toaster" name="Toasters"/>
+            <category url="sale/home/appliance/small/water_filter" name="Water Filters"/>
+            <category url="sale/home/appliance/washer" name="Washer & Dryers"/>
+            <category url="sale/home/appliance/washer/dryer" name="Dryers"/>
+            <category url="sale/home/appliance/washer/washer" name="Washers"/>
+            <category url="sale/home/appliance/water_heater" name="Water Heaters"/>
+            <category url="sale/home/bedding" name="Bedding"/>
+            <category url="sale/home/clean" name="Cleaning & Vacuuming"/>
+            <category url="sale/home/decor" name="Home Decor"/>
+            <category url="sale/home/floor" name="Carpets & Floor Materials"/>
+            <category url="sale/home/food" name="Food & Produce"/>
+            <category url="sale/home/heat" name="Heating, Cooling & Air"/>
+            <category url="sale/home/heat/ac" name="Cooling & Air Conditioners"/>
+            <category url="sale/home/heat/firewood" name="Firewood & Fuel"/>
+            <category url="sale/home/heat/heat" name="Heaters, Fireplaces & Furnaces"/>
+            <category url="sale/home/kitchen" name="Kitchen & Cooking"/>
+            <category url="sale/home/lawn" name="Lawn, Garden & Patio"/>
+            <category url="sale/home/lawn/lawnmower" name="Lawnmowers"/>
+            <category url="sale/home/light" name="Lamps, Lighting & Ceiling Fans"/>
+            <category url="sale/home/pool" name="Pools, Spas & Hot Tubs"/>
+            <category url="sale/home/security" name="Home Security"/>
+            <category url="sale/home/tool" name="Home & Garden Tools"/>
+            <category url="sale/home/tool/hand" name="Hand Tools"/>
+            <category url="sale/home/tool/hand/axe" name="Axes"/>
+            <category url="sale/home/tool/hand/chisel" name="Files & Chisels"/>
+            <category url="sale/home/tool/hand/clamps_vises" name="Clamps & Vises"/>
+            <category url="sale/home/tool/hand/hammer" name="Hammers"/>
+            <category url="sale/home/tool/hand/knife" name="Knives & Cutters"/>
+            <category url="sale/home/tool/hand/ladder" name="Ladders"/>
+            <category url="sale/home/tool/hand/level" name="Levels"/>
+            <category url="sale/home/tool/hand/measure" name="Measuring Tools"/>
+            <category url="sale/home/tool/hand/other" name="Other Hand Tools"/>
+            <category url="sale/home/tool/hand/plane" name="Tools: Planes"/>
+            <category url="sale/home/tool/hand/plier" name="Pliers"/>
+            <category url="sale/home/tool/hand/pry_bar" name="Pry Bars"/>
+            <category url="sale/home/tool/hand/puller" name="Tools: Pullers"/>
+            <category url="sale/home/tool/hand/punch" name="Tools: Punches"/>
+            <category url="sale/home/tool/hand/saw" name="Saws"/>
+            <category url="sale/home/tool/hand/saw_horse" name="Sawhorses"/>
+            <category url="sale/home/tool/hand/screwdriver" name="Screwdrivers"/>
+            <category url="sale/home/tool/hand/sledge_hammer" name="Sledge Hammers"/>
+            <category url="sale/home/tool/hand/socket" name="Sockets"/>
+            <category url="sale/home/tool/hand/square" name="Tools: Squares"/>
+            <category url="sale/home/tool/hand/stud_sensor" name="Stud Sensors"/>
+            <category url="sale/home/tool/hand/tool_set" name="Tool Sets"/>
+            <category url="sale/home/tool/hand/wrench" name="Wrenches"/>
+            <category url="sale/home/tool/other" name="Other Home Tools"/>
+            <category url="sale/home/tool/power" name="Power Tools"/>
+            <category url="sale/home/tool/power/air_compress" name="Air Compressors"/>
+            <category url="sale/home/tool/power/air_hammer" name="Air Hammers"/>
+            <category url="sale/home/tool/power/air_ratchet" name="Air Ratchets"/>
+            <category url="sale/home/tool/power/chipper" name="Wood Chipper"/>
+            <category url="sale/home/tool/power/drill" name="Drills"/>
+            <category url="sale/home/tool/power/engraver" name="Engravers"/>
+            <category url="sale/home/tool/power/generator" name="Generators"/>
+            <category url="sale/home/tool/power/grinder" name="Grinders"/>
+            <category url="sale/home/tool/power/impact_wrench" name="Impact Wrenches"/>
+            <category url="sale/home/tool/power/lathe" name="Lathes"/>
+            <category url="sale/home/tool/power/leaf_blower" name="Leaf Blower"/>
+            <category url="sale/home/tool/power/nail_gun" name="Nail & Staple Guns"/>
+            <category url="sale/home/tool/power/planer" name="Planers"/>
+            <category url="sale/home/tool/power/polisher" name="Polishers"/>
+            <category url="sale/home/tool/power/pressure_washer" name="Pressure Washers"/>
+            <category url="sale/home/tool/power/router" name="Tools: Routers"/>
+            <category url="sale/home/tool/power/sander" name="Sanders"/>
+            <category url="sale/home/tool/power/saw" name="Power Saws"/>
+            <category url="sale/home/tool/power/saw/band" name="Band Saws"/>
+            <category url="sale/home/tool/power/saw/chain" name="Chain Saws"/>
+            <category url="sale/home/tool/power/saw/circular" name="Circular Saws"/>
+            <category url="sale/home/tool/power/saw/miter" name="Miter Saws"/>
+            <category url="sale/home/tool/power/saw/reciprocating" name="Reciprocating Saws"/>
+            <category url="sale/home/tool/power/saw/scroll" name="Scroll Saws"/>
+            <category url="sale/home/tool/power/saw/table" name="Table Saws"/>
+            <category url="sale/home/tool/power/saw/tile" name="Tile Saws"/>
+            <category url="sale/home/tool/power/welding_soldering" name="Welding & Soldering"/>
+            <category url="sale/home/tool/wood" name="Woodworking Tools"/>
+            <category url="sale/home/windows" name="Windows, Drapes & Curtains"/>
+            <category url="sale/kid" name="Baby & Kid Stuff"/>
+            <category url="sale/kid/accessories" name="Baby Grooming, Bathing, and Feeding"/>
+            <category url="sale/kid/backpack" name="Baby Backpacks & Carriers"/>
+            <category url="sale/kid/bedding" name="Children's Bedding"/>
+            <category url="sale/kid/bikes" name="Children's Bikes"/>
+            <category url="sale/kid/books" name="Children's Books"/>
+            <category url="sale/kid/car_seat" name="Car Seats"/>
+            <category url="sale/kid/clothes" name="Children's Clothes"/>
+            <category url="sale/kid/furniture" name="Children's Furniture"/>
+            <category url="sale/kid/safety" name="Baby Safety Products"/>
+            <category url="sale/kid/stroller" name="Baby Strollers"/>
+            <category url="sale/kid/toy" name="Children's Toys"/>
+            <category url="sale/music" name="Musical Instruments"/>
+            <category url="sale/music/accessories" name="Music Accessories"/>
+            <category url="sale/music/accessories/metronome" name="Metronomes"/>
+            <category url="sale/music/accessories/musicstand" name="Music Stands"/>
+            <category url="sale/music/accessories/sheetmusic" name="Sheet Music"/>
+            <category url="sale/music/accessories/tune" name="Tuning Forks"/>
+            <category url="sale/music/brass" name="Brass Instruments"/>
+            <category url="sale/music/brass/baritone" name="Baritones"/>
+            <category url="sale/music/brass/bugle" name="Bugles"/>
+            <category url="sale/music/brass/cornet" name="Cornets"/>
+            <category url="sale/music/brass/flugelhorn" name="Flugelhorns"/>
+            <category url="sale/music/brass/french_horn" name="French Horns"/>
+            <category url="sale/music/brass/trombone" name="Trombones"/>
+            <category url="sale/music/brass/trumpet" name="Trumpets"/>
+            <category url="sale/music/brass/tuba" name="Tubas"/>
+            <category url="sale/music/drum" name="Drums & Percussion"/>
+            <category url="sale/music/drum/base" name="Base Drums"/>
+            <category url="sale/music/drum/bongo" name="Bongos"/>
+            <category url="sale/music/drum/chimes" name="Musical Instrument Chimes"/>
+            <category url="sale/music/drum/conga" name="Conga Drums"/>
+            <category url="sale/music/drum/cowbell" name="Cowbells"/>
+            <category url="sale/music/drum/cymbal" name="Cymbals"/>
+            <category url="sale/music/drum/drum" name="Drums"/>
+            <category url="sale/music/drum/glockespiel" name="Glockespiels"/>
+            <category url="sale/music/drum/gong" name="Gongs"/>
+            <category url="sale/music/drum/hi_hat" name="Hi-Hat Drums"/>
+            <category url="sale/music/drum/maracas" name="Maracas"/>
+            <category url="sale/music/drum/percussion" name="Percussions"/>
+            <category url="sale/music/drum/snare" name="Snare Drums"/>
+            <category url="sale/music/drum/tambourine" name="Tambourines"/>
+            <category url="sale/music/drum/timpani" name="Timpanis"/>
+            <category url="sale/music/drum/tomtom" name="Tom-Tom Drums"/>
+            <category url="sale/music/drum/triangle" name="Instruments: Triangles"/>
+            <category url="sale/music/drum/xylophone" name="Xylophones"/>
+            <category url="sale/music/guitar" name="Guitars & Basses"/>
+            <category url="sale/music/guitar/banjo" name="Banjos"/>
+            <category url="sale/music/guitar/bass" name="Bass Instruments"/>
+            <category url="sale/music/guitar/dulcimer" name="Dulcimers"/>
+            <category url="sale/music/guitar/guitar" name="Guitars"/>
+            <category url="sale/music/guitar/lute" name="Lutes"/>
+            <category url="sale/music/guitar/mandolin" name="Mandolins"/>
+            <category url="sale/music/guitar/ukulele" name="Ukuleles"/>
+            <category url="sale/music/other" name="Other Musical Instruments"/>
+            <category url="sale/music/piano" name="Pianos & Keyboards"/>
+            <category url="sale/music/piano/accordian" name="Accordians"/>
+            <category url="sale/music/piano/keyboard" name="Instruments: Keyboards"/>
+            <category url="sale/music/piano/organ" name="Instruments: Organs"/>
+            <category url="sale/music/piano/piano" name="Pianos"/>
+            <category url="sale/music/piano/synthesizer" name="Synthesizers"/>
+            <category url="sale/music/string" name="Classic Stringed Instruments"/>
+            <category url="sale/music/string/autoharp" name="Autoharps"/>
+            <category url="sale/music/string/cello" name="Cellos"/>
+            <category url="sale/music/string/harp" name="Harps"/>
+            <category url="sale/music/string/viola" name="Violas"/>
+            <category url="sale/music/string/violin" name="Violins"/>
+            <category url="sale/music/wind" name="Woodwinds"/>
+            <category url="sale/music/wind/bassoon" name="Bassoons"/>
+            <category url="sale/music/wind/clarinet" name="Clarinets"/>
+            <category url="sale/music/wind/flute" name="Instruments: Flutes"/>
+            <category url="sale/music/wind/harmonica" name="Harmonicas"/>
+            <category url="sale/music/wind/oboe" name="Oboes"/>
+            <category url="sale/music/wind/piccolo" name="Piccolos"/>
+            <category url="sale/music/wind/recorder" name="Instruments: Recorders"/>
+            <category url="sale/music/wind/saxophone" name="Saxophones"/>
+            <category url="sale/other" name="Everything Else"/>
+            <category url="sale/sale" name="Auctions, Estate & Garage Sales"/>
+            <category url="sale/sale/auction" name="Auctions"/>
+            <category url="sale/sale/estate" name="Estate Sales"/>
+            <category url="sale/sale/garage" name="Garage & Yard Sales"/>
+            <category url="sale/sport" name="Sporting Goods & Bicycles"/>
+            <category url="sale/sport/bike" name="Bicycles & Equipment"/>
+            <category url="sale/sport/bike/apparel" name="Bicycling Apparel"/>
+            <category url="sale/sport/bike/helmet" name="Bicycle Helmets"/>
+            <category url="sale/sport/bike/kid" name="Kids Bikes"/>
+            <category url="sale/sport/bike/mountain" name="Mountain Bikes"/>
+            <category url="sale/sport/bike/parts" name="Bicycle Parts & Accessories"/>
+            <category url="sale/sport/bike/road" name="Road Bikes"/>
+            <category url="sale/sport/camping" name="Camping Equipment"/>
+            <category url="sale/sport/equestrian" name="Equestrian Equipment"/>
+            <category url="sale/sport/exercise" name="Exercise Equipment"/>
+            <category url="sale/sport/exercise/treadmill" name="Treadmills & Stair Machines"/>
+            <category url="sale/sport/exercise/treadmill/stair" name="Stair Machines"/>
+            <category url="sale/sport/exercise/treadmill/treadmill" name="Treadmills"/>
+            <category url="sale/sport/hunting" name="Hunting & Fishing"/>
+            <category url="sale/sport/hunting/fishing" name="Fishing Equipment"/>
+            <category url="sale/sport/hunting/hunting" name="Hunting Equipment"/>
+            <category url="sale/sport/indoor" name="Indoor Games"/>
+            <category url="sale/sport/indoor/air_hockey" name="Air Hockey"/>
+            <category url="sale/sport/indoor/darts" name="Darts"/>
+            <category url="sale/sport/indoor/foosball" name="Foosball"/>
+            <category url="sale/sport/indoor/ping_pong" name="Ping Pong"/>
+            <category url="sale/sport/indoor/pool_table" name="Pool Tables & Equipment"/>
+            <category url="sale/sport/other" name="Other Sports & Fitness"/>
+            <category url="sale/sport/snow" name="Snow Sports"/>
+            <category url="sale/sport/snow/ski" name="Skiing"/>
+            <category url="sale/sport/snow/snowboard" name="Snowboarding"/>
+            <category url="sale/sport/sport" name="Sports Equipment"/>
+            <category url="sale/sport/sport/baseball" name="Baseball Equipment"/>
+            <category url="sale/sport/sport/basketball" name="Basketball Equipment"/>
+            <category url="sale/sport/sport/football" name="Football Equipment"/>
+            <category url="sale/sport/sport/golf" name="Golf Equipment"/>
+            <category url="sale/sport/sport/hockey" name="Hockey Equipment"/>
+            <category url="sale/sport/sport/other" name="Other Sports Equipment"/>
+            <category url="sale/sport/sport/soccer" name="Soccer Equipment"/>
+            <category url="sale/sport/sport/tennis" name="Tennis & Racquet Sports Equipment"/>
+            <category url="sale/sport/water" name="Water Sports"/>
+            <category url="sale/sport/water/dive" name="Scuba & Snorkeling"/>
+            <category url="sale/sport/water/other" name="Other Water Sports"/>
+            <category url="sale/sport/water/paddle" name="Canoe, Kayaks, Rafts"/>
+            <category url="sale/sport/water/paddle/canoe" name="Canoe"/>
+            <category url="sale/sport/water/paddle/kayak" name="Kayaks"/>
+            <category url="sale/sport/water/paddle/rafts" name="Rafts"/>
+            <category url="sale/sport/water/ski" name="Waterskiing & Wakeboarding"/>
+            <category url="sale/sport/water/surf" name="Surfing"/>
+            <category url="sale/sport/water/wind" name="Wind Surfing"/>
+            <category url="sale/sport/weight" name="Weights & Weightlifting Equipment"/>
+            <category url="sale/toy" name="Crafts, Hobbies & Toys"/>
+            <category url="sale/toy/art" name="Arts & Crafts Supplies"/>
+            <category url="sale/toy/baby" name="Infant & Toddler Toys"/>
+            <category url="sale/toy/car" name="Toy Cars, Trains, Airplanes"/>
+            <category url="sale/toy/dolls" name="Dolls & Action Figures"/>
+            <category url="sale/toy/educational" name="Educational Toys"/>
+            <category url="sale/toy/games" name="Games"/>
+            <category url="sale/toy/outdoor" name="Outdoor Toys & Structures"/>
+            <category url="sale/toy/stuffed" name="Stuffed Animals"/>
+        </root>
+        <root name="Personals">
+            <category url="personals" name="Personals"/>
+            <category url="personals/men_seeking_both" name="Men Seeking Both"/>
+            <category url="personals/men_seeking_men" name="Men Seeking Men"/>
+            <category url="personals/men_seeking_women" name="Men Seeking Women"/>
+            <category url="personals/missed_connections" name="Missed Connections"/>
+            <category url="personals/other" name="Everyone Else"/>
+            <category url="personals/women_seeking_both" name="Women Seeking Both"/>
+            <category url="personals/women_seeking_men" name="Women Seeking Men"/>
+            <category url="personals/women_seeking_women" name="Women Seeking Women"/>
+        </root>
+        <root name="Jobs">
+            <category url="job" name="Jobs"/>
+            <category url="job/admin" name="Administrative, Clerical & Support Services Jobs"/>
+            <category url="job/advertising" name="Advertising, Marketing & Public Relations Jobs"/>
+            <category url="job/architecture" name="Architecture & Design Jobs"/>
+            <category url="job/art" name="Art, Media & Writer Jobs"/>
+            <category url="job/art/other" name="Other Art & Media Jobs"/>
+            <category url="job/art/visual_art" name="Visual Art Jobs"/>
+            <category url="job/art/writing" name="Writing Jobs"/>
+            <category url="job/civil_service" name="Civil Service & Public Policy Jobs"/>
+            <category url="job/construction" name="Construction & Skilled Labor Jobs"/>
+            <category url="job/customer_service" name="Customer Service & Call Center Jobs"/>
+            <category url="job/domestic_help" name="Domestic Help, Child & Adult Care Jobs"/>
+            <category url="job/education" name="Teaching, Training & Library Jobs"/>
+            <category url="job/energy" name="Oil, Gas & Solar Power Jobs"/>
+            <category url="job/engineer" name="Engineering & Product Development Jobs"/>
+            <category url="job/entertainment" name="TV, Film & Musician Jobs"/>
+            <category url="job/entertainment/actor" name="Acting Jobs"/>
+            <category url="job/entertainment/actor/adult" name="Adult Acting Jobs"/>
+            <category url="job/entertainment/dancer" name="Dancing Jobs"/>
+            <category url="job/entertainment/dancer/adult" name="Adult Dancing Jobs"/>
+            <category url="job/entertainment/model" name="Modeling Jobs"/>
+            <category url="job/entertainment/model/adult" name="Adult Modeling Jobs"/>
+            <category url="job/entertainment/music" name="Music Jobs"/>
+            <category url="job/entertainment/post_production" name="Post-Production Jobs"/>
+            <category url="job/entertainment/production" name="Production Jobs"/>
+            <category url="job/facilities" name="Facilities & Maintenance Jobs"/>
+            <category url="job/finance" name="Accounting & Finance Jobs"/>
+            <category url="job/general_labor" name="General Labor & Warehouse Jobs"/>
+            <category url="job/health" name="Healthcare & Nurse Jobs"/>
+            <category url="job/hospitality" name="Hospitality, Tourism & Travel Jobs"/>
+            <category url="job/hr" name="Human Resources & Recruiting Jobs"/>
+            <category url="job/law_enforcement" name="Law Enforcement & Security Jobs"/>
+            <category url="job/legal" name="Legal Jobs"/>
+            <category url="job/logistics" name="Transportation, Travel & Logistics Jobs"/>
+            <category url="job/management" name="Management & Executive Jobs"/>
+            <category url="job/nonprofit" name="Non-Profit & Fundraising Jobs"/>
+            <category url="job/other" name="Other Jobs"/>
+            <category url="job/production_operation" name="Production & Operations Jobs"/>
+            <category url="job/qa" name="Quality Assurance & Control Jobs"/>
+            <category url="job/rd" name="Research & Development Jobs"/>
+            <category url="job/real_estate" name="Real Estate Jobs"/>
+            <category url="job/retail" name="Retail, Grocery & Wholesale Jobs"/>
+            <category url="job/sales" name="Sales & Business Development Jobs"/>
+            <category url="job/salon" name="Salon, Fitness & Spa Jobs"/>
+            <category url="job/science" name="Science, Pharmaceutical & Biotech Jobs"/>
+            <category url="job/social_services" name="Social Services & Counseling Jobs"/>
+            <category url="job/tech" name="Computer& Software Jobs"/>
+            <category url="job/vet" name="Veterinary & Other Animal Care Jobs"/>
+            <category url="job/work_from_home" name="Work from Home & Self Employed Jobs"/>
+        </root>
+        <root name="Real Estate">
+            <category url="housing/sale" name="Real Estate"/>
+            <category url="housing/sale/commercial" name="Commercial & Office Space for Sale"/>
+            <category url="housing/sale/commercial/industrial" name="Industrial Property for Sale"/>
+            <category url="housing/sale/commercial/office_space" name="Office Space for Sale"/>
+            <category url="housing/sale/commercial/retail" name="Retail Property for Sale"/>
+            <category url="housing/sale/condo" name="Condos, Townhouses & Apts for Sale"/>
+            <category url="housing/sale/farm" name="Farms & Ranches for Sale"/>
+            <category url="housing/sale/foreclosure" name="Foreclosures"/>
+            <category url="housing/sale/home" name="Single-Family Houses"/>
+            <category url="housing/sale/land" name="Land for Sale"/>
+            <category url="housing/sale/mobile" name="Mobile Homes for Sale"/>
+            <category url="housing/sale/multi_family" name="Multi-Family Residences for Sale"/>
+            <category url="housing/sale/open_house" name="Open Houses"/>
+            <category url="housing/sale/other" name="Other Housing for Sale"/>
+            <category url="housing/sale/storage" name="Storage Space for Sale"/>
+            <category url="housing/sale/vacation" name="Vacation Property for Sale"/>
+        </root>
+        <root name="Property For Rent">
+            <category url="housing/rent" name="Property For Rent"/>
+            <category url="housing/rent/apartment" name="Apartments for Rent"/>
+            <category url="housing/rent/commercial" name="Commercial & Office Space for Rent"/>
+            <category url="housing/rent/commercial/industrial" name="Industrial Property for Rent"/>
+            <category url="housing/rent/commercial/office_space" name="Office Space for Rent"/>
+            <category url="housing/rent/commercial/retail" name="Retail Property for rent"/>
+            <category url="housing/rent/condo" name="Condos & Townhouses for Rent"/>
+            <category url="housing/rent/garage" name="Garages for Rent"/>
+            <category url="housing/rent/home" name="Homes for Rent"/>
+            <category url="housing/rent/mobile" name="Mobile Homes for Rent"/>
+            <category url="housing/rent/open_house" name="Open Houses for Rent"/>
+            <category url="housing/rent/other" name="Other Housing for Rent"/>
+            <category url="housing/rent/roommates" name="Roommates"/>
+            <category url="housing/rent/short_term" name="Short Term Rentals"/>
+            <category url="housing/rent/storage" name="Storage Space for Rent"/>
+            <category url="housing/rent/vacation" name="Vacation Rentals"/>
+        </root>
+        <root name="Community">
+            <category url="community" name="Community"/>
+            <category url="community/announcements" name="Announcements"/>
+            <category url="community/announcements/auction" name="Auction Sales"/>
+            <category url="community/announcements/celebration" name="Celebrations"/>
+            <category url="community/announcements/celebration/anniversary" name="Anniversary Announcements"/>
+            <category url="community/announcements/celebration/birthdays" name="Birthday Announcements"/>
+            <category url="community/announcements/celebration/births" name="Birth Announcements"/>
+            <category url="community/announcements/celebration/congrats" name="Congratulation Announcements"/>
+            <category url="community/announcements/celebration/engagements" name="Engagement Announcements"/>
+            <category url="community/announcements/celebration/marriages" name="Marriage Announcements"/>
+            <category url="community/announcements/celebration/other" name="Other Celebrations"/>
+            <category url="community/announcements/celebration/seasonal" name="Seasonal Announcements"/>
+            <category url="community/announcements/celebration/thanks" name="Thank You Announcements"/>
+            <category url="community/announcements/company" name="Company Notices, Tenders & Contracts"/>
+            <category url="community/announcements/death" name="Death Announcements"/>
+            <category url="community/announcements/death/funerals" name="Funeral Announcements"/>
+            <category url="community/announcements/government" name="Government & Electoral Notices"/>
+            <category url="community/announcements/legal" name="Legal Announcements"/>
+            <category url="community/announcements/lost" name="Lost Announcements"/>
+            <category url="community/announcements/other" name="Announcements More"/>
+            <category url="community/announcements/proposals" name="Proposals-RFPs"/>
+            <category url="community/announcements/trustee" name="Trustee Sales"/>
+            <category url="community/groups" name="Groups"/>
+            <category url="community/news" name="Art & Music News"/>
+            <category url="community/news/film" name="Film News & Announcements"/>
+            <category url="community/news/music" name="Musician & Band News & Announcements"/>
+            <category url="community/news/other" name="Other Art News & Announcements"/>
+            <category url="community/news/visual_art" name="Artist News & Announcements"/>
+            <category url="community/politics" name="Political News & Opinions"/>
+            <category url="community/rants" name="Rants"/>
+            <category url="community/rideshare" name="Rideshare"/>
+        </root>
+    </categories>

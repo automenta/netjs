@@ -1,0 +1,637 @@
+<html>
+    <head>
+        <script src="lib/jquery/jquery.js" type="text/javascript"></script>
+        
+    </head>
+    <body>
+        
+<ul class="tree">
+    <li>
+        <a href="#">Global Alerts</a>
+        <ul>
+            <li><a href="http://climateviewer.com/3D/">ClimateViewer 3D</a></li>
+            <li><a href="http://hisz.rsoe.hu/alertmap/index2.php">RSOE EDIS</a></li>
+            <li><a href="#">Global Incident Map</a>
+                <ul>
+                    <li><a href="http://www.globalincidentmap.com/">Global Incident Map</a></li>
+                    <li><a href="http://amberalerts.globalincidentmap.com/home.php">Amber Alerts</a></li>
+                    <li><a href="http://fires.globalincidentmap.com/home.php">Forest Fires</a></li>
+                    <li><a href="http://outbreaks.globalincidentmap.com/home.php">Disease Outbreaks</a></li>
+                    <li><a href="http://gangs.globalincidentmap.com/home.php">Gang Violence</a></li>
+                    <li><a href="http://border.globalincidentmap.com/home.php">Amber Alerts</a></li>
+                    <li><a href="http://amberalerts.globalincidentmap.com/home.php">Border Security</a></li>
+                    <li><a href="http://president.globalincidentmap.com/home.php">Presidential Threats</a></li>
+                    <li><a href="http://www.globalincidentmap.com/predictions.php">Terrorism Predictions</a></li>
+                    <li><a href="http://drugs.globalincidentmap.com/home.php">Drug Interdictions</a></li>
+                    <li><a href="http://aviation.globalincidentmap.com/home.php">Aviation Incidents</a></li>
+                    <li><a href="http://food.globalincidentmap.com/home.php">Food/Medicine</a></li>
+                    <li><a href="http://human.globalincidentmap.com/home.php">Human Trafficing</a></li>
+                </ul>
+            </li>
+            <li><a id="shakeme" href="#">Earthquakes</a>
+                <ul>
+                    <li><a href="http://www.iris.washington.edu/servlet/eventserver/map.do">IRIS Earthquake Browser</a></li>
+                    <li><a href="#">IRIS Seismology Data</a>
+                        <ul>
+                            <li><a href="http://www.iris.edu/dms/products/">IRIS Seismology Data</a></li>
+                            <li><a href="http://www.iris.edu/spud/gmv">SPUD USArray GMV (Earthscope)</a></li>
+                            <li><a href="http://www.iris.edu/spud/backprojection">SPUD Back Projection</a></li>
+                            <li><a href="http://www.iris.edu/spud/momenttensor">SPUD Moment Tensor</a></li>
+                            <li><a href="http://www.iris.edu/spud/eventplot">SPUD Event Plots</a></li>
+                            <li><a href="http://global.shakemovie.princeton.edu/home.jsp">ShakeMovie Global</a></li>
+                            <li><a href="http://www.iris.edu/dms/products/seissound/data/">SeisSound Repository</a></li>
+                            <li><a href="http://ears.iris.washington.edu/networkList.html">EARS Earthquake Monitoring Stations</a></li>
+                        </ul>
+                    <li><a href="http://earthquake.usgs.gov/">US Geological Society Earthquakes</a></li>
+                    <li><a href="http://anf.ucsd.edu/recenteqs/">Earthscope USArray Recent Earthquake map</a></li>
+                    <li><a href="http://usarray.seis.sc.edu/">Earthscope USArray station data viewer</a></li>
+                    <li><a href="http://anf.ucsd.edu/stations.php">Earthscope USArray ANF Status map</a></li>
+                    <li><a href="http://anf.ucsd.edu/stations.php#active-infrasound">Earthscope USArray Infrasound monitors</a></li>
+                    <li><a href="http://rev.seis.sc.edu/earthquakes.html">REV Rapid Earthquake Viewer (quake view)</a></li>
+                    <li><a href="http://rev.seis.sc.edu/stations.html">REV Rapid Earthquake Viewer (station view)</a></li>
+                    <li><a href="http://earthquake.usgs.gov/">US Geological Society Earthquakes</a></li>
+                    <li><a href="http://viewer.nationalmap.gov/viewer/">USGS National Map</a></li>
+                    <li><a href="http://portal.earthscope.org:8080/gridsphere/gridsphere">Earthscope Array Data</a></li>
+                    <li><a href="http://anf.ucsd.edu/stations.php">Earthscope Array stations</a></li>
+                    <li><a href="http://www.seismo.ethz.ch/eq/latest/index_EN?list=w">SED Swiss Earthquake Detection</a></li>
+                    <li><a href="http://www.seismo.ethz.ch/prod/rt_waveforms/24h/index_EN">Swiss Real-Time Waveforms</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Fires</a>
+                <ul>
+                    <li><a href="http://www.firedetect.noaa.gov/">NOAA Fire Detection Map</a></li>
+                    <li><a href="http://activefiremaps.fs.fed.us/">Active Fire Mapping Program</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Volcanoes</a>
+                <ul>
+                    <li><a href="http://volcanoes.usgs.gov/">USGS Volcano Alerts</a></li>
+                    <li><a href="http://www.volcano.si.edu/reports/usgs/">USGS Weekly Activity</a></li>
+                    <li><a href="http://flash3.ess.washington.edu/USGS/Global/">Volcanic Lightning Monitor</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+    <li><a href="#">Nuclear</a>
+        <ul>
+            <li><a href="#">Monitoring</a>
+                <ul>
+                    <li><a href="http://japan.failedrobot.com/">Japan Geigermap</a></li>
+                    <li><a href="http://www.radiationnetwork.com/">Radiation Network</a></li>
+                    <li><a href="http://www.blackcatsystems.com/RadMap/?locale=world">Black Cat Systems</a></li>
+                    <li><a href="http://eurdepweb.jrc.ec.europa.eu/PublicEurdepMap/Default.aspx">EURDEP Europe</a></li>
+                    <li><a href="http://terra2.spacenvironment.net/~raps_ops/current_files/globeView.html">NAIRAS Flight Radiation</a></li>
+                    <li><a href="http://www.radon.com/maps/">USA Radon Map</a></li>
+                    <li><a href="http://www.epa.gov/japan2011/rert/radnet-data-map.html">EPA RadNet: 03/11/2011</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Information</a>
+                <ul>
+                    <li><a href="http://www.youtube.com/embed/ekZtK4ZBMt4">2053 Worldwide Nuclear Tests (Video)</a></li>
+                    <li><a href="http://www.enenews.com/">Energy News</a></li>
+                    <li><a href="http://www.ctbto.org/map/">CTBTO Map</a></li>
+                    <li><a href="http://www.nrdc.org/nuclear/fallout/default.asp">What if the Fukushima nuclear fallout crisis had happened here? (in the USA)</a></li>
+                    <li><a href="http://www.nrdc.org/search.asp?cof=FORID%3A11&amp;ie=UTF-8&amp;q=nucler+stockpile+2012&amp;cx=001024953138106184952%3Alevppyfplwy&amp;hq=-inurl%3Ahttps&amp;t=iframe">Natural Resources Defense Council - Nuclear files</a></li>
+                    <li><a href="http://www.motherjones.com/special-reports/2011/11/nuclear-weapons">The Nuclear Zombie: Why America's atomic arsenal just won't die</a></li>
+                    <li><a href="http://www.motherjones.com/politics/2011/11/map-nuclear-bombs-power-weapons">Map: The Nuclear Bombs in Your Backyard</a></li>
+                    <li><a href="http://www.nukestrat.com/">The Nuclear Information Project</a></li>
+                    <li><a href="http://nuclearstreet.com/nuclear-power-plants/w/nuclear_power_plants/default.aspx">Nuclear Street - World wide power plants</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">Electromagnetics</a>
+        <ul>
+            <li><a href="#">Monitoring</a>
+                <ul>
+                    <li><a href="http://www.websdr.org/">WebSDR Stations</a></li>
+                    <li><a href="http://websdr.pa3weg.nl/">1-24 kHz (ELF/VLF)</a></li>
+                    <li><a href="http://w4ax.com/">1800-14240 kHz</a></li>
+                    <li><a href="http://sidstation.loudet.org/data-en.xhtml">VLF SID Monitoring</a></li>
+                    <li><a href="http://abelian.org/vlf/">Natural VLF Radio</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Directed Energy Info</a>
+                <ul>
+                    <li><a href="http://rezn8d.com/haarp/">The HAARP University</a></li>
+                    <li><a href="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/">The Sonic Weapon of Vladimir Gavreau</a></li>
+                    <li><a href="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/">Directed Energy Weapons 101: Infrasonic, Sonic, Microwave & Laser</a></li>
+                    <li><a href="http://rezn8d.net/2012/04/05/russian-president-wields-zombie-apocalypse-weapon/">Russian President wields Zombie Apocalypse weapon!</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Maps</a>
+                <ul>
+                    <li><a href="http://www.zone-interdite.net/P/">Zone Interdite (Military Map)</a></li>
+                    <li><a href="http://vlf-engineering.stanford.edu/map/public_map.php#home:">Stanford VLF Map</a></li>
+                    <li><a href="http://maps.spench.net/rf/#pos=-28.9788097,133.335044&amp;zoom=5&amp;type=hybrid&amp;auto_fetch=true&amp;clustering=true&amp;cluster_level=17">Spench.net Australian Radio Towers</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Electro-Smog, Ambient EMR</a>
+                <ul>
+                    <li><a href="http://rezn8d.net/2013/01/31/mind-control-capabilities/">Mind Control Capabilities</a></li>
+                    <li><a href="http://www.huffingtonpost.com/2009/03/03/the-hazards-of-electromag_n_171501.html">The Hazards Of Electromagnetic Pollution</a></li>
+                    <li><a href="http://electromagnetichealth.org/electromagnetic-health-blog/iarc-rf-carc/">IARC classifies RF and electromagnetic fields as possibly carcinogenic</a></li>
+                    <li><a href="http://electromagnetichealth.org/community-health-assessment/">EMR Community Health Assessment</a></li>
+                    <li><a href="http://www.ursi.org/proceedings/procGA11/AbstractBook_v2.htm">RF &amp; Microwave Standards; Realization and Standardization</a></li>
+                    <li><a href="http://www.youtube.com/embed/m3_Rg7yoMsE">"I Am HAARP" - GAIA Consciousness</a></li>
+                    <li><a href="http://www.youtube.com/embed/51VOHrxtlT0">Matter is Vibrating</a></li>
+                    <li><a href="http://www.youtube.com/embed/ptG9j3L1IX8">Resonance - Beings of Frequency | Microwaves and Brain Function</a></li>
+                    <li><a href="http://www.ccst.us/projects/smart/documents/082009_Hardell_Wireless_Phones_&amp;_Tumor.pdf">Epidemiological evidence for an association between use of wireless phones and tumor diseases</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">Big Brother</a>
+        <ul>
+            <li><a href="#">Maps</a>
+                <ul>
+                    <li><a href="http://www.spyfiles.org/">The Spy Files</a></li>
+                    <li><a href="http://bigbrotherinc.org/v1/">Surveillance Who's Who</a></li>
+                    <li><a href="http://wikileaks.org/the-spyfiles.html">Wikileaks: The Spy Files</a></li>
+                    <li><a href="http://www.zone-interdite.net/P/">Zone Interdite</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul>
+            <li><a href="#">Information</a>
+                <ul>
+                    <li><a href="http://rezn8d.net/2012/03/30/kill-your-television/">Kill Your Television</a></li>
+                    <li><a href="http://rezn8d.net/2012/01/29/big-brother-is-watching-privacy-censorship-and-staying-anonymous/">Big Brother is Watching – Privacy, Censorship, and Staying Anonymous</a></li>
+                    <li><a href="http://rezn8d.net/2012/02/08/big-brother-supporters-countries-corporations-and-corruption/">Big Brother Supporters – Countries, Corporations, and Corruption</a></li>
+                    <li><a href="http://rezn8d.net/2012/02/27/dhs-terrorism-informatics-fusion-centers-are-socially-irresponsible/">DHS Terrorism Informatics – Fusion Centers are Socially Irresponsible</a></li>
+                    <li><a href="http://rezn8d.net/2012/03/02/a-declaration-of-the-independence-of-cyberspace/">A Declaration of the Independence of CyberSpace</a></li>
+                    <li><a href="http://rezn8d.net/2012/03/20/welcome-to-1984-martial-law-is-here-obama-signs-new-legislation/">Obama signs “Police State” legislation</a></li>
+                    <li><a href="http://rezn8d.net/2012/04/05/make-hemp-not-war/">Make Hemp Not War</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul>
+            <li><a href="#">Video</a>
+                <ul>
+                    <li><a href="http://www.youtube.com/embed/3y2aazcmk2E">01 - Language, Thinking and Levels of Abstraction</a></li>
+                    <li><a href="http://www.youtube.com/embed/9rKo4EIB6yc">02 - Church and Government, the Main Terrocrats</a></li>
+                    <li><a href="http://www.youtube.com/embed/cDOtAFBa9aQ">03 - Interpreting Media (NLP)</a></li>
+                    <li><a href="http://www.youtube.com/embed/0pajKfN9VP8">How the News Works</a></li>
+                    <li><a href="http://www.youtube.com/embed/jRgKH0j3yoE">Terrorist - Just a Word</a></li>
+                    <li><a href="http://www.youtube.com/embed/JXm5hklbBsA">George Orwell - A Final Warning</a></li>
+                    <li><a href="http://www.youtube.com/embed/jnaM8TqAzzo">Eisenhower's Warning</a></li>
+                    <li><a href="http://www.youtube.com/embed/qAQrsA3m8Bg">Everything is OK</a></li>
+                    <li><a href="http://www.youtube.com/embed/W0AAMCESr5Q">Big Brother on Steroids</a></li>
+                    <li><a href="http://www.youtube.com/embed/k6QDteA_Jdk">MTV warns us Martial Law is coming</a></li>
+                    <li><a href="http://www.youtube.com/embed/Klqv9t1zVww">Police State 4: The Rise of FEMA</a></li>
+                    <li><a href="http://www.youtube.com/embed/ao4bQr0R8W0">How can plants be illegal?</a></li>
+                    <li><a href="http://www.youtube.com/embed/B_u8E7aG-cA">Wake Up Sheeple!</a></li>
+                    <li><a href="http://www.youtube.com/embed/ql7cDR0uha8">Television Is A Drug</a></li>
+                    <li><a href="http://www.youtube.com/embed/KFCsWLKsIqo">Dumbing Down Americans</a></li>
+                    <li><a href="http://www.youtube.com/embed/wpLaD1C7egI">The False Left Right Paradigm</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">Chemtrails</a>
+        <ul>
+            <li><a href="http://planefinder.net/">Plane Finder</a></li>
+            <li><a href="http://www.flightradar24.com/">Flight Radar 24</a></li>
+            <li><a href="http://shipfinder.co/">Shipfinder.co</a></li>
+            <li><a href="http://flightwise.com/">Flightwise.com</a></li>
+            <li><a href="http://contrailscience.com/map/">Contrail Science Map</a></li>
+            <li><a href="http://www.swhydro.arizona.edu/archive/V6_N2/feature4.pdf">Air Pollution &amp; Intentional Seeding</a></li>
+            <li><a href="http://www.terraforminginc.com/chemtrails-vs-contrails/">Chemtrails: Planned and Inadvertent Cloud Seeding</a></li>
+        </ul>
+    </li>
+    <li id="weather-rootz">
+        <a href="#">Weather</a>
+        <ul>
+            <li><a href="http://nowcoast.noaa.gov/">NOAA nowCOAST</a></li>
+            <li><a href="http://www.spc.noaa.gov/exper/sref/cmm_sref.php">Short Range Ensemble Forecast (SREF)</a></li>
+            <li><a href="http://lance-modis.eosdis.nasa.gov/imagery/subsets/?area=global">NASA Rapid Response LANCE</a></li>
+            <li><a href="#">Satellite Imagery</a>
+                <ul>
+                    <li><a href="#">GOES</a>
+                        <ul>
+                            <li><a href="http://www.ghcc.msfc.nasa.gov/GOES/">NASA ESO GOES</a></li>
+                            <li><a href="http://rsd.gsfc.nasa.gov/goes/">GOES Project Science</a></li>
+                            <li><a href="http://goes.gsfc.nasa.gov/goescolor/goeseast/overview2/color_lrg/latestfull.jpg">Full East</a></li>
+                            <li><a href="http://goes.gsfc.nasa.gov/goescolor/goeswest/overview2/color_lrg/latestfull.jpg">Full West</a></li>
+                            <li><a href="http://goes.gsfc.nasa.gov/goescolor/goeseast/hurricane2/color_lrg/latest.jpg">USA East</a></li>
+                            <li><a href="http://goes.gsfc.nasa.gov/goescolor/goeswest/pacific2/color_lrg/latest.jpg">USA West</a></li>
+                            <li><a href="http://goes.gsfc.nasa.gov/goescolor/goeseast/overview2/color_lrg/latestfull.jpg">Full East</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="http://www.nesdis.noaa.gov/">National Environmental Satellite, Data, &amp; Information Service (NESDIS)</a></li>
+                    <li><a href="http://www.star.nesdis.noaa.gov/smcd/opdb/goes/soundings/index.php">Satellite Applications &amp; Research (STAR)</a></li>
+                    <li><a href="http://www.nrlmry.navy.mil/NEXSAT.html">US. Navy NexSAT</a></li>
+                    <li><a href="http://www.nrlmry.navy.mil/sat-bin/over.cgi">NRL Monterey NOGAPS</a></li>
+                    <li><a href="http://lance2.modaps.eosdis.nasa.gov/wms/usecase_all_devel.html">LANCE Web Mapping Service</a></li>
+                    <li><a href="http://earthdata.nasa.gov/labs/worldview/">NASA Earthdata Worldview</a></li>
+                    <li><a href="http://earthdata.nasa.gov/lance">NASA LANCE Near Real-Time Data</a></li>
+                    <li><a href="http://lance-modis.eosdis.nasa.gov/imagery/subsets/?area=global">LANCE MODIS(AERONET)(FAS)(FIRMS)</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#">Radar</a>
+                <ul>
+                    <li><a href="http://nowcoast.noaa.gov/">NOAA nowCOAST</a></li>
+                    <li><a href="http://nmq.ou.edu/">National Mosaic &amp; Multi-Sensor QPE</a></li>
+                    <li><a href="http://www.srh.noaa.gov/ridge2/ridgenew2/">NWS/NOAA SRH National Mosaic</a></li>
+                    <li><a href="http://radar.weather.gov/ridge/Conus/full_loop.php">NWS/NOAA National Mosiac Loop</a></li>
+                    <li><a href="http://weather.cod.edu/satrad/">College of DuPage NEXLAB</a></li>
+                    <li><a href="http://wdssii.nssl.noaa.gov/web/wdss2/products/radar/rconusloop.shtml">WDSSII Merged Reflectivity Loop</a></li>
+                    <li><a href="http://wdssii.nssl.noaa.gov/web/wdss2/products/radar/conus.shtml">WDSSII Multi-Radar CONUS</a></li>
+                    <li><a href="http://www.intellicast.com/Local/WxMapFull.aspx">Intellicast Map</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Wind</a>
+                <ul>
+                    <li><a href="http://squall.sfsu.edu/crws/jetstream.html">Jet Stream Analyses &amp; Forecasts</a></li>
+                    <li><a href="http://hint.fm/wind/">Wind Map @ Hint.fm</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Lightning</a>
+                <ul>
+                    <li><a href="http://www.strikestarus.com/">StrikeStar Tracker</a></li>
+                    <li><a href="http://www.lightningstorm.com/explorer.html">VIASALA STRIKEnet</a></li>
+                    <li><a href="http://wwlln.net/">World Wide Lightning Location Network</a></li>
+                    <li><a href="http://www.blitzortung.org/Webpages/index.php?lang=en">Blitzortung.org</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Hurricanes</a>
+                <ul>
+                    <li><a href="http://www.ssd.noaa.gov/PS/TROP/mtcswa.html">Multiplatform Tropical Cyclone Surface Winds Analysis (MTCSWA)</a></li>
+                    <li><a href="http://www.ssd.noaa.gov/PS/TROP/">NESDIS Tropical Cyclone Products</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Climate Monitoring</a>
+                <ul>
+                    <li><a href="http://www.ncdc.noaa.gov/climate-monitoring/">NOAA National Climatic Data Center</a></li>
+                    <li><a href="http://www.cpc.ncep.noaa.gov/">NWS Climate Prediction Center</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Weather Modification</a>
+                <ul>
+                    <li><a href="http://www.terraforminginc.com/climate-engineering-exposed/">Climate Engineering Exposed!</a></li>
+                    <li><a href="http://www.youtube.com/embed/YaO8z2eaQvw">Terrorism, HAARP &amp; Futzing With the Weather</a></li>
+                    <li><a href="http://www.youtube.com/playlist?list=PLfN7m5OaSZKRaC4-VjiX053_118y3EqqJ">Climate Engineering Videos</a></li>
+                    <li><a href="http://www.youtube.com/playlist?list=PLBA520F5F545A6E62&amp;feature=view_all">Weather Modification Videos</a></li>
+                    <li><a href="http://www.youtube.com/playlist?list=PL4A3526E31EF10293&amp;feature=view_all">Geoengineering Videos</a></li>
+                    <li><a href="http://www.youtube.com/playlist?list=PLfN7m5OaSZKR_4HzBoeULqxb1uRLFlldm&amp;feature=view_all">Terraforming Inc.</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+    <li><a href="#">Space Weather</a>
+        <ul>
+            <li><a href="http://iswa.ccmc.gsfc.nasa.gov:8080/IswaSystemWebApp/index.jsp?i_1=7&amp;l_1=0&amp;t_1=0&amp;w_1=230&amp;h_1=268&amp;s_1=0_0_10_3&amp;i_2=2&amp;l_2=1444&amp;t_2=4&amp;w_2=436&amp;h_2=445&amp;s_2=0_0_10_3&amp;i_3=141&amp;l_3=822&amp;t_3=302&amp;w_3=284&amp;h_3=210&amp;s_3=0_0_10_3&amp;i_4=4&amp;l_4=233&amp;t_4=0&amp;w_4=225&amp;h_4=269&amp;s_4=0_0_10_3&amp;i_5=273&amp;l_5=508&amp;t_5=512&amp;w_5=938&amp;h_5=447&amp;s_5=0_0_10_3&amp;i_6=467&amp;l_6=-1&amp;t_6=357&amp;w_6=502&amp;h_6=606&amp;s_6=0_0_10_3&amp;i_7=1&amp;l_7=510&amp;t_7=302&amp;w_7=309&amp;h_7=209&amp;s_7=0_0_10_3&amp;i_8=40&amp;l_8=1448&amp;t_8=489&amp;w_8=450&amp;h_8=473&amp;s_8=0_0_10_3&amp;i_9=129&amp;l_9=1114&amp;t_9=300&amp;w_9=245&amp;h_9=212&amp;s_9=0_0_10_3">ClimateViewer iSWA 1080p</a></li>
+            <li><a href="http://iswa.ccmc.gsfc.nasa.gov/IswaSystemWebApp/">iNTEGRATED SPACE WEATHER ANALYSIS SYSTEM</a></li>
+            <li><a href="http://ngdc.noaa.gov/stp/spaceweather.html">NOAA Geophysical Data Center</a></li>
+            <li><a href="http://spaceweather.com/">SpaceWeather.com</a></li>
+            <li><a href="http://www.solarham.net/">SolarHam.net</a></li>
+            <li><a href="http://helioviewer.org">NASA Helioviewer</a></li>
+            <li><a href="http://www.youtube.com/embed/videoseries?list=UUIp0KTgnQNZJIOQZqrVDw1g&amp;hl=en_US">The Sun Today</a></li>
+            <li><a href="http://science.nasa.gov/realtime/jtrack/3d/JTrack3D.html/">NASA J-Track 3D Satellite Tracking</a></li>
+            <li><a href="#">Real-Time Space Weather Data Sources</a>
+                <ul>
+                    <li><a href="http://www.solarmonitor.org/">SolarMonitor.org</a></li>
+                    <li><a href="http://www.swpc.noaa.gov/ace">ACE Real Time Solar Wind</a></li>
+                    <li><a href="http://www.sec.noaa.gov/today.html">Today's Space Weather</a> (NOAA)</li>
+                    <li><a href="http://www.sec.noaa.gov/forecast.html">Current Solar Forecast</a> (NOAA)</li>
+                    <li><a href="http://www.bbso.njit.edu/cgi-bin/ActivityReport">Big Bear Solar Activity Reports</a>(BBSO)</li>
+                    <li><a href="http://pixie.spasci.com/DynMod/">Real-Time Magnetopause and Bow Shock Model</a></li>
+                    <li><a href="http://www.arsc.edu/SpaceWeather/">Real-Time UAF Eulerian Polar Ionosphere Model</a></li>
+                    <li><a href="http://solar.uleth.ca/www/aurora.php">Current Auroral Oval Position</a></li>
+                    <li><a href="http://www.sp-agency.ca/www/rtoval.htm">Current Auroral Oval inferred from CANOPUS array</a>(U. Alberta)</li>
+                    <li><a href="http://superdarn.jhuapl.edu/rt/map/index.html">SuperDARN/ISR Global Real-Time Ionospheric Convection</a></li>
+                    <li><a href="http://www.sec.noaa.gov/pmap/">Estimated Auroral Activity from NOAA/TIROS</a></li>
+                    <li><a href="http://www.sprl.umich.edu/MIST/spw.html">IZMEM Space Weather Forecast</a></li>
+                    <li><a href="http://eiger.physics.uiowa.edu/~vis/images/">Most Recent POLAR Auroral Image (Visible Light)</a></li>
+                    <li><a href="http://science.nasa.gov/uvi/LatestImage.htm">POLAR UltraViolet Imager Current Image</a></li>
+                    <li><a href="http://pixie.spasci.com/pixie/homepage/img_dir/image_of_the_day.html">POLAR Ionospheric X-ray Imaging Experiment (PIXIE) Image of the Day</a></li>
+                    <li><a href="http://www.gi.alaska.edu/aurora_predict/about.html">Alaska Auroral Prediction Service</a></li>
+                    <li><a href="http://gedds.pfrr.alaska.edu/default.htm">Alaska Geospace Environment Data Display System (GEDDS)</a></li>
+                    <li><a href="http://www.ips.gov.au/">Prediction Services</a> (Australian gov't)</li>
+                    <li><a href="http://space.rice.edu/ISTP/dials.html">Latest Solar Wind Observations</a></li>
+                    <li><a href="http://sprg.ssl.berkeley.edu/dst_index/">Real Time Dst Estimate</a> (UCLA, ACE-based)</li>
+                    <li><a href="http://umtof.umd.edu/pm">SOHO CELIAS MTOF Latest 48 Hours of Solar Wind Data</a></li>
+                    <li><a href="http://leadbelly.lanl.gov/lanl_ep_data/cgi-bin/ep_plot_choose_2.cgi">LANL Geosynchronous Energetic Particle Data</a></li>
+                    <li><a href="http://sideshow.jpl.nasa.gov/gpsiono">North American Ionospheric Total Electron Content Maps</a></li>
+                    <li><a href="http://geomag.usgs.gov/">USGS Geomagnetism Program</a></li>
+                    <li><a href="http://hiraiso.nict.go.jp//">Hiraiso Solar Terrestrial Research Center</a> (Japan)</li>
+                    <li><a href="http://www.ips.gov.au/Satellite/2/1/1">Current Australian-Region Ionospheric Conditions</a></li>
+                    <li><a href="http://www.drao.nrc.ca/icarus/www/sol_home.shtml">Pentiction 10cm Solar Radio Flux</a></li>
+                    <li><a href="http://umbra.nascom.nasa.gov/images/latest.html">Current Solar Images</a> (from <a href="http://umbra.nascom.nasa.gov/sdac.html">Solar Data Analysis Center</a></li>
+                    <li><a href="http://sohowww.nascom.nasa.gov/data/latestimages.html">Current Solar Images</a> (from SOHO)</li>
+                    <li><a href="http://www.astro.ucla.edu/~obs/intro.html">Current Solar Images: Mt. Wilson Solar Tower</a></li>
+                    <li><a href="http://digisonde.haystack.edu/">Millstone Hill Digisonde</a> (<a href="http://digisonde.haystack.edu/latestFrames.htm">Latest Ionogram</a>)</li>
+                    <li><a href="http://www.nwra-az.com/ionoscint/sp_daily.html">Ionospheric Scintillation Predictions</a></li>
+                    <li><a href="http://sideshow.jpl.nasa.gov/gpsiono">GPS-based Ionospheric TEC Measurements</a></li>
+                    <li><a href="http://www.geolab.nrcan.gc.ca/geomag">Geological Survey of Canada: Geomagnetic Forecasts</a></li>
+                    <li><a href="http://www.dan.sp-agency.ca/www/rt_maria.htm">CANOPUS Real Time Magnetometer and Riometer (MARIA) Data</a> (Canada)</li>
+                    <li><a href="http://www.irf.se/mag">Kiruna Magnetometer</a> (Sweden)</li>
+                    <li><a href="http://geo.phys.uit.no/realtime.html">Norwegian Magnetometers</a></li>
+                    <li><a href="http://www.sgo.fi/Data/Pulsation/pulsation.php">Sodankyla Magnetometer</a> (Finland)</li>
+                    <li><a href="http://swdcdb.kugi.kyoto-u.ac.jp/imagdir/imag1/quick.html">INTERMAGNET Kyoto GIN Quicklook Test Page</a></li>
+                    <li><a href="http://www.alis.irf.se/ALIS/">Auroral Large Imaging System</a> (Sweden, quicklook images)</li>
+                    <li><a href="http://solar.uleth.ca/">Solar Terrestrial Dispatch Homepage</a></li>
+                    <li><a href="http://helios.izmiran.rssi.ru/cosray/main.htm">Cosmic Ray Station, Moscow, Russia</a></li>
+                    <li><a href="http://www-ssc.igpp.ucla.edu/gem/spaceweather.html">GEM Real-Time Spaceweather Links</a></li>
+                    <li><a href="http://www.ukssdc.ac.uk/spaceweb/data.html#RealTime">More Real Time Data</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Space Weather Forecasts</a>
+                <ul>
+                    <li><a href="http://www.swpc.noaa.gov/alerts/index.html#alerts">NOAA SEC Alerts, Forecasts, and Summaries</a></li>
+                    <li><a href="http://previ.obspm.fr/">The Paris-Meudon Observatory Solar and Geomagnetic Activity Forecast Center</a>(France)</li>
+                </ul>
+            </li>
+            <li><a href="#">What is Space Weather? (Educational Links)</a>
+                <ul>
+                    <li><a href="http://www7.nationalacademies.org/ssb/SSB_Space_weather97.pdf">Space Weather: A Research Perspective</a> (A good overview; PDF;  New March 21, 1997.)
+                    </li><li><a href="http://www.ofcm.gov/nswp-sp/text/a-cover.htm">National Space Weather Program: Strategic Plan</a> (Technical Document)
+                    </li><li><a href="http://www.ofcm.gov/nswp-ip/text/cover.htm">National Space Weather Program: Implementation Plan</a> (Technical Document)
+                    </li><li><a href="http://www-istp.gsfc.nasa.gov/istp/outreach/">Mission to Geospace</a> (General; Beautifull Pictures) 
+                    </li><li><a href="http://image.gsfc.nasa.gov/poetry/">IMAGE Mission Educational Page</a> (K-12)
+                    </li><li><a href="http://space.rice.edu/">Rice Space Physics Public Outreach</a>
+                    </li><li><a href="http://education.gsfc.nasa.gov/">NASA Goddard Space Science Education</a> (General)
+                    </li><li><a href="http://www-spof.gsfc.nasa.gov/Education/Intro.html">The Exploration of the Earth's Magnetosphere</a> (General) 
+                    </li><li><a href="http://www.sec.noaa.gov/info/index.html">NOAA Space Environment Center Education and Outreach</a> (General)
+                    </li><li><a href="gopher://proton.sec.noaa.gov/00/weekly/README2">User's Guide for NOAA/SEC Space Environment Forecasts</a> (Technical)(NOAA)
+                    </li><li><a href="http://dosxx.colorado.edu/magneto/magnetosphereshome.html">Planetary Magnetospheres</a> (Advanced)
+                    </li><li><a href="http://www-ssc.igpp.ucla.edu/ssc/tutorial.html">SSC Space Physics Tutorial</a> (Advanced Collegiate)
+                    </li><li><a href="http://www.spacescience.org/ExploringSpace/SpaceWeather/1.html">Exploring Space: Space Weather</a> (K-12, General)
+                    </li><li><a href="http://www.windows.umich.edu/spaceweather">Windows to the Universe: Space Weather</a> (K-12)
+                    </li><li><a href="http://tqd.advanced.org/2787/">Solar Observation Homepage</a> (General, K-12)
+                    </li><li><a href="http://tqd.advanced.org/2787/class.htm">Classifying Sunspot Groups</a> (General)
+                    </li><li><a href="http://www.ngdc.noaa.gov/stp/IONO/ionohome.html">NGDC Ionosphere Home Page</a>(General)
+                    </li><li><a href="http://nastol.astro.lu.se/~henrik/spacew2.html">What is Space Weather?</a> (Collegiate) (Overseas: Sweden)
+                    </li><li><a href="http://www.oulu.fi/~spaceweb/lib/ref.html#Education">Space Physics WWW Reference (Education section)</a> (General) (Overseas: Finland)
+                    </li><li><a href="http://www.oulu.fi/~spaceweb/textbook/">Space Physics Textbook</a> (Collegiate) (Overseas: Finland)
+                    </li><li><a href="http://www.ips.gov.au/Educational/">Educational Material from Australia's IPS Radio &amp; Space Services</a> (General) (Overseas: Australia)
+                    </li><li><a href="http://www2.satellite.eu.org/sat/vsohp/iridium.html">Iridium Flares (Satellites observable from Earth)</a> (General)
+                    </li></ul>
+            </li>
+            <li><a href="#">Coordinated Data Analysis</a><ul>
+                    <li><a href="http://www.ngdc.noaa.gov:8080/index.html">SPIDR: Space Physics Interactive Data Resource</a>
+                    </li><li><a href="http://cdaweb.gsfc.nasa.gov/cdaweb/">CDAWeb: Coordinated Data Analysis Website</a>
+                    </li><li><a href="http://www-spof.gsfc.nasa.gov/cgi-bin/gif_walk">NASA SPOF Orbit &amp; KP Survey Plots</a>
+                    </li><li><a href="http://sscweb.gsfc.nasa.gov/">Satellite Situation Center</a> (NASA GSFC)
+                    </li><li><a href="http://iacg.org/">InterAgengy Consulting Group</a>
+                    </li><li><a href="http://www.sel.bldrdoc.gov/iuwds/iuwds.html">The World Space Weather Service</a>
+                    </li><li><a href="http://bolero.gsfc.nasa.gov/ias/ias.html">International Auroral Study</a>
+                    </li><li><a href="http://www-istp1.gsfc.nasa.gov/istp/cloud_jan97/event.html">January 1997 Magnetic Cloud Event Study</a>
+                    </li></ul></li><li><a href="#">Major Modeling Efforts</a><ul>
+                    <li><a href="http://www.bu.edu/cism/">NSSDC Center for Integrated Space Weather Modeling (CISM)</a>
+                    </li><li><a href="http://www.windows.ucar.edu/csem/">Center for Space Environment Modeling (CSEM)</a>
+                    </li></ul></li><li><a href="#">Space Physics Models</a><ul>
+                    <li><a href="http://nssdc.gsfc.nasa.gov/space/model/models_home.html">NSSDC Space Physics Models</a>
+                    </li><li><a href="http://nssdc.gsfc.nasa.gov/space/model/magnetos/data-based/modeling.html">GSFC Magnetospheric Modeling Group</a>
+                    <li><a href="http://rigel.rice.edu/~ding/rfm.html">Rice ElectroMagnetic Field Models</a>
+                    </li><li><a href="http://leadbelly.lanl.gov/reeves/papers/talks/1995_GEM_poster/gem_1995.html">Six Magnetic Field Models Compared: Mapping Geosynchronous Orbit to the Auroral Zone</a>
+                    </li><li><a href="http://rigel.rice.edu/~dmb/index.html">Magnetospheric Specification Model</a>
+                    </li><li><a href="http://web.hao.ucar.edu/public/research/tiso/amie/AMIE_head.html">Assimilative Mapping of Ionospheric Electrodynamics</a>
+                    </li><li><a href="http://gandalf.engin.umich.edu/">Space Weather Aeronomical Response Models</a> (U. of Michigan)
+                    </li><li><a href="http://sd-www.jhuapl.edu/RADAR/AACGM/">Altitude-Adjusted Corrected Geomagnetic coordinate Model (AACGM)</a>
+                    </li><li><a href="http://dac3.pfrr.alaska.edu/~sergei/">Real-Time UAF Eulerian Polar
+                            Ionosphere Model</a>
+                    </li><li><a href="http://www.nwra-az.com/ionoscint/wbmod.html">WBMOD Ionospheric Scintillation Model</a></li>
+                </ul></li>
+            <li><a href="#">Space Physics Observatories</a><ul>
+                    <li><a href="#">Radars</a><ul>
+                            <li><a href="http://www.haystack.edu/iswg/iswg.html">Interactive Map of Incoherent Scatter Radar Stations</a>
+                            </li><li><a href="http://www.haystack.edu/homepage.html">Millstone Hill Haystack Observatory</a>
+                            </li><li><a href="http://www.naic.edu/">Arecibo Observatory</a>
+                            </li><li><a href="http://jicamarca.ece.cornell.edu/">Jicamarca Radar Observatory</a>
+                            </li><li><a href="http://www.eiscat.se/about.html">EISCAT Scientific Association</a>
+                            </li><li><a href="http://isr.sri.com/iono/sondre_web/">Sondrestrom Facility</a>
+                            </li><li><a href="http://hyperion.haystack.edu/kharkov/homepage.html">Institute of the Ionosphere - Kharkov, Ukraine</a> (server in USA)
+                            </li><li><a href="http://sd-www.jhuapl.edu/RADAR/SD_homepage.html">SuperDARN (Super Dual Auroral Radar Network)</a>
+                            </li><li><a href="http://ion.le.ac.uk/cutlass/cutlass.html">CUTLASS Radar</a>
+                            </li><li><a href="http://www.ava.fmi.fi/PLASMA/RADAR/STARE/">STARE Radar</a>
+                            </li><li><a href="http://wwww.pfrr.alaska.edu/HLMS/vhf.htm">Poker Flats Research Range</a></li>
+                        </ul></li>
+                    <li><a href="#">Riometers</a><ul>
+                            <li><a href="http://www.phys.ucalgary.ca/groundbased/html/iris.html">IRIS (U. Calgary)</a>
+                            </li></ul></li>
+                    <li><a href="#">Lidars</a><ul>
+                            <li><a href="http://hoffa.gi.alaska.edu/~rlc/lidar.html">GI-IAF Lidar</a>
+                            </li><li><a href="http://ltpwww.gsfc.nasa.gov/ltp/ant_lidar.html">Antarctic Lidar</a>
+                            </li><li><a href="http://alomar.rocketrange.no/">ALOMAR: Arctic Lidar Observatory for Middle Atmospheric Research</a>
+                            </li><li><a href="http://www.linmpi.mpg.de/english/projekte/sousy/">SOUSY Lidar</a>
+                            </li><li><a href="http://pcl.physics.uwo.ca/">Purple Crow Lidar (U. of Western Ontario)</a>
+                            </li></ul>
+                    </li><li><a href="#">Ionosondes</a><ul>
+                            <li><a href="http://digisonde.haystack.edu/">Millstone Hill Digisonde</a>
+                            </li><li><a href="http://www.eiscat.se/dynasonde/">Dynasonde at Tromsø, Norway</a>
+                            </li><li><a href="http://www.sgo.fi/Data/Ionosonde/ionosonde.php">Sodankylä Geophysical Observatory Ionospheric Station</a>
+                            </li><li><a href="http://www.irf.se/">Swedish Ionosonde System</a>
+                            </li><li><a href="http://www.arlut.utexas.edu/~cir/ionosonde.html">ARL/UT Ionosonde (Austin, Texas, USA)</a>
+                            </li><li><a href="http://www.ngdc.noaa.gov/stp/IONO/ionohome.html">NGDC Ionospheric Data Archive</a>
+                            </li></ul>
+                    </li><li><a href="#">Magnetometers</a><ul>
+                            <li><a href="http://www.haarp.alaska.edu/cgi-bin/scmag/disp-scmag.cgi?Bx=on&amp;By=on&amp;Bz=on">HAARP Magnetometer</a></li>
+                            <li><a href="http://www.haarp.alaska.edu/cgi-bin/magnetometer/magchain.cgi">HAARP Tomography Chain</a></li>
+                            <li><a href="http://www.sprl.umich.edu/MIST/magic.html">Magnetometer Array on the Greenland Ice Cap (MAGIC)</a>
+                            </li><li><a href="http://space.augsburg.edu/space/MaccsHome.html">Magnetometer Array for Cusp and Cleft Studies</a>
+                            </li><li><a href="http://www.dan.sp-agency.ca/">CANOPUS Magnetometer Array</a>(Canada)
+                            </li><li><a href="http://stdb2.stelab.nagoya-u.ac.jp/mm210/">210 Magnetic Meridian Network</a>
+                            </li><li><a href="http://www.irf.se/mag/">Kiruna, Sweden</a>
+                            </li><li><a href="http://www.geo.fmi.fi/image/index.html">International Monitor for Auroral Geomagnetic Effects (IMAGE)</a>
+                            </li><li><a href="http://www.sgo.fi/Data/Magnetometer/magnetometer.php">Pulsation Magnetometer Chain, U. of Oulu, Finland</a>
+                            </li><li><a href="http://space.sgo.fi/htmls/magstation.html">Sodankylä Geophysical Observatory Magnetic Station</a>
+                            </li><li><a href="http://geo.phys.uit.no/">The Auroral Observatory, Tromsø, Norway</a>
+                            </li><li><a href="http://gaea.es.flinders.edu.au/~mgfhc/vault.html">Real Time Magnetograms from South Australia (Flinders U.)</a>
+                            </li><li><a href="http://gldss7.cr.usgs.gov/geomag/imag.html">INTERMAGNET International Magnetometer Network</a><ul>
+                                    <li><a href="http://unixb.nerc-murchison.ac.uk/htbin/form">INTERMAGNET Data Request</a> (UK)
+                                    </li><li><a href="http://ub.nmh.ac.uk/htbin/form/">INTERMAGNET Data Request</a>(UK)
+                                    </li><li><a href="http://obsmag.ipgp.jussieu.fr/cgi-bin/form">INTERMAGNET Data Request</a> (France)
+                                    </li><li><a href="http://swdcdb.kugi.kyoto-u.ac.jp/">WDC-C2 Geomagnetism</a></li>
+                                </ul>
+                            </li></ul>
+                    </li><li><a href="#">Cosmic Ray &amp; Neutron Monitors</a><ul>
+                            <li><a href="http://www.izmiran.troitsk.ru/cosray/main.htm">Cosmic Ray Station, Moscow, Russia</a>
+                            </li></ul>
+                    </li><li><a href="#">Solar Observatories</a><ul>
+                            <li><a href="http://www.astro.ucla.edu/~obs/intro.html">Mt. Wilson Solar Tower</a> (Calfornia, USA)
+                            </li><li><a href="http://sundog.caltech.edu/">Big Bear Solar Observatory</a> (California, USA)
+                            </li><li><a href="http://www.nso.edu/">National Solar Observatory</a> (USA)
+                            </li><li><a href="http://www.hao.ucar.edu/public/research/mlso/mlso_homepage.html">Mauna Loa Solar Observatory</a>(Hawaii, USA)
+                            </li><li><a href="http://www.solar.ifa.hawaii.edu/">Mees Solar Observatory</a> (Hawaii, USA)
+                            </li><li><a href="http://www.ips.oz.au/learmonth/index.html">Learmonth Solar Observatory</a> (Western Australia)
+                            </li><li><a href="http://www.ct.astro.it/">Catania Astrophysical Observatory</a> (Italy)
+                            </li><li><a href="http://www.rm.astro.it/oaract.html">Osservatorio Astronomico di Roma</a> (Italy)
+                            </li><li><a href="http://spin.cifus.uson.mx/EOS/eosengl.htm">Solar Observatory, Universidad de Sonora</a> (Mexico)
+                            </li><li><a href="http://spin.cifus.uson.mx/EOS/oca.htm">Observatorio de el Cerro Azul</a> (Mexico)
+                            </li><li><a href="http://www.lmsal.com/LaPalma/homepage.html">LaPalma Observatory</a> (Canary Islands)
+                            </li><li><a href="http://www.dasop.obspm.fr/dasop/index.html">The Paris-Meudon Solar Department (DASOP)</a> (France)
+                            </li><li><a href="http://mesola.obspm.fr/">The Bass 2000 Solar Data Base , Meudon Antenna</a> (France)
+                            </li><li><a href="http://www.obs-nancay.fr/html_fr/rh_new.htm">The Nancay Radioheliograph (Paris Observatory)</a> (France)
+                            </li><li><a href="http://www.obs-nice.fr/themis/">THEMIS [Heliographic Telescope for the Study of the Magnetism and Instabilities on the Sun]</a> (France)
+                            </li><li><a href="http://www-istp.gsfc.nasa.gov/istp/istp_index/soho/soho.html">Solar and Heliospheric Observatory (SOHO)</a>
+                            </li><li><a href="http://www.lmsal.com/SXT/homepage.html">Yohkoh Soft X-Ray Telescope (SXT)</a>
+                            </li><li><a href="http://www.lmsal.com/TRACE/welcome.html">Transition Region and Coronal Explorer (TRACE)</a>
+                            </li><li><a href="http://solar.nro.nao.ac.jp/">Nobeyama Radioheliograph</a> (Japan)
+                            </li></ul>
+                    </li><li><a href="#">Optical Instruments</a><ul>
+                            <li>Poker Flat: Davis Science Operations Center<ul>
+                                    <li><a href="http://dac3.pfrr.alaska.edu/~pfrr/DATA/ASC.HTM">Alaska All-Sky Cameras</a>
+                                    </li><li><a href="http://www.ucalgary.ca/~tstronds/groundbased/html/fairchild.htm">Fairchild All-Sky Imager</a>
+                                    </li><li><a href="http://www.ucalgary.ca/~tstronds/groundbased/html/asi.html">CANOPUS All-Sky Imager</a>
+                                    </li><li><a href="http://www.ucalgary.ca/~tstronds/pai/pai.html">U. Calgary Portable Auroral Imager</a>
+                                    </li><li><a href="http://www.pfrr.alaska.edu/~optics/opticsgroup.html">Alaska Meridian Scanning Photometers</a></li></ul>
+                            </li><li><a href="http://haldde.unis.no/">Henriksen Auroral Station (Svalbard)</a>
+                            </li><li><a href="http://snake.irf.se/">Auroral Large Imaging System</a>
+                            </li><li><a href="http://www.nipr.ac.jp/~asi-dp/">South Pole Station All-Sky Imager</a>
+                            </li></ul>
+                    </li><li><a href="#">Sounding Rocket Facilities</a><ul>
+                            <li><a href="http://www.pfrr.alaska.edu/">Poker Flat Research Range</a>
+                            </li><li><a href="http://www.arr.nsc.no/">Andoya Rocket Range</a>
+                            </li></ul>
+
+                    </li><li><a href="#">Satellites</a><ul>
+
+                            <li><a href="http://science.nasa.gov/heliophysics/missions/">NASA Heliospheric Missions</a>
+                            </li><li><a href="http://sci.esa.int/">ESA Science</a>
+                            </li><li><a href="http://www.isas.jaxa.jp/">ISAS Science (Japan)</a>
+                            </li></ul></ul><li><a href="#"> Mission pages : Active Missions</a><ul>
+                    <li><a href="http://www.srl.caltech.edu/ACE/">Advanced Composition Explorer (ACE)</a>
+                    </li><li><a href="http://science.nasa.gov/missions/aim">AIM</a>
+                    </li><li><a href="http://www.isas.jaxa.jp/e/enterp/missions/akebono/">AKEBONO</a>
+                    </li><li><a href="http://cindispace.utdallas.edu/"> CINDI</a>
+                    </li><li><a href="http://space.rice.edu/Cluster/">Cluster (Rice)</a>
+                    </li><li><a href="http://www.plh.af.mil/VSBS/ssiesdmspgeneral.html">DMSP</a>
+                    </li><li><a href="http://www.plh.af.mil/VSBS/ssiesgeneral.html">SSIES</a>
+                    </li><li><a href="http://www.plh.af.mil/VSBS/dmspssj4.html">SSJ/4</a>
+                    </li><li><a href="http://www.plh.af.mil/VSBS/dmspssm.html">SSM</a>
+                    </li><li><a href="http://web.ngdc.noaa.gov/dmsp/dmsp.html">NOAA Data Archive</a>
+                    </li><li><a href="http://plasma2.ssl.berkeley.edu/fast/welcome2.html">FAST</a>
+                    </li><li><a href="http://pwg.gsfc.nasa.gov/istp/geotail">Geotail</a>
+                    </li><li><a href="http://www.isas.jaxa.jp/e/enterp/missions/hinode/">HINODE</a> (Solar-B)
+                    </li><li><a href="http://www.ibex.swri.edu/"> IBEX (Interstellar Boundary Explorer) </a>
+                    </li><li><a href="http://leadbelly.lanl.gov/lanl_ep_data/">LANL CPA &amp; SOPA</a>
+                    </li><li><a href="http://science.nasa.gov/missions/mms/">Magnetospheric MultiScale</a>
+                    </li><li><a href="http://space.rice.edu/MMS">MMS-SMART E/PO (Rice) </a>
+                    </li><li><a href="http://mms.space.swri.edu/">MMS-SMART (SwRI) </a>
+                    </li><li><a href="http://science.nasa.gov/missions/rhessi">RHESSI</a>
+                    </li><li><a href="http://sdo.gsfc.nasa.gov/">SDO</a>
+                    </li><li><a href="http://sohowww.nascom.nasa.gov/">SOHO</a>
+                    </li><li><a href="http://umtof.umd.edu/pm">CELIAS MTOF Proton Monitor</a>
+                    </li><li><a href="http://stereo.gsfc.nasa.gov/">STEREO</a>
+                    </li><li><a href="http://twins.swri.edu/"> TWINS </a>
+                    </li><li><a href="http://science.nasa.gov/missions/voyager/">Voyager</a>
+                    </li><li><a href="http://voyager.jpl.nasa.gov/index.html">Voyager at JPL</a>
+                    </li><li><a href="http://nssdc.gsfc.nasa.gov/space/ampte.html">AMPTE</a>
+                    </li><li><a href="http://science.nasa.gov/missions/de/">Dynamics Explorer (DE)</a>
+                    </li><li><a href="http://science.nasa.gov/missions/equator-s/">Equator-S</a> 
+                    </li><li><a href="http://nssdc.gsfc.nasa.gov/hawkeye/hawkeye.html">Hawkeye</a>
+                    </li><li><a href="http://image.gsfc.nasa.gov/">IMAGE (GSFC)</a>
+                    </li><li><a href="http://pluto.space.swri.edu/">IMAGE (SwRI)</a>
+                    </li><li><a href="http://nssdc.gsfc.nasa.gov/space/imp-8.html">IMP-8</a>
+                    </li><li><a href="http://www.iki.rssi.ru/interball/">Interball</a> 
+                    </li><li><a href="http://science.nasa.gov/missions/isee/">ISEE</a>
+                    </li><li><a href="http://pwg.gsfc.nasa.gov/polar">POLAR</a> 
+                    </li><li><a href="http://science.nasa.gov/missions/sampex/">SAMPEX</a>
+                    </li><li><a href="http://science.nasa.gov/missions/uars/">UARS</a>
+                    </li><li><a href="http://ulysses.jpl.nasa.gov/">Ulysses</a>
+                    </li></ul>
+            </li><li><a href="#">GPS-based Measurements</a><ul>
+                    <li><a href="http://sideshow.jpl.nasa.gov/gpsiono/">Ionospheric Total Electron Content</a>
+                    </li><li><a href="http://www.grdl.noaa.gov/GRD/GPS/Projects/TEC/">GPS-derived Total Electron Content</a>
+                    </li><li><a href="http://http//www.unavco.ucar.edu/~rocken/realtime.html">UNAVCO TEC (and PWV) from GPS</a>(Southwestern USA)
+                    </li></ul>
+            </li><li><a href="#">Computerized Ionospheric Tomography</a><ul>
+                    <li><a href="http://sgdion1.arlut.utexas.edu/~grk/Tomo/tomo.html">ARL/UT Computerized Ionospheric Tomography</a>
+                    </li></ul>
+            </li><li><a href="#">Space Physics Research Centers</a><ul>
+                    <li><a href="#">Non-Academic Centers</a><ul>
+                            <li><a href="http://umbra.nascom.nasa.gov/sdac.html">Solar Data Analysis Center</a>
+                            </li><li><a href="http://nssdc.gsfc.nasa.gov/">National Space Science Data Center</a>
+                            </li><li><a href="http://nssdc.gsfc.nasa.gov/space/helios/spw.html">NSSDC Space Weather Assets</a>
+                            </li><li><a href="http://spdf.gsfc.nasa.gov/space_weather/Space_Weather_at_SSDOO.html">Space Weather Resources at Space Science Data Operations Office (SSDOO)</a>
+                            </li><li><a href="http://www.sec.noaa.gov/">NOAA Space Environment Center</a>
+                            </li><li><a href="http://dsuap1.nrl.navy.mil/">NRL Thermospheric and Ionospheric Physics Section</a>
+                            </li><li><a href="http://uap-www.nrl.navy.mil/">NRL Upper Atmospheric Physics Branch</a>
+                            </li><li><a href="http://www.plh.af.mil/VSBS/">USAF Research Laboratory - Space Hazards Branch</a>
+                            </li><li><a href="http://satori2.lerc.nasa.gov/DOC/othersee.html">NASA Space Environment Effects</a>
+                            </li><li><a href="http://www.hao.ucar.edu/">NCAR High Altitude Observatory</a>
+                            </li><li><a href="http://wwwssl.msfc.nasa.gov/ssl/pad/solar/">NASA MSFC Solar Physics</a>
+                            </li><li><a href="http://www.ngdc.noaa.gov/stp/stp.html">National Geophysical Data Center</a>
+                            </li><li><a href="http://www.ngdc.noaa.gov/wdc/wdcmain.html">World Data Center System</a>
+                            </li><li><a href="http://www-spof.gsfc.nasa.gov/">ISTP Science Planning and Operations Facility</a>
+                            </li><li><a href="http://ispec.ucsd.edu/">International Space Physics Educational Consortium</a>
+                            </li><li><a href="http://espsun.space.swri.edu/spacephysics/home.html">SwRI Space Plasma Physics</a>
+                            </li><li><a href="http://www.lmsal.com/">Lockheed Martin Solar and Astrophysics Laboratory</a>
+                            </li><li><a href="http://www.nwra.com/">Northwest Research Associates</a>
+                            </li><li><a href="http://osprey.itd.sterling.com/">Sterling Software Spacecast</a>
+                            </li><li><a href="http://www.nerc-bas.ac.uk/public/uasd/">British Antarctic Survey</a>
+                            </li><li><a href="http://aurora.irf.se/">Swedish Institute of Space Physics</a>
+                            </li><li><a href="http://sumppu.fmi.fi/">Department of Geophysics, Finnish Meteorological Institute</a>
+                            </li><li><a href="http://hiraiso.crl.go.jp/">Hiraiso Solar Terrestrial Research Center, Japan</a>
+                            </li></ul>
+                    </li><li><a href="#">Academic Centers</a><ul>
+                            <li><a href="http://www.usra.edu/members/index.shtml">Universities Space Research Association member institutions</a>
+                            </li><li><a href="http://physics.rice.edu/">Department of Physics &amp; Astronomy, Rice University</a>
+                            </li><li><a href="http://igpp.ucla.edu/">Institute for Geophysics and Planetary Physics, UCLA</a>
+                            </li><li><a href="http://utd500.utdallas.edu/">William B. Hanson Center for Space Sciences, UTD</a>
+                            </li><li><a href="http://www.arlut.utexas.edu/~cir/">Center for Ionospheric Research, ARL/UT</a>
+                            </li><li><a href="http://leonardo.unh.edu/">Space Physics Lab, UNH</a>
+                            </li><li><a href="http://www.sprl.umich.edu/">Space Physics Research Laboratory, U Michigan</a>
+                            </li><li><a href="http://www.physics.uiowa.edu/">Department of Physics &amp; Astronomy, U Iowa</a>
+                            </li><li><a href="http://lasp.colorado.edu/">Laboratory for Atmospheric and Space Physics, U Colorado</a>
+                            </li><li><a href="http://www.ku.edu/~kuspace/">U Kansas Space Physics</a>
+                            </li><li><a href="http://www.gi.alaska.edu/">Geophysical Institude, U Alaska Fairbanks</a><ul>
+                                    <li><a href="http://what.gi.alaska.edu/hew/">Space Physics Theory and Simulation</a>
+                                    </li><li><a href="http://www.gi.alaska.edu/space/">Space Physics and Aeronomy Group</a></li></ul>
+                            </li><li><a href="http://bu-ast.bu.edu/csp.html">Center for Space Physics, Boston University</a>
+                            </li><li><a href="http://www.ssec.wisc.edu/">Space Science and Engineering Center, U Wisconsin-Madison</a>
+                            </li><li><a href="http://www.stanford.edu/group/CSSA">Stanford University Center for Space Science and Astrophysics</a>
+                            </li><li><a href="http://mssla3.mssl.ucl.ac.uk/">Mullard Space Science Laboratory, University College, London, UK</a>
+                            </li><li><a href="http://sd-www.jhuapl.edu/">Space Department, Applied Physics Lab, John Hopkins University</a>
+                            </li><li><a href="http://space.umd.edu/">Space Physics Group, U. Maryland (College Park)</a>
+                            </li><li><a href="http://web.mit.edu/space/www/index.html">The MIT Space Plasma Group</a>
+                            </li><li><a href="http://spaceweb.oulu.fi/">Space Physics Group, Oulu, Finland</a>
+                            </li><li><a href="http://rrsl.ee.washington.edu/home.htm">Radar Remote Sensing, Ionospheric Plasma Plasma, U. of Washington</a>
+                            </li><li><a href="http://www.stelab.nagoya-u.ac.jp/omosaic/crle.html">Solar-Terrestrial Environment Lab, Nagoya U., Japan</a>
+                            </li><li><a href="http://www.si.umich.edu/sparc/">Upper Atmosphere Research Collaboratory</a>
+                            </li><li><a href="http://gaea.es.flinders.edu.au/~mgfhc/posters.html">Geomagnetism at Flinders University, Australia</a>
+                            </li><li><a href="http://www.phys.ucalgary.ca/">Institute of Space Research, U. of Calgary, Canada</a>
+                            </li></ul>
+                    </li></ul>
+            </li><li><a href="#">Technical Literature Indices</a><ul>
+                    <li><a href="http://adswww.harvard.edu/">NASA Astrophysics Data System</a> (includes searchable abstract database)
+                    </li></ul>
+            </li><li><a href="#">Space Physics Professional Organizations &amp; Programs</a><ul>
+                    <li><a href="http://www.geo.nsf.gov/atm/start.htm">NSF Division of Atmospheric Sciences</a>
+                    </li><li><a href="http://www-ssc.igpp.ucla.edu/gem/Welcome.html">NSF GEM (magnetosphere) program</a>
+                    </li><li><a href="http://hyperion.haystack.edu/css/cedar_storm_study.html">NSF CEDAR (ionosphere/thermosphere) program</a>
+                    </li><li><a href="http://www.ioag.org/">Interagency (NASA,ESA,ISAS,IKI) Coordinating Group</a>
+                    </li><li><a href="http://www-istp.gsfc.nasa.gov/">International Solar-Terrestrial Physics Program</a>
+                    </li><li><a href="http://www.usra.edu/">Universities Space Research Association</a>
+                    </li><li><a href="http://www.uaf.edu/asgp/">Alaska Space Grant Program</a>
+                    </li><li><a href="http://www.utexas.edu/tsgc/">Texas Space Grant Consortium</a>
+                    </li><li><a href="http://www.niac.usra.edu/">NASA Institute for Advanced Concepts</a>
+                    </li></ul>
+            </li><li><a href="#">Relevant Amateur Organizations</a><ul>
+                    <li><a href="http://www.dxlc.com/">DX-Listener's Club</a>(Norway)</li></ul>
+            </li><li><a href="#">GPS FAQ - reviews, forums, articles</a><ul>
+                    <li><a href="http://www.gpsfaq.com/">GPS FAQ</a></li></ul>
+            </li><li><a href="#">Other Lists of Space Weather &amp; Space Physics Links</a><ul>
+                    <li><a href="http://www.ukssdc.ac.uk/spaceweb/">WWW Virtual Library: Aeronomy, Solar-Terrestrial Physics and Chemistry</a>
+                    </li><li><a href="http://sgl.arlut.utexas.edu/"> Space Weather Resources </a> (From UT)
+                    </li><li><a href="http://hyperion.haystack.edu/mhrobs/links.html">Millstone Hill's Internet Links List</a>
+                    </li><li><a href="http://www.lmsal.com/SXT/html2/list.html">Solar Physics Web Guide</a>	</ul></li></ul></li></ul>
+        <script>
+            var m = { };
+            $('.tree').find('a').map(function() {
+                var tt = $(this);
+                var url = tt.attr('href');
+                if (url!='#')
+                    m[url] = { label: tt.text() };
+            });
+            console.log(m);
+        </script>
+    </body>
+</html>   

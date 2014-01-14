@@ -1,0 +1,1971 @@
+storyjs_jsonp_data = {
+    "timeline":
+    {
+        "headline":"The History of Weather Control",
+        "type":"default",
+		"text":"After 100 years of rainmaking, few know the extensive history of man's attempt to control the weather.  Timeline by <a href='http://www.facebook.com/rezn8d' target='_blank'>Jim Lee</a><br> <div style='position:relative;width:190px;display:block;clear:both;margin:0 auto;padding:0;'><a target='_blank' href='http://on.fb.me/11j82kU'><img src='compiled/facebook.png' style='width:60px;height:60px;position:relative;float:left;margin:0 3px 0 0;padding:0;outline:none;border:none;' title='Share this on Facebook'  alt='Share this on Facebook'  /></a><a target='_blank' href='http://bit.ly/Z4MFXR'><img src='compiled/twitter.png' style='width:60px;height:60px;position:relative;float:left;margin:0 3px 0 0;padding:0;outline:none;border:none;' title='Share this on Twitter'  alt='Share this on Twitter'  /></a><a target='_blank' href='http://bit.ly/ZyVjKQ'><img src='compiled/google-plus.png' style='width:60px;height:60px;position:relative;float:left;margin:0 3px 0 0;padding:0;outline:none;border:none;' title='Share this on Google Plus'  alt='Share this on Google Plus'  /></a></div>",
+		"asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=ZohI8VkdUzE",
+                    "credit":"",
+                    "caption":""
+                },
+		"startDate":"1780,1,1",
+        "date": [
+            {
+                "startDate":"1785,5,9",
+				"endDate":"1860,1,24",
+                "headline":"James Pollard Espy &ldquo;The Storm King&rdquo;",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8527158168/",
+                    "credit":"proposed to stimulate rain through controlled forest burning. <a href='http://en.wikipedia.org/wiki/James_Pollard_Espy'>[1]</a>, <a href='http://www.encyclopedia.com/topic/James_Pollard_Espy.aspx'>[2]</a>, <a href='https://play.google.com/books/reader?id=7bkOAAAAYAAJ&amp;printsec=frontcover&amp;output=reader&amp;authuser=0&amp;hl=en&amp;pg=GBS.PR1' title='The Philosophy of Storms'>[3]</a>, <a href='http://www.flickr.com/photos/rezn8d/8498864047/' title='War Weather Map'>[4]</a>",
+                    "caption":""
+                }
+            },
+            {
+                "startDate":"1887,1",
+                "headline":"Reroute warm ocean currents to melt the polar icecaps!",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8499608936/",
+                    "credit":" <a href='https://play.google.com/books/reader?id=zP9LR92pzVQC&amp;printsec=frontcover&amp;output=reader&amp;authuser=0&amp;hl=en&amp;pg=GBS.PA724'>&ldquo;How to change the North American Climate&rdquo;</a>, <a href='http://www.villagevoice.com/2005-05-10/news/polar-eclipse/'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1889,1",
+                "headline":"Fire a cannon to tilt Earth's axis, melt poles!",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8498436705/",
+                    "credit":"<a href='http://www.gutenberg.org/files/10547/10547-h/10547-h.htm'>&ldquo;The Purchase of the North Pole&rdquo;</a> by Jules Verne. <a href='http://en.wikipedia.org/wiki/The_Purchase_of_the_North_Pole'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1890,1",
+                "endDate":"1892,1",
+                "headline":"General &ldquo;Dryhenceforth&rdquo;",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8498880639/",
+                    "credit":"Gen. Robert St. George Dyrenforth. <a href='http://househistoryman.blogspot.com/2012/02/bizaare-last-will-of-rainmaker-george.html'>[1]</a>, <a href='http://nzetc.victoria.ac.nz/tm/scholarly/tei-Gov14_04Rail-t1-body-d4.html'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1891,1",
+                "headline":"An Ode to Pluviculture",
+                "text":"",
+                "asset":
+                {
+                    "media":"<p><strong>The Rhyme of the Rain Machine</strong> by F. W. Clarke<br><br>Said Jeremy Jonathan Joseph Jones,<br>&ldquo;The weather is far too dry,<br>So I reckon I’ll have to stir my bones<br>And try the effect of concussive tones<br>Upon the lazy sky.&rdquo; ... <a href='http://www.history.noaa.gov/art/rainmachine.html'>continue reading</a></p>",
+                    "credit":"",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1891,9,5",
+                "headline":"Effects of Rain-Making",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8540126381/",
+                    "credit":"<a href='http://yesteryearsnews.wordpress.com/2011/06/14/rain-makers-wizards-kings-and-uncle-sam/'>Uncle Sam’s Rain</a>: Prosperity. Politician’s Rain: Office. Miser’s Rain: Money. Merchant’s Rain: Orders. Farmer’s Rain: Crops. Spinster’s Rain: Angels? Babies?",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1891,1",
+                "endDate":"1893,1",
+                "headline":"&ldquo;Ohio Rain Wizard&rdquo; Frank Melbourne",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8499994456/",
+                    "credit":"<a href='http://plainshumanities.unl.edu/encyclopedia/doc/egp.wat.023'>[1]</a>, <a href='http://www.kshs.org/index.php?url=kansapedia/rainmaking/12179'>[2]</a>, <a href='http://yesteryearsnews.wordpress.com/2011/06/14/rain-makers-wizards-kings-and-uncle-sam/'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1902,9",
+                "headline":"Steiger Vortex rain-making gun",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/mattmarble/4661388470/",
+                    "credit":"<a href='http://www.qhatlas.com.au/resource/steiger-vortex-rain-making-gun-c1900'>[1]</a>, <a href='http://www.flickr.com/photos/mattmarble/4661388470/'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1911,1",
+                "endDate":"1914,1",
+                "headline":"C.W. Post: Cereal Czar and Rainmaker",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8506201824/",
+                    "credit":"<a href='http://www.texascooppower.com/texas-stories/history/cw-post-cereal-czar-and-rainmaker'>[1]</a>, <a href='http://plainshumanities.unl.edu/encyclopedia/doc/egp.wat.023'>[2]</a>, <a href='http://www.loc.gov/pictures/item/98510402/'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1921,9,29",
+                "headline":"End Of Iceberg Menace!",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8511372027/",
+                    "credit":"<a href='http://r3zn8d.files.wordpress.com/2013/02/to-move-the-earth-and-melt-the-pole-geoengineering.pdf'>&ldquo;To Move the Earth and Melt the Pole&rdquo;</a> by Carroll Livingston Riker. <a href='http://query.nytimes.com/gst/abstract.html?res=F40F1FF83A5E13738DDDA00A94D1405B828DF1D3'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1916,1,5",
+                "endDate":"1916,1,20",
+                "headline":"Hatfield made rain for Los Angeles",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8500037320/",
+                    "credit":"Charles &ldquo;moisture accelerator&rdquo; Hatfield. <a href='http://en.wikipedia.org/wiki/Charles_Hatfield'>[1]</a>, <a href='http://www.youtube.com/watch?v=xGmgdsZ7mQg'>Song</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1929,1",
+                "headline":"Space mirrors to focus sunlight and melt polar icecaps",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8497835785/",
+                    "credit":"Hermann Oberth. <a href='http://books.google.com/books?id=te15mpHmmTwC&amp;lpg=PR2&amp;ots=0b5WNvgVDK&amp;dq=The%20Problem%20of%20Space%20Travel&amp;pg=PA121'>[1]</a>, <a href='http://www.gao.gov/assets/330/322208.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1935,1",
+                "headline":"Great Plains Shelterbelt and the Dust Bowl",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8498948198/",
+                    "credit":"<a href='http://en.wikipedia.org/wiki/Great_Plains_Shelterbelt'>[1]</a>, <a href='http://www.pbs.org/kenburns/dustbowl/'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1945,1",
+                "headline":"Nuke the Arctic",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8497901789/",
+                    "credit":"Professor Julian Huxley. <a href='http://www.kschroeder.com/weblog/retro-replays-can-we-atomize-the-arctic'>&ldquo;Can We Atomize the Arctic?&rdquo;</a>, <a href='http://www.gao.gov/assets/330/322208.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1946,11,13",
+                "headline":"Vincent Schaefer invents Cloud Seeding",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8532480537/",
+                    "credit":"<a href='http://library.albany.edu/speccoll/findaids/eresources/findingaids/ua902-01.xml'>[1]</a>, <a href='http://en.wikipedia.org/wiki/Cloud_seeding'>[2]</a>, <a href='http://langmuir.nmt.edu/Storms_Above/StormsAboveCh3.html'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1947,2,28",
+                "endDate":"1952,12,30",
+                "headline":"Project Cirrus",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8526077588/",
+                    "credit":"First hurricane modification project. <a href='http://www.dtic.mil/dtic/tr/fulltext/u2/006880.pdf'>[1]</a>, <a href='http://en.wikipedia.org/wiki/Project_Cirrus'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1948,10,20",
+                "headline":"Great Plan for the Transformation of Nature",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8498616727/",
+                    "credit":"<a href='http://en.wikipedia.org/wiki/Great_Plan_for_the_Transformation_of_Nature'>[1]</a>, <a href='http://geocurrents.info/google-earth/exhausting-the-inexhaustible-ogalala-and-aral-illustrated'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1952,10",
+                "endDate":"1954,3",
+                "headline":"Project SCUD",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8526151056/",
+                    "credit":"Cloud seeding over the East Coast, USA. <a href='http://r3zn8d.files.wordpress.com/2013/03/report-of-the-skyline-conference-on-the-design-and-conduct-of-experiments-in-weather-modification.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1958,1",
+                "headline":"Metal particle space ring to melt the arctic",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8502717230/",
+                    "credit":"M. Gorodsky and Valentin Cherenkov. <a href='http://www.gao.gov/assets/330/322208.pdf'>to thaw the permanently frozen soil of Russia, Canada, and Alaska and melt polar ice</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1958,1",
+                "headline":"Nuclear-powered pumps to melt the arctic",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8501700139/",
+                    "credit":"Arkady Markin. <a href='http://www.gao.gov/assets/330/322208.pdf'>&ldquo;to push the warm Pacific current into the Arctic Sea to melt arctic ice&rdquo;</a>, <a href='http://caltechcampuspubs.library.caltech.edu/508/1/1961_01_26_62_15.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1958,8,1",
+                "endDate":"1958,8,12",
+                "headline":"Operation Hardtack",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8501907945/",
+                    "credit":"Nuclear explosion, artificial radiation belt created. <a href='http://en.wikipedia.org/wiki/List_of_artificial_radiation_belts'>[1]</a>, <a href='http://en.wikipedia.org/wiki/Hardtack_Teak'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1958,8,27",
+                "endDate":"1958,9,6",
+                "headline":"Operation Argus",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8502821036/",
+                    "credit":"Nuclear explosion, artificial radiation belt created. <a href='http://www.fas.org/sgp/othergov/doe/lanl/docs1/00322994.pdf'>[1]</a>, <a href='http://en.wikipedia.org/wiki/Operation_Argus'>[2]</a>, <a href='http://www.darpa.mil/About/History/ARPA-DARPA__The_Name_Chronicles.aspx'>[3]</a>, <a href='http://en.wikipedia.org/wiki/Christofilos_Effect'>[4]</a>, <a href='http://en.wikipedia.org/wiki/List_of_artificial_radiation_belts'>[4]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1959,1",
+                "endDate":"1972,1",
+                "headline":"Colorado University cloud seeding experiments",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8525377422/",
+                    "credit":"<a href='http://gao.justia.com/national-science-foundation/1972/5/cloud-seeding-activities-carried-out-in-the-united-states-under-programs-supported-by-the-federal-agencies-b-100063/B-100063-full-report.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1959,1",
+                "endDate":"1981,12",
+                "headline":"National Hail Research Experiment",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8524378179/",
+                    "credit":"<a href='http://bit.ly/W4liLT'>[1]</a>, <a href='https://nldr.library.ucar.edu/archon/?p=collections/controlcard&id=9'>[2]</a>, <a href='http://gao.justia.com/national-science-foundation/1972/5/cloud-seeding-activities-carried-out-in-the-united-states-under-programs-supported-by-the-federal-agencies-b-100063/B-100063-full-report.pdf'>[3]</a>, <a href='http://www.archives.ucar.edu/search/nhre/0/10/date_desc/NULL/NHRE-000-000-000-003'>[4]</a>, <a href='http://ncar.ucar.edu/'>[5]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1960,6",
+                "endDate":"1967,12",
+                "headline":"Project Skyfire",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8525128832/",
+                    "credit":"cloud seeding and lightning studies (forest fire prevention). <a href='http://www.dtic.mil/dtic/tr/fulltext/u2/a952223.pdf'>[1]</a>, <a href='http://gao.justia.com/national-science-foundation/1972/5/cloud-seeding-activities-carried-out-in-the-united-states-under-programs-supported-by-the-federal-agencies-b-100063/B-100063-full-report.pdf'>[2]</a>, <a href='http://journals.ametsoc.org/doi/pdf/10.1175/1520-0450(1967)006%3C0102%3ACSACTG%3E2.0.CO%3B2'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1961,1",
+                "endDate":"1971,1",
+                "headline":"Agent Orange over Vietnam",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=uTK8PlThZy0",
+                    "credit":"US Air Force sprayed 19,395,369 million gallons of herbicide over Vietnam. <a href='http://www.cc.gatech.edu/~tpilsch/AirOps/ranch.html'>Operation Ranch Hand</a>, <a href='http://www.globalsecurity.org/military/ops/ranch_hand.htm'>Operation Trail Dust</a>, <a title='http://www1.american.edu/ted/ice/vietnam.htm' href='http://www1.american.edu/ted/ice/vietnam.htm' target='_blank'>[1]</a>, <a href='http://www.afhso.af.mil/shared/media/document/AFD-100928-054.pdf'>[2]</a>, <a href='http://en.wikipedia.org/wiki/Operation_Ranch_Hand'>[3]</a>, <a title='Rainbow Herbicides' href='http://en.wikipedia.org/wiki/Rainbow_Herbicides'>[4]</a>, <a title='Agent Orange' href='http://en.wikipedia.org/wiki/Agent_Orange'>[5]</a> ",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1961,1",
+                "endDate":"1988,1",
+                "headline":"Project Skywater",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=bDL9P87MQo8",
+                    "credit":"West Coast USA mountain cloud-seeding <a href='http://www.flickr.com/photos/rezn8d/8501821745/'>[1]</a>, <a href='http://wrri.nmsu.edu/publish/watcon/proc17/Kahan.pdf'>[2]</a> ",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1961,10,21",
+                "endDate":"1963,9,5",
+                "headline":"Project West Ford",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8502770282/",
+                    "credit":"480,000,000 copper dipole antennas launched into orbit. <a href='http://en.wikipedia.org/wiki/Project_West_Ford'>[1]</a>, <a href='http://space.skyrocket.de/doc_sdat/westford.htm'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1962,4,25",
+                "endDate":"1962,11,16",
+                "headline":"Project Highwater",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8503096284/",
+                    "credit":"Experimental release of water in the ionosphere resulted in ice clouds and radio disruption. <a href='http://en.wikipedia.org/wiki/Project_Highwater'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1962,7,9",
+                "headline":"Starfish Prime",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=KZoic9vg1fw",
+                    "credit":"Nuclear explosion, artificial radiation belt created. <a href='http://en.wikipedia.org/wiki/List_of_artificial_radiation_belts'>[1]</a>, <a href='http://en.wikipedia.org/wiki/Starfish_Prime'>[2]</a>, <a href='http://rezn8d.net/2012/01/20/haarp-timeline-an-animated-history-of-ionospheric-destruction/'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1962,8,17",
+                "endDate":"1983,1",
+                "headline":"Project Stormfury",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8535331550/",
+                    "credit":"Hurricane mitigation cloud seeding experiments. <a href='http://www.aoml.noaa.gov/hrd/hrd_sub/sfury.html'>[1]</a>, <a title='American Meteorological Society, Project Stormfury - A Scientific Chronicle' href='http://bit.ly/13Hl4yQ'>[2]</a>, <a href='http://www.thelivingmoon.com/45jack_files/03files/Project_Stormfury_NOAA.html'>[3]</a>, <a href='http://en.wikipedia.org/wiki/Project_Cirrus'>[4]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1962,10,22",
+                "endDate":"1962,11,1",
+                "headline":"Operation K",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8502041155/",
+                    "credit":"Nuclear explosion, artificial radiation belt created. <a href='http://en.wikipedia.org/wiki/List_of_artificial_radiation_belts'>[1]</a>, <a href='http://en.wikipedia.org/wiki/The_K_Project'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1963,1",
+                "endDate":"1972,12",
+                "headline":"National Cumulus Modification Project",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8525341948/",
+                    "credit":"NOAA cloud seeding over Carribbean and Florida. <a href='http://gao.justia.com/national-science-foundation/1972/5/cloud-seeding-activities-carried-out-in-the-united-states-under-programs-supported-by-the-federal-agencies-b-100063/B-100063-full-report.pdf'>[1]</a>, <a href='http://www.ntis.gov/search/product.aspx?ABBR=PB200694F'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1963,5",
+                "endDate":"2025,1",
+                "headline":"Plasma Seeding and Magnetospheric Modification Begins!",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8608000359/",
+                    "credit":"&ldquo;create an artificial ion cloud in interplanetary space for studying the state of the interplanetary medium .. sounding rocket experiments of May 1963&rdquo; <a href='http://www.sciencedirect.com/science/article/pii/0032063365901807'>Foppl et al., 1965</a>, <a href='http://www.igpp.ucla.edu/public/mkivelso/Publications/019-RS008i011p01035.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1963,10,10",
+                "headline":"The Limited Test Ban Treaty (LTBT)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=LLCF7vPanrY",
+                    "credit":"Bans nuclear weapon tests in the atmosphere, outer space, and underwater. <a href='http://en.wikipedia.org/wiki/Partial_Test_Ban_Treaty'>[1]</a>, <a href='http://www.youtube.com/watch?v=LLCF7vPanrY'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1964,2,14",
+                "endDate":"1964,12,3",
+                "headline":"Artificial Strontium and Barium Clouds in the Upper Atmosphere",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/artificial-strontium-and-barium-clouds-in-the-upper-atmosphere.png?w=700",
+                    "credit":"&ldquo;So far seven different experiments have been carried out with sounding rockets in the Sahara and in Sardinia&rdquo;  <a href='http://www.igpp.ucla.edu/public/mkivelso/Publications/019-RS008i011p01035.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1965,11",
+                "headline":"Restoring the Quality of Our Environment",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8512434818/",
+                    "credit":"Presidential report advises <a href='http://en.wikipedia.org/wiki/Solar_radiation_management'>SRM</a> and hurricane mitigation. <a href='http://dge.stanford.edu/labs/caldeiralab/Caldeira%20downloads/PSAC,%201965,%20Restoring%20the%20Quality%20of%20Our%20Environment.pdf'>[1]</a>, <a title='Thermal Equilibrium of the Atmosphere with a Convective Adjustment' href='http://journals.ametsoc.org/doi/abs/10.1175/1520-0469%281964%29021%3C0361%3ATEOTAW%3E2.0.CO%3B2'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1966,1",
+                "endDate":"1970,12",
+                "headline":"Joint Hail Project",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8524378179/",
+                    "credit":"Hail mitigation cloud seeding <a href='http://www.flickr.com/photos/rezn8d/8525482374/'>[1]</a>, <a href='http://journals.ametsoc.org/doi/pdf/10.1175/1520-0450%281968%29007%3C1004%3AHDSBCS%3E2.0.CO%3B2'>[2]</a>, <a href='http://gao.justia.com/national-science-foundation/1972/5/cloud-seeding-activities-carried-out-in-the-united-states-under-programs-supported-by-the-federal-agencies-b-100063/B-100063-full-report.pdf'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1966,10,1",
+                "headline":"Man Versus Climate",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8511404465/",
+                    "credit":"Nikolaĭ Petrovich Rusin and L. Flit. <a href='http://www.amazon.com/Man-Versus-Climate-N-P-Rusin/dp/0714700878/'>[1]</a>, <a href='http://lasp.colorado.edu/~randall/4800/reading/margolin_bixler_optional.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1966,11,7",
+                "headline":"A Recommended National Program In Weather Modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513367382/",
+                    "credit":"<a href='http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19680002906_1968002906.pdf'>Interdepartmental Committee for Atmospheric Sciences</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1967,3,20",
+                "endDate":"1972,7,5",
+                "headline":"Operation Popeye: Weather Warfare",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8504985592/",
+                    "credit":"Cloud seeding over Vietnam. <a href='http://en.wikipedia.org/wiki/Operation_Popeye'>Operation Popeye/Motorpool</a>, <a href='http://www.sunshine-project.org/enmod/US_Congr.html'>[1]</a>, <a href='http://www.awra.us/gallery-jan05.htm'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1968,1",
+                "endDate":"2025,1",
+                "headline":"Solar Power Satellite",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/solar-powered-satellite-1968-death-ray.png?w=700",
+                    "credit":"&ldquo;as long as the program was called Solar Energy by the United States, it could not be considered a weapons project.&rdquo; <a href='http://rezn8d.net/2012/01/20/haarp-timeline-an-animated-history-of-ionospheric-destruction/'>[1]</a>, <a href='http://r3zn8d.files.wordpress.com/2012/01/1978doesps-militaryimplications-ozeroff.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1968,1",
+                "endDate":"1971,1",
+                "headline":"Military fog dispersal",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8525404878/",
+                    "credit":"<a href='http://gao.justia.com/national-science-foundation/1972/5/cloud-seeding-activities-carried-out-in-the-united-states-under-programs-supported-by-the-federal-agencies-b-100063/B-100063-full-report.pdf'>[1]</a>, <a href='http://en.wikipedia.org/wiki/Urea'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1968,1",
+                "endDate":"1972,1",
+                "headline":"Great Lakes Snow Redistribution Project",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8524244855/",
+                    "credit":"<a href='http://gao.justia.com/national-science-foundation/1972/5/cloud-seeding-activities-carried-out-in-the-united-states-under-programs-supported-by-the-federal-agencies-b-100063/B-100063-full-report.pdf'>[1]</a>, <a href='http://en.wikipedia.org/wiki/Urea'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1970,1",
+                "headline":"Pseudomonas syringae cloud seeding bacteria",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8544870599/",
+                    "credit":"<a href='http://en.wikipedia.org/wiki/Pseudomonas_syringae'>[1]</a>, <a href='http://news.yahoo.com/storm-clouds-crawling-bacteria-221441662.html'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1970,10",
+                "headline":"On the possibility of weather modification by aircraft contrails",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8511441453/",
+                    "credit":"&ldquo;likely contrails are affecting precipitation to a much greater extent than are present deliberate seeding operations.&rdquo; <a href='http://www.pbs.org/wgbh/nova/space/contrail-effect.html'>The Contrail Effect</a>, <a href='http://docs.lib.noaa.gov/rescue/mwr/098/mwr-098-10-0745.pdf'>[1]</a>, <a href='https://www.faa.gov/about/office_org/headquarters_offices/apl/research/science_integrated_modeling/accri/'>[2]</a>, <a href='http://terraforminginc.com/chemtrails-vs-contrails/'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1971,12,18",
+                "headline":"Weather Modification Reporting Act of 1972",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513376970/",
+                    "credit":"<a href='http://uscode.house.gov/download/pls/15C9A.txt'>Public Law 92-205</a>, <a href='http://cfr.regstoday.com/15cfr908.aspx'>15 CFR 908</a>. Reporting forms: <a href='http://www.corporateservices.noaa.gov/~noaaforms/eforms/nf17-4.pdf'>[1]</a>, <a href='http://www.corporateservices.noaa.gov/~noaaforms/eforms/nf17-4a.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1972,6",
+                "headline":"Observations of the Developement of Striations in Large Barium Ion Clouds",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/observations-of-the-developement-of-striations-in-large-barium-ion-clouds-1972.png",
+                    "credit":"<a href='http://www.dtic.mil/cgi-bin/GetTRDoc?AD=AD757916'>dtic.mil</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1972,11",
+                "headline":"ARPA Project SECEDE II barium cloud releases",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/arpa-project-secede-ii-barium-cloud-releases-in-the-ionosphere-1972.png",
+                    "credit":"<a href='http://www.dtic.mil/dtic/tr/fulltext/u2/756938.pdf'>dtic.mil</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1972,10,15",
+                "headline":"Energy beams on rockets create artificial aurora",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8609288572/",
+                    "credit":"accelerator intended to send electron beams upward along an L=1.24 magnetic field line was flown from a rocket launched from Kauai, Hawaii <a href='http://onlinelibrary.wiley.com/doi/10.1029/JA085iA04p01722/abstract'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1973,5,14",
+                "headline":"NASA Skylab launch creates hole in the ionosphere, knocks out radio communication over Atlantic Ocean",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/nasa-skylab-launch-creates-hole-in-the-ionosphere-knocks-out-radio-communication-over-atlantic-ocean-1973.png",
+                    "credit":"<a href='http://www.leif.org/EOS/JA080i016p02217.pdf'>[1]</a>, <a href='http://www.leif.org/EOS/JA080i016p02217.pdf'>[1]</a>, <a href='http://www.nasa.gov/missions/shuttle/f_skylab1.html'>[2]</a>, <a href='http://onlinelibrary.wiley.com/doi/10.1029/JA083iA01p00151/abstract'>[Mendillo, et al., 1975]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1974,1",
+                "headline":"High-explosive shaped Barium charges pound ionosphere",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8609349734/",
+                    "credit":"&ldquo;hollow conical liners of barium metal, detonated above 500-km altitude, jets of barium plasma with a range of initial velocity of 8 to 20 km/sec have been created&rdquo; <a href='http://onlinelibrary.wiley.com/doi/10.1029/JA079i001p00159/abstract'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1976,1",
+                "headline":"Environmental warfare: questions and answers",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8511503951/",
+                    "credit":"U.S. Arms Control and Disarmament Agency. Publication 83. <a href='http://openlibrary.org/works/OL6428632W/Environmental_warfare'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1976,1",
+                "headline":"Natural Precedents to Active Magnetospheric Experiments",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8609269886/",
+                    "credit":"&ldquo;...the 1980's will bring a decade of intensive active magnetospheric experimentation.&rdquo; <a href='http://www-ssc.igpp.ucla.edu/personnel/russell/papers/natural_experiments.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1976,3,1",
+                "headline":"On Geoengineering and the CO2 problem",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8511486385/",
+                    "credit":"<a href='http://www.cesaremarchetti.org/bio.php'>Cesare Marchetti</a>. <a href='http://webarchive.iiasa.ac.at/Admin/PUB/Documents/RM-76-017.pdf'>[1]</a>, <a href='http://www.lbl.gov/Science-Articles/Archive/sea-carb-bish.html'>[2]</a>, <a href='http://en.wikipedia.org/wiki/Carbon_sequestration'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1976,10,15",
+                "headline":"National Weather Modification Policy Act of 1976",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8512344045/",
+                    "credit":"<a href='http://www.gpo.gov/fdsys/pkg/STATUTE-90/pdf/STATUTE-90-Pg2359.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1977,3,1",
+                "endDate":"1978,7,24",
+                "headline":"Monsanto and USAF School of Aerospace Medicine study jet exhaust",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/monsanto-and-usaf-school-of-aerospace-medicine-chemtrail-study-1977.png?w=700",
+                    "credit":"<a href='http://www.dtic.mil/dtic/tr/fulltext/u2/a067898.pdf'>[dtic.mil]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1977,5,18",
+                "endDate":"1978,10,5",
+                "headline":"The Environmental Modification Convention (ENMOD)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8535529454/",
+                    "credit":"Bans weather warfare: the use of weather modification techniques for the purposes of inducing damage or destruction. <a href='http://en.wikipedia.org/wiki/Environmental_Modification_Convention'>[1]</a>, <a href='http://www.sunshine-project.org/enmod/US_Congr.html'>[2]</a>, <a href='http://en.wikipedia.org/wiki/Convention_on_Biological_Diversity'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1980,1",
+                "endDate":"1994,1",
+                "headline":"NOAA Atmospheric Modification Program (AMP)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513389712/",
+                    "credit":"<a href='http://www.swc.state.nd.us/4dlink9/4dcgi/GetContentRecord/PB-307'>NOAA Federal-State Cooperative Program in Atmospheric Modification Research</a>. <a href='http://www.dirksencenter.org/findingaids/legislativeseries/1994ILDel/05.16.1994%20Funding%20for%20NOAA-AMP.pdf'>[1]</a>, <a href='http://en.wikipedia.org/wiki/National_Oceanic_and_Atmospheric_Administration'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1981,1",
+                "startDate":"1984,1",
+                "headline":"Project Waterhole, interrupting aurora",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/project-waterhole-1981-1984-ionospheric-modification.png",
+                    "credit":"&ldquo;created a water vapour chemical reaction that poked a hole in the northern lights.&rdquo; <a href='http://www.atmosp.physics.utoronto.ca/~workshop/presentations_2010/Sounding%20-%20A%20Yau.pdf'>[1]</a> <a href='http://adsabs.harvard.edu/abs/1982aiaa.confQ....H'>[2]</a>, <a href='http://www.polarbearalley.com/Assets/feb2008-pages14-15.pdf'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1986,4,15",
+                "endDate":"1987,11",
+                "headline":"New Concepts in Ionospheric Modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8608249165/",
+                    "credit":"Stanford's Star Lab.  <a href='http://www.dtic.mil/cgi-bin/GetTRDoc?AD=ADA199181'>[1]</a>, <a href='http://www.terraforminginc.com/haarp/'>[2]</a>.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1989,7,13",
+                "headline":"Beam Experiment Aboard Rocket (BEAR)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/beam-experiment-aboard-rocket-bear.png?w=700",
+                    "credit":"<a href='http://www.dtic.mil/cgi-bin/GetTRDoc?AD=ADA344879'>dtic.mil</a>, <a href='http://accelconf.web.cern.ch/AccelConf/p89/PDF/PAC1989_1462.pdf'>[1]</a>, <a href='http://accelconf.web.cern.ch/AccelConf/p89/PDF/PAC1989_1462.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1989,9,1",
+                "headline":"International Treaties and Active Experiments in Space",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/internation-treaties-and-active-experiments-in-space.png",
+                    "credit":"High-frequency vertical heating facilities in operation before <a href='http://www.terraforminginc.com/haarp/'>HAARP</a>. <a href='http://r3zn8d.files.wordpress.com/2012/03/haarp-hf-active-auroral-research-program-joint-services-program-plans-and-activities-1990.pdf'>Birth Certificate</a>, <a href='http://www.terraforminginc.com/haarp/'>[1]</a>, <a href='http://www.nrl.navy.mil/research/nrl-review/2004/atmospheric-science-and-technology/kennedy/'>[2]</a>, <a href='http://www.haarp.alaska.edu/'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1989,12,13",
+                "headline":"US Air Force and Navy ask DARPA for HAARP heater",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8512653145/",
+                    "credit":"High-frequency vertical heating facilities in operation before <a href='http://www.terraforminginc.com/haarp/'>HAARP</a>. <a href='http://www.wired.com/images_blogs/dangerroom/2009/07/haarp_1990.pdf'>[1]</a>, <a href='http://www.nrl.navy.mil/research/nrl-review/2004/atmospheric-science-and-technology/kennedy/'>[2]</a>, <a href='http://www.haarp.alaska.edu/'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1990,1,9",
+                "endDate":"1990,1,11",
+                "headline":"HAARP discussed at Ionospheric Modification workshop",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8512613793/",
+                    "credit":"<a href='http://www.wired.com/images_blogs/dangerroom/2009/07/haarp_1990.pdf'>Workshop on Ionospheric Modification and Generation of ELF</a>, <a href='http://www.terraforminginc.com/haarp/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1990,1,24",
+                "endDate":"1990,2,12",
+                "headline":"HAARP &ldquo;Joint Services Program Plans and Activities&rdquo;",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513647464/",
+                    "credit":"<a href='http://r3zn8d.files.wordpress.com/2012/03/haarp-hf-active-auroral-research-program-joint-services-program-plans-and-activities-1990.pdf'>&ldquo;Joint Services Program Plans and Activities&rdquo;</a>, <a href='http://www.terraforminginc.com/haarp/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1990,4,23",
+                "endDate":"1991,3,26",
+                "headline":"Stratospheric Welsbach seeding for reduction of global warming",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538075965/",
+                    "credit":"<a href='http://www.freepatentsonline.com/5003186.html'>United States Patent 5003186</a>. Assignee: Hughes Aircraft Company (Los Angeles, CA)",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1991,6,12",
+                "headline":"Mount Pinatubo Eruption Cools Planet, Scientists Rejoice",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538065333/",
+                    "credit":"The <a href='http://www.theozonehole.com/ozone1991.htm'>ozone hole</a> over Antarctica was the largest recorded following the eruption. <a href='http://vulcan.wr.usgs.gov/Volcanoes/Philippines/Pinatubo/description_pinatubo.html'>[1]</a>, <a href='http://visibleearth.nasa.gov/view.php?id=56217'>[2]</a>, <a href='http://pubs.usgs.gov/fs/1997/fs113-97/'>[3]</a>, <a href='http://so2.gsfc.nasa.gov/'>[4]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1990,7",
+                "endDate":"1993,9",
+                "headline":"CRRES Ionospheric Modification and the Arecibo Heater",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8609329654/",
+                    "credit":"<a href='http://www.dtic.mil/cgi-bin/GetTRDoc?AD=ADA293219'>[1]</a>, <a href='http://www-pw.physics.uiowa.edu/plasma-wave/crres/press-kit/detailed-experiments.html'>[2]</a>, <a href='http://www-pw.physics.uiowa.edu/plasma-wave/crres/index.html'>[3]</a>, ",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1992,1",
+                "headline":"Policy Implications of Greenhouse Warming",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539148160/",
+                    "credit":"Proposed adding more dust to naturally occurring stratospheric dust to increase the net reflection of sunlight. <a href='http://www.nap.edu/catalog/1605.html'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1992,5,25",
+                "headline":"Utah State University studies in Plasma Modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/utah-state-university-studies-in-plasma-modification-1992.png",
+                    "credit":"USU to work in close Collaboration with scientists at the Air Force Geophysics Laboratory on a number of problems that are relevant to Air Force systems, including OTH radars, communications, and orbiting space structures. <a href='http://www.dtic.mil/dtic/tr/fulltext/u2/a252189.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1993,3,19",
+                "headline":"Triggering the HF breakdown of the atmosphere by Barium Release",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/haarp-and-barium-injection-in-mesophere1.png",
+                    "credit":"&ldquo;possible using the NIIR facility located in the vicinity of Moscow or the <a href='http://www.terraforminginc.com/haarp/'>HAARP heater</a> currently under contstruction&rdquo; <a href='http://spp.astro.umd.edu/SpaceWebProj/pap/TRIGGERING%20THE%20HF%20BREAKDOWN%20OF%20THE.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1995,1",
+                "endDate":"1996,12",
+                "headline":"Owning the Weather in 2025",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538017433/",
+                    "credit":"<a href='http://csat.au.af.mil/2025/volume3/vol3ch15.pdf'>Weather as a Force Multiplier: Owning the Weather in 2025</a>, <a href='http://csat.au.af.mil/2025/'>AF 2025</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1995,1",
+                "endDate":"1996,12",
+                "headline":"Aerosol-launched Attack Microbots",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537983697/",
+                    "credit":"<a href='http://csat.au.af.mil/2025/o_a.pdf'>2025 Operational Analysis</a>, <a href='http://csat.au.af.mil/2025/'>AF 2025</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1995,1",
+                "endDate":"1996,12",
+                "headline":"Shrinking the Bull's Eye",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539071670/",
+                    "credit":"<a href='http://csat.au.af.mil/2025/volume2/vol2ch08.pdf'>Aerospace Sanctuary in 2025: Shrinking the Bull’s-Eye</a>, <a href='http://csat.au.af.mil/2025/'>AF 2025</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1995,1",
+                "endDate":"1996,12",
+                "headline":"Global Area Strike System",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537953321/",
+                    "credit":"<a href='http://csat.au.af.mil/2025/volume3/vol3ch14.pdf'>Space Operations: Through The Looking Glass (Global Area Strike System)</a>, <a href='http://csat.au.af.mil/2025/'>AF 2025</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1995,1",
+                "endDate":"1996,12",
+                "headline":"Weather Control UAV Constellations",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537992635/",
+                    "credit":"<a href='http://csat.au.af.mil/2025/concepts/900604.HTM'>UAV Constellations, AF 2025</a>, <a href='http://csat.au.af.mil/2025/'>AF 2025</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1995,1",
+                "endDate":"1996,12",
+                "headline":"An Operational Analysis for AF 2025",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539117812/",
+                    "credit":"<a href='http://csat.au.af.mil/2025/volume4/vol4ch03.pdf'>An Operational Analysis for Air Force 2025: An Application of Value-Focused Thinking to Future Air and Space Capabilities</a>, <a href='http://csat.au.af.mil/2025/'>AF 2025</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1996,1",
+                "endDate":"1998,1",
+                "headline":"Triggered-Lightning Avoidance for Space Launches",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8605403896/",
+                    "credit":"<a href='http://web.archive.org/web/20010504064718/http://www.vs.afrl.af.mil/Factsheets/lightning.html'>Air Force Research Laboratory</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1996,10",
+                "endDate":"2011,9",
+                "headline":"Free-Air CO2 Enrichment (FACE) Experiment",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539048612/",
+                    "credit":"Pumping CO2 into live forests to measure the effect of future climates on trees. <a href='http://public.ornl.gov/face/global_face.shtml'>Global sites</a>, <a href='http://public.ornl.gov/face/index.html'>[1]</a>, <a href='http://face.ornl.gov/'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1997,3,19",
+                "headline":"Weather Modification Test Technology Symposium and HAARP",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537922597/",
+                    "credit":"USAF Dr. Arnold A. Barnes Jr. <a href='http://www.terraforminginc.com/us-army-test-technology-symposium-weather-modification-1997/'>Session B: Advanced Weapon/Instrumentation Technologies</a>. John Hopkins University/Applied Physics Laboratory. Note: <a href='http://www.terraforminginc.com/haarp/'>HAARP</a> on page 6.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1999,3",
+                "headline":"HAARP is operational",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8516910374/",
+                    "credit":"The <a href='http://www.terraforminginc.com/haarp/'>HAARP</a> facility becomes operational, with a <a href='http://www.nrl.navy.mil/research/nrl-review/2004/atmospheric-science-and-technology/kennedy/'>radiated power of 960 kW</a>.  Multiple upgrades follow.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1999,6",
+                "headline":"CME Group launches Weather Derivatives",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8540106248/",
+                    "credit":"The <a href='http://www.cmegroup.com/trading/weather/'>Chicago Mercantile Exchange</a> weather derivatives stock exchange <a href='http://youtu.be/TuwuWPxUF-Q'>Video</a.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1997,4",
+                "headline":"Vision for 2020",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537927965/",
+                    "credit":"<a href='http://www.fas.org/spp/military/docops/usspac/visbook.pdf'>&ldquo;protecting (as well as negating) these non-military space systems will become more difficult&rdquo;</a>. US Space Command",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1997,4,28",
+                "headline":"Eco-Terrorism",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539019230/",
+                    "credit":"<a href='http://www.fas.org/news/usa/1997/04/bmd970429d.htm'>Terrorism, Weapons of Mass Destruction, and U.S. Strategy</a>. Secretary of Defense William Cohen, Sam Nunn Policy Forum.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1997,8",
+                "headline":"Dr. Evils Geoengineering Plan (part 1)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537873653/",
+                    "credit":"<a href='http://dge.stanford.edu/labs/caldeiralab/Caldeira%20downloads/Teller_etal_LLNL231636_1997.pdf'>Global Warming and Ice Ages – Prospects for Physics-Based Modulation of Global Change</a>. Edward Teller, Lowell Wood, Roderick Hyde.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"1999,8,19",
+                "endDate":"1999,8,24",
+                "headline":"Dr. Evils Geoengineering Plan (part 2)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537865279/",
+                    "credit":"<a href='http://dge.stanford.edu/labs/caldeiralab/Caldeira%20downloads/Teller_etal_LLNL236324_1999.pdf'>Long-Range Weather Prediction And Prevention of Climate Catastrophes – A Status Report</a>. Edward Teller, Lowell Wood, Roderick Hyde.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2000,11,1",
+                "headline":"Geoengineering the Climate: History and Prospect",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513621600/",
+                    "credit":"<a href='http://www.keith.seas.harvard.edu/papers/26.Keith.2000.GeoengineeringHistoryandProspect.e.pdf'>by David Keith</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2001,6,11",
+                "headline":"The Climate Change Research Initiative",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538954912/",
+                    "credit":"President Bush establishes <a href='http://www.climatescience.gov/about/nccti.htm'>NCCTI</a> and <a href='http://www.climatescience.gov/about/ccri.htm'>CCRI</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2002,1",
+                "endDate":"2025,1",
+                "headline":"HiVOLT tether to remove space radiation",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/hivolt-high-voltage-orbiting-long-tether-radiation-belt-remediation.jpg",
+                    "credit":"HiVOLT (High Voltage Orbiting Long Tether) <a href='http://www.tethers.com/papers/es_remediation_ieee_paper.pdf'>[1]</a>, <a href='http://www.tethers.com/HiVOLT.html'>[2]</a>, <a href='http://radbelts.gsfc.nasa.gov/outreach/RadNews.html'>[3]</a>, ",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2002,1",
+                "endDate":"2005,1",
+                "headline":"The Weather Damage Modification Program",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8525871374/",
+                    "credit":"In 2002 Congress authorized funding the <a href='https://ams.confex.com/ams/Annual2005/techprogram/session_17912.htm'>WDMP</a> and specified that it be administered by <a href='http://www.usbr.gov/WaterSMART/'>U.S. Bureau of Reclamation</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2002,4,19",
+                "headline":"Dr. Evils Geoengineering Plan (part 3)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537858907/",
+                    "credit":"<a href='http://r3zn8d.files.wordpress.com/2013/03/active-climate-stabilization-practical-physics-based-approaches-to-prevention-of-climate-change.pdf'>Active Climate Stabilization – Practical Physics-Based Approaches to Prevention of Climate Change</a>. Edward Teller, Lowell Wood, Roderick Hyde. <a title='http://web.archive.org/web/20070611194418/http://www.llnl.gov/global-warm/148012.pdf' href='http://bit.ly/XWy27Y'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2002,9",
+                "headline":"Spacecraft-based electron beam atmospheric/ionospheric modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8608196871/",
+                    "credit":"&ldquo;the mesosphere and lower thermosphere regions can be perturbed down to 40-km altitude&rdquo; <a href='http://onlinelibrary.wiley.com/doi/10.1029/2001JA900102/abstract'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2003,10",
+                "headline":"Abrupt Climate Change and National Security",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538903680/",
+                    "credit":"<a href='http://r3zn8d.files.wordpress.com/2013/03/an-abrupt-climate-change-scenario-and-its-implications-for-united-states-national-security1.pdf'>&ldquo;We have created a climate change scenario that although not the most likely, is plausible, and would challenge United States national security in ways that should be considered immediately.&rdquo;</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2003,10",
+                "headline":"Critical Issues in Weather Modification Research",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538836174/",
+                    "credit":"&ldquo;We conclude that the initiation of large-scale operational weather modification programs would be premature.&rdquo; <a href='http://www.nap.edu/openbook.php?record_id=10829'>[1]</a>, <a href='http://www8.nationalacademies.org/onpinews/newsitem.aspx?RecordID=10829'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2004,1",
+                "headline":"Fixing the Weather and Climate",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538917618/",
+                    "credit":"<a href='http://www.nap.edu/openbook.php?record_id=10829'>Fixing the Weather and Climate – Military and Civilian Schemes for Cloud Seeding and Climate</a> by James R. Fleming",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2004,1",
+                "endDate":"2012,1",
+                "headline":"Reported Weather Modification Projects",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539019133/",
+                    "credit":"<a href='http://www.terraforminginc.com/weather-modification-projects-experiments/'>Weather Modification Projects &amp; Experiments</a> by Terraforming Inc.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2004,5",
+                "headline":"Weather Modification – Finding Common Ground",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538922296/",
+                    "credit":"<a href='http://www.nap.edu/openbook.php?record_id=10829'>A review of &ldquo;Critical Issues in Weather Modification Research&rdquo;</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2005,3,3",
+                "headline":"Weather Modification Research Legislation Fail #1",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538714902/",
+                    "credit":"<a href='http://www.govtrack.us/congress/bills/109/s517'>S. 517 (109<sup>th</sup>): Weather Modification Research and Development Policy Authorization Act of 2005</a>. Sen. Kay Hutchison (Republican) <a href='http://www.gpo.gov/fdsys/pkg/BILLS-109s517is/pdf/BILLS-109s517is.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2005,4,27",
+                "headline":"North American Interstate Weather Modification Council",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529337014/",
+                    "credit":"<a title='http://web.archive.org/web/20110718133827/http://www.naiwmc.org/4dcgi/GetSubCategoryRecord/Congressional%20Activities/Letters%20and%20Resolutions%20of%20Support' href='http://bit.ly/ZkmOXE'>NAIWMC 2005 Congressional objectives</a> – Legislative outlook and strategy for the remainder of 2005. <a href='http://r3zn8d.files.wordpress.com/2013/03/north-american-interstate-weather-modification-council-4-27-2005.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2005,6,20",
+                "headline":"Weather Modification Research Legislation Fail #2",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8537549279/",
+                    "credit":"<a href='http://www.govtrack.us/congress/bills/109/hr2995'>H.R. 2995 (109<sup>th</sup>): Weather Modification Research and Technology Transfer Authorization Act of 2005</a>. Rep. Mark Udall (Democrat) <a href='http://www.gpo.gov/fdsys/pkg/BILLS-109hr2995ih/pdf/BILLS-109hr2995ih.pdf'>[1]</a>, <a href='http://www.ucar.edu/oga/pdf/Udall%20weather%20modification.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2005,9,25",
+                "headline":"Modelling man-made holes in the ionosphere",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://r3zn8d.files.wordpress.com/2013/04/an-interhemispheric-model-of-artificial-ionospheric-ducts.png?w=700",
+                    "credit":"<a href='http://www.scribd.com/doc/134553897/An-Interhemispheric-Model-of-Artificial-Ionospheric-Ducts'>[1]</a>, <a href='http://spp.astro.umd.edu/SpaceWebProj/pap/An%20interhemispheric%20model.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2005,10,1",
+                "endDate":"2025,1",
+                "headline":"Harnessing artificial tornadoes as an energy source",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8543069899/",
+                    "credit":"<a href='http://vortexengine.ca/index.shtml'>Atmospheric Vortex Engine</a>. <a href='http://www.terraforminginc.com/engineering-tornadoes/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2006,1",
+                "headline":"HAARP Ionospheric Research Instrument (IRI) completed",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8516924890/",
+                    "credit":"<a href='http://www.terraforminginc.com/haarp/'>HAARP IRI</a> is completed, with 180 towers, 72' tall, 80' apart, each with two pairs of crossed dipole antennas (2.8 to 8.3 MHz)(7 to 10 MHz), and a <a href='http://www.nrl.navy.mil/research/nrl-review/2004/atmospheric-science-and-technology/kennedy/'>radiated power of 3600 kW</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2006,1",
+                "headline":"The Pathological History of Weather and Climate Modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538782244/",
+                    "credit":"by <a title='My hero' href='http://www.colby.edu/sts/06_fleming_pathological.pdf'>James R. Fleming</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2006,8",
+                "headline":"Stratospheric sulfur injection to reflect sunlight",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538421760/",
+                    "credit":"<a href='http://link.springer.com/article/10.1007%2Fs10584-006-9101-y?LI=true'>Albedo Enhancement by Stratospheric Sulfur Injections – A Contribution to Resolve a Policy Dilemma</a> by Nobel prize winner Paul J. Crutzen",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2006,11",
+                "headline":"Can Dr. Evil Save the World?",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8531501336/",
+                    "credit":"<a href='http://www.terraforminginc.com/can-dr-evil-save-the-world/'>The Pentagon’s top weaponeer says he has a radical solution that would stop global warming now</a>. <a href='http://www.atmos.washington.edu/~bitz/111/readings/drevil.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2006,11",
+                "headline":"NASA Workshop Report on Managing Solar Radiation",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8530211881/",
+                    "credit":"<a href='http://event.arc.nasa.gov/main/home/reports/SolarRadiationCP.pdf'>NASA Ames Research Center and the Carnegie Institution of Washington Department of Global Ecology at Stanford University</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2007,1",
+                "headline":"The Climate Engineers: Playing God to Save the Planet",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8531486080/",
+                    "credit":"<a href='http://www.colby.edu/sts/climateengineers.pdf'>Climate Engineers, by James Fleming</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2007,1",
+                "headline":"Bill Gates funds Geoengineering studies",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538204857/",
+                    "credit":"<a href='http://keith.seas.harvard.edu/FICER.html'>The Fund for Innovative Climate and Energy Research (FICER)</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2007,4",
+                "headline":"Governor Schwarzenegger, Terminating Drought!",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8531475640/",
+                    "credit":"<a href='http://www.energy.ca.gov/2007publications/CEC-500-2007-008/CEC-500-2007-008.PDF'>Optimizing Cloud Seeding for Water and Energy in California</a>. <a href='http://www.flickr.com/photos/rezn8d/8531472022/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2007,5",
+                "headline":"ATLANT Australian Rain Technologies cloud ionizer",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8542829631/",
+                    "credit":"<a href='http://www.australianrain.com.au/'>[1]</a>. <a href='http://terraforminginc.com/cloud-ionizers-electromagnetic-cloud-generation/'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2007,6,4",
+                "headline":"Simulations of planetary geoengineering",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8530283912/",
+                    "credit":"<a href='http://www.pnas.org/content/104/24/9949.full.pdf+html'>Transient climate–carbon simulations of planetary geoengineering</a> by H. Damon Matthews and Ken Caldeira, National Academy of Sciences.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2007,10,24",
+                "headline":"How to Cool the Globe",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8530271802/",
+                    "credit":"by <a href='http://dge.stanford.edu/labs/caldeiralab/'>Ken Caldeira</a>, Op-Ed <a href='http://www.nytimes.com/2007/10/24/opinion/24caldiera.html?ex=1193889600&amp;en=cfa1940caeb&amp;_r=0'>New York Times</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2007,11,9",
+                "headline":"Ionogenics ELAT Cloud Ionizer",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8542962123/",
+                    "credit":"IOLA (<a href='http://www.holoscience.com/news/img/Electric_Rainmaking.pdf'>ionization of the local atmosphere</a>) by Earthwise and ELAT (<a href='http://ams.confex.com/ams/pdfpapers/88063.pdf'>electrification of the atmosphere</a>) by the company ELAT. <a href='http://terraforminginc.com/cloud-ionizers-electromagnetic-cloud-generation/'>[1]</a>, <a href='http://www.wmo.int/pages/prog/arep/wwrp/new/documents/WMR_documents.final_27_April_1.FINAL.pdf'>[2]</a>, <a href='http://www.freepatentsonline.com/7965488.html'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,1,23",
+                "headline":"US. Navy FOIA reveals Weather Modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513532168/",
+                    "credit":"&ldquo;successful completion of the proposed effort and the follow-on E&amp;MD program(s)  will give the U.S. military a viable, <a href='http://cryptome.org/weather-war.pdf'>state-of-the-art weather modification capability</a> again. ... I know of no countermeasures.&rdquo;",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,2,6",
+                "endDate":"2008,2,7",
+                "headline":"DHS Hurricane Modification Workshop",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=lpib3VQHDoc",
+                    "credit":"<a href='http://www.terraforminginc.com/department-of-homeland-security-and-noaa-hurricane-modification-workshop-2008/'>[1]</a>, <a href='http://www.see.ed.ac.uk/~shs/Hurricanes/HURRICANE%20MODIFICATION%20WORKSHOP%20REPORTG.doc'>[2]</a>, <a href='http://www.youtube.com/watch?v=lpib3VQHDoc'>Video</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,4,21",
+                "headline":"Crazy Ideas at Weather Modification Conference",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=AIIFvTdqcA4",
+                    "credit":"<a href='https://ams.confex.com/ams/17WModWMA/techprogram/programexpanded_492.htm'>17th Planned and Inadvertent Weather Modification/Weather Modification Association</a>. Presentations: <a title='Atmospheric heating as a research tool' href='https://ams.confex.com/ams/17WModWMA/techprogram/paper_139228.htm'>[1]</a> (<a title='Atmospheric heating as a research tool' href='http://www.youtube.com/watch?v=ylTQj2qX1ZM'>Video</a>), <a title='Reducing hurricane intensity by Atmocean, Inc.s upwelling pumps' href='https://ams.confex.com/ams/17WModWMA/techprogram/paper_139127.htm'>[2]</a> (<a title='Reducing hurricane intensity by Atmocean, Inc.s upwelling pumps' href='http://www.youtube.com/watch?v=xlnR_GMNIGA'>Video</a>), <a title='On Engineering Hurricanes' href='https://ams.confex.com/ams/17WModWMA/techprogram/paper_139450.htm'>[3]</a> (<a title='On Engineering Hurricanes' href='http://www.youtube.com/watch?v=ylTQj2qX1ZM'>Video</a>), <a title='A machine to get rid of hurricanes' href='https://ams.confex.com/ams/17WModWMA/techprogram/paper_137069.htm'>[4]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,4,22",
+                "headline":"Weather Modification – The State of the Science",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529811250/",
+                    "credit":"<a href='http://www.ametsoc.org/amsnews/2008Weather_Mod_Advisory.pdf'>Roelof Bruintjes, Joe Golden, and Arlen Huggins</a> hold discussion sponsored by the <a href='https://ams.confex.com/ams/17WModWMA/techprogram/programexpanded_492.htm'>American Meteorological Society</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,5,5",
+                "headline":"CFR Planetary Scale Geoengineering",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528624185/",
+                    "credit":"<a href='http://www.cfr.org/projects/world/geoengineering-workshop-on-unilateral-planetary-scale-geoengineering/pr1364'>Geoengineering: Workshop on Unilateral Planetary Scale Geoengineering</a>, Council on Foreign Relations. <a href='http://www.cfr.org/content/thinktank/GeoEng_041209.pdf'>[1]</a>, <a href='http://www.cfr.org/content/thinktank/GM_CFR_briefing_REV.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,6",
+                "headline":"Microspheres and Microworlds",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528657031/",
+                    "credit":"<a href='http://srnl.doe.gov/newsroom/ACerS_Bulletin_0608.pdf'>SRNL’s pourous, hollow glass balls open new opportunities for hydrogen storage, drug delivery, and national defense</a>. <a href='http://cnsnews.com/news/article/glass-particles-sky-studied-global-warming-fix'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,10,23",
+                "headline":"DOE Funds Climate Research Field Studies",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528584639/",
+                    "credit":"<a href='http://www.doe.gov/articles/department-energy-announces-7-million-funding-climate-research-field-studies'>A Cloud is a Cloud is a Cloud - or is it?</a>, <a href='http://www.arm.gov/'>[1]</a>, <a href='http://www.doe.gov/articles/one-arm-two-columns-and-whole-lot-aerosols'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2008,11,21",
+                "headline":"AMS discusses SRM and Clean Coal",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529725786/",
+                    "credit":"<a href='http://www.ametsoc.org/atmospolicy/81121ESSS.html'>American Meteorological Society</a>. Discussions:  <a href='http://www.ametsoc.org/atmospolicy/documents/2008ESSS/ESSS112108/Simbeck-SFA-Pacific-ESSS-%20Nov%2020082.pdf'>Clean Coal</a>, <a href='http://www.ametsoc.org/atmospolicy/documents/2008ESSS/ESSS112108/Robock%20GeoEngineering17AMScongressionalBriefing.pdf'>Smoke and Mirrors – Is Geoengineering a Solution to Global Warming?</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,4",
+                "headline":"Operational Defenses through Weather Control in 2030",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529620806/",
+                    "credit":"&ldquo;<a href='http://www.dtic.mil/cgi-bin/GetTRDoc?AD=ada539515'>create localized fog or stratus cloud formations</a> shielding critical assets against attack from energy based weapons&rdquo;</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,4,1",
+                "headline":"Modiﬁcation of cirrus clouds to reduce global warming",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529638772/",
+                    "credit":"&ldquo;A potential delivery mechanism for the seeding material is already in place: <a href='http://iopscience.iop.org/1748-9326/4/4/045102/pdf/1748-9326_4_4_045102.pdf'>the airline industry</a>&rdquo;</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,4,16",
+                "headline":"Weather Modification Research Legislation Fail #3",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538818416/",
+                    "credit":"<a href='http://www.govtrack.us/congress/bills/111/s601'>S. 601 (111<sup>th</sup>): Weather Mitigation Research and Development Policy Authorization Act of 2009</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,5",
+                "headline":"The Benefits, Risks, and Costs of Stratospheric Geoengineering",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528275021/",
+                    "credit":"&ldquo;dispersing gases from planes .. addition of sulfur to the fuel, .. release the aerosol through the exhaust system ... <a href='http://climate.envsci.rutgers.edu/pdf/GRLreview2.pdf'>release the sulfur from its own tank within the plane</a>&rdquo; <a href='http://r3zn8d.files.wordpress.com/2013/03/the-benefits-risks-and-costs-of-stratospheric-geoengineering-grlreview2.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,7,7",
+                "headline":"Weathertec Cloud Ionizer",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8543213806/",
+                    "credit":"&ldquo;WeatherTec™ uses electrical charge to create attractive forces between particles&rdquo; <a href='http://www.meteo-systems.com/index.php'>[1]</a>, <a href='http://terraforminginc.com/cloud-ionizers-electromagnetic-cloud-generation/'>[2]</a>, <a href='http://www.freepatentsonline.com/y2011/0174892.html'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,7,9",
+                "headline":"Bill Gates Hurricane Protection Scheme",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8512729818/",
+                    "credit":"<a href='http://www.freepatentsonline.com/y2009/0177569.html'>United States Patent Application 20090177569</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,7,13",
+                "headline":"Bill Gates, the Hurricane Tamer?",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538161173/",
+                    "credit":"<a href='http://abcnews.go.com/Technology/Science/story?id=8055781&page=1#.UL7SMoPAd8E'>[1]</a>, <a href='http://www.telegraph.co.uk/news/worldnews/1566898/Scientists-a-step-closer-to-steering-hurricanes.html'>[2]</a>, <a href='http://www.guardian.co.uk/technology/2012/nov/04/stephen-salter-tyre-hurricane-sandy'>[3]</a>, <a href='http://www.see.ed.ac.uk/~shs/Hurricanes/Hurricane%20reduction%20by%20cloud.pdf'>[4]</a>, <a href='http://www.nytimes.com/2012/10/28/opinion/sunday/geoengineering-testing-the-waters.html'>[5]</a>, <a href='http://www.freepatentsonline.com/y2009/0177569.html'>[6]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,7,20",
+                "headline":"AMS Statement on Geoengineering",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538882522/",
+                    "credit":"<a href='http://r3zn8d.files.wordpress.com/2013/03/ams-policy-statement-on-geoengineering-the-climate-system.pdf'>American Meteorological Society Policy Statement on Geoengineering the Climate System</a>, <a title='http://web.archive.org/web/20130116121521/http://ametsoc.org/policy/2009geoengineeringclimate_amsstatement.html' href='http://bit.ly/15B9NOJ'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,7,28",
+                "headline":"Weathering the Storm: The Need for a National Hurricane Initiative",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513506254/",
+                    "credit":"Hearing before US Senate: &ldquo;The (proposed) <a href='http://www.gpo.gov/fdsys/pkg/CHRG-111shrg54496/pdf/CHRG-111shrg54496.pdf'>National Hurricane Research Initiative Act of 2009</a> will create a coordinated Federal hurricane research program&rdquo;",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,7,29",
+                "headline":"NOAA refuses DHS hurricane modification plans",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8512390995/",
+                    "credit":"<a href='http://voices.washingtonpost.com/capitalweathergang/noaa_letter_dhs_hurricane_modification.pdf'>Letter</a> to William Laska, program manager for DHS's Advanced Research Projects Agency, from Richard Spinrad, director of NOAA's Office of Atmospheric Research (OAR) <a href='http://voices.washingtonpost.com/capitalweathergang/2009/08/noaa_officially_rebuffs_dhs_hu.html'>[1]</a><a href='http://voices.washingtonpost.com/capitalweathergang/noaa_letter_dhs_hurricane_modification.pdf'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,9,8",
+                "endDate":"2009,9,18",
+                "headline":"Charged Aerosol Release Experiment (CARE)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8554811306/",
+                    "credit":"<a href='http://r3zn8d.files.wordpress.com/2012/01/bernhardt.pdf'>12th Workshop on the Physics of Dusty Plasma</a>. <a href='http://en.wikipedia.org/wiki/Charged_Aerosol_Release_Experiment'>[1]</a>, <a title='NASA plans To &ldquo;Make Clouds&rdquo; Tonight' href='http://bit.ly/ZzvedV'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,11,5",
+                "headline":"Geoengineering Congressional Testimony part 1",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=Lo3CpJhlyWU",
+                    "credit":"<a href='http://gop.science.house.gov/Hearings/Detail.aspx?ID=188'>Geoengineering: Assessing the Implications of Large-Scale Climate Intervention</a>. <a href='http://r3zn8d.files.wordpress.com/2013/03/us-uk-geoengineering-joint-statement.pdf'>[1]</a>, <a href='http://www.publications.parliament.uk/pa/cm200910/cmselect/cmsctech/221/22111.htm'>[2]</a>, <a href='http://www.youtube.com/watch?v=Lo3CpJhlyWU'>Video</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2009,11,28",
+                "headline":"The Stratoshield “Hose in the Sky”",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://youtu.be/JrimZzgqwdo",
+                    "credit":"Geoengineering SRM hose funded by Bill Gates <a href='http://intellectualventureslab.com/?p=296'>[1]</a>, <a href='http://intellectualventureslab.com/?p=474'>[2]</a>, <a href='http://intellectualventureslab.com/?p=338'>[3]</a>, <a href='http://intellectualventureslab.com/?page_id=258'>[3]</a>, <a href='http://intellectualventureslab.com/wp-content/uploads/2009/10/Stratoshield-white-paper-300dpi.pdf'>[4]</a>, <a href='http://youtu.be/JrimZzgqwdo'>Video</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,1",
+                "headline":"Hurricane Aerosol and Microphysics Program (HAMP)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=z72TJ68zKJE",
+                    "credit":"<a href='http://www.dhs.gov/st-hsarpa'>Homeland Security Advanced Research Projects Agency (HSARPA)</a> has embarked on what appears to be a hitherto missing key component of the <a href='http://www.terraforminginc.com/department-of-homeland-security-and-noaa-hurricane-modification-workshop-2008/'>hurricane research</a> effort, HAMP ... (which) adopts the view that a good way to understand a meteorological system is to <a href='http://r3zn8d.files.wordpress.com/2012/11/hamp-report-to-dhs-2010.pdf'>perturb it in some way</a>.&rdquo;  <a href='http://www.youtube.com/watch?v=z72TJ68zKJE'>Video</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,1,13",
+                "headline":"Geoengineering UK Parliament Testimony",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=5snNegB32eo",
+                    "credit":"<a href='http://www.publications.parliament.uk/pa/cm200910/cmselect/cmsctech/221/22102.htm'>'The Regulation of Geoengineering'</a>. <a href='http://www.publications.parliament.uk/pa/cm200910/cmselect/cmsctech/221/10011301.htm'>[1]</a>, <a href='http://r3zn8d.files.wordpress.com/2013/03/uk_regulation_of_geoengineering_report.pdf'>[2]</a>, <a href='http://www.parliament.uk/business/committees/committees-a-z/commons-select/science-and-technology-committee/inquiries/parliament-2005/geoengineering-/'>[3]</a>, <a href='http://r3zn8d.files.wordpress.com/2013/03/us-uk-geoengineering-joint-statement.pdf'>[4]</a> <a href='http://www.publications.parliament.uk/pa/cm200910/cmselect/cmsctech/221/22111.htm'>[5]</a>, <a href='http://www.youtube.com/watch?v=5snNegB32eo'>Video</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,1,21",
+                "headline":"Hugo Chavez says US used tectonic weapon to cause Haiti quake",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528147195/",
+                    "credit":"Chavez said the January 7th, 2010 killer earthquake (7.0 magnitude) followed a test of <a href='http://edition.presstv.ir/detail/116688.html'>&ldquo;weapon of earthquakes&rdquo;</a> <a href='http://www.livescience.com/8071-chavez-tectonic-weapon-caused-haiti-quake.html'>&ldquo;under the guise of the natural disaster.&rdquo;</a> ",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,2,4",
+                "headline":"Geoengineering Congressional Testimony part 2",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=LVrHv8Ky2cc",
+                    "credit":"<a href='http://gop.science.house.gov/Hearings/Detail.aspx?ID=202'>Geoengineering II – The Scientific Basis and Engineering Challenges</a>. <a href='http://www.youtube.com/watch?v=LVrHv8Ky2cc'>Video</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,2,16",
+                "headline":"The Silver Lining Project",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539246466/",
+                    "credit":"Boats spray ocean salt water into clouds to make them reflect sunlight <a href='http://www.see.ed.ac.uk/~shs/Asilomar%20Climate%20Intervention/Salter%20DECC%20Feb%202010.ppt'>[1]</a>. <a title='http://web.archive.org/web/20100514105840/http://silverliningproj.org/collaborators.html' href='http://bit.ly/Zw5Sip'>[2]</a>, <a href='http://www.economist.com/node/15814427?story_id=15814427'>[3]</a>, <a href='http://www.terraforminginc.com/geoengineering-projects-experiments/'>[4]</a>, <a href='http://www.see.ed.ac.uk/~shs/Hurricanes/Hurricane%20reduction%20by%20cloud.pdf'>[5]</a>, <a href='http://youtu.be/fg7J8P-uXqM'>Video 1</a>,  <a href='http://youtu.be/EC22nUwDTQw'>Video 2</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,2,20",
+                "headline":"SRM with Aluminum Nanoparticles",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=F58HbYTbKnU",
+                    "credit":"<a href='http://www.youtube.com/watch?v=F58HbYTbKnU'>Atmospheric Geoengineering with Aluminum Aerosols</a> by David Keith, American Association for the Advancement of Science (AAAS)",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,2,22",
+                "endDate":"2010,2,26",
+                "headline":"The Asilomar Conference on Geoengineering",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8541265290/",
+                    "credit":"<a href='http://www.climate.org/PDF/AsilomarConferenceSummary.pdf'>The Asilomar International Conference on Climate Intervention Technologies</a>, Asilomar Conference Center, Pacific Grove, California. <a href='http://e360.yale.edu/feature/a_hard_look_at_the_perils_and_potential_of_geoengineering/2260/'>[1]</a>, <a href='http://www.climate.org/resources/climate-archives/conferences/asilomar.html'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,3,10",
+                "headline":"Case Orange - Belfort Group 300 page Chemtrail Report",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8554007012/",
+                    "credit":"<a href='http://www.terraforminginc.com/case-orange-remix-2013-the-chemtrail-debate-rages-on/'>Case Orange REMiX 2013 – The Chemtrail Debate Rages On!</a> <a href='http://r3zn8d.files.wordpress.com/2013/03/chemtrail-symposium-belfort-group-300page-report.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,3,18",
+                "headline":"Geoengineering Congressional Testimony part 3",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=L5SdXWOwGbw",
+                    "credit":"<a href='http://gop.science.house.gov/Hearings/Detail.aspx?ID=219'>Geoengineering III – Domestic and International Research Governance</a>. <a href='http://www.youtube.com/watch?v=L5SdXWOwGbw'>Video</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,3,22",
+                "endDate":"2010,3,24",
+                "headline":"WMO Statement on Weather Modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8543970466/",
+                    "credit":"&ldquo;Weather Modification technologies that claim to achieve such large scale or dramatic effects do not have a sound scientific basis (e.g. hail canons, ionization methods) and <strong>should be treated with suspicion.</strong>&rdquo; <a href='http://www.wmo.int/pages/prog/arep/wwrp/new/documents/WMR_documents.final_27_April_1.FINAL.pdf'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,3,22",
+                "endDate":"2025,1",
+                "headline":"WMO Expert Team on Weather Modification Research (ET-WMR)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8540099290/",
+                    "credit":"<a href='http://www.wmo.int/pages/prog/arep/cas/documents/doc3.3.2-ETWMR-Response.pdf'>International Centre for Weather Modification Research</a> proposal, <a href='http://www.wmo.int/pages/prog/arep/wwrp/new/documents/Agenda_ET_Wea_Mod_2010_final.pdf'>[1]</a>, <a href='http://www.wmo.int/pages/prog/arep/wwrp/new/weathermod_new.html'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,8,15",
+                "endDate":"2010,9,30",
+                "headline":"NASA hurricane studies",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=t7iVeAR1YNM",
+                    "credit":"NASA <a href='http://airbornescience.nsstc.nasa.gov/grip/index.html'>Genesis and Rapid Intensification Processes (GRIP)</a>. <a href='http://www.terraforminginc.com/department-of-homeland-security-and-noaa-hurricane-modification-workshop-2008/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,9,28",
+                "headline":"UK Government response to &ldquo;The Regulation of Geoengineering&rdquo;",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=7oK7wmP2CFk",
+                    "credit":"<a href='http://www.official-documents.gov.uk/document/cm79/7936/7936.pdf'>[1]</a>. The <a href='http://royalsociety.org/policy/projects/solar-radiation-governance/'>Royal Society</a> has launched <a href='http://www.srmgi.org/'>SRMGI</a> in partnership with the <a href='http://twas.ictp.it/prog/collaborations/solar-radiation-management-governance-initiative-srmgi'>TWAS</a> and the <a href='http://www.edf.org/news/international-groups-call-coordinated-oversight-geoengineering-research'>EDF</a> to explore <a href='http://en.wikipedia.org/wiki/Solar_radiation_management'>SRM</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,10,15",
+                "headline":"2010 Sunset Review: Weather Modification Act of 1972",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8513499658/",
+                    "credit":"<a href='http://www.colorado.gov/cs/Satellite?blobcol=urldata&amp;blobheadername1=Content-Disposition&amp;blobheadername2=Content-Type&amp;blobheadervalue1=inline%3B+filename%3D%22Weather+Modification+Act+of+1972+-+2010+Sunset+Review.pdf%22&amp;blobheadervalue2=application%2Fpdf&amp;blobkey=id&amp;blobtable=MungoBlobs&amp;blobwhere=1251815550673&amp;ssbinary=true'>Recommendations</a>: Continue the Weather Modification Act of 1972 for nine years, until 2020.",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,11",
+                "headline":"&ldquo;Engineering the Planet&rdquo;",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528042537/",
+                    "credit":"<a href='http://www.keith.seas.harvard.edu/papers/89.Keith.EngineeringThePlanet.e.pdf'>Engineering the Planet</a> by David Keith. &ldquo;The possibility of <a href='http://r3zn8d.files.wordpress.com/2013/03/engineering-the-planet-david-keith-2010.pdf'>weather control</a> remains.&rdquo;",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2010,11",
+                "headline":"Walker River Basin Cloud Seeding Project",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529143858/",
+                    "credit":"U.S. Department of the Interior, Bureau of Reclamation, <a href='http://www.usbr.gov/mp/nepa/documentShow.cfm?Doc_ID=6677'>DRAFT Environmental Assessment for the Walker River Basin Cloud Seeding Project</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2011,2,23",
+                "headline":"E-PEACE Eastern Pacific Emitted Aerosol Cloud Experiment",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538117935/",
+                    "credit":"Cloud brightening field test (Geoengineering SRM experiment) <a href='http://aerosols.ucsd.edu/E_PEACE.html'>[1]</a>, <a href='http://www.nae.edu/Publications/Bridge/67677/67685.aspx'>[2]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2011,4",
+                "headline":"The Risk Management Potential of Climate Engineering",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=KbNDG2xFOVg",
+                    "credit":"<a href='http://www.ametsoc.org/atmospolicy/climatebriefing/apr2011.html'>American Meteorological Society</a> discussion with Ken Caldeira, Ph.D., (<a href='http://www.ametsoc.org/atmospolicy/climatebriefing/Caldeira.pdf'>download Ken's slides</a>) and David Keith, Ph.D.,  (<a href='http://www.ametsoc.org/atmospolicy/climatebriefing/Keith.pdf'>download David's slides</a>)",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2011,7",
+                "headline":"US GAO reviews Climate Engineering",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8527966339/",
+                    "credit":"<a href='http://www.gao.gov/new.items/d1171.pdf'>Climate engineering – Technical status, future directions, and potential responses</a>: <strong>&ldquo;Climate engineering technologies do not now offer a viable response to global climate change.&rdquo;</strong>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2011,7,27",
+                "headline":"Geoengineering Cost Analysis",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529060794/",
+                    "credit":"<a href='http://www.keith.seas.harvard.edu/Misc/AuroraGeoReport.pdf'>Aurora Flight Sciences</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2011,8,1",
+                "endDate":"2011,8,5",
+                "headline":"UNEP says No to Geoengineering SRM",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8542914779/",
+                    "credit":"<a href='http://ozone.unep.org/Meeting_Documents/oewg/31oewg/OEWG-31-3E.pdf'>Synthesis report</a>:  <strong>&ldquo;Deliberate injections of sulphur-containing compounds into the stratosphere ... could have substantial unintended effects on the ozone layer.&rdquo;</strong>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2011,10,4",
+                "endDate":"2011,10,7",
+                "headline":"10th Scientific Conference on Weather Modification",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8540062520/",
+                    "credit":"<a href='http://www.wmo.int/pages/prog/arep/wwrp/new/10thWeatherModBali2011.html'>[1]</a>, <a href='http://www.wmo.int/pages/prog/arep/wwrp/new/Extended_abstracts_Weather_Modification_Conference_Bali.html'>[2]</a>, <a href='http://www.wmo.int/pages/prog/arep/wwrp/new/documents/WWRP_2012_2_Proceedings_19_June.pdf'>[3]</a>, <a href='http://www.wmo.int/pages/prog/arep/wwrp/new/weathermod_new.html'>[4]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2011,11,14",
+                "headline":"Stratospheric Particle Injection for Climate Engineering (SPICE)",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8538173789/",
+                    "credit":"<a href='http://www.nerc.ac.uk/press/releases/2011/22-spice.asp'>[1]</a>, <a href='http://www.guardian.co.uk/environment/2011/nov/17/scientists-criticise-project-geoengineer-climate'>[2]</a>, <a href='http://www.newscientist.com/article/dn20996-political-backlash-to-geoengineering-begins.html'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,3,23",
+                "headline":"SRM Cost Analysis",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8529021294/",
+                    "credit":"<a href='http://www.keith.seas.harvard.edu/papers/159.McClellan.2012.CostAnalysisOfStratosp.e.pdf'>Cost analysis of stratospheric albedo modiﬁcation delivery systems</a>. (<a href='http://en.wikipedia.org/wiki/Solar_radiation_management' title='Solar Radiation Management'>Solar Radiation Management</a>)",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,3,25",
+                "endDate":"2012,5,15",
+                "headline":"Oil platform leaks 7 million cu. ft. (200,000 cu m) of methane per day!",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=8r4PjbCAP3k",
+                    "credit":"<a href='http://www.time.com/time/health/article/0,8599,2111562,00.html'>Natural Gas and the Invisible Spill: How Much Methane Is Reaching the Atmosphere?</a>. <a href='http://www.elgin.total.com/elgin/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,4,16",
+                "endDate":"2012,7,16",
+                "headline":"Aquiess and Sci-Blue Weather Resonance Technology",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8542820025/",
+                    "credit":"<a href='http://www.aquiess.com/'>Aquiess</a>, <a href='http://terraforminginc.com/cloud-ionizers-electromagnetic-cloud-generation/'>[1]</a>, <a href='http://www.aquiess.com/Introduction%20-%20Aquiess%20-%202012.pdf'>[2]</a>. <a href='http://www.manta.com/c/mmp3r5x/us-air-force'>SciBlue Inc.</a>, <a href='http://terraforminginc.com/the-blue-gold-rush-using-the-rivers-of-the-troposphere/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,5,30",
+                "headline":"The ANGELS Proposal",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8527879859/",
+                    "credit":"<a href='http://r3zn8d.files.wordpress.com/2013/03/the-angels-proposal-arctic-natural-gas-extraction-liquefaction-sales.pdf'>The ANGELS Proposal</a> (Arctic Natural Gas Extraction Liquefaction and Sales) <a href='http://arctic-news.blogspot.com/2012/05/proposal-to-extract-store-and-sell.html'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,6,4",
+                "headline":"Lucy in the Sky with Diamonds",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528960276/",
+                    "credit":"<a href='http://iowa-city-climate-advocates.org/wp-content/uploads/2012/06/ProjectLucyExtendedVersion2.pdf'>Project Lucy</a> aims to turn arctic noctilucent methane clouds into nano diamond powder to reflect sunlight back into space using microwaves. <a href='http://rezn8d.net/2013/01/15/radio-and-laser-frequency-and-harmonic-test-ranges-for-the-lucy-and-haarp-experiments-and-their-application-to-atmospheric-methane-destruction/'>HAARP</a>, <a href='http://arctic-news.blogspot.com/2012/06/project-lucy.html'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,6,21",
+                "endDate":"2025,1",
+                "headline":"DARPA Project NIMBUS: Laser-guided Lightning Weapon",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8544215942/",
+                    "credit":"<a href='http://www.darpa.mil/Our_Work/DSO/Programs/Nimbus.aspx'>Project NIMBUS</a>. <a href='https://www.fbo.gov/spg/ODA/DARPA/CMO/DARPA-BAA-10-18/listing.html'>[1]</a>, <a href='http://www.popsci.com/technology/article/2012-06/armys-laser-guided-lightning-weapon-delivers-high-voltage-through-air'>[2]</a>, <a href='http://rezn8d.net/2012/03/06/haarp-project-nimbus-and-the-fire-of-the-gods/'>[4]</a>, <a href='http://en.wikipedia.org/wiki/Boeing_YAL-1'>[4]</a>,  <a href='http://aipadvances.aip.org/resource/1/aaidbi/v2/i1/p012151_s1'>[5]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,8,12",
+                "headline":"World's First Rogue Geoengineer",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8539301300/",
+                    "credit":"The Haida Salmon Restoration Project (ocean iron fertilization) <a href='http://www.haidasalmon.net/'>[1]</a>, <a href='http://disc.sci.gsfc.nasa.gov/giovanni/giovanni_user_images'>[2]</a>, <a href='http://www.guardian.co.uk/environment/2012/oct/15/pacific-iron-fertilisation-geoengineering'>[3]</a>, <a href='http://www.etcgroup.org/content/full-press-coverage-2012-ocean-fertilization-scheme-near-haida-gwaii'>[4]</a>, <a href='http://www.etcgroup.org/content/world%E2%80%99s-largest-geoengineering-deployment-coast-canada%E2%80%99s-british-columbia'>[5]</a>, <a href='http://www.scientificamerican.com/article.cfm?id=questions-and-answers-with-rogue-geoengineer-carbon-entrepreneur-russ-george'>[6]</a>, <a href='http://www.scientificamerican.com/article.cfm?id=fertilizing-ocean-with-iron-to-save-salmon-and-earn-money'>[7]</a>, <a href='http://www.popularmechanics.com/science/environment/geoengineering/can-we-stop-modern-day-mad-scientists-14793219'>[8]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,11,12",
+                "headline":"HAARP Creates Fire in the Sky",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8515848193/",
+                    "credit":"<a href='http://www.nrl.navy.mil/media/news-releases/2013/nrl-scientists-produce-densest-artificial-ionospheric-plasma-clouds-using-haarp'>NRL Scientists Produce Densest Artificial Ionospheric Plasma Clouds Using HAARP</a>, the <a href='http://www.terraforminginc.com/haarp/'>High-frequency Active Auroral Research Program</a> <a href='http://www.nrl.navy.mil/research/nrl-review/2004/atmospheric-science-and-technology/kennedy/'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2012,12,4",
+                "headline":"AMEG calls for immediate geoengineering to prevent methane-caused extinction",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=iDBt07skLbQ",
+                    "credit":"&ldquo;up to 50 Gigatons of methane could be rapidly released from under arctic ice&rdquo; <a href='http://a-m-e-g.blogspot.com/2012/12/ameg-strategic-plan.html'>Arctic Methane Emergency Group</a> (<a href='http://ameg.me/'>AMEG</a>) <a href='http://ameg.me/index.php/letter-to-world-leaders'>[1]</a> <a href='http://www.terraforminginc.com/haarp-geoengineering-with-alchemy-arctic-methane-global-emergency-uk-gov-tells-climate-alarmists-to-chill-out/'>[2]</a>, <a href='http://www.youtube.com/watch?v=eIZTMVNBjc4'>[3]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2013,1,4",
+                "headline":"SRM Double Catastrophe",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.flickr.com/photos/rezn8d/8528906916/",
+                    "credit":"&ldquo;a catastrophic societal collapse eliminates society’s ability to continue <a href='http://en.wikipedia.org/wiki/Solar_radiation_management' title='Solar Radiation Management or Stratospheric Aerosol Injection' >SRM</a>, making for a double catastrophe&rdquo; <a href='http://sethbaum.com/ac/fc_DoubleCatastrophe.html'>[1]</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2014,1",
+                "endDate":"2025,1",
+                "headline":"Hard choices must be made",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=OV4G5ei9W5E",
+                    "credit":"<a href='http://youtu.be/OV4G5ei9W5E'>Nero - Choices</a>",
+                    "caption":""
+                }
+            },
+			{
+                "startDate":"2015,1",
+                "endDate":"2025,1",
+                "headline":"Let it Grow!",
+                "text":"",
+                "asset":
+                {
+                    "media":"http://www.youtube.com/watch?v=HkvmtvUHJtI",
+                    "credit":"<a href='http://www.youtube.com/watch?v=HkvmtvUHJtI'><em>&ldquo;Unless someone like you cares a whole awful lot, nothing is going to get better. It’s not.&rdquo;</em></a>",
+                    "caption":""
+                }
+            },
+ 			{
+              "startDate":"2016,1",
+              "endDate":"2025,1",
+		      "headline":"The History of Weather Control",
+			  "text":"After 100 years of rainmaking, few know the extensive history of man's attempt to control the weather.  This timeline seeks to expose the hidden world of climate engineering.<br> Follow <a href='http://www.facebook.com/rezn8d'>me</a> on <a href='http://youtube.com/subscription_center?add_user=R3zn8D'>YouTube</a>, <a href='http://twitter.com/rezn8d'>Twitter</a>, and <a href='http://www.facebook.com/climateviewer'>Facebook</a>.<br>Brought to you by <a href='http://terraforminginc.com/'>Terraforming Inc.</a> and <a href='http://climateviewer.com/'>ClimateViewer 3D</a>.</p>",
+			  "asset":
+					  {
+						  "media":"",
+						  "credit":"",
+						  "caption":""
+					  }
+            },
+        ]
+    }
+}

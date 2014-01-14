@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+        <meta charset="utf-8">
+        <title>Netention Voltron v.10</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="application-name" content="Netention Alpha"/>
+        <meta name="description" content="">
+        <meta name="author" content="SeH / Jim 'rezn8d' Lee / Revlin">
+        <meta name="robots" content="noindex, nofollow, noarchive">
+
+        <style type="text/css">
+            @import url("netention.css");
+			@import url("lib/reveal.js/css/reveal.min.css");
+			@import url("lib/reveal.js/css/theme/simple2.css");
+        </style>
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+           <script src="assets/js/html5shiv.js"></script>
+        <![endif]-->
+
+        <!-- Fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="icon/apple-touch-icon-57-precomposed.png">
+        <link rel="shortcut icon" href="icon/favicon.png">
+    </head>
+
+    <body>
+
+        <!-- LOGIN SCREEN -->
+        <div id="LoadingSplash" style="display: none">        
+            <div id="login-prompt" class="logon overthrow">
+                <div>
+                    <img alt="Welcome" id="about-toggle" title="Click here to learn about this project" src="icon/netention-logo.png" />
+                    <h3 id="LoadingSplashTitle" style="text-align:center;">Login</h3>
+                    <ul id="AuthSelect">
+                        <li id="AnonymousLoginButton"><a href="/anonymous"><img src="icon/anonymous-login.png" alt="Anonymous Login" title="Anonymous Login" /></a></li>
+                        <li><a href="/auth/google"><img src="icon/google.png" alt="Google Login" title="Login with your Google Account" /></a></li>
+                        <li><img src="icon/openid.png" alt="Open ID Login" title="Login with your Open ID" id="openid-toggle" /></li>
+                        <li><img src="icon/facebook.png" alt="Facebook Login" title="Login with your Facebook Account" /></li>
+                        <li><!--<a href="/auth/twitter">--><img src="icon/twitter.png" alt="Twitter Login" title="Login with your Twitter Account" /><!--</a>--></li>
+                    </ul>
+                    <!--<div id="openid-login" style="display:none">
+                        <p>Surprise! You may already have an OpenID. Find out, <a href="http://openid.net/get-an-openid/" target="_blank">click here</a>.</p>
+                        <form action="/auth/openid" method="post">
+                            <label>OpenID:</label>
+                            <input type="text" name="openid_identifier"/><input type="submit" value="OpenID Login"/>
+                        </form>
+                    </div>-->
+					<div id="ProfileSelect">
+					</div>
+                    <!--<div id="about-netention" style="display:none">
+                        <p>Contribute to the <a href="http://netention.org/" target="_blank">&ldquo;<em>Netention</em>&rdquo;</a> open-source project on <a href="https://github.com/automenta/netentionjs2" target="_blank">Github</a> and read about the upcoming <a href="http://climateviewer.com/" target="_blank">Global Survival System</a>. Contact Jim Lee on <a href="http://twitter.com/rezn8d" target="_blank">Twitter</a>, <a href="http://www.facebook.com/rezn8d" target="_blank">Facebook</a>, or Skype user &ldquo;rezn8d&rdquo; if you are interested in helping.  Works best on <a href="http://chrome.google.com/" target="_blank">Chrome</a> or <a href="http://www.firefox.com/" target="_blank">Firefox</a>.</p>
+                    </div>-->
+                </div>    
+            </div>           
+        </div> 
+        <!-- HIDDEN UNTIL LOADED -->
+
+
+        <!-- UI LAYERS -->
+        <div id="View" style="display:none;" class="display-window "></div>
+        <div id="toggle-menu" style="display:none;" class="ui-corner-all shadow"><img id="toggle-img" title="Click here to expand the control panel" class="ui-corner-all" alt="toggle menu button" src="icon/netention-button.png" /></div>
+		<div id="toggle-submenu"></div>
+		<div id="ActionMenuWrapper"></div>
+        <div id="close-menu" class="close-menu" style="display:none;" title="Click here to close the control panel"><span class="ui-icon ui-icon-closethick"></span></div>
+        <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;"><img id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" /></div>
+        <div id="ViewMenu" style="display:none;" class="ui-widget shadow overthrow">
+            <div class="viewmenu-container">
+                <!-- <li class="viz"><a class="ui-button" id="time" title="Timeline" href="#"><b class="icon-time"></b><span class="display-menu-collapse">Timeline</span></a></li> -->
+                <!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
+                <!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
+
+                <div id="identity" class="ui-widget-content ui-corner-all shadow">
+					<div id="welcomeoptions">
+						<select id="uitheme"/>
+						</select>
+						<br/>
+						<select id="uilanguage">
+							<option>English</option>
+							<option>Español</option> 
+							<option>Français</option>
+							<option>Русский</option> 
+							<option>עברית</option> 
+							<option>العربية</option>
+							<option>हिन्दी; हिंदी </option>
+							<option>中文(简体)</option> 
+							<option>日本語</option> 
+						</select>
+					</div>
+                    <span id="welcome">
+		                <button id="AddContentButton" title="New...">[+]</button>
+						<button id="TogetherJSTalk" onclick="startTalk(); return false;" title="Toggle Communicator" style="display: none">Talk</button>
+						<button id="SelectProfileButton" title="Select Profile">ID</button>:<a class="brand" href="#"></a>
+					</span>
+                    <a id="logout" class="logout ui-widget-content ui-corner-all" href="logout">Logout</a></div>
+
+		            <div id="ViewControls">
+		                <form>
+		                    <input type="radio" id="goal" name="ViewControls" /><label for="goal">Goal</label>
+		                    <input type="radio" id="map" name="ViewControls" /><label for="map">Map</label>
+		                    <input type="radio" id="browse" name="ViewControls" /><label for="browse">Browse</label>
+		                    <input type="radio" id="chat" name="ViewControls" /><label for="chat">Chat</label>
+		                    <input type="radio" id="self" name="ViewControls" /><label for="self">Team</label>
+		                    <input type="radio" id="graph" name="ViewControls" /><label for="graph">Network</label>
+		                    <input type="radio" id="trends" name="ViewControls" /><label for="trends">Trends</label>
+		                    <!--<input type="radio" id="options" name="ViewControls" /><label for="options">Options</label>-->
+		                </form>
+		            </div>
+                
+		            <button id="FocusWhatButton">What?</button>
+		            <button id="FocusWhereButton">Where?</button>
+		            <button id="FocusWhenButton">When?</button>
+		            <button id="FocusNeedButton">Need</button>
+		            <input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
+		            <button id="FocusClearButton" title="Clear">[x]</button>
+
+		        </div>
+		        <div id="FocusEdit"></div>
+
+        </div>
+        <!-- END HIDDEN UNTIL LOADED -->
+
+        <script src="lib/jquery/jquery.min.js" type="text/javascript"></script>
+        <script src="lib/jquery-ui/1.10.3/ui/minified/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="lib/overthrow/overthrow.js" type="text/javascript"></script>
+
+        <script src="lib/lazyload.js" type="text/javascript"></script> 
+        <script src="lib/setImmediate.js" type="text/javascript"></script> 
+
+        <script src="socket.io/socket.io.js" type="text/javascript"></script> 
+
+        <script src="lib/openlayers/OpenLayers.js" type="text/javascript"></script> <!--<script src="http://openlayers.org/dev/OpenLayers.js" type="text/javascript"></script> -->
+        <script src="lib/jQuery-URL-Parser/purl.js" type="text/javascript"></script> 
+        <script src="lib/underscore.js/1.5.2/underscore-min.js" type="text/javascript"></script> 
+        <script src="lib/underscore.string/2.3.3/underscore.string.min.js" type="text/javascript"></script> 
+        <script src="lib/backbone.js/1.1.0/backbone-min.js" type="text/javascript"></script> 
+        <script src="lib/pnotify/jquery.pnotify.min.js" type="text/javascript"></script> 
+
+        <script src="lib/timeago/timeago.js" type="text/javascript"></script> 
+        <script src="lib/jquery-form/jquery.form.js" type="text/javascript"></script> 
+
+        <script src="lib/jqtree/tree.jquery.js"></script>
+
+        <script src="lib/sketchpad/raphael-min.js"></script>
+        <script src="lib/sketchpad/raphael.sketchpad.js"></script>
+
+		<!-- REVEAL.js -->
+        <script src="lib/reveal.js/lib/js/head.min.js"></script>
+        <script src="lib/reveal.js/js/reveal.min.js"></script>
+        
+		<!-- PDF.js -->
+        <script src="lib/pdf.js/build/pdf.js"></script>
+
+
+        <!-- <script src="lib/masonry/jquery.masonry.min.js" type="text/javascript"></script>  -->
+        
+        
+
+        <script src="util.js" type="text/javascript"></script> 
+        <script src="widget.object.js" type="text/javascript"></script> 
+        <script src="widget.map.js" type="text/javascript"></script> 
+        <script src="widget.tag.js" type="text/javascript"></script> 
+        <script src="widget.focus.js" type="text/javascript"></script> 
+        <script src="widget.profile.js" type="text/javascript"></script> 
+        <script src="search.js" type="text/javascript"></script> 
+		
+
+        <script src="client_configuration.js" type="text/javascript"></script> 
+        <script src="view.map.js" type="text/javascript"></script> 
+        <script src="view.map.cesium.js" type="text/javascript"></script> 
+        <script src="view.browse.js" type="text/javascript"></script> 
+        <script src="view.trends.js" type="text/javascript"></script> 
+        <script src="view.slides.js" type="text/javascript"></script> 
+        <script src="view.graph.js" type="text/javascript"></script> 
+        <script src="view.self.js" type="text/javascript"></script> 
+        <script src="view.chat.js" type="text/javascript"></script> 
+        <script src="view.options.js" type="text/javascript"></script> 
+
+        <script src="view.goal.js" type="text/javascript"></script> 
+
+        <script src="netention.js" type="text/javascript"></script> 
+        <script src="action.js" type="text/javascript"></script> 
+
+        <script src="index.js" type="text/javascript"></script> 
+
+    </body>
+</html>

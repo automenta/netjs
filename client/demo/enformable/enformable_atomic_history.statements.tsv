@@ -1,0 +1,515 @@
+person	Julius Robert Oppenheimer	has the first name	first name	Julius
+person	Julius Robert Oppenheimer	has the middle name	middle name	Robert
+person	Julius Robert Oppenheimer	has the last name	last name	Oppenheimer
+person	Julius Robert Oppenheimer	is nicknamed	nickname	J. Robert
+person	Julius Robert Oppenheimer	works for	organization	Manhattan Project
+person	Julius Robert Oppenheimer	was acquainted with	war	World War II
+person	Julius Robert Oppenheimer	developed	thing	atomic bomb
+person	Julius Robert Oppenheimer	taught at	organization	University of California, Berkeley
+person	Julius Robert Oppenheimer	taught	school subject	Physics
+person	Julius Robert Oppenheimer	read	book	Bhagavad Gita
+person	Julius Robert Oppenheimer	was an advisor to	organization	United States Atomic Energy Commission
+person	Julius Robert Oppenheimer	organized	project	The Manhattan Project	during	war	World War II
+person	Franklin D. Roosevelt	has the first name	first name	Franklin
+person	Franklin D. Roosevelt	has the middle name	middle name	D.
+person	Franklin D. Roosevelt	has the last name	last name	Roosevelt
+date	10/9/1941	was relevant to	person	Franklin D. Roosevelt
+person	Franklin D. Roosevelt	was the	job title	President of the United States
+person	Franklin D. Roosevelt	ordered	thing	atomic bomb	on the date	date	10/9/1941
+organization	United States Army	created	organization	Manhattan Engineer District
+person	Yoshio Nishina	has the first name	first name	Yoshio
+person	Yoshio Nishina	has the last name	last name	Nishina
+person	Yoshio Nishina	works for	organization	RIKEN	as	job title	Head of Japan Atomic Weapons Program
+person	Yoshio Nishina	was born			on the date	date	12/6/1890
+person	Yoshio Nishina	died			on the date	date	1/10/1951
+person	Yoshio Nishina	was the director of	organization	Japanese Atomic Weapons Program
+person	Yoshio Nishina	was the	job title	Principle Investigator	at	organization	RIKEN
+person	Yoshio Nishina	graduated from	organization	Tokyo Imperial University	in the year	year	1918
+person	Yoshio Nishina	was born			in	city	Satosho, Okayama
+person	Yoshio Nishina	worked for	organization	Institute of Physical and Chemical Research (Now Riken)
+person	Yoshio Nishina	went to	country	Europe	in the year	year	1921
+person	Yoshio Nishina	studied	school subject	Physics	in	country	Europe
+person	Yoshio Nishina	visited	organization	Cavendish Laboratory
+person	Yoshio Nishina	visited	organization	Georg August University of Gottingen
+person	Yoshio Nishina	visited	organization	University of Copenhagen
+person	Yoshio Nishina	discovered	thing	Uranium 237
+person	Yoshio Nishina	was an expert in	school subject	Symmetric Fission
+person	Yoshio Nishina	died			of	health problem	Liver Cancer
+person	Niels Henrik David Bohr	has the first name	first name	Niels
+person	Niels Henrik David Bohr	has the middle name	middle name	Henrik David
+person	Niels Henrik David Bohr	has the last name	last name	Bohr
+person	Niels Henrik David Bohr	works for	organization	University of Copenhagen	as	job title	Physicist
+person	Niels Henrik David Bohr	was born			on the date	date	10/7/1885
+person	Niels Henrik David Bohr	died			on the date	date	11/18/1962
+person	Niels Henrik David Bohr	was an expert in	school subject	Quantum Mechanics
+person	Niels Henrik David Bohr	was born			in	city	Copenhagen
+person	Niels Henrik David Bohr	was a member of	organization	Manhattan Project	as	job title	Physicist
+person	Niels Henrik David Bohr	was also known as	alias	Nicholas Baker	for	phrase	security reasons
+person	Niels Henrik David Bohr	was a colleague of	person	Julius Robert Oppenheimer	in	organization	Manhattan Project
+person	Werner Karl Heisenberg	has the first name	first name	Werner
+person	Werner Karl Heisenberg	has the middle name	middle name	Karl
+person	Werner Karl Heisenberg	has the last name	last name	Heisenberg
+person	Kurt Diebner	has the first name	first name	Kurt
+person	Kurt Diebner	has the last name	last name	Diebner
+person	Kurt Diebner	was a member of	organization	The Uranium Club	during	war	World War II
+person	Robert Abraham Esau	has the first name	first name	Robert
+person	Robert Abraham Esau	has the middle name	middle name	Abraham
+person	Robert Abraham Esau	has the last name	last name	Esau
+person	Robert Abraham Esau	is nicknamed	nickname	Abraham
+person	Robert Abraham Esau	was a member of	organization	The Uranium Club	during	war	World War II
+person	Walter Gerlach	has the first name	first name	Walter
+person	Walter Gerlach	has the last name	last name	Gerlach
+person	Walter Gerlach	is nicknamed	nickname	Walt
+person	Walter Gerlach	was a member of	organization	The Uranium Club	during	war	World War II
+person	Erich Schumann	has the first name	first name	Erich
+person	Erich Schumann	has the last name	last name	Schumann
+person	Erich Schumann	was a member of	organization	The Uranium Club	during	war	World War II
+person	Werner Karl Heisenberg	was in charge of	organization	The Uranium Club	during	war	World War II
+person	Max Born	has the first name	first name	Max
+person	Max Born	has the last name	last name	Born
+person	Werner Karl Heisenberg	was a colleague of	person	Max Born	after	activity	studying in Gottingen together
+person	James Franck	has the first name	first name	James
+person	James Franck	has the last name	last name	Franck
+person	Werner Karl Heisenberg	was a colleague of	person	James Franck	after	activity	studying in Gottingen together
+person	Niels Henrik David Bohr	was a member of	organization	European Council for Nuclear Research (CERN)
+person	Leslie Richard Groves	has the title	title	Lietutenant General
+person	Leslie Richard Groves	has the first name	first name	Leslie
+person	Leslie Richard Groves	has the middle name	middle name	Richard
+person	Leslie Richard Groves	has the last name	last name	Groves
+person	Leslie Richard Groves	was born			on the date	date	8/17/1896
+person	Leslie Richard Groves	died			on the date	date	7/13/1970
+person	Leslie Richard Groves	was the director of	organization	Armed Forces Special Weapons Project	after	activity	handing over charge of the Manhattan Project to the United States Atomic Energy Commission in 1947
+person	Leo Szilard	has the first name	first name	Leo
+person	Leo Szilard	has the last name	last name	Szilard
+person	Leo Szilard	was born			on the date	date	2/11/1898
+person	Leo Szilard	died			on the date	date	5/30/1964
+person	Enrico Fermi	has the first name	first name	Enrico
+person	Enrico Fermi	has the last name	last name	Fermi
+person	Leo Szilard	co-developed	thing	idea of a nuclear reactor	with	person	Enrico Fermi
+person	Leo Szilard	was born			in	city	Budapest, Hungary
+person	Albert Einstein	has the first name	first name	Albert
+person	Albert Einstein	has the last name	last name	Einstein
+person	Leo Szilard	was friends with	person	Albert Einstein
+person	H.G. Wells	has the first name	first name	H.G.
+person	H.G. Wells	has the last name	last name	Wells
+person	Leo Szilard	read books by	person	H.G. Wells
+person	Aaron Novic	has the first name	first name	Aaron
+person	Aaron Novic	has the last name	last name	Novic
+person	Leo Szilard	worked with	person	Aaron Novic
+person	Leo Szilard	died			of	health problem	a heart attack
+person	Albert Einstein	was born			on the date	date	3/14/1879
+person	Albert Einstein	died			on the date	date	4/18/1955
+person	Albert Einstein	developed	thing	general theory of relativity
+person	Albert Einstein	was born			in	country	Germany
+person	Albert Einstein	left	country	Germany	after	event	Adolph Hitler came to power
+person	Albert Einstein	was friends with	person	Max Born
+person	Kurt Godel	has the first name	first name	Kurt
+person	Kurt Godel	has the last name	last name	Godel
+person	Albert Einstein	was friends with	person	Kurt Godel
+person	Aaron Novic	was a member of	organization	Manhattan Project	at	location	Hanford, Washington
+person	Aaron Novic	helped achieve the goal	goal	plutonium production
+person	Aaron Novic	watched	event	the Trinity experiment
+person	Aaron Novic	didn't believe in	thing	war	after	war	World War II
+person	Julius Robert Oppenheimer	began working on	concept	fast neutron calculations	to	activity	calculate critical mass of weapon detonation
+person	Robert Serber	has the first name	first name	Robert
+person	Robert Serber	has the last name	last name	Serber
+person	Julius Robert Oppenheimer	studied	concept	problems of neutron diffusion	with	person	Robert Serber
+person	Glenn Theodore Seaborg	has the first name	first name	Glenn
+person	Glenn Theodore Seaborg	has the middle name	middle name	Theodore
+person	Glenn Theodore Seaborg	has the last name	last name	Seaborg
+person	Glenn Theodore Seaborg	was born			on the date	date	4/19/1912
+person	Glenn Theodore Seaborg	died			on the date	date	2/25/1999
+person	Glenn Theodore Seaborg	was friends with	person	Julius Robert Oppenheimer
+person	Glenn Theodore Seaborg	was a member of	organization	Manhattan Project	at	location	Metallurgical Labratory at the University of Chicago
+person	Edwin McMillan	has the first name	first name	Edwin
+person	Edwin McMillan	has the last name	last name	McMillan
+person	Glenn Theodore Seaborg	co-developed	concept	the chemistry of the first transuranium elements	with	person	Edwin McMillan
+person	Glenn Theodore Seaborg	was a member of	organization	United States Atomic Energy Commission	from	thing	1961 to 1971
+person	Enrico Fermi	was born			on the date	date	9/29/1901
+person	Enrico Fermi	died			on the date	date	11/28/1954
+person	Enrico Fermi	is famous for	activity	his development of the first nuclear reactor
+person	Enrico Fermi	watched	event	the Trinity experiment
+person	Enrico Fermi	began working on	organization	Manhattan Project	with	person	Leo Szilard
+person	Enrico Fermi	was a member of	organization	United States Atomic Energy Commission
+person	Enrico Fermi	supported	person	Julius Robert Oppenheimer	at	event	AEC Hearing in 1954
+person	Enrico Fermi	was friends with	person	Julius Robert Oppenheimer
+person	Enrico Fermi	died			in	city	Chicago, Illinois
+person	Enrico Fermi	died			of	health problem	Stomach Cancer
+person	Enrico Fermi	was aware of	health problem	considerable health risks	of	thing	his research
+person	Yoshio Nishina	was an expert in	activity	organization
+person	Lieutenant General Takeo Yasuda	has the first name	first name	Lieutenant
+person	Lieutenant General Takeo Yasuda	has the middle name	middle name	General Takeo
+person	Lieutenant General Takeo Yasuda	has the last name	last name	Yasuda
+person	Yoshio Nishina	had a meeting with	person	Lieutenant General Takeo Yasuda	to	activity	discuss the possibility of nuclear weapons.
+person	Yoshio Nishina	mentioned	goal	it would require 10 kilograms of uranium-235 of at least 50% purity to create an atomic bomb	on the date	date	4/2/1943
+event	Japan builds first cyclotron in Korea	is located at	city	Hungnam, North Korea
+person	Edward Teller	has the first name	first name	Edward
+person	Edward Teller	has the last name	last name	Teller
+person	Edward Teller	was born			on the date	date	1/15/1908
+person	Edward Teller	died			on the date	date	9/9/2003
+person	Edward Teller	was a member of	organization	Manhattan Project	after	activity	emigrating to the United States in the 1930s
+person	Edward Teller	was friends with	person	Enrico Fermi
+person	Edward Teller	was associated with	location	Los Alamos Laboratory	during	war	World War II
+person	George Placzek	has the first name	first name	George
+person	George Placzek	has the last name	last name	Placzek
+person	Edward Teller	was friends with	person	George Placzek	for	duration	lifetime
+person	George Placzek	was born			on the date	date	9/26/1905
+person	George Placzek	died			on the date	date	10/9/1955
+person	Hans Bethe	has the first name	first name	Hans
+person	Hans Bethe	has the last name	last name	Bethe
+person	George Placzek	worked with	person	Hans Bethe
+person	George Placzek	worked with	person	Edward Teller
+person	Rudolf Peierls	has the first name	first name	Rudolf
+person	Rudolf Peierls	has the last name	last name	Peierls
+person	George Placzek	worked with	person	Rudolf Peierls
+person	George Placzek	worked with	person	Werner Karl Heisenberg
+person	Victor Weisskopf	has the first name	first name	Victor
+person	Victor Weisskopf	has the last name	last name	Weisskopf
+person	George Placzek	worked with	person	Victor Weisskopf
+person	George Placzek	worked with	person	Enrico Fermi
+person	George Placzek	worked with	person	Niels Henrik David Bohr
+person	Yoshio Nishina	was a colleague of	person	Niels Henrik David Bohr	after	activity	researching in Copenhagen together
+person	Lev Landau	has the first name	first name	Lev
+person	Lev Landau	has the last name	last name	Landau
+person	George Placzek	worked with	person	Lev Landau
+person	Edoardo Amaldi	has the first name	first name	Edoardo
+person	Edoardo Amaldi	has the last name	last name	Amaldi
+person	George Placzek	worked with	person	Edoardo Amaldi
+person	Emilio Gino Segre	has the first name	first name	Emilio
+person	Emilio Gino Segre	has the last name	last name	Segre
+person	George Placzek	worked with	person	Emilio Gino Segre
+person	Leon van Hove	has the first name	first name	Leon
+person	Leon van Hove	has the middle name	middle name	van
+person	Leon van Hove	has the last name	last name	Hove
+person	George Placzek	worked with	person	Leon van Hove
+person	Otto Robert Frisch	has the first name	first name	Otto
+person	Otto Robert Frisch	has the last name	last name	Frisch
+person	George Placzek	co-developed	concept	direct experimental proof of nuclear fission	with	person	Otto Robert Frisch
+person	George Placzek	was friends with	person	Julius Robert Oppenheimer
+person	George Placzek	was friends with	person	Edward Teller
+person	George Placzek	was a member of	organization	Manhattan Project	as	collection	a member of the British Mission
+person	George Placzek	was friends with	person	Hans Bethe
+person	George Placzek	committed suicide		
+person	Otto Robert Frisch	has the middle name	middle name	Robert
+person	Otto Robert Frisch	was born			on the date	date	10/1/1904
+person	Otto Robert Frisch	died			on the date	date	9/22/1979
+person	Otto Stern	has the first name	first name	Otto
+person	Otto Stern	has the last name	last name	Stern
+person	Otto Robert Frisch	was a student of	person	Otto Stern	in	location	Hamburg
+person	Otto Robert Frisch	moved from	country	Germany	to	location	London, England
+person	Otto Robert Frisch	moved from	country	Germany	after	activity	accession of Adolf Hitler to chancellorship of Germany in 1933
+person	Lise Meitner	has the first name	first name	Lise
+person	Lise Meitner	has the last name	last name	Meitner
+person	Otto Robert Frisch	was the nephew of	person	Lise Meitner	from	city	Kungalv
+person	Otto Robert Frisch	developed	concept	of nuclear fission
+person	Otto Robert Frisch	worked with	person	Rudolf Peierls	on	project	the process by which an atomic explosion could be generated
+person	Otto Robert Frisch	was a member of	organization	Manhattan Project
+person	Lise Meitner	was born			on the date	date	11/7/1878
+person	Lise Meitner	died			on the date	date	10/27/1968
+person	Lise Meitner	was an expert in	school subject	Physics
+person	Otto Hahn	has the first name	first name	Otto
+person	Otto Hahn	has the last name	last name	Hahn
+person	Lise Meitner	was a colleague of	person	Otto Hahn
+person	Lise Meitner	was the aunt of	person	Otto Robert Frisch
+publication	two papers on beta-radiation	is titled	publication title	two papers on beta-radiation
+person	Lise Meitner	published	publication	two papers on beta-radiation
+person	Lise Meitner	was famous for	award	being Germany's first femail full professor of physics.
+person	Lise Meitner	taught	school subject	Nuclear Physics	with	person	Leo Szilard
+person	Lise Meitner	was friends with	person	Otto Hahn
+person	Lise Meitner	did not want	activity	to work	on	product	nuclear bomb
+person	Friedrich Wilhelm Strassmann	has the last name	last name	Strassmann
+person	Lise Meitner	shared the award	award	Enrico Fermi Award	with	person	Friedrich Wilhelm Strassmann
+person	Ernest Rutherford	has the first name	first name	Ernest
+person	Ernest Rutherford	has the last name	last name	Rutherford
+person	Ernest Rutherford	was born			on the date	date	8/30/1871
+person	Ernest Rutherford	died			on the date	date	10/19/1937
+person	Ernest Rutherford	created	thing	alpha ray
+person	Ernest Rutherford	created	thing	beta ray
+person	Ernest Rutherford	studied	thing	radioactivity
+person	Hans Geiger	has the first name	first name	Hans
+person	Hans Geiger	has the last name	last name	Geiger
+person	Ernest Rutherford	co-developed	thing	Zinc-Sulfide scintillation screens	with	person	Hans Geiger
+person	Thomas Royds	has the first name	first name	Thomas
+person	Thomas Royds	has the last name	last name	Royds
+person	Ernest Rutherford	worked with	person	Thomas Royds	on	project	alpha radiation research
+person	Ernest Marsden	has the first name	first name	Ernest
+person	Ernest Marsden	has the last name	last name	Marsden
+person	Ernest Rutherford	worked with	person	Ernest Marsden
+person	Ernest Rutherford	was famous for	activity	being the first person to transmute one element into another
+person	Ernest Rutherford	worked with	person	Niels Henrik David Bohr
+person	Ernest Rutherford	thought of	concept	existence of neutrons
+person	John Cockcroft	has the first name	first name	John
+person	John Cockcroft	has the last name	last name	Cockcroft
+person	Ernest Rutherford	taught	person	John Cockcroft
+person	Ernest Walton	has the first name	first name	Ernest
+person	Ernest Walton	has the last name	last name	Walton
+person	Ernest Rutherford	taught	person	Ernest Walton
+person	Irene Jolio-Curie	has the first name	first name	Irene
+person	Irene Jolio-Curie	has the last name	last name	Jolio-Curie
+person	Irene Jolio-Curie	was born			on the date	date	9/12/1897
+person	Irene Jolio-Curie	died			on the date	date	3/17/1956
+person	Marie Sklodowska-Curie	has the first name	first name	Marie
+person	Marie Sklodowska-Curie	has the last name	last name	Sklodowska-Curie
+person	Irene Jolio-Curie	was the child of	person	Marie Sklodowska-Curie
+person	Pierre Curie	has the first name	first name	Pierre
+person	Pierre Curie	has the last name	last name	Curie
+person	Irene Jolio-Curie	was the child of	person	Pierre Curie
+person	Frederic Joliot-Curie	has the first name	first name	Frederic
+person	Frederic Joliot-Curie	has the last name	last name	Joliot-Curie
+person	Irene Jolio-Curie	was the partner of	person	Frederic Joliot-Curie
+person	Irene Jolio-Curie	shared the award	award	Nobel Prize for Chemistry	with	person	Frederic Joliot-Curie
+person	Irene Jolio-Curie	was born			in	country	France
+person	Friedrich Wilhelm Strassmann	was born			on the date	date	2/22/1902
+person	Friedrich Wilhelm Strassmann	died			on the date	date	4/22/1980
+person	Friedrich Wilhelm Strassmann	worked with	person	Otto Hahn	to	activity	identify barium after bombarding uranium with neutrons, demonstration nuclear fission
+person	Friedrich Wilhelm Strassmann	was born			in	city	Boppard
+person	Friedrich Wilhelm Strassmann	shared the award	award	Enrico Fermi Award	with	person	Lise Meitner
+person	Friedrich Wilhelm Strassmann	shared the award	award	Enrico Fermi Award	with	person	Otto Hahn
+person	Eugene Paul Wigner	has the first name	first name	Eugene
+person	Eugene Paul Wigner	has the middle name	middle name	Paul
+person	Eugene Paul Wigner	has the last name	last name	Wigner
+person	Eugene Paul Wigner	is nicknamed	nickname	E.P.
+person	Eugene Paul Wigner	was born			on the date	date	11/17/1902
+person	Eugene Paul Wigner	died			on the date	date	1/1/1995
+person	Maria Goepper-Mayer	has the first name	first name	Maria
+person	Maria Goepper-Mayer	has the last name	last name	Goepper-Mayer
+person	Eugene Paul Wigner	shared the award	award	Nobel Prize for Physics	with	person	Maria Goepper-Mayer
+person	J. Hans D. Jensen	has the first name	first name	J.
+person	J. Hans D. Jensen	has the middle name	middle name	Hans D.
+person	J. Hans D. Jensen	has the last name	last name	Jensen
+person	Eugene Paul Wigner	shared the award	award	Nobel Prize for Physics	with	person	J. Hans D. Jensen
+person	Eugene Paul Wigner	developed	concept	theory of symmetries in quantum mechanics
+person	Eugene Paul Wigner	was born			in	city	Budapest, Hungary
+person	John von Neumann	has the first name	first name	John
+person	John von Neumann	has the middle name	middle name	von
+person	John von Neumann	has the last name	last name	Neumann
+person	Eugene Paul Wigner	was a colleague of	person	John von Neumann
+person	Laszlo Ratz	has the first name	first name	Laszlo
+person	Laszlo Ratz	has the last name	last name	Ratz
+person	Eugene Paul Wigner	was a student of	person	Laszlo Ratz	with	person	John von Neumann
+person	Eugene Paul Wigner	studied	school subject	Theoretical Physics
+person	Eugene Paul Wigner	studied	school subject	Nuclear Physics
+person	Eugene Paul Wigner	studied	school subject	Atomic Physics
+person	Eugene Paul Wigner	studied	school subject	Solid State Physics
+person	Eugene Paul Wigner	was a member of	organization	Manhattan Project
+person	Eugene Paul Wigner	studied	school subject	Chemical Engineering	at	organization	Technische Hochschule
+person	Eugene Paul Wigner	was friends with	person	Leo Szilard
+person	Michael Polanyi	has the first name	first name	Michael
+person	Michael Polanyi	has the last name	last name	Polanyi
+person	Eugene Paul Wigner	was a student of	person	Michael Polanyi
+person	Eugene Paul Wigner	studied	school subject	Quantum Mechanics	during	time period	late 1920s
+person	David Hilbert	has the first name	first name	David
+person	David Hilbert	has the last name	last name	Hilbert
+person	Eugene Paul Wigner	was the assistant of	person	David Hilbert	at	organization	Gottingen
+person	Eugene Paul Wigner	introduced	person	Leo Szilard	to	person	Albert Einstein
+person	Eugene Paul Wigner	studied	concept	atomic nuclei
+person	Eugene Paul Wigner	believed in	concept	pacifism
+person	Eugene Paul Wigner	witnessed	event	Chicago Pile One (CP-1) achieved a critical nuclear chain reaction
+person	Eugene Paul Wigner	was the director of	organization	Oak Ridge National Laboratory	in	time period	1946
+person	Eugene Paul Wigner	received	award	Atoms for Peace Award	in the year	year	1959
+person	Eugene Paul Wigner	received	award	National Medal of Science	in the year	year	1969
+person	Eugene Paul Wigner	received	award	Enrico fermi Award	in the year	year	1958
+person	Paul Adrien Maurice Dirac	has the first name	first name	Paul
+person	Paul Adrien Maurice Dirac	has the middle name	middle name	Adrien Maurice
+person	Paul Adrien Maurice Dirac	has the last name	last name	Dirac
+person	Paul Adrien Maurice Dirac	was born			on the date	date	8/8/1902
+person	Paul Adrien Maurice Dirac	died			on the date	date	10/20/1984
+person	Paul Adrien Maurice Dirac	studied	school subject	Theoretical Physics
+person	Erwin Schrodinger	has the first name	first name	Erwin
+person	Erwin Schrodinger	has the last name	last name	Schrodinger
+person	Paul Adrien Maurice Dirac	shared the award	award	Nobel Prize for Physics	with	person	Erwin Schrodinger
+person	Paul Adrien Maurice Dirac	received	award	Nobel Prize for Physics	for	event	discovery of the new productive forms of atomic theory
+person	Eugene Paul Wigner	received	award	Nobel Prize for Physics	in the year	year	1963
+person	Paul Adrien Maurice Dirac	received	award	Nobel Prize for Physics	in the year	year	1933
+person	Paul Adrien Maurice Dirac	was born			in	city	Bristol, England
+person	Paul Adrien Maurice Dirac	studied	school subject	Electrical Engineering	at	organization	University of Bristol
+person	Paul Adrien Maurice Dirac	received	educational degree	first class honours bachelor of science	in	school subject	Engineering
+person	Paul Adrien Maurice Dirac	received	educational degree	first class honours bachelor of arts	from	organization	University of Bristol
+person	Paul Adrien Maurice Dirac	studied	school subject	Mathematics	at	organization	University of Bristol
+person	Paul Adrien Maurice Dirac	received	educational degree	first class honours bachelor of arts	in the year	year	1923
+person	Friedrich Wilhelm Strassmann	has the first name	first name	Friedrich
+person	Friedrich Wilhelm Strassmann	has the middle name	middle name	Wilhelm
+person	Friedrich Wilhelm Strassmann	is nicknamed	nickname	Fritz
+person	Emilio Gino Segre	has the middle name	middle name	Gino
+person	Emilio Gino Segre	was born			on the date	date	2/1/1905
+person	Emilio Gino Segre	died			on the date	date	4/22/1989
+person	Emilio Gino Segre	was born			in	city	Tivoli, Italy
+person	Emilio Gino Segre	was a student of	person	Enrico Fermi	at	organization	University of Rome La Sapienza
+person	Emilio Gino Segre	worked with	person	Otto Hahn	in	city	Hamburg, Germany
+person	Pieter Zeeman	has the first name	first name	Pieter
+person	Pieter Zeeman	has the last name	last name	Zeeman
+person	Emilio Gino Segre	worked with	person	Pieter Zeeman	in	city	Amsterdam
+person	Ettore Majorana	has the first name	first name	Ettore
+person	Ettore Majorana	has the last name	last name	Majorana
+person	Emilio Gino Segre	was a colleague of	person	Ettore Majorana
+person	Emilio Gino Segre	was a member of	organization	Manhattan Project	for the time period	time period	1943 to 1946
+person	Emilio Gino Segre	received	award	Nobel Prize for Physics	in the year	year	1959
+person	Emilio Gino Segre	published	book type	biography	of	person	Enrico Fermi
+person	Emilio Gino Segre	died			of	health problem	a heart attack
+person	Ettore Majorana	was born			on the date	date	8/1/1906
+person	Ettore Majorana	died			on the date	date	3/27/1938
+person	Ettore Majorana	was born			in	city	Catania, Scility
+person	Ettore Majorana	was a student of	person	Enrico Fermi	in	city	Rome, Italy
+person	Ettore Majorana	was friends with	person	Emilio Gino Segre
+person	Ettore Majorana	received	educational degree	Doctorate of Physics	from	organization	University of Rome La Sapienza
+person	Ettore Majorana	worked with	person	Werner Karl Heisenberg	in	city	Copenhagen
+person	Ettore Majorana	worked with	person	Niels Henrik David Bohr	in	city	Copenhagen
+person	Ettore Majorana	worked with	person	Werner Karl Heisenberg	in	city	Leipzig, Germany
+organization	The Uranium Club	began working on	activity	German nuclear weapons program	in the month	month	April, 1939
+person	Kurt Diebner	was born			on the date	date	5/13/1905
+person	Kurt Diebner	died			on the date	date	4/13/1964
+person	Kurt Diebner	was the director of	organization	The Uranium Club	after	event	Adolf Hitler authorized the German nuclear program
+person	Kurt Diebner	was born			in	city	Obernessa, Germany
+person	Kurt Diebner	studied	school subject	Physics	at	organization	Martin Luther University of Halle-Wittenberg
+person	Kurt Diebner	received	educational degree	Bachelors of Science	from	organization	Martin Luther University of Halle-Wittenberg
+person	Kurt Diebner	received	educational degree	Bachelors of Science	in the year	year	1928
+person	Kurt Diebner	received	educational degree	Masters of Science	from	organization	Leopold Franzens University of Innsbruck
+person	Kurt Diebner	received	educational degree	Masters of Science	in the year	year	1930
+person	Gerhard Hoffman	has the first name	first name	Gerhard
+person	Gerhard Hoffman	has the last name	last name	Hoffman
+person	Kurt Diebner	was the assistant of	person	Gerhard Hoffman
+person	Kurt Diebner	was the director of	organization	Kernoforshungsrat (Nuclear Research Council)
+person	Walter Wilhelm Georg Bothe	has the first name	first name	Walter
+person	Walter Wilhelm Georg Bothe	has the middle name	middle name	Wilhelm Georg
+person	Walter Wilhelm Georg Bothe	has the last name	last name	Bothe
+person	Walter Wilhelm Georg Bothe	was born			on the date	date	1/8/1891
+person	Walter Wilhelm Georg Bothe	died			on the date	date	2/8/1957
+person	Walter Wilhelm Georg Bothe	shared the award	award	Nobel Prize for Physics	with	person	Max Born
+person	Walter Wilhelm Georg Bothe	received	award	Nobel Prize for Physics	in the year	year	1954
+person	Walter Wilhelm Georg Bothe	was the director of	organization	University of Giessen Physics Department	in the year	year	1930
+person	Walter Wilhelm Georg Bothe	was the director of	organization	Physical and Radiological Institute at the University of Heidelberg	in the year	year	1932
+person	Walter Wilhelm Georg Bothe	created	thing	first operational cyclotron	in	country	Germany
+person	Walter Wilhelm Georg Bothe	was a member of	organization	The Uranium Club
+person	Max Planck	has the first name	first name	Max
+person	Max Planck	has the last name	last name	Planck
+person	Wolfgang Gentner	has the first name	first name	Wolfgang
+person	Wolfgang Gentner	has the last name	last name	Gentner
+person	Walter Wilhelm Georg Bothe	worked with	person	Wolfgang Gentner	on	product	Van de Graaf generator
+person	Walter Wilhelm Georg Bothe	went to	organization	Lawrence Berkely National Laboratory	in the year	year	1938
+person	Walter Wilhelm Georg Bothe	was friends with	person	Emilio Gino Segre	after	activity	traveling to Berkeley, California
+person	Donald Cooksey	has the first name	first name	Donald
+person	Donald Cooksey	has the last name	last name	Cooksey
+person	Walter Wilhelm Georg Bothe	was friends with	person	Donald Cooksey	after	activity	traveling to Berkeley, California
+person	Walter Wilhelm Georg Bothe	studied	thing	Frederic Joliot-Curie cyclotron in Paris, France	in the year	year	1940
+person	Georg Robert Dopel	has the first name	first name	Georg
+person	Georg Robert Dopel	has the middle name	middle name	Robert
+person	Georg Robert Dopel	has the last name	last name	Dopel
+person	Georg Robert Dopel	was born			on the date	date	12/3/1895
+person	Georg Robert Dopel	died			on the date	date	12/2/1982
+person	Georg Robert Dopel	was a member of	organization	The Uranium Club
+person	Georg Robert Dopel	worked for	person	Werner Karl Heisenberg	at	organization	University of Leipzig
+person	Georg Robert Dopel	worked on	activity	Soviet atomic bomb project
+person	Wilhelm Wien	has the first name	first name	Wilhelm
+person	Wilhelm Wien	has the last name	last name	Wien
+person	Georg Robert Dopel	was a student of	person	Wilhelm Wien	at	organization	Ludwig Maximilian Universtiy of Munich
+person	Johannes Stark	has the first name	first name	Johannes
+person	Johannes Stark	has the last name	last name	Stark
+person	Georg Robert Dopel	worked with	person	Johannes Stark	on	project	canal rays
+person	Georg Robert Dopel	studied	concept	using heavy water as a moderator in a research nuclear reactor	in the month	month	August, 1940
+person	Hans Geiger	was born			on the date	date	9/30/1882
+person	Hans Geiger	died			on the date	date	9/24/1945
+person	Hans Geiger	was born			in	city	Neustadt-an-der-Haardt, Germany
+person	Hans Geiger	worked with	person	Ernest Rutherford	at	organization	University of Manchester
+person	John Mitchell Nuttall	has the first name	first name	John
+person	John Mitchell Nuttall	has the middle name	middle name	Mitchell
+person	John Mitchell Nuttall	has the last name	last name	Nuttall
+person	Hans Geiger	worked with	person	John Mitchell Nuttall	on	project	Geiger-Nuttall law
+person	Hans Geiger	created	thing	Geiger-Muller counter
+person	Hans Geiger	was a member of	organization	The Uranium Club
+person	Hans Geiger	died			in	city	Potsdam, Germany
+person	Wolfgang Gentner	was born			on the date	date	4/23/1906
+person	Wolfgang Gentner	died			on the date	date	9/4/1980
+person	Wolfgang Gentner	received	educational degree	Doctorate of Physics	from	organization	University of Frankfurt
+person	Wolfgang Gentner	studied	school subject	Nuclear Physics	at	location	Curies Radium Institute
+person	Wolfgang Gentner	visited	organization	Lawrence Berkely National Laboratory	in the year	year	1938
+person	Wolfgang Gentner	helped with	activity	construction of the German cyclotron at Heidelberg
+person	Wolfgang Gentner	was the assistant of	person	Walter Wilhelm Georg Bothe	for the time period	time period	1936 to 1945
+person	Wilhelm Hanle	has the first name	first name	Wilhelm
+person	Wilhelm Hanle	has the last name	last name	Hanle
+person	Wilhelm Hanle	was born			on the date	date	1/13/1901
+person	Wilhelm Hanle	died			on the date	date	4/29/1993
+person	Wilhelm Hanle	was a member of	organization	The Uranium Club
+person	Wilhelm Hanle	was a student of	person	James Franck	at	organization	Georg August University of Gottingen
+person	Gerhard Hoffman	was born			in the year	year	1880
+person	Gerhard Hoffman	died			in the year	year	1945
+person	Gerhard Hoffman	was a member of	organization	The Uranium Club
+person	Gerhard Hoffman	studied	school subject	Nuclear Physics	at	organization	University of Leipzig
+person	Walter Kaufmann	has the first name	first name	Walter
+person	Walter Kaufmann	has the last name	last name	Kaufmann
+person	Gerhard Hoffman	was a student of	person	Walter Kaufmann
+person	Gerhard Hoffman	studied	concept	precise measurement of radioactivity
+organization	The Uranium Club	was founded			on the date	date	9/1/1939
+organization	The Uranium Club	had the first contact date	date	9/16/1939
+person	Karl-Heinz Hocker	has the first name	first name	Karl-Heinz
+person	Karl-Heinz Hocker	has the last name	last name	Hocker
+person	Karl-Heinz Hocker	was born			on the date	date	12/27/1915
+person	Karl-Heinz Hocker	died			on the date	date	4/17/1998
+person	Karl-Heinz Hocker	was a member of	organization	The Uranium Club
+person	Carl Friedrich von Weizsacker	has the first name	first name	Carl
+person	Carl Friedrich von Weizsacker	has the middle name	middle name	Friedrich von
+person	Carl Friedrich von Weizsacker	has the last name	last name	Weizsacker
+person	Karl-Heinz Hocker	was a student of	person	Carl Friedrich von Weizsacker	at	organization	Friedrich-Wilhelms University
+person	Karl-Heinz Hocker	received	educational degree	Doctorate of Physics	from	organization	Friedrich-Wilhelms University
+person	Karl-Heinz Hocker	was born			in	city	Bremen
+person	Karl-Heinz Hocker	studied	concept	geometry for uranium reactors
+person	Erich Rudolf Bagge	has the first name	first name	Erich
+person	Erich Rudolf Bagge	has the middle name	middle name	Rudolf
+person	Erich Rudolf Bagge	has the last name	last name	Bagge
+person	Erich Rudolf Bagge	was born			on the date	date	5/30/1912
+person	Erich Rudolf Bagge	died			on the date	date	6/5/1996
+person	Erich Rudolf Bagge	was a student of	person	Werner Karl Heisenberg
+person	Erich Rudolf Bagge	was a member of	organization	The Uranium Club
+person	Erich Rudolf Bagge	developed	thing	gaseous uranium enrichment device
+organization	Tube Alloys	was the	organization	Nuclear Weapons Program	of	country	Great Britain
+organization	Manhattan Project	was the	organization	Nuclear Weapons Program	of	country	United States of America
+organization	The Uranium Club	was the	organization	Nuclear Weapons Program	of	country	Germany
+person	Francis Perrin	has the first name	first name	Francis
+person	Francis Perrin	has the last name	last name	Perrin
+person	Francis Perrin	was born			on the date	date	8/17/1901
+person	Francis Perrin	died			on the date	date	7/4/1992
+person	Jean Perrin	has the first name	first name	Jean
+person	Jean Perrin	has the last name	last name	Perrin
+person	Francis Perrin	was the child of	person	Jean Perrin
+person	Francis Perrin	was born			in	city	Paris, France
+person	Francis Perrin	discovered	thing	Oklo natural reactor	in the year	year	1972
+person	Lew Kowarski	has the first name	first name	Lew
+person	Lew Kowarski	has the last name	last name	Kowarski
+person	Lew Kowarski	was born			on the date	date	2/10/1907
+person	Lew Kowarski	died			on the date	date	7/30/1979
+person	Lew Kowarski	was born			in	city	Geneva
+person	Lew Kowarski	worked with	person	Frederic Joliot-Curie	starting	year	1934
+person	Lew Kowarski	was a member of	organization	The Paris Group
+person	Lew Kowarski	was a member of	organization	Tube Alloys	during	war	World War II
+person	Lew Kowarski	was the supervisor of	job	Canada's first nuclear reactor construction at Chalk River Laboratories	in the year	year	1945
+person	Lew Kowarski	was the supervisor of	job	France's first two nuclear reactors	for the time period	time period	1948 to 1952
+person	Hans von Halban	has the first name	first name	Hans
+person	Hans von Halban	has the last name	last name	von Halban
+person	Hans von Halban	was born			on the date	date	1/24/1908
+person	Hans von Halban	died			on the date	date	11/28/1964
+person	Hans von Halban Sr	has the first name	first name	Hans
+person	Hans von Halban Sr	has the last name	last name	Halban Sr
+person	Hans von Halban	was the child of	person	Hans von Halban Sr
+person	Hans von Halban	received	educational degree	Doctorate of Physics	from	organization	Swiss Federal Institute of Technology
+person	Lew Kowarski	received	educational degree	Doctorate of Physics	from	organization	University of Paris
+person	Hans von Halban Sr	has the middle name	middle name	von
+person	Hans von Halban	received	educational degree	Doctorate of Physics	in the year	year	1936
+person	Hans von Halban	went to school at	organization	Swiss Federal Institute of Technology	in	city	Zurich
+person	Hans von Halban	worked with	person	Niels Henrik David Bohr	at	organization	University of Copenhagen
+person	Hans von Halban	worked with	person	Otto Robert Frisch	on	project	heavy water research
+person	Hans von Halban	was a member of	organization	The Paris Group	as of	year	1937
+person	Francis Perrin	was a member of	organization	The Paris Group
+person	James Chadwick	has the title	title	Sir
+person	James Chadwick	has the first name	first name	James
+person	James Chadwick	has the middle name	middle name	Chadwick
+person	James Chadwick	was born			on the date	date	10/20/1891
+person	James Chadwick	died			on the date	date	7/24/1974
+person	James Chadwick	was a member of	organization	Manhattan Project	during	war	World War II
+person	James Chadwick	was a student of	person	Hans Geiger	at	organization	Technical Institute of Berlin
+person	James Chadwick	was a student of	person	Ernest Rutherford	at	organization	Technical Institute of Berlin
+person	James Chadwick	received	award	Nobel Prize for Physics	in the year	year	1935
+person	James Chadwick	discovered	thing	neutron	in the year	year	1932
+person	James Chadwick	was the	job title	Professor of Physics	at	organization	University of Liverpool
+person	James Chadwick	received	award	Hughes Medal of the Royal Society	in the year	year	1932
+person	James Chadwick	was elected to	organization	MAUD Committee	in the year	year	1940
+person	Leslie Richard Groves	was responsible for	project	The Manhattan Project
+person	Leslie Richard Groves	was responsible for	activity	all aspects of the acquisition of the atomic bomb including: research, development, testing, evaluation, production, and fielding of the weapons system	of	organization	Manhattan Project

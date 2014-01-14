@@ -1,0 +1,8 @@
+xyz.js
+node_modules/
+upload/*
+nbproject/*
+/nbproject/private/
+netention.options.js
+doc/.~lock.*
+

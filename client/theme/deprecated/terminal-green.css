@@ -1,0 +1,30 @@
+/* 
+    Document   : terminal-green
+    Created on : Nov 10, 2010, 6:15:36 AM
+    Author     : me
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+@import url("default-black.css");
+
+#_Content {
+    color: #adf298;
+    background-color: rgba(0,0,0,0.6);
+    padding: 0.5em;
+    
+    text-align:justify;
+}
+#_Content a, #_Content a:visited {
+    color: #fdB2c8;    
+}
+
+body {
+    background: url('/themes/image/holodeck1.jpg')  no-repeat center center fixed;
+    background-size: cover;    
+    height: 100%;
+}

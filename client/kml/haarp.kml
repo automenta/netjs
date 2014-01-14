@@ -1,0 +1,1047 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>HAARP_TRDB.kml</name>
+	<LookAt>
+		<longitude>-146.1560655023966</longitude>
+		<latitude>65.07326973127162</latitude>
+		<altitude>0</altitude>
+		<heading>-11.09850525579962</heading>
+		<tilt>0</tilt>
+		<range>2388232.902002758</range>
+		<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+	</LookAt>
+	<Style id="radz0">
+		<IconStyle>
+			<scale>3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LabelStyle>
+			<scale>0.6</scale>
+		</LabelStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>ff0000ff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="radz3">
+		<IconStyle>
+			<scale>3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LabelStyle>
+			<scale>0.6</scale>
+		</LabelStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>ff0000ff</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="radz2">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#radz3</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#radz0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Folder>
+		<name>HAARP</name>
+		<Snippet maxLines="0"></Snippet>
+		<description><![CDATA[<img src="http://www.rezn8d.com/trdb/The_Radiation_DB.png" width="300px" /><br /><br />
+<p style="width:300px"><b>Gakona, Alaska, USA</b><br />
+Estimated >4 GW ERP : 2.8 - 10 MHz at 3.6 MW</p>
+<h3>High Frequency Active Auroral Research Program</h3>
+<p style="width:300px"><a href="http://r3zn8d.files.wordpress.com/2012/03/haarp-hf-active-auroral-research-program-joint-services-program-plans-and-activities-1990.pdf" target="_blank">HF Active Auroral Research Program Joint Services Program Plans and Activities – 1990</a></p>
+<a title="http://rezn8d.net/2012/01/04/haarp-the-worlds-sexiest-energy-weapon/" href="http://rezn8d.net/2012/01/04/haarp-the-worlds-sexiest-energy-weapon/" target="_blank">HAARP 101:&nbsp;the basics<br />
+</a><a title="http://rezn8d.net/2012/01/20/haarp-timeline-an-animated-history-of-ionospheric-destruction/" href="http://rezn8d.net/2012/01/20/haarp-timeline-an-animated-history-of-ionospheric-destruction/" target="_blank">HAARP 201: history<br />
+</a><a title="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" href="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" target="_blank">HAARP 301: sonic weapons<br />
+</a><a title="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" href="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" target="_blank">HAARP 401: energy weapons<br />
+</a><a title="http://rezn8d.net/2012/03/06/haarp-project-nimbus-and-the-fire-of-the-gods/" href="http://rezn8d.net/2012/03/06/haarp-project-nimbus-and-the-fire-of-the-gods/" target="_blank">HAARP 501: thunderstruck<br>
+</a><a title="http://rezn8d.net/2012/03/21/darpa-haarp-team-thundercats/" href="http://rezn8d.net/2012/03/21/darpa-haarp-team-thundercats/" target="_blank">HAARP 601: Thundercats
+</a><br /><a title="http://rezn8d.net/2012/03/27/haarp-resonations-from-the-moon/" href="http://rezn8d.net/2012/03/27/haarp-resonations-from-the-moon/" target="_blank">HAARP 701:&nbsp;tomography</a><br />
+<a title="http://rezn8d.net/2012/03/29/dutchsinse-haarp-ring-facepalm/" href="http://rezn8d.net/2012/03/27/haarp-resonations-from-the-moon/" target="_blank">HAARP 801:  HAARP rings</a><br /><br />
+<a title="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" href="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" target="_blank">Energy Weapons 101: the past</a><br />
+<a title="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" href="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" target="_blank">Energy Weapons 201: the future</a><br /><br />
+<a href="http://rezn8d.net/category/haarp/" target="_blank">and more!</a><br /><br />
+<a href="http://www.haarp.alaska.edu/" target="_blank">HAARP's Official Website</a><br /><br />
+<img src="http://rezn8d.com/gallery/haarp.jpg" width="300px" /></p>
+<h3>More here: <a href="http://rezn8d.com/haarp-high-altitude-active-aurorals-research-program/" target="_blank">HAARP at TRDB</a><br />
+Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+		<LookAt>
+			<longitude>-146.1560655023966</longitude>
+			<latitude>65.07326973127162</latitude>
+			<altitude>0</altitude>
+			<heading>-11.09850525579962</heading>
+			<tilt>0</tilt>
+			<range>2388232.902002758</range>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</LookAt>
+		<Placemark id="HAARP" target="_blank">
+			<name>HAARP</name>
+			<open>1</open>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<p style="width:300px"><b>Gakona, Alaska, USA</b><br />
+Estimated >4 GW ERP : 2.8 - 10 MHz at 3.6 MW</p>
+<h3>High Frequency Active Auroral Research Program</h3>
+<p style="width:300px"><a href="http://r3zn8d.files.wordpress.com/2012/03/haarp-hf-active-auroral-research-program-joint-services-program-plans-and-activities-1990.pdf" target="_blank">HF Active Auroral Research Program Joint Services Program Plans and Activities – 1990</a></p>
+<a title="http://rezn8d.net/2012/01/04/haarp-the-worlds-sexiest-energy-weapon/" href="http://rezn8d.net/2012/01/04/haarp-the-worlds-sexiest-energy-weapon/" target="_blank">HAARP 101:&nbsp;the basics<br />
+</a><a title="http://rezn8d.net/2012/01/20/haarp-timeline-an-animated-history-of-ionospheric-destruction/" href="http://rezn8d.net/2012/01/20/haarp-timeline-an-animated-history-of-ionospheric-destruction/" target="_blank">HAARP 201: history<br />
+</a><a title="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" href="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" target="_blank">HAARP 301: sonic weapons<br />
+</a><a title="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" href="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" target="_blank">HAARP 401: energy weapons<br />
+</a><a title="http://rezn8d.net/2012/03/06/haarp-project-nimbus-and-the-fire-of-the-gods/" href="http://rezn8d.net/2012/03/06/haarp-project-nimbus-and-the-fire-of-the-gods/" target="_blank">HAARP 501: thunderstruck<br>
+</a><a title="http://rezn8d.net/2012/03/21/darpa-haarp-team-thundercats/" href="http://rezn8d.net/2012/03/21/darpa-haarp-team-thundercats/" target="_blank">HAARP 601: Thundercats
+</a><br /><a title="http://rezn8d.net/2012/03/27/haarp-resonations-from-the-moon/" href="http://rezn8d.net/2012/03/27/haarp-resonations-from-the-moon/" target="_blank">HAARP 701:&nbsp;tomography</a><br />
+<a title="http://rezn8d.net/2012/03/29/dutchsinse-haarp-ring-facepalm/" href="http://rezn8d.net/2012/03/27/haarp-resonations-from-the-moon/" target="_blank">HAARP 801:  HAARP rings</a><br /><br />
+<a title="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" href="http://rezn8d.net/2012/02/15/the-sonic-weapon-of-vladimir-gavreau-tesla-lrad-and-haarp/" target="_blank">Energy Weapons 101: the past</a><br />
+<a title="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" href="http://rezn8d.net/2012/02/15/directed-energy-weapons-101-infrasonic-sonic-microwave-and-laser/" target="_blank">Energy Weapons 201: the future</a><br /><br />
+<a href="http://rezn8d.net/category/haarp/" target="_blank">and more!</a><br /><br />
+<a href="http://www.haarp.alaska.edu/" target="_blank">HAARP's Official Website</a><br /><br />
+<a href="http://rezn8d.com/gallery/haarp-iri-ionospheric-research-instrument.png" target="_blank"><img src="http://rezn8d.com/gallery/haarp.jpg" /></a></p>
+<h3>More here: <a href="http://rezn8d.com/haarp-high-frequency-active-auroral-research-program/" target="_blank">HAARP at TRDB</a><br />
+Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+			<LookAt>
+				<longitude>-145.1466420261072</longitude>
+				<latitude>62.39839173432813</latitude>
+				<altitude>0</altitude>
+				<heading>-0.007978142039020955</heading>
+				<tilt>7.799162458421292</tilt>
+				<range>8009.476150375346</range>
+				<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			</LookAt>
+			<styleUrl>#radz2</styleUrl>
+			<Point>
+				<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+				<coordinates>-145.1466420261072,62.39839173432812,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Siple Station (HAARP Sr.)</name>
+			<open>1</open>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<p style="width:300px"><b>Siple Station, Antarctica</b><br />
+150 kW - 1.5—6 kHz<br />
+The first long term, and to this day most referenced, magnetospheric wave injection experiment was that operated by Stanford University at Siple Station, Antarctica.  Now closed the facility is buried under many feet of snow and ice.</p>
+<p style="width:300px"><img src="http://rezn8d.com/gallery/siple1.jpg" width="300px" /><br /><br />
+<img src="http://rezn8d.com/gallery/Siplepic.jpg" width="300px" /><br /><br />
+<a href="http://en.wikipedia.org/wiki/Siple_Station" target="_blank">Wikipedia</a><br />
+<a href="http://www-star.stanford.edu/~vlf/Antarctica/Siple/index.htm" target="_blank">Stanford VLF</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+			<LookAt>
+				<longitude>-83.91666945990876</longitude>
+				<latitude>-75.91686021360113</latitude>
+				<altitude>0</altitude>
+				<heading>3.00948902738962e-006</heading>
+				<tilt>0</tilt>
+				<range>1118.522500472998</range>
+				<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			</LookAt>
+			<styleUrl>#radz2</styleUrl>
+			<Point>
+				<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+				<coordinates>-83.91666945990876,-75.91686021360113,0</coordinates>
+			</Point>
+		</Placemark>
+		<Folder>
+			<name>HIPAS</name>
+			<Snippet maxLines="0"></Snippet>
+			<Placemark id="HIPAS" target="_blank">
+				<name>HIPAS</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Fairbanks, Alaska</b><br />
+High Power Auroral Stimulation Observatory<br />
+70 MW - 2.85-4.53 MHz<br /><br />
+<a href="http://www.physics.ucla.edu/plasmalab/" target="_blank">UCLA.edu Plasma lab</a></p>
+<p style="width:300px"><img src="http://rezn8d.com/gallery/HIPAS_facility.gif" width="300px"/><br />
+<a href="http://rezn8d.com/gallery/HIPAS_site_map.jpg" target="_blank"><img src="http://rezn8d.com/gallery/HIPAS_site_map.jpg" width="300px"/></a><br /><br/>
+<a href="http://rezn8d.com/gallery/dipole_array_001.JPG" target="_blank"><img src="http://rezn8d.com/gallery/dipole_array_001.JPG" width="300px"/></a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-146.8385918321329</longitude>
+					<latitude>64.87231478668961</latitude>
+					<altitude>0</altitude>
+					<heading>0.003460187192750272</heading>
+					<tilt>6.021919622642188</tilt>
+					<range>681.8383083405976</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-146.8385918321329,64.87231478668961,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HIPAS</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Fairbanks, Alaska</b><br />
+The LIDAR facility consists of a 2.7 meter LMT (Liquid Mirror Telescope) with a 4.5 meter focal length as well as 6 state-of-the-art lasers.</p>
+<p style="width:300px"><img src="http://rezn8d.com/gallery/HIPAS_LIDAR.jpg"/><br /><br />
+<a href="http://rezn8d.com/gallery/HIPAS_liquid_mercury_mirror.jpg" target="_blank"><img src="http://rezn8d.com/gallery/HIPAS_liquid_mercury_mirror.jpg" width="300px" /></a><br /><br />
+<a href="http://www.physics.ucla.edu/plasmalab/images/opalaska.pdf" target="_blank">UCLA Plasma Lab PDF</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-146.8298675520118</longitude>
+					<latitude>64.87199147830503</latitude>
+					<altitude>0</altitude>
+					<heading>0.01134456327906299</heading>
+					<tilt>6.714261749484558</tilt>
+					<range>167.9384212200771</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-146.83011122302,64.87211624853228,0</coordinates>
+				</Point>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>HLMS</name>
+			<Snippet maxLines="0"></Snippet>
+			<Placemark>
+				<name>HLMS</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Elmendorf AFB, Anchorage, Alaska</b><br />
+The High Latitude Monitoring Station (HLMS)<br />
+<p style="width:300px">The primary mission of HLMS has been to monitor the earth's ionospheric environment, and to collect and reduce raw geophysical data (including seismological information) for analysis and archiving at the Geophysical Institute and other organizations nationwide.
+</p>
+<p style="width:300px"><img src="http://rezn8d.com/gallery/hlms.jpg" width="300px" /><br /><br />
+<a href="http://www2.gi.alaska.edu/dac2/pfrr/hlms.htm" target="_blank">Alaska.edu</a><br />
+<a href="http://landau.geo.cornell.edu/hlms.html" target="_blank">Cornell.edu</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-149.8249311610504</longitude>
+					<latitude>61.28321464585636</latitude>
+					<altitude>0</altitude>
+					<heading>-0.0004163008480481125</heading>
+					<tilt>20.3226960585418</tilt>
+					<range>93.2722953180787</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8249311610504,61.28321464585637,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8321861436146</longitude>
+					<latitude>61.28270162661096</latitude>
+					<altitude>0</altitude>
+					<heading>-26.55832474342196</heading>
+					<tilt>6.269434608123222</tilt>
+					<range>150.9466786138195</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.832382790012,61.28270708721789,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8283977630186</longitude>
+					<latitude>61.28789309914268</latitude>
+					<altitude>0</altitude>
+					<heading>-26.55444101221062</heading>
+					<tilt>15.00346017426613</tilt>
+					<range>152.0861743079639</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8284477910312,61.28787726474994,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8358059681161</longitude>
+					<latitude>61.28904127938175</latitude>
+					<altitude>0</altitude>
+					<heading>-26.56033448995277</heading>
+					<tilt>10.564701175518</tilt>
+					<range>258.346541258165</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8363513827343,61.28893194827878,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8358059681161</longitude>
+					<latitude>61.28904127938175</latitude>
+					<altitude>0</altitude>
+					<heading>-26.56033448995277</heading>
+					<tilt>10.564701175518</tilt>
+					<range>258.346541258165</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8373931089418,61.28873393422735,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8358059681161</longitude>
+					<latitude>61.28904127938175</latitude>
+					<altitude>0</altitude>
+					<heading>-26.56033448995277</heading>
+					<tilt>10.564701175518</tilt>
+					<range>258.346541258165</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8367641316064,61.28941523021747,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8358059681161</longitude>
+					<latitude>61.28904127938175</latitude>
+					<altitude>0</altitude>
+					<heading>-26.56033448995277</heading>
+					<tilt>10.564701175518</tilt>
+					<range>258.346541258165</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8353266684551,61.28910366175988,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8358059681161</longitude>
+					<latitude>61.28904127938175</latitude>
+					<altitude>0</altitude>
+					<heading>-26.56033448995277</heading>
+					<tilt>10.564701175518</tilt>
+					<range>258.346541258165</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8359524965062,61.28846860606156,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<Camera>
+					<longitude>-149.8258893289315</longitude>
+					<latitude>61.2826549980031</latitude>
+					<altitude>80.5569111462692</altitude>
+					<heading>-13.32411642977467</heading>
+					<tilt>0.2125273154257849</tilt>
+					<roll>-13.22916827007752</roll>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</Camera>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8259148668485,61.28272212762486,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8247563475947</longitude>
+					<latitude>61.2841612591867</latitude>
+					<altitude>0</altitude>
+					<heading>-0.1253470647788734</heading>
+					<tilt>0.186771796169691</tilt>
+					<range>172.6753594052247</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8247920636453,61.28411294744592,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HLMS</name>
+				<Snippet maxLines="0"></Snippet>
+				<LookAt>
+					<longitude>-149.8204175017583</longitude>
+					<latitude>61.28066350446974</latitude>
+					<altitude>0</altitude>
+					<heading>0.002236401227152124</heading>
+					<tilt>25.66624544703032</tilt>
+					<range>148.3176124288264</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-149.8207952576559,61.28056775132006,0</coordinates>
+				</Point>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>Poker Flat Research Range</name>
+			<Placemark>
+				<name>Poker Flat Research Range</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+PFRR is the only non-federal, university owned and operated range in the world and the only high-latitude, auroral-zone rocket launching facility in the United States of America. The name Poker Flat was taken from an old Bret Harte rags-to-riches short story, The Outcasts of Poker Flat; the name may have been suggested by the nearby Poker Creek, or perhaps by the way in which the original launch site was constructed from begged and borrowed materials.<br /><br />
+<img src="http://rezn8d.com/gallery/pfrr.jpg" width="300px" /><br /><br />
+<img src="http://rezn8d.com/gallery/gatesign.jpg" width="300px" /><br /><br />
+<a href="http://www.pfrr.alaska.edu/pfrr/index.html" target="_blank">Alaska.edu</a><br />
+<a href="http://www2.gi.alaska.edu/dac2/pfrr/INDEX.HTM" target="_blank">Poker Flat Research Range</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4636437348839</longitude>
+					<latitude>65.12150979516619</latitude>
+					<altitude>0</altitude>
+					<heading>-0.02710176032776642</heading>
+					<tilt>0</tilt>
+					<range>4146.018820707884</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<coordinates>-147.4636437348838,65.12150979516619,0</coordinates>
+				</Point>
+			</Placemark>
+			<GroundOverlay>
+				<name>Poker Flats Facility Map</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+				Poker Flat Research Range (PFRR)</p>
+				<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<color>b3ffffff</color>
+				<Icon>
+					<href>http://rezn8d.com/gallery/poker_flat_map.gif</href>
+					<viewBoundScale>0.75</viewBoundScale>
+				</Icon>
+				<LatLonBox>
+					<north>65.13713286868756</north>
+					<south>65.10062668273649</south>
+					<east>-147.4061080896444</east>
+					<west>-147.5145837892061</west>
+				</LatLonBox>
+			</GroundOverlay>
+			<Placemark>
+				<name>PFISR - Poker Flat Incoherent Scatter Radar</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+AMISR Advanced Modulator Incoherent Scatter Radar<br /> 
+The Advanced Modular Incoherent Scatter Radar (AMISR) is a new ISR that employs modular solid-state and phased-array technologies and will yield measurements of the upper atmosphere and ionosphere with unprecedented versatility and power. AMISR is being deployed at Poker Flat Research Range (PFRR), Chatanika, Alaska (65°N, 147°W) to investigate auroral processes. The AMISR facility establishes a new state-of-the-art for IS radar design by implementing fully electronic beam steering with a phased array of 4096 UHF transceivers. This beam pointing capability is available on a pulse-by-pulse basis.  This installation is coordinated by SRI, International.<br /> <br /> 
+<img src="http://rezn8d.com/gallery/Poker_Flat_ISR.jpg" width="300px"/><br /> <br /> 
+<a href="http://isr.sri.com/iono/amisr/" target="_blank">SRI.com</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4695942680127</longitude>
+					<latitude>65.13011508085764</latitude>
+					<altitude>0</altitude>
+					<heading>-34.30337122753362</heading>
+					<tilt>13.76468856844215</tilt>
+					<range>428.4605055264345</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-147.4706102346942,65.12984623470807,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>LIDAR - Poker Flats, AK</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+The new Lidar Observatory, constructed in 2000, occupies the site of the old Optical Observatory, which was the scientific hub of Poker Flat prior to the construction of the Science Operations Center.<br /><br />
+The lidar is an instrument similar in principle to a radar, but using a laser instead of radio waves. Laser light aimed into the sky is scattered back by fine particles (aerosols), atoms, and molecules at various heights. A small radar operates near the lidar to shut off the laser when aircraft are in the area.<br /><br />
+The Lidar Observatory also provides facilities for other optical equipment and complements the capabilities of the Science Operations Center. The Lidar Observatory is a joint project with Japan's Communications Research Laboratory. <br /><br />
+<img src="http://rezn8d.com/gallery/Poker_Flat_LIDAR.jpg" alt="Lidar and weather balloon" width="300" target="_blank"><br /><br />
+<a href="http://www2.gi.alaska.edu/dac2/tour/lidar.htm" target="_blank">Poker Flat tour</a><br />
+<a href="http://www.pfrr.alaska.edu/pfrr/index.html" target="_blank">Alaska.edu PFRR</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4640895250671</longitude>
+					<latitude>65.11628355668418</latitude>
+					<altitude>0</altitude>
+					<heading>-0.001516546234804094</heading>
+					<tilt>7.421567472068638</tilt>
+					<range>512.115645602128</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-147.4652893052954,65.11641255626726,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>The T. Neil Davis Science Operations Center</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+The T. Neil Davis Science Operations Center contains the Geospace Environment Data Display System, the first of its kind to display real-time information about the aurora and a variety of phenomena in the arctic polar regions. The system is composed of computers and instruments that obtain data from satellites and remote ground-based stations throughout North America. The data help scientists determine when atmospheric conditions are right for a rocket launch, and provide information useful for a variety of research projects at the range.<br /><br />
+The building is located on the hilltop overlooking Poker Flat and has an unobstructed view of the whole sky. It is equipped with observing domes for a variety of optical instruments, such as all-sky cameras, interferometers, and super-sensitive video cameras. A meridian-scanning photometer is also located at the Science Operations Center in a specially-built penthouse. The building includes conference and meeting rooms as well.<br /><br />
+<img src="http://rezn8d.com/gallery/Poker_Flat_T_Neil_Davis_Science_Operation_Center.jpg" width="300px"/><br /><br />
+<a href="http://www2.gi.alaska.edu/dac2/tour/soc.htm" target="_blank">Alaska.edu</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4332242411942</longitude>
+					<latitude>65.11869601655171</latitude>
+					<altitude>0</altitude>
+					<heading>0.02765842612490941</heading>
+					<tilt>5.355305634993851</tilt>
+					<range>201.4057488545058</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<coordinates>-147.4331788032814,65.11876026135468,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Communications and Surveillance Radar</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+The upper range is the top of the hill overlooking Poker Flat, and is the highest ground in the area, providing a nearly unobstructed view of the entire sky. That makes it an excellent home for the digital microwave and surveillance radar facilities.<br /><br /> 
+The surveillance radar, whose antenna can be seen at the top of the tower, monitors aircraft in the area during launch operations, to insure that the skies are clear before a rocket is launched. The radar equipment is located in the trailer on the left.<br /><br />
+Poker Flat communicates with the outside world primarily by means of a state-of-the-art digital microwave system, located in the trailer on the right in the photo above and using the dish mounted halfway up the tower. The digital microwave has a 45 Mbps (DS3) capacity, and provides most of Poker Flat's data and telephone lines.<br /><br />
+The microwave at Poker Flat communicates via a repeater on Ester Dome with its counterpart on the 8th floor of the Geophysical Institute.</p>
+<img src="http://rezn8d.com/gallery/Poker_Flat_comm_mwave.jpg" width="300px" /><br /><br />
+<img src="http://rezn8d.com/gallery/Poker_Flat_commpath.gif" width="300px" /></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4351167560095</longitude>
+					<latitude>65.11793658123963</latitude>
+					<altitude>0</altitude>
+					<heading>0.025941585633095</heading>
+					<tilt>5.355305033259412</tilt>
+					<range>200.6879523719678</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<coordinates>-147.4347321961999,65.11809682490267,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Telemetry and Tracking Facilities</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+The Telemetry facility, known as TM, is located a short distance from the Lidar Observatory on the ridge above Poker Flat&acute;s lower range. The Telemetry facility consists of a building surrounded by transportable satellite tracking dishes, as shown in the image above.</p>
+<p style="width:300px"><img src="http://rezn8d.com/gallery/Poker_Flat_telemetry.jpg" width="300px"/><br /><br />
+This building is a hub on the Poker Flat fiber optic backbone, as well as having specialized communications links to NASA.  Data from rockets and satellites can be sent almost anywhere from this location.</p>
+<center><p style="width:300px"><img src="http://rezn8d.com/gallery/Poker_Flat_tots-van.jpg" width="300px"/><br/><br />
+<img src="http://rezn8d.com/gallery/Poker_Flat_tots.jpg" width="300px"/><br /><br />
+<img src="http://rezn8d.com/gallery/Poker_Flat_tm.jpg" width="300px"/><br /><br /></center>
+<a href="http://www2.gi.alaska.edu/dac2/tour/tm.htm" target="_blank">Alaska.edu</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4613644028973</longitude>
+					<latitude>65.11679746135705</latitude>
+					<altitude>0</altitude>
+					<heading>-0.02503360080659626</heading>
+					<tilt>0</tilt>
+					<range>309.2043887746644</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-147.4619471425653,65.11666347291323,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Poker Flats Imaging Riometer</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+A very large imaging riometer at Poker Flat research range, employing a 16x16 antenna array (256 crossed dipole antennas).<br /><br />
+<img src="http://rezn8d.com/gallery/Poker_Flat_E1800413-Riometer_information_board-SPL.jpg" width="300px"/><br /><br />
+<img src="http://rezn8d.com/gallery/Poker_Flat_E1800415-Riometer_radio_antennae-SPL.jpg" width="300px"/></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4543443494708</longitude>
+					<latitude>65.13228669705967</latitude>
+					<altitude>0</altitude>
+					<heading>0.005523504963760213</heading>
+					<tilt>14.58893747224224</tilt>
+					<range>176.8589958993456</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-147.4544435509942,65.13200649064224,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Climate Change Monitoring Station</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><b>Poker Flat, Alaska</b><br />
+Poker Flat Research Range (PFRR)<br /><br />
+The Climate Change Monitoring (CCM) station is a 12 by 60 foot field laboratory located on the upper range, near the top of the hill, and is operated by the Geophysical Institute Atmospheric Sciences group.</p>
+<img src="http://rezn8d.com/gallery/ccm.jpg" width="300px"/><br /><br />
+<a href="http://www2.gi.alaska.edu/dac2/tour/ccm.htm" target="_blank">Alaska.edu</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-147.4337694553904</longitude>
+					<latitude>65.11746495812112</latitude>
+					<altitude>0</altitude>
+					<heading>2.432806275851444e-011</heading>
+					<tilt>0</tilt>
+					<range>110.101574619587</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<coordinates>-147.4337143296079,65.11742216785824,0</coordinates>
+				</Point>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>HAARP One-hop VLF Buoy</name>
+			<Snippet maxLines="0"></Snippet>
+			<Placemark>
+				<name>HAARP VLF Buoy (Ocean)</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><img src="http://rezn8d.com/gallery/HAARP_onehop_VLF_buoy.gif" width="300px" /><br /><br />
+This three-year program will study radio waves generated by the HAARP transmitter in Alaska. We expect some waves to be ducted along the earth’s magnetic field lines – propagating out beyond five times the earth’s radius and returning to earth at a remote location in the South Pacific Ocean.<br /><br />
+These waves will propagate through several important physical layers beyond the earth’s atmosphere. By operating a receiver at the magnetic conjugate point where the waves are most likely to return to earth, we will develop significant scientific understanding of those layers and the processes that affect them.<br /><br />
+Unfortunately, the HAARP conjugate point falls half-way between New Zealand and Antarctica above a tempestuous ocean 5400 meters deep. Wave heights greater than forty feet are not uncommon!<br /><br />
+<center><img src="http://rezn8d.com/gallery/HAARP_onehop_buoy_translucent.JPG" width="300px" /><br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_onehop_VLF_buoy_mooring.gif" width="300px" /></center><br /><br />
+<a href="http://www-star.stanford.edu/%7Evlf/buoy/" target="_blank">Stanford VLF Group</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>174.0780895978981</longitude>
+					<latitude>-56.2641193280883</latitude>
+					<altitude>0</altitude>
+					<heading>-1.564983430983719</heading>
+					<tilt>0</tilt>
+					<range>175669.9884548388</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<coordinates>174.0780895978981,-56.26411932808829,0</coordinates>
+				</Point>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>Joint NWRA-UAF Tomography Chain</name>
+			<Snippet maxLines="0"></Snippet>
+			<Folder>
+				<name>Details</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">This page provides links to locations where real-time observations of ionospheric scintillation are available.  Three of the links are to NWRA instruments tracking the VHF and UHF signals from a variety of satellites in low earth orbit from three sites in Alaska.  The fifth  link shows scintillation from a GPS receiver also located in Alaska. The NWRA instrument pages show plots of the relative Total Electron Content (TEC) along the path from the receiver to the satellite and time-series plots of both phase and intensity scintillation (the latter at both UHF and VHF).  The GPS plot shows intensity scintillation (the S4 index) for one of the GPS L-band signals.</p>
+<menu>
+<li><a href="http://maestro.haarp.alaska.edu/cgi-bin/its10/plot-tec.cgi?location=cordova" target="_blank">Data from the NWRA Cordova Receiver</a></li>
+<li><a href="http://maestro.haarp.alaska.edu/cgi-bin/its10/plot-tec.cgi?location=gakona" target="_blank">Data from the NWRA Gakona Receiver</a></li>
+<li><a href="http://maestro.haarp.alaska.edu/cgi-bin/its10/plot-tec.cgi?location=delta" target="_blank">Data from the NWRA Delta Junction Receiver</a></li>
+<li><a href="http://maestro.haarp.alaska.edu/cgi-bin/its10/plot-tec.cgi?location=arctiv_village" target="_blank">Data from the NWRA Arctic Village Receiver</a></li>
+<li><a href="http://141.154.98.131/haarp/" target="_blank">Data from the AFRL Gakona GPS Receiver</a></li>
+</menu><br /><br />
+<center><img src="http://rezn8d.com/gallery/HAARP_NWRA_alaska-std.gif" width="300px" /></center><br /><br />
+<a href="http://www.nwra.com/ionoscint/sp_rtdata.html" target="_blank">NWRA.com</a><br />
+<a href="http://www.nw-re.us/pixantennas.html" target="_blank">NW-RE.com</a><br />
+<a href="ftp://nwra.com/outgoing/jackie/R376final_11feb09_new.doc" target="_blank">R376final_11feb09_new.doc</a><h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+			</Folder>
+			<Placemark>
+				<name>Delta Station</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">The Delta station, the second Alaska ITS station, was installed in December 1999 at the Silver Fox Roadhouse.  Initially, there were multiple problems with receiver tuning, antenna cabling and very noisy telephone service.  It took a year and several visits to resolve the problems but, since then, the Delta station has been very reliable.  The Silver Fox Roadhouse is a gas station / convenience store with rental cottages, mostly used by recreational hunters.  The receiver is located in a small back room away from activity in the store.  The antenna is mounted on a wooden frame with a mesh ground-plane similar to the one at Gakona.<br /><br />
+Delta is the most RF-quiet location of all the sites.  Moreover, since a fiber-optic telephone cable was installed along the highway outside, communication has been very reliable.  We have the option of installing a DSL Modem but, at present, there is no need for this.  For the occasional service to the system, we have always had the assistance of the owner of the Silver Fox, Mr. Dan Splain.<br /><br />
+Silver Fox Roadhouse<br />
+1404 Alaska Highway, Delta Junction, AK<br />
+(907) 895-4157</p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.7200082870903</longitude>
+					<latitude>64.03549423188643</latitude>
+					<altitude>0</altitude>
+					<heading>-0.009381066326000826</heading>
+					<tilt>0</tilt>
+					<range>545.8265241433802</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.7203214134689,64.0347081367058,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Gakona Station</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">The ITS10 station at the HAARP site, near Gakona, AK, is the first of the ITS stations to be installed as part of the HAARP operation.  This station is the most ideal of all the installations, as RF noise is minimal, a large area is available for a large antenna ground-plane, and the equipment is housed in, and operated from, an equipment shelter specifically designed for scientific observation.  Besides power, the facility provides telephone service and high-speed Internet connectivity.  The on-call availability of HAARP staff personnel to perform occasional jobs that need hands-on operation is a major benefit for this site location.<br /><br />
+<img src="http://www.nw-re.us/ITS10_Gakona_AngGndScreen2.jpg" width="300px" /><br /><br />
+<img src="http://www.nw-re.us/ITS10_Gakona_JohnAtRcvr.jpg" width="300px" /><br /><br />
+<img src="http://www.nw-re.us/ITS10_Gakona_Shelter.jpg" width="300px" /></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.157228750704</longitude>
+					<latitude>62.40717957955421</latitude>
+					<altitude>0</altitude>
+					<heading>179.6194066786628</heading>
+					<tilt>0</tilt>
+					<range>292.298301144725</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1570952416875,62.40756136128372,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Cordova Station</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">The Cordova station was installed in November of 2000.  It was first installed at Cordova High School in the City of Cordova, but the student-teacher activities, local RF interference, and occultation of the horizon by the surrounding mountains led to the abandonment of that site.  The station was moved to Cordova Auto Rental, a small business operating near the Cordova airport, about 12 miles from the town.  Except for a nearby aeronautical navigation beacon, the location is very radio-quiet.  (The navigation beacon interference is removed with an RF filter.)  The horizon is low in all directions so low-elevation satellite passes are obtainable.  The antenna is mounted atop an 8’ x 40’ steel cargo container, which provides a good ground plane.  The receiver and computer are inside the Rental office, inside a TV-enclosure type cabinet.  Communication with the Cordova station is via the local telephone cooperative.  Cordova Telephone, in turn, communicates with the outside world entirely by satellite communication.  There are occasional outages, but they are rarely longer than a few hours.<br /><br />
+Other receiver outages (not caused by the Telephone system) usually require the help of someone on-site.  For several years, the owner of Cordova Auto provided this service.  However, after he sold the operation, a local Cordova resident, Mr. Jim Vansant, has been available to us as the need arises.<br /><br />
+<img src="http://www.nw-re.us/ITS10_CordovaHS_AntOnRoof_small.jpg" width="300px" /><br /><br />
+<img src="http://www.nw-re.us/ITS10_CordovaHS_Rcvr_small.jpg" width="300px" /></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.758836871568</longitude>
+					<latitude>60.54030948108348</latitude>
+					<altitude>0</altitude>
+					<heading>0.0001526950580200737</heading>
+					<tilt>0</tilt>
+					<range>171.7153786999133</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.758868429769,60.54027415840402,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Artic Village Station</name>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">The station at Arctic Village was installed in March, 2004.  It began as, and continues to be, a difficult environment from which to gather data.  The location of the station is an 8’ x 8’ science experiment shelter located near the Arctic Village airport.  This facility is owned and operated by the University of Alaska, Fairbanks.  Indeed, the actual installation and most subsequent work has been by an employee of UAF, Ms. Kay Lawson.<br /><br />
+The difficulty at Arctic Village is twofold; communication with the outside world, and radio interference.  The facility had (and has) a telephone connection, so initially it was believed that communication would be similar to Cordova.  That is, there is a copper telephone connection from the receiver station to the village, and, then, a satellite link to the rest of the world.  However, the satellite link is vastly far below Cordova in terms of data transmission speed.  The solution was to set up our own link from the station to a second (Internet-only) satellite station within the village.  This was done in concert with an Alaska-wide program to provide Internet access to all Alaskans, regardless of the size of the villages they lived in.  This system, by itself, works adequately, albeit very slowly at times.  The problem is that the Internet connection equipment is, itself, a source of interference to ITS10 operations.  The solution here was to program the Internet connection equipment to power-down during a satellite pass.  This mode of operation did eliminate the equipment interference, but sometime during the setup, testing, and eventual power-on - power-off operating mode, another source of interference has come into being.<br /><br />
+Arctic Village operation remains poor in terms of the amount of useful data obtained from the site.  We are investigating an alternative location for this receiver, perhaps at the Toolik Field Site, operated for the National Science Foundation by the University of Alaska at Fairbanks.  This site is on the main road from Fairbanks to Prudhoe Bay, and would provide better communications and on-site support.</p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.5738240659225</longitude>
+					<latitude>68.11477831036598</latitude>
+					<altitude>0</altitude>
+					<heading>0.002735432867827009</heading>
+					<tilt>0</tilt>
+					<range>2519.436708625761</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.5738240659225,68.11477831036596,0</coordinates>
+				</Point>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>HAARP Instruments</name>
+			<Snippet maxLines="0"></Snippet>
+			<Placemark>
+				<name>HAARP Digisonde</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">Digisonde DPS-4 <br /><br />
+The HAARP Digisonde, which was developed and provided by the University of Massachusetts at Lowell, was one of the first instruments installed at the HAARP Research Station. The purposes of this instrument are to support frequency management of the 3600 kilowatt Ionospheric Research Instrument transmitter and to provide real time ionospheric characteristics for guiding experiment selection. The Digisonde data are processed, archived, and are available for post-analysis of experiment results. Various formats of the information derived from the Digisonde are made available on the HAARP web site in chart form in near real time and can be accessed from the Data Index. <br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_digisonde_1.jpg" width="300px" /><br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_digisonde_1.jpg" width="300px" /><br /><br />
+*exact location unknown<br /><br />
+<a href="http://www.haarp.alaska.edu/haarp/dsonde.html" target="_blank">HAARP's Website</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<Camera>
+					<longitude>-145.1601209808689</longitude>
+					<latitude>62.40056157862227</latitude>
+					<altitude>3715.947154041733</altitude>
+					<heading>38.32107587588556</heading>
+					<tilt>0.2511226259870237</tilt>
+					<roll>36.91576590483213</roll>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</Camera>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1599252029652,62.40067633972944,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HAARP Optical Shelters</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><img src="http://rezn8d.com/gallery/HAARP_optical_Dome.jpg" width="300px" /></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1580767893943</longitude>
+					<latitude>62.4072901014186</latitude>
+					<altitude>0</altitude>
+					<heading>179.6186550902742</heading>
+					<tilt>0</tilt>
+					<range>292.3000457449296</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1580054820266,62.4076013465862,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>HAARP Research Building</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><img src="http://rezn8d.com/gallery/HAARP_research_building.jpg"  width="300px"/><br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_control_room_Death_Star_1.jpg" width="300px" /></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1316415565558</longitude>
+					<latitude>62.39129521526483</latitude>
+					<altitude>0</altitude>
+					<heading>179.6415827065096</heading>
+					<tilt>7.778368873895934</tilt>
+					<range>136.8831075244421</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1307246278667,62.39120749204564,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>(IRI) Ionospheric Research Instrument</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">2.8 to 10 MHz at 3.6 MW<br /><br />
+Basically, the IRI is what is known as a phased array transmitter. It is designed to transmit a narrow beam of high power radio signals in the 2.8 to 10 MHz frequency range. Its antenna is built on a gravel pad having dimensions of 1000' x 1200' (about 33 acres). There are 180 towers, 72' in height mounted on thermopiles spaced 80' apart in a 12 x 15 rectangular grid. Each tower supports near its top, two pairs of crossed dipole antennas, one for the low band (2.8 to 8.3 MHz), the other for the high band (7 to 10 MHz). The antenna system is surrounded by an exclusion fence to prevent possible damage to the antenna towers or harm to large animals. An elevated ground screen, attached to the towers at the 15' level, acts as a reflector for the antenna array while allowing vehicular access underneath to 30 environmentally-controlled transmitter shelters spaced throughout the array. Each shelter contains 6 pairs of 10 kW transmitters, for a total of 6 x 30 x 2 x 10 kW = 3600 kW available for transmission. The transmitters can be switched to drive either the low or high band antennas. Electric prime power is provided from an on-site power plant housing five, 2500 kW generators, each driven by a 3600 hp diesel engine. Four generators are required for operation of the IRI and the fifth is held as a spare. From a control room within the Operations Center, the transmission from each of the 180 crossed-dipole antennas is adjusted in a precise manner under computer control. In this manner, the complete array of antennas forms a narrow antenna pattern pointed upward toward the ionosphere. The transmitted signal diverges (spreads out) as it travels upward and is partially absorbed, at an altitude which depends on the transmitted HF frequency, in a small volume several tens of miles in diameter and a few hundred meters thick directly over the facility. The remainder of the transmitted signal either reflects back toward the earth or passes through the ionosphere into space, continuing to diverge as it does so. By the time it reaches the ionosphere, the intensity of the HF signal is less than 3 microwatts (0.000003 watt) per cm2, thousands of times less than the Sun's natural electromagnetic radiation reaching the earth and hundreds of times less, even, than the variations in intensity of the Sun's natural ultraviolet (UV) energy which creates the ionosphere.<br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_IRI_dipole.jpg" width="300px" /><br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_array1.jpg" width="300px" /><br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_arrayC.jpg" width="300px" /></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1495617380962</longitude>
+					<latitude>62.3926391535586</latitude>
+					<altitude>0</altitude>
+					<heading>-22.41627554663762</heading>
+					<tilt>9.168869101041272</tilt>
+					<range>464.2749698634505</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1499748834314,62.39241960231989,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>VHF Ionospheric Radar</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px"><img src="http://rezn8d.com/gallery/HAARP_VHF_Radar.jpg" width="300px" /></p><h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1317422373266</longitude>
+					<latitude>62.39195876996996</latitude>
+					<altitude>0</altitude>
+					<heading>-22.40055548228648</heading>
+					<tilt>10.05816041491913</tilt>
+					<range>235.7507094758123</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.132132163752,62.39181637269284,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Aircraft Alert Radar</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">60 kW S-Band Aircraft Alert Radar<br />
+The HAARP Gakona Facility employs a Faruno S-Band radar to detect all aircraft that may be in the vicinity of the facility. The radar is used to alert the control operator during research operations so that any high power transmitters on-site can be shut down. This Aircraft Alert Radar can detect planes at altitudes as low as 500 feet at 8 miles. As a supplement and to improve detection performance, the radar installation uses a modified TCAS system to interrogate planes within range that carry transponders. The resulting automatic replies allow the plane's altitude to be shown on the display console adjacent to the normal radar return.</p>
+<p style="width:300px"> The radar system was installed by BAE Systems Advanced Technologies and the Naval Air Warfare Center (PAX River) with assistance from Oceantronics Corp. during July and August 2003.<br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_aircraft_alert_radar.jpg" alt="The HAARP Aircraft Alert Radar" width="300" target="_blank"></a><br /><br />
+<a href="http://www.haarp.alaska.edu/haarp/aar.html" target="_blank">HAARP's Official Website</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1684339705602</longitude>
+					<latitude>62.39584384119484</latitude>
+					<altitude>0</altitude>
+					<heading>-1.477398509962769</heading>
+					<tilt>0.8006811085349629</tilt>
+					<range>280.5143804080839</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1683544284592,62.39614386784001,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>VHF Classic Riometer Antenna</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">The HAARP VHF Riometer operates at a frequency near 30 MHz. The receiver measures the total power in a bandwidth of 30 kHz and compares the result with quiet day data developed over a long period of riometer operation at the HAARP location. The difference between the current measured noise power and the expected power is converted to ionospheric absorption and plotted on a continually updating chart.<br /><br />
+The HAARP VHF Riometer uses a 2 X 2 array of five element yagi antennas to. The antenna array has a reception pattern that encompasses a fairly large portion of the overhead sky. As a result, the HAARP VHF riometer does not give information on where (in the sky) a particular absorption event may be occurring but, rather, provides an overall or integrated measure of ionospheric absorption above the site.<br /><br />
+The chart below is an example of data obtained using the HAARP VHF Riometer. The chart covers the 36 hour time period from 1200 UTC on 28 January 2007 until 0000 UTC on 30 January 2007. There are three curves on this chart: (1) The green curve is the Quiet Day Curve, (2) The blue curve plots the actual measured data and (3) The red curve is the calculated ionospheric absorption. In the early part of the chart (to the left) the green and blue curves overlap, indicating that the cosmic noise observed by the riometer is very close to the expected value. Beginning at about 1400 UTC on 29 January, however, the measured noise (blue curve) drops below the quiet day curve and the ionospheric absorption (red curve), as calculated by the riometer, begins to rise. After a short time, the measured noise returns to the quiet level (at 1600 UTC) but then drops again in response to another absorption event. (Compare this period of disturbed conditions with the quiet period 24 hours earlier in the chart at 1400 UTC on 28 January.)
+<br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_VHF_riometer.jpg" width="300px" /><br /><br />
+<a href="http://www.haarp.alaska.edu/haarp/Rio.html" target="_blank">HAARP's Official Website</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1562874865215</longitude>
+					<latitude>62.40690236966758</latitude>
+					<altitude>0</altitude>
+					<heading>179.6202554848921</heading>
+					<tilt>12.43138743014921</tilt>
+					<range>109.3362981812845</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1557112946775,62.40681757868408,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Modular UHF Ionospheric Radar</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">The UHF Ionospheric Radar, acquired in conjunction with the University of Alaska, Fairbanks (UAF), is a phased array consisting of 512 antenna elements and operating at a frequency of 446 MHz. This diagnostic radar is particularly useful for the study of ionospheric physical processes during operation of the high power HF transmitter. The instrument installed at HAARP is a small portion of a much larger design developed for the National Science Foundation (NSF) by SRI International. (You can read more about the NSF Advanced Modular Incoherent Scatter Radar or AMISR). At its current level of development, the HAARP UHF radar can readily detect plasma and ion lines and many of their properties during operation of the high power HF transmitter. <br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_muir.jpg" width="300px" /><br /><br />
+<a href="http://www.haarp.alaska.edu/haarp/status.html" target="_blank">HAARP's Official Website</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1374875513883</longitude>
+					<latitude>62.3892828061728</latitude>
+					<altitude>0</altitude>
+					<heading>0.0001231588320757032</heading>
+					<tilt>8.610867626708178</tilt>
+					<range>147.8637811280155</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1374875513882,62.3892828061728,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Power Plants</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<p style="width:300px">The HF transmitter system is able to produce approximately 3.6 million Watts of radio frequency power. However, the HAARP transmitters have been designed to operate very linearly (in Class AB mode) so that they will not produce radio interference to other users of the radio spectrum. To achieve that degree of linearity, the transmitters operate at an efficiency of only about 45 %. For every 100 Watts of input power 45 Watts of Radio Frequency power is generated and the rest is lost in the transmitter cabinet as heat. (As an analogy, a 75 Watt light bulb gets quite hot while it&acute;s producing the light you actually see.) In addition, the on-site diesel generators must provide power for other equipment used by the transmitters including the cooling system and low level amplifier stages. As a result, approximately 10 million Watts of prime power will be required when the transmitter system is operating at full power.<br /><br />
+<img src="http://rezn8d.com/gallery/HAARP_power_plant.jpg" width="300px" /><br /><br />
+<a href="http://www.haarp.alaska.edu/haarp/faq.html" target="_blank">HAARP's Official Website</a></p>
+<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1312560955501</longitude>
+					<latitude>62.3909807260417</latitude>
+					<altitude>0</altitude>
+					<heading>179.6424278799398</heading>
+					<tilt>4.261991430204905</tilt>
+					<range>161.432601317201</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<styleUrl>#radz2</styleUrl>
+				<Point>
+					<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>
+					<coordinates>-145.1312560955501,62.3909807260417,0</coordinates>
+				</Point>
+			</Placemark>
+			<GroundOverlay>
+				<name>Diagnostic Instrument Pad 3</name>
+				<open>1</open>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[<h3>Part of: <a href="http://rezn8d.com/the-radiation-database-trdb/" target="_blank">The Radiation Database</a></h3>]]></description>
+				<LookAt>
+					<longitude>-145.1572287508251</longitude>
+					<latitude>62.4071795796009</latitude>
+					<altitude>0</altitude>
+					<heading>179.6194066785552</heading>
+					<tilt>0</tilt>
+					<range>292.2980968934594</range>
+					<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+				</LookAt>
+				<Icon>
+					<href>http://rezn8d.com/gallery/HAARP_optical_Pad.jpg</href>
+					<viewBoundScale>0.75</viewBoundScale>
+				</Icon>
+				<LatLonBox>
+					<north>62.40806102574545</north>
+					<south>62.40634348544347</south>
+					<east>-145.1549564387332</east>
+					<west>-145.1592786430036</west>
+					<rotation>-179.9192721729668</rotation>
+				</LatLonBox>
+			</GroundOverlay>
+		</Folder>
+	</Folder>
+</Document>
+</kml>

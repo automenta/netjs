@@ -1,0 +1,76 @@
+Activity,activity,An object representation of an activity.
+Alert,alert,Any kind of significant notification.
+Application,application,A software application
+Article,article,"An article, such as a news article, knowledge base entry or similar construct"
+Audio,audio,An item of audio content
+Badge,badge,A badge or award given to an entity
+Binary,binary,"Objects of this type are used to carry arbirary Base64-encoded binary data within an Activity Stream object. It is primarily intended to attach binary data to other types of objects through the use of the ""attachments"" property."
+Bookmark,bookmark,A pointer to a URL
+Collection,collection,A generic collection of objects of any type.
+Comment,comment,A textual response to another object
+Device,device,A device of any time
+Event,event,An event that occurs in a certain place during a particular interval of time
+File,file,A document or other file with no additional machine-readable semantics
+Game,game,A game or competition of any kind
+Group,group,A social networking group
+Image,image,A graphical image
+Issue,issue,"Represents a report about a problem or situation that needs to be resolved. For instance, the issue object can be used to represent reports detailing software defects, or reports of acceptable use violations, and so forth."
+Job,job,A job or job posting.
+Link,link,A link to another resource
+Note,note,A short-form text message
+Offer,offer,An offer of any kind
+Organization,organization,An organization of any kind
+Page,page,"Represents an area, typically a web page, that is representative of, and generally managed by a particular entity. Such areas are usually dedicated to displaying descriptive information about the entity and showcasing recent content such as articles, photographs and videos. Most social networking applications, for example, provide individual users with their own dedicated ""profile"" pages. Several allow similar types of pages to be created for commercial entities, organizations or events. While the specific details of how pages are implemented, their characteristics and use may vary, the one unifying property is that they are typically ""owned"" by a single entity that is represented by the content provided by the page itself."
+Person,person,A user account
+Place,place,A location on Earth.
+Process,process,"Represents any form of process. For instance, a long-running task that is started and expected to continue operating for a period of time."
+Product,product,A commercial good or service
+Question,question,A question or poll
+Review,review,A primarily prosed-based commentary on another object
+Service,service,Something that provides a service to others
+Task,task,An activity that has yet to be completed.
+Video,video,An item of video content
+Alias,alias,A local alias for an object
+Attachments,attachments,"A collection of one or more additional, associated objects, similar to the concept of attached files in an email message."
+Attended By,attendedBy,Used to provide information about the collection of entities that attended an event
+Attending,attending,Used to provide information about the collection of actors that have responded to an event using the rsvp-yes verb.
+Author,author,An Object that describes the entity that created or authored the object. Note that the author field identifies the entity that created the object and does not necessarily identify the entity that published the object.
+Content,content,Natural-language description of the object encoded as a single JSON String containing HTML markup.
+Display Name,displayName,"A natural-language, human-readable and plain-text name for the object. HTML markup MUST NOT be included."
+Downstream Duplicates,downstreamDuplicates,A JSON Array of one or more absolute IRIs identifying objects that duplicate this object's content.
+Dublin Core,dc,Dublin Core Metadata related to the object (http://dublincore.org)
+End-Time,endTime,A timestamp indicating the date and time at which the object ended.
+Followers,followers,"Used to provide information about the collection of objects (typically person objects) that are ""following"" the containing object."
+Following,following,"Used to provide information about the collection of objects that this object is ""following""."
+Friend Requests,friend-requests,"Used to provide information about the collection of objects with which a ""friendship"" relationship is being requested using the request-friend verb. This property will typically only be relevant for the person object type."
+Friends,friends,"Used to provide information about the collection of objects with which a ""friendship"" relationship has been established using the make-friend verb. This property will typically only be relevant for the person object type."
+GeoJSON,geojson,GeoJSON Metadata related to the object (http://www.geojson.org/geojson-spec.html)
+ID,id,An absolute URI that uniquely identifies the object.
+Image,image,"A Media Link that describes a resource providing a visual representation of the object, intended for human consumption."
+Invited,invited,"Used to provide information about the collection of entities that have been invited to an event, or possibly invited to join a group, etc."
+Likes,likes,Used to provide information about the actors (typically person objects) that have favorited or liked the containing object.
+Linked Data for JSON,ld,JSON-LD Metadata related to the object (http://json-ld.org)
+Links,links,Links associated with the object
+Location,location,An object construct representing the location at which the activity occured.
+Maybe Attending,maybeAttending,Used to provide information about the collection of actors that have responded to an event using the rsvp-maybe verb.
+Members,members,"Used to provide information about the actors (typically person objects) that have ""joined"" the containing object. This is typically only useful for object types that represent groups."
+Mood,mood,A human-readable keyword or short phrase describing the mood of the actor at the time the activity was performed.
+Not Attended By,notAttendedBy,Used to provide information about the collection of entities that did not attend an event
+Not Attending,notAttending,Used to provide information about the collection of actors that have responded to an event using the rsvp-no verb.
+OData,odata,OData Metadata related to the object (http://www.odata.org)
+Object Type,objectType,Identifies the type of object.
+OpenGraph,opengraph,OpenGraph Metadata related to the object (http://developers.facebook.com/docs/opengraph)
+Published,published,The date and time at which the object was published.
+Rating,rating,A rating given as a number between 1.0 and 5.0 inclusive with one decimal place of precision.
+Replies,replies,"Used to provide information about the thread of discussion associated with a given object. Typically, the objects contained will have an implied inReplyTo property value equal to the object containing the replies property."
+Reviews,reviews,Used to provide information about reviews available for the containing object.
+Saves,saves,"Used to provide information about the actors (typically person objects) that have ""saved"" the containing object."
+Schema.org,schema_org,Schema.org Metadata related to the object (http://schema.org)
+Shares,shares,"Used to provide information about the actors (typically person objects) that have ""shared"" the containing object."
+Source,source,A reference to the original source of an object or activity.
+Start-Time,startTime,A timestamp indicating the date and time at which the object was started.
+Summary,summary,Natural-language summarization of the object encoded as a single JSON String containing HTML markup.
+Tags,tags,A listing of the objects that have been associated with a particular object using the tag verb.
+URL,url,An IRI identifying a resource providing an HTML representation of the object.
+Updated,updated,The date and time at which the object was modified.
+Upstream Duplicates,upstreamDuplicates,A JSON Array of one or more absolute IRIs identifying objects that duplicate this object's content.

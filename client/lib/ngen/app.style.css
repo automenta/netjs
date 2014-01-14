@@ -1,0 +1,243 @@
+body, * {
+    font-family: verdana;
+    font-size: 11px;
+    color: #FFFFFF;
+}
+
+body {
+    overflow: hidden;
+    xbackground-image: url(images/background.png);
+}
+
+body {
+    background-color: #242424;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+input, select, option, textarea {
+    color: #000;
+}
+
+input.text {
+    background-color: transparent;
+    border: 1px solid #333;
+    color: #FFF;
+}
+
+#main {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#tools, #details {
+    xdisplay: none;
+    position: absolute;
+    z-index: 100;
+    
+    background-color: #000;
+    xopacity: 0.7;
+}
+
+#tools {
+    bottom: 0px;
+    left: 0px;
+    
+    width: 550px;
+    height: 50px;
+    
+    padding: 5px 5px 10px 10px;
+    
+    x-moz-border-radius: 0 10px 0 0;
+    x-webkit-border-top-right-radius: 10px;
+}
+
+#tools label {
+    float: left;
+    padding-right: 2em;
+}
+
+#tools .find,
+#tools .filter {
+    margin-top: 20px;
+}
+
+#tools .find {
+    float : left;
+    width: 275px;
+}
+
+#tools .find input.text {
+    float: left;
+    width: 100px;
+    position: relative;
+    top: -2px;
+}
+
+#tools .filter {
+    float : left;
+    width: 275px;
+}
+
+#tools .filter .max-slider {
+    float : left;
+    width : 100px;
+    margin-top: 2px;
+}
+
+#tools .ui-widget-content {
+    background: transparent;
+}
+
+#tools .ui-slider-horizontal {
+    height: 1em;
+}
+
+#tools .ui-slider-horizontal .ui-slider-handle {
+    top: 0em;
+}
+
+#tools .ui-corner-all {
+    -moz-border-radius-bottomleft:0px;
+    -moz-border-radius-bottomright:0px;
+    -moz-border-radius-topleft:0px;
+    -moz-border-radius-topright:0px;
+    -webkit-border-bottom-left-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+}
+
+#tools .ui-slider .ui-slider-handle {
+    width: 1em;
+    margin-left: -0.5em;
+    height: 1.1em;
+    background: #fff;
+    border: 0;
+}
+
+#background {
+    xwidth: 100%;
+    xheight: 100%;
+}
+
+#details{
+    top: 10px;
+    right: 10px;
+    
+    min-width: 250px;
+    padding-bottom: 10px;
+    
+    x-moz-border-radius: 10px;
+    x-webkit-border-radius: 10px;
+}
+
+#details .row {
+    overflow:auto;
+    clear: both;
+    padding: 0px 20px 0 10px;
+}
+
+#details .row label {
+    float: left;
+    width: 100px;
+}
+
+#details .row span {
+    float: left;
+}
+
+#details .row ul {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+}
+
+#details .controls {
+    clear: both;
+    overflow:auto;
+    padding: 5px 10px 10px 10px;
+}
+
+#details .controls .next {
+    float: right;
+    color: #aaa;
+    xopacity: 0.5;
+    cursor: pointer;
+}
+
+#details .controls .previous {
+    float: left;
+    xopacity: 0.5;
+    color: #aaa;
+    cursor: pointer;
+}
+
+#details .controls .active {
+    color: #fff;
+    xopacity: 1;
+}
+
+.message {
+    margin:0 auto;
+    width:590px;
+}
+
+.message h1 {
+    text-align: center;
+}
+
+.message a {
+    display: block;
+    float: left;
+    width: 33%;
+    text-align: center;
+}
+
+.message a, .message a:visited, .message a:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+.message .safari, .message .firefox, .message .chrome {
+    font-size: 20px;
+    padding-top: 190px;
+}
+
+.message .safari {
+    background: url('images/safari.jpg') 0 0 no-repeat;
+}
+
+.message .firefox {
+    background: url('images/firefox.jpg') 0 0 no-repeat;
+}
+
+.message .chrome {
+    background: url('images/chrome.jpg') 0 0 no-repeat;
+}
+
+.message p.explorer {
+    font: 13px "MS Serif", "New York";
+    padding: 20px 50px 0 45px;
+    float: none;
+    width: auto;
+    clear: both;
+    text-align: left;
+}

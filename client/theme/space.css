@@ -1,0 +1,11 @@
+@import url("/theme/dark.css");
+
+body {
+    background-image: url('/theme/space/orbit.jpg'); 
+    background-attachment: fixed;
+    background-size: stretch;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;    
+}

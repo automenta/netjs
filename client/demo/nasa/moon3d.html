@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello World!</title>
+    <script type="text/javascript" src="Cesium/Cesium.js"></script>
+    <style>
+      @import url(Cesium/Widgets/CesiumWidget/CesiumWidget.css);
+      body {
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+    var widget = new Cesium.CesiumWidget('cesiumContainer');
+
+    var layers = widget.centralBody.getImageryLayers();
+    layers.removeAll();
+
+    var blackMarble = layers.addImageryProvider(new Cesium.WebMapServiceImageryProvider({
+        url : 'http://webmap.lroc.asu.edu/',
+//        layers : 'luna_clem750',
+	layers: 'luna_wac_dtm',
+//	layers: 'mars_viking',
+
+        maximumLevel : 8,
+        credit : 'Lunar Clementine 750 @ ASU.edu'
+    }));
+    blackMarble.alpha = 1.0;
+    blackMarble.brightness = 1.0;
+
+  </script>
+</body>
+</html>

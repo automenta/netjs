@@ -1,0 +1,12 @@
+body {
+    background: white;
+}
+
+#_Panel {
+    color: black;
+}
+
+a, a:visited, #_Panel a, #_Panel a:visited {
+    color: #333;
+}
+

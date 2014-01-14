@@ -1,0 +1,36 @@
+{
+    "name":"netjs2",
+    "version":"0.0.1",
+    "dependencies":{
+		"express":"",
+		"request":"",
+		"url":"",
+		"util":"",
+		"socket.io": "",
+		"node-static":"",
+		"always":"",
+		"mongojs":"",
+		"ya-csv":"",
+		"feedparser":"",
+		"xml2object":"",
+		"passport":"",
+		"passport-openid":"",
+		"passport-google":"",
+		"passport-twitter":"",
+		"session.socket.io":"",
+		"connect":"",
+		"underscore":"",
+		"kademlia":"",
+		"irc":"",
+		"cheerio":"",
+		"rdfstore":"",
+		"kmeans":"",
+		"telehash": "",
+		"jsdom": "",
+		"togeojson":""
+    },
+    "engines": {
+		"node": "0.8.x", 
+		"npm": "1.1.x"
+    }
+}

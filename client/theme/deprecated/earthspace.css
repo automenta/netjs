@@ -1,0 +1,54 @@
+/* 
+    Document   : terminal-green
+    Created on : Nov 10, 2010, 6:15:36 AM
+    Author     : me
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+@import url("default-black.css");
+@import url(http://fonts.googleapis.com/css?family=Aldrich);
+
+#_Panel {
+    color: #E2A848;
+    background-color: rgba(0,0,0,0.5);
+    font-family: 'Aldrich', sans-serif;    
+    margin-top: 4em;
+}
+
+#_Panel a {
+    color: #D282F2;
+    font-family: 'Aldrich', sans-serif;    
+}
+
+#_Content {
+    padding: 0.5em;
+}
+
+body {
+    background: url('/themes/image/earthspace.jpg') no-repeat center center fixed;
+    background-size: cover;    
+    height: 100%;
+}
+
+Status {
+    color: white;
+}
+
+#_Top {
+    position: fixed;
+    top:0;
+    left: 10%;
+    right:0;
+    width: 80%;
+    
+    background-color: rgba(128,128,128,0.5);
+    
+}
+#_Top ul {
+    margin-bottom: 0em;
+}

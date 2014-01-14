@@ -1,0 +1,10 @@
+@import url('/lib/jquery-ui/1.10.3/themes/sunny/jquery-ui.min.css');
+h1 a {
+    color: black;
+}
+#View {
+    background: none !important;
+}
+#ViewMenu {
+    opacity: 0.94;
+}

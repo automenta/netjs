@@ -1,0 +1,8 @@
+@import url('/lib/jquery-ui/1.10.3/themes/ui-darkness/jquery-ui.min.css');
+body, .display-window { background: url('/theme/matrix/matrix-green.gif') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-attachment:fixed; }
+
+#ViewMenu { 
+    border:none !important; background: none !important; moz-box-shadow: none !important; -webkit-box-shadow: none !important; box-shadow: none !important; -ms-filter: none !important; filter: none !important; 
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { background: #0C0 !important; border: #060 !important; }

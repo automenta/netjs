@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Sunlight Foundation Presentations in Reveal.js </title>
+
+		<meta name="description" content="presentations given by a member of the Sunlight Foundation, using Reveal.js">
+		<meta name="author" content="Sunlight Labs">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/sunlight.css" id="theme">
+
+		<script type="text/javascript" src="//use.typekit.net/blp6kvr.js"></script>
+		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section class="slide1">
+					<img src="http://assets.sunlightfoundation.com.s3.amazonaws.com/presentations/okCon/sf_logo.png">
+					<div style="margin-left: 300px; text-align: left;">
+					<h2>Presentations</h2>
+					<ul>
+						<li><a href="http://presentation.sunlightfoundation.com/okCon_ellen.html">Ellen @ OKCon 2013</a></li>
+						<li><a href="http://presentation.sunlightfoundation.com/index-original.html">Default Reveal.js presentation</a></li>
+						<li><a href="/kaitlin_gat.html">Kaitlin's GAT board presentation</a></li>
+						<li><a href="/ONA-2013.html">Kathy Kiely and Evan Mackinder ONA 2013</a></li>
+						<li><a href="/JAWS%20presentation.html">Kathy Kiely JAWS Presentation</a></li>
+					</ul>       
+					</div> 
+					        
+
+				</section>
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:   
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

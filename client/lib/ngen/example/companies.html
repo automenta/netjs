@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>NGEN</title>
+		
+	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+		<script src="/spacegraph.ngen.js"></script> 
+
+		<link rel="stylesheet" href="../app.style.css" type="text/css" charset="utf-8"/>
+
+		<script>		
+		
+		initNGEN(function() {				
+			
+			graphNGEN([				        
+			            {
+			            	label: 'Center',
+			                id : 1,
+			                type : 1,
+			                outs : [{id : 2, weight : 1}, {id : 5, weight : 1}],
+			                fixed: [0,0]
+			            },
+			            
+			            {
+			                id : 2,
+			                type : 1,
+			                label: 'Right of center',
+			                fixed: [1, 0]
+			            },
+
+			            {
+			                id : 3,
+			                type : 1,
+			                outs : [{id : 4, weight : 1}, {id : 1, weight : 1}]
+			            },
+
+			            {
+			                id : 4,
+			                type : 2
+			            },
+
+			            {
+			                id : 5,
+			                type : 2
+			            },
+
+			            {
+			                id : 6,
+			                type : 1
+			            },
+			            
+			            {
+			                id : 7,
+			                type : 2
+			            },
+
+			            {
+			                id : 8,
+			                type : 2
+			            },
+
+			            {
+			                id : 9,
+			                type : 1,
+			                outs : [{id : 8, weight : 1.2}, {id : 3, weight : 1.8}]
+			            },
+			            
+			            {
+			                id : 10,
+			                type : 1
+			            },
+			            
+			            {
+			                id : 11,
+			                type : 1
+			            },
+			            
+			            {
+			                id : 12,
+			                type : 1,
+			                outs : [{id : 10, weight : 1}, {id : 11, weight : 1.8}, {id : 13, weight : 1.8}, {id : 14, weight : 1.8}, {id : 15, weight : 2.0}, {id : 16, weight : 1.5}]
+			            },
+			            
+			            {
+			                id : 13,
+			                type : 1
+			            },
+			            
+			            {
+			                id : 14,
+			                type : 1
+			            },
+			            
+			            {
+			                id : 15,
+			                type : 1
+			            },
+			            
+			            {
+			                id : 16,
+			                type : 1
+			            }
+			        
+			   ]);
+		});
+		
+		</script>
+	</head>
+		
+	<body>
+	    <div class="no-msie message" style="display:none">
+	        <h1>This demo only works on</h1>
+	        <a href="http://www.apple.com/safari/" class="safari">Safari 4+</a>
+	        <a href="http://www.firefox.com" class="firefox">Firefox 3+</a>
+	        <a href="http://www.google.com/chrome" class="chrome">Chrome</a>
+	        <p class="explorer">I did not take the effort to make the demo work on Internet Explorer. Making it work
+            for Internet Explorer will require HTML5 canvas emulation, and browser specific
+            performance optimizing.</p>
+	    </div>
+	</body>
+</html>
