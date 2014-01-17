@@ -479,6 +479,12 @@ exports.start = function(options, init) {
         });
 
     }
+    
+    function getOperatorTags() {
+        return _.filter(_.keys(tags), function(t) {
+           return tags[t].operator; 
+        });
+    }
 
 
     function getTagCounts(whenFinished) {
@@ -1004,17 +1010,7 @@ exports.start = function(options, init) {
             */
             var objects = [];
 
-            var tagMap = {
-                'BeginnerStudent': '#AFE500',
-                'IntermediateStudent': '#E9EA08',
-                'CollaboratingStudent': '#EFBB11',
-                'CollaboratingTeacher': '#F48E1A',
-                'IntermediateTeacher': '#F96324',
-                'ExpertTeacher': '#FF3B2E',
-                'Not' : '', 'Can' : '', 'Need' : ''                
-            };
-            var st = _.keys(tagMap);
-
+            var st = getOperatorTags();
             getObjectsByTag(st, function(o) {
                 objects.push(o);
             }, function() {
@@ -1022,7 +1018,6 @@ exports.start = function(options, init) {
                 var query = '';
                        /*'PREFIX n: <http://netention.org/>\
                         PREFIX d: <http://dbpedia.org/resource/>\
-                        PREFIX zertify: <http://zertify.org/>\
                         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
                         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\
                         INSERT DATA {\n';*/
@@ -1044,7 +1039,7 @@ exports.start = function(options, init) {
                     }
                     if ((skillLevel) && (object)) {
                         skills++;
-                        query += '<http://netention.org/' + oo.author + '> <http://zertify.com/' + skillLevel + '> <http://dbpedia.org/resource/' + object + '> .\n'; 
+                        query += '<http://netention.org/' + oo.author + '> <http://netention.org/' + skillLevel + '> <http://dbpedia.org/resource/' + object + '> .\n'; 
                     }
                     if (authors[oo.author])
                         continue;

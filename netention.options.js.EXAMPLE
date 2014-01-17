@@ -22,7 +22,6 @@
         "initialView": "goal",
         "initialDisplayAvatarMenu": false,
         "defaultAvatarIcon": "/icon/netention-160.jpg",
-        "includeCanNeedNot": true,
         "wikiStartPage": "Life",
         "showPlanOnSelfPage": true,
         "defaultTheme": "_cybernetic",

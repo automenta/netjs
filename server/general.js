@@ -168,30 +168,45 @@ var generalTags = [
     {uri: 'Decision.Block', name: 'Block', tag: ['Decision'],
         description: 'You have serious objections and you’ll be extremely unhappy if this proposal goes ahead.'
     },
-    {uri: 'Skill', name: 'Skill', properties: {
+    
+    {uri: 'Social', name: 'Social', properties: {       }},
+    {uri: 'Friend', name: 'Friend', tag: ['Social'], operator: true},
+    {uri: 'Enemy', name: 'Enemy', tag: ['Social'], operator: true},
+    
+    {uri: 'Know', name: 'Know', properties: {
             'knowledge': {name: 'Knowledge', type: 'object'}
        }},
     /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
      3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
-    {uri: 'BeginnerStudent', name: 'Student', tag: ['Skill']},
-    {uri: 'IntermediateStudent', name: 'Student Collaborator', tag: ['Skill']},
-    {uri: 'CollaboratingStudent', name: 'Collaborator Student', tag: ['Skill']},
-    {uri: 'Collaborating', name: 'Collaborating', tag: ['Skill']},
-    {uri: 'CollaboratingTeacher', name: 'Collaborator Teacher', tag: ['Skill']},
-    {uri: 'IntermediateTeacher', name: 'Teacher Collaborator', tag: ['Skill']},
-    {uri: 'ExpertTeacher', name: 'Teacher', tag: ['Skill']},
-    {uri: 'Can', name: 'Can'},
-    {uri: 'Need', name: 'Need'},
-    {uri: 'Not', name: 'Not'},
+    {uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true,
+        description: 'No knowledge but curious to learn' },
+    {uri: 'DoLearn', name: 'DoLearn', tag: ['Know'], operator: true,
+        description: 'Some knowledge and willing to learn more while collaborating' },
+    {uri: 'Do', name: 'Do', tag: ['Know'], operator: true,
+        description: 'Can independently work' },
+    {uri: 'DoTeach', name: 'DoTeach', tag: ['Know'], operator: true,
+        description: 'Independently able to work and can teach or train' },
+    {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true,
+        description: 'Has expert knowledge and is most uesful in teaching others' },
+        
+    {uri: 'Can', name: 'Can', operator: true},
+    {uri: 'Need', name: 'Need', operator: true, properties: {
+        'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
+    }},
+    {uri: 'Not', name: 'Not', operator: true},
+    
+    {uri: 'Support', name: 'Support', operator: true, description: 'A life-supporting component of civilization or infrastructure'},
+    
     //NEEDS from SparkRelief
-    {uri: 'Volunteer', name: 'Volunteer', tag: ['Need']},
-    {uri: 'Shelter', name: 'Shelter', tag: ['Need']},
-    {uri: 'Food', name: 'Food', tag: ['Need']},
-    {uri: 'Tools', name: 'Tools', tag: ['Need']},
-    {uri: 'Health', name: 'Health', tag: ['Need']},
-    {uri: 'Transport', name: 'Transport', tag: ['Need']},
-    {uri: 'Service', name: 'Service', tag: ['Need']},
-    {uri: 'Animal', name: 'Animal', tag: ['Need']},
+    {uri: 'Volunteer', name: 'Volunteer', tag: ['Support']},
+    {uri: 'Shelter', name: 'Shelter', tag: ['Support']},
+    {uri: 'Food', name: 'Food', tag: ['Support']},
+    {uri: 'Tools', name: 'Tools', tag: ['Support']},
+    {uri: 'Health', name: 'Health', tag: ['Support']},
+    {uri: 'Transport', name: 'Transport', tag: ['Support']},
+    {uri: 'Service', name: 'Service', tag: ['Support']},
+    {uri: 'Animal', name: 'Animal', tag: ['Support']},
+    
     {uri: 'PDF', name: 'PDF Slide', properties: {
             'pdfURL': {name: 'PDF URL', type: 'text'},
             'slideNumber': {name: 'Slide', type: 'integer', min: 1, incremental: true}
