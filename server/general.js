@@ -195,7 +195,7 @@ var generalTags = [
     }},
     {uri: 'Not', name: 'Not', operator: true},
     
-    {uri: 'Support', name: 'Support', operator: true, description: 'A life-supporting component of civilization or infrastructure'},
+    {uri: 'Support', name: 'Support', description: 'A life-supporting component of civilization or infrastructure'},
     
     //NEEDS from SparkRelief
     {uri: 'Volunteer', name: 'Volunteer', tag: ['Support']},

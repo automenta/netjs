@@ -613,7 +613,7 @@ function netention(f) {
                 this.socket.emit('setPlugin', pid, enabled, callback);                    
             },
             
-			getGoals: function(from, to /*, mineOnly */) {
+			/*getGoals: function(from, to, mineOnly ) {
 				var that = this;
 
 				if (from == null) {
@@ -625,7 +625,7 @@ function netention(f) {
 					var w = x.when || 0;
 					return ((w >= from) && (w < to));
 				} );
-			},
+			},*/
 
             getLatestObjects : function(num, onFinished) {
                 var that = this;

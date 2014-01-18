@@ -23,8 +23,9 @@ function newGoalWidget(g)  {
 	return d;
 }
 
-function saveGoalTags(gt, when) {
+function saveAddedTags(gt, tag, when) {
 	_.each(gt, function(g) {
+	    var G = self.tag(g);
 		var ng = objNew();
 
 		if (when)
@@ -33,8 +34,8 @@ function saveGoalTags(gt, when) {
 			ng.delay = 0; //NOW
 
 		ng.own();
-		ng = objName(ng, g);
-		ng = objAddTag(ng, 'Goal');
+		ng = objName(ng, G.name);
+		ng = objAddTag(ng, tag);
 		ng = objAddTag(ng, g);
 		
 		self.pub(ng, function(err) {
@@ -204,9 +205,7 @@ function renderUs(v) {
 			var currentGoalHeader = $('<div id="GoalHeader"></div>');
 			sidebar.append(currentGoalHeader);
 
-			var addbutton = $('<button title="Add Tag">[+]</button>');
-			currentGoalHeader.append(addbutton);
-			currentGoalHeader.append('<button disabled title="Set Focus To This Goal">Focus</button>')
+			currentGoalHeader.append('<button disabled title="Set Focus To This Goal">Focus</button>');
 			currentGoalHeader.append('<button disabled title="Clear">[x]</button>');
 
 			var userSelect = $('<select></select>');
@@ -222,24 +221,44 @@ function renderUs(v) {
 			});
 			currentGoalHeader.prepend(userSelect);
 
-			var now = self.getGoals(null);
-			_.each(now, function(g) {
-				sidebar.append( newObjectSummary(g) );
-			});
+            var operators = _.filter(_.keys(self.tags()), function(t) {
+                return self.tag(t).operator;        
+            });
+            _.each(operators, function(o) {
+                var O = self.tag(o);
+                var header = $('<h2>' + O.name + '&nbsp;</h2>');
+                var addbutton = $('<a>[+]</a>');
+                header.append(addbutton);
+                sidebar.append(header);
+                
+    			var nn = self.objectsWithTag(o);
+    			if (nn.length > 0) {
+        			_.each(nn, function(g) {
+        				sidebar.append( newObjectSummary( self.getObject(g) ) );
+        			});
+    			}
+    			else {
+    			    header.attr('style', 'font-size: 75%');
+    			}
+    			
+    			addbutton.click(function() {
+    				var d = newPopup("Add " + O.name, {width: 800, height: 600, modal: true});
+    		        d.append(newTagger([], function(results) {
+    					saveAddedTags(results, o);
+    
+    		            later(function() {
+    		                d.dialog('close');                        
+    						newNowDiv();
+    		            });
+    		            //container.html(newSelfTimeList(s, x, container));
+    		        }));
+    			});
+                
+                sidebar.append('<br/>');
+    			
+            });
+            
 
-			addbutton.click(function() {
-				var d = newPopup("Add a Goal", {width: 800, height: 600, modal: true});
-		        d.append(newTagger([], function(results) {
-					saveGoalTags(results);
-
-		            //now = _.unique(now.concat(results));
-		            later(function() {
-		                d.dialog('close');                        
-						newNowDiv();
-		            });
-		            //container.html(newSelfTimeList(s, x, container));
-		        }));
-			});
 
 		}
 
@@ -265,7 +284,7 @@ function renderUs(v) {
 
 			var ti = time + (i * timeUnitLengthMS);
 			
-			var goals = self.getGoals(ti, ti+timeUnitLengthMS);
+			var goals = []; //self.objectsWithTag('Need') ti, ti+timeUnitLengthMS);
 
 			var ts = new Date(ti);
 			d.append('<span class="goallistTimestamp">' + ts + '</span>');
