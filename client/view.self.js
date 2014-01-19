@@ -235,14 +235,14 @@ function renderUs(v) {
 
 			var userSelect = $('<select></select>');
 			if (self.myself())
-				userSelect.append('<option>My (' + self.myself().name + ')</option>');
-			userSelect.append('<option>Everyone\'s</option>');
+				userSelect.append('<option oid="' + self.myself().id + '">Me (' + self.myself().name + ')</option>');
+			//userSelect.append('<option>Everyone\'s</option>');
 
 			var users = self.objectsWithTag('User');
 			_.each(users, function(uid) {
 				var u = self.getObject(uid);
 				if (u)
-					userSelect.append('<option oid="' + u + '">' + u.name + '</option>');
+					userSelect.append('<option oid="' + u.id + '">' + u.name + '</option>');
 			});
 			currentGoalHeader.prepend(userSelect);
 

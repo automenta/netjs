@@ -814,7 +814,7 @@ exports.start = function(options, init) {
        if (key) {
            return key;
        }
-       return 'null';         //anonymous?
+       return 'anonymous';
     }
     
     function getCurrentClientID(session) {
@@ -843,7 +843,7 @@ exports.start = function(options, init) {
     }
     function addClientSelf(session, uid) {
         var key = getSessionKey(session);
-        if (!key) {
+        if ((!key) || (key == '')) {
             key = 'anonymous';
         }
         if (!Server.users)
@@ -855,6 +855,7 @@ exports.start = function(options, init) {
         }
         else {
             Server.users[key].push(uid);            
+			Server.users[key] = _.unique(Server.users[key]);
         }
         
         //HACK clean users?

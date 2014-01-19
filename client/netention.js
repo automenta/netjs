@@ -410,6 +410,7 @@ function netention(f) {
                         that.set('clientID', cid.substring(5));
                      that.set('authorized', key);
                      that.set('otherSelves', _.unique(otherSelves));
+
                      that.saveLocal();
                      /*$.pnotify({
                                 title: 'Connected',

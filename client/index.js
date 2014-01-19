@@ -23,6 +23,13 @@ function updateBrand() {
     $('#toggle-img').attr('src', avatarURL);
 }
 
+function updateViewControls() {
+    //select the current view in the ViewControls
+    $('#ViewControls #' + self.get('currentView')).attr('checked', true);
+    $('#ViewControls').buttonset('refresh');
+}
+
+
 function _updateView(force) {
 
     var s = window.self;
@@ -118,6 +125,36 @@ function _updateView(force) {
 }
 
 
+function initKeyboard() {
+	var views = [];
+	$('#ViewControls input').each(function(x) { views.push($(this).attr('id')); });
+
+	for (var i = 0; i < views.length; i++) {
+		var f = function(I) { 
+			jwerty.key('ctrl+' + I, function() {
+				self.set('currentView', views[I]); 
+				updateViewControls();
+				return false; 
+			})
+		};
+		f(i);
+	}
+	
+	var viewDelta = function(delta) {
+		var currentIndex = _.indexOf( views, self.get('currentView') );
+		var nextIndex = currentIndex + delta;
+
+		if (nextIndex < 0) nextIndex = views.length - 1;
+		if (nextIndex >= views.length) nextIndex = 0;
+
+		self.set('currentView', views[nextIndex]); 
+		updateViewControls();
+		return false; 
+	};
+
+	jwerty.key('ctrl+left', function() {	viewDelta(-1);	});
+	jwerty.key('ctrl+right', function() {	viewDelta(+1);	});
+}
 
 
 function setTheme(t) {
@@ -279,9 +316,7 @@ $(document).ready(function() {
                     self.save('currentView', configuration.initialView);
                 }
 
-                //select the current view in the ViewControls
-                $('#ViewControls #' + self.get('currentView')).attr('checked', true);
-                $('#ViewControls').buttonset('refresh');
+				updateViewControls();
 
                 $('body').timeago();
                 updateView = _.throttle(function() {
@@ -293,6 +328,7 @@ $(document).ready(function() {
                 function doUpdate() {
                     updateView();
                 }
+
 
                 self.on('change:attention', doUpdate);
                 self.on('change:layer', doUpdate);
@@ -347,6 +383,9 @@ $(document).ready(function() {
                         if (configuration.requireIdentity)
                             openSelectProfileModal("Start a New Profile");
                     }
+
+					initKeyboard();
+
                 });
 
 
