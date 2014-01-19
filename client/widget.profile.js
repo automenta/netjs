@@ -104,6 +104,12 @@ function newNewProfileWidget(whenFinished) {
 
     d.append('<br/>');
 
+	var locationEnabled = true;
+	var locEnabled = $('<input type="checkbox" checked="true"/>');
+	d.append(locEnabled);
+	d.append('Location Enabled');
+    d.append('<br/>');
+
     var cm = $('<div id="SelfMap"/>');
     d.append(cm);
 
@@ -120,6 +126,16 @@ function newNewProfileWidget(whenFinished) {
 		};
 	});
 
+	locEnabled.change(function() {
+		locationEnabled = locEnabled.is(':checked');
+		if (locationEnabled) {
+			cm.show();
+		}
+		else {
+			cm.hide();
+		}
+	});
+
 	createButton.click(function() {
 		var name = nameField.val();
 		if (name.length == 0) {
@@ -133,7 +149,8 @@ function newNewProfileWidget(whenFinished) {
         objAddTag(o, 'Human');
         objAddTag(o, 'User');     
 
-	    objSetFirstValue( o, 'spacepoint', {lat: location[0], lon: location[1], planet: 'Earth'} );            
+		if  (locationEnabled)
+		    objSetFirstValue( o, 'spacepoint', {lat: location[0], lon: location[1], planet: 'Earth'} );            
 
 		whenFinished(o);  
 	});
