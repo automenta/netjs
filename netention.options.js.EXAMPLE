@@ -29,7 +29,7 @@
         "requireIdentity": false,
         "maxStartupObjects": 8192,
         "defaultMapMode2D": true,
-		"mapDefaultLocation": [ 80, -40 ],
+		"mapDefaultLocation": [ 40.44, -80.0  ],
         "enableTogetherJS": false
     }
 }

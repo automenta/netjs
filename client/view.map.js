@@ -1,3 +1,5 @@
+var MAP_MAX_ITEMS = 500;
+
 var currentMapNow = null;
 
 function getProxyURL(u) {
@@ -28,6 +30,8 @@ function renderMapMarker(x, createMarkerFunction) {
     }
 
     iconURL = getTagIcon(x);
+	if (!iconURL)
+		iconURL = defaultIcons['unknown'];
     
     var tagStyling = {
         'Earthquake' : function() {
@@ -160,7 +164,6 @@ function renderMap(s, o, v) {
 }
 
 function renderOLMap(s, o, v) {
-    var MAX_ITEMS = 500;
     
     var e = uuid();
     $('<div style="width: 100%; height: 100%"/>').attr('id', e).appendTo(v);
@@ -179,8 +182,11 @@ function renderOLMap(s, o, v) {
     
     var target = e;
     var location = objSpacePointLatLng(s.myself());
-    if (!location)
-        location = [0,0];
+
+    if (!location)  {
+		//swap lat,lng
+        location = configuration.mapDefaultLocation || [0,0];
+	}
     
     var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
     var toProjection = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
@@ -448,7 +454,7 @@ function renderOLMap(s, o, v) {
 
 	    currentMapNow = Date.now();        
         
-        renderItems(s, o, v, MAX_ITEMS, function(s, v, xxrr) {
+        renderItems(o, v, MAP_MAX_ITEMS, function(s, v, xxrr) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 var r = xxrr[i][1];
