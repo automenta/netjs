@@ -1187,8 +1187,6 @@ a.openModal:focus {
 #goalviewSidebar {
 	float: left;
 	width: 35%;
-	height: 97%;
-	overflow: auto;
 }
 #goalviewList {
 	float: right;

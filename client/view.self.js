@@ -226,22 +226,8 @@ function renderUs(v) {
             });
             _.each(operators, function(o) {
                 var O = self.tag(o);
-                var header = $('<h2>' + O.name + '&nbsp;</h2>');
-                var addbutton = $('<a>[+]</a>');
-                header.append(addbutton);
-                sidebar.append(header);
-                
-    			var nn = self.objectsWithTag(o);
-    			if (nn.length > 0) {
-        			_.each(nn, function(g) {
-        				sidebar.append( newObjectSummary( self.getObject(g) ) );
-        			});
-    			}
-    			else {
-    			    header.attr('style', 'font-size: 75%');
-    			}
-    			
-    			addbutton.click(function() {
+
+				var header = newTagButton(O, function() {
     				var d = newPopup("Add " + O.name, {width: 800, height: 600, modal: true});
     		        d.append(newTagger([], function(results) {
     					saveAddedTags(results, o);
@@ -253,7 +239,29 @@ function renderUs(v) {
     		            //container.html(newSelfTimeList(s, x, container));
     		        }));
     			});
+
+				header.attr('style', 'font-size: 150%');
+
+                //var header = $('<h2>' + O.name + '&nbsp;</h2>');
+                header.append('&nbsp;[+]');
+                sidebar.append(header);
                 
+    			var nn = self.objectsWithTag(o);
+    			if (nn.length > 0) {
+					var uu = $('<ul></ul>');
+        			_.each(nn, function(g) {
+        				uu.append( newObjectSummary( self.getObject(g), {
+							showAuthorIcon: false,
+							showAuthorName: false
+						} ) );
+        			});
+					sidebar.append(uu);
+    			}
+    			else {
+    			    //header.attr('style', 'font-size: 75%');
+					sidebar.append('<br/>');
+    			}
+    			                
                 sidebar.append('<br/>');
     			
             });
@@ -852,7 +860,11 @@ function newRoster(selectUser) {
     var anonymous = [];
     
     function h(x) {
-        var sx = newObjectSummary(x, null, 0.5, 0, (selectUser ? true : false));        
+        var sx = newObjectSummary(x, {
+			scale: 0.5,
+			depthRemaining: 0,
+			nameClickable: !selectUser
+		});        
         
         if (self.myself()) {
             if (x.id === self.myself().id) {

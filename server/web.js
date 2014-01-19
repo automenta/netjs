@@ -775,7 +775,9 @@ exports.start = function(options, init) {
     };
     
     //Gzip compression
-    express.use(connect.compress());
+	if (Server.httpCompress)
+	    express.use(connect.compress());
+
     //express.use(expressm.staticCache());
     express.use("/plugin", expressm.static('./plugin' , staticContentConfig ));
     express.use("/doc", expressm.static('./doc' , staticContentConfig ));

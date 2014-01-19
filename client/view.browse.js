@@ -1,3 +1,5 @@
+var BROWSE_ITEMS_MAX_DISPLAYED = 75;
+
 function getRelevant(sort, scope, semantic, s, o, maxItems) { 
 
     var now = Date.now();
@@ -145,22 +147,22 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
     return [ _.first(relevant, maxItems), relevance ];
 }
 
-function renderItems(s, o, v, maxItems, perItems) {
-    var sort = s.get('list-sort') || 'Recent';
-    var scope = s.get('list-scope') || 'Public';
-    var semantic = s.get('list-semantic') || 'Any';
+function renderItems(o, v, maxItems, perItems) {
+    var sort = self.get('list-sort') || 'Recent';
+    var scope = self.get('list-scope') || 'Public';
+    var semantic = self.get('list-semantic') || 'Any';
     
-    var rr = getRelevant(sort, scope, semantic, s, o, maxItems);
+    var rr = getRelevant(sort, scope, semantic, self, o, maxItems);
     var relevant = rr[0];
     var relevance = rr[1];
 
     var xxrr = [];
     for (var x = 0; x < relevant.length; x++) {
-        var xx = s.get('attention')[relevant[x]];                        
+        var xx = self.get('attention')[relevant[x]];                        
         var rr =  relevance[relevant[x]];
         xxrr.push([xx,rr]);
     }
-    perItems(s, v, xxrr);
+    perItems(self, v, xxrr);
     
     /*var semanticFilter = $('<select><option>Any</option><option>Relevant</option></select>');
     semanticFilter.change(function() {
@@ -206,34 +208,27 @@ function renderItems(s, o, v, maxItems, perItems) {
 
 }
 
-function renderBrowseList(o, v) {
-    renderItems(self, o, v, 75, function(s, v, xxrr) {
+function renderBrowseList(o, v, cssClass) {
+    renderItems(o, v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
         var elements = [];
         for (var i = 0; i < xxrr.length; i++) {
             var x = xxrr[i][0];
-            var r = xxrr[i][1];
-            elements.push(newObjectSummary(x, function() { }, r, 1 ));
-        }
-        v.append(elements);
-    });
-    
-    $('body').timeago('refresh');
-}
-
-function renderBrowseGrid(o, v) {
-    renderItems(self, o, v, 75, function(s, v, xxrr) {
-        var elements = [];
-        for (var i = 0; i < xxrr.length; i++) {
-            var x = xxrr[i][0];
-            var r = xxrr[i][1];
-            var o = newObjectSummary(x, function() {
-            }, r, 1);
-            o.addClass('objectGridItem');
+			var o = newObjectSummary(x, {
+				onRemoved: function() { },
+				scale: xxrr[i][1],
+				depthRemaining: 1,
+			});
+			if (cssClass)
+				o.addClass(cssClass);
             elements.push(o);
         }
         v.append(elements);
-    });
+	    $('body').timeago('refresh');
+    });   
+}
 
+function renderBrowseGrid(o, v) {
+	renderBrowseList(o, v, 'objectGridItem');
     //http://masonry.desandro.com/docs/intro.html
     /*$(function() {
         vv.imagesLoaded(function(){
@@ -244,8 +239,6 @@ function renderBrowseGrid(o, v) {
             });//.masonry('reload');
         });
     });*/
-
-    $('body').timeago('refresh');
 }
 
 function renderBrowseSlides(o, vv, slideControls) {
@@ -256,12 +249,16 @@ function renderBrowseSlides(o, vv, slideControls) {
 
 	later(function() {
 
-	  renderItems(self, o, v, 15, function(s, v, xxrr) {
+	  renderItems(o, v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
 				var elements = [];
 				for (var i = 0; i < xxrr.length; i++) {
 				    var x = xxrr[i][0];
-				    var r = xxrr[i][1];
-				    var o = newObjectSummary(x, function() {  }, r, 1);
+
+				    var o = newObjectSummary(x, {
+						onRemoved: function() { },
+						scale: xxrr[i][1],
+						depthRemaining: 1,
+					});
 
 					//<section>Single Horizontal Slide</section><section><section>Vertical Slide 1</section><section>Vertical Slide 2</section></section>
 					var w = $('<section/>');

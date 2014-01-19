@@ -5,6 +5,7 @@
     "port": "8080",
     "databaseURL": "localhost/netention_0",
     "memoryUpdatePeriodMS": 5000,
+	"httpCompress": true,
     "plugins": [
         "_rss.js", "_irc.js"
     ],
@@ -28,6 +29,7 @@
         "requireIdentity": false,
         "maxStartupObjects": 8192,
         "defaultMapMode2D": true,
+		"mapDefaultLocation": [ 80, -40 ],
         "enableTogetherJS": false
     }
 }

@@ -37,7 +37,9 @@ function newPopupObjectView(_x) {
     }
 
     var d = newPopup(x.name);
-    d.append(newObjectSummary(x, null, 1.0, 4));
+    d.append(newObjectSummary(x, {
+		depthRemaining: 4
+	}));
     return d;
 
 }
@@ -59,7 +61,7 @@ function getAvatarURL(email) {
     return "http://www.gravatar.com/avatar/" + MD5(email);
 }
 
-function newTagButton(t) {
+function newTagButton(t, onClicked) {
     var ti = null;
 
     if (!t.uri) {
@@ -92,9 +94,10 @@ function newTagButton(t) {
         return o;
     }
 
-    b.click(function() {
-        newPopupObjectView(tagObject(t));
-    });
+	if (!onClicked)
+		onClicked = function() {       newPopupObjectView(tagObject(t));    };
+
+    b.click(onClicked);
 
     return b;
 }
@@ -1257,7 +1260,15 @@ function newPropertyView(x, vv) {
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
  */
-function newObjectSummary(x, onRemoved, r, depthRemaining, nameNotClickable) {
+function newObjectSummary(x, options) {
+	if (!options) options = { };
+
+	var onRemoved = options.onRemoved;
+	var scale = options.scale;
+	var depthRemaining = options.depthRemaining;
+	var nameClickable = (options.nameClickable != undefined) ? options.nameClickable : true;
+	var showAuthorIcon = (options.showAuthorIcon != undefined) ? options.showAuthorIcon : true;
+	var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
 
     if (!x) {
         return newDiv().html('Object Missing');
@@ -1309,22 +1320,26 @@ function newObjectSummary(x, onRemoved, r, depthRemaining, nameNotClickable) {
 
     var d = $('<div class="objectView ui-widget-content ui-corner-all">');
     var oStyle = x.style;
-    d.attr('style', "font-size:" + ((r) ? ((0.5 + r) * 100.0 + '%') : ("100%")) + (oStyle ? '; ' + oStyle : ''));
+    d.attr('style', "font-size:" + ((scale) ? ((0.5 + scale) * 100.0 + '%') : ("100%")) + (oStyle ? '; ' + oStyle : ''));
 
     var xn = x.name;
     var authorID = x.author;
 
     d.append(cd);
 
-    if (!isSelfObject(x.id)) { //exclude Self- objects
-        if (x.author) {
-            var a = x.author;
-            var as = self.getSelf(x.author);
-            if (as)
-                a = as.name;
-            xn = a + ': ' + xn;
-        }
-    }
+	if (showAuthorName) {
+		if (!isSelfObject(x.id)) { //exclude Self- objects
+		    if (x.author) {
+		        var a = x.author;
+		        var as = self.getSelf(x.author);
+		        if (as)
+		            a = as.name;
+				//else display UID?
+
+		        xn = a + ': ' + xn;
+		    }
+		}
+	}
 
     var replies = newDiv();
 
@@ -1335,7 +1350,9 @@ function newObjectSummary(x, onRemoved, r, depthRemaining, nameNotClickable) {
             //TODO sort the replies by age, oldest first
             for (var i = 0; i < r.length; i++) {
                 var p = r[i];
-                replies.append(newObjectSummary(self.getObject(p), null, /*r*0.618*/ null, depthRemaining - 1));
+                replies.append(newObjectSummary(self.getObject(p), {
+					'depthRemaining': depthRemaining - 1
+				}));
             }
         }
         else {
@@ -1430,15 +1447,17 @@ function newObjectSummary(x, onRemoved, r, depthRemaining, nameNotClickable) {
     hb.hide();
 
 
-    var authorClient = self.getSelf(authorID);
-    if (authorClient) {
-        if (authorID) {
-            var av = getAvatar(authorClient).attr('align', 'left');
+	if (showAuthorIcon) {
+		var authorClient = self.getSelf(authorID);
+		if (authorClient) {
+		    if (authorID) {
+		        var av = getAvatar(authorClient).attr('align', 'left');
 
-            d.append(av);
-            av.wrap('<div class="AvatarIcon"/>');
-        }
-    }
+		        d.append(av);
+		        av.wrap('<div class="AvatarIcon"/>');
+		    }
+		}
+	}
 
     //Selection Checkbox
     var selectioncheck = $('<input type="checkbox"/>');
@@ -1490,7 +1509,7 @@ function newObjectSummary(x, onRemoved, r, depthRemaining, nameNotClickable) {
     //Name
     if (x.name) {
         haxn = $('<h1>');
-        if (nameNotClickable) {
+        if (!nameClickable) {
             haxn.html(xn);
         }
         else {
