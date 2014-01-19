@@ -187,7 +187,7 @@ var generalTags = [
     {uri: 'DoTeach', name: 'DoTeach', tag: ['Know'], operator: true,
         description: 'Independently able to work and can teach or train' },
     {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true,
-        description: 'Has expert knowledge and is most uesful in teaching others' },
+        description: 'Has expert knowledge and is most useful in teaching others' },
         
     {uri: 'Can', name: 'Can', operator: true},
     {uri: 'Need', name: 'Need', operator: true, properties: {

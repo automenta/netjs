@@ -245,13 +245,13 @@ function netention(f) {
             objects : function() { return this.get('attention'); },
             
             /* returns a list of object id's */
-            objectsWithTag : function(t) {
+            objectsWithTag : function(t, fullObject) {
                 //TODO support subtags
                 var r = [];
                 for (var k in this.objects()) {
-                    var v = this.objects()[k];
+                    var v = this.getObject(k);
                     if (objHasTag(v, t))
-                        r.push(k);
+                        r.push( fullObject ? v : k );
                 }
                 return r;
             },

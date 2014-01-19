@@ -34,7 +34,11 @@ function saveAddedTags(gt, tag, when) {
 			ng.delay = 0; //NOW
 
 		ng.own();
-		ng = objName(ng, G.name);
+		if (G)
+			ng = objName(ng, G.name);
+		else
+			ng = objName(ng, g);
+
 		ng = objAddTag(ng, tag);
 		ng = objAddTag(ng, g);
 		
@@ -284,6 +288,7 @@ function renderUs(v) {
 	function updateGoalList() {
 		goalList.html('');
 
+		var GOALS = self.objectsWithTag('Goal', true);
 
 		for (var i = 0; i < numHours; i++) {
 			var d = newDiv();
@@ -292,7 +297,11 @@ function renderUs(v) {
 
 			var ti = time + (i * timeUnitLengthMS);
 			
-			var goals = []; //self.objectsWithTag('Need') ti, ti+timeUnitLengthMS);
+			var goals = _.filter(GOALS, function(x) {
+				var w = x.when || 0;
+				return ((w >= ti) && (w < ti+timeUnitLengthMS));
+			});
+
 
 			var ts = new Date(ti);
 			d.append('<span class="goallistTimestamp">' + ts + '</span>');
@@ -306,7 +315,7 @@ function renderUs(v) {
 				addbutton.click(function() {
 					var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
 				    d.append(newTagger([], function(results) {
-						saveGoalTags(results, tti+timeUnitLengthMS/2);
+						saveAddedTags(results, 'Goal', tti+timeUnitLengthMS/2);
 
 				        //now = _.unique(now.concat(results));
 				        later(function() {

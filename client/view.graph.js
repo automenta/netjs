@@ -1,7 +1,9 @@
-var $s, theSlate;
-
+var GRAPH_MAX_NODES = 75;
 var layoutFPS = 30;
 var graphUpdatePeriod = 1000 / layoutFPS; //in ms
+
+var $s, theSlate;
+
 
 function renderSlateGraph(s, o, v, withGraph) {
     
@@ -126,10 +128,9 @@ function renderSlateGraph(s, o, v, withGraph) {
 
 
 function renderGraph(s, o, v) {
-	var maxGraphNodes = 75;
 
     renderSlateGraph(s, o, v, function(g) {
-        renderItems(s, o, v, maxGraphNodes, function(s, v, xxrr) {
+        renderItems(o, v, GRAPH_MAX_NODES, function(s, v, xxrr) {
             var tags = { };
             
             for (var i = 0; i < xxrr.length; i++) {
