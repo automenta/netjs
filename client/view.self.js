@@ -1,3 +1,9 @@
+function getOperatorTags() {
+	return _.filter(_.keys(self.tags()), function(t) {
+        return self.tag(t).operator;        
+    });
+}
+
 
 function newGoalWidget(g)  {
 
@@ -41,6 +47,7 @@ function saveAddedTags(gt, tag, when) {
 
 		ng = objAddTag(ng, tag);
 		ng = objAddTag(ng, g);
+		ng.subject = self.myself().id;
 		
 		self.pub(ng, function(err) {
 			$.pnotify({
@@ -209,6 +216,20 @@ function renderUs(v) {
 			var currentGoalHeader = $('<div id="GoalHeader"></div>');
 			sidebar.append(currentGoalHeader);
 
+			var exportButton = $('<button>Export</button>');
+			exportButton.click(function() {
+				var user = self.myself();
+				var p = newPopup('Code @ ' + new Date(), {width: 550, height: 400});
+				p.html('<textarea class="SelfCode" readonly="true">' + getKnowledgeCode(user.id) + '</textarea>');
+				
+				var htmlButton = $('<button>HTML Version</button>');
+				htmlButton.click(function() {
+				   p.html('<div class="SelfCode">' + getKnowledgeCodeHTML(user.id) + '</div>');
+				});
+				p.prepend(htmlButton);
+			});
+			currentGoalHeader.append(exportButton);
+
 			currentGoalHeader.append('<button disabled title="Set Focus To This Goal">Focus</button>');
 			currentGoalHeader.append('<button disabled title="Clear">[x]</button>');
 
@@ -225,9 +246,9 @@ function renderUs(v) {
 			});
 			currentGoalHeader.prepend(userSelect);
 
-            var operators = _.filter(_.keys(self.tags()), function(t) {
-                return self.tag(t).operator;        
-            });
+
+			var operators = getOperatorTags();
+
             _.each(operators, function(o) {
                 var O = self.tag(o);
 
@@ -512,24 +533,30 @@ function newTagBar(s, currentTag) {
     return tagBar;
 }
 
-function getKnowledgeCodeTags(s, userid) {
+function getKnowledgeCodeTags(userid) {
     userid = userid.substring(5);
     
-    var tags = self.getIncidentTags(userid, _.keys(tagColorPresets));                 
-        
-    
+    var tags = self.getIncidentTags(userid, getOperatorTags());
+            
     for (var k in tags) {
         var l = tags[k];
-        for (var i = 0; i < l.length; i++)            
+		tags[k] = _.map(tags[k], function(o) {
+			return self.getObject(o).name;
+		});
+        /*for (var i = 0; i < l.length; i++) {
             l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
+		}*/
     }
     
-    tags['@'] = objSpacePointLatLng(self.object('Self-' + userid));    
+	var user = self.object('Self-' + userid);
+    tags['@'] = objSpacePointLatLng(user);
+	tags['name'] = user.name;
+
     return tags;
 }
 
-function getKnowledgeCodeHTML(s, userid) {
-    var tags = getKnowledgeCodeTags(s, userid);
+function getKnowledgeCodeHTML(userid) {
+    var tags = getKnowledgeCodeTags(userid);
     var x = '';
     for (var i in tags) {
                 
@@ -557,8 +584,8 @@ function getKnowledgeCodeHTML(s, userid) {
     return x;    
 }
 
-function getKnowledgeCode(s, userid) {
-    var tags = getKnowledgeCodeTags(s, userid);
+function getKnowledgeCode(userid) {
+    var tags = getKnowledgeCodeTags(userid);
     
     return JSON.stringify(tags,null,0);
 }
