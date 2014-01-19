@@ -312,6 +312,30 @@ $(document).ready(function() {
                 $.getScript(configuration.ui, function(data) {
                     doUpdate();
 
+		            var ii = identity();
+
+		            if (ii === ID_AUTHENTICATED) {
+		                $.pnotify({
+		                    title: 'Authorized.',
+		                    text: self.myself().name
+		                });
+		            }
+		            else if (ii === ID_ANONYMOUS) {
+		                $.pnotify({
+		                    title: 'Anonymous.'
+		                });
+		            }
+		            else {
+		                var nn = $.pnotify({
+		                    title: 'Unidentified.',
+		                    text: 'Read-only public access.  <b><a class="loginlink" href="#">Login</a>?</b>'
+		                });
+		                $('.loginlink').click(function() {
+		                    $('#LoadingSplash').show();
+		                    nn.hide();
+		                });
+		            }
+
                     $('#View').show();
                     $('#LoadingSplash2').hide();
 
@@ -325,29 +349,6 @@ $(document).ready(function() {
                     }
                 });
 
-                var ii = identity();
-
-                if (ii === ID_AUTHENTICATED) {
-                    $.pnotify({
-                        title: 'Authorized.',
-                        text: self.myself().name
-                    });
-                }
-                else if (ii === ID_ANONYMOUS) {
-                    $.pnotify({
-                        title: 'Anonymous.'
-                    });
-                }
-                else {
-                    var nn = $.pnotify({
-                        title: 'Unidentified.',
-                        text: 'Read-only public access.  <b><a class="loginlink" href="#">Login</a>?</b>'
-                    });
-                    $('.loginlink').click(function() {
-                        $('#LoadingSplash').show();
-                        nn.hide();
-                    });
-                }
 
             });
         });

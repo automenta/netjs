@@ -502,7 +502,7 @@ function netention(f) {
 			    }
             },
             
-            geolocate : function(ex) {
+            /*geolocate : function(ex) {
                 objSetFirstValue(this.myself(), 'spacepoint', {lat: ex[0], lon: ex[1], planet: 'Earth'} );
                 
                 var that = this;
@@ -521,7 +521,7 @@ function netention(f) {
                     that.saveLocal();
                     
                 });    
-            },
+            },*/
             
             addProperties : function(ap) {
                 for (var k in ap) {
@@ -629,13 +629,14 @@ function netention(f) {
 
             getLatestObjects : function(num, onFinished) {
                 var that = this;
-                $.getJSON('/object/latest/' + num + '/json', function(objs) {
-                	for (var k = 0; k < objs.length; k++) {
-            			var x = objs[k];
-            			that.notice(x);
-            		}
-            		onFinished();                    
-                });  
+				$.getJSON('/object/tag/User/json', function(users) {
+	       			that.notice( users );
+
+		            $.getJSON('/object/latest/' + num + '/json', function(objs) {
+		       			that.notice( objs );				
+		        		onFinished();                    
+		            });  
+				});
             },
             
             getObjects: function(query, onObject, onFinished) {

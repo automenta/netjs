@@ -26,8 +26,8 @@ function setGeolocatedLocation(map, onUpdated) {
 function initLocationChooserMap(target, location, zoom, geolocate) {    
     var defaultZoomLevel = zoom || 7;
     
-    if ((!location) && (geolocate!=false))
-        geolocate = true;
+    /*if ((!location) && (geolocate!=false))
+        geolocate = true;*/
     
     var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
     var toProjection = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
@@ -51,7 +51,6 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
     ]);
     
     m.setCenter(new OpenLayers.LonLat(0,0), defaultZoomLevel);
-    m.targetLocation = m.getCenter();
 
 	var latlonDisplay = newDiv();
 	$('#' + target).append(latlonDisplay);
@@ -62,34 +61,56 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
 
     m.zoomTo(defaultZoomLevel);
     
-    function center(oll) {
-        //m.targetLocation.move(oll);
-        m.setCenter(oll);        
-    }
 
-    var specificLocation = true;
-    if (!location) {
-        specificLocation = false;
-    }
-    else {
-        //console.log('specific location', location);
-        center(project(new OpenLayers.LonLat(location[1], location[0])));        
-    }
+    var rad = 10;
+    var opacity = 0.5;
+
+	var targetLocation = null;
     
-    m.onClicked = null;
-    
-    m.events.register("click", m, function(e) {
-        //var opx = m.getLayerPxFromViewPortPx(e.xy) ;
-        var oll = m.getLonLatFromViewPortPx(e.xy);
-        center(oll);
+
+	function setLocation(oll) {
+		m.setCenter(oll);
+
+		if (targetLocation)
+			m.vector.removeFeatures([targetLocation]);
+
+        var rad = 10;
+        var opacity = 0.5;
+
+        targetLocation = new OpenLayers.Feature.Vector(
+		    OpenLayers.Geometry.Polygon.createRegularPolygon(
+		    new OpenLayers.Geometry.Point(oll.lon, oll.lat),
+		    rad,
+		    6,
+		    0), {}, {
+		        fillColor: '#f00',
+		        strokeColor: '#f00',
+		        fillOpacity: opacity,
+		        strokeOpacity: opacity,
+		        strokeWidth: 1
+		        //view-source:http://openlayers.org/dev/examples/vector-features-with-text.html
+        });
+        m.vector.addFeatures([targetLocation]);
+
+        m.zoomToExtent(vector.getDataExtent());
 
 		var uo = unproject(oll);
 
-		latlonDisplay.html(_n(uo.lat,4) + ', ' + _n(uo.lon,4));
-        
-        if (m.onClicked) {
-            m.onClicked(uo);
-		}
+		latlonDisplay.html(_n(uo.lat,4) + ', ' + _n(uo.lon,4));        
+
+		if (m.onClicked)
+			m.onClicked( { lat: uo.lat, lon: uo.lon } );
+	}
+
+    if (location) {
+		setLocation(project(new OpenLayers.LonLat(location[1], location[0])));
+    }
+    
+    
+
+    m.events.register("click", m, function(e) {
+        var oll = m.getLonLatFromViewPortPx(e.xy);
+		setLocation(oll);
     });
     
     function unproject(x) {
@@ -101,68 +122,11 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
         return x;
     }
 
-    function createMarker() {
-        var t = [0,0];
-        var rad = 10;
-        var opacity = 0.5;
 
-        var targetLocation = new OpenLayers.Feature.Vector(
-        OpenLayers.Geometry.Polygon.createRegularPolygon(
-        t,
-        rad,
-        6,
-        0), {}, {
-            fillColor: '#f00',
-            strokeColor: '#f00',
-            fillOpacity: opacity,
-            strokeOpacity: opacity,
-            strokeWidth: 1
-            //view-source:http://openlayers.org/dev/examples/vector-features-with-text.html
-
+    if (geolocate) {
+        setGeolocatedLocation(m, function(e) {
+			setLocation(new OpenLayers.LonLat(e.point.x, e.point.y));
         });
-        m.vector.addFeatures([targetLocation]);
-
-        m.zoomToExtent(vector.getDataExtent());
-        m.targetLocation = targetLocation;
-        
-    }
-    
-    if (specificLocation) {
-        createMarker();
-    }
-    else {
-        if (geolocate) {
-            setGeolocatedLocation(m, function(e) {
-
-                var t = e.point;
-                var rad = 10;
-                var opacity = 0.5;
-
-                var targetLocation = new OpenLayers.Feature.Vector(
-                OpenLayers.Geometry.Polygon.createRegularPolygon(
-                t,
-                rad,
-                6,
-                0), {}, {
-                    fillColor: '#f00',
-                    strokeColor: '#f00',
-                    fillOpacity: opacity,
-                    strokeOpacity: opacity,
-                    strokeWidth: 1
-                    //view-source:http://openlayers.org/dev/examples/vector-features-with-text.html
-
-                });
-                m.vector.addFeatures([targetLocation]);
-
-                m.zoomToExtent(vector.getDataExtent());
-                m.targetLocation = targetLocation;
-
-
-                unproject(e.point);
-                window.self.geolocate( [ e.point.y, e.point.x ])    
-
-            });
-        }
     }
 
     m.location = function() {

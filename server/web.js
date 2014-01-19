@@ -935,16 +935,52 @@ exports.start = function(options, init) {
     express.get('/log', function(req, res) {
         sendJSON(res, logMemory.buffer);
     });
+
+    function compactObjects(list) {
+        return _.map(list,  function(o) { return util.objCompact(o); } );
+    }
+
+	/*
+    express.get('/object/users/json', function(req, res) {
+		var userObjects = [];
+        getObjectsByTag('User', function(u) {
+			userObjects.push(u);
+		}, function() {
+            sendJSON(res, compactObjects(userObjects));
+		});
+	});
+    express.get('/users/json', function(req, res) {
+       res.redirect('/object/tag/User/json');        
+    });*/
+    express.get('/object/tag/:tag/json', function(req, res) {
+        var tag = req.params.tag;
+        if (tag.indexOf(',')) {
+            tag = tag.split(',');
+        }
+        var objects = [];
+        getObjectsByTag(tag, function(o) {
+            objects.push(o);
+        }, function() {
+            sendJSON(res, compactObjects(objects));
+        });
+    });
+    express.get('/object/:uri', function(req, res) {
+        var uri = req.params.uri;
+        res.redirect('/object.html?id=' + uri);
+    });
+    express.get('/object/:uri/json', function(req, res) {
+        var uri = req.params.uri;
+        getObjectSnapshot(uri, function(x) {
+            sendJSON(res, x);
+        });
+    });
+
     express.get('/object/latest/:num/json', function(req, res) {
         var n = parseInt(req.params.num);
         var db = mongo.connect(getDatabaseURL(), collections);
         db.obj.find().limit(n).sort({modifiedAt: -1}, function(err, objs) {
             removeMongoID(objs);
-            
-            function compactObjects(list) {
-                return _.map(list,  function(o) { return util.objCompact(o); } );
-            }
-            
+                        
             sendJSON(res, compactObjects(objs));
             db.close();
         });
@@ -984,9 +1020,8 @@ exports.start = function(options, init) {
            sendJSON(res, kmeans.getCentroids(p, 3));
         });
     });*/
-    express.get('/users/json', function(req, res) {
-       res.redirect('/tag/User/json');        
-    });
+
+
     express.get('/users/tag/rdf', function(req, res) {
         var rdfstore = require('rdfstore');
         rdfstore.create(function(store) {
@@ -1066,28 +1101,6 @@ exports.start = function(options, init) {
             
         }); 
        
-    });
-    express.get('/tag/:tag/json', function(req, res) {
-        var tag = req.params.tag;
-        if (tag.indexOf(',')) {
-            tag = tag.split(',');
-        }
-        var objects = [];
-        getObjectsByTag(tag, function(o) {
-            objects.push(o);
-        }, function() {
-            sendJSON(res, objects);
-        });
-    });
-    express.get('/object/:uri', function(req, res) {
-        var uri = req.params.uri;
-        res.redirect('/object.html?id=' + uri);
-    });
-    express.get('/object/:uri/json', function(req, res) {
-        var uri = req.params.uri;
-        getObjectSnapshot(uri, function(x) {
-            sendJSON(res, x);
-        });
     });
     express.get('/input/geojson/*', function(req, res) {
 		var url = req.params[0] || '';
@@ -1499,9 +1512,9 @@ exports.start = function(options, init) {
             getObjectsByTag('Tag', function(to) {
                 socket.emit('notice', to);
             });
-            getObjectsByTag('User', function(to) {
+            /*getObjectsByTag('User', function(to) {
                 socket.emit('notice', to);
-            });
+            });*/
             getObjectsByAuthor(cid, function(uo) {
                 socket.emit('notice', uo);
             });
