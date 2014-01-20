@@ -1,6 +1,7 @@
 xyz.js
 node_modules/
-upload/*
+client/upload/*
+!client/upload/README
 nbproject/*
 /nbproject/private/
 netention.options.js
