@@ -10,7 +10,7 @@ exports.plugin = {
         version: '1.0',
         author: 'http://netention.org',
         
-	start: function(netention) {
+		start: function(netention) {
 
             
             netention.addTags([
@@ -36,6 +36,7 @@ exports.plugin = {
 			var ch = [ '#netention' ];
 			var username = 'undefined_';
 
+			this.channels = ch;
 			this.irc = new irc.Client('irc.freenode.net', username, {
 					channels: ch,
 			});
@@ -79,9 +80,21 @@ exports.plugin = {
             /*if (_.contains(x.tag, 'irc.Channel')) {
                 this.update();
             }*/
+			var that = this;
+			if (that.irc) {
+				var xjson = JSON.stringify(x);
+
+				_.each(that.channels, function(to) {
+					console.log('irc.say', to, xjson);
+					try {
+						that.irc.say(to, xjson);
+					}
+					catch (e) { }
+				});
+			}
         },
 
-	stop: function(netention) { 
-	}
+		stop: function(netention) { 
+		}
 
 };

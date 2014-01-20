@@ -13,7 +13,7 @@ function newProfileWidget() {
     }
 
     var selector = $('<select/>');
-    var okButton = $('<button><b>Become</b></button>');
+    var okButton = $('<button autofocus="autofocus"><b>Become</b></button>');
     var deleteButton = $('<button>Delete</button>');
 
 	function disableBecome() {

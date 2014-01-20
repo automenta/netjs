@@ -43,6 +43,7 @@ function plugin(netention, kv) {
             netention.server.plugins[kv].name = p.name;
             netention.server.plugins[kv].description = p.description;
             netention.server.plugins[kv].filename = filename;
+			netention.server.plugins[kv].plugin = p;
 
 
             //TODO add required plugins parameter to add others besides 'general'
@@ -268,7 +269,9 @@ exports.start = function(options, init) {
 
         o = util.objExpand(o);
 
-		o._tag = util.objTags(o);	//provides an index for faster DB querying ($in)
+		var _tag = util.objTags(o);	//provides an index for faster DB querying ($in)
+		if (_tag.length > 0)
+			o._tag = _tag;	
 
         //nlog('notice: ' + JSON.stringify(o, null, 4));
 
@@ -1310,9 +1313,10 @@ exports.start = function(options, init) {
         }
         io.sockets.in('*').emit('notice', message);
 
-		var plugins = that.plugins;
+		var plugins = that.server.plugins;
         for (var p in plugins) {
-            var pp = plugins[p];
+            var pp = plugins[p].plugin;
+			if (!pp) continue;
             if (Server.plugins[p].enabled) {
                 if (pp.notice) {
                     pp.notice(message);

@@ -222,8 +222,7 @@ function objTags(x) {
 	        newValues.push(vv);
 		}
   }
-  x.value = newValues;
-  return _.uniq( _.filter( _.pluck(x.value, 'id'), function(t) { return !isPrimitive(t) } ) );
+  return _.uniq( _.filter( _.pluck(newValues, 'id'), function(t) { return !isPrimitive(t) } ) );
 }
 exports.objTags = objTags;
 
@@ -357,24 +356,28 @@ exports.objAddGeoLocation = objAddGeoLocation;
 function objHasTag(x, t) {
 	if (!x.value) return false;
 
+	var tIsArray = Array.isArray(t);
+
 	//if t is an array, return true if any one of t's elements is a tag 
 	for (var i = 0; i < x.value.length; i++) {
-	  var vv = x.value[i];
-	  if (vv) 
-		if (vv.id) {
-			if (vv.strength == 0)
-				continue;
-			if (isPrimitive(vv.id))
-				continue;
-			
-			if (Array.isArray(t)) {
-				if (_.contains(t, vv.id))
-					return true;
-			}
-			else {
-				if (vv.id == t)
-					return true;
-			}
+	    var vv = x.value[i];
+	    if (!vv) continue;
+
+	    var vid = vv.id;
+		if (!vid) continue;
+	
+		if (vv.strength == 0)
+			continue;
+		if (isPrimitive(vid))
+			continue;
+	
+		if (tIsArray) {
+			if (_.contains(t, vid))
+				return true;
+		}
+		else {
+			if (vid == t)
+				return true;
 		}
 	}
 	return false;
@@ -445,8 +448,11 @@ function uuid() {
 	//UUID = 128 bit = Math.pow(2, 128) = 3.402823669209385e+38 permutations
 
 	//RFC 2396 - Allowed characters in a URI - http://www.ietf.org/rfc/rfc2396.txt
-	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-_.!~*\'()";
+	//		removing all that would confuse jquery
+	//var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-_.!~*\'()";
+	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-_";
 
+	//TODO recalculate this
 	//70 possible chars
 	//	21 chars = 5.58545864083284e+38 ( > UUID) permutations
 	//		if we allow author+objectID >= 21 then we can guarantee approximate sparseness as UUID spec
@@ -1057,8 +1063,10 @@ function objCompact( o ) {
                 newValues.push([ia, va, s]);
             else if (va)
                 newValues.push([ia, va]);
-            else 
+            else if (ia)
                 newValues.push( ia );
+			else
+				newValues.push( v );
         }
     }
     y.value = newValues;

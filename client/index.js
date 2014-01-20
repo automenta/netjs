@@ -134,7 +134,7 @@ function initKeyboard() {
 
 	for (var i = 0; i < views.length; i++) {
 		var f = function(I) { 
-			jwerty.key('ctrl+' + I, function() {
+			jwerty.key('ctrl+' + (1+I), function() {
 				later(function() {
 					self.set('currentView', views[I]); 
 					updateViewControls();
