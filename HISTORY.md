@@ -1,10 +1,10 @@
-On SeH's old sourceforge account i had started an empty project:
+SeH started an empty project on a sourceforge account.
 
 *   https://sourceforge.net/projects/wishblaster/ 2006-08-18
 
 Decentralized global resource advertisement and discovery. Similar non-interoperating web services fragment web activity. A decentralized resource advertisement and discovery system surpasses the functionality of any individual site.
 
-during this period i didnt do much with this idea while i focused on some of the Fractal 3D GUI stuff which you can read about here: 
+during this period SeH didnt do much with this idea while SeH focused on some of the Fractal 3D GUI work which you can read about here: 
 
 *   http://blog.automenta.com/2012/09/spacenet-retrospective.html
 
