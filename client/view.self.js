@@ -63,7 +63,8 @@ function saveAddedTags(gt, tag, when) {
 
 	});
 
-	saveSelf();				
+	saveSelf();
+
 }
 
 
@@ -96,114 +97,7 @@ function renderUs(v) {
     }
     
 
-    function save() {
-		if (!s.myself()) {
-			$.pnotify('Can not save; not identified.');
-			return;
-		}
 
-        if (self.id() !== s.myself().id)
-            return;
-
-        plan = { };
-        for (var i = 0; i < numHours; i++) {
-            var tt = planSlotTimes[i];
-            if (planSlots[i].length > 0)
-                plan[tt] = planSlots[i];
-            
-        }
-        
-        later(function() {
-            saveSelf(function(m) {
-               m.plan = plan; 
-               return m;
-            });
-        });
-        /*s.notice(me);
-        s.pub(me, function(err) {
-            $.pnotify({
-               title: 'Unable to save Self.',
-               type: 'Error',
-               text: err
-            });           
-        }, function() {
-            $.pnotify({
-               title: 'Self Saved.'            
-            });           
-        });*/
-    }
-
-	function newSelfTimeGrid(clicked) {
-		
-		for (var i = 0; i < numHours; i++) {
-		    var cell = $('<a>');
-			cell.addClass('timecell');
-
-			//http://css-tricks.com/how-to-create-a-horizontally-scrolling-site/
-			var fs = 100.0 * (0.25 + (numHours-i)/numHours);
-			cell.attr('style', 'display: inline-block;');
-
-		    var endtime = time + 60.0 * 60.0 * 1000.0 * 1.0;
-		    var timed = new Date(time);
-		    var rowHeader = newDiv();
-
-			/*
-		    if (i % 12 == 0) {
-		        rowHeader.html(timed.toLocaleDateString() + ': ' + timed.toLocaleTimeString());            
-		    }
-		    else {
-		        rowHeader.html(timed.toLocaleTimeString());                        
-		    }*/
-			var lds = timed.toLocaleDateString()
-			cell.attr('title', timed.toLocaleDateString() + ': ' + timed.toLocaleTimeString());
-			rowHeader.html(timed.toLocaleTimeString().substring(0, 2));
-		    
-		    var t = newDiv();        
-		    var u = newDiv();
-		    
-		    
-		    
-		    t.append('&nbsp;');
-		    _.each(plans, function(p) {
-		        t.append(newTagButton(p));
-		        t.append('&nbsp;');
-		    });
-		    
-		    _.each(centroids, function(c) {
-		        u.append(newObjectSummary(c));
-		    });
-		    
-		    if (plans.length > 0)
-		        t.addClass('SelfTimeFilled');
-
-		    (function(i, time, endtime) {
-		        cell.click(function() {
-		            var targetTime = (time + endtime)/2.0;
-					clicked(time);
-					/*
-		            var targetTime = (time + endtime)/2.0;
-		            var d = newPopup("Select Tags for " + new Date(targetTime), {width: 800, height: 600, modal: true});
-		            d.append(newTagger(planSlots[i], function(results) {
-		                planSlots[i] = results;
-		                later(function() {
-		                    save();                    
-		                    d.dialog('close');                        
-		                });
-		                //container.html(newSelfTimeList(s, x, container));
-		            }));
-					*/
-		        });
-		    })(i, time, endtime);
-		    
-			cell.append(rowHeader);
-		    cell.append(t);
-		    cell.append(u);
-		    d.append(cell);
-		    time = endtime;
-		}
-		
-		return d;
-	}
     
 
 
@@ -271,7 +165,6 @@ function renderUs(v) {
     		                d.dialog('close');                        
     						newNowDiv();
     		            });
-    		            //container.html(newSelfTimeList(s, x, container));
     		        }));
     			});
 
@@ -381,25 +274,6 @@ function renderUs(v) {
 			goalList.append(d);			
 		}
 
-/*		if (now)
-			goalTime = Date.now();
-
-		var st = newSelfTimeGrid(function(clickedTime) {
-			goalTime = clickedTime;
-			now = false;
-			updateGoalList();
-		});
-
-		goalList.append(st);
-
-		goalList.append('<br/>');
-		goalList.append('<hr/>');
-		goalList.append('NOW: ' + new Date(goalTime));
-
-		var goals = self.getGoals(goalTime);
-		for (var i = 0; i < goals.length; i++) {
-			goalList.append(newGoalWidget(goals[i]));
-		}*/
 	}
 	//setInterval(updateGoalList, updatePeriod);
 	updateGoalList();

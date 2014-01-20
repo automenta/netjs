@@ -102,7 +102,7 @@ function renderCesiumMap(o, v) {
 
 	    currentMapNow = Date.now();        
 
-        renderItems(self, o, v, MAX_CESIUM_ITEMS, function(s, v, xxrr) {
+        renderItems(o, v, MAX_CESIUM_ITEMS, function(s, v, xxrr) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 var r = xxrr[i][1];        
