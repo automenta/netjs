@@ -8,7 +8,7 @@ during this period SeH didnt do much with this idea while SeH focused on some of
 
 *   http://blog.automenta.com/2012/09/spacenet-retrospective.html
 
-SeH later went on to creating this original Netention repository.  SeH coined the word Netention.  It was also around this time that Dante and I, through a mutual friend, Marc Fawzi, were discussing the beginnings of these concepts.
+SeH later went on to creating this original Netention repository.  SeH coined the word Netention.  It was also around this time that Dante and SeH, through a mutual friend, Marc Fawzi, were discussing the beginnings of these concepts.
 
 *   https://sourceforge.net/projects/netention/ 2009-07-21
 

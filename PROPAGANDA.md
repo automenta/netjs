@@ -3,7 +3,7 @@ THESE ARE SIMPLE TEXT-BASED CLIPS THAT CAN BE USED TO CONSTRUCT ADS AND OTHER ED
 
 ------------------
 
-irc.freenode.net #netention http://github.com/automenta/netentionjs2
+irc.freenode.net #netention http://github.com/automenta/netjs
 
 ------------------
 
