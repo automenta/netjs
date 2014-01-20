@@ -62,6 +62,8 @@ exports.plugin = {
         var that = this;
 
         that.node = null;
+		that.util = util;
+
         that.connect = function connect(x) {
             var hashname = util.objFirstValue(x, 'telehashname');
             var addr = util.objFirstValue(x, 'telehashAddress');
@@ -169,7 +171,7 @@ exports.plugin = {
 
     },
     notice: function(x) {
-        if (util.objHasTag(x, 'TelehashNode')) {
+        if (this.util.objHasTag(x, 'TelehashNode')) {
             //connect(x);
             this.connect(x);
         }
