@@ -132,8 +132,10 @@ function initKeyboard() {
 	for (var i = 0; i < views.length; i++) {
 		var f = function(I) { 
 			jwerty.key('ctrl+' + I, function() {
-				self.set('currentView', views[I]); 
-				updateViewControls();
+				later(function() {
+					self.set('currentView', views[I]); 
+					updateViewControls();
+				});
 				return false; 
 			})
 		};
@@ -147,13 +149,14 @@ function initKeyboard() {
 		if (nextIndex < 0) nextIndex = views.length - 1;
 		if (nextIndex >= views.length) nextIndex = 0;
 
-		self.set('currentView', views[nextIndex]); 
-		updateViewControls();
-		return false; 
+		later(function() {
+			self.set('currentView', views[nextIndex]); 
+			updateViewControls();
+		});
 	};
 
-	jwerty.key('ctrl+left', function() {	viewDelta(-1);	});
-	jwerty.key('ctrl+right', function() {	viewDelta(+1);	});
+	jwerty.key('ctrl+left',  function()	{	viewDelta(-1); return false;	});
+	jwerty.key('ctrl+right', function() {	viewDelta(+1); return false;	});
 }
 
 

@@ -216,6 +216,16 @@ function renderUs(v) {
 			var currentGoalHeader = $('<div id="GoalHeader"></div>');
 			sidebar.append(currentGoalHeader);
 
+			var avatarButton = $('<span/>');
+
+			var avatarImg = getAvatar(self.myself());
+			avatarImg.attr('style', 'height: 1.5em; vertical-align: middle');
+
+			avatarButton.append(avatarImg);
+			
+
+			currentGoalHeader.append(avatarButton);
+
 			var exportButton = $('<button>Export</button>');
 			exportButton.click(function() {
 				var user = self.myself();

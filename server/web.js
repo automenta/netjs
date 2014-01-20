@@ -268,6 +268,8 @@ exports.start = function(options, init) {
 
         o = util.objExpand(o);
 
+		o._tag = util.objTags(o);	//provides an index for faster DB querying ($in)
+
         //nlog('notice: ' + JSON.stringify(o, null, 4));
 
         if (o.modifiedAt === undefined)
@@ -322,11 +324,14 @@ exports.start = function(options, init) {
 
     function removeMongoID(x) {
         if (Array.isArray(x)) {
-            for (var i = 0; i < x.length; i++)
+            for (var i = 0; i < x.length; i++) {
                 delete x[i]._id;
+				delete x[i]._tag;
+			}			
         }
-        else
-            delete x._id;
+        else {
+			removeMongoID([x]);
+		}
     }
     
     function getObjectSnapshot(uri, whenFinished) {
@@ -368,6 +373,9 @@ exports.start = function(options, init) {
     //TODO optimize this to use a tag cache property
     function getObjectsByTag(t, withObject, whenFinished) {
         //t can be a single string, or an array of strings
+
+		if (!Array.isArray(t))
+			t = [ t ];
         
         var db = mongo.connect(getDatabaseURL(), collections);
 
@@ -382,20 +390,15 @@ exports.start = function(options, init) {
 		        oldClose();
         }*/
                 
-        //db.obj.find({ tag: { $in: [ t ] } }, function(err, docs) {
-        db.obj.find(function(err, docs) {
-
+        db.obj.find({ _tag: { $in: t } }, function(err, docs) {
             if (err) {
                 nlog('getObjectsByTag: ' + err);
             }
             else {
                 docs.forEach(function(d) {
-                    if (util.objHasTag(d, t)) {
-                        removeMongoID(d);
-                        withObject(d);
-                    }
+                    removeMongoID(d);
+                    withObject(d);
                 });
-				finished = true;
 				if (whenFinished)
 					whenFinished();
             }
