@@ -39,7 +39,7 @@ sudo npm -g install always
 
 ####Get the latest Netention source code
 ```
-git clone https://github.com/1h1e1s1/netjs.git ; cd netjs ; npm update
+git clone https://github.com/automenta/netjs.git ; cd netjs ; npm update
 ```
 
 ###The following commands run from the *directory where Netention is installed* (ex: 'netjs')

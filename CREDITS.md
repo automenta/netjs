@@ -4,11 +4,11 @@ Original concept and development
 
 Rezn8d
 ======
-User-interface / user-experience design
+User-interface / user-experience design & development
 
 Revlin
 ======
-Development support
+Development support & testing
 
 Dante Monson
 ============
