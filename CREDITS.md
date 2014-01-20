@@ -14,25 +14,33 @@ Dante Monson
 ============
 Original concept, brainstorming, testing, and promotion
 
-Marc Fawzi
-==========
-Original concepts and brainstorming
-
-Thomas Loeber
-=============
-Original concept, philosophical foundations, and brainstorming
-
 Nirgal
 ======
 Brainstorming, testing, and promotion
+
+Jason Palank
+============
+Brainstorming & testing
 
 Helene Finidori
 ===============
 Brainstorming, testing, and promotion
 
+Mariana Soffer
+==============
+Brainstorming, testing, and *natural language processing* contributions
+
 Dan Robles
 ==========
-Contributed Zertify / Curiosume inspiring development of Wikitagger and Wikipedia as a foundation ontology
+Contributing *Zertify / Curiosume* which inspired development of Wikitagger and use of Wikipedia as a foundation ontology
+
+Thomas Loeber
+=============
+Original concept, philosophical foundations, and brainstorming
+
+Eimhin David
+============
+Documentation contributions
 
 Sean Kuty
 =========
@@ -44,7 +52,11 @@ Brainstorming & testing
 
 William Justin
 ==============
-Contributed *Trade & Law Matrix* spreadsheet
+Contributing *Trade & Law Matrix* spreadsheet
+
+Marc Fawzi
+==========
+Original concepts and brainstorming
 
 ###NOTE: If we have forgetten your contribution, or incorrectly identified it, please let us know so we may add or correct it.
 
