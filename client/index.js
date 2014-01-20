@@ -358,8 +358,7 @@ $(document).ready(function() {
 
 		            if (ii === ID_AUTHENTICATED) {
 		                $.pnotify({
-		                    title: 'Authorized.',
-		                    text: self.myself().name
+		                    title: 'Authorized.'
 		                });
 		            }
 		            else if (ii === ID_ANONYMOUS) {

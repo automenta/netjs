@@ -20,7 +20,7 @@
     },
     "client": {
         "ui": "ui.mobile.js",
-        "initialView": "goal",
+        "initialView": "us",
         "initialDisplayAvatarMenu": false,
         "defaultAvatarIcon": "/icon/netention-160.jpg",
         "wikiStartPage": "Life",
