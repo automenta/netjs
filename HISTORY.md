@@ -31,7 +31,7 @@ Throughout 2013 we had significant contributions that directly affected the code
 
 As a result of the Zertify / Curiosume integration SeH developed the Spacetime Tag Planning algorithm, which has applications beyond Netention's scope.
 
-*   https://github.com/sseehh/netjs/blob/master/doc/Netention%20Spacetime%20Tag%20Planning.pdf
+*   https://github.com/automenta/netjs/blob/master/doc/Netention%20Spacetime%20Tag%20Planning.pdf
 
 Restored GIT repository to the automenta github account:
 
