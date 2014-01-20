@@ -353,7 +353,36 @@ function objAddGeoLocation(x, lat, lon) {
 }
 exports.objAddGeoLocation = objAddGeoLocation;
 
-function objHasTag(x, t) {    
+
+function objHasTag(x, t) {
+	if (!x.value) return false;
+
+	//if t is an array, return true if any one of t's elements is a tag 
+	for (var i = 0; i < x.value.length; i++) {
+	  var vv = x.value[i];
+	  if (vv) 
+		if (vv.id) {
+			if (vv.strength == 0)
+				continue;
+			if (isPrimitive(vv.id))
+				continue;
+			
+			if (Array.isArray(t)) {
+				if (_.contains(t, vv.id))
+					return true;
+			}
+			else {
+				if (vv.id == t)
+					return true;
+			}
+		}
+	}
+	return false;
+
+}
+
+function objHasTagOLD(x, t) {   
+	//if t is an array, return true if any one of t's elements is a tag 
     if (Array.isArray(t)) {
         var ot = objTags(x);
         for (var i = 0; i < t.length; i++) 

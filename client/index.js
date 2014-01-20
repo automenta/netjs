@@ -25,6 +25,9 @@ function updateBrand() {
 
 function updateViewControls() {
     //select the current view in the ViewControls
+
+	//TODO uncheck all that are checked
+
     $('#ViewControls #' + self.get('currentView')).attr('checked', true);
     $('#ViewControls').buttonset('refresh');
 }
