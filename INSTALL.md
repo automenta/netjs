@@ -3,8 +3,13 @@ Install Netention for Node.JS on Ubuntu Linux
 
 Requirements
 ------------
-*   node.JS (latest version preferably)
-*   mongoDB
+
+###Node.JS
+http://nodejs.org (latest version preferably)
+
+###MongoDB
+http://mongodb.org
+
 
 Optional Requirements
 ---------------------

@@ -14,6 +14,10 @@ Dante Monson
 ============
 Original concept, brainstorming, testing, and promotion
 
+Marc Fawzi
+==========
+Original concepts and brainstorming
+
 Thomas Loeber
 =============
 Original concept, philosophical foundations, and brainstorming
@@ -30,14 +34,17 @@ Dan Robles
 ==========
 Contributed Zertify / Curiosume inspiring development of Wikitagger and Wikipedia as a foundation ontology
 
+Sean Kuty
+=========
+Brainstorming, contributing *Cognitive Behavioral Support Engine (CBSE)* ideas, and testing
+
 Peter Sysko
 ===========
 Brainstorming & testing
 
 William Justin
 ==============
-Contributed Trade & Law Matrix spreadsheet
+Contributed *Trade & Law Matrix* spreadsheet
 
-
-*Note: if we have forgetten your contribution, please let us know so we may add it.*
+###NOTE: If we have forgetten your contribution, or incorrectly identified it, please let us know so we may add or correct it.
 
