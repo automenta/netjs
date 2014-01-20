@@ -20,7 +20,7 @@ exports.plugin = {
             } ]);
             
             
-            var reader = csv.createCsvFileReader('./plugin/iaea_nuclear/IAEANuclear.csv', {
+            var reader = csv.createCsvFileReader('./plugin/nuclear/IAEANuclear.csv', {
                 'separator': ',',
                 'quote': '"',
                 'escape': '"',       
