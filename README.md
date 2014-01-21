@@ -6,15 +6,9 @@ Netention (for Node.JS)
 Freedom to edit reality.
 ------------------------
 
-###[Technical Description](https://github.com/automenta/netjs/blob/master/README.technical.md)
+###[About](https://github.com/automenta/netjs/blob/master/README.technical.md)
 
 ###[Installation](https://github.com/automenta/netjs/blob/master/INSTALL.md)
-
-###[History](https://github.com/automenta/netjs/blob/master/HISTORY.md)
-
-###[Propaganda](https://github.com/automenta/netjs/blob/master/PROPAGANDA.md)
-
-###[Credits](https://github.com/automenta/netjs/blob/master/CREDITS.md)
 
 ###[License](https://github.com/automenta/netjs/blob/master/LICENSE)
 GPL v3
