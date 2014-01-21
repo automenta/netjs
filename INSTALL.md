@@ -10,14 +10,12 @@ http://nodejs.org (latest version preferably)
 ###MongoDB
 http://mongodb.org
 
-
-Optional Requirements
----------------------
 These packages facilitate the development process:
 *   git
 *   build-essential (includes GCC/G++)
 *   libreoffice (for viewing & editing included documents, spreadsheets, & presentations in doc/ folder)
 
+Install them with:
 ```
 sudo apt-get install build-essential git mongodb
 ```
