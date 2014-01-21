@@ -163,7 +163,220 @@ exports.plugin = {
                 });
             }*/
             
+
 /*
+OpenGeoSci
+http://opengeosci.org/
+
+	  <select class="search-form-select form-select" title="Select the GeoRef category" id=
+	  "edit-category" name="category">
+		<option value="0">
+		  Category
+		</option>
+
+		<option value="38">
+		  Applied Geophysics
+		</option>
+
+		<option value="29">
+		  Areal Geology
+		</option>
+
+		<option value="53">
+		  Economic Geology Of Energy Sources
+		</option>
+
+		<option value="55">
+		  - Economic Geology, Economics Of Energy Sources
+		</option>
+
+		<option value="54">
+		  - Economic Geology, Geology Of Energy Sources
+		</option>
+
+		<option value="50">
+		  Economic Geology Of Nonmetal Deposits
+		</option>
+
+		<option value="51">
+		  - Economic Geology, Geology Of Nonmetal Deposits
+		</option>
+
+		<option value="47">
+		  Economic Geology Of Ore Deposits
+		</option>
+
+		<option value="49">
+		  - Economic Geology, Economics Of Ore Deposits
+		</option>
+
+		<option value="48">
+		  - Economic Geology, Geology Of Ore Deposits
+		</option>
+
+		<option value="44">
+		  Economic Geology, General
+		</option>
+
+		<option value="45">
+		  - Economic Geology, General, Deposits
+		</option>
+
+		<option value="56">
+		  Engineering Geology
+		</option>
+
+		<option value="40">
+		  Environmental Geology
+		</option>
+
+		<option value="16">
+		  Extraterrestrial Geology
+		</option>
+
+		<option value="33">
+		  General Geophysics
+		</option>
+
+		<option value="34">
+		  - General Geophysics
+		</option>
+
+		<option value="35">
+		  - Geophysics Of Minerals And Rocks
+		</option>
+
+		<option value="24">
+		  General Paleontology
+		</option>
+
+		<option value="10">
+		  Geochemistry
+		</option>
+
+		<option value="11">
+		  - General Geochemistry
+		</option>
+
+		<option value="13">
+		  - Geochemistry Of Rocks, Soils, And Sediments
+		</option>
+
+		<option value="12">
+		  - Geochemistry Of Water
+		</option>
+
+		<option value="14">
+		  - Isotope Geochemistry
+		</option>
+
+		<option value="15">
+		  Geochronology
+		</option>
+
+		<option value="30">
+		  Geologic Maps
+		</option>
+
+		<option value="41">
+		  Geomorphology
+		</option>
+
+		<option value="39">
+		  Hydrogeology
+		</option>
+
+		<option value="17">
+		  Igneous And Metamorphic Petrology
+		</option>
+
+		<option value="18">
+		  - Igneous And Metamorphic Petrology
+		</option>
+
+		<option value="19">
+		  - Petrology Of Meteorites And Tektites
+		</option>
+
+		<option value="26">
+		  Invertebrate Paleontology
+		</option>
+
+		<option value="6">
+		  Mineralogy
+		</option>
+
+		<option value="7">
+		  - General Mineralogy
+		</option>
+
+		<option value="9">
+		  - Mineralogy Of Non-silicates
+		</option>
+
+		<option value="8">
+		  - Mineralogy Of Silicates
+		</option>
+
+		<option value="31">
+		  Miscellaneous
+		</option>
+
+		<option value="23">
+		  Oceanography
+		</option>
+
+		<option value="25">
+		  Paleobotany
+		</option>
+
+		<option value="42">
+		  Quaternary Geology
+		</option>
+
+		<option value="20">
+		  Sedimentary Petrology
+		</option>
+
+		<option value="22">
+		  - Petrology Of Coal
+		</option>
+
+		<option value="21">
+		  - Sedimentary Petrology
+		</option>
+
+		<option value="37">
+		  Seismology
+		</option>
+
+		<option value="43">
+		  Soils
+		</option>
+
+		<option value="36">
+		  Solid-earth Geophysics
+		</option>
+
+		<option value="28">
+		  Stratigraphy
+		</option>
+
+		<option value="32">
+		  Structural Geology
+		</option>
+
+		<option value="27">
+		  Vertebrate Paleontology
+		</option>
+	  </select>
+
+
+*/
+
+/*
+
+
 FROM http://fetchclimate.cloudapp.net/?view=datasources ::
 
 Data source	Supported climate parameter	 Description

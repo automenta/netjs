@@ -282,14 +282,16 @@ div.olMapViewport {
 .tagButtons button {
     margin: 0;
     height: 1em;
-    width: 1em;
+    width: 0.618em;
+	border: none;
+	opacity: 0.9;
 }
 .tagButtons button:nth-child(2) {    background-color: #f00;  }
 .tagButtons button:nth-child(3) {    background-color: #080;  }
 .tagButtons button:nth-child(4) {    background-color: #0a0;  }
 .tagButtons button:nth-child(5) {    background-color: #0c0;  }
 .tagButtons button:nth-child(6) {    background-color: #1f1;  }
-.tagButtonSelected { border: 2px solid white; }
+.tagButtonSelected { border-bottom: 4px solid white !important; opacity: 1.0 !important; }
 
 .tagSectionHovered {
     background-color: rgba(255,255,255,0.8);
@@ -762,6 +764,7 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	#welcome { margin:0px auto; clear:both; display:block; text-align:right; }
 	#logout { width: 80px; margin:10px auto 0px auto; clear:both; display:block; padding:2px 5px; }
 #ViewMenu, #View { width:auto !important; max-width:100% !important; min-width:100% !important; }
+
 	#close-menu, #close-menu span {  z-index:-1; display:none;}
 #ViewControls {	margin:5px 0px 10px 0px; display:block; text-align:center; clear:both; }
 	#ViewControls .ui-button-text { font-size:12px; }
@@ -785,7 +788,17 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 }
 
 
-
+#ViewMenuExpand { 
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	opacity: 0.7;
+	margin: 0;
+	height: 0.8em;
+}
+.ViewMenuExpanded {
+	height: 100%;
+}
 
 div.olControlZoom { top:auto !important; bottom:8px !important; }
 

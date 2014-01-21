@@ -37,6 +37,10 @@ $('#ViewMenu input').click(function(x) {
     showAvatarMenu(false);
 });
 
+$('#ViewMenuExpand').click(function() {
+	$('#ViewMenu').toggleClass('ViewMenuExpanded');
+});
+
 $('#toggle-menu').click(function() {
     var vm = $('#ViewMenu');
     var shown = vm.is(':visible');
