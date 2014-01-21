@@ -128,6 +128,8 @@ function newTreeBrowser(selected, onTagAdded) {
     e.addClass('SelfTimeTagTree');
     
     $('.TagChoice').remove();
+
+	var prefix = 'STT_';
     
     var p = {
         target: e,
@@ -136,7 +138,7 @@ function newTreeBrowser(selected, onTagAdded) {
             if (ti)
                 content = '<img style="height: 1em" src="' + ti + '"/>' + content;
             return {
-                label: ('<button id="' + id + '" class="TagChoice")>' + content + '</button>')
+                label: ('<button id="' + prefix + id + '" class="TagChoice")>' + content + '</button>')
             };
         }        
     };
@@ -145,7 +147,7 @@ function newTreeBrowser(selected, onTagAdded) {
     e.find('.TagChoice').each(function(x) {
         var t = $(this);
         t.click(function() {
-           onTagAdded(t.attr('id'));
+           onTagAdded(t.attr('id').substring(prefix));
         });
     });
     

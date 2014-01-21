@@ -21,7 +21,8 @@
     "client": {
         "ui": "ui.mobile.js",
         "initialView": "us",
-        "initialDisplayAvatarMenu": false,
+        "avatarMenuDisplayInitially": false,
+		"avatarMenuTagTreeAlways": false,
         "defaultAvatarIcon": "/icon/netention-160.jpg",
         "wikiStartPage": "Life",
         "showPlanOnSelfPage": true,

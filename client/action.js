@@ -58,7 +58,9 @@ addAction({
 	run: function(selection) {
 		var x = selection[0];
 		var oid = x.id;
-        var e = newPopup("Edit " + oid);
+
+		//TODO consider screen geometry in creating the dialog
+        var e = newPopup("Edit " + oid, {width: 375, height: 450, position: 'center'} );
         e.append(newObjectEdit(x, true));
 	}
 });

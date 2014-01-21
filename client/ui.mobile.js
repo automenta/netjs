@@ -1,3 +1,21 @@
+function startTalk() {
+
+	TogetherJSConfig_on_ready = function () {};
+	TogetherJSConfig_toolName = 'Collaboration';
+	TogetherJSConfig_getUserName = function () {
+		return self.myself().name;
+	};
+	//TogetherJSConfig_getUserAvatar = function () {return avatarUrl;};
+
+	TogetherJSConfig_dontShowClicks = true;
+	TogetherJSConfig_suppressJoinConfirmation = true;
+	TogetherJSConfig_suppressInvite = true;
+
+	//TogetherJS.refreshUserData()
+	TogetherJS(this);
+
+}
+
 function showAvatarMenu(b) {
     var vm = $('#ViewMenu');
     if (!b) {
@@ -71,26 +89,126 @@ $('#FocusButton').click(function() {
      */
 });
 
-if (configuration.initialDisplayAvatarMenu)
+if (configuration.avatarMenuDisplayInitially)
     showAvatarMenu(true);
 else
     showAvatarMenu(false);
 
-
-function startTalk() {
-
-	TogetherJSConfig_on_ready = function () {};
-	TogetherJSConfig_toolName = 'Collaboration';
-	TogetherJSConfig_getUserName = function () {
-		return self.myself().name;
-	};
-	//TogetherJSConfig_getUserAvatar = function () {return avatarUrl;};
-
-	TogetherJSConfig_dontShowClicks = true;
-	TogetherJSConfig_suppressJoinConfirmation = true;
-	TogetherJSConfig_suppressInvite = true;
-
-	//TogetherJS.refreshUserData()
-	TogetherJS(this);
-
+var focusValue;
+function clearFocus() {
+    $('#FocusKeywords').val('');
+    focusValue = {tags: [], when: null, where: null};
 }
+clearFocus();
+
+function renderFocus() {
+    self.setFocus(focusValue);
+
+    var fe = $('#FocusEdit');
+    fe.html('');
+    var noe = newObjectEdit(focusValue, true, true, function(xx) {
+        focusValue = xx;
+        renderFocus();
+    }, function(x) {
+        focusValue = x;
+        self.setFocus(x);
+    });
+
+    fe.append(noe);
+
+	if ((configuration.avatarMenuTagTreeAlways) || (focusValue.what)) {
+		var tt = newFocusTagTree(focusValue, function(tag, newStrength) {
+			console.log(tag, newStrength);
+			var tags = objTags(focusValue);
+			var existingIndex = _.indexOf(tags, tag);
+
+			if (existingIndex!=-1)
+				objRemoveValue(focusValue, existingIndex);
+
+			if (newStrength > 0) {
+	            objAddTag(focusValue, tag, newStrength);
+			}
+
+		    renderFocus();
+		});
+		tt.attr('style', 'height: ' + Math.floor($(window).height()*0.4) + 'px !important' );
+		fe.append(tt);
+	}
+    if (focusValue.when) {
+    }
+    if (focusValue.where) {
+        var uu = uuid();
+        var m = newDiv(uu);
+        m.attr('style', 'height: 250px; width: 95%');	//TODO use css
+        fe.append(m);
+        var lmap = initLocationChooserMap(uu, focusValue.where, 3);
+    }
+}
+
+$('#FocusWhereButton').click(function() {
+    if (!focusValue.where) {
+        focusValue.where = _.clone(objSpacePoint(self.myself()) || {lat: 40, lon: -79, planet: 'Earth'});
+        renderFocus();
+    }
+    else {
+        if (confirm("Remove focus's 'Where'?")) {
+            focusValue.where = null;
+            renderFocus();
+        }
+    }
+});
+
+var periodMS = FOCUS_KEYWORD_UPDATE_PERIOD;
+var ty = _.throttle(function() {
+    var t = $('#FocusKeywords').val();
+    focusValue.name = t;
+    self.setFocus(focusValue);
+}, periodMS);
+
+$('#FocusKeywords').keyup(
+        function() {
+            ty();
+        }
+);
+
+
+$('#FocusClearButton').click(function() {
+    clearFocus();
+    renderFocus();
+});
+
+$('#FocusWhatButton').click(function() {
+	focusValue.what = !focusValue.what;
+    renderFocus();
+});
+$('#FocusWhenButton').click(function() {
+    objAddValue(focusValue, {id: 'timerange', value: {from: 0, to: 0}});
+    renderFocus();
+});
+
+//TODO ABSTRACT this into a pluggable focus template system
+
+$('#FocusNeedButton').click(function() {
+    /*var needs = ['Volunteer', 'Shelter', 'Food', 'Tools', 'Health', 'Transport', 'Service', 'Animal'];
+	//TODO select child tags of 'Support' (their parent tag) to avoid hardcoding it here
+    _.each(needs, function(n) {
+        objAddValue(focusValue, {id: n});
+    });
+    renderFocus();*/
+    var d = newPopup("Add Tag to Focus", {width: 800, height: 600, modal: true, position: 'center'});
+    d.append(newTagger([], function(x) {
+        for (var i = 0; i < x.length; i++)
+            objAddTag(focusValue, x[i]);
+
+        renderFocus();
+        d.dialog('close');
+    }));
+
+});
+
+if (configuration.avatarMenuTagTreeAlways) {
+	$('#FocusWhatButton').hide();
+	renderFocus();	//force a render
+}
+
+

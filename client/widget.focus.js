@@ -1,4 +1,78 @@
-function newLayersWidget() {
+
+function newFocusTagTree(currentFocus, onTagChanged) {
+    var e = newDiv('FocusTagTree');
+    
+    //$('.TagChoice').remove();
+	var prefix = 'FTT_';
+    
+    var p = {
+        target: e,
+        newTagDiv: function(id, content) {
+            var ti = getTagIcon(id);
+            if (ti)
+                content = '<img style="height: 1em" src="' + ti + '"/>' + content;
+            return {
+                label: ('<input id="' + prefix + id + '" type="checkbox" class="FTT_TagChoice"/>' + content)
+            };
+        }        
+    };
+    newTagTree(p);    
+    
+    e.find('.FTT_TagChoice').each(function(x) {
+        var t = $(this);
+        t.change(function() {
+
+			var tag = t.attr('id').substring(prefix.length);
+			if (t.is(':checked')) {
+
+
+
+				function strength(v) {
+					later(function() {
+						if (onTagChanged)
+							onTagChanged(tag, v);
+					});
+				}
+
+				strength(1.0);					
+				/*
+
+				var sd = $('<span/>').addClass('tagButtons').addClass('tagButtonsLeft').appendTo(t.parent());
+				//2 placeholders to match the CSS nth child
+				$('<button style="display: none"></button>').appendTo(sd);
+				$('<button style="display: none"></button>').appendTo(sd);
+		        var p25Button =  $('<button title="25%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.25); });
+		        var p50Button =  $('<button title="50%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.5); });
+		        var p75Button =  $('<button title="75%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.75); });
+		        var p100Button = $('<button title="100%">&nbsp;</button>').appendTo(sd).click(function() {  strength(1.0); });
+				
+				p100Button.addClass('tagButtonSelected');
+
+				var bb = [p25Button, p50Button, p75Button, p100Button];
+				_.each(bb, function(b) {
+					b.click(function() {
+						_.each(bb, function(c) { c.removeClass('tagButtonSelected'); });
+						b.addClass('tagButtonSelected');
+					
+					});
+				});*/
+			}
+			else {
+				t.parent().find('span').remove();
+				if (onTagChanged)
+					onTagChanged(tag, 0);
+			}
+
+           //onTagAdded();
+        });
+    });
+    
+    return e;
+    
+}
+
+//DEPRECATED
+function newLayersWidget() { 
     var target = newDiv();
 
     //var isGeographic = $('#GeographicToggle').is(':checked');

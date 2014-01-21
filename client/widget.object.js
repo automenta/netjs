@@ -640,16 +640,11 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
         
         {
-            var disableButton = $('<button title="Disable">&nbsp;</button>');
-            tagButtons.append(disableButton);
-            var p25Button = $('<button title="25%">&nbsp;</button>');
-            tagButtons.append(p25Button);
-            var p50Button = $('<button title="50%">&nbsp;</button>');
-            tagButtons.append(p50Button);
-            var p75Button = $('<button title="75%">&nbsp;</button>');
-            tagButtons.append(p75Button);
-            var p100Button = $('<button title="100%">&nbsp;</button>');
-            tagButtons.append(p100Button);
+            var disableButton = $('<button title="Disable">&nbsp;</button>').appendTo(tagButtons);
+            var p25Button = $('<button title="25%">&nbsp;</button>').appendTo(tagButtons);
+            var p50Button = $('<button title="50%">&nbsp;</button>').appendTo(tagButtons);
+            var p75Button = $('<button title="75%">&nbsp;</button>').appendTo(tagButtons);
+            var p100Button = $('<button title="100%">&nbsp;</button>').appendTo(tagButtons);
             
             var currentButton = null;
             if (strength == 0) currentButton = disableButton;
@@ -1796,7 +1791,8 @@ function newTagTree(param) {
         autoEscape: false,
         selectable: false,
         slide: false,
-        autoOpen: 2
+		autoOpen: 1
+        //autoOpen: 2
     });
 
     return tree;
