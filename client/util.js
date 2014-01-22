@@ -206,7 +206,7 @@ exports.objIncidentTags= objIncidentTags;
                 
 
 
-function objTags(x) {
+function objTags(x, includePrimitives) {
   // objTags(x) -> array of tags involved (except those with strength==0)
   if (!x.value) return [];
   
@@ -222,7 +222,10 @@ function objTags(x) {
 	        newValues.push(vv);
 		}
   }
-  return _.uniq( _.filter( _.pluck(newValues, 'id'), function(t) { return !isPrimitive(t) } ) );
+  if (includePrimitives)
+	return _.pluck(newValues, 'id');
+  else
+  	return _.uniq( _.filter( _.pluck(newValues, 'id'), function(t) { return !isPrimitive(t) } ) );
 }
 exports.objTags = objTags;
 

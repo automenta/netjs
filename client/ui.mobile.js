@@ -112,7 +112,7 @@ function renderFocus() {
     }, function(x) {
         focusValue = x;
         self.setFocus(x);
-    });
+    }, [ 'spacepoint' ]); //do not show spacepoint property, custom renderer is below
 
     fe.append(noe);
 
@@ -136,23 +136,34 @@ function renderFocus() {
 	}
     if (focusValue.when) {
     }
-    if (focusValue.where) {
+
+	var where = objSpacePointLatLng(focusValue);
+    if (where) {
         var uu = uuid();
         var m = newDiv(uu);
         m.attr('style', 'height: 250px; width: 95%');	//TODO use css
         fe.append(m);
-        var lmap = initLocationChooserMap(uu, focusValue.where, 3);
+        var lmap = initLocationChooserMap(uu, where, 3);
+		lmap.onClicked = function(l) {
+			objSetFirstValue(focusValue, 'spacepoint', { lat: l.lat, lon: l.lon, planet: 'Earth'});
+			self.setFocus(focusValue);
+		};
     }
 }
 
 $('#FocusWhereButton').click(function() {
-    if (!focusValue.where) {
-        focusValue.where = _.clone(objSpacePoint(self.myself()) || {lat: 40, lon: -79, planet: 'Earth'});
+    if (!objSpacePointLatLng(focusValue)) {
+        /*focusValue.where = _.clone(objSpacePoint(self.myself()) || 
+			{lat: configuration.mapDefaultLocation[0] , lon: configuration.mapDefaultLocation[0], planet: 'Earth'});*/
+		objSetFirstValue(focusValue, 'spacepoint', { lat: configuration.mapDefaultLocation[0], lon: configuration.mapDefaultLocation[1], planet: 'Earth'});
         renderFocus();
     }
     else {
         if (confirm("Remove focus's 'Where'?")) {
-            focusValue.where = null;
+			var tags = objTags(focusValue, true);
+			var spi = _.indexOf(tags, 'spacepoint');
+			if (spi!=-1)
+				objRemoveValue(focusValue, spi);
             renderFocus();
         }
     }

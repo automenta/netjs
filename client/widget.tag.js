@@ -147,7 +147,7 @@ function newTreeBrowser(selected, onTagAdded) {
     e.find('.TagChoice').each(function(x) {
         var t = $(this);
         t.click(function() {
-           onTagAdded(t.attr('id').substring(prefix));
+           onTagAdded(t.attr('id').substring(prefix.length));
         });
     });
     

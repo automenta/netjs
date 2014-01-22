@@ -142,7 +142,7 @@ function newReplyWidget(onReply, onCancel) {
  *  focus - a function that returns the current focus
  *  commitFocus - a function that takes as parameter the next focus to save
  */
-function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange) {
+function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
     var d = newDiv();
 
 
@@ -219,6 +219,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange)
 
             for (var i = 0; i < x.value.length; i++) {
                 var t = x.value[i];
+	
+				console.log(t.id, excludeTags);
+
+				if (excludeTags)
+					if (_.contains(excludeTags, t.id))
+						continue;
+
                 tags.push(t.id);
                 var tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
                 d.append(tt);
