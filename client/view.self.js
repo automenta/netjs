@@ -34,10 +34,12 @@ function saveAddedTags(gt, tag, when) {
 	    var G = self.tag(g);
 		var ng = objNew();
 
-		if (when)
+		if (when) {
 			ng.when = when;
-		else
-			ng.delay = 0; //NOW
+			var location = objSpacePoint(self.myself());
+			if (location)
+				objAddValue(ng, 'spacepoint', location);
+		}
 
 		ng.own();
 		if (G)
