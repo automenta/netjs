@@ -16,6 +16,10 @@ function startTalk() {
 
 }
 
+function toggleAvatarMenu() {
+	showAvatarMenu(!$('#ViewMenu').is(':visible'));		
+}
+
 function showAvatarMenu(b) {
     var vm = $('#ViewMenu');
     if (!b) {

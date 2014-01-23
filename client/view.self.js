@@ -95,167 +95,205 @@ function renderUs(v) {
     }
     
 
-	var currentGoalHeader = $('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all").appendTo(v);
-	var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn').appendTo(v);
-	var goalList = newDiv('goalviewList').addClass('goalviewColumn').appendTo(v)
+	function updateUsView(currentUser) {
+		v.html('');
+
+		var currentGoalHeader = $('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all").appendTo(v);
+		var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn').appendTo(v);
+		var goalList = newDiv('goalviewList').addClass('goalviewColumn').appendTo(v)
 
 
-	function newNowDiv() {
-		sidebar.empty();
+		function updateNowDiv() {
+			sidebar.empty();
 
-		//sidebar.html(newProtogoalMenu());	
+			//sidebar.html(newProtogoalMenu());	
 
-		var avatarButton = $('<span/>');
+			var avatarButton = $('<span/>');
 
-		var avatarImg = getAvatar(self.myself());
-		avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
+			var avatarImg = getAvatar(self.myself());
+			avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
-		var exportButton = $('<button>Export</button>');
-		exportButton.click(function() {
-			var user = self.myself();
-			var p = newPopup('Code @ ' + new Date(), {width: 550, height: 400});
-			p.html('<textarea class="SelfCode" readonly="true">' + getKnowledgeCode(user.id) + '</textarea>');
+			var exportButton = $('<button>Export</button>');
+			exportButton.click(function() {
+				var p = newPopup('Code @ ' + new Date(), {width: 550, height: 400});
+				p.html('<textarea class="SelfCode" readonly="true">' + getKnowledgeCode(currentUser) + '</textarea>');
 			
-			var htmlButton = $('<button>HTML Version</button>');
-			htmlButton.click(function() {
-			   p.html('<div class="SelfCode">' + getKnowledgeCodeHTML(user.id) + '</div>');
-			}).prependTo(p);
-		});
-
-		currentGoalHeader
-		.append(avatarButton)
-		.append(exportButton)
-		.append('<button disabled title="Set Focus To This Goal">Focus</button>')
-		.append('<button disabled title="Clear">[x]</button>');
-
-		var userSelect = $('<select></select>');
-		if (self.myself())
-			userSelect.append('<option oid="' + self.myself().id + '">Me (' + self.myself().name + ')</option>');
-		//userSelect.append('<option>Everyone\'s</option>');
-
-		var users = self.objectsWithTag('User');
-		_.each(users, function(uid) {
-			var u = self.getObject(uid);
-			if (u)
-				userSelect.append('<option oid="' + u.id + '">' + u.name + '</option>');
-		});
-		currentGoalHeader.prepend(userSelect);
-
-
-		var operators = getOperatorTags();
-
-        _.each(operators, function(o) {
-            var O = self.tag(o);
-
-			var sdd = newDiv().addClass('alternatingDiv');
-
-			var header = newTagButton(O, function() {
-				var d = newPopup("Add " + O.name, {width: 800, height: 600, modal: true});
-		        d.append(newTagger([], function(results) {
-					saveAddedTags(results, o);
-
-		            later(function() {
-		                d.dialog('close');                        
-						newNowDiv();
-		            });
-		        }));
-			}).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
-
-			var nn = self.objectsWithTag(o);
-			if (nn.length > 0) {
-				var uu = $('<ul></ul>');
-    			_.each(nn, function(g) {
-    				uu.append( newObjectSummary( self.getObject(g), {
-						showAuthorIcon: false,
-						showAuthorName: false
-					} ).removeClass("ui-widget-content ui-corner-all") );
-    			});
-				sdd.append(uu);
-			}
-			else {
-			    //header.attr('style', 'font-size: 75%');
-				sdd.append('<br/>');
-			}
-			                
-			sidebar.append(sdd);
-			
-        });
-        
-
-
-	}
-
-	newNowDiv();
-
-
-
-	var now = true;
-	var goalTime = Date.now();
-
-	function updateGoalList() {
-		goalList.html('');
-
-		var GOALS = self.objectsWithTag('Goal', true);
-
-		for (var i = 0; i < numHours; i++) {
-
-			var ti = time + (i * timeUnitLengthMS);
-			
-			var goals = _.filter(GOALS, function(x) {
-				var w = x.when || 0;
-				return ((w >= ti) && (w < ti+timeUnitLengthMS));
+				var htmlButton = $('<button>HTML Version</button>');
+				htmlButton.click(function() {
+				   p.html('<div class="SelfCode">' + getKnowledgeCodeHTML(currentUser) + '</div>');
+				}).prependTo(p);
 			});
 
 
-			var ts = new Date(ti);
-			if (ts.getHours()!=0) {
-				ts = ts.getHours() + ":00";
+
+			currentGoalHeader
+			.append(avatarButton)
+			.append(exportButton);
+
+			if (currentUser == self.myself().id) {
+				var editButton = $('<button>Edit</button>').appendTo(currentGoalHeader);
+				editButton.click(function() {
+				    newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
+					append(newObjectEdit(self.getObject(currentUser), true));
+				});
 			}
 
-			var d = newDiv().addClass('alternatingDiv').append('<span class="goalRowHeading">' + ts + '</span>');
+			//.append('<button disabled title="Set Focus To This Goal">Focus</button>')
+			//.append('<button disabled title="Clear">[x]</button>');
 
-			var addbutton = $('<button title="Add Tag">[+]</button>').appendTo(d);
+			var userSelect = $('<select></select>');
+			if (self.myself()) {
+				var o = $('<option value="' + self.myself().id + '">Me (' + self.myself().name + ')</option>').appendTo(userSelect);
+				if (currentUser == self.myself().id)
+					o.attr('selected','selected');
+			}
+			//userSelect.append('<option>Everyone\'s</option>');
 
-			var y = function() {
-				var tti = ti;
-				var tts = ts;
-				addbutton.click(function() {
-					var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true})
+			var users = self.objectsWithTag('User');
+			_.each(users, function(uid) {
+				if (uid == self.myself().id)
+					return; //skip self
+
+				var u = self.getObject(uid);			
+				if (u) {
+					var o = $('<option value="' + u.id + '">' + u.name + '</option>').appendTo(userSelect);
+					if (currentUser == u.id)
+						o.attr('selected','selected');
+				}
+			});
+
+			currentGoalHeader.prepend(userSelect);
+		
+			userSelect.change(function(v) {
+				updateUsView(userSelect.val());
+			});
+
+			var operators = getOperatorTags();
+
+		    _.each(operators, function(o) {
+		        var O = self.tag(o);
+
+				var sdd = newDiv().addClass('alternatingDiv');
+
+				var header = newTagButton(O, function() {
+					var d = newPopup("Add " + O.name, {width: 800, height: 600, modal: true});
 				    d.append(newTagger([], function(results) {
-						saveAddedTags(results, 'Goal', tti+timeUnitLengthMS/2);
+						saveAddedTags(results, o);
 
-				        //now = _.unique(now.concat(results));
 				        later(function() {
 				            d.dialog('close');                        
-							updateGoalList();
+							updateNowDiv();
 				        });
-				        //container.html(newSelfTimeList(s, x, container));
 				    }));
-				});
-			}; y();
+				}).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
 
-			_.each(goals, function(g) {
-				var ogg = objTags(g);
-				if (_.contains(ogg, 'GoalCentroid'))
-					return;
+				var currentUserFilter = function(o) {
+					o = self.getObject(o);
+					return o.author == currentUser.substring(5);
+				};
 
-				var gg = newObjectSummary( g ).addClass("miniGoalSummary");
-				d.append(gg);
-			});
+				var nn = _.filter(self.objectsWithTag(o),currentUserFilter);
+
+				if (nn.length > 0) {
+					var uu = $('<ul></ul>');
+					_.each(nn, function(g) {
+						uu.append( newObjectSummary( self.getObject(g), {
+							showAuthorIcon: false,
+							showAuthorName: false
+						} ).removeClass("ui-widget-content ui-corner-all") );
+					});
+					sdd.append(uu);
+				}
+				else {
+					//header.attr('style', 'font-size: 75%');
+					sdd.append('<br/>');
+				}
+					            
+				sidebar.append(sdd);
+			
+		    });
+		    
 
 
-			_.each( _.filter(centroids, function(c) {
-				return (c.when >= ti) && (c.when < ti + timeUnitLengthMS);
-			}), function(g) {
-				newObjectSummary( g ).addClass("miniGoalSummary centroidSummary").appendTo(d);
-			});
-
-			goalList.append(d);			
 		}
 
+		updateNowDiv();
+
+
+
+		var now = true;
+		var goalTime = Date.now();
+
+		function updateGoalList() {
+			goalList.html('');
+
+			var GOALS = self.objectsWithTag('Goal', true);
+
+			for (var i = 0; i < numHours; i++) {
+
+				var ti = time + (i * timeUnitLengthMS);
+			
+				var goals = _.filter(GOALS, function(x) {
+					if (x.author!=currentUser.substring(5))
+						return;
+
+					var w = x.when || 0;
+					return ((w >= ti) && (w < ti+timeUnitLengthMS));
+				});				
+
+
+				var ts = new Date(ti);
+				if (ts.getHours()!=0) {
+					ts = ts.getHours() + ":00";
+				}
+
+				var d = newDiv().addClass('alternatingDiv').append('<span class="goalRowHeading">' + ts + '</span>');
+
+				var addbutton = $('<button title="Add Tag">[+]</button>').appendTo(d);
+
+				var y = function() {
+					var tti = ti;
+					var tts = ts;
+					addbutton.click(function() {
+						var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true})
+						d.append(newTagger([], function(results) {
+							saveAddedTags(results, 'Goal', tti+timeUnitLengthMS/2);
+
+						    //now = _.unique(now.concat(results));
+						    later(function() {
+						        d.dialog('close');                        
+								updateGoalList();
+						    });
+						    //container.html(newSelfTimeList(s, x, container));
+						}));
+					});
+				}; y();
+
+				_.each(goals, function(g) {
+					var ogg = objTags(g);
+					if (_.contains(ogg, 'GoalCentroid'))
+						return;
+
+					var gg = newObjectSummary( g ).addClass("miniGoalSummary");
+					d.append(gg);
+				});
+
+
+				_.each( _.filter(centroids, function(c) {
+					return (c.when >= ti) && (c.when < ti + timeUnitLengthMS);
+				}), function(g) {
+					newObjectSummary( g ).addClass("miniGoalSummary centroidSummary").appendTo(d);
+				});
+
+				goalList.append(d);			
+			}
+
+		}
+		//setInterval(updateGoalList, updatePeriod);
+		updateGoalList();
 	}
-	//setInterval(updateGoalList, updatePeriod);
-	updateGoalList();
+
+	updateUsView(self.myself().id);
 
 }
 

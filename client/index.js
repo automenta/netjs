@@ -158,6 +158,8 @@ function initKeyboard() {
 		});
 	};
 
+
+	jwerty.key('esc', function() {	toggleAvatarMenu(); return false;	});
 	jwerty.key('ctrl+left',  function()	{	viewDelta(-1); return false;	});
 	jwerty.key('ctrl+right', function() {	viewDelta(+1); return false;	});
 }

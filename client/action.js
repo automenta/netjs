@@ -60,8 +60,7 @@ addAction({
 		var oid = x.id;
 
 		//TODO consider screen geometry in creating the dialog
-        var e = newPopup("Edit " + oid, {width: 375, height: 450, position: 'center'} );
-        e.append(newObjectEdit(x, true));
+        newPopup("Edit " + oid, {width: 375, height: 450, position: 'center'} ).append(newObjectEdit(x, true));
 	}
 });
 addAction({
