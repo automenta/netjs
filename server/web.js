@@ -203,14 +203,17 @@ exports.start = function(options, init) {
 
     }
 
-    function deleteObject(objectID, whenFinished) {
+    function deleteObject(objectID, whenFinished, contentAddedToDeletedObject) {
         attention.remove(objectID);
 
         function objectRemoved(uri) {
-            return {
+            var a = {
                 'id': uri,
                 'removed': true
             };
+			if (contentAddedToDeletedObject)
+				a.content = contentAddedToDeletedObject;
+			return a;
         }
 
         //TODO move to 'removed' db collection

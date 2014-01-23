@@ -64,10 +64,17 @@ exports.plugin = {
 					if (m.id) {
 						//TODO make this into a .pub(id, func, false /* avoid overwrite */)
 						netention.getObjectSnapshot(m.id, function(err, d) {
+							var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
 							if ((err)  || (d.length == 0)) {
 								m.fromIRC = true;
 								netention.pub(m);
 								that.prevMsg = m.id;
+							}
+							else if (d.length == 1) {
+								//remove only objects from outside when told so, TODO use more thorough tracking of authors to allow only an author to delete one's own'
+								if (m.removed)
+									//if (d[0].fromIRC) 
+										netention.deleteObject(m.id, null, "externalRemovalIRC");
 							}
 						});
 					}
@@ -79,7 +86,8 @@ exports.plugin = {
 					m.fromIRC = true; //avoid rebroadcast
 
 					netention.getObjectSnapshot(m.id, function(err, d) {
-						if ((err)  || (d.length == 0)) {
+						var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
+						if ((err)  || (d.length == 0) || (newer)) {
 							netention.pub(m);
 							that.prevMsg = m.id;
 						}
@@ -119,6 +127,9 @@ exports.plugin = {
 
 			if (x.fromIRC)
 				return;
+			if (x.removed)
+				if (x.content == 'externalRemovalIRC')
+					return;
 
 			var toChannels = that.channels;
 			if (x.ircChannels)
