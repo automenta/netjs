@@ -67,7 +67,7 @@ function getSpaceTimeTagCentroids(points, centroids) {
     var obs = getObservations(points, tags);
     
     
-    var w = 8 * (1 + (tags.length));
+    var w = 1.0 / (1 + (tags.length));
     var timeNorm = normalize(obs, 2, w);    
     obs = timeNorm[0];
     var latNorm = normalize(obs, 0, w);
