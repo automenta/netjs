@@ -348,15 +348,16 @@ exports.start = function(options, init) {
                 db.close();
                 if (err) {
                     nlog('getObjectSnapshot: ' + err);
-                    whenFinished(err);
+                    whenFinished(err, []);
                 }
                 else {
-                    whenFinished(docs);
+                    whenFinished(null, docs);
                 }
             });
         }
 
     }
+	that.getObjectSnapshot = getObjectSnapshot;
 
     function getObjectsByAuthor(a, withObjects) {
         var db = mongo.connect(getDatabaseURL(), collections);
@@ -977,7 +978,7 @@ exports.start = function(options, init) {
     });
     express.get('/object/:uri/json', function(req, res) {
         var uri = req.params.uri;
-        getObjectSnapshot(uri, function(x) {
+        getObjectSnapshot(uri, function(err, x) {
             sendJSON(res, x);
         });
     });

@@ -34,7 +34,9 @@ exports.plugin = {
             ], [ 'Internet' ]);
 
 			var ch = [ '#netention' ];
-			var username = 'undefined_';
+
+			var maxusernamelength = 9;
+			var username = netention.server.name.replace('/ /g', '_').substring(0, maxusernamelength);
 
 			this.channels = ch;
 			this.irc = new irc.Client('irc.freenode.net', username, {
@@ -54,9 +56,30 @@ exports.plugin = {
 			// Listen for any message, say to him/her in the room
 			var that = this;
 			this.irc.addListener("message", function(from, to, text, message) {
-				var m = util.objNew();
-				m.setName(to + ', ' + from + ': ' + text);
-				netention.pub(m);
+				try {
+					var m = JSON.parse(message);
+					
+					//TODO make this into a .pub(id, func, false /* avoid overwrite */)
+					netention.getObjectSnapshot(message.id, function(err, d) {
+						if ((err)  || (d.length == 0)) {
+							netention.pub(m);
+						}
+					});
+				}
+				catch (e) {
+					var name = to + ', ' + from + ': ' + text;
+					var m = util.objNew(util.MD5(name));
+					m.setName(name);
+					m.fromIRC = true; //avoid rebroadcast
+
+					netention.getObjectSnapshot(m.id, function(err, d) {
+						console.log(m.id, err, d);
+						if ((err)  || (d.length == 0)) {
+							netention.pub(m);
+						}
+					});
+				}
+
 
 				//	if (to === channel)
 				if (text.indexOf(username)==0) {
@@ -67,6 +90,7 @@ exports.plugin = {
 
 					//save response as a reply
 					var n = util.objNew();
+					m.fromIRC = true; //avoid rebroadcast
 					n.setName(reply);
 					n.replyTo = [ m.id ];
 					netention.pub(n);
@@ -80,18 +104,29 @@ exports.plugin = {
             /*if (_.contains(x.tag, 'irc.Channel')) {
                 this.update();
             }*/
-			var that = this;
-			if (that.irc) {
-				var xjson = JSON.stringify(x);
 
-				_.each(that.channels, function(to) {
-					console.log('irc.say', to, xjson);
-					try {
-						that.irc.say(to, xjson);
-					}
-					catch (e) { }
-				});
-			}
+			var messageDelayMS = 750;
+
+			var that = this;
+
+
+			if (x.fromIRC)
+				return;
+
+			_.throttle(function() { 
+				if (that.irc) {
+					var xjson = JSON.stringify(x);
+
+					_.each(that.channels, function(to) {						
+						console.log('irc.say', to, xjson);
+						
+						try {
+							that.irc.say(to, xjson);
+						}
+						catch (e) { }
+					});
+				}
+			}, messageDelayMS)();
         },
 
 		stop: function(netention) { 
