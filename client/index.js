@@ -379,15 +379,27 @@ $(document).ready(function() {
 
                     $('#View').show();
                     $('#LoadingSplash2').hide();
+					
 
-                    if (isAnonymous()) {
-                        //show profile chooser
-                        openSelectProfileModal("Anonymous Profiles");
-                    }
-                    else if (self.myself() === undefined) {
-                        if (configuration.requireIdentity)
-                            openSelectProfileModal("Start a New Profile");
-                    }
+					var alreadyLoggedIn = false;
+					if (configuration.autoLoginDefaultProfile) {
+						var otherSelves = _.filter(self.get("otherSelves"), function(f) { return self.getObject(f)!=null; } );
+						if (otherSelves.length >= 1) {
+							self.become(otherSelves[0]);
+							alreadyLoggedIn = true;
+						}
+					}
+
+					if (!alreadyLoggedIn) {
+		                if (isAnonymous()) {
+		                    //show profile chooser
+		                    openSelectProfileModal("Anonymous Profiles");
+		                }
+		                else if (self.myself() === undefined) {
+		                    if (configuration.requireIdentity)
+		                        openSelectProfileModal("Start a New Profile");
+		                }
+					}
 
 					initKeyboard();
 

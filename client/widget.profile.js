@@ -25,6 +25,7 @@ function newProfileWidget() {
 	}
 
     var otherSelves = self.get('otherSelves');
+
     /*if (!otherSelves) {
 		if (self.myself())
 	        selector.append('<option>' + self.myself().name + '</option>');

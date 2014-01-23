@@ -65,7 +65,7 @@ exports.plugin = {
 						//TODO make this into a .pub(id, func, false /* avoid overwrite */)
 						netention.getObjectSnapshot(m.id, function(err, d) {
 							var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
-							if ((err)  || (d.length == 0)) {
+							if ((err)  || (d.length == 0) || (newer)) {
 								m.fromIRC = true;
 								netention.pub(m);
 								that.prevMsg = m.id;

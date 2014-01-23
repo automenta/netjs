@@ -117,10 +117,7 @@ function renderUs(v) {
 			var avatarImg = getAvatar(self.myself());
 			avatarImg.attr('style', 'height: 1.5em; vertical-align: middle');
 
-			avatarButton.append(avatarImg);
-			
-
-			currentGoalHeader.append(avatarButton);
+			avatarButton.append(avatarImg);			
 
 			var exportButton = $('<button>Export</button>');
 			exportButton.click(function() {
@@ -134,10 +131,12 @@ function renderUs(v) {
 				});
 				p.prepend(htmlButton);
 			});
-			currentGoalHeader.append(exportButton);
 
-			currentGoalHeader.append('<button disabled title="Set Focus To This Goal">Focus</button>');
-			currentGoalHeader.append('<button disabled title="Clear">[x]</button>');
+			currentGoalHeader
+			.append(avatarButton)
+			.append(exportButton)
+			.append('<button disabled title="Set Focus To This Goal">Focus</button>')
+			.append('<button disabled title="Clear">[x]</button>');
 
 			var userSelect = $('<select></select>');
 			if (self.myself())
@@ -183,7 +182,7 @@ function renderUs(v) {
         				uu.append( newObjectSummary( self.getObject(g), {
 							showAuthorIcon: false,
 							showAuthorName: false
-						} ) );
+						} ).removeClass("ui-widget-content ui-corner-all") );
         			});
 					sidebar.append(uu);
     			}
@@ -218,8 +217,8 @@ function renderUs(v) {
 
 		for (var i = 0; i < numHours; i++) {
 			var d = newDiv();
-			d.addClass('ui-widget-content');
-			d.addClass('ui-corner-all');
+			//d.addClass('ui-widget-content');
+			//d.addClass('ui-corner-all');
 
 			var ti = time + (i * timeUnitLengthMS);
 			
@@ -230,6 +229,10 @@ function renderUs(v) {
 
 
 			var ts = new Date(ti);
+			if (ts.getHours()!=0) {
+				ts = ts.getHours() + ":00";
+			}
+
 			d.append('<span class="goallistTimestamp">' + ts + '</span>');
 
 			var addbutton = $('<button title="Add Tag">[+]</button>');
@@ -258,8 +261,7 @@ function renderUs(v) {
 				if (_.contains(ogg, 'PlanCentroid'))
 					return;
 
-				var gg = newObjectSummary( g );
-				gg.addClass('miniGoalSummary');
+				var gg = newObjectSummary( g ).addClass("miniGoalSummary");
 				d.append(gg);
 			});
 
@@ -267,9 +269,7 @@ function renderUs(v) {
 			_.each( _.filter(centroids, function(c) {
 				return (c.when >= ti) && (c.when < ti + timeUnitLengthMS);
 			}), function(g) {
-				var gg = newObjectSummary( g );
-				gg.addClass('miniGoalSummary');
-				gg.addClass('centroidSummary');
+				var gg = newObjectSummary( g ).addClass("miniGoalSummary centroidSummary");
 				d.append(gg);
 			});
 

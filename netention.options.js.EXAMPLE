@@ -27,6 +27,7 @@
         "wikiStartPage": "Life",
         "showPlanOnSelfPage": true,
         "defaultTheme": "_cybernetic",
+		"autoLoginDefaultProfile": true,
         "requireIdentity": true,
         "maxStartupObjects": 8192,
         "defaultMapMode2D": true,
