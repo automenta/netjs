@@ -750,7 +750,7 @@ exports.start = function(options, init) {
     // provider for authentication.  When complete, the provider will redirect
     // the user back to the application at:
     //     /auth/openid/return
-    express.get('/auth/openid', passport.authenticate('openid'));
+    express.post('/auth/openid', passport.authenticate('openid'));
     // The OpenID provider has redirected the user back to the application.
     // Finish the authentication process by verifying the assertion.  If valid,
     // the user will be logged in.  Otherwise, authentication has failed.

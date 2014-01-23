@@ -96,6 +96,7 @@ function newProfileWidget() {
 function newNewProfileWidget(whenFinished) {
 	var d = newDiv();
 
+
 	var nameField = $('<input type="text" placeholder="Name"></input>');
 	
 	var createButton = $('<button>Create User</button>');

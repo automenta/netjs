@@ -232,6 +232,12 @@ $(document).ready(function() {
     if (configuration.enableAnonymous)
         $('#AnonymousLoginButton').show();
 
+
+	$('#openid-open').click(function() {
+		$('#openid-login').fadeIn();
+	});
+
+
     $('.logout').show();
 
     function newLoginButton() {
@@ -392,6 +398,7 @@ $(document).ready(function() {
 						}
 					}
 
+
 					if (!alreadyLoggedIn) {
 		                if (isAnonymous()) {
 		                    //show profile chooser
@@ -434,9 +441,8 @@ $(document).ready(function() {
     $('#about-toggle').click(function() {
         $('#about-netention').fadeIn();
     });
-    $('#openid-toggle').click(function() {
-        $('#openid-login').fadeIn();
-    });
+
+	
 
 
 });
