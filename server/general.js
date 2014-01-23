@@ -137,6 +137,9 @@ var generalTags = [
             'goalEnabled': {name: 'Enabled', type: 'boolean', default: true}
         }
     }, //=Project=Program=Plan=Opportunity
+
+	{uri: 'GoalCentroid', name: 'Possible Goal', tag: [ 'Goal', 'Imaginary' ]},
+
     //state = considered|desired|active|completed
 
     {uri: 'Favorite', name: 'Favorite'},

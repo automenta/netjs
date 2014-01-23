@@ -28,7 +28,7 @@ var defaultIcons = {
     'emotion.angry': '/icon/emoticon/angry.svg',
     'emotion.surprised': '/icon/emoticon/surprised.svg',
     'Tweet': '/icon/twitter.png',
-    'PlanCentroid': '/icon/rrze/emblems/workflow-cycle.png',
+    'GoalCentroid': '/icon/rrze/emblems/workflow-cycle.png',
 	'Item': '/icon/rrze/emblems/database.png',
 	'Volunteer': '/icon/sparkrelief/cat-volunteer-28.png',
 	'Shelter': '/icon/sparkrelief/cat-shelter-28.png',

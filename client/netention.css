@@ -1186,14 +1186,7 @@ a.openModal:focus {
 	text-align: left;
 	width: 150px;
 }
-#GoalHeader {
-	width: 100%;
-	margin-top: 1em;
-	margin-bottom: 1em;
-}
-#GoalHeader button {
-	float: right;
-}
+
 /* ------------------------------- */
 
 
@@ -1207,16 +1200,34 @@ a.openModal:focus {
 	box-shadow: none !important;
 }
 
-#goalviewSidebar {
+#GoalHeader {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	z-index: 5000;
+}
+#GoalHeader button {
+	float: right;
+}
+
+.goalviewColumn {
 	float: left;
 	width: 35%;
+	height: 100%;
+	overflow: auto;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 }
-#goalviewList {
-	float: right;
-	width: 62%;
-}
-.goallistTimestamp { font-size: 120%; font-weight: bold; }
+
+.goalRowHeading { font-size: 150%; font-weight: bold; }
+
+.alternatingDiv:nth-child(even) {	background-color: rgba(255,255,255,0.5); }
+.alternatingDiv:nth-child(odd) {	background-color: rgba(240,240,240,0.5); }
+.alternatingDiv ul { margin: 0; }
+
 #goalviewList div {	margin-bottom: 1em; } 
+
+
 /*#goalviewList div:nth-child(odd) {	background: #ddd; } 
 #goalviewList div:nth-child(even) {	background: #eee; } */
 

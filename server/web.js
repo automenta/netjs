@@ -105,7 +105,7 @@ exports.start = function(options, init) {
     function _updateCentroids() {
         //remove old centroids
         var objs = [];
-        getObjectsByTag('PlanCentroid', function(o) {      
+        getObjectsByTag('GoalCentroid', function(o) {      
             objs.push(o);
         }, function() {
             //TODO create deleteObjects function that does this
@@ -136,8 +136,7 @@ exports.start = function(options, init) {
                             util.objAddTag(x, 'Goal');                            
 							util.objAddGeoLocation(x, parseFloat(cc.location[0]), parseFloat(cc.location[1]));
                             //util.objSetWhen(x, new Date(cc.time)); 
-                            util.objAddTag(x, 'Imaginary');
-                            util.objAddTag(x, 'PlanCentroid');					
+                            util.objAddTag(x, 'GoalCentroid');					
 
                             delete cc.location;
                             delete cc.time;
