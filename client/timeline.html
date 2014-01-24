@@ -119,15 +119,21 @@
             );
 
 			/* ------ */
-			var minTime = Date.now() - 1000 * 60 * 60 * 48;
+			var timePeriod = 1000 * 60 * 60 * 48;
+			var windowSize = Date.now() - timePeriod ;
+			var earliestTime = Date.now() - timePeriod*10;
 
 			for (var i = 0; i < objects.length; i++) {
 				var O = objects[i];
+
 				
 				var t = O.modifiedAt || O.createdAt || O.when;
+				if (!t) continue;
+				if (t < earliestTime) continue;
 
 				//var ts = (-32.7+Math.random()*8) * k;
-				var ts = (-30.7+ 25 * (t - minTime)/minTime ) * k;
+				var ts = (-30.7+ 25 * (t - windowSize)/timePeriod ) * k;
+				console.log(t, ts);
 
 				//var te = -(Math.random()*24 * k);
 				var te = ts+(k * 2);
@@ -276,7 +282,9 @@
 		}
 
         $(document).ready(function () {
-			$.getJSON('/object/latest/100/json', function(d) {
+			var url = '/object/latest/512/json';
+
+			$.getJSON(url, function(d) {
 				draw(d);
 			});
 
