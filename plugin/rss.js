@@ -113,7 +113,7 @@ exports.plugin = function($N) { return {
         },
                 
         onPub: function(x) {
-            if (x.HasTag('web.RSSFeed'))
+            if (x.hasTag('web.RSSFeed'))
                 this.update();
         },
         
