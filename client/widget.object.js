@@ -27,7 +27,7 @@ function getTagIcon(t) {
 function newPopupObjectView(_x) {
     var x;
     if (typeof (_x) == "string")
-        x = self.getObject(_x);
+        x = $N.getObject(_x);
     else
         x = _x;
 
@@ -65,7 +65,7 @@ function newTagButton(t, onClicked) {
     var ti = null;
 
     if (!t.uri) {
-        var tagObject = self.getTag(t);
+        var tagObject = $N.getTag(t);
         if (tagObject)
             t = tagObject;
     }
@@ -235,14 +235,14 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             //Add missing required properties, min: >=1 (with their default values) of known objects:
             for (var i = 0; i < tags.length; i++) {
                 var t = tags[i];
-                t = self.getTag(t);
+                t = $N.getTag(t);
                 if (!t)
                     continue;
                 var prop = t.properties;
                 if (!prop)
                     continue;
                 var propVal = _.map(prop, function(pid) {
-                    return self.getProperty(pid);
+                    return $N.getProperty(pid);
                 })
                 for (var j = 0; j < prop.length; j++) {
                     if (propVal[j].min)
@@ -332,7 +332,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
          //    var y = getEditedFocus();
          //    var oldURI = y.id;
          //    y.id = uuid();
-         //    y.author = window.self.id();
+         //    y.author = window.$N.id();
          //    commitFocus(y);
          //    saveObject(y);
          //
@@ -344,7 +344,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
          //}
          //
          //function deleteFocus() {
-         //    var f = window.self.focus();
+         //    var f = window.$N.focus();
          //
          //    $.pnotify({
          //        title: 'Delete coming soon',
@@ -555,9 +555,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var saveButton = $('<button><b>Save/Share</b></button>');
             saveButton.click(function() {
                 var e = getEditedFocus();
-                e.author = self.id();
+                e.author = $N.id();
                 objTouch(e);
-                self.pub(e, function(err) {
+                $N.pub(e, function(err) {
                     $.pnotify({
                         title: 'Unable to save.',
                         text: x.name,
@@ -568,7 +568,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         title: 'Saved (' + x.id.substring(0, 6) + ')',
                         text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object           
                     });
-                    self.notice(e);
+                    $N.notice(e);
                 });
                 d.parent().dialog('close');
             });
@@ -711,9 +711,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         //tagButtons.hide();
     }
 
-    d.append(tagLabel);
-    d.append('&nbsp;');
-
+    d.append(tagLabel, '&nbsp;');
 
     var type;
     if (isPrimitive(tag)) {
@@ -721,7 +719,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         type = tag;
     }
 
-    var prop = self.getProperty(tag);
+    var prop = $N.getProperty(tag);
     var defaultValue = null;
     if (prop) {
         type = prop.type;
@@ -761,10 +759,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     else if ((type == 'text') || (type == 'url') || (type == 'integer') || (type == 'real')) {
 
         if (editable) {
-            var dd = $('<input type="text" placeholder="' + type + '"/>');
-
-
-            d.append(dd);
+            var dd = $('<input type="text" placeholder="' + type + '"/>').appendTo(d);
 
             var sx = null;
             if (prop) {
@@ -844,13 +839,11 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     }
     else if (type == 'spacepoint') {
         var ee = newDiv();
-
         var dd = newDiv();
+
         var de = uuid();
         dd.attr('id', de);
-        dd = dd.addClass('focusMap');
-
-        ee.append(dd);
+        dd = dd.addClass('focusMap').appendTo(ee);
 
         var m;
 
@@ -1066,8 +1059,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             //TODO filter by tag specified by ontology property metadata
             var data = [];
-            for (var k in self.objects()) {
-                var v = self.object(k);
+            for (var k in $N.objects()) {
+                var v = $N.object(k);
                 if (value == k) {
                     ts.val(v.name);
                     ts.result = value;
@@ -1095,7 +1088,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             });
 
             //TODO handle specific tag restriction
-            /*self.objectsWithTag(t) {
+            /*$N.objectsWithTag(t) {
              
              }*/
 
@@ -1115,7 +1108,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
     }
     else if (tag) {
-        var TAG = self.tags()[tag];
+        var TAG = $N.tags()[tag];
         whenSaved.push(function(y) {
             objAddTag(y, tag, strength);
         });
@@ -1124,7 +1117,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
         else {
             var ti = getTagIcon(tag);
-            if (self.tags()[tag] != undefined) {
+            if ($N.tags()[tag] != undefined) {
                 tagLabel.html(TAG.name);
             }
             if (ti) {
@@ -1135,7 +1128,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                  tagLabel.append(pb);*/
 
                 function getTagProperties(t) {
-                    var TT = self.tags()[t];
+                    var TT = $N.tags()[t];
                     if (!TT)
                         return [];
                     if (!TT.properties)
@@ -1149,16 +1142,14 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 for (var i = 0; i < pp.length; i++) {
                     (function() {
                         var ppv = pp[i];
-                        var PP = self.getProperty(ppv);
+                        var PP = $N.getProperty(ppv);
                         var ppn = PP.name;
                         var appv = $('<a href="#" title="' + PP.type + '">' + ppn + '</a>');
                         var defaultValue = '';
                         appv.click(function() {
                             onAdd(ppv, defaultValue);
                         });
-                        pd.append('+');
-                        pd.append(appv);
-                        pd.append('&nbsp;');
+                        pd.append('+', appv, '&nbsp;');
                     })();
                 }
 
@@ -1169,7 +1160,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
              if (t.value) {
              for (var v = 0; v < t.value.length; v++) {
              var vv = t.value[v];
-             var pv = self.getProperty(vv.id);
+             var pv = $N.getProperty(vv.id);
              //var pe = newPropertyEdit(vv, pv);
              var pe = newTagSection(t, v, vv, editable);
              //this.propertyEdits.push(pe);
@@ -1184,12 +1175,12 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
 function newPropertyView(x, vv) {
 
-    var p = self.getProperty(vv.id);
+    var p = $N.getProperty(vv.id);
     if (!p)
         return ('<li>' + vv.id + ': ' + vv.value + '</li>');
 
     if (p.type == 'object') {
-        var o = self.getObject(vv.value) || {name: vv.value};
+        var o = $N.getObject(vv.value) || {name: vv.value};
 
         return ('<li>' + p.name + ': <a href="javascript:newPopupObjectView(\'' + vv.value + '\')">' + o.name + '</a></li>');
     }
@@ -1200,13 +1191,13 @@ function newPropertyView(x, vv) {
     else if ((p.type == 'integer') && (p.incremental)) {
         function goprev() {
             objSetFirstValue(x, vv.id, ii - 1);
-            self.notice(x);
-            self.pub(x);
+            $N.notice(x);
+            $N.pub(x);
         }
         function gonext() {
             objSetFirstValue(x, vv.id, ii + 1);
-            self.notice(x);
-            self.pub(x);
+            $N.notice(x);
+            $N.pub(x);
         }
 
         var v = $('<li>' + p.name + ': ' + vv.value + '</li>');
@@ -1333,7 +1324,7 @@ function newObjectSummary(x, options) {
 		if (!isSelfObject(x.id)) { //exclude Self- objects
 		    if (x.author) {
 		        var a = x.author;
-		        var as = self.getSelf(x.author);
+		        var as = $N.getSelf(x.author);
 		        if (as)
 		            a = as.name;
 				//else display UID?
@@ -1346,13 +1337,13 @@ function newObjectSummary(x, options) {
     var replies = newDiv();
 
     function refreshReplies() {
-        var r = self.getReplies(x.id);
+        var r = $N.getReplies(x.id);
         if (r.length > 0) {
             replies.show();
             //TODO sort the replies by age, oldest first
             for (var i = 0; i < r.length; i++) {
                 var p = r[i];
-                replies.append(newObjectSummary(self.getObject(p), {
+                replies.append(newObjectSummary($N.getObject(p), {
 					'depthRemaining': depthRemaining - 1
 				}));
             }
@@ -1390,14 +1381,14 @@ function newObjectSummary(x, options) {
 
 
 
-                                self.pub(rr, function(err) {
+                                $N.pub(rr, function(err) {
                                     $.pnotify({
                                         title: 'Error replying (' + x.id.substring(0, 6) + ')',
                                         text: err,
                                         type: 'Error'
                                     })
                                 }, function() {
-                                    self.notice(rr);
+                                    $N.notice(rr);
                                     refreshReplies();
                                     $.pnotify({
                                         title: 'Replied (' + x.id.substring(0, 6) + ')'
@@ -1450,7 +1441,7 @@ function newObjectSummary(x, options) {
 
 
 	if (showAuthorIcon) {
-		var authorClient = self.getSelf(authorID);
+		var authorClient = $N.getSelf(authorID);
 		if (authorClient) {
 		    if (authorID) {
 		        var av = getAvatar(authorClient).attr('align', 'left');
@@ -1520,8 +1511,7 @@ function newObjectSummary(x, options) {
             axn.click(function() {
                 newPopupObjectView(x.id);
             });
-            haxn.append(axn);
-			haxn.append('&nbsp;');
+            haxn.append(axn, '&nbsp;');
         }
         haxn.prepend(selectioncheck);
         d.append(haxn);
@@ -1541,10 +1531,10 @@ function newObjectSummary(x, options) {
     for (var i = 0; i < ot.length; i++) {
         var t = ot[i];
 
-        if (self.isProperty(t))
+        if ($N.isProperty(t))
             continue;
 
-        var tt = self.getTag(t);
+        var tt = $N.getTag(t);
         if (tt) {
             var ttt = newTagButton(tt);
             applyTagStrengthClass(ttt, ots[t]);
@@ -1560,7 +1550,7 @@ function newObjectSummary(x, options) {
     if (spacepoint) {
         var lat = _n(spacepoint.lat);
         var lon = _n(spacepoint.lon);
-        var mll = objSpacePointLatLng(self.myself());
+        var mll = objSpacePointLatLng($N.myself());
         if (mll) {
             var dist = '?';
             //TODO check planet
@@ -1651,7 +1641,7 @@ function newObjectSummary(x, options) {
                     }
                 }
 
-                if (self.isProperty(vv.id))
+                if ($N.isProperty(vv.id))
                     ud.append(newPropertyView(x, vv));
             }
         }
@@ -1705,10 +1695,10 @@ function newTagTree(param) {
 
     var stc;
     if (isGeographic) {
-        stc = self.getTagCount(false, objGeographic);
+        stc = $N.getTagCount(false, objGeographic);
     }
     else {
-        stc = self.getTagCount();
+        stc = $N.getTagCount();
     }
 
     var T = [
@@ -1738,7 +1728,7 @@ function newTagTree(param) {
         else
             name = xi = i;
 
-        var children = self.subtags(xi);
+        var children = $N.subtags(xi);
 
         var label = name;
         if (stc[xi]) {
@@ -1755,7 +1745,7 @@ function newTagTree(param) {
         if (children.length > 0) {
             b.children = [];
             _.each(children, function(c) {
-                subtree(b.children, self.tag(c));
+                subtree(b.children, $N.tag(c));
             });
         }
 
@@ -1770,7 +1760,7 @@ function newTagTree(param) {
 
         var others = [];
         for (var c in stc) {
-            if (!self.tag(c))
+            if (!$N.tag(c))
                 others.push(c);
         }
 
@@ -1783,9 +1773,9 @@ function newTagTree(param) {
         root.push(otherFolder);
     }
 
-    var roots = self.tagRoots();
+    var roots = $N.tagRoots();
     _.each(roots, function(t) {
-        subtree(T, self.tag(t));
+        subtree(T, $N.tag(t));
     });
     othersubtree(T);
 

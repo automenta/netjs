@@ -7,13 +7,14 @@
 
 var DEFAULT_TELEHASH_PORT = 10901;
 
-exports.plugin = {
+exports.plugin = function($N) { return {
     name: 'Telehash',
     description: 'P2P Messaging Network',
     options: {},
     version: '1.0',
     author: 'http://telehash.org',
-    start: function(netention, util) {
+
+    start: function() {
 
         /*
          TelehashNode:
@@ -24,7 +25,7 @@ exports.plugin = {
          lastReceived [ro]
          connected? [ro]
          */
-        netention.addTags([
+        $N.addTags([
             {
                 uri: 'TelehashNode', name: 'Telehash Node',
                 properties: {
@@ -62,12 +63,11 @@ exports.plugin = {
         var that = this;
 
         that.node = null;
-		that.util = util;
 
         that.connect = function connect(x) {
-            var hashname = util.objFirstValue(x, 'telehashname');
-            var addr = util.objFirstValue(x, 'telehashAddress');
-            var publicKey = util.objFirstValue(x, 'telehashPublicKey');
+            var hashname = $N.objFirstValue(x, 'telehashname');
+            var addr = $N.objFirstValue(x, 'telehashAddress');
+            var publicKey = $N.objFirstValue(x, 'telehashPublicKey');
 
 
             if (hashname && addr && publicKey) {
@@ -88,18 +88,18 @@ exports.plugin = {
         }
 
         tele.genkey(function(err, seedKey) {
-            seedKey.nick = netention.server.name;
+            seedKey.nick = $N.server.name;
 
             that.node = tele.hashname(seedKey, {port: DEFAULT_TELEHASH_PORT});
 
             var hashnames = {};
 
-            var selfNode = util.objNew('TelehashNode_Local', 'Telehash');
-            util.objAddTag(selfNode, 'TelehashNode');
-            util.objAddValue(selfNode, 'telehashname', that.node.hashname);
-            util.objAddValue(selfNode, 'telehashAddress', netention.server.host + ':' + DEFAULT_TELEHASH_PORT);
-            util.objAddValue(selfNode, 'telehashPublicKey', seedKey.public);
-            netention.pub(selfNode);
+            var selfNode = $N.objNew('TelehashNode_Local', 'Telehash');
+            $N.objAddTag(selfNode, 'TelehashNode');
+            $N.objAddValue(selfNode, 'telehashname', that.node.hashname);
+            $N.objAddValue(selfNode, 'telehashAddress', $N.server.host + ':' + DEFAULT_TELEHASH_PORT);
+            $N.objAddValue(selfNode, 'telehashPublicKey', seedKey.public);
+            $N.pub(selfNode);
 
             that.node.listen("message", function(err, arg, chan, cb) {
                 //console.log('message', chan, cb);
@@ -131,7 +131,7 @@ exports.plugin = {
             that.node.online(function(err) {
                 console.log('Telehash node online @ ' + that.node.hashname + ' ' + seedKey.nick);
 
-                netention.getObjectsByTag('TelehashNode', function(x) {
+                $N.getObjectsByTag('TelehashNode', function(x) {
                     if (x.id == 'TelehashNode_Local')
                         return;
                     connect(x);
@@ -170,16 +170,18 @@ exports.plugin = {
         });
 
     },
-    notice: function(x) {
-        if (this.util.objHasTag(x, 'TelehashNode')) {
+
+    onPub: function(x) {
+        if ($N.objHasTag(x, 'TelehashNode')) {
             //connect(x);
             this.connect(x);
         }
     },
-    stop: function(netention) {
+
+    stop: function() {
         /*if (this.loop) {
          clearInterval(this.loop);
          this.loop = null;
          } */
     }
-};
+}; };

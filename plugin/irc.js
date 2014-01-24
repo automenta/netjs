@@ -1,19 +1,18 @@
 var irc = require('irc');
 var _= require('underscore');
-var util = require('../client/util.js');
 
 
-exports.plugin = {
+exports.plugin = function($N) { return {
         name: 'IRC',    
 		description: 'Awareness of IRC Channels',
 		options: { },
         version: '1.0',
-        author: 'http://netention.org',
+        author: 'http://$N.org',
         
-		start: function(netention) {
+		start: function() {
 
             
-            netention.addTags([
+            $N.addTags([
                 {
                     uri: 'IRCChannel', name: 'IRC Channel', 
                     properties: {
@@ -36,7 +35,7 @@ exports.plugin = {
 			var ch = [ '#netention' ];
 
 			var maxusernamelength = 9;
-			var username = netention.server.name.replace('/ /g', '_').substring(0, maxusernamelength);
+			var username = $N.server.name.replace('/ /g', '_').substring(0, maxusernamelength);
 
 			this.channels = ch;
 			this.irc = new irc.Client('irc.freenode.net', username, {
@@ -63,32 +62,32 @@ exports.plugin = {
 					var m = JSON.parse(text);
 					if (m.id) {
 						//TODO make this into a .pub(id, func, false /* avoid overwrite */)
-						netention.getObjectSnapshot(m.id, function(err, d) {
+						$N.getObjectSnapshot(m.id, function(err, d) {
 							var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
 							if ((err)  || (d.length == 0) || (newer)) {
 								m.fromIRC = true;
-								netention.pub(m);
+								$N.pub(m);
 								that.prevMsg = m.id;
 							}
 							else if (d.length == 1) {
 								//remove only objects from outside when told so, TODO use more thorough tracking of authors to allow only an author to delete one's own'
 								if (m.removed)
 									//if (d[0].fromIRC) 
-										netention.deleteObject(m.id, null, "externalRemovalIRC");
+										$N.deleteObject(m.id, null, "externalRemovalIRC");
 							}
 						});
 					}
 				}
 				catch (e) {
 					var name = to + ', ' + from + ': ' + text;
-					var m = util.objNew(util.MD5(name + prevMsg ) );
+					var m = $N.objNew($N.MD5(name + prevMsg ) );
 					m.setName(name);
 					m.fromIRC = true; //avoid rebroadcast
 
-					netention.getObjectSnapshot(m.id, function(err, d) {
+					$N.getObjectSnapshot(m.id, function(err, d) {
 						var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
 						if ((err)  || (d.length == 0) || (newer)) {
-							netention.pub(m);
+							$N.pub(m);
 							that.prevMsg = m.id;
 						}
 					});
@@ -103,19 +102,19 @@ exports.plugin = {
 					//that.irc.say(to, reply + ' [netention]');
 
 					//save response as a reply
-					var n = util.objNew();
+					var n = $N.objNew();
 					m.fromIRC = true; //avoid rebroadcast
 					m.ircChannels = [ from ];
 					n.setName(reply);
 					n.replyTo = [ m.id ];
-					netention.pub(n);
+					$N.pub(n);
 
 				}
 			});
 
      	},
 
-        notice: function(x) {
+        onPub: function(x) {
             /*if (_.contains(x.tag, 'irc.Channel')) {
                 this.update();
             }*/
@@ -151,7 +150,7 @@ exports.plugin = {
 			}, messageSendDelayMS)();
         },
 
-		stop: function(netention) { 
+		stop: function() { 
 		}
 
-};
+}; };

@@ -10,7 +10,9 @@
 var request = require('request');
 var _= require('underscore');
 
-exports.plugin = {
+exports.plugin = undefined;
+
+/*exports.plugin =*/var unused = {
         name: 'Twitter Interface',    
         description: 'Twitter inputs',
         options: { },

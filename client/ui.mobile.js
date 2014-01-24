@@ -3,7 +3,7 @@ function startTalk() {
 	TogetherJSConfig_on_ready = function () {};
 	TogetherJSConfig_toolName = 'Collaboration';
 	TogetherJSConfig_getUserName = function () {
-		return self.myself().name;
+		return $N.myself().name;
 	};
 	//TogetherJSConfig_getUserAvatar = function () {return avatarUrl;};
 
@@ -55,7 +55,7 @@ $('#ViewMenu input').click(function(x) {
     if ((b.attr('type') === 'text') || (b.attr('type') === 'checkbox'))
         return;
     $('#ViewControls').buttonset('refresh');
-    self.save('currentView', v);
+    $N.save('currentView', v);
     showAvatarMenu(false);
 });
 
@@ -106,7 +106,7 @@ function clearFocus() {
 clearFocus();
 
 function renderFocus() {
-    self.setFocus(focusValue);
+    $N.setFocus(focusValue);
 
     var fe = $('#FocusEdit');
     fe.html('');
@@ -115,7 +115,7 @@ function renderFocus() {
         renderFocus();
     }, function(x) {
         focusValue = x;
-        self.setFocus(x);
+        $N.setFocus(x);
     }, [ 'spacepoint' ]); //do not show spacepoint property, custom renderer is below
 
     fe.append(noe);
@@ -150,14 +150,14 @@ function renderFocus() {
         var lmap = initLocationChooserMap(uu, where, 3);
 		lmap.onClicked = function(l) {
 			objSetFirstValue(focusValue, 'spacepoint', { lat: l.lat, lon: l.lon, planet: 'Earth'});
-			self.setFocus(focusValue);
+			$N.setFocus(focusValue);
 		};
     }
 }
 
 $('#FocusWhereButton').click(function() {
     if (!objSpacePointLatLng(focusValue)) {
-        /*focusValue.where = _.clone(objSpacePoint(self.myself()) || 
+        /*focusValue.where = _.clone(objSpacePoint($N.myself()) || 
 			{lat: configuration.mapDefaultLocation[0] , lon: configuration.mapDefaultLocation[0], planet: 'Earth'});*/
 		objSetFirstValue(focusValue, 'spacepoint', { lat: configuration.mapDefaultLocation[0], lon: configuration.mapDefaultLocation[1], planet: 'Earth'});
         renderFocus();
@@ -177,7 +177,7 @@ var periodMS = FOCUS_KEYWORD_UPDATE_PERIOD;
 var ty = _.throttle(function() {
     var t = $('#FocusKeywords').val();
     focusValue.name = t;
-    self.setFocus(focusValue);
+    $N.setFocus(focusValue);
 }, periodMS);
 
 $('#FocusKeywords').keyup(

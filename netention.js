@@ -8,11 +8,11 @@ if (process.argv.length > 1) {
 
 if (options == null) options = 'netention.options.js';
 
-console.log('Loading server config: ' + options);
+//console.log('Loading server config: ' + options);
 
 var fs = require('fs');
 var o = JSON.parse(fs.readFileSync(options));
 
-console.log(o);
+//console.log(o);
 
 require('./server/web.js').start(o);

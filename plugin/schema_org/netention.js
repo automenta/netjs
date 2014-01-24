@@ -1,17 +1,18 @@
 var _ = require('underscore');
 
-exports.plugin = {
+exports.plugin = function($N) { return {
         name: 'Schema.org',    
 		description: 'Useful schemas',
 		options: { },
         version: '1.0',
         author: 'http://schema.org',
-		start: function(netention) { 
+
+		start: function() { 
             var schemaorg = require('./schema.org.json');
             var types = schemaorg.types;
             var properties = schemaorg.properties;
             
-            netention.addProperties(_.map(properties, function(prop) {
+            $N.addProperties(_.map(properties, function(prop) {
                 function propType(ranges) {
                     if (_.contains(ranges, 'URL')) {
                         return 'url';
@@ -45,7 +46,7 @@ exports.plugin = {
             
             var unnecessaryProperties = [ 'description', 'image', 'name', 'url', 'about'];            
             
-            netention.addTags(_.map(types, function(type) {
+            $N.addTags(_.map(types, function(type) {
                 return {
                     uri: type.id,
                     name: type.label,
@@ -57,10 +58,11 @@ exports.plugin = {
             
         },
                 
-	stop: function(netention) { 
-            //TODO remove any schema.org tags that may have been created
-        }
-};
+		stop: function() { 
+		        //TODO remove any schema.org tags that may have been created
+		}
+}; };
+
 /*var schema, code;
 var types = {};
 

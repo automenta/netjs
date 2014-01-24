@@ -11,8 +11,8 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 
 	if (focus) semantic = 'Relevant';
     
-    var ii = _.keys(self.layer().include);
-    var ee = _.keys(self.layer().exclude);
+    var ii = _.keys($N.layer().include);
+    var ee = _.keys($N.layer().exclude);
     
     for (var k in s.get('attention')) {
         
@@ -148,9 +148,9 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 }
 
 function renderItems(o, v, maxItems, perItems) {
-    var sort = self.get('list-sort') || 'Recent';
-    var scope = self.get('list-scope') || 'Public';
-    var semantic = self.get('list-semantic') || 'Any';
+    var sort = $N.get('list-sort') || 'Recent';
+    var scope = $N.get('list-scope') || 'Public';
+    var semantic = $N.get('list-semantic') || 'Any';
     
     var rr = getRelevant(sort, scope, semantic, self, o, maxItems);
     var relevant = rr[0];
@@ -158,7 +158,7 @@ function renderItems(o, v, maxItems, perItems) {
 
     var xxrr = [];
     for (var x = 0; x < relevant.length; x++) {
-        var xx = self.get('attention')[relevant[x]];                        
+        var xx = $N.get('attention')[relevant[x]];                        
         var rr =  relevance[relevant[x]];
         xxrr.push([xx,rr]);
     }

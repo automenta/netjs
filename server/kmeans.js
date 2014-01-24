@@ -79,6 +79,9 @@ function getSpaceTimeTagCentroids(points, centroids) {
     //TODO normalize lat/lon
 
     var km = kmeans.create(obs, centroids);
+
+
+
     var maxIterations = 128;
     km.process = function() {
         // iterate until generated means converged

@@ -267,26 +267,27 @@ $(document).ready(function() {
         title: 'Loading...'
     });
 
-    netention(function(self) {
+    netention(function($N) {
         ll.pnotify({
             text: 'System loaded.'
         });
 
-        window.self = self;
+        window.self = $N; //DEPRECATED
+		window.$N = $N;
 
-        setTheme(self.get('theme'));
+        setTheme($N.get('theme'));
 
-        self.clear();
+        $N.clear();
 
-        self.loadSchemaJSON('/ontology/json', function() {
+        $N.loadSchemaJSON('/ontology/json', function() {
             ll.pnotify({
                 text: 'Ontology ready. Loading objects...'
             });
 
-            self.getLatestObjects(configuration.maxStartupObjects, function() {
+            $N.getLatestObjects(configuration.maxStartupObjects, function() {
                 ll.hide();
 
-                self.listenAll(true);
+                $N.listenAll(true);
 
                 //SETUP ROUTER
                 var Workspace = Backbone.Router.extend({
@@ -303,13 +304,13 @@ $(document).ready(function() {
                                 //"search/:query/:page":  "query"   // #search/kiwis/p7
                     },
                     me: function() {
-                        commitFocus(self.myself());
+                        commitFocus($N.myself());
                     },
                     completeExample: function() {
                         commitFocus(exampleObject);
                     },
                     showObject: function(id) {
-                        var x = self.getObject(id);
+                        var x = $N.getObject(id);
                         if (x) {
                             newPopupObjectView(x);
                         }
@@ -327,7 +328,7 @@ $(document).ready(function() {
                 Backbone.history.start();
 
                 if (configuration.initialView) {
-                    self.save('currentView', configuration.initialView);
+                    $N.save('currentView', configuration.initialView);
                 }
 
 				updateViewControls();
@@ -344,11 +345,11 @@ $(document).ready(function() {
                 }
 
 
-                self.on('change:attention', doUpdate);
-                self.on('change:layer', doUpdate);
-                self.on('change:currentView', doUpdate);
-                self.on('change:tags', doUpdate);
-                self.on('change:focus', doUpdate);
+                $N.on('change:attention', doUpdate);
+                $N.on('change:layer', doUpdate);
+                $N.on('change:currentView', doUpdate);
+                $N.on('change:tags', doUpdate);
+                $N.on('change:focus', doUpdate);
 
                 var msgs = ['I think', 'I feel', 'I wonder', 'I know', 'I want'];
                 //var msgs = ['Revolutionary', 'Extraordinary', 'Bodacious', 'Scrumptious', 'Delicious'];
@@ -391,9 +392,9 @@ $(document).ready(function() {
 
 					var alreadyLoggedIn = false;
 					if (configuration.autoLoginDefaultProfile) {
-						var otherSelves = _.filter(self.get("otherSelves"), function(f) { return self.getObject(f)!=null; } );
+						var otherSelves = _.filter($N.get("otherSelves"), function(f) { return $N.getObject(f)!=null; } );
 						if (otherSelves.length >= 1) {
-							self.become(otherSelves[0]);
+							$N.become(otherSelves[0]);
 							alreadyLoggedIn = true;
 						}
 					}
@@ -404,7 +405,7 @@ $(document).ready(function() {
 		                    //show profile chooser
 		                    openSelectProfileModal("Anonymous Profiles");
 		                }
-		                else if (self.myself() === undefined) {
+		                else if ($N.myself() === undefined) {
 		                    if (configuration.requireIdentity)
 		                        openSelectProfileModal("Start a New Profile");
 		                }

@@ -128,7 +128,6 @@ function renderOptions(s, o, v) {
             
             /*$(document).ready(function(){
                 netention(function(self) {
-                    window.self = self;
                     
                     $('#PluginList').html('Loading...');
                     self.on('change:plugins', updatePlugins);

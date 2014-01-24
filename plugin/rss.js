@@ -1,24 +1,20 @@
 var feedparser = require('feedparser');     //https://github.com/danmactough/node-feedparser
-
 var request = require('request');
 var _ = require('underscore');
-var util = require('../client/util.js');
 
 var minUrlFetchPeriod = 60*10;
-var rssCyclePeriod = 5 * 1000;
+var rssCyclePeriod = 15 * 1000;
 
-exports.plugin = {
+exports.plugin = function($N) { return {
         name: 'RSS Feeds (Really Simple Syndication)',	
 		description: 'Periodically monitors RSS Feeds for new content',
 		options: { },
         version: '1.0',
         author: 'http://netention.org',
         
-		start: function(netention) { 
+		start: function() { 
             
-
-            
-            netention.addTags([
+           $N.addTags([
                 {
                     uri: 'RSSFeed', name: 'RSS Feed', 
                     properties: {
@@ -37,15 +33,15 @@ exports.plugin = {
             ], [ 'Internet' ]);
             
             
-            this.netention = netention;
             this.feeds = { };
+
             var that = this;
             
             this.updateUnthrottled = function(f) {
                 
                 that.feeds = { };                
                 
-                that.netention.getObjectsByTag('RSSFeed', function(x) {
+                $N.getObjectsByTag('RSSFeed', function(x) {
                     that.feeds[x.id] = x;
                     
                     if (f)
@@ -70,13 +66,13 @@ exports.plugin = {
                             
                         var needsFetch = false;
                                             
-                        if (!util.objFirstValue(f, 'lastRSSUpdate')) {
+                        if (!$N.objFirstValue(f, 'lastRSSUpdate')) {
                             needsFetch = true;
                         }
                         else {
-                            var age = (Date.now() - util.objFirstValue(f, 'lastRSSUpdate'))/1000.0;
+                            var age = (Date.now() - $N.objFirstValue(f, 'lastRSSUpdate'))/1000.0;
                             
-                            var fp = util.objFirstValue(f, 'urlFetchPeriod');
+                            var fp = $N.objFirstValue(f, 'urlFetchPeriod');
                             fp = Math.max(fp, minUrlFetchPeriod);
                             
                             if (fp < age) {
@@ -89,13 +85,13 @@ exports.plugin = {
                         
                         if (needsFetch) {
                         
-                            var furi = util.objValues(f, 'url');
+                            var furi = $N.objValues(f, 'url');
                             
                             if (furi) {
                                 for (var ff = 0; ff < furi.length; ff++) {
-                                    RSSFeed(furi[ff], function(a) {            
+                                    RSSFeed($N, furi[ff], function(a) {            
                                         //TODO add extra tags from 'f'
-                                        netention.pub(a);
+                                        $N.pub(a);
                                         return a;
                                     });
                                 }
@@ -104,8 +100,8 @@ exports.plugin = {
                                 //set error message as f property
                             }
                             
-                            util.objSetFirstValue(f, 'lastRSSUpdate', Date.now());                        
-                            netention.pub(f);
+                            $N.objSetFirstValue(f, 'lastRSSUpdate', Date.now());                        
+                            $N.pub(f);
                         }
                     }
                     
@@ -117,21 +113,21 @@ exports.plugin = {
             ux();
         },
                 
-        notice: function(x) {
-            if (util.objHasTag(x, 'web.RSSFeed')) {
+        onPub: function(x) {
+            if ($N.objHasTag(x, 'web.RSSFeed')) {
                 this.update();
             }
         },
         
-		stop: function(netention) {
+		stop: function() {
             if (this.loop) {
                 clearInterval(this.loop);
                 this.loop = null;
             }   
 		}
-};
+}; }; 
 
-var RSSFeed = function(url, perArticle) {
+var RSSFeed = function($N, url, perArticle) {
 
 	if (!process)
 		process = function(x) { return x; };
@@ -148,25 +144,25 @@ var RSSFeed = function(url, perArticle) {
         else
             w = Date.now();
             
-        var x = util.objNew( util.MD5(a['guid']), a['title'] );
+        var x = $N.objNew( $N.MD5(a['guid']), a['title'] );
         x.createdAt = w;
         
-        util.objAddDescription(x, a['description']);        
+        $N.objAddDescription(x, a['description']);        
         
 		if (a['georss:point']) {
 			var pp = a['georss:point'];
 			if (pp.length == 2)
-	            util.objAddGeoLocation(x, pp[0], pp[1] );
+	            $N.objAddGeoLocation(x, pp[0], pp[1] );
 			else {
 				pp = pp['#'].split(' ');
-	            util.objAddGeoLocation(x, pp[0], pp[1] );
+	            $N.objAddGeoLocation(x, pp[0], pp[1] );
 			}
 		}
 		if (a['geo:lat']) {
-            util.objAddGeoLocation(x, parseFloat(a['geo:lat']['#']), parseFloat(a['geo:long']['#']) );
+            $N.objAddGeoLocation(x, parseFloat(a['geo:lat']['#']), parseFloat(a['geo:long']['#']) );
 		}
-        util.objAddTag(x, 'RSSItem');
-        util.objAddValue(x, 'rssItemURL', a['link']);
+        $N.objAddTag(x, 'RSSItem');
+        $N.objAddValue(x, 'rssItemURL', a['link']);
 
 
 		perArticle(x, a);

@@ -1,7 +1,6 @@
 var memory = require('./memory.js');
 var util = require('../client/util.js');
 var feature = require('./feature.js');
-//var cortexit = require('./cortexit.js');
 var expressm = require('express');
 var express = expressm();
 var connect = require('connect');
@@ -15,93 +14,109 @@ var http = require('http')
 var mongo = require("mongojs");
 var request = require('request');
 var _ = require('underscore');
+//var cortexit = require('./cortexit.js');
 
 
 
-function plugin(netention, kv) {
-    var v = kv;
-    var p = require('../plugin/' + v).plugin;
-    var filename = v;
-    v = v.split('.js')[0];
-    v = v.split('/netention')[0];
-
-    if (p) {
-        if (p.name) {
-
-            var enabled = false;
-
-			if (!netention.server)
-				netention.server = { plugins: { } };
-
-            if (!netention.server.plugins[kv]) {
-                netention.server.plugins[kv] = {
-                    valid: true,
-                    enabled: false
-                };
-            }
-
-            netention.server.plugins[kv].name = p.name;
-            netention.server.plugins[kv].description = p.description;
-            netention.server.plugins[kv].filename = filename;
-			netention.server.plugins[kv].plugin = p;
-
-
-            //TODO add required plugins parameter to add others besides 'general'
-            if ((netention.server.plugins[kv].enabled) || (v == 'general')) {
-                p.start(netention, util);
-                enabled = true;
-            }
-
-            if (enabled) {
-                netention.nlog('Started plugin: ' + p.name);
-            }
-            else {
-                //netention.nlog('Disabling plugin: ' + p.name);
-            }
-
-            return;
-        }
-    }
-    netention.server.plugins[v] = {};
-    netention.server.plugins[v].name = v;
-    netention.server.plugins[v].valid = false;
-    netention.server.plugins[v].filename = filename;
-
-
-    //TODO remove unused Server.plugins entries
-
-    //console.log('Loaded invalid plugin: ' + v);
-}
-exports.plugin = plugin;
-
-/**
- * init - callback function that is invoked after the server is created but before it runs
- */
+/** 
+	init - callback function that is invoked after the server is created but before it runs 
+*/
 exports.start = function(options, init) {
 
-    var Server = options;
+    var $N = _.clone(util);	
+	$N.server = options;
 
     var focusHistory = [ ];
     var focusHistoryMaxAge = 24*60*60; //in seconds
     
-    var that = {};
-
+	
     var tags = {};
     var properties = {};
 
     var attention = memory.Attention(0.95);
 
     var logMemory = util.createRingBuffer(256);
-    Server.interestTime = {};	//accumualted time per interest, indexed by tag URI
-    Server.clientState = {};	//current state of all clients, indexed by their clientID DEPRECATED
+    $N.server.interestTime = {};	//accumualted time per interest, indexed by tag URI
+    $N.server.clientState = {};	//current state of all clients, indexed by their clientID DEPRECATED
 
     function getDatabaseURL() {
         //"mydb"; // "username:password@example.com/mydb"
-        return Server.databaseURL || process.env['MongoURL'];
+        return $N.server.databaseURL || process.env['MongoURL'];
     }
     var collections = ["obj"];
 
     
+	function plugin(kv) {
+		var v = kv;
+
+		var p = require('../plugin/' + v).plugin;
+		if (typeof(p) == "function")
+			p = p($N);
+		else if (p!=undefined) {
+			console.error(v + ' plugin format needs upgraded');
+		}
+
+		var filename = v;
+		v = v.split('.js')[0];
+		v = v.split('/netention')[0];
+
+		if (p) {
+		    if (p.name) {
+
+		        var enabled = false;
+
+				if (!$N.server)
+					$N.server = { plugins: { } };
+
+		        if (!$N.server.plugins[kv]) {
+		            $N.server.plugins[kv] = {
+		                valid: true,
+		                enabled: false
+		            };
+		        }
+
+		        $N.server.plugins[kv].name = p.name;
+		        $N.server.plugins[kv].description = p.description;
+		        $N.server.plugins[kv].filename = filename;
+				$N.server.plugins[kv].plugin = p;
+
+
+		        //TODO add required plugins parameter to add others besides 'general'
+		        if (($N.server.plugins[kv].enabled) || (v == 'general')) {
+		            $N.nlog('Started plugin: ' + p.name);
+		            p.start();
+		            enabled = true;
+		        }
+
+		        return;
+		    }
+		}
+		$N.server.plugins[v] = {};
+		$N.server.plugins[v].name = v;
+		$N.server.plugins[v].valid = false;
+		$N.server.plugins[v].filename = filename;
+
+
+		//TODO remove unused $N.server.plugins entries
+
+		//console.log('Loaded invalid plugin: ' + v);
+	}
+	$N.plugin = plugin;
+
+	function plugins(operation, parameter) {
+		var plugins = $N.server.plugins;
+	    for (var p in plugins) {
+	        if (plugins[p].enabled) {
+		        var pp = plugins[p].plugin;
+				if (!pp) continue;
+	            if (pp[operation]) {
+	                pp[operation](parameter);
+	            }
+	        }
+	    }
+	}
+	$N.plugins = plugins;
+
     function _updateCentroids() {
         //remove old centroids
         var objs = [];
@@ -171,17 +186,17 @@ exports.start = function(options, init) {
                 objs.forEach(function(x) {
                     var now = Date.now();
                     nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds downtime');
-                    Server.interestTime = x.interestTime;
-                    Server.clientState = x.clientState;
-                    Server.users = x.users || { };
-                    Server.currentClientID = x.currentClientID || { };
+                    $N.server.interestTime = x.interestTime;
+                    $N.server.clientState = x.clientState;
+                    $N.server.users = x.users || { };
+                    $N.server.currentClientID = x.currentClientID || { };
 
                     if (x.plugins) {
                         for (var pl in x.plugins) {
-                            if (!Server.plugins[pl])
-                                Server.plugins[pl] = {};
+                            if (!$N.server.plugins[pl])
+                                $N.server.plugins[pl] = {};
                             if (x.plugins[pl].enabled)
-                                Server.plugins[pl].enabled = x.plugins[pl].enabled;
+                                $N.server.plugins[pl].enabled = x.plugins[pl].enabled;
                         }
                     }
 
@@ -189,8 +204,6 @@ exports.start = function(options, init) {
                      logMemory.buffer = x.logMemoryBuffer;
                      logMemory.pointer = x.logMemoryPointer;*/
 
-                    //nlog("State loaded");
-                    //nlog(Server);
 
                 });
 
@@ -235,7 +248,7 @@ exports.start = function(options, init) {
                 db2.obj.remove({replyTo: objectID}, function(err, docs) {
                     db2.close();
                     
-                    nlog('deleted ' + objectID);
+                    //nlog('deleted ' + objectID);
 
                     if (!err) {
                         if (whenFinished)
@@ -250,7 +263,7 @@ exports.start = function(options, init) {
             }
         });
     }
-    that.deleteObject = deleteObject;
+    $N.deleteObject = deleteObject;
 
     function noticeAll(l) {
         var i = 0;
@@ -262,7 +275,7 @@ exports.start = function(options, init) {
         }
         remaining();
     }
-    that.noticeAll = noticeAll;
+    $N.noticeAll = noticeAll;
 
     function notice(o, whenFinished, socket) {       
 
@@ -303,7 +316,7 @@ exports.start = function(options, init) {
         });
 
     }
-    that.notice = notice;
+    $N.notice = notice;
 
 
     function addProperties(ap) {
@@ -313,7 +326,7 @@ exports.start = function(options, init) {
 
         //TODO broadcast change in properties?
     }
-    that.addProperties = addProperties;
+    $N.addProperties = addProperties;
 
     function addTags(at, defaultTag) {
         for (var i = 0; i < at.length; i++) {
@@ -325,7 +338,7 @@ exports.start = function(options, init) {
 
         //TODO broadcast change in tags?
     }
-    that.addTags = addTags;
+    $N.addTags = addTags;
 
     function removeMongoID(x) {
         if (Array.isArray(x)) {
@@ -359,7 +372,7 @@ exports.start = function(options, init) {
         }
 
     }
-	that.getObjectSnapshot = getObjectSnapshot;
+	$N.getObjectSnapshot = getObjectSnapshot;
 
     function getObjectsByAuthor(a, withObjects) {
         var db = mongo.connect(getDatabaseURL(), collections);
@@ -374,7 +387,7 @@ exports.start = function(options, init) {
             db.close();
         });
     }
-    that.getObjectsByAuthor = getObjectsByAuthor;
+    $N.getObjectsByAuthor = getObjectsByAuthor;
 
     //TODO optimize this to use a tag cache property
     function getObjectsByTag(t, withObject, whenFinished) {
@@ -411,7 +424,7 @@ exports.start = function(options, init) {
             db.close();
         });
     }
-    that.getObjectsByTag = getObjectsByTag;
+    $N.getObjectsByTag = getObjectsByTag;
 
 
 
@@ -530,14 +543,14 @@ exports.start = function(options, init) {
          logMemoryBuffer = logMemory.buffer;
          logMemoryPointer = logMemory.pointer;*/
 
-        delete Server._id;
-        Server.tag = ['ServerState'];
-        Server.when = t;
+        delete $N.server._id;
+        $N.server.tag = ['ServerState'];
+        $N.server.when = t;
 
 
         var db = mongo.connect(getDatabaseURL(), collections);
 
-        db.obj.save(Server, function(err, saved) {
+        db.obj.save($N.server, function(err, saved) {
             db.close();
 
             if (err || !saved) {
@@ -621,9 +634,9 @@ exports.start = function(options, init) {
 
     var httpServer = http.createServer(express);
 
-    httpServer.listen(Server.port);
+    httpServer.listen($N.server.port);
 
-    nlog('Web server on port ' + Server.port);
+    nlog('Web server on port ' + $N.server.port);
 
     var io = socketio.listen(httpServer);
 
@@ -690,8 +703,8 @@ exports.start = function(options, init) {
     });
 
     passport.use(new OpenIDStrategy({
-            returnURL: 'http://' + Server.host + '/auth/openid/return',
-            realm: 'http://' + Server.host + '/'
+            returnURL: 'http://' + $N.server.host + '/auth/openid/return',
+            realm: 'http://' + $N.server.host + '/'
         },
         function(identifier, done) {
         //console.log(identifier);
@@ -704,8 +717,8 @@ exports.start = function(options, init) {
     ));
 
     passport.use(new GoogleStrategy({
-            returnURL: 'http://' + Server.host + '/auth/google/return',
-            realm: 'http://' + Server.host + '/'
+            returnURL: 'http://' + $N.server.host + '/auth/google/return',
+            realm: 'http://' + $N.server.host + '/'
         },
         function(identifier, profile, done) {
             //console.log(identifier);
@@ -784,7 +797,7 @@ exports.start = function(options, init) {
     };
     
     //Gzip compression
-	if (Server.httpCompress)
+	if ($N.server.httpCompress)
 	    express.use(connect.compress());
 
     //express.use(expressm.staticCache());
@@ -830,19 +843,19 @@ exports.start = function(options, init) {
         var key = getSessionKey(session);
         var cid;
         if (key) {
-            if (Server.currentClientID) {
-                cid = Server.currentClientID[key];
+            if ($N.server.currentClientID) {
+                cid = $N.server.currentClientID[key];
             }
             else {
-                Server.currentClientID = { };
-                Server.users = { };
+                $N.server.currentClientID = { };
+                $N.server.users = { };
                 cid = null
             }
             
             if (!cid) {
                 cid = util.uuid();
-                Server.users[key] = [ cid ];
-                Server.currentClientID[key] = cid;
+                $N.server.users[key] = [ cid ];
+                $N.server.currentClientID[key] = cid;
                 saveState();
             }
         }
@@ -855,16 +868,16 @@ exports.start = function(options, init) {
         if ((!key) || (key == '')) {
             key = 'anonymous';
         }
-        if (!Server.users)
-            Server.users = { };
+        if (!$N.server.users)
+            $N.server.users = { };
         
-        var ss = Server.users[key];
+        var ss = $N.server.users[key];
         if (!ss) {
-            Server.users[key] = [uid];
+            $N.server.users[key] = [uid];
         }
         else {
-            Server.users[key].push(uid);            
-			Server.users[key] = _.unique(Server.users[key]);
+            $N.server.users[key].push(uid);            
+			$N.server.users[key] = _.unique($N.server.users[key]);
         }
         
         //HACK clean users?
@@ -873,19 +886,19 @@ exports.start = function(options, init) {
         
     }
     function getClientSelves(session) {
-        if (!Server.users)
-            return Server.users = { };
+        if (!$N.server.users)
+            return $N.server.users = { };
         
         if (!session) {
-            if (!Server.users['anonymous']) {
-                Server.users['anonymous'] = [ ];
+            if (!$N.server.users['anonymous']) {
+                $N.server.users['anonymous'] = [ ];
             }
-            return Server.users['anonymous'];
+            return $N.server.users['anonymous'];
         }
         
         var key = getSessionKey(session);        
         if (key) {
-            var selves = Server.users[key];
+            var selves = $N.server.users[key];
             return selves;
         }
         else {
@@ -1165,7 +1178,7 @@ exports.start = function(options, init) {
     });
 
     express.get('/state', function(req, res) {
-        sendJSON(res, _.omit(Server, ['users','currentClientID']));
+        sendJSON(res, _.omit($N.server, ['users','currentClientID']));
     });
     express.get('/attention', function(req, res) {
         getTagCounts(function(x) {
@@ -1197,7 +1210,7 @@ exports.start = function(options, init) {
     });
     express.get('/team/interestTime', function(req, res) {
         updateInterestTime();
-        sendJSON(res, Server.interestTime);
+        sendJSON(res, $N.server.interestTime);
     });
     express.post('/notice', function(request, response) {
 
@@ -1288,6 +1301,7 @@ exports.start = function(options, init) {
 
 
 
+
     var channelListeners = {};
 
     function broadcast(socket, message, whenFinished) {
@@ -1316,23 +1330,18 @@ exports.start = function(options, init) {
         }
         io.sockets.in('*').emit('notice', message);
 
-		var plugins = that.server.plugins;
-        for (var p in plugins) {
-            var pp = plugins[p].plugin;
-			if (!pp) continue;
-            if (Server.plugins[p].enabled) {
-                if (pp.notice) {
-                    pp.notice(message);
-                }
-            }
-        }
+		if (!message.removed)			
+			plugins("onPub", message);
+		else
+			plugins("onDelete", message);
+
     }
-    that.broadcast = broadcast;
+    $N.broadcast = broadcast;
 
     function pub(message, whenFinished) {
         broadcast(null, message, whenFinished);
     }
-    that.pub = pub;
+    $N.pub = pub;
 
     function isAuthenticated(ses) {           
         if (ses)
@@ -1370,7 +1379,7 @@ exports.start = function(options, init) {
             }
             
             
-            if (Server.permissions['authenticate_to_create_objects'] != false) {
+            if ($N.server.permissions['authenticate_to_create_objects'] != false) {
                 if (!isAuthenticated(session)) {
                     if (err)
                         err('Not authenticated');
@@ -1382,22 +1391,22 @@ exports.start = function(options, init) {
         });
 
         socket.on('getPlugins', function(f) {
-            f(Server.plugins);
+            f($N.server.plugins);
         });
 
         socket.on('setPlugin', function(pid, enabled, callback) {
-			if (Server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
+			if ($N.server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
                 callback('Plugin enabling and disabling not allowed');
                 return;
 			}
-            if (Server.permissions['authenticate_to_configure_plugins'] != false) {
+            if ($N.server.permissions['authenticate_to_configure_plugins'] != false) {
                 if (!isAuthenticated(session)) {
                     callback('Unable to configure plugins (not logged in)');
                     return;
                 }
             }
 
-            var pm = Server.plugins[pid];
+            var pm = $N.server.plugins[pid];
             if (pm) {
                 if (!(pm.valid == false)) {
                     var currentState = pm.enabled;
@@ -1405,13 +1414,13 @@ exports.start = function(options, init) {
                         if (enabled) {
                             pm.enabled = true;
 							if (pm.start)
-	                            pm.start(that, util);
+	                            pm.start();
                             nlog('Plugin ' + pid + ' enabled');
                         }
                         else {
                             pm.enabled = false;
 							if (pm.stop)
-	                            pm.stop(that);
+	                            pm.stop();
                             nlog('Plugin ' + pid + ' disabled');
                         }
                         saveState(function() {
@@ -1450,7 +1459,7 @@ exports.start = function(options, init) {
             }
             
             var sessionKey = getSessionKey(session);
-            var keyRequired = (Server.permissions['authenticate_to_create_profiles']!=false);
+            var keyRequired = ($N.server.permissions['authenticate_to_create_profiles']!=false);
             if (!targetObject) { 
                 var selves = getClientSelves(session);
                 if (_.contains(selves, target)) {
@@ -1518,7 +1527,7 @@ exports.start = function(options, init) {
                         
             socket.set('clientID', cid);
             socket.emit('setClientID', cid, key, getClientSelves(session) );
-            socket.emit('setServer', Server.name, Server.description);
+            socket.emit('setServer', $N.server.name, $N.server.description);
             
             getObjectsByTag('Tag', function(to) {
                 socket.emit('notice', to);
@@ -1569,7 +1578,7 @@ exports.start = function(options, init) {
         });
 
         socket.on('delete', function(objectID, whenFinished) {
-            if (Server.permissions['authenticate_to_delete_objects'] != false) {
+            if ($N.server.permissions['authenticate_to_delete_objects'] != false) {
                 if (!isAuthenticated(session)) {
                     whenFinished('Unable to delete (not logged in)');
                     return;
@@ -1598,8 +1607,8 @@ exports.start = function(options, init) {
 
     function updateInterestTime() {
         //reprocess all clientState's to current time
-        for (c in Server.clientState) {
-            var cl = Server.clientState[c];
+        for (c in $N.server.clientState) {
+            var cl = $N.server.clientState[c];
             updateInterests(c, cl);
         }
     }
@@ -1627,7 +1636,7 @@ exports.start = function(options, init) {
     }
 
     function updateInterests(clientID, state, socket, resubscribe) {
-        var prevState = Server.clientState[clientID];
+        var prevState = $N.server.clientState[clientID];
         var now = Date.now();
 
         if (!prevState) {
@@ -1657,8 +1666,8 @@ exports.start = function(options, init) {
 
             else {
                 var averageInterest = (v + pv) / 2.0;
-                if (Server.interestTime[k] == undefined)
-                    Server.interestTime[k] = 0;
+                if ($N.server.interestTime[k] == undefined)
+                    $N.server.interestTime[k] = 0;
                 addends[k] = (now - prevState.when) / 1000.0 * averageInterest;
             }
         }
@@ -1668,8 +1677,8 @@ exports.start = function(options, init) {
             if (v == undefined) {
                 v = 0;
                 var averageInterest = (v + pv) / 2.0;
-                if (Server.interestTime[k] == undefined)
-                    Server.interestTime[k] = 0;
+                if ($N.server.interestTime[k] == undefined)
+                    $N.server.interestTime[k] = 0;
                 addends[k] = (now - prevState.when) / 1000.0 * averageInterest;
 
                 if (socket)
@@ -1683,14 +1692,14 @@ exports.start = function(options, init) {
         }
         for (k in addends) {
             var a = addends[k];
-            if (Server.interestTime[k] == undefined)
-                Server.interestTime[k] = 0;
-            Server.interestTime[k] += a / addendSum;
+            if ($N.server.interestTime[k] == undefined)
+                $N.server.interestTime[k] = 0;
+            $N.server.interestTime[k] += a / addendSum;
         }
 
 
         state.when = now;
-        Server.clientState[clientID] = state;
+        $N.server.clientState[clientID] = state;
 
     }
 
@@ -1709,26 +1718,25 @@ exports.start = function(options, init) {
 
     //setInterval(attention.update, Server.memoryUpdatePeriodMS);
 
-    require('./general.js').plugin.start(that, util);
+    require('./general.js').plugin($N).start();
 
 
-    that.permissions = options.permissions || { };
-	that.enablePlugins = options.plugins || [];
+    $N.permissions = options.permissions || { };
+	$N.enablePlugins = options.plugins || [];
 
-	that.server = Server;
-	that.nlog = nlog;
-	that.plugin = function(pluginfile, forceEnable) {
-		plugin(that, pluginfile, forceEnable);
+	$N.nlog = nlog;
+	$N.plugin = function(pluginfile, forceEnable) {
+		plugin(pluginfile, forceEnable);
 	};
-	that.saveState = saveState;
+	$N.saveState = saveState;
 
     function loadPlugins() {
-		if (that.enablePlugins)	{
-			_.each(that.enablePlugins, function(x) {
-				if (!that.server.plugins[x])
-					that.server.plugins[x] = { };
+		if ($N.enablePlugins)	{
+			_.each($N.enablePlugins, function(x) {
+				if (!$N.server.plugins[x])
+					$N.server.plugins[x] = { };
 
-				that.server.plugins[x].enabled = true;
+				$N.server.plugins[x].enabled = true;
 			});
 		}
 
@@ -1741,7 +1749,7 @@ exports.start = function(options, init) {
                 file = file + '/netention.js';
             }
 
-            plugin(that, file);
+            plugin(file);
         });
     }
 
@@ -1749,9 +1757,9 @@ exports.start = function(options, init) {
     nlog('Ready');
 
 	if (init)
-	    init(that);
+	    init($N);
 
-    return that;
+    return $N;
 
 };
 

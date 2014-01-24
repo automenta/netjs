@@ -1,6 +1,6 @@
 function getOperatorTags() {
-	return _.filter(_.keys(self.tags()), function(t) {
-        return self.tag(t).operator;        
+	return _.filter(_.keys($N.tags()), function(t) {
+        return $N.tag(t).operator;        
     });
 }
 
@@ -28,12 +28,12 @@ function newGoalWidget(g)  {
 
 function saveAddedTags(gt, tag, when) {
 	_.each(gt, function(g) {
-	    var G = self.tag(g);
+	    var G = $N.tag(g);
 		var ng = objNew();
 
 		if (when) {
 			ng.when = when;
-			var location = objSpacePoint(self.myself());
+			var location = objSpacePoint($N.myself());
 			if (location)
 				objAddValue(ng, 'spacepoint', location);
 		}
@@ -46,9 +46,9 @@ function saveAddedTags(gt, tag, when) {
 
 		ng = objAddTag(ng, tag);
 		ng = objAddTag(ng, g);
-		ng.subject = self.myself().id;
+		ng.subject = $N.myself().id;
 		
-		self.pub(ng, function(err) {
+		$N.pub(ng, function(err) {
 			$.pnotify({
 					title: 'Unable to save Goal.',
 					type: 'Error'            
@@ -57,7 +57,7 @@ function saveAddedTags(gt, tag, when) {
 				$.pnotify({
 					title: 'Goal saved (' + ng.id.substring(0,6) + ')'
 				});        
-			self.notice(ng);
+			$N.notice(ng);
 		});		
 
 	});
@@ -85,13 +85,13 @@ function renderUs(v) {
     var d = newDiv().attr('style', 'width:100%; overflow: auto;');
 
     
-    var centroidTimes = self.objectsWithTag('GoalCentroid');
+    var centroidTimes = $N.objectsWithTag('GoalCentroid');
     if (!centroidTimes) centroidTimes = [];
 
     var plans = [];
     var centroids = [];
     for (var k = 0; k < centroidTimes.length; k++) {
-        centroids.push( self.object(centroidTimes[k]) );
+        centroids.push( $N.object(centroidTimes[k]) );
     }
     
 
@@ -110,7 +110,7 @@ function renderUs(v) {
 
 			var avatarButton = $('<span/>');
 
-			var avatarImg = getAvatar(self.myself());
+			var avatarImg = getAvatar($N.myself());
 			avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
 			var exportButton = $('<button>Export</button>');
@@ -124,17 +124,13 @@ function renderUs(v) {
 				}).prependTo(p);
 			});
 
+			currentGoalHeader.append(avatarButton, exportButton);
 
-
-			currentGoalHeader
-			.append(avatarButton)
-			.append(exportButton);
-
-			if (currentUser == self.myself().id) {
+			if (currentUser == $N.myself().id) {
 				var editButton = $('<button>Edit</button>').appendTo(currentGoalHeader);
 				editButton.click(function() {
 				    newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
-					append(newObjectEdit(self.getObject(currentUser), true));
+					append(newObjectEdit($N.getObject(currentUser), true));
 				});
 			}
 
@@ -142,19 +138,19 @@ function renderUs(v) {
 			//.append('<button disabled title="Clear">[x]</button>');
 
 			var userSelect = $('<select></select>');
-			if (self.myself()) {
-				var o = $('<option value="' + self.myself().id + '">Me (' + self.myself().name + ')</option>').appendTo(userSelect);
-				if (currentUser == self.myself().id)
+			if ($N.myself()) {
+				var o = $('<option value="' + $N.myself().id + '">Me (' + $N.myself().name + ')</option>').appendTo(userSelect);
+				if (currentUser == $N.myself().id)
 					o.attr('selected','selected');
 			}
 			//userSelect.append('<option>Everyone\'s</option>');
 
-			var users = self.objectsWithTag('User');
+			var users = $N.objectsWithTag('User');
 			_.each(users, function(uid) {
-				if (uid == self.myself().id)
+				if (uid == $N.myself().id)
 					return; //skip self
 
-				var u = self.getObject(uid);			
+				var u = $N.getObject(uid);			
 				if (u) {
 					var o = $('<option value="' + u.id + '">' + u.name + '</option>').appendTo(userSelect);
 					if (currentUser == u.id)
@@ -171,7 +167,7 @@ function renderUs(v) {
 			var operators = getOperatorTags();
 
 		    _.each(operators, function(o) {
-		        var O = self.tag(o);
+		        var O = $N.tag(o);
 
 				var sdd = newDiv().addClass('alternatingDiv');
 
@@ -188,16 +184,16 @@ function renderUs(v) {
 				}).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
 
 				var currentUserFilter = function(o) {
-					o = self.getObject(o);
+					o = $N.getObject(o);
 					return o.author == currentUser.substring(5);
 				};
 
-				var nn = _.filter(self.objectsWithTag(o),currentUserFilter);
+				var nn = _.filter($N.objectsWithTag(o),currentUserFilter);
 
 				if (nn.length > 0) {
 					var uu = $('<ul></ul>');
 					_.each(nn, function(g) {
-						uu.append( newObjectSummary( self.getObject(g), {
+						uu.append( newObjectSummary( $N.getObject(g), {
 							showAuthorIcon: false,
 							showAuthorName: false
 						} ).removeClass("ui-widget-content ui-corner-all") );
@@ -227,7 +223,7 @@ function renderUs(v) {
 		function updateGoalList() {
 			goalList.html('');
 
-			var GOALS = self.objectsWithTag('Goal', true);
+			var GOALS = $N.objectsWithTag('Goal', true);
 
 			for (var i = 0; i < numHours; i++) {
 
@@ -293,17 +289,17 @@ function renderUs(v) {
 		updateGoalList();
 	}
 
-	updateUsView(self.myself().id);
+	updateUsView($N.myself().id);
 
 }
 
 function getPlan() {
-	if (!self.myself())
+	if (!$N.myself())
 		return { };
 
-    var plan = self.myself().plan;
+    var plan = $N.myself().plan;
     if (!plan) {
-        plan = self.myself().plan = { };
+        plan = $N.myself().plan = { };
 	}
 
 	return plan;
@@ -335,9 +331,9 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
            }
         });
         if (selTags.length > 0) {
-            var id = self.id() + '-' + currentTag;
+            var id = $N.id() + '-' + currentTag;
             var o = objNew(id, currentTag);
-            o.author = self.id();
+            o.author = $N.id();
             objAddTag(o, currentTag);
 
             for (var i = 0; i < selTags.length; i++) {
@@ -345,10 +341,10 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
             }
 
             
-            self.pub(o, function(err) {
+            $N.pub(o, function(err) {
                 $.pnotify({title: 'Error saving:', text: err, type:'error'});
             }, function() {
-                self.notice(o);
+                $N.notice(o);
                 $.pnotify({title: 'Saved', text: currentTag});
             });                            
             
@@ -392,7 +388,7 @@ function newTagBar(s, currentTag) {
         });
         target.append(b);
 
-        var tt = self.tag(tag);
+        var tt = $N.tag(tag);
         
         var tagname;
         var tooltip;
@@ -431,25 +427,26 @@ function newTagBar(s, currentTag) {
     canNeedSet.buttonset();        
 
     tagBar.append('<br/>');        
+
     return tagBar;
 }
 
 function getKnowledgeCodeTags(userid) {
     userid = userid.substring(5);
     
-    var tags = self.getIncidentTags(userid, getOperatorTags());
+    var tags = $N.getIncidentTags(userid, getOperatorTags());
             
     for (var k in tags) {
         var l = tags[k];
 		tags[k] = _.map(tags[k], function(o) {
-			return self.getObject(o).name;
+			return $N.getObject(o).name;
 		});
         /*for (var i = 0; i < l.length; i++) {
             l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
 		}*/
     }
     
-	var user = self.object('Self-' + userid);
+	var user = $N.object('Self-' + userid);
     tags['@'] = objSpacePointLatLng(user);
 	tags['name'] = user.name;
 
@@ -466,7 +463,7 @@ function getKnowledgeCodeHTML(userid) {
         }
         else {
             var il = i;
-            var stt = self.getTag(i);
+            var stt = $N.getTag(i);
             if (stt)
                 il = stt.name;
 
@@ -508,11 +505,11 @@ function newSelfTagList(s, user, c) {
 
     var b = $('<div/>');
          
-    var tags = self.getIncidentTags(user.id.substring(5), _.keys(tagColorPresets));            
+    var tags = $N.getIncidentTags(user.id.substring(5), _.keys(tagColorPresets));            
     
     function newTagWidget(x, i) {
         var name
-        var o = self.getObject(i);
+        var o = $N.getObject(i);
         if (o) {
             var tags = objTags(o);
             var otherTags = _.without(tags, x);  
@@ -540,7 +537,7 @@ function newSelfTagList(s, user, c) {
         
         var color = tagColorPresets[x] || 'gray';
         
-        var xn = self.tag(x).name;
+        var xn = $N.tag(x).name;
         b.append('<div><h4><span style="padding-right: 0.2em; background-color: ' + color + '">&nbsp;&nbsp;</span>&nbsp;' + xn + '</h4></div>');
         
         for (var i = 0; i < cl.length; i++) {
@@ -568,8 +565,8 @@ function newSelfTagList(s, user, c) {
         }
     }
     else {
-        if ((user) && (self.myself())) {
-            var own = (user.id === self.myself().id);
+        if ((user) && ($N.myself())) {
+            var own = (user.id === $N.myself().id);
             b.append('Click ');
 
             var addLink = $('<button><b>+ Tag</b></button>' );
@@ -594,19 +591,19 @@ function newSelfTagList(s, user, c) {
 }
 
 function saveSelf(editFunction) {
-    var m = self.myself();
+    var m = $N.myself();
     if (editFunction)
         m = editFunction(m);
     objTouch(m);
 
-    self.pub(m, function(err) {
+    $N.pub(m, function(err) {
         $.pnotify({
            title: 'Unable to save Self.',
            type: 'Error',
            text: err
         });           
     }, function() {
-        self.notice(m);
+        $N.notice(m);
         $.pnotify({
            title: 'Self Saved.'            
         });
@@ -619,12 +616,12 @@ function newSelfSummary(s, user, content) {
 	if (!user)
 		return;
 
-	if (self.myself())
-		editable = (user.id === self.myself().id);
+	if ($N.myself())
+		editable = (user.id === $N.myself().id);
     
 
     var c = $('<div/>');        
-    $.get('/self.header.html', function(d) {
+    $.get('/$N.header.html', function(d) {
         c.prepend(d);        
     });
 
@@ -745,7 +742,7 @@ function newSelfSummary(s, user, content) {
         lmap.onClicked = function(l) {
             if (editable) {
                 tags['@'] = [ l.lon, l.lat ];
-                objSetFirstValue( self.myself(), 'spacepoint', {lat: l.lat, lon: l.lon, planet: 'Earth'} );            
+                objSetFirstValue( $N.myself(), 'spacepoint', {lat: l.lat, lon: l.lon, planet: 'Earth'} );            
             }
         };
     });
@@ -790,7 +787,7 @@ function newSelfSummary(s, user, content) {
 
 
 function newRoster(selectUser) {
-    var users = self.objectsWithTag('User');
+    var users = $N.objectsWithTag('User');
 
     var d = newDiv();
 
@@ -803,8 +800,8 @@ function newRoster(selectUser) {
 			nameClickable: !selectUser
 		});        
         
-        if (self.myself()) {
-            if (x.id === self.myself().id) {
+        if ($N.myself()) {
+            if (x.id === $N.myself().id) {
                 sx.find('h1').append(' (me)');
                 d.prepend(sx);            
             }
@@ -826,7 +823,7 @@ function newRoster(selectUser) {
     }
     
     for (var i = 0; i < users.length; i++) {
-        var x = self.object(users[i]);
+        var x = $N.object(users[i]);
         if (x.name === 'Anonymous') {
             anonymous.push(x);
             continue;
@@ -861,7 +858,7 @@ function renderSelf(s, o, v) {
     frame.append(roster);
     frame.append(content);
 
-    var currentUser = self.myself();
+    var currentUser = $N.myself();
     
     function summaryUser(x) {
         currentUser = x;
