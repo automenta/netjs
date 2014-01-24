@@ -229,22 +229,22 @@ function initCZ(f) {
         _chronozoomloaded = true;
 
         var scripts = [ 
-                       "/lib/chronozoom/Scripts/rx.js",
-                       "/lib/chronozoom/Scripts/rx.jQuery.js",
-                       "/lib/chronozoom/Scripts/common.js",
-                       "/lib/chronozoom/Scripts/cz.settings.js",
-                       "/lib/chronozoom/Scripts/vccontent.js",
-                       "/lib/chronozoom/Scripts/viewport.js",
-                       "/lib/chronozoom/Scripts/virtualCanvas.js",
-                       "/lib/chronozoom/Scripts/mouseWheelPlugin.js",
-                       "/lib/chronozoom/Scripts/gestures.js",
-                       "/lib/chronozoom/Scripts/viewportAnimation.js",
-                       "/lib/chronozoom/Scripts/viewportController.js",
+                       "/lib/chronozoom/scripts/rx.js",
+                       "/lib/chronozoom/scripts/rx.jQuery.js",
+                       "/lib/chronozoom/scripts/common.js",
+                       "/lib/chronozoom/scripts/cz.settings.js",
+                       "/lib/chronozoom/scripts/vccontent.js",
+                       "/lib/chronozoom/scripts/viewport.js",
+                       "/lib/chronozoom/scripts/virtualCanvas.js",
+                       "/lib/chronozoom/scripts/mouseWheelPlugin.js",
+                       "/lib/chronozoom/scripts/gestures.js",
+                       "/lib/chronozoom/scripts/viewportAnimation.js",
+                       "/lib/chronozoom/scripts/viewportController.js",
 
                        '/lib/arbor/arbor.js'
         ];
         
-        loadCSS('/lib/chronozoom/Styles/cz.css');
+        loadCSS('/lib/chronozoom/css/cz.css');
         
 
         LazyLoad.js(scripts, f);

@@ -50,16 +50,12 @@ function newProfileWidget() {
     }
 
 	if (c === 0) {
-		d.html('');
-		d.append(newNewProfileWidget(function(user) {
+		d.html('').append(newNewProfileWidget(function(user) {
 			become(user);
 			closeDialog();
 		}));
 	}
 	else {
-		d.append(selector);
-		d.append(okButton);
-		d.append(deleteButton);
 
 		okButton.click(function() {
 		    var id = selector.val();
@@ -77,8 +73,6 @@ function newProfileWidget() {
 		});
 
 
-		d.append('<hr/>');
-
 		var newButton = $('<button>New Profile...</button>');
 		newButton.click(function() {
 			newButton.hide();
@@ -87,7 +81,8 @@ function newProfileWidget() {
 				closeDialog();
 			}));
 		});
-		d.append(newButton);        
+
+		d.append(selector).append(okButton).append(deleteButton).append('<hr/>').append(newButton);
 	}
 
     return d;
@@ -96,28 +91,20 @@ function newProfileWidget() {
 function newNewProfileWidget(whenFinished) {
 	var d = newDiv();
 
-
 	var nameField = $('<input type="text" placeholder="Name"></input>');
 	
 	var createButton = $('<button>Create User</button>');
 
-
-	d.append(nameField);
-
-    d.append('<br/>');
+	d.append(nameField).append('<br/>');
 
 	var locationEnabled = true;
 	var locEnabled = $('<input type="checkbox" checked="true"/>');
-	d.append(locEnabled);
-	d.append('Location Enabled');
-    d.append('<br/>');
 
-    var cm = $('<div id="SelfMap"/>');
-    d.append(cm);
+	d.append(locEnabled).append('Location Enabled').append('<br/>');
 
-    d.append('<br/>');
+    var cm = $('<div id="SelfMap"/>').appendTo(d);
 
-	d.append(createButton);
+    d.append('<br/>').append(createButton);
 
 	var location = configuration.mapDefaultLocation;
 
