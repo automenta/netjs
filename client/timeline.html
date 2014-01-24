@@ -56,8 +56,7 @@
             timeline.onmouseclick = function (e) { return zoomToElementHandler(this, e, 1.0); };
         }
 
-        $(document).ready(function () {
-
+		function draw(objects) {
             vc = $("#vc");
             vc.virtualCanvas();
             var gesturesStream = getGesturesStream(vc);
@@ -120,13 +119,19 @@
             );
 
 			/* ------ */
+			var minTime = Date.now() - 1000 * 60 * 60 * 48;
 
-			for (var i = 0; i < 50; i++) {
+			for (var i = 0; i < objects.length; i++) {
+				var O = objects[i];
+				
+				var t = O.modifiedAt || O.createdAt || O.when;
 
 				//var ts = (-32.7+Math.random()*8) * k;
-				var ts = (-75.7+Math.random()*60) * k;
+				var ts = (-30.7+ 25 * (t - minTime)/minTime ) * k;
+
 				//var te = -(Math.random()*24 * k);
-				var te = ts+(k * Math.random()*5);
+				var te = ts+(k * 2);
+
                 var top = (-16 + Math.random()*32) * k;
 				var height = Math.random()*1 * k;
 
@@ -141,7 +146,7 @@
 
 				function addObjectRect(ts, te, top, height) {
 					var rect = addRectangle(root, "layerTimelines", "timeline" + i, ts, top, te-ts, height, { strokeStyle: 'rgb(240,240,240)', lineWidth: 2, fillStyle: 'rgba(140,140,140,0.5)' } );
-					var text = "TEXT";
+					var text = O.name.substring(0,16);
     			    addText(root, "layerTimelineLabels", "timeline_l" + i, ts, top, te-ts, height, text, { fontName: contentItemHeaderFontName, 
     			                fillStyle: contentItemHeaderFontColor, textBaseline: 'middle', textAlign: 'center',
 	                    wrapText: true, numberOfLines: 1 }, 15);
@@ -150,8 +155,8 @@
 			}
 
 
-            addVideo(root, "layerVideos", "vid1", "http://www.youtube.com/embed/7hqX8ljEP34", -13*k, -4.5*k, k, k);
-            addVideo(root, "layerVideos", "vid2", "http://player.vimeo.com/video/31911961?title=0&amp;byline=0&amp;portrait=0", -16*k, -3.4*k, k, k);
+            //addVideo(root, "layerVideos", "vid1", "http://www.youtube.com/embed/7hqX8ljEP34", -13*k, -4.5*k, k, k);
+            //addVideo(root, "layerVideos", "vid2", "http://player.vimeo.com/video/31911961?title=0&amp;byline=0&amp;portrait=0", -16*k, -3.4*k, k, k);
 
 			/*
             add_Text = function (id, text) {
@@ -264,9 +269,17 @@
                 controller.moveToVisible(e.newvisible);
             });
 
-            vc.virtualCanvas("setVisible", new VisibleRegion2d(-20.0 * k, 2.5 * k, 14.0 * k / 1024.0));
+            vc.virtualCanvas("setVisible", new VisibleRegion2d(-60.0 * k, 2.5 * k, 34.0 * k / 1024.0));
 
             UpdateLayout();
+
+		}
+
+        $(document).ready(function () {
+			$.getJSON('/object/latest/100/json', function(d) {
+				draw(d);
+			});
+
         });
 
         function UpdateLayout() {
