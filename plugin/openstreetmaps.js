@@ -16,6 +16,7 @@ exports.plugin = function($N) { return {
                 uri: 'OSM.Interest', name: 'Interest in a Location (OSM)', 
 				description: 'Interest in a geolocation, which triggers a data load from OpenStreetMaps',
                 properties: {
+					'OSM.InterestActive': { name: 'Enabled', type: 'boolean', default: 'true', min: 1 /* url */ }
                     //'OSM.location': { name: 'Location', type: 'spacepoint' /* url */ }
 					//range (length/width of scan area)
                 }
@@ -84,6 +85,10 @@ OSM.studio*/
 		
         
 		this.update = _.throttle(function(x) {
+			if (!$N.objFirstValue(x, 'OSM.InterestActive')) {
+				return;
+			}
+
 			var where = x.earthPoint();
 
 			var radius = 0.03;
@@ -143,8 +148,6 @@ http://www.overpass-api.de/api/xapi?map?bbox=-180,-90,180,90
 */
 
 function getOpenStreetMaps(bounds, eachNode) {
-	request.get('http://google.com/img.png')
-
 	var url = 'http://jxapi.openstreetmap.org/xapi/api/0.6/node[amenity=*][bbox='+ 
 		bounds[0] +',' + bounds[1] + ',' + bounds[2] + ',' + bounds[3] + ']';
 

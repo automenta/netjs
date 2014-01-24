@@ -57,7 +57,7 @@ function renderMapMarker(x, createMarkerFunction) {
             rad = 50;                    
         },
         'GoalCentroid' : function() {
-            rad = 7000;
+            rad = 200;
             op = 0.3;
             //fill = '#fa3';                    
         },

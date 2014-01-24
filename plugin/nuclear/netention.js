@@ -49,17 +49,14 @@ exports.plugin = function($N) { return  {
                 var y = $N.objNew(
                     'NuclearFacility_' + name.replace(/\s+/g, '_'), 
                     name + ' Nuclear Facility'
-                );
+                	);
+
+				y.addTag('NuclearFacility').earthPoint(lat, lon);
                 y.createdAt = 1316995200;
-                $N.objAddTag(y, 'NuclearFacility');
-                $N.objAddGeoLocation(y, lat, lon);
-                if (reactors[1] > 0)
-                    $N.objAddValue(y, 'reactorsActive', reactors[1]);
-                if (reactors[2] > 0)
-                    $N.objAddValue(y, 'reactorsUnderConstruction', reactors[2]);
-                if (reactors[3] > 0)
-                    $N.objAddValue(y, 'reactorsShutDown', reactors[3]);
-                
+
+                if (reactors[1] > 0) y.add('reactorsActive', reactors[1]);
+                if (reactors[2] > 0) y.add('reactorsUnderConstruction', reactors[2]);
+                if (reactors[3] > 0) y.add('reactorsShutDown', reactors[3]);                
                 
                 f.push(y);
                 
