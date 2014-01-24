@@ -209,7 +209,7 @@ function netention(f) {
         
         id : function() { 
 			var cid = this.get('clientID'); 
-			if (cid.substring('Self-')==0)
+			if (cid.indexOf('Self-')==0)
 				return cid.substring(5);
 			return cid;
 		},
