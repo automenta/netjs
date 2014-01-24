@@ -220,8 +220,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             for (var i = 0; i < x.value.length; i++) {
                 var t = x.value[i];
 	
-				console.log(t.id, excludeTags);
-
 				if (excludeTags)
 					if (_.contains(excludeTags, t.id))
 						continue;

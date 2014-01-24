@@ -340,11 +340,13 @@ exports.start = function(options, init) {
     }
     $N.addTags = addTags;
 
+	//TODO rename: unMongoize
     function removeMongoID(x) {
         if (Array.isArray(x)) {
             for (var i = 0; i < x.length; i++) {
                 delete x[i]._id;
 				delete x[i]._tag;
+				util.objectify(x[i]);
 			}			
         }
         else {
@@ -1322,13 +1324,16 @@ exports.start = function(options, init) {
             }
         }
         
-        message = util.objCompact(message);
+        cmessage = util.objCompact(message);
 
 
         for (var t in targets) {
-            io.sockets.socket(t).emit('notice', message);
+            io.sockets.socket(t).emit('notice', cmessage);
         }
-        io.sockets.in('*').emit('notice', message);
+        io.sockets.in('*').emit('notice', cmessage);
+
+
+		message = util.objectify(message);
 
 		if (!message.removed)			
 			plugins("onPub", message);

@@ -16,47 +16,98 @@ function _n(x, places) {
 exports._n = _n;
     
 
-function objNew(id, name) {
+
+
+/** adds the objectInterface to an object */
+function objectify(x) {
+	//TODO build convenient & friendly object API here
+	//TODO is more optimal to use .prototype. methods than _.extend ?
+
+	var objectInterface = {
+
+		setName: function(n) {
+			objName(x, n);
+			return x;
+		},
+
+		addDescription: function(d) {
+			objAddDescription(x, d);
+			return x;
+		},
+
+		touch: function() {
+			objTouch(x);
+			return x;
+		},
+
+		add: function(k, v) {
+			return objAddValue(x, k, v);
+		},
+
+		/*x.objSpacePoint = function(latitude, longitude) {
+			return objSpacePointLatLng
+		}*/
+
+		//CLIENT-ONLY
+		own: function() {
+			if (self)
+				x.author = self.id();
+			return x;
+		},
+
+		addTag : function(t) {
+			return objAddTag(x, t);
+		},
+
+		addTags : function( tagArray ) {
+			for (var i = 0; i < tagArray.length; i++)
+				x.addTag(tagArray[i]);
+			return x;
+		},
+
+		hasTag : function(t) {
+			return objHasTag(x, t);
+		},
+
+		tags : function() {
+			return objTags(x);
+		},
+
+		earthPoint: function(lat, lon) {
+			if (lat == undefined) {
+				return objSpacePointLatLng(x);
+			}
+			return this.add('spacepoint', { 'lat': lat, 'lon': lon });
+		}
+
+	};
+
+	return _.extend(x, objectInterface);
+}
+exports.objectify = objectify;
+
+function objNew(id, name, initialTags) {
 	if (!name)
 		name = id;
     if (!id)
         id = uuid();
         
-	var now = Date.now();
-
     var x = {
         'id': id,
-        'createdAt': now
+        'createdAt': Date.now()
         //scope: 'public'
     };
     
     if (name)
         x.name = name;
         
-	//TODO build convenient & friendly object API here
-	x.setName = function(n) {
-		objName(x, n);
-		return x;
-	};
+	objectify(x);
 
-	x.touch = function() {
-		objTouch(x);
-		return x;
-	};
-
-	x.add = function(k, v) {
-		return objAddValue(x, k, v);
-	};
-
-	x.own = function() {
-		if (self)
-			x.author = self.id();
-		return x;
-	};
-
-	/*x.objSpacePoint = function(latitude, longitude) {
-		return objSpacePointLatLng
-	}*/
+	if (initialTags) {
+		if (!Array.isArray(initialTags))
+			initialTags = [ initialTags ];
+		x.addTags( initialTags );
+	}
 
     return x;
 }
@@ -93,8 +144,7 @@ function objAddValue(x, a, b, strength) {
         x.value = [];
         
     x.value.push(v);
-    
-        
+            
     return x;
 }
 exports.objAddValue = objAddValue;
@@ -367,6 +417,9 @@ function objHasTag(x, t) {
 	    if (!vv) continue;
 
 	    var vid = vv.id;
+		if (Array.isArray(vv))
+			vid = vv[0];			
+
 		if (!vid) continue;
 	
 		if (vv.strength == 0)
@@ -1047,6 +1100,10 @@ function objCompact( o ) {
     //console.log(  o);
 
     var y = _.clone(o);
+	return y;
+
+	//TODO ---- fix the rest of this
+
     var newValues = [];
 
     //console.log(o.value.length + ' values');

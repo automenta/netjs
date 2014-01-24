@@ -37,7 +37,7 @@ exports.plugin = function($N) { return {
 
             var that = this;
             
-            this.updateUnthrottled = function(f) {
+            this.update = _.throttle(function(f) {
                 
                 that.feeds = { };                
                 
@@ -48,8 +48,7 @@ exports.plugin = function($N) { return {
                         f();
                 });                    
                 
-            };            
-            this.update = _.throttle(this.updateUnthrottled, 5000 /* Increase longer */);
+            }, 5000 /* Increase longer */);
             
             this.update();
             
@@ -114,9 +113,8 @@ exports.plugin = function($N) { return {
         },
                 
         onPub: function(x) {
-            if ($N.objHasTag(x, 'web.RSSFeed')) {
+            if (x.HasTag('web.RSSFeed'))
                 this.update();
-            }
         },
         
 		stop: function() {
