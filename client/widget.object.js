@@ -1106,7 +1106,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
     }
     else if (tag) {
-        var TAG = $N.tags()[tag];
+        var TAG = $N.tags[tag];
         whenSaved.push(function(y) {
             objAddTag(y, tag, strength);
         });
@@ -1115,7 +1115,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
         else {
             var ti = getTagIcon(tag);
-            if ($N.tags()[tag] != undefined) {
+            if ($N.tags[tag] != undefined) {
                 tagLabel.html(TAG.name);
             }
             if (ti) {
@@ -1126,7 +1126,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                  tagLabel.append(pb);*/
 
                 function getTagProperties(t) {
-                    var TT = $N.tags()[t];
+                    var TT = $N.tags[t];
                     if (!TT)
                         return [];
                     if (!TT.properties)

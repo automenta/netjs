@@ -14,7 +14,7 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
     var ii = _.keys($N.layer().include);
     var ee = _.keys($N.layer().exclude);
     
-    for (var k in s.get('attention')) {
+    for (var k in s.objects()) {
         
         var x = s.getObject(k);
         
@@ -157,8 +157,9 @@ function renderItems(o, v, maxItems, perItems) {
     var relevance = rr[1];
 
     var xxrr = [];
+	var objects = $N.objects();
     for (var x = 0; x < relevant.length; x++) {
-        var xx = $N.get('attention')[relevant[x]];                        
+        var xx = objects[relevant[x]];                        
         var rr =  relevance[relevant[x]];
         xxrr.push([xx,rr]);
     }

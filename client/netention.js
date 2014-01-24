@@ -196,25 +196,25 @@ function netention(f) {
     var $NClient = Backbone.Model.extend({
         
         clear : function() {
-            this.set('tags', { });
-            this.set('properties', { });    
-            this.set('attention', { });    
             this.set('deleted', { });    
             this.set('replies', { });
             this.set('layer', { include: [], exclude: [] });
             this.set('focus', null );    
 			this.set('clientID', 'undefined');
+			this.attention = { };
+			this.tags = { };
+			this.properties = { };
+			
         },
         
         id : function() { return this.get('clientID'); },
 
-        tag : function(t) { return this.tags()[t]; },            
-        tags : function() { return this.get('tags'); },
+        tag : function(t) { return this.tags[t]; },            
         
         tagRoots: function() {
             var that = this;
             //this might be suboptimal
-            return _.select( _.keys(this.tags()), function(tt) {
+            return _.select( _.keys(this.tags), function(tt) {
                 var t = that.tag(tt);
                 if (!t.tag)
                     return true;
@@ -225,8 +225,8 @@ function netention(f) {
         subtags : function(s) {
             //this might be suboptimal, use an index
             var that = this;
-            return _.select( _.keys(this.tags()), function(tt) {
-                var t = that.tags()[tt];
+            return _.select( _.keys(this.tags), function(tt) {
+                var t = that.tags[tt];
                 if (!t.tag)
                     return false;
                 else { 
@@ -235,12 +235,9 @@ function netention(f) {
             });                
         },
         
-        isProperty : function(p) { return this.properties()[p]!=undefined; },
-        
-        properties : function() { return this.get('properties'); },
-        //property(p)
-        
-        objects : function() { return this.get('attention'); },
+        isProperty : function(p) { return this.properties[p]!=undefined; },
+                
+        objects : function() { return this.attention; }, //DEPRECATED
         
         /* returns a list of object id's */
         objectsWithTag : function(t, fullObject) {
@@ -254,8 +251,8 @@ function netention(f) {
             return r;
         },
         
-        getObject : function(id) { return this.objects()[id]; }, //deprecated
-        object : function(id) { return this.objects()[id]; }, 
+        getObject : function(id) { return this.attention[id]; }, //deprecated
+        object : function(id) { return this.attention[id]; }, 
         
         
         //self
@@ -282,13 +279,11 @@ function netention(f) {
         },
         
         //->tag
-        getTag : function(t) { return this.tags()[t]; },
-        getProperty : function(p) { return this.properties()[p]; },
+        getTag : function(t) { return this.tags[t]; },
+        getProperty : function(p) { return this.properties[p]; },
                     
-        getIncidentTags : function(userid, oneOfTags) {
-            
-            return objIncidentTags(this.objects(), oneOfTags, userid);
-            
+        getIncidentTags : function(userid, oneOfTags) {           
+            return objIncidentTags(this.objects(), oneOfTags, userid);            
         },
                 
         setObject : function(o) {
@@ -471,12 +466,12 @@ function netention(f) {
         },
 
         addProperty : function(p) {
-            this.properties()[p.uri] = p;
+            this.properties[p.uri] = p;
         },
         
         addTag: function(t) {
-            var ty = this.tags();
-            var p = this.properties();
+            var ty = this.tags;
+            var p = this.properties;
             
             var tt = t;
             var xx = t.properties;
@@ -697,7 +692,7 @@ function netention(f) {
         		this.notice([x]);
         	}
             
-            var attention = this.objects();
+            var attention = this.attention;
             var replies = this.get('replies');
             
             var that = this;
@@ -753,7 +748,6 @@ function netention(f) {
         	for (var i = 0; i < x.length; i++)
         		n(x[i]);
                 
-            this.set('attention', attention);
         	this.trigger('change:attention');
         },
         
@@ -808,7 +802,7 @@ function netention(f) {
         getTagCount : function(onlySelf, predicate) {
                             
             var tagCount = { };
-            var aa = this.get('attention');                
+            var aa = this.attention;
             var myID = this.id();
             
             for (var ai in aa) {

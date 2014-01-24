@@ -1,5 +1,5 @@
 function renderTrends(s, o, v) {
-    var aa = s.get('attention');                    
+    var aa = s.objects();
     var serverTagCount = { };
     var localTagCount = s.getTagCount();
     var selfTagCount = s.getTagCount(true);

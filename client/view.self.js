@@ -1,5 +1,5 @@
 function getOperatorTags() {
-	return _.filter(_.keys($N.tags()), function(t) {
+	return _.filter(_.keys($N.tags), function(t) {
         return $N.tag(t).operator;        
     });
 }

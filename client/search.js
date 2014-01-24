@@ -21,7 +21,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
     
     var matched = { };
     _.each(keywords, function(keyword) {
-        var types = self.tags();
+        var types = self.tags;
         
         function keywordMatchesTag(k, t) {
             var name = types[t].name;
