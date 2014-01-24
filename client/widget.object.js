@@ -1716,7 +1716,6 @@ function newTagTree(param) {
     ];
 
 
-
     function subtree(root, i) {
         var name, xi;
         if (i.name) {
@@ -1725,7 +1724,7 @@ function newTagTree(param) {
         }
         else
             name = xi = i;
-
+		
         var children = $N.subtags(xi);
 
         var label = name;
@@ -1746,6 +1745,7 @@ function newTagTree(param) {
                 subtree(b.children, $N.tag(c));
             });
         }
+		b.id = xi;
 
         root.push(b);
     }
@@ -1781,14 +1781,28 @@ function newTagTree(param) {
         addToTree(T);
 
     tree.appendTo(a);
-    a.tree({
-        data: T,
-        autoEscape: false,
-        selectable: false,
-        slide: false,
-		autoOpen: 1
-        //autoOpen: 2
-    });
+
+	later(function() {
+		a.hide();
+		a.tree({
+		    data: T,
+			useContextMenu: false,
+		    autoEscape: false,
+		    selectable: false,
+		    //slide: false,
+			autoOpen: false
+		});
+
+		//autoOpen seems broken in jqtree, so manually open the first level:
+
+		a.find('.jqtree-toggler').click();
+		a.find('.jqtree-toggler').click();
+
+		//all should be closed now.  now open the first row:
+
+		a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
+		a.show();
+	});
 
     return tree;
 

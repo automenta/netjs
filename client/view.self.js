@@ -289,7 +289,11 @@ function renderUs(v) {
 		updateGoalList();
 	}
 
-	updateUsView($N.myself().id);
+	if ($N.myself())
+		updateUsView($N.myself().id);
+	else {
+		//..
+	}
 
 }
 

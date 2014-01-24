@@ -135,8 +135,10 @@ function newTreeBrowser(selected, onTagAdded) {
         target: e,
         newTagDiv: function(id, content) {
             var ti = getTagIcon(id);
-            if (ti)
-                content = '<img style="height: 1em" src="' + ti + '"/>' + content;
+			if (!ti) ti = defaultIcons['unknown'];
+
+            content = '<img style="height: 1em" src="' + ti + '"/>&nbsp;' + content;
+
             return {
                 label: ('<button id="' + prefix + id + '" class="TagChoice")>' + content + '</button>')
             };

@@ -6,7 +6,35 @@ var currencyUnits = [ 'Bitcoin', 'USDollar', 'Euro', 'Gold(g)', 'Silver(g)' ];
     //http://www.therichest.org/business/most-traded-currencies/
 
 var generalTags = [
+    {uri: 'Resource', name: 'Resource', description: 'Something that may be used or applied'},
+
+    {uri: 'Concept', name: 'Concept', description: 'An abstract concept' },
+
+    {uri: 'Action', name: 'Action', //combined Event into this one..
+		description: 'Something that may be accomplished',
+        properties: {
+            'active': {name: 'Active', type: 'boolean'},
+            'startsAt': {name: 'Starts At', type: 'text' /*datetime*/},
+            'stopsAt': {name: 'Stops At', type: 'text' /*datetime*/},
+            'maxAttendance': {name: 'Maximum Attendance', type: 'integer' /*datetime*/}
+            //Inviting (person)
+            //Completed?
+            //RSVP by
+            //Reason (why)
+            //Needs Volunteers?
+            /*
+             Are you about to take a big decision? How do you know it's the right one? Here are the five tests:
+             The Eternal Recurrence Test - this thing you are about to do: if you had to watch yourself performing this action an infinite number of times, would you still go ahead? If so, do it. If not, don't.
+             The Movie Of Your Life Test - this thing you are about to do: would you want it to be in the movie of your life, the scenes that show you at your very best? If so, do it. If not, don't.
+             The Gravestone Test - this thing you are about to do: would you want it recorded on your gravestone after your death? If so, do it. If not, don't.
+             The Mirror Test - this thing you are about to do: will you be able to look at yourself in the mirror afterwards and feel proud of what you have done? If so, do it. If not, don't.
+             The Others Test - this thing you are about to do: will you be happy for others to know all about it? If so, do it. If not, don't.
+             */
+
+        }
+    },
     {uri: 'Imaginary', name: 'Imaginary', description: 'Something imaginary, indefinite values.'},
+
     //Being superclass of Human..
     //TODO "Contact Schema": http://portablecontacts.net/draft-spec.html#schema   
     {uri: 'Human', name: 'Human',
@@ -50,37 +78,18 @@ var generalTags = [
             'count': {name: 'Count', type: 'integer'},
             'individualWeight': {name: 'Weight (individual)', type: 'real'},
             'color': {name: 'Color', type: 'text'}
-        }
+        },
+		tag: ['Resource']
     },
-    {uri: 'Action', name: 'Action', //combined Event into this one..
-        properties: {
-            'active': {name: 'Active', type: 'boolean'},
-            'startsAt': {name: 'Starts At', type: 'text' /*datetime*/},
-            'stopsAt': {name: 'Stops At', type: 'text' /*datetime*/},
-            'maxAttendance': {name: 'Maximum Attendance', type: 'integer' /*datetime*/}
-            //Inviting (person)
-            //Completed?
-            //RSVP by
-            //Reason (why)
-            //Needs Volunteers?
-            /*
-             Are you about to take a big decision? How do you know it's the right one? Here are the five tests:
-             The Eternal Recurrence Test - this thing you are about to do: if you had to watch yourself performing this action an infinite number of times, would you still go ahead? If so, do it. If not, don't.
-             The Movie Of Your Life Test - this thing you are about to do: would you want it to be in the movie of your life, the scenes that show you at your very best? If so, do it. If not, don't.
-             The Gravestone Test - this thing you are about to do: would you want it recorded on your gravestone after your death? If so, do it. If not, don't.
-             The Mirror Test - this thing you are about to do: will you be able to look at yourself in the mirror afterwards and feel proud of what you have done? If so, do it. If not, don't.
-             The Others Test - this thing you are about to do: will you be happy for others to know all about it? If so, do it. If not, don't.
-             */
 
-        }
-    },
     {uri: 'Geometry', name: 'Geometry',
         properties: {
             'length': {name: 'Length', type: 'real', units: lengthUnits },
             'width': {name: 'Width', type: 'real', units: lengthUnits },
             'height': {name: 'Height', type: 'real', units: lengthUnits},
             'mass': {name: 'Mass', type: 'real', units: massUnits}
-        }
+        },
+		tag: ['Concept']
     },
     {uri: 'Value', name: 'Value',
         properties: {
@@ -89,7 +98,8 @@ var generalTags = [
             'walletRipple': {name: 'Ripple Wallet', type: 'text'},
             'walletPayPal': {name: 'PayPal Address', type: 'text'},
             'walletRTN': {name: 'Bank Account', type: 'text'}, //http://en.wikipedia.org/wiki/Routing_transit_number
-        }
+        },
+		tag: ['Concept']
     },
     {uri: 'Contract', name: 'Contract',
         properties: {
@@ -107,25 +117,31 @@ var generalTags = [
             //public enum TrocoKey {
             //   ISSUER, ISSUER_ID, ISSUER_BTN, ISSUER_IMG, RECPT, RECPT_ID, RECPT_BTN, RECPT_IMG, GIVE_VALUE, OTHER_VALUE, SAME_VALUE, BEFORE_DATE, SIGN_BTN, STATUS, ISSUER_SIGNED, RECPT_SIGNED, REDEEMED, REDEEM_BTN, ISSUER_GPGAUTH, RECPT_GPGAUTH, ISSUER_GPGSIGN, RECPT_GPGSIGN
 
-        }
+        },
+		tag: ['Concept']
     },
-    {uri: 'Media', name: 'Media'}, //params: contentType
+
+    {uri: 'Media', name: 'Media', description: 'A multimedia object', tag: ['Resource'] }, //params: contentType
     //goodPartStartsAt: (time)
 
-    {uri: 'Report', name: 'Report'}, //Report=Incident
+    {uri: 'Report', name: 'Report',	tag: ['Resource']	}, //Report=Incident
     //NewsSourceLink (url)
     //see: Ushahidi.com
 
-    {uri: 'Arrive', name: 'Arrive'},
-    {uri: 'Depart', name: 'Depart'},
-    {uri: 'Problem', name: 'Problem'}, //=Question
-    //blame : who
+    {uri: 'Arrive', name: 'Arrive', tag: ['Action'] },
+    {uri: 'Depart', name: 'Depart', tag: ['Action']},
 
-    {uri: 'Solution', name: 'Solution'}, //=Answer
+    {uri: 'Problem', name: 'Problem', tag: ['Concept'], 
+		properties: {
+			'problemBlame': { name: 'Blame', description: 'Who or what is blamed', type: 'object' }
+		}
+	}, //=Question     //blame : who
 
-    {uri: 'Cause', name: 'Cause'},
-    {uri: 'Effect', name: 'Effect'},
-    {uri: 'Internet', name: 'Internet'},
+    {uri: 'Solution', name: 'Solution', tag: ['Concept']}, //=Answer
+
+    {uri: 'Cause', name: 'Cause', tag: ['Concept']},
+    {uri: 'Effect', name: 'Effect', tag: ['Concept']},
+    {uri: 'Internet', name: 'Internet', tag: ['Resource']},
     {uri: 'Goal', name: 'Goal',
         properties: {
             /*'repeatPeriod': {name: 'Repeat period (sec)', type: 'real', unit: 'time'},
@@ -135,18 +151,20 @@ var generalTags = [
             'requiresAcknowledgement': {name: 'Require Acknowledgement', type: 'boolean'},
             'lastAcknowledgement': {name: 'Repeat started', type: 'timepoint', readonly: true},
             'goalEnabled': {name: 'Enabled', type: 'boolean', default: true}
-        }
+        },
+		tag: ['Concept']
     }, //=Project=Program=Plan=Opportunity
 
 	{uri: 'GoalCentroid', name: 'Possible Goal', tag: [ 'Goal', 'Imaginary' ]},
 
     //state = considered|desired|active|completed
 
-    {uri: 'Favorite', name: 'Favorite'},
-    {uri: 'User', name: 'User'},
+    {uri: 'Favorite', name: 'Favorite', tag: ['Concept']},
+
+    {uri: 'User', name: 'User', tag: ['Resource']},
     //{ uri: 'Netention', name: 'Netention'}, //Netention itself, meta 
 
-    {uri: 'Message', name: 'Message'},
+    {uri: 'Message', name: 'Message', tag: ['Resource']},
     /*
      At the first gate, ask yourself, ‘Is it true?
      At the second ask, ‘Is it necessary?
@@ -154,7 +172,7 @@ var generalTags = [
      - Sufi saying -
      */
 
-    {uri: 'Decision', name: 'Decision'},
+    {uri: 'Decision', name: 'Decision', tag: ['Concept']},
     //subtag of Action?
 
     //http://en.wikipedia.org/wiki/List_of_biases_in_judgment_and_decision_making
@@ -173,13 +191,15 @@ var generalTags = [
         description: 'You have serious objections and you’ll be extremely unhappy if this proposal goes ahead.'
     },
     
-    {uri: 'Social', name: 'Social', properties: {       }},
+    {uri: 'Social', name: 'Social', tag: ['Concept'], properties: {       }},
     {uri: 'Friend', name: 'Friend', tag: ['Social'], operator: true},
     {uri: 'Enemy', name: 'Enemy', tag: ['Social'], operator: true},
     
     {uri: 'Know', name: 'Know', properties: {
             'knowledge': {name: 'Knowledge', type: 'object'}
-       }},
+       },
+		tag: ['Action']
+	},
     /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
      3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
     {uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true,
@@ -193,48 +213,49 @@ var generalTags = [
     {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true,
         description: 'Has expert knowledge and is most useful in teaching others' },
         
-    {uri: 'Can', name: 'Can', operator: true},
-    {uri: 'Need', name: 'Need', operator: true, properties: {
+    {uri: 'Can', name: 'Can', tag: ['Concept'], operator: true},
+    {uri: 'Need', name: 'Need', tag: ['Concept'], operator: true, properties: {
         'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
     }},
-    {uri: 'Not', name: 'Not', operator: true},
-    
-    {uri: 'Support', name: 'Support', description: 'A life-supporting component of civilization or infrastructure'},
-    
+    {uri: 'Not', name: 'Not', tag: ['Concept'], operator: true},
+        
     //NEEDS from SparkRelief
-    {uri: 'Volunteer', name: 'Volunteer', tag: ['Support']},
-    {uri: 'Shelter', name: 'Shelter', tag: ['Support']},
-    {uri: 'Food', name: 'Food', tag: ['Support']},
-    {uri: 'Tools', name: 'Tools', tag: ['Support']},
-    {uri: 'Health', name: 'Health', tag: ['Support']},
-    {uri: 'Transport', name: 'Transport', tag: ['Support']},
-    {uri: 'Service', name: 'Service', tag: ['Support']},
-    {uri: 'Animal', name: 'Animal', tag: ['Support']},
-    
+    {uri: 'Volunteer', name: 'Volunteer', tag: ['Resource']},
+    {uri: 'Shelter', name: 'Shelter', tag: ['Resource']},
+    {uri: 'Food', name: 'Food', tag: ['Resource']},
+    {uri: 'Tools', name: 'Tools', tag: ['Resource']},
+    {uri: 'Health', name: 'Health', tag: ['Resource']},
+    {uri: 'Transport', name: 'Transport', tag: ['Resource']},
+    {uri: 'Service', name: 'Service', tag: ['Resource']},
+    {uri: 'Animal', name: 'Animal', tag: ['Resource']},
+    {uri: 'Infrastructure', name: 'Infrastructure', tag: ['Resource']},
+
+	/*    
     {uri: 'PDF', name: 'PDF Slide', properties: {
             'pdfURL': {name: 'PDF URL', type: 'text'},
             'slideNumber': {name: 'Slide', type: 'integer', min: 1, incremental: true}
-        }},
+        }, tag: ['Media'] },
+	*/
+
     //Pledge = Promise
-    //  
     {uri: 'Promise', name: 'Promise',
-        description: "Promise or an Offer. 'I will do it, but only if you will help.'" //PledgeBank.com
+        description: "Promise or an Offer. 'I will do it, but only if you will help.'", //PledgeBank.com
+		tag: ['Concept']
     },
     {uri: 'Tag', name: 'Tag',
         description: "Indicates that an object defines a tag",
         properties: {
             'tagValueType': {name: 'Value Type', type: 'text'},
             //'tagDomain': { name: 'Domain', type: 'text' }
-        }
-
-
+        },
+		tag: ['Concept']
     }
-
 
 ];
 
 var emotionTags = [
-	{ uri: 'Emotion', name: 'Emotion'},
+	{ uri: 'Emotion', name: 'Emotion', tag: ['Concept'] },
+
     { uri: 'Emotion.calm', name: 'Calm', tag: ['Emotion'] }, //neutral
     
     //

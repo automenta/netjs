@@ -16,7 +16,8 @@ exports.plugin = function($N) { return  {
             			 'reactorsActive': { name: 'Active Reactors', type: 'integer' },
                          'reactorsUnderConstruction': { name: 'Reactors Under Construction', type: 'integer' },
                          'reactorsShutDown': { name: 'Shut Down Reactors', type: 'integer' },
-                }
+                },
+				tag: ['Infrastructure']
             } ]);
             
             

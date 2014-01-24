@@ -13,7 +13,7 @@ exports.plugin = function($N) { return {
         
        $N.addTags([
             {
-                uri: 'OSM.Interest', name: 'Location Interest (OSM)', 
+                uri: 'OSM.Interest', name: 'Interest in a Location (OSM)', 
 				description: 'Interest in a geolocation, which triggers a data load from OpenStreetMaps',
                 properties: {
                     //'OSM.location': { name: 'Location', type: 'spacepoint' /* url */ }
@@ -21,8 +21,8 @@ exports.plugin = function($N) { return {
                 }
             },
             {
-                uri: 'OSM.Node', name: 'OpenStreetMaps Item', 
-				description: 'OpenStreetMaps map item',
+                uri: 'OSM.Node', name: 'OpenStreetMaps Place', 
+				description: 'OpenStreetMaps map node',
                 properties: {
                     //'OSM.amenity': { name: 'Amenity', type: 'text', min: 1 }
                 }
@@ -31,12 +31,56 @@ exports.plugin = function($N) { return {
 
 		//http://wiki.openstreetmap.org/wiki/Key:amenity
 		$N.addTags([
-			{ uri: 'OSM.parking', name: 'Parking Location' },
-			{ uri: 'OSM.place_of_worship', name: 'Place of Worship' },
-			{ uri: 'OSM.school', name: 'School' },
-			{ uri: 'OSM.restaurant', name: 'Restaurant' },
-			{ uri: 'OSM.hospital', name: 'Hospital' },
-		], ['OSM.Node']);
+			{ uri: 'OSM.parking', name: 'Parking Location', tag: [ 'OSM.Node', 'Transport' ] },
+			{ uri: 'OSM.fuel', name: 'Fuel', tag: [ 'OSM.Node', 'Transport', 'Infrastructure' ] },
+			{ uri: 'OSM.car_wash', name: 'Car Wash', tag: [ 'OSM.Node', 'Transport' ] },
+			{ uri: 'OSM.parking_entrance', name: 'Parking Entrance', tag: [ 'OSM.Node', 'Transport' ] },
+			{ uri: 'OSM.bicycle_parking', name: 'Bicycle Parking Location', tag: [ 'OSM.Node', 'Transport' ] },
+
+			{ uri: 'OSM.place_of_worship', name: 'Place of Worship', tag: [ 'OSM.Node' ] },
+			{ uri: 'OSM.school', name: 'School', tag: [ 'OSM.Node' ] },
+
+
+			{ uri: 'OSM.hospital', name: 'Hospital', tag: [ 'OSM.Node', 'Health' ] },
+			{ uri: 'OSM.dentist', name: 'Dentist', tag: [ 'OSM.Node', 'Health' ] },
+			{ uri: 'OSM.pharmacy', name: 'Pharmacy', tag: [ 'OSM.Node', 'Health' ] },
+			{ uri: 'OSM.doctors', name: 'Doctors', tag: [ 'OSM.Node', 'Health' ] },
+
+			{ uri: 'OSM.grave_yard', name: 'Grave Yard', tag: [ 'OSM.Node' ]},
+
+			{ uri: 'OSM.cafe', name: 'Cafe', tag: [ 'OSM.Node', 'Food' ] },
+			{ uri: 'OSM.fast_food', name: 'Fast Food', tag: [ 'OSM.Node', 'Food' ] },
+			{ uri: 'OSM.vending_machine', name: 'Vending Machine', tag: [ 'OSM.Node', 'Food' ] },
+			{ uri: 'OSM.restaurant', name: 'Restaurant', tag: [ 'OSM.Node', 'Food' ] },
+
+			{ uri: 'OSM.atm', name: 'ATM Machine', tag: [ 'OSM.Node' ] },
+			{ uri: 'OSM.police', name: 'Police', tag: [ 'OSM.Node', 'Infrastructure' ] },
+			{ uri: 'OSM.bank', name: 'Bank', tag: [ 'OSM.Node' ] },
+			{ uri: 'OSM.post_box', name: 'Post Box', tag: [ 'OSM.Node', 'Infrastructure' ] },
+			{ uri: 'OSM.pub', name: 'Pub', tag: [ 'OSM.Node', 'Food' ] },
+			{ uri: 'OSM.bar', name: 'Bar', tag: [ 'OSM.Node', 'Food' ] },
+
+
+/*OSM.public_building
+OSM.fire_station
+OSM.social_centre
+OSM.shelter
+OSM.post_office
+OSM.bench
+OSM.fountain
+
+OSM.university
+OSM.library
+OSM.kindergarten
+
+OSM.Wedding Location
+OSM.theatre
+OSM.swimming_pool
+OSM.cinema
+OSM.ice_cream
+OSM.studio*/
+
+		]);
 		
         
 		this.update = _.throttle(function(x) {
