@@ -256,7 +256,7 @@ function netention(f) {
         
         
         //self
-        getSelf : function(clientID) { return this.objects()['Self-' + clientID]; }, 
+        getSelf : function(clientID) { return this.attention['Self-' + clientID]; }, 
         deleteSelf : function(clientID) {
             var os = this.get('otherSelves');
             if (os.length < 2) {
