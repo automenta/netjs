@@ -207,7 +207,12 @@ function netention(f) {
 			
         },
         
-        id : function() { return this.get('clientID'); },
+        id : function() { 
+			var cid = this.get('clientID'); 
+			if (cid.substring('Self-')==0)
+				return cid.substring(5);
+			return cid;
+		},
 
         tag : function(t) { return this.tags[t]; },            
         
