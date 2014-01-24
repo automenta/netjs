@@ -110,10 +110,13 @@ function renderFocus() {
 
     var fe = $('#FocusEdit');
     fe.html('');
-    var noe = newObjectEdit(focusValue, true, true, function(xx) {
+
+	var newFocusValue = _.clone(focusValue);
+
+    var noe = newObjectEdit(newFocusValue, true, true, function(xx) {
         focusValue = xx;
         renderFocus();
-    }, function(x) {
+    }, function(x) {			
         focusValue = x;
         $N.setFocus(x);
     }, [ 'spacepoint' ]); //do not show spacepoint property, custom renderer is below
@@ -122,7 +125,7 @@ function renderFocus() {
 
 	if ((configuration.avatarMenuTagTreeAlways) || (focusValue.what)) {
 		var tt = newFocusTagTree(focusValue, function(tag, newStrength) {
-			console.log(tag, newStrength);
+
 			var tags = objTags(focusValue);
 			var existingIndex = _.indexOf(tags, tag);
 
@@ -149,8 +152,9 @@ function renderFocus() {
         fe.append(m);
         var lmap = initLocationChooserMap(uu, where, 3);
 		lmap.onClicked = function(l) {
-			objSetFirstValue(focusValue, 'spacepoint', { lat: l.lat, lon: l.lon, planet: 'Earth'});
-			$N.setFocus(focusValue);
+			var newFocus = _.clone(focusValue);
+			objSetFirstValue(newFocus, 'spacepoint', { lat: l.lat, lon: l.lon, planet: 'Earth'});
+			$N.setFocus(newFocus);
 		};
     }
 }
@@ -176,8 +180,9 @@ $('#FocusWhereButton').click(function() {
 var periodMS = FOCUS_KEYWORD_UPDATE_PERIOD;
 var ty = _.throttle(function() {
     var t = $('#FocusKeywords').val();
-    focusValue.name = t;
-    $N.setFocus(focusValue);
+	var newFocus = _.clone(focusValue);
+	newFocus.name = t;
+    $N.setFocus(newFocus);
 }, periodMS);
 
 $('#FocusKeywords').keyup(

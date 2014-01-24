@@ -21,7 +21,15 @@ exports.plugin = function($N) { return {
         onPub: function(x) {
 			console.log('pub', JSON.stringify(x));
         },
+
+		onConnect: function(who) {
+			console.log('connect', who);
+		},
         
+		onFocus: function(who, focus) {
+			console.log('focus', who, focus);
+		},
+
 		onDelete: function(x) { 
 			console.log('delete', x);
 		},

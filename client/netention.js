@@ -662,10 +662,24 @@ function netention(f) {
         },
         
         setFocus : function(f) {
+			//TODO avoid sending duplicate focuses
+			/*
+			var oldFocus = this.get('focus');
+			if (oldFocus)
+				if (f.when == oldFocus.when)
+					if (f.where == oldFocus.where)
+						if (f.author == oldFocus.author) {
+							console.log(f.value, oldFocus.value);
+							if (_.isEqual(f.value, oldFocus.value))
+								return;
+						}
+			*/
+
             f.id = uuid();
             f.focus = 'change';
             f.whenCreated = Date.now();
             f.author = this.id();
+
             if (f.when==null) delete f.when;
             if (f.where==null) delete f.where;
             if (f.tags)

@@ -333,22 +333,24 @@ exports.objTagStrength = objTagStrength;
 
 function objTagRelevance(x,y) {
     /* dot product of the normalized tag vectors */
-    
+
     var xx = objTagStrength(x, false, true);
     var yy = objTagStrength(y, false, true);
-    var common = _.intersection( _.keys(xx), _.keys(yy) );
-    if (common) {
-        var union = _.difference(_.union( _.keys(xx), _.keys(yy) ), ['Imaginary']);
-        if (common.length > 0) {
-            var total = 0.0;
-            for (var i = 0; i < common.length; i++) {
-                var c = common[i];
-                total += xx[c] * yy[c]; //dot product
-            }
-            return total / union.length;
-        }
-    }
-    return 0;
+
+	var xxk = _.keys(xx);
+	var yyk = _.keys(yy);
+
+	var r = 0;
+
+	for (var i = 0; i < xxk.length; i++) {
+		var c = xxk[i];
+		var contained = _.contains( yyk, c );
+		if (contained) {
+			r += xx[c] * yy[c];
+		}
+	}
+
+    return r;
     
 }
 exports.objTagRelevance = objTagRelevance;

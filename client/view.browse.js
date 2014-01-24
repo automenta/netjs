@@ -99,7 +99,10 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
             if (focus) {
 				if (focus.name) {
 					var fn = focus.name.toLowerCase();
-					var xn = (x.name||'').toLowerCase();
+
+					var xn = (x.name||'');
+					if (xn.toLowerCase) xn = xn.toLowerCase();
+
 					if (xn.indexOf(fn)==-1)
 						r = 0;
 				}

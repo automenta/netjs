@@ -1373,7 +1373,7 @@ exports.start = function(options, init) {
                 var m = util.objExpand(message);
                 focusHistory.push(m);
 
-                console.log('Focus', m.author, m.value);
+				plugins('onFocus', m);
                 
                 //remove elements in focusHistory that are older than focusHistoryMaxAge (seconds)
                 var now = Date.now();
