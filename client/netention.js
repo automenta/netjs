@@ -324,6 +324,8 @@ function netention(f) {
                         if (nextID.indexOf('Self-') === 0)
                             nextID = nextID.substring(5);
                         
+						self.set('clientID', nextID);
+
                         s.connect(target, function() {
                             var os = self.get('otherSelves');
                             os.push('Self-' + nextID);
