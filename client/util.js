@@ -289,14 +289,15 @@ function objTags(x, includePrimitives) {
   }
   if (includePrimitives)
 	return _.pluck(newValues, 'id');
-  else
-  	return _.uniq( _.filter( _.pluck(newValues, 'id'), function(t) { return !isPrimitive(t) } ) );
+  else {
+	return _.uniq( _.pluck(newValues, 'id').filter( function(t) { return !isPrimitive(t) } ) );
+  }
 }
 exports.objTags = objTags;
 
 function objProperties(x) {
   if (!x.value) return [];
-  return _.uniq( _.filter( _.pluck(x.value, 'id'), function(t) { 
+  return _.uniq( _.pluck(x.value, 'id').filter( function(t) { 
       return (window.self.getProperty(t)!=null);
   } ) );
 }

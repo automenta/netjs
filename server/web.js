@@ -966,9 +966,9 @@ exports.start = function(options, init) {
     });
 
     function compactObjects(list) {
-        return _.map(list,  function(o) { 
+        return list.map(function(o) { 
 			return util.objCompact(o); 
-		} );
+		});
     }
 
 	/*

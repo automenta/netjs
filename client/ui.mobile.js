@@ -109,7 +109,7 @@ function renderFocus() {
     $N.setFocus(focusValue);
 
     var fe = $('#FocusEdit');
-    fe.html('');
+    fe.empty();
 
 	var newFocusValue = _.clone(focusValue);
 

@@ -61,19 +61,14 @@ function _updateView(force) {
         }
     }
 
-    v.html('');
-    o.html('');
-    submenu.html('');
+    v.empty();
+    o.empty();
+    submenu.empty();
     submenu.hide();
 
     lastView = view;
 
-    v.css('font-size', '100%');
-    v.removeClass('ui-widget-content');
-    v.removeClass('view-indented');
-    v.removeClass('overthrow');
-    v.removeClass('overflow-hidden');
-    v.removeClass('nobg');
+    v.css('font-size', '100%').removeClass('ui-widget-content view-indented overthrow overflow-hidden nobg');
 
     function indent() {
         submenu.show();
@@ -263,14 +258,10 @@ $(document).ready(function() {
         $('#LoadingSplash').hide();
     }
 
-    var ll = $.pnotify({
-        title: 'Loading...'
-    });
+    $('#NotificationArea').html('Loading...');
 
     netention(function($N) {
-        ll.pnotify({
-            text: 'System loaded.'
-        });
+		$('#NotificationArea').html('System loaded.');
 
         window.self = $N; //DEPRECATED
 		window.$N = $N;
@@ -280,12 +271,9 @@ $(document).ready(function() {
         $N.clear();
 
         $N.loadSchemaJSON('/ontology/json', function() {
-            ll.pnotify({
-                text: 'Ontology ready. Loading objects...'
-            });
+            $('#NotificationArea').html('Ontology ready. Loading objects...');
 
             $N.getLatestObjects(configuration.maxStartupObjects, function() {
-                ll.hide();
 
                 $N.listenAll(true);
 
@@ -366,24 +354,17 @@ $(document).ready(function() {
 		            var ii = identity();
 
 		            if (ii === ID_AUTHENTICATED) {
-		                $.pnotify({
-		                    title: 'Authorized.'
-		                });
+		                $('#NotificationArea').html('Authorized.');
 		            }
 		            else if (ii === ID_ANONYMOUS) {
-		                $.pnotify({
-		                    title: 'Anonymous.'
-		                });
+		                $('#NotificationArea').html('Anonymous.');
 		            }
 		            else {
-		                var nn = $.pnotify({
-		                    title: 'Unidentified.',
-		                    text: 'Read-only public access.  <b><a class="loginlink" href="#">Login</a>?</b>'
-		                });
-		                $('.loginlink').click(function() {
+		                $('#NotificationArea').html('Read-only public access.');
+		                /*$('.loginlink').click(function() {
 		                    $('#LoadingSplash').show();
 		                    nn.hide();
-		                });
+		                });*/
 		            }
 
                     $('#View').show();
@@ -410,6 +391,9 @@ $(document).ready(function() {
 		                        openSelectProfileModal("Start a New Profile");
 		                }
 					}
+
+					$('#NotificationArea').html('Ready...');
+					$('#NotificationArea').fadeOut();
 
 					initKeyboard();
 

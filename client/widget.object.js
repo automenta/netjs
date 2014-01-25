@@ -195,7 +195,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         };
 
 
-        d.html('');
+        d.empty();
 
         if (editable) {
             if (hideWidgets != true) {
@@ -286,7 +286,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         if (objHasTag(getEditedFocus(), 'Tag')) {
             //skip suggestions when editing a Tag
-            ts.html('');
+            ts.empty();
         }
 		else {
 		    if (hideWidgets != true) {
@@ -1376,7 +1376,7 @@ function newObjectSummary(x, options) {
         replyButton.click(function() {
 
             newReply.show();
-            newReply.html('');
+            newReply.empty();
             newReply.append(newReplyWidget(
                     //on reply
                             function(text) {
@@ -1699,7 +1699,7 @@ function newTagTree(param) {
     var addToTree = param.addtoTree;
     var newTagLayerDiv = param.newTagDiv;
 
-    a.html('');
+    a.empty();
 
     var tree = newDiv();
 

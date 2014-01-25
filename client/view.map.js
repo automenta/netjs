@@ -115,7 +115,7 @@ function renderMap(s, o, v) {
     var typeSelect;
     
     function updateMap() {
-        v.html('');
+        v.empty();
 
         if (typeSelect)
             map2d = (typeSelect.val() === '2D');

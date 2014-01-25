@@ -96,12 +96,11 @@ function renderUs(v) {
     
 
 	function updateUsView(currentUser) {
-		v.html('');
+		v.empty();
 
-		var currentGoalHeader = $('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all").appendTo(v);
-		var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn').appendTo(v);
-		var goalList = newDiv('goalviewList').addClass('goalviewColumn').appendTo(v)
-
+		var currentGoalHeader = $('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
+		var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
+		var goalList = newDiv('goalviewList').addClass('goalviewColumn');
 
 		function updateNowDiv() {
 			sidebar.empty();
@@ -284,9 +283,12 @@ function renderUs(v) {
 				goalList.append(d);			
 			}
 
+
 		}
 		//setInterval(updateGoalList, updatePeriod);
 		updateGoalList();
+
+		v.append(currentGoalHeader, sidebar, goalList);
 	}
 
 	if ($N.myself())

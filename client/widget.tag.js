@@ -13,7 +13,7 @@ function newTagger(selected, onFinished) {
     
     var tagsCombo = $('<span></span>');
     tagsCombo.update = function() {
-        tagsCombo.html('');
+        tagsCombo.empty();
         for (var i = 0; i < tags.length; i++)
             tagsCombo.append('<b>' + tags[i] + '</b>&nbsp;');
     };
@@ -25,7 +25,7 @@ function newTagger(selected, onFinished) {
     }
     
     function loadBrowser(w) {
-        t.html('');
+        t.empty();
         currentBrowser = w(selected, onTagAdded);
         t.append(currentBrowser);        
     }
@@ -216,8 +216,7 @@ s
             }
             
             $.get(url, function(d) {
-               br.html('');
-               br.append(d); 
+               br.empty().append(d); 
                
                if (search) {
                     currentTag = $('.WIKIPAGEREDIRECTOR').html();

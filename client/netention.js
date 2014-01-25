@@ -321,10 +321,11 @@ function netention(f) {
             }
             this.socket.emit('become', target, function(nextID) {
                 if (nextID) {
-                    $.pnotify( {
+                    /*$.pnotify( {
                         title: 'Switched profile',
                         text: nextID
-                    });
+                    });*/
+
                     later(function() {
                         if (nextID.indexOf('Self-') === 0)
                             nextID = nextID.substring(5);
