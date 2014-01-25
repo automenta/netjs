@@ -112,14 +112,17 @@ exports.plugin = function($N) { return {
 				}
 			});
 
+			var messageSendDelayMS = 1500;
+			that.send = _.throttle(function(to, xjson) {
+				that.irc.say(to, xjson);
+			}, messageSendDelayMS);
+
      	},
 
         onPub: function(x) {
             /*if (_.contains(x.tag, 'irc.Channel')) {
                 this.update();
             }*/
-
-			var messageSendDelayMS = 1500;
 
 			var that = this;
 
@@ -134,20 +137,16 @@ exports.plugin = function($N) { return {
 			if (x.ircChannels)
 				toChannels = x.ircChannels;
 
-			_.throttle(function() { 
-				if (that.irc) {
-					var xjson = JSON.stringify(x);
+			if (that.irc) {
+				var xjson = JSON.stringify(x);
 
-					_.each(toChannels, function(to) {						
-						console.log('irc.say', to, xjson);
-						
-						try {
-							that.irc.say(to, xjson);
-						}
-						catch (e) { }
-					});
-				}
-			}, messageSendDelayMS)();
+				_.each(toChannels, function(to) {						
+					try {
+						that.send(to, xjson);
+					}
+					catch (e) { }
+				});
+			}
         },
 
 		stop: function() { 

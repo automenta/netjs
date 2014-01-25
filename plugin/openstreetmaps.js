@@ -16,8 +16,7 @@ exports.plugin = function($N) { return {
                 uri: 'OSM.Interest', name: 'Interest in a Location (OSM)', 
 				description: 'Interest in a geolocation, which triggers a data load from OpenStreetMaps',
                 properties: {
-					'OSM.InterestActive': { name: 'Enabled', type: 'boolean', default: 'true', min: 1 /* url */ }
-                    //'OSM.location': { name: 'Location', type: 'spacepoint' /* url */ }
+					'OSM.InterestActive': { name: 'Enabled', type: 'boolean', default: 'true', min: 1, max: 1 }
 					//range (length/width of scan area)
                 }
             },

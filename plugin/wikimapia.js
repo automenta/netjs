@@ -22,8 +22,7 @@ exports.plugin = function($N) { return {
                 uri: 'Wikimapia.Interest', name: 'Interest in a Location (WikiMapia)', 
 				description: 'Interest in a geolocation, which triggers a data load from Wikimapia',
                 properties: {
-					'Wikimapia.InterestActive': { name: 'Enabled', type: 'boolean', default: 'true', min: 1 /* url */ }
-                    //'OSM.location': { name: 'Location', type: 'spacepoint' /* url */ }
+					'Wikimapia.InterestActive': { name: 'Enabled', type: 'boolean', default: 'true', min: 1, max: 1 }
 					//range (length/width of scan area)
                 }
             },
