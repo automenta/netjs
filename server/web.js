@@ -966,7 +966,9 @@ exports.start = function(options, init) {
     });
 
     function compactObjects(list) {
-        return _.map(list,  function(o) { return util.objCompact(o); } );
+        return _.map(list,  function(o) { 
+			return util.objCompact(o); 
+		} );
     }
 
 	/*
@@ -1001,7 +1003,7 @@ exports.start = function(options, init) {
         var uri = req.params.uri;
         getObjectSnapshot(uri, function(err, x) {
 			if (x)
-	            sendJSON(res, x);
+	            sendJSON(res, util.objCompact(x));
 			else
 				sendJSON(res, [ 'Unknown', uri ]);
         });

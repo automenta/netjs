@@ -1117,7 +1117,6 @@ function objCompact( o ) {
     //console.log(  o);
 
     var y = _.clone(o);
-	return y;
 
 	//TODO ---- fix the rest of this
 

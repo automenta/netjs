@@ -119,7 +119,7 @@ exports.plugin = function($N) { return {
                 this.update();
             }*/
 
-			var messageSendDelayMS = 750;
+			var messageSendDelayMS = 1500;
 
 			var that = this;
 
