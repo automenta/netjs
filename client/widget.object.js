@@ -1,5 +1,5 @@
 /* version 1.1 5-26-2013 */
-var ONTO_SEARCH_PERIOD_MS = 500; //TODO move this to client.js
+var ONTO_SEARCH_PERIOD_MS = 1500; //TODO move this to client.js
 
 //t is either a tag ID, or an object with zero or more tags
 function getTagIcon(t) {
@@ -217,6 +217,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         if (x.value) {
             var tags = []; //tags & properties, actually
 
+
+
             for (var i = 0; i < x.value.length; i++) {
                 var t = x.value[i];
 	
@@ -236,12 +238,14 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 t = $N.getTag(t);
                 if (!t)
                     continue;
-                var prop = t.properties;
-                if (!prop)
-                    continue;
-                var propVal = _.map(prop, function(pid) {
-                    return $N.getProperty(pid);
-                })
+
+		        var prop = t.properties;
+		        if (!prop)
+		            continue;
+		        var propVal = _.map(prop, function(pid) {
+		            return $N.getProperty(pid);
+		        });
+
                 for (var j = 0; j < prop.length; j++) {
                     if (propVal[j].min)
                         if (propVal[j].min > 0)
@@ -273,24 +277,23 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 return;
             }
 
-            //skip suggestions when editing a Tag
-            if (objHasTag(getEditedFocus(), 'Tag')) {
-                ts.html('');
-            }
-            else {
-                var v = nameInput.val();
-                if (lastValue != v) {
-                    updateTagSuggestions(v, ts, onAdd, getEditedFocus);
-                }
+            var v = nameInput.val();
+            if (lastValue != v) {
+                updateTagSuggestions(v, ts, onAdd, getEditedFocus);
                 lastValue = v;
             }
-
         }
 
-        if (hideWidgets != true) {
-            if (editable)
-                ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
+        if (objHasTag(getEditedFocus(), 'Tag')) {
+            //skip suggestions when editing a Tag
+            ts.html('');
         }
+		else {
+		    if (hideWidgets != true) {
+		        if (editable)
+		            ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
+		    }
+		}
 
         d.getEditedFocus = getEditedFocus;
 
@@ -812,27 +815,25 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
     }
     else if (type == 'boolean') {
-        var t = $('<input type="checkbox">');
+        var ii = $('<input type="checkbox">');
 
         var value = t.value;
-        if (!value) {
+        if (value==undefined) {
             if (defaultValue)
                 value = defaultValue;
             else
                 value = true;
         }
 
-
-        t.attr('checked', value ? 'on' : undefined);
-        d.append(t);
+        ii.prop('checked', value).appendTo(d);
 
         if (editable) {
             whenSaved.push(function(y) {
-                objAddValue(y, tag, t.attr('checked') == 'checked' ? true : false, strength);
+                objAddValue(y, tag, ii.is(':checked'), strength);
             });
         }
         else {
-            t.attr("disabled", "disabled");
+            ii.attr("disabled", "disabled");
         }
     }
     else if (type == 'spacepoint') {
@@ -1138,17 +1139,28 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 //pd.addClass('tagSuggestions');
                 var pp = getTagProperties(tag);
                 for (var i = 0; i < pp.length; i++) {
-                    (function() {
-                        var ppv = pp[i];
+                    (function(I) {
+                        var ppv = pp[I];
                         var PP = $N.getProperty(ppv);
+
+						//TODO dont include if max present reached
+				        if (PP.max)
+				            if (PP.max > 0) {
+								var existing = objValues(x, ppv).length;
+								if (PP.max <= existing)
+									return;
+							}
+
                         var ppn = PP.name;
                         var appv = $('<a href="#" title="' + PP.type + '">' + ppn + '</a>');
                         var defaultValue = '';
                         appv.click(function() {
                             onAdd(ppv, defaultValue);
                         });
+
+
                         pd.append('+', appv, '&nbsp;');
-                    })();
+                    })(i);
                 }
 
                 d.append(pd);
@@ -1217,12 +1229,11 @@ function newPropertyView(x, vv) {
 
     }
     else if ((p.type == 'integer') || (p.type == 'real')) {
-        if (vv.value.unit) {
-            return $('<li>' + p.name + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
-        }
-        else {
-            return $('<li>' + p.name + ': ' + vv.value + '</li>');
-        }
+		if (vv.value)
+	        if (vv.value.unit) {
+    	        return $('<li>' + p.name + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
+    	    }
+        return $('<li>' + p.name + ': ' + vv.value + '</li>');
     }
     else {
         var v = $('<li>' + p.name + ': ' + vv.value + '</li>');

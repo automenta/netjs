@@ -365,14 +365,18 @@ exports.start = function(options, init) {
                 db.close();
                 if (err) {
                     nlog('getObjectSnapshot: ' + err);
-                    whenFinished(err, []);
+                    whenFinished(err, null);
                 }
-                else {
-                    whenFinished(null, docs);
+                else if (docs.length == 1) {
+					removeMongoID(docs);
+                    whenFinished(null, docs[0]);
                 }
+				else {
+					//none found
+					whenFinished(true, null);
+				}
             });
         }
-
     }
 	$N.getObjectSnapshot = getObjectSnapshot;
 
@@ -996,7 +1000,10 @@ exports.start = function(options, init) {
     express.get('/object/:uri/json', function(req, res) {
         var uri = req.params.uri;
         getObjectSnapshot(uri, function(err, x) {
-            sendJSON(res, x);
+			if (x)
+	            sendJSON(res, x);
+			else
+				sendJSON(res, [ 'Unknown', uri ]);
         });
     });
 

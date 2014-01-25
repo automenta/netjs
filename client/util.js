@@ -30,6 +30,13 @@ function objectify(x) {
 			return x;
 		},
 
+		//.name is already used, so use n()
+		n: function(n) { 
+			if (!n) return x.name;
+			objName(x, n);
+			return x;				
+		},
+
 		addDescription: function(d) {
 			objAddDescription(x, d);
 			return x;
@@ -78,6 +85,14 @@ function objectify(x) {
 				return objSpacePointLatLng(x);
 			}
 			return this.add('spacepoint', { 'lat': lat, 'lon': lon });
+		},
+
+		firstValue: function(id, defaultValue) {
+			return objFirstValue(x, id, defaultValue);
+		},
+
+		getValues: function(id) {
+			return objValues(x, id);
 		}
 
 	};

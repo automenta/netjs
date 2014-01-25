@@ -493,6 +493,10 @@ div.olMapViewport {
     max-height: 8em;
     overflow: auto;
 }
+.tagSuggestions img {
+	height: 1em;
+}
+
 #MatchedTypes button {
     margin: 0.2em;
     opacity: 0.5;

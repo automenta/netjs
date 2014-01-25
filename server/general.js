@@ -230,6 +230,13 @@ var generalTags = [
     {uri: 'Animal', name: 'Animal', tag: ['Resource']},
     {uri: 'Infrastructure', name: 'Infrastructure', tag: ['Resource']},
 
+    {uri: 'Nature', name: 'Nature', tag: ['Resource']},
+    {uri: 'Danger', name: 'Danger', tag: ['Resource']},
+    {uri: 'Plugin', name: 'Plugin', tag: ['Resource'], properties: {
+		'Plugin.enable': { name: 'Enable', type: 'boolean', max: 1 },
+		'Plugin.updateEvery': { name: 'Update Every (sec)', type: 'real', max: 1 }
+	}},
+
 	/*    
     {uri: 'PDF', name: 'PDF Slide', properties: {
             'pdfURL': {name: 'PDF URL', type: 'text'},

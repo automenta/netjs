@@ -64,12 +64,12 @@ exports.plugin = function($N) { return {
 						//TODO make this into a .pub(id, func, false /* avoid overwrite */)
 						$N.getObjectSnapshot(m.id, function(err, d) {
 							var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
-							if ((err)  || (d.length == 0) || (newer)) {
+							if ((err) || (newer)) {
 								m.fromIRC = true;
 								$N.pub(m);
 								that.prevMsg = m.id;
 							}
-							else if (d.length == 1) {
+							else {
 								//remove only objects from outside when told so, TODO use more thorough tracking of authors to allow only an author to delete one's own'
 								if (m.removed)
 									//if (d[0].fromIRC) 
