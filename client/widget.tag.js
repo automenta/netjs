@@ -131,7 +131,7 @@ function newTreeBrowser(selected, onTagAdded) {
 
 	var prefix = 'STT_';
     
-    var p = {
+    newTagTree({
         target: e,
         newTagDiv: function(id, content) {
             var ti = getTagIcon(id);
@@ -142,19 +142,18 @@ function newTreeBrowser(selected, onTagAdded) {
             return {
                 label: ('<button id="' + prefix + id + '" class="TagChoice")>' + content + '</button>')
             };
-        }        
-    };
-    newTagTree(p);    
+        },
+		onCreated: function() {
+			e.find('.TagChoice').each(function(x) {
+				var t = $(this);
+				t.click(function() {
+				   onTagAdded(t.attr('id').substring(prefix.length));
+				});
+			});
+		}
+    });    
     
-    e.find('.TagChoice').each(function(x) {
-        var t = $(this);
-        t.click(function() {
-           onTagAdded(t.attr('id').substring(prefix.length));
-        });
-    });
-    
-    return e;
-    
+    return e;   
 }
 
 function newWikiBrowser(selected, onTagAdded) {    

@@ -1813,6 +1813,9 @@ function newTagTree(param) {
 
 		a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
 		a.show();
+
+		if (param.onCreated)
+			param.onCreated(a);
 	});
 
     return tree;
