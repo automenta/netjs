@@ -868,6 +868,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             ee.append(ar);
 
             whenSaved.push(function(y) {
+				if (!m) return;
+				if (!m.location) return;
+
                 var l = m.location();
                 objAddValue(y, tag, {
                     lat: l.lat,
