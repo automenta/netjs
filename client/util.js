@@ -435,7 +435,9 @@ function objHasTag(x, t) {
 	    if (!vv) continue;
 
 	    var vid = vv.id;
-		if (Array.isArray(vv))
+		if (typeof vv == "string")
+			vid = vv;
+		else if (Array.isArray(vv))
 			vid = vv[0];			
 
 		if (!vid) continue;

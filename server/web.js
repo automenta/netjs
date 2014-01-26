@@ -117,62 +117,6 @@ exports.start = function(options, init) {
 	}
 	$N.plugins = plugins;
 
-    function _updateCentroids() {
-        //remove old centroids
-        var objs = [];
-        getObjectsByTag('GoalCentroid', function(o) {      
-            objs.push(o);
-        }, function() {
-            //TODO create deleteObjects function that does this
-            function d() {
-                var n = objs.pop();
-                if (n) {
-                    //console.log('  deleting: ', objs.length);
-                    deleteObject(n.id, d);
-                }     
-                //whenFinished()
-                else {
-                    getPlans(function(p) {            
-
-                        if (p.length < 2)
-                            return;
-
-                        var kmeans = require('./kmeans.js');
-                        var centroids = Math.floor(Math.pow(p.length, 0.55)); //a sub-exponential curve, steeper than log(x) and sqrt(x)
-                        var c = kmeans.getSpaceTimeTagCentroids(p, centroids);
-
-
-                        for (var i = 0; i < c.length; i++) {
-                            var cc = c[i];
-
-                            var x = util.objNew();
-                            x.name = 'Possible Meeting #' + (i+1);
-							x.when = cc.time;
-                            util.objAddTag(x, 'Goal');                            
-							util.objAddGeoLocation(x, parseFloat(cc.location[0]), parseFloat(cc.location[1]));
-                            //util.objSetWhen(x, new Date(cc.time)); 
-                            util.objAddTag(x, 'GoalCentroid');					
-
-                            delete cc.location;
-                            delete cc.time;
-                            util.objAddDescription(x, JSON.stringify(cc, null, 4));
-
-                            pub(x);
-                        }
-                    });
-                    
-                }
-            }
-            d();
-        });
-        
-    }
-    var updateCentroids = _.throttle(_updateCentroids, 2000);
-    
-    function onSelfChange(s) {
-        updateCentroids();
-    }
-    
 
     function loadState(f) {
         var db = mongo.connect(getDatabaseURL(), collections);
@@ -301,14 +245,6 @@ exports.start = function(options, init) {
             if (err) {
                 nlog('notice: ' + err);
                 return;
-            }
-
-            if (o.id) {
-                if (o.id.indexOf) {
-                    if (o.id.indexOf('Self-')==0) {
-                        onSelfChange(o);
-                    }
-                }
             }
             
             if (whenFinished)
@@ -1020,8 +956,10 @@ exports.start = function(options, init) {
         });
     });
     
+
     function getPlans(withPlan) {
         var allPlan = [];
+		var goalID = [];
         var now = Date.now();
         getObjectsByTag('Goal', function(t) {
             var tt = t.when;
@@ -1038,10 +976,12 @@ exports.start = function(options, init) {
             }
 			var tags = util.objTags(t);
             allPlan.push([util._n(lat, 4), util._n(lon, 4), tt, tags, t]);
+			goalID.push(t.id);
         }, function() {
-            withPlan(allPlan);
+            withPlan(allPlan, goalID);
         });        
     }
+	$N.getPlans = getPlans;
     
     express.get('/users/plan', function(req, res) {
         getPlans(function(p) {
