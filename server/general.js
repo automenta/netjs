@@ -212,9 +212,11 @@ var generalTags = [
         description: 'Independently able to work and can teach or train' },
     {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true,
         description: 'Has expert knowledge and is most useful in teaching others' },
+
+    {uri: 'Access', name: 'Access', tag: ['Concept'], operator: true},
         
-    {uri: 'Can', name: 'Can', tag: ['Concept'], operator: true},
-    {uri: 'Need', name: 'Need', tag: ['Concept'], operator: true, properties: {
+    {uri: 'Can', name: 'Can', tag: ['Access'], operator: true},
+    {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, properties: {
         'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
     }},
     {uri: 'Not', name: 'Not', tag: ['Concept'], operator: true},

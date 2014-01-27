@@ -5,7 +5,7 @@ var updatePeriodMS = 3000;
 
 exports.plugin = function($N) { return {
     name: 'Spacetime Tag Matching',	
-	description: '',
+	description: 'Clusters objects according to their spatial location, temporal location, and tags.',
 	options: { },
     version: '1.0',
     author: 'http://netention.org',
