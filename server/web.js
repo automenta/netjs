@@ -297,37 +297,54 @@ exports.start = function(options, init) {
         }
         else {
             var db = mongo.connect(getDatabaseURL(), collections);
-            db.obj.find({'id': uri}, function(err, docs) {
-                db.close();
-                if (err) {
-                    nlog('getObjectSnapshot: ' + err);
-                    whenFinished(err, null);
-                }
-                else if (docs.length == 1) {
-					removeMongoID(docs);
-                    whenFinished(null, docs[0]);
-                }
-				else {
-					//none found
-					whenFinished(true, null);
+			db.obj.ensureIndex( { id: "hashed" }, function(err, res) {
+				if (err) {
+					console.error('ENSURE INDEX id', err);
+					db.close();
 				}
-            });
+
+		        db.obj.find({'id': uri}, function(err, docs) {
+		            db.close();
+		            if (err) {
+		                nlog('getObjectSnapshot: ' + err);
+		                whenFinished(err, null);
+		            }
+		            else if (docs.length == 1) {
+						removeMongoID(docs);
+		                whenFinished(null, docs[0]);
+		            }
+					else {
+						//none found
+						whenFinished(true, null);
+					}
+		        });
+			});
+
         }
     }
 	$N.getObjectSnapshot = getObjectSnapshot;
 
     function getObjectsByAuthor(a, withObjects) {
         var db = mongo.connect(getDatabaseURL(), collections);
-        db.obj.find({author: a}, function(err, docs) {
-            if (err) {
-                nlog('getObjectsByAuthor: ' + err);
-            }
-            else {
-                removeMongoID(docs);
-                withObjects(docs);
-            }
-            db.close();
-        });
+
+		db.obj.ensureIndex( { author: "hashed" }, function(err, res) {
+			if (err) {
+				console.error('ENSURE INDEX author', err);
+				db.close();
+				return;
+			}
+
+		    db.obj.find({author: a}, function(err, docs) {
+		        if (err) {
+		            nlog('getObjectsByAuthor: ' + err);
+		        }
+		        else {
+		            removeMongoID(docs);
+		            withObjects(docs);
+		        }
+		        db.close();
+		    });
+	    });
     }
     $N.getObjectsByAuthor = getObjectsByAuthor;
 
@@ -350,21 +367,31 @@ exports.start = function(options, init) {
 			if (oldClose)
 		        oldClose();
         }*/
-                
-        db.obj.find({ _tag: { $in: t } }, function(err, docs) {
-            if (err) {
-                nlog('getObjectsByTag: ' + err);
-            }
-            else {
-                docs.forEach(function(d) {
-                    removeMongoID(d);
-                    withObject(d);
-                });
-				if (whenFinished)
-					whenFinished();
-            }
-            db.close();
-        });
+           
+		db.obj.ensureIndex( { _tag: 1 }, function(err, res) {
+			if (err) {
+				console.error('ENSURE INDEX _tag', err);
+				db.close();
+			}
+
+		    db.obj.find({ _tag: { $in: t } }, function(err, docs) {
+		        if (err) {
+		            nlog('getObjectsByTag: ' + err);
+		        }
+		        else {
+		            docs.forEach(function(d) {
+		                removeMongoID(d);
+		                withObject(d);
+		            });
+					if (whenFinished)
+						whenFinished();
+		        }
+		        db.close();
+		    });
+
+		});
+
+     
     }
     $N.getObjectsByTag = getObjectsByTag;
 
@@ -510,27 +537,7 @@ exports.start = function(options, init) {
 
     }
 
-	//SETUP INDEXES - does not work yet
-	function setupIndexes() {
-		var DB = mongo.connect(getDatabaseURL(), collections);
-		DB.obj.ensureIndex( { modifiedAt: 1 }, function(err, res) {
-			if (err)
-				console.error('ENSURE INDEX modifiedAt', err);
-			DB.close();
-		});
-		var DB2 = mongo.connect(getDatabaseURL(), collections);
-		DB2.obj.ensureIndex( { id: "hashed" }, function(err, res) {
-			if (err)
-				console.error('ENSURE INDEX id', err);
-			DB2.close();
-		});
-		var DB3 = mongo.connect(getDatabaseURL(), collections);
-		DB3.obj.ensureIndex( { _tag: 1 }, function(err, res) {
-			if (err)
-				console.error('ENSURE INDEX _tag', err);
-			DB3.close();
-		});
-	}
+
 
     loadState(function() {
         loadPlugins();
@@ -970,12 +977,21 @@ exports.start = function(options, init) {
     express.get('/object/latest/:num/json', function(req, res) {
         var n = parseInt(req.params.num);
         var db = mongo.connect(getDatabaseURL(), collections);
-        db.obj.find().limit(n).sort({modifiedAt: -1}, function(err, objs) {
-            removeMongoID(objs);
-                        
-            sendJSON(res, compactObjects(objs));
-            db.close();
-        });
+		db.obj.ensureIndex( { modifiedAt: 1 }, function(err, eres) {
+
+			if (err) {
+				console.error('ENSURE INDEX modifiedAt', err);
+				db.close();
+				return;
+			}
+
+		    db.obj.find().limit(n).sort({modifiedAt: -1}, function(err, objs) {
+		        removeMongoID(objs);
+		                    
+		        sendJSON(res, compactObjects(objs));
+		        db.close();
+		    });
+		});
     });
     
     
