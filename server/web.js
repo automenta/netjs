@@ -510,6 +510,28 @@ exports.start = function(options, init) {
 
     }
 
+	//SETUP INDEXES - does not work yet
+	function setupIndexes() {
+		var DB = mongo.connect(getDatabaseURL(), collections);
+		DB.obj.ensureIndex( { modifiedAt: 1 }, function(err, res) {
+			if (err)
+				console.error('ENSURE INDEX modifiedAt', err);
+			DB.close();
+		});
+		var DB2 = mongo.connect(getDatabaseURL(), collections);
+		DB2.obj.ensureIndex( { id: "hashed" }, function(err, res) {
+			if (err)
+				console.error('ENSURE INDEX id', err);
+			DB2.close();
+		});
+		var DB3 = mongo.connect(getDatabaseURL(), collections);
+		DB3.obj.ensureIndex( { _tag: 1 }, function(err, res) {
+			if (err)
+				console.error('ENSURE INDEX _tag', err);
+			DB3.close();
+		});
+	}
+
     loadState(function() {
         loadPlugins();
     });
@@ -956,38 +978,13 @@ exports.start = function(options, init) {
         });
     });
     
-
-    function getPlans(withPlan) {
-        var allPlan = [];
-		var goalID = [];
-        var now = Date.now();
-        getObjectsByTag('Goal', function(t) {
-            var tt = t.when;
-			if (!t.when)
-				return;
-			if (tt < now)
-				return;
-            var lat = null;
-            var lon = null;
-            var geo = util.objSpacePoint(t);
-            if (geo) {
-                lat = geo.lat;
-                lon = geo.lon;
-            }
-			var tags = util.objTags(t);
-            allPlan.push([util._n(lat, 4), util._n(lon, 4), tt, tags, t]);
-			goalID.push(t.id);
-        }, function() {
-            withPlan(allPlan, goalID);
-        });        
-    }
-	$N.getPlans = getPlans;
     
-    express.get('/users/plan', function(req, res) {
+    /*express.get('/users/plan', function(req, res) {
         getPlans(function(p) {
            sendJSON(res, p); 
         });
-    });
+    });*/
+
     /*express.get('/users/plan/cluster', function(req, res) {
         getPlan(function(p) {
            var kmeans = require('./kmeans.js');           
