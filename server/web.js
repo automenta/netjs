@@ -209,6 +209,22 @@ exports.start = function(options, init) {
     }
     $N.deleteObject = deleteObject;
 
+	function deleteObjects(objs, whenFinished) {
+		var that = this;
+		function d() {
+		    var n = objs.pop();
+
+		    if (n) {
+		        that.deleteObject(n.id, d);
+		    }     
+		    else {
+				whenFinished();
+		    }
+		}
+		d();
+	};
+	$N.deleteObjects = deleteObjects;
+
     function noticeAll(l) {
         var i = 0;
 
@@ -860,10 +876,11 @@ exports.start = function(options, init) {
         if (!$N.server.users)
             return $N.server.users = { };
         
+        if (!$N.server.users['anonymous']) {
+            $N.server.users['anonymous'] = [ ];
+        }
+
         if (!session) {
-            if (!$N.server.users['anonymous']) {
-                $N.server.users['anonymous'] = [ ];
-            }
             return $N.server.users['anonymous'];
         }
         
@@ -872,8 +889,8 @@ exports.start = function(options, init) {
             var selves = $N.server.users[key];
             return selves;
         }
-        else {
-            return [];
+        else /*if ((key == 'anonymous') || (!key))*/ {
+            return $N.server.users['anonymous'];
         }
     }
    /*function getClientID(session) {
@@ -1489,10 +1506,11 @@ exports.start = function(options, init) {
                 }                
             }            
 
-            nlog('connect: ' + cid + ', ' + key);
+			var selves = getClientSelves(session);
+            nlog('connect: ' + cid + ', ' + key + ', ' + selves);
                         
             socket.set('clientID', cid);
-            socket.emit('setClientID', cid, key, getClientSelves(session) );
+            socket.emit('setClientID', cid, key, selves );
             socket.emit('setServer', $N.server.name, $N.server.description);
             
             getObjectsByTag('Tag', function(to) {

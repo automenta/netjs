@@ -68,41 +68,29 @@ exports.plugin = function($N) { return {
 
 		function _updateCentroids() {
 
-			function getPlans(withPlan) {
-				var allGoals = [];
-				var now = Date.now();
-				$N.getObjectsByTag('Goal', function(t) {
-					if (!t.when)
-						return;
-					var tt = t.when;
-					if (tt < now)
-						return;
-					if (!t.author)
-						return;
+			var p = [];
+			var now = Date.now();
+			$N.getObjectsByTag('Goal', function(t) {
 
-					/*
-					var lat = null;
-					var lon = null;
-					var geo = util.objSpacePoint(t);
-					if (geo) {
-						lat = geo.lat;
-						lon = geo.lon;
-					}
-					var tags = util.objTags(t);
-					*/
+				if (!t.when)
+					return;
 
-					allGoals.push(t);
-				}, function() {
-					withPlan(allGoals);
-				});        
-			}
+				var tt = t.when;
 
-            getPlans(function(p) {
+				if (tt < now)
+					return;
+
+				if (!t.author)
+					return;
+
+				p.push(t);
+
+			}, function() {
+
 				that.goalID = p.map(function(x) { return x.id; });
 
                 if (p.length < 2)
                     return;
-
 
                 var centroids = Math.floor(Math.pow(p.length, 0.55)); //a sub-exponential curve, steeper than log(x) and sqrt(x)
                 var c = getSpaceTimeTagCentroids($N, p, centroids, true, true, ['Goal', 'GoalCentroid']);
@@ -110,49 +98,40 @@ exports.plugin = function($N) { return {
                 for (var i = 0; i < c.length; i++) {
                     var cc = c[i];
 
-                    $N.objAddTag(cc, 'Goal');                            
-                    $N.objAddTag(cc, 'GoalCentroid');					
+					cc.setName('Possible Goal ' + i);
 
-                    $N.objAddDescription(cc, JSON.stringify(cc.tags,null,4) + ' ' + JSON.stringify(cc.implicates,null,4) );
+                    cc.addTag('Goal');                            
+                    cc.addTag('GoalCentroid');					
+
+                    cc.addDescription(JSON.stringify(cc.tags,null,4) + ' ' + JSON.stringify(cc.implicates,null,4) );
 
                     $N.pub(cc);
                 }
-            });
+			});   
+
 		}
 
-		function _deleteCentroids() {
+	    //remove old centroids, then create new ones
+		function _deleteExistingCentroids() {
 
-		    //remove old centroids
-		    var objs = [];
+			var existingCentroids = [];
 
 		    $N.getObjectsByTag('GoalCentroid', function(o) {      
-		        objs.push(o);
+		        existingCentroids.push(o);
 		    }, function() {
-				if (objs.length == 0) {
+				if (existingCentroids.length == 0) {
 					_updateCentroids();
 				}
 				else {
-
-				    //TODO create deleteObjects function that does this
-				    function d() {
-				        var n = objs.pop();
-
-				        if (n) {
-				            //console.log('  deleting: ', objs.length);
-				            $N.deleteObject(n.id, d);
-				        }     
-				        else {
-							_updateCentroids();				            
-				        }
-				    }
-				    d();
+					$N.deleteObjects(existingCentroids, function() {
+						_updateCentroids();				            
+					});
 				}
 		    });
 		    
 		}
 		
-		this.updateCentroids = _.throttle(_deleteCentroids, updatePeriodMS);
-
+		this.updateCentroids = _.throttle(_deleteExistingCentroids, updatePeriodMS);
 		this.updateCentroids();
     },
             
@@ -169,9 +148,8 @@ exports.plugin = function($N) { return {
 		}
 	},
 
-	stop: function() {
-	}
-}; }
+	stop: function() {	}
+}; };
 
 
 function hoursFromNow(n) { return Date.now() + 60.0 * 60.0 * 1000.0 * n;     }
@@ -328,7 +306,6 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
 	}
 
 	//console.log('Centroid implicates:', mi);
-
     
     var results = [];
 	var j = 0;
@@ -352,8 +329,6 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
             if (mm[k] > 0)
                 restags[t] = mm[k];            
         }
-
-		res.setName('Possible Goal ' + (j++));
 
 		res.tags = restags;
 
