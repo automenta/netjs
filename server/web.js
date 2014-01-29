@@ -210,6 +210,10 @@ exports.start = function(options, init) {
     $N.deleteObject = deleteObject;
 
 	function deleteObjects(objs, whenFinished) {
+		if (objs.length == 0) {
+			whenFinished();
+			return;
+		}
 		var that = this;
 		function d() {
 		    var n = objs.pop();
@@ -364,7 +368,6 @@ exports.start = function(options, init) {
     }
     $N.getObjectsByAuthor = getObjectsByAuthor;
 
-    //TODO optimize this to use a tag cache property
     function getObjectsByTag(t, withObject, whenFinished) {
         //t can be a single string, or an array of strings
 
@@ -373,17 +376,6 @@ exports.start = function(options, init) {
         
         var db = mongo.connect(getDatabaseURL(), collections);
 
-		/*
-		var finished = false;
-        var oldClose = db.close;
-        db.close = function() {
-			if (finished)
-	            if (whenFinished)
-    	            whenFinished();
-			if (oldClose)
-		        oldClose();
-        }*/
-           
 		db.obj.ensureIndex( { _tag: 1 }, function(err, res) {
 			if (err) {
 				console.error('ENSURE INDEX _tag', err);
@@ -407,10 +399,8 @@ exports.start = function(options, init) {
 
 		});
 
-     
     }
     $N.getObjectsByTag = getObjectsByTag;
-
 
 
     /*

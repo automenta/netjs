@@ -66,86 +66,72 @@ exports.plugin = function($N) { return {
 	start: function() {            
 		var that = this;
 
+		this.matchingTags = [ 'Goal' ];
+		this.centroidTag = 'GoalCentroid';
+
 		function _updateCentroids() {
-
-			var p = [];
-			var now = Date.now();
-			$N.getObjectsByTag('Goal', function(t) {
-
-				if (!t.when)
-					return;
-
-				var tt = t.when;
-
-				if (tt < now)
-					return;
-
-				if (!t.author)
-					return;
-
-				p.push(t);
-
-			}, function() {
-
-				that.goalID = p.map(function(x) { return x.id; });
-
-                if (p.length < 2)
-                    return;
-
-                var centroids = Math.floor(Math.pow(p.length, 0.55)); //a sub-exponential curve, steeper than log(x) and sqrt(x)
-                var c = getSpaceTimeTagCentroids($N, p, centroids, true, true, ['Goal', 'GoalCentroid']);
-
-                for (var i = 0; i < c.length; i++) {
-                    var cc = c[i];
-
-					cc.setName('Possible Goal ' + i);
-
-                    cc.addTag('Goal');                            
-                    cc.addTag('GoalCentroid');					
-
-                    cc.addDescription(JSON.stringify(cc.tags,null,4) + ' ' + JSON.stringify(cc.implicates,null,4) );
-
-                    $N.pub(cc);
-                }
-			});   
-
-		}
-
-	    //remove old centroids, then create new ones
-		function _deleteExistingCentroids() {
 
 			var existingCentroids = [];
 
-		    $N.getObjectsByTag('GoalCentroid', function(o) {      
+		    $N.getObjectsByTag(that.centroidTag, function(o) {      
 		        existingCentroids.push(o);
 		    }, function() {
-				if (existingCentroids.length == 0) {
-					_updateCentroids();
-				}
-				else {
-					$N.deleteObjects(existingCentroids, function() {
-						_updateCentroids();				            
-					});
-				}
+
+			    //remove old centroids, then create new ones
+				$N.deleteObjects(existingCentroids, function() {
+
+					var p = [];
+					var now = Date.now();
+					$N.getObjectsByTag(that.matchingTags, function(t) {
+
+						if (!t.when)		return;
+
+						var tt = t.when;
+
+						if (tt < now)		return;
+						if (!t.author)		return;
+
+						p.push(t);
+
+					}, function() {
+						that.matchedID = p.map(function(x) { return x.id; });
+
+				        if (p.length < 2)
+				            return;
+
+				        var centroids = Math.floor(Math.pow(p.length, 0.55)); //a sub-exponential curve, steeper than log(x) and sqrt(x)
+				        var c = getSpaceTimeTagCentroids($N, p, centroids, true, true, that.matchingTags );
+
+				        for (var i = 0; i < c.length; i++) {
+				            var cc = c[i];
+
+							cc.setName('Possible Goal ' + i);
+
+				            cc.addTag(that.centroidTag);
+
+				            cc.addDescription(JSON.stringify(cc.tags,null,4) + ' ' + JSON.stringify(cc.implicates,null,4) );
+
+				            $N.pub(cc);
+				        }
+					});   
+				});
 		    });
-		    
+
 		}
 		
-		this.updateCentroids = _.throttle(_deleteExistingCentroids, updatePeriodMS);
+		this.updateCentroids = _.throttle(_updateCentroids, updatePeriodMS);
 		this.updateCentroids();
     },
             
     onPub: function(x) {
-		if ( x.hasTag('Goal') && !x.hasTag('GoalCentroid') ) {
+		if ( x.hasTag(this.matchingTags) && !x.hasTag(this.centroidTag) )
 			this.updateCentroids();
-		}
     },
 
 	onDelete: function(x) { 		
-		if (!this.goalID) return;
-		if (_.contains(this.goalID, x.id)) {
+		if (!this.matchedID) return;
+		if (_.contains(this.matchedID, x.id))
 			this.updateCentroids();
-		}
 	},
 
 	stop: function() {	}
