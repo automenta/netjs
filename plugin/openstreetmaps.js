@@ -1,6 +1,9 @@
 var xml2object = require('xml2object');
 var request = require('request');
 
+var osmUpdatePeriodMS = 2000;
+var osmPublishPeriodMS = 150;
+
 exports.plugin = function($N) { return {
 
     name: 'OpenStreetMaps',	
@@ -93,6 +96,7 @@ OSM.studio*/
 			var radius = 0.03;
 			var halfRadius = radius/2.0;
 			if (where) {
+
 				getOpenStreetMaps([where[1]-halfRadius, where[0]-halfRadius, where[1]+halfRadius, where[0]+halfRadius], 
 					function(id, name, amenity, lat, lon, data) {
 
@@ -101,12 +105,13 @@ OSM.studio*/
 						if (amenity) {
 							n.addTag('OSM.' + amenity);
 						}
+
 						$N.pub(n);
 					}
 				);
 			}
 
-		}, 1000);
+		}, osmUpdatePeriodMS);
         
 		//reload existing interests
 		var that = this;

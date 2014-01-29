@@ -1288,14 +1288,13 @@ exports.start = function(options, init) {
         
         cmessage = util.objCompact(message);
 
-
         for (var t in targets) {
             io.sockets.socket(t).emit('notice', cmessage);
         }
         io.sockets.in('*').emit('notice', cmessage);
 
 
-		message = util.objectify(message);
+		message = util.objectify(util.objExpand(message));
 
 		if (!message.removed)			
 			plugins("onPub", message);
