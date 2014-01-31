@@ -163,7 +163,7 @@ function newWikiBrowser(selected, onTagAdded) {
 	header.addClass('WikiBrowserHeader');
 
     var backButton = $('<button disabled>Back</button>');
-    var homeButton = $('<button>Bookmarks</button>');
+    var homeButton = $('<button disabled>Bookmarks</button>');
     homeButton.click(function() {
        gotoTag(configuration.wikiStartPage);
     });
@@ -178,7 +178,7 @@ function newWikiBrowser(selected, onTagAdded) {
     });
     header.append(backButton);
     header.append(homeButton);
-    header.append('<button title="Bookmark">*</button>');
+    header.append('<button disabled title="Bookmark">*</button>');
     header.append(searchInput);
     header.append(searchInputButton);
 

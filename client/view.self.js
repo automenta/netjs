@@ -504,16 +504,7 @@ function getKnowledgeCode(userid) {
     return JSON.stringify(tags,null,0);
 }
 
-function onWikiTagAdded(target) {
-    var d = newPopup(target, {width: 550});
-    var tagBar = newTagBar(self, target);
-    var saveButton = newTagBarSaveButton(self, target, tagBar, function() {
-        d.dialog('close');
-    });
 
-    d.append(saveButton);        
-    d.prepend(tagBar);
-}
 
 function newSelfTagList(s, user, c) {
 	if (!user)
@@ -858,12 +849,32 @@ function hoursFromNow(n) {
     return Date.now() + 60.0 * 60.0 * 1000.0 * n;
 }
 
+function onWikiTagAdded(target) {
+    var d = newPopup(target, {width: 550});
+    var tagBar = newTagBar(self, target);
+    var saveButton = newTagBarSaveButton(self, target, tagBar, function() {
+        d.dialog('close');
+    });
 
+    d.append(saveButton);        
+    d.prepend(tagBar);
+}
 
-function renderSelf(s, o, v) {
+function renderWiki(s, o, v) {
        
     var frame = newDiv().attr('class','SelfView');
+	frame.append( newWikiBrowser(s, onWikiTagAdded) );
+
+    v.append(frame);
+
+    frame.onChange = function() {
+        updateTags(currentUser);
+        //update user summary?
+    };
+
+    return frame;
     
+/*
     var roster = newRoster();
     roster.addClass('SelfRoster');
     
@@ -906,8 +917,7 @@ function renderSelf(s, o, v) {
         updateTags(currentUser);
         //update user summary?
     };
-    
-    return frame;
+*/    
     
 }
 

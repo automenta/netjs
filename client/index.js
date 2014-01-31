@@ -103,6 +103,10 @@ function _updateView(force) {
         indent();
         currentView = renderSelf(s, o, v);
     }
+    else if (view == 'wiki') {
+        indent();
+        currentView = renderWiki(s, o, v);
+    }
     else if (view == 'plan') {
         indent();
         currentView = renderPlan(v);
