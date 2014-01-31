@@ -33,7 +33,12 @@ var generalTags = [
 
         }
     },
-    {uri: 'Imaginary', name: 'Imaginary', description: 'Something imaginary, indefinite values.'},
+
+    {uri: 'Imaginary', name: 'Imaginary', description: 'Something imaginary, indefinite values.', 
+        properties: {
+            'involvesUser': { name: 'Involves', type: 'object' }
+        }
+	},
 
     //Being superclass of Human..
     //TODO "Contact Schema": http://portablecontacts.net/draft-spec.html#schema   

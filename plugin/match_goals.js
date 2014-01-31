@@ -185,6 +185,7 @@ function getObservations($N, t, tags, includeSpace, includeTime) {
 
 		var ta = $N.objTagStrength(tt);
 		
+		//TODO remove totalContained denominator if not being used:
         var totalContained = 0;
         for (var k = 0; k < tags.length; k++) {
 			var K = tags[k];
@@ -194,7 +195,7 @@ function getObservations($N, t, tags, includeSpace, includeTime) {
         for (var k = 0; k < tags.length; k++) {
 	        if (totalContained > 0) {
 				var v = ta[tags[k]];
-                l.push( (v!=undefined) ? ( v / totalContained) : 0.0) 
+                l.push( (v!=undefined) ? ( v /*/ totalContained*/) : 0.0) 
             }
 			else
 				l.push(0);
@@ -205,7 +206,7 @@ function getObservations($N, t, tags, includeSpace, includeTime) {
     return obs;
 }
 
-function normalize(points, index) {
+function normalize(points, index, scale) {
     var min, max;
     
     min = max = points[0][index];
@@ -223,7 +224,7 @@ function normalize(points, index) {
         else {
             pp = 0.5;
         }
-        points[i][index] = pp;
+        points[i][index] = pp * scale;
     }    
     return [parseFloat(min), parseFloat(max)];
 }
@@ -251,18 +252,24 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
     var obs = getObservations($N, objects, tags, includeSpace, includeTime);
 	//console.log('Observations: ', obs);
 	
+	//console.log('observations: ', tags, includeSpace, includeTime, obs);
+
 	if (obs.length == 0) return; //nothing to work with
 
 	var dimensions = obs[0].length;
 
 	var normLat, normLon, normTime;
 
+	//TODO move these to function parameters
+	var spaceScale = 0.05;
+	var timeScale = 0.05;
+
 	if (includeSpace) {
-		normLat = normalize(obs, 0);
-		normLon = normalize(obs, 1);
+		normLat = normalize(obs, 0, spaceScale);
+		normLon = normalize(obs, 1, spaceScale);
 	}
 	if (includeTime) {
-		normTime = normalize(obs, 2);
+		normTime = normalize(obs, 2, timeScale);
 	}
 
 	//console.log('Normalized Obs: ', obs);
@@ -303,10 +310,10 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
 		var res = $N.objNew();
 
 		if (includeSpace) {
-			$N.objAddGeoLocation(res, denormalize(mm[0],normLat), denormalize(mm[1],normLon));
+			$N.objAddGeoLocation(res, denormalize(mm[0]/spaceScale,normLat), denormalize(mm[1]/spaceScale,normLon));
 		}
 		if (includeTime) {
-			res.when = denormalize(mm[2], normTime);
+			res.when = denormalize(mm[2]/timeScale, normTime);
 		}
 
 		var restags = { };
@@ -329,5 +336,4 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
     
     return results;
 }
-
-
+exports.getSpaceTimeTagCentroids = getSpaceTimeTagCentroids;

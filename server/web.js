@@ -482,6 +482,7 @@ exports.start = function(options, init) {
            return tags[t].operator; 
         });
     }
+	$N.getOperatorTags = getOperatorTags;
 
 
     function getTagCounts(whenFinished) {

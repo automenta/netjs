@@ -1218,11 +1218,11 @@ a.openModal:focus {
 
 .goalviewColumn {
 	float: left;
-	width: 35%;
+	width: 31%;
 	height: 100%;
 	overflow: auto;
-	padding-left: 0.5em;
-	padding-right: 0.5em;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
 }
 
 .goalRowHeading { font-size: 150%; font-weight: bold; }

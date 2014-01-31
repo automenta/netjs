@@ -1570,7 +1570,10 @@ function newObjectSummary(x, options) {
             if (mll)
                 dist = geoDist(sx, mll);
 
-            mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
+			if (dist == 0)
+	            mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + ' here</span>');
+			else
+	            mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
         }
         else {
             mdline.append('&nbsp;<span>[' + lat + ',' + lon + ']</span>');

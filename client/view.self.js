@@ -31,7 +31,7 @@ function saveAddedTags(gt, tag, when) {
 	    var G = $N.tag(g);
 		var ng = objNew();
 
-		if (when) {
+		/*if (when)*/ {
 			ng.when = when;
 			var location = objSpacePoint($N.myself());
 			if (location)
@@ -62,7 +62,7 @@ function saveAddedTags(gt, tag, when) {
 
 	});
 
-	saveSelf();
+	//saveSelf();
 
 }
 
@@ -101,6 +101,7 @@ function renderUs(v) {
 		var currentGoalHeader = $('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
 		var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
 		var goalList = newDiv('goalviewList').addClass('goalviewColumn');
+		var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumn');
 
 		function updateNowDiv() {
 			sidebar.empty();
@@ -288,7 +289,16 @@ function renderUs(v) {
 		//setInterval(updateGoalList, updatePeriod);
 		updateGoalList();
 
-		v.append(currentGoalHeader, sidebar, goalList);
+		{
+			var iu = $N.objectsWithTag('involvesUser');
+			_.each(iu, function(x) {
+				var X = $N.getObject(x);
+				involvesList.append(newObjectSummary(X));
+			});
+			
+		}
+
+		v.append(currentGoalHeader, sidebar, goalList, involvesList);
 	}
 
 	if ($N.myself())

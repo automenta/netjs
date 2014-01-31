@@ -140,6 +140,10 @@ var gp1 = { }, gp2 = { };
 
 //distance, in kilometers
 function geoDist(p1, p2) {
+	if (p1[0] == p2[0])
+		if (p1[1] == p2[1])
+			return 0;
+
     gp1.lat = p1[0];
     gp1.lon = p1[1];
     gp2.lat = p2[0];
