@@ -330,18 +330,8 @@ $(document).ready(function() {
                     later(function() {
                         _updateView();
                     });
-                }, 850);
+                }, configuration.viewUpdateMS);
 
-                function doUpdate() {
-                    updateView();
-                }
-
-
-                $N.on('change:attention', doUpdate);
-                $N.on('change:layer', doUpdate);
-                $N.on('change:currentView', doUpdate);
-                $N.on('change:tags', doUpdate);
-                $N.on('change:focus', doUpdate);
 
                 var msgs = ['I think', 'I feel', 'I wonder', 'I know', 'I want'];
                 //var msgs = ['Revolutionary', 'Extraordinary', 'Bodacious', 'Scrumptious', 'Delicious'];
@@ -353,7 +343,6 @@ $(document).ready(function() {
                 updatePrompt();
 
                 $.getScript(configuration.ui, function(data) {
-                    doUpdate();
 
 		            var ii = identity();
 
@@ -400,6 +389,12 @@ $(document).ready(function() {
 					$('#NotificationArea').fadeOut();
 
 					initKeyboard();
+
+		            $N.on('change:attention', updateView);
+		            $N.on('change:layer', updateView);
+		            $N.on('change:currentView', updateView);
+		            $N.on('change:tags', updateView);
+		            $N.on('change:focus', updateView);
 
                 });
 

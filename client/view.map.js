@@ -21,7 +21,7 @@ function renderMapMarker(x, createMarkerFunction) {
 	};
 
     var op = 0.5;
-    var rad = 50;
+    var rad = null;
     var iconURL = undefined;
     
     var ww = x.modifiedAt || x.createdAt || null;
@@ -167,19 +167,7 @@ function renderOLMap(s, o, v) {
     
     var e = uuid();
     $('<div style="width: 100%; height: 100%"/>').attr('id', e).appendTo(v);
-        
-    /*{
-        var menu = $('<div></div>');
-        menu.css('position', 'absolute');
-        menu.css('right', '1em');
-        menu.css('top', '1em');
-        
-        menu.append('<button>prev</button>');
-        menu.append('<button>next</button>');
-        menu.append('<button>NOW</button>');
-        o.append(menu);
-    }*/
-    
+            
     var target = e;
     var location = objSpacePointLatLng(s.myself());
 
@@ -239,14 +227,19 @@ function renderOLMap(s, o, v) {
                         "http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
                         "http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"]);
 
-    var vector = new OpenLayers.Layer.Vector("Vectors", {});
-    var markers =  new OpenLayers.Layer.Markers( "Markers" );
+    var vector = new OpenLayers.Layer.Vector("Vectors", {
+        /*strategies: [
+            new OpenLayers.Strategy.Fixed(),
+            new OpenLayers.Strategy.Cluster()
+        ],*/
+	});
+    /*var markers =  new OpenLayers.Layer.Markers( "Markers",{
+	} );*/
     
     m.vector = vector;
-    m.marker = markers;
     
     m.addLayers([
-        mapnik, aerial, vector, markers //, gphy, gmap, gsat, ghyb, /*veroad, veaer, vehyb,*/ 
+        mapnik, aerial, vector //, gphy, gmap, gsat, ghyb, /*veroad, veaer, vehyb,*/ 
     ]);
 
     
@@ -256,8 +249,8 @@ function renderOLMap(s, o, v) {
         });*/
     }
     
-    m.events.register("moveend", m, saveBounds);
-    m.events.register("zoomend", m, saveBounds);
+    //m.events.register("moveend", m, saveBounds);
+    //m.events.register("zoomend", m, saveBounds);
     
     var exm = s.get('mapExtent');
     if (exm) {
@@ -274,6 +267,7 @@ function renderOLMap(s, o, v) {
     m.addControl( new OpenLayers.Control.LayerSwitcher() );
 
     var select;
+
     
     vector.events.on({
         featureselected: function(event) {
@@ -310,42 +304,44 @@ function renderOLMap(s, o, v) {
         var p = project(new OpenLayers.LonLat(lon, lat));
         var t = new OpenLayers.Geometry.Point(p.lon, p.lat /*location[1],location[0]*/);
         
-		function fillString(f) {
-			return 'rgb(' + (f.r * 256.0) + ', ' + (f.g * 256.0) + ', ' + (f.b * 256.0) + ')';
+		if (rad) {
+			function fillString(f) {
+				return 'rgb(' + (f.r * 256.0) + ', ' + (f.g * 256.0) + ', ' + (f.b * 256.0) + ')';
+			}
+			var style = {
+			    fillColor: fillString(fill),
+			    //strokeColor: '#fff',
+			    fillOpacity: opacity,
+			    //strokeOpacity: opacity,
+			    strokeWidth: 0,
+			    //view-source:http://openlayers.org/dev/examples/vector-features-with-text.html
+		    };
+		    var radMarker = new OpenLayers.Feature.Vector(
+				OpenLayers.Geometry.Polygon.createRegularPolygon(
+				t,
+				rad,
+				6,
+				0), {}, style);
+		    radMarker.uri = uri;
+		    m.vector.addFeatures([radMarker]);
 		}
 
-        var targetLocation = new OpenLayers.Feature.Vector(
-        OpenLayers.Geometry.Polygon.createRegularPolygon(
-        t,
-        rad,
-        6,
-        0), {}, {
-            fillColor: fillString(fill),
-            //strokeColor: '#fff',
-            fillOpacity: opacity,
-            //strokeOpacity: opacity,
-            strokeWidth: 0
-            //view-source:http://openlayers.org/dev/examples/vector-features-with-text.html
-
-        });
-        targetLocation.uri = uri;
-        m.vector.addFeatures([targetLocation]);
-
-        //m.zoomToExtent(m.vector.getDataExtent());
-        
         if (iconURL) {
-            var iw = 35;
-            var ih = 35;
-            var iop = 0.95;
-            var size = new OpenLayers.Size(iw,ih);
-            var offset = new OpenLayers.Pixel(-iw/2.0,-ih/2.0);
-            var icon = new OpenLayers.Icon(iconURL,size,offset);
-            icon.setOpacity(iop);
-            markers.addMarker(new OpenLayers.Marker(p,icon));
+			var style = {
+				graphicWidth: 32,
+				graphicHeight: 32,
+				externalGraphic: iconURL
+			}
+		    var iconMarker = new OpenLayers.Feature.Vector(
+				t /*OpenLayers.Geometry.Polygon.createRegularPolygon(
+				t,
+				rad,
+				6,
+				0)*/, {}, style);
+		    iconMarker.uri = uri;
+		    m.vector.addFeatures([iconMarker]);
         }
-        
-        return targetLocation;
-        
+
     }
 
     m.location = function() {
@@ -434,7 +430,6 @@ function renderOLMap(s, o, v) {
             select.destroy();
         }
 
-        m.marker.clearMarkers();
         m.vector.removeAllFeatures();
         
         for (var i = 0; i < kmllayers.length; i++) {
@@ -468,14 +463,13 @@ function renderOLMap(s, o, v) {
         });
         m.addControl(select);    
         select.activate();
+
+		m.onChange = function() {
+		    updateMap();
+		};
     }
-    
+
     updateMap();    
-
-
-    m.onChange = function() {
-        updateMap();
-    };
     
     return m;
 }
