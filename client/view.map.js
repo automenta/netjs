@@ -227,11 +227,8 @@ function renderOLMap(s, o, v) {
                         "http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
                         "http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"]);
 
+
     var vector = new OpenLayers.Layer.Vector("Vectors", {
-        /*strategies: [
-            new OpenLayers.Strategy.Fixed(),
-            new OpenLayers.Strategy.Cluster()
-        ],*/
 	});
     /*var markers =  new OpenLayers.Layer.Markers( "Markers",{
 	} );*/
@@ -304,6 +301,7 @@ function renderOLMap(s, o, v) {
         var p = project(new OpenLayers.LonLat(lon, lat));
         var t = new OpenLayers.Geometry.Point(p.lon, p.lat /*location[1],location[0]*/);
         
+
 		if (rad) {
 			function fillString(f) {
 				return 'rgb(' + (f.r * 256.0) + ', ' + (f.g * 256.0) + ', ' + (f.b * 256.0) + ')';
