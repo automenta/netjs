@@ -275,6 +275,7 @@ function renderOLMap(s, o, v) {
             //console.log(feature, area, id, output);
             newPopupObjectView(feature.uri);
             //document.getElementById("output-id").innerHTML = output;
+
         }
     });
     

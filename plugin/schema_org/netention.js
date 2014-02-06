@@ -30,7 +30,7 @@ exports.plugin = function($N) { return {
                         return 'integer';
                     }
                     else {
-                        return ranges;
+                        return 'text'; //ranges;
                     }
                     
                 }
