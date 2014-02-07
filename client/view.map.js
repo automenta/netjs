@@ -266,6 +266,7 @@ function renderOLMap(s, o, v) {
     var select;
 
     
+	/*
     vector.events.on({
         featureselected: function(event) {
             var feature = event.feature;
@@ -278,6 +279,7 @@ function renderOLMap(s, o, v) {
 
         }
     });
+	*/
     
 /*
     var df = new OpenLayers.Control.DragFeature(vector);
