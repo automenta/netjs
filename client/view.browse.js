@@ -245,7 +245,9 @@ function renderBrowseGrid(o, v) {
     });*/
 }
 
+
 function renderBrowseSlides(o, vv, slideControls) {
+
 	var u = $('<div class="reveal"></div>');
 	var v = $('<div class="slides"></div>');
 	v.appendTo(u);

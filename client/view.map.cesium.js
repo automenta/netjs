@@ -51,6 +51,8 @@ function renderCesiumMap(o, v) {
 					vertexAngle
 					)
 		    });
+			if (!iconURL)
+				iconURL = defaultIcons['unknown'];
 			if (iconURL) {
 				if (imageMaterials[iconURL]) {
 					poly.material = imageMaterials[iconURL];

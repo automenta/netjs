@@ -186,7 +186,7 @@ function setTheme(t) {
             inverse = true;
     }
     else {
-        themeURL = 'lib/jquery-ui/1.10.3/themes/' + t + '/jquery-ui.min.css';
+        themeURL = 'lib/jquery-ui/1.10.4/themes/' + t + '/jquery-ui.min.css';
         if (t === 'ui-darkness')
             inverse = true;
     }

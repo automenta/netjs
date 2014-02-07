@@ -44,6 +44,26 @@ function newPopupObjectView(_x) {
 
 }
 
+function newPopupObjectViews(objectIDs) {
+	if (objectIDs.length == 0)
+		return;
+	if (objectIDs.length == 1)
+		return newPopupObjectView(objectIDs[0]);
+
+	var objects = objectIDs.map(function(i) {
+		return $N.getObject(i);
+	});
+
+    var d = newPopup(objects.length + " Objects");
+	_.each(objects, function(o) {
+		d.append(newObjectSummary(o, {
+			depthRemaining: 0
+		}));
+	});
+    return d;
+
+}
+
 
 function getAvatar(s) {
     var e = '';

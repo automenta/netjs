@@ -187,31 +187,6 @@ function renderOLMap(s, o, v) {
         //numZoomLevels: 12
     });
 
-	var oClick = new OpenLayers.Control.Click({eventMethods:{
-	 'rightclick': function(e) {
-		//		  alert('rightclick at '+e.xy.x+','+e.xy.y);
-		var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
-		var lonlat = unproject(m.getLonLatFromPixel(pixel));
-		var n = objAddGeoLocation(objNew(), lonlat.lat, lonlat.lon);
-
-		$.pnotify( { title: 'New Object', text: ('@ ' + _n(lonlat.lat) + ',' + _n(lonlat.lon)) } );
-		newPopupObjectEdit( n );
-		
-	    //alert("Lat: " + lonlat.lat + " (Pixel.x:" + pixel.x + ")" + "\n" + "Lon: " + lonlat.lon + " (Pixel.y:" + pixel.y + ")" );
-	 },
-
-	 /*'dblclick': function(e) {
-	  alert('dblclick at '+e.xy.x+','+e.xy.y);
-	 },*/
-	 /*'click': function(e) {
-	  alert('click at '+e.xy.x+','+e.xy.y);
-	 },
-	 'dblrightclick': function(e) {
-	  alert('dblrightclick at '+e.xy.x+','+e.xy.y);
-	 }*/
-	}});
-	m.addControl(oClick);
-	oClick.activate();
 
 	document.getElementById(e).oncontextmenu = function(e){
 	 e = e?e:window.event;
@@ -238,6 +213,56 @@ function renderOLMap(s, o, v) {
     m.addLayers([
         mapnik, aerial, vector //, gphy, gmap, gsat, ghyb, /*veroad, veaer, vehyb,*/ 
     ]);
+
+	var oClick = new OpenLayers.Control.Click({eventMethods:{
+	 'rightclick': function(e) {
+		//		  alert('rightclick at '+e.xy.x+','+e.xy.y);
+		var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
+		var lonlat = unproject(m.getLonLatFromPixel(pixel));
+		var n = objAddGeoLocation(objNew(), lonlat.lat, lonlat.lon);
+
+		$.pnotify( { title: 'New Object', text: ('@ ' + _n(lonlat.lat) + ',' + _n(lonlat.lon)) } );
+		newPopupObjectEdit( n );
+		
+	    //alert("Lat: " + lonlat.lat + " (Pixel.x:" + pixel.x + ")" + "\n" + "Lon: " + lonlat.lon + " (Pixel.y:" + pixel.y + ")" );
+	 },
+
+	 /*'dblclick': function(e) {
+	  alert('dblclick at '+e.xy.x+','+e.xy.y);
+	 },*/
+
+	 'click': function(e) {
+		//alert('click at '+e.xy.x+','+e.xy.y);
+		//http://dev.openlayers.org/docs/files/OpenLayers/Feature/Vector-js.html#OpenLayers.Feature.Vector.atPoint
+		// to select all coincident map icons on click
+		var dx = 10;
+		var dy = 10;
+		var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
+		var lonlat = m.getLonLatFromPixel(pixel);
+		var dlonlat = m.getLonLatFromPixel(new OpenLayers.Pixel(e.xy.x+dx,e.xy.y+dy));
+		var dlonlat = Math.max(Math.abs(lonlat.lon-dlonlat.lon), Math.abs(lonlat.lat-dlonlat.lat));
+		//console.log(dlonlat);
+		var f = vector.features;
+		var clicked = [];
+		for (var i = 0; i < f.length; i++) {
+			var F = f[i];
+			if (F.onScreen(true)) {
+				if (F.atPoint(lonlat,dlonlat,dlonlat)) {
+					if (F.uri)
+						clicked.push(F.uri);
+				}
+			}
+		}
+		clicked = _.unique(clicked);
+		newPopupObjectViews(clicked);
+	 },
+	/*
+	 'dblrightclick': function(e) {
+	  alert('dblrightclick at '+e.xy.x+','+e.xy.y);
+	 }*/
+	}});
+	m.addControl(oClick);
+	oClick.activate();
 
     
     function saveBounds() {
@@ -458,12 +483,12 @@ function renderOLMap(s, o, v) {
             }        
         });
         
-        select = new OpenLayers.Control.SelectFeature(ollayers, {
+        /*select = new OpenLayers.Control.SelectFeature(ollayers, {
             toggle: true,
             clickout: true
         });
         m.addControl(select);    
-        select.activate();
+        select.activate();*/
 
 		m.onChange = function() {
 		    updateMap();
