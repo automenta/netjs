@@ -1,0 +1,28 @@
+.tagSection {
+	float: left;
+	width: 50%;
+}
+
+.Location {
+	float: right;
+}
+
+h5 {
+	color: gray;
+}
+
+body {
+	font-family: Arial, sans;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+#ThemeSelect {
+	position: fixed;
+	left: auto;
+	right: auto;
+	padding: 0.5em;
+	opacity: 0.75;
+	bottom: 0;
+	background-color: gray;
+	float: center;
+}

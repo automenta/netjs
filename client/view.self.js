@@ -31,7 +31,7 @@ function saveAddedTags(gt, tag, when) {
 	    var G = $N.tag(g);
 		var ng = objNew();
 
-		/*if (when)*/ {
+		if (when) {
 			ng.when = when;
 			var location = objSpacePoint($N.myself());
 			if (location)
@@ -115,13 +115,9 @@ function renderUs(v) {
 
 			var exportButton = $('<button>Export</button>');
 			exportButton.click(function() {
-				var p = newPopup('Code @ ' + new Date(), {width: 550, height: 400});
-				p.html('<textarea class="SelfCode" readonly="true">' + getKnowledgeCode(currentUser) + '</textarea>');
-			
-				var htmlButton = $('<button>HTML Version</button>');
-				htmlButton.click(function() {
-				   p.html('<div class="SelfCode">' + getKnowledgeCodeHTML(currentUser) + '</div>');
-				}).prependTo(p);
+				var newwindow=window.open();
+				var newdocument=newwindow.document;
+				newdocument.write(getSelfSummaryHTML(currentUser));
 			});
 
 			currentGoalHeader.append(avatarButton, exportButton);
@@ -469,31 +465,67 @@ function getKnowledgeCodeTags(userid) {
     return tags;
 }
 
-function getKnowledgeCodeHTML(userid) {
+function getSelfSummaryHTML(userid) {
     var tags = getKnowledgeCodeTags(userid);
     var x = '';
+	var user = $N.getObject(userid);
+
+	x += '<title>' + user.name + '</title>';
+	x += '<link href="summary.css" type="text/css" rel="stylesheet"/>';
+	x += '<link class="themecss" href="theme/summary.complete.css" type="text/css" rel="stylesheet"/>';
+	//</head>
+	x += '<script>function setTheme(t) { document.getElementsByClassName(\'themecss\')[0].setAttribute(\'href\', \'theme/summary.\' + t + \'.css\'); }</script>';
+	x += '<script>function removeThemeSelect() { document.getElementById(\'ThemeSelect\').remove(); }</script>';
+	x += '<body>';
+
+	x += '<h1>' + user.name + '</h1>';
+
+	delete tags['name'];
+
+	var location = tags['@'];
+	if (location) {
+		x += '<div class="Location">' + _n(location[0],3) + ',' + _n(location[1],3) + '</div>';
+		delete tags['@'];
+	}
+
+	var desc = objDescription(user);
+	if (desc) {
+		x += '<h3>' + desc + '</h3>';
+	}
+
+	x += '<hr/>';
+
+	
     for (var i in tags) {
                 
-        if (i == '@') {            
-            x += '@: ' + _n(tags[i][0], 3) + ', ' + _n(tags[i][1], 3);
-        }
-        else {
-            var il = i;
-            var stt = $N.getTag(i);
-            if (stt)
-                il = stt.name;
+        var il = i;
+        var stt = $N.getTag(i);
+        if (stt)
+            il = stt.name;
 
-            var color = tagColorPresets[i] || 'black'; 
-                
-            x += '<b style="color: ' + color + '">' + il + '</b>: ';
-            for (var y = 0; y < tags[i].length; y++) {
-                var tt = tags[i][y];
-                x += '<a href="' + getENWikiURL(tt) + '">' + tags[i][y] + '</a>';
-                x += '&nbsp;';
-            }
+        var color = tagColorPresets[i] || 'black'; 
+            
+        //x += '<b style="color: ' + color + '">' + il + '</b>: ';
+		x += '<div class="tagSection ' + i + '_section">';
+		x += '<h2 class="' + i + '_heading">' + il + '</h2><ul>';
+        for (var y = 0; y < tags[i].length; y++) {
+            var tt = tags[i][y];
+            x += '<li><a href="' + getENWikiURL(tt) + '">' + tags[i][y] + '</a></li>';
         }
-        x += '<br/><br/>';
+		x += '</ul></div>';
     }
+
+	//theme switcher
+	x += '<div id="ThemeSelect">';
+	x += 'Mode: ';
+	x += '<button onclick="setTheme(\'complete\')">Complete</button>';
+	x += '<button onclick="setTheme(\'professional\')">Professional</button>';
+	x += '<button onclick="setTheme(\'canneed\')">Cans & Needs</button>';
+	x += '<button onclick="setTheme(\'silly\')">Silly</button>';
+	x += '<button onclick="removeThemeSelect()" title="Remove This Mode Selector">(x)</button>';
+	x += '</div>';
+
+	x+='</body>';
     
     return x;    
 }
