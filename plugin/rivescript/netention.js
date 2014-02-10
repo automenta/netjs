@@ -9,25 +9,24 @@ Automatically Generating Rivescript from Natural Language
 http://www.rivescript.com/yabb2/YaBB.pl?num=1227013586
 */
 var util = require('../../client/util.js');
-var RiveScript = require("./rivescript/bin/RiveScript.js");
+var RiveScript = require("rivescript");
 var _ = require('underscore');
 
-exports.plugin = {
+exports.plugin = function($N) { return {
         name: 'RiveScript Chatbot',    
 		description: 'Replies to comments and responds to private chat',
 		options: { },
         version: '1.0',
         author: 'http://rivescript.com',
         
-		start: function(netention) { 
+		start: function() { 
             
-            this.netention = netention;
             
             // Create the bot.
             var bot;
             
             this.bot = bot = new RiveScript({ debug: false });
-            this.bot.loadDirectory("./plugin/rivescript/rivescript/eg/brain", function() { 
+            this.bot.loadDirectory("./plugin/rivescript/brain", function() { 
                 
                 bot.sortReplies();
                 bot.ready = true;
@@ -53,7 +52,7 @@ exports.plugin = {
                 if (_.contains(x.tag, 'Message')) {
                     if (!x.replyTo) {
                         var response = this.bot.reply(x.author, x.name);
-                        this.netention.pub({
+                        $N.pub({
                            replyTo: x.uri,
                            uri: util.uuid(),
                            name: response,
@@ -65,11 +64,12 @@ exports.plugin = {
                 }
         },
         
-		stop: function(netention) {
+		stop: function() {
 		}
-};
+}; };
 
 
 function error_handler (loadcount, err) {
 	console.log("Error loading batch #" + loadcount + ": " + err + "\n");
 }
+

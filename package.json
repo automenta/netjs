@@ -1,5 +1,5 @@
 {
-    "name":"netjs2",
+    "name":"netention_js",
     "version":"0.0.1",
     "dependencies":{
 		"express":"",
@@ -27,10 +27,7 @@
 		"kmeans":"",
 		"telehash": "",
 		"jsdom": "",
-		"togeojson":""
-    },
-    "engines": {
-		"node": "0.8.x", 
-		"npm": "1.1.x"
+		"togeojson":"",
+		"rivescript":""
     }
 }
