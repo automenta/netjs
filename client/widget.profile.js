@@ -33,21 +33,23 @@ function newProfileWidget() {
     }
     else*/ 
 	var c = 0;
-    for (var i = 0; i < otherSelves.length; i++) {
-        var s = otherSelves[i];
-        if (s.indexOf('Self-')==0)
-            s = s.substring(5);
-        var o = self.getSelf(s);
-        if (o) {                    
-            var n = o.name;
-            var selString = (o.id.substring(5) === self.id()) ? 'selected' : '';
-            selector.append('<option value="' + s + '" ' + selString + '>' + n + '</option>');
-			c++;
-        }
-        else {
-            //console.log('unknown self: ' + s);
-        }
-    }
+	if(otherSelves){
+	    for (var i = 0; i < otherSelves.length; i++) {
+	        var s = otherSelves[i];
+	        if (s.indexOf('Self-')==0)
+	            s = s.substring(5);
+	        var o = self.getSelf(s);
+	        if (o) {                    
+	            var n = o.name;
+	            var selString = (o.id.substring(5) === self.id()) ? 'selected' : '';
+	            selector.append('<option value="' + s + '" ' + selString + '>' + n + '</option>');
+				c++;
+	        }
+	        else {
+	            //console.log('unknown self: ' + s);
+	        }
+	    }
+	}
 
 	if (c === 0) {
 		d.html('').append(newNewProfileWidget(function(user) {
