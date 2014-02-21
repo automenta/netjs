@@ -163,6 +163,8 @@ exports.plugin = {
                 });
             }*/
             
+//http://semanticommunity.info/Data.gov/GEOViewer
+//http://catalog.data.gov/dataset?res_format=KML&_res_format_limit=0
 
 /*
 OpenGeoSci

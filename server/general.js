@@ -267,6 +267,7 @@ var generalTags = [
 
 ];
 
+//http://bioportal.bioontology.org/ontologies/MFOEM?p=classes
 var emotionTags = [
 	{ uri: 'Emotion', name: 'Emotion', tag: ['Concept'] },
 
