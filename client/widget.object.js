@@ -179,6 +179,11 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var n = objNew(x.id, na);
             n.createdAt = x.createdAt;
             n.author = x.author;
+
+			if (x.subject) n.subject = x.subject;
+
+			//TODO copy any other metadata
+
             for (var i = 0; i < whenSaved.length; i++) {
                 var w = whenSaved[i];
                 w(n);
