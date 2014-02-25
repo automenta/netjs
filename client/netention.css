@@ -1283,7 +1283,6 @@ a.openModal:focus {
 }
 .fractaldom_surface {
 	overflow: hidden;
-	position: fixed;
 	width: 100%;
 	height: 100%;	
 	background-image: url('lib/slateboxjs/cursors/grid_transparent.png');

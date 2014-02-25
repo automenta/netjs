@@ -113,14 +113,35 @@ function fractaldom(options) {
 	var underlayCanvas = $('<div/>').appendTo(x);
 	underlayCanvas.addClass('underlaySVG');
 	underlayCanvas.svg();
-	var svg = underlayCanvas.svg('get');
+	underlayCanvas.find("svg").attr('width','100%').attr('height','100%');
 
+	var svg = underlayCanvas.svg('get');
+	
+	var defs = svg.defs('myDefs');
+	/*
+	   <marker id="Triangle"
+                viewBox="0 0 10 10" 
+                refX="1" refY="5"
+                markerWidth="6" 
+                markerHeight="6"
+                orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+	    </marker>
+
+		 <polyline points="10,90 50,80 90,20"
+              fill="none" stroke="black" 
+              stroke-width="2"
+              marker-end="url(#Triangle)" />
+	*/
+	var triangle = svg.marker(defs, 'Triangle', 1, 5, 6, 6, 'auto', {
+		viewBox: "0 0 10 10" 
+	});
+	svg.path(triangle, "M 0 0 L 10 5 L 0 10 z");
 
 	function resizeUnderlayCanvas() {
-		underlayCanvas.attr('width', x.width());
-		underlayCanvas.attr('height', x.height());
+		underlayCanvas.css('width', x.width());
+		underlayCanvas.css('height', x.height());
 	}
-
 
 	function _updateUnderlayCanvas() {
 
@@ -147,7 +168,7 @@ function fractaldom(options) {
 			var npbh = nB.height();
 
 			var lineWidth = 5;
-			var lineColor = '#888';
+			var lineColor = 'black';
 			var o = E[2];
 			if (o) {
 				lineWidth = o.lineWidth || lineWidth;
@@ -163,8 +184,21 @@ function fractaldom(options) {
 			if (!existingLine) {
 				E.svgLine = svg.line(x1, y1, x2, y2,{
 					'stroke': lineColor, 
-					'stroke-width': lineWidth
+					'stroke-width': lineWidth,
+					'marker-segment': "url(#Triangle)",
+					'marker-end': "url(#Triangle)",
+					//'marker-pattern': "40 url(#Triangle) 40 url(#Triangle)"
 				});
+				/*E.svgLine = svg.polyline([[x1,y1],[x2,y2]], {
+					'stroke': lineColor, 
+					'stroke-width': lineWidth,
+					//'marker-pattern': "40 url(#Triangle) 40 url(#Triangle)",
+					'marker-segment': "url(#Triangle)",
+					'marker-end': "url(#Triangle)",
+					'marker-start': "url(#Triangle)",
+					'marker': "url(#Triangle)",
+				});*/
+
 			}
 			else {
 				existingLine.setAttribute('x1',x1);
