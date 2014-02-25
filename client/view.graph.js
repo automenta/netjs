@@ -1,404 +1,464 @@
-var GRAPH_MAX_NODES = 75;
-var layoutFPS = 30;
-var graphUpdatePeriod = 1000 / layoutFPS; //in ms
-
-var $s, theSlate;
-
-
-function renderSlateGraph(s, o, v, withGraph) {
-    
-    var ee = uuid();
-	var r = newDiv('"slateContainer"');
-	r.attr('style', 'width:100%; height:100%;');	
-	v.append(r);
-
-	var controlpanel = newDiv();
-	controlpanel.addClass('graphControlPanel');
-	r.append(controlpanel);
-
-	var l = newDiv('slate');
-	r.append(l);
-    
-	function updateGraph() {
-		later(function() {
-		    initCZ(function() {
-		    		
-				$s = new Slatebox();
-				theSlate = $s.slate({
-					id: 'firstSlateExample' //slate with the same ids can collaborate together.
-					, container: 'slate'
-					, viewPort: { width: 50000, height: 50000, allowDrag: true, left: 5000, top: 5000 }
-					, showZoom: true
-					, showBirdsEye: false
-					, showStatus: false
-					, showMultiSelect: false
-					, onSlateChanged: function (subscriberCount) {
-						//upd();
-					}
-					, collaboration: {
-						allow: false
-					}
-				}).canvas.init({ imageFolder: "/lib/slateboxjs/cursors/" });
-
-				graphCZ(r, function(root) {	
-		            var width = 1400;
-		            var height = 1300;
-					var layout = { };
-		            
-		            var sys = arbor.ParticleSystem(1500, 762, 0.5);                
-		            sys.screenPadding(20);
-		            sys.screenSize(width, height);
-		            sys.parameters({"fps":layoutFPS, "repulsion":4400,"friction":0.2,"stiffness":25,"gravity":false});
-		            
-					sys.stop();
-		            
-		            var nodeShapes = { }, nodeNodes = { };
-		            var edgeShapes = { };
-		            
-		            
-					layout.addNode = function (nodeID, shape) {
-						nodeNodes[nodeID] = sys.addNode(nodeID);
-						nodeShapes[nodeID] = shape;
-
-					};
-					layout.addEdge = function(from, to, edge) {
-						sys.addEdge(from, to, edge);
-					};
-
-		            
-		            var offsetX = width;
-		            var offsetY = height/2.0;
-		            var iterations = 0;
-					var updater = null;
-
-					var organize = $('<button>Organize</button>');
-
-					var updateLayout = function() {
-		                
-						iterations--;
-
-						//console.log('layout iterations remain', iterations);
-
-		                if ((!l.is(':visible')) || (iterations == 0)) { 
-		                    //STOP
-		                    clearInterval(updater);
-		                    sys.stop();
-							organize.removeAttr('disabled');
-							//console.log('layout stop');
-		                    return;
-		                }
-
-		                sys.eachNode(function(x, pi) {
-		                   var s = nodeShapes[x.name];                       
-		                   if (s) {
-								s.setPosition({
-									x: pi.x + 5000,
-									y: pi.y + 5000
-								});
-		                   }
-		                });
-		            };
-
-
-				 	{
-						organize.click(function() {
-							organize.attr('disabled', 'true');
-							iterations = 10;
-							//console.log('layout start');
-				            sys.start();
-				            updater = setInterval(updateLayout, graphUpdatePeriod);
-						});
-						controlpanel.append(organize);
-					}
-
-					return layout;
-		 
-		            
-				}, withGraph);		
-						
-			});
-		    
-		});
-	}
-	updateGraph();
-
-
-}
-
-
-
 function renderGraph(s, o, v) {
+	var d = fractaldom();
+	d.appendTo(v);
+	d.init();
 
-    renderSlateGraph(s, o, v, function(g) {
-        renderItems(o, v, GRAPH_MAX_NODES, function(s, v, xxrr) {
-            var tags = { };
-            
-            for (var i = 0; i < xxrr.length; i++) {
-                var x = xxrr[i][0];
-                var r = xxrr[i][1];
 
-                g.addNode(x.id, { label: x.name || "" } );
-                
-                var rtags = objTags(x);
+	var w1 = d.newNode("a", {title:'Hi', position: [100,100]} );
+	w1.append('Fractals are everywhere<br/>');
+	w1.append('Fractal patterns have been modeled extensively, albeit within a range of scales rather than infinitely, owing to the practical limits of physical time and space. Models may simulate theoretical fractals or natural phenomena with fractal features. The outputs of the modelling process may be highly artistic renderings, outputs for investigation, or benchmarks for fractal analysis. Some specific applications of fractals to technology are listed elsewhere. Images and other outputs of modelling are normally referred to as being "fractals" even if they do not have strictly fractal characteristics, such as when it is possible to zoom into a region of the fractal image that does not exhibit any fractal properties. Also, these may include calculation or display artifacts which are not characteristics of true fractals.')
 
-                if (!rtags) 
-                    continue;
+	var w2 = d.newNode('b', { title: 'Instructions', position: [800,300] } );
+	w2.append('<b>Drag on the left-side box in the title bar to adjust zoom.</b><br/><br/>');
+	w2.append('<b>Drag on the background to move the canvas.</b><br/><br/>');
+	w2.append('<b>Resize a window to a small square to activate its icon mode.</b><br/><br/>');
 
-				if (x.author)
-					rtags.push('Self-' + x.author);
+	d.newEdge('a', 'b', { });
 
-				//add Tags (intensional inheritance)
-                for (var j = 0; j < rtags.length; j++) {
-                    var tj = rtags[j];
-                    var exists = tags[tj];
-                    if (!exists) {
-                        var ttj = s.tag(tj) || s.object(tj) || null; // || { name: '<' + tj + '>' };
-						if (!ttj)
-							continue;
+	d.destroy = function() {
+		d.removeNodes();
+	};
+	d.update = function() {
+	};
 
-						var tagIcon = null;
-						if (ttj)
-							tagIcon = getTagIcon(tj);
+	return d;
 
-						//see slatebox.node.js for options
-                        g.addNode(tj, { 
-							label: ttj.name||"",
-							width: 150,
-							height: 70,
-							shape: 'ellipse',
-							color: '#ddd',
-							image: tagIcon ? (/*"url("*/  tagIcon /*+ ")"*/) : null,
-							fontSize: 20,
-							fontStyle: 'bold'
-						});
-
-                        tags[tj] = true;
-                    }
-
-					/*
-						EDGE OPTIONS
-
-				        , lineColor: option.lineColor || _self._.options.lineColor
-				        , lineWidth: option.lineWidth || _self._.options.lineWidth
-				        , lineOpacity: option.lineOpacity || _self._.options.lineOpacity
-				        , blnStraight: option.isStraightLine || false
-				        , showParentArrow: option.showParentArrow || false
-				        , showChildArrow: option.showChildArrow || false
-						option.editable //whether the edge can be modified
-					*/
-                    g.addEdge(x.id+'_' + j, x.id, tj, {
-						isStraightLine: true,
-						//lineColor: 'red',
-					});
-                }
-            }
-            
-        });        
-    });
 }
 
-function _label(t, maxlen) {
-	if (t.length > maxlen)
-		return t.substring(0, maxlen) + '..';
-	return t;
-}
+var updateUnderlayFPS = 25;
 
-function graphCZ(canvasElement, init, withGraph) {
-	var layout = init(canvasElement);
+function fractaldom(options) {
+	var nodes = { };
+	var edges = [ ];
 
-
-    var log = [], startTime = Math.round(new Date().getTime() / 1000);
-
-    /*function upd() {
-        Slatebox.el("txtSlateJson").value = theSlate.exportJSON();
-        Slatebox.el("txtSlateLastUpdated").innerHTML = "last updated <b>" + new Date().toString();
-    };*/
-
-    //this.paper.clear();
-    theSlate.nodes.allNodes = [];
-
-
-	//console.log(theSlate.zoomSlider);
-
-	var zoomValue = 15000;
-	var zoomDelta = 2500;
-	var maxZoom = 200000;	//taken from Slatebox.slate.zoomSlider.js
-	var minZoom = 6000; 
-
-	function MouseWheelHandler(e) {
-
-		// cross-browser wheel delta
-		var e = window.event || e;
-		var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-		if (delta < 0) {
-			zoomValue += zoomDelta;
-		}
-		else {
-			zoomValue -= zoomDelta;
-		}
-		if (zoomValue > maxZoom) zoomValue = maxZoom;
-		if (zoomValue < minZoom) zoomValue = minZoom;
-		theSlate.zoomSlider.set(zoomValue);
-
-		return false;
+	if (!options) {
+		options = { };
+		options.iconSize = 64;
 	}
 
-	var s = document.getElementById("slate");
-	if (s.addEventListener) {
-		s.addEventListener("mousewheel", MouseWheelHandler, false);
-		s.addEventListener("DOMMouseScroll",MouseWheelHandler,false);
+	var x = $('<div/>');
+
+	x.addClass('fractaldom_surface');
+
+	var dragging = false;
+	var lastPoint = null;
+	var startDragPoint = null;
+	x.mousedown(function(m) {
+		if (m.which==1) { 
+			dragging = true;
+			startDragPoint = [m.clientX, m.clientY];
+		}		
+	});
+	x.mouseup(function(m) {
+		dragging = false;
+		lastPoint = null;
+	});
+	x.mousemove(function(m) {
+		if (m.which!=1) {
+			dragging = false;
+			lastPoint = null;
+			return;
+		}
+
+
+		if (dragging) {
+			if (lastPoint) {
+				var dx = m.clientX - lastPoint[0];
+				var dy = m.clientY - lastPoint[1];
+				for (var n in nodes) {
+					var W = nodes[n];
+					var p = W.parent().position();
+					var P = W.parent();
+					P.css('left', p.left + dx );
+					P.css('top', p.top + dy );
+				}
+			}
+
+			lastPoint = [m.clientX, m.clientY];		
+
+			updateUnderlayCanvas();
+		}
+	});
+
+	var underlayCanvas = $('<canvas width="200" height="200"/>');
+	x.append(underlayCanvas);
+
+	function resizeUnderlayCanvas() {
+		underlayCanvas.attr('width', x.width());
+		underlayCanvas.attr('height', x.height());
 	}
-	else s.attachEvent("onmousewheel", MouseWheelHandler);
 
+	function __updateUnderlayCanvas() {
+		var c = underlayCanvas.get(0);
+		var ctx = c.getContext("2d");
+		
+		//ctx.clearRect(0,0,c.width,c.height);
+		c.width = c.width; //clears the canvas
 
-	var _nodes =  [];
-	var _edges = [];
-	var nodeIndex = { };
+		var labels = [];
+		for (var i = 0; i < edges.length; i++) {
+			var E = edges[i];
+			var nA = nodes[E[0]].parent();
+			var nB = nodes[E[1]].parent();
 
-    /*var _nodes = [
-        $s.node({ id: 'first_node', text: 'drag', xPos: 5090, yPos: 5120, height: 40, width: 80, vectorPath: 'roundedrectangle', backgroundColor: '90-#ADD8C7-#59a989', lineColor: "green", lineWidth: 2, allowDrag: true, allowMenu: true, allowContext: true })
-        , $s.node({ id: 'second_node', text: 'me', xPos: 5290, yPos: 5080, height: 40, width: 100, vectorPath: 'ellipse', backgroundColor: '90-#6A8FBD-#54709a', lineColor: "green", lineWidth: 4, allowDrag: true, allowMenu: true, allowContext: true })
-        , $s.node({ id: 'third_node', text: 'around', xPos: 5260, yPos: 5305, height: 40, width: 80, vectorPath: 'rectangle', backgroundColor: '90-#756270-#6bb2ab', lineColor: "blue", lineWidth: 5, allowDrag: true, allowMenu: true, allowContext: true })
-    ];*/
+			var docScrollTop = $(document).scrollTop();
 
-	var g = {
-		addNode : function(id, n) {
-			var x = 5000+Math.random() * 2000;
-			var y = 5000+Math.random() * 2000;
-			var nn = $s.node({ 
-					id: id, 
-					text: _label(n.label, 24), 
-					xPos: x, yPos: y, 
-					height: n.height||40, 
-					width: n.width||80, 
-					image: n.image || null,
-					vectorPath: n.shape||'rectangle', 
-					backgroundColor: n.color||'white', //'90-#ADD8C7-#59a989', 
-					fontSize: n.fontSize,
-					fontStyle: n.fontStyle,
-					lineColor: "black", 
-					lineWidth: 3, 
-					allowDrag: true, 
-					allowMenu: true, 
-					allowContext: false });
+			var npa = nA.offset();
+			var npb = nB.offset();
+			if ((!npa) || (!npb))
+				continue;
 
-			_nodes.push(nn);
-			nodeIndex[id] = nn;
-			layout.addNode(id, nn);
-		},
-		addEdge : function(e, from, to, options) {
-			_edges.push( [ from, to, e, options] );
-			layout.addEdge(from, to, { id: e } );
+			var npaw = nA.width();
+			var npah = nA.height();
+			var npbw = nB.width();
+			var npbh = nB.height();
+
+			var lineWidth = 5;
+			var lineColor = '#888';
+			var o = E[2];
+			if (o) {
+				lineWidth = o.lineWidth || lineWidth;
+				lineColor = o.lineColor || lineColor;
+			}
+			ctx.lineWidth = lineWidth;
+			ctx.strokeStyle = lineColor;
+
+			var x1 = Math.round(npa.left + (npaw/2));
+			var y1 = Math.round(npa.top - docScrollTop + (npah/2));
+			var x2 = Math.round(npb.left + (npbw/2));
+			var y2 = Math.round(npb.top - docScrollTop + (npbh/2));
+			ctx.moveTo(x1,y1);
+			ctx.lineTo(x2,y2);
+
+			if (o.label) {
+				var text = o.label.substring(0,24);
+				ctx.fillStyle = lineColor;
+  				ctx.font = "bold 24px Arial";
+			    var metrics = ctx.measureText(text);
+			    var width = metrics.width;
+				var mpx = (x1+x2)/2-width/2;
+				var mpy = (y1+y2)/2;
+  				ctx.fillText(text, mpx, mpy);
+			}
+		}
+		ctx.stroke();		
+	}
+	var _updateUnderlayCanvas = _.throttle( __updateUnderlayCanvas, Math.floor(1000.0 / parseFloat(updateUnderlayFPS)) );
+
+	function updateUnderlayCanvas() {
+		_updateUnderlayCanvas();
+	}
+
+	$(window).resize(function() {
+		resizeUnderlayCanvas();
+		updateUnderlayCanvas();
+	});
+
+	x.init = function() {
+		resizeUnderlayCanvas();
+		updateUnderlayCanvas();
+	}
+
+	x.removeNodes = function() {
+		for (var n in nodes) {
+			var N = nodes[n];
+			N.dialog( "destroy" );
 		}
 	};
 
-	if (withGraph)
-		withGraph(g);
+	x.newEdge = function(a, b, opt) {
+		edges.push([a,b,opt]);
+		updateUnderlayCanvas();
+	};
 
-    theSlate.nodes.addRange(_nodes);
-	for (var i = 0; i < _edges.length; i++) {
-		var ee = _edges[i];
-		var f = ee[0];
-		var t = ee[1];
-		var e = ee[2];
-		var options = ee[3] || { };
+	x.layoutFD = function(affectX, affectY, iterations) {
+		var R = 0.5;
+		var A = 0.5;
 
-		if (f==t)
-			continue;
+		var nodePosition = { };
 
-		if (!nodeIndex[t]) {
-			//console.log('Missing node: ', t);
-			continue;
+		for (var i in nodes) {
+			var ip = nodes[i].parent().position();
+			nodePosition[i] = [ ip.left, ip.top ]; //TODO consider width/height
 		}
-	
 
-		if (nodeIndex[f]) {
-			nodeIndex[f].relationships.addAssociation(nodeIndex[t], options);
+		for (var n = 0; n < iterations; n++) {
+			//calculate repulsive forces
+			for (var i  in nodes) {
+				var ip = nodePosition[i];
+
+				for (var j in nodes) {
+
+					if (i == j) continue;
+
+					var jp = nodePosition[j];
+
+					var dx = parseFloat(ip[0] - jp[0]);
+					var dy = parseFloat(ip[1] - jp[1]);
+
+					var dist = 0;
+					if (affectX) dist+=dx*dx;
+					if (affectY) dist+=dy*dy;
+					var D = Math.sqrt( dist );
+					if (D == 0) continue;
+
+					D = R / D;	
+					dx*=D; dy*=D;
+
+					if (!affectX) dx = 0;				
+					if (!affectY) dy = 0;
+
+					nodePosition[j] = [ jp[0] - dx, jp[1] - dy ];
+				}	
+			}
+
+			//calculate attractive forces
+			for (var j = 0; j < edges.length; j++) {
+				var a = edges[j][0];
+				var b = edges[j][1];
+				var ap = nodePosition[a];
+				var bp = nodePosition[b];
+
+				var dx = parseFloat(ap[0] - bp[0]);
+				var dy = parseFloat(ap[1] - bp[1]);
+
+				var dist = 0;
+				if (affectX) dist+=dx*dx;
+				if (affectY) dist+=dy*dy;
+				var D = Math.sqrt( dist );
+				if (D == 0) continue;
+
+				D = A / D;
+				dx*=D; dy*=D;
+
+				if (!affectX) dx = 0;				
+				if (!affectY) dy = 0;
+
+				nodePosition[b] = [ bp[0] + dx, bp[1] + dy ];
+			}			
+		}
+
+		for (var i in nodes) {
+			var ip = nodePosition[i];
+			nodes[i].position( ip[0], ip[1]);
+		}
+
+		updateUnderlayCanvas();
+	};
+
+	//https://jqueryui.com/dialog/
+	x.newNode = function(id, opt) {
+		if (!opt) opt = { };
+
+		var e = opt.element ? opt.element : $('<div/>');
+		var etype = e.prop('tagName');
+
+		if (etype == 'IFRAME') {
+			e.attr('width','99%');
+			e.attr('height','99%');
+		}
+
+
+		e.addClass('fractaldom');
+
+		opt.minHeight = options.iconSize;
+		opt.minWidth = options.iconSize;
+		//opt.focus = function( event, ui ) { console.log(e, 'focus'); return false; };
+
+		e.dialog(opt);
+
+
+		var resized;
+		if (!opt.element) {
+			var f = $('<div/>');
+			e.append(f);
+			resized = f;
 		}
 		else {
-			//console.log('Edge missing node: ', f);
-		}
-	}
-
-    theSlate.init();
-
-}
-
-
-var codeLoading = false;
-var codeLoaded = false;
-
-function initCZ(f) {
-    if (codeLoaded) {
-        f();
-    }
-    else {
-		if (codeLoading)
-			return;
-
-		codeLoading = true;
-
-        var scripts = [ 
-
-			"/lib/slateboxjs/slatebox.js",
-			"/lib/slateboxjs/slatebox.slate.js",
-			"/lib/slateboxjs/slatebox.node.js",
-
-			"/lib/slateboxjs/raphael/raphael.el.tooltip.js",
-			"/lib/slateboxjs/raphael/raphael.el.loop.js",
-			"/lib/slateboxjs/raphael/raphael.el.style.js",
-			"/lib/slateboxjs/raphael/raphael.button.js",
-			"/lib/slateboxjs/raphael/raphael.fn.connection.js",
-			"/lib/slateboxjs/raphael/raphael.fn.objects.js",
-
-			"/lib/slateboxjs/node/Slatebox.node.editor.js",
-			"/lib/slateboxjs/node/Slatebox.node.shapes.js",
-			"/lib/slateboxjs/node/Slatebox.node.menu.js",
-			"/lib/slateboxjs/node/Slatebox.node.toolbar.js",
-			"/lib/slateboxjs/node/Slatebox.node.context.js",
-			"/lib/slateboxjs/node/Slatebox.node.colorpicker.js",
-			"/lib/slateboxjs/node/Slatebox.node.links.js",
-			"/lib/slateboxjs/node/Slatebox.node.connectors.js",
-			"/lib/slateboxjs/node/Slatebox.node.relationships.js",
-			"/lib/slateboxjs/node/Slatebox.node.images.js",
-			"/lib/slateboxjs/node/Slatebox.node.template.js",
-			"/lib/slateboxjs/node/Slatebox.node.resize.js",
-
-			"/lib/slateboxjs/spinner.js",
-			"/lib/slateboxjs/emile/emile.js",
-			"/lib/slateboxjs/notify.js",
-
-			"/lib/slateboxjs/slate/Slatebox.slate.canvas.js",
-			"/lib/slateboxjs/slate/Slatebox.slate.message.js",
-			"/lib/slateboxjs/slate/Slatebox.slate.multiselection.js",
-			"/lib/slateboxjs/slate/Slatebox.slate.nodes.js",
-
-			"/lib/slateboxjs/slate/Slatebox.slate.zoomSlider.js",
-			"/lib/slateboxjs/slate/Slatebox.slate.keyboard.js",
-			"/lib/slateboxjs/slate/Slatebox.slate.birdseye.js",
-
-             '/lib/arbor/arbor.js'
-        ];
-        
-        loadCSS('/lib/slateboxjs/example.css');        
-
-		function ff() {
-	        codeLoaded = true;
-			f();
+			resized = e;
 		}
 
-        LazyLoad.js(scripts, ff);
+
+		function updateSize() {
+			var h = e.parent().height();
+			var w = e.parent().width();
+
+			var tb = e.parent().find(".ui-dialog-titlebar");
+			var content = e.parent().find(".ui-dialog-content");
+			var slider = e.parent().find(".zoomSlider");
+
+			if ((w < 1.25 * options.iconSize) || (h < 1.25 * options.iconSize)) {
+				content.hide();
+				slider.hide();
+				tb.css('height', '100%');
+			}
+			else {
+				content.show();
+				slider.show();
+				tb.css('height', 'auto');
+			}
+		}
+		//e.dialog({stack:false});
+		e.dialog({ closeOnEscape: false });
+		e.dialog("widget").draggable("option","containment","none");
+		e.dialog({
+			  drag: function( event, ui ) {
+				dragging = false;
+				lastPoint = null;
+
+				updateUnderlayCanvas();				
+			  },
+			  resize: function( event, ui ) {
+				dragging = false;
+				lastPoint = null;
+
+				updateSize();
+				updateUnderlayCanvas();
+				return false;
+			  },
+			  close: function( event, ui ) {
+				//
+			  }
+		});
+
+		e.parent().addClass("fractal-dialog");
+
+		var titlebar = e.parent().find(".ui-dialog-titlebar span").first();
+
+		var minZoom = 0.2;
+		var maxZoom = 2.5;
 
 
-    }
-	
+		function correctIFrameSize() {
+			var zoom = e.attr('zoom') || 1.0;
+			var pwidth = e.parent().width();
+			var pheight = e.parent().width();
+			var newWidth = pwidth / zoom;
+			var newHeight = pheight / zoom;
+			
+			e.css('width', newWidth);
+			e.css('height', newHeight);
+		}
+
+		function scaleNode(m) {
+			var E = resized.parent().parent();
+			var w = E.width() * m;
+			var h = E.height() * m;
+			resized.parent().parent().css('width', w).css('height', h);
+			resized.parent().css('width', w).css('height', h);
+
+			updateSize();
+			updateUnderlayCanvas();
+		}
+
+		function setZoom(fs) {
+			//e.css('font-size', (fs*100.0) + '%' );
+			if (etype == 'IFRAME') {
+				/*    zoom: 0.15;
+					-moz-transform:scale(0.75);
+					-moz-transform-origin: 0 0;
+					-o-transform: scale(0.75);
+					-o-transform-origin: 0 0;
+					-webkit-transform: scale(0.75);
+					-webkit-transform-origin: 0 0;*/
+				e.css('-webkit-transform', 'scale(' + fs + ')');
+				e.css('-webkit-transform-origin', '0 0');
+				e.css('-moz-transform', 'scale(' + fs + ')');
+				e.css('-moz-transform-origin', '0 0');
+				e.css('-o-transform', 'scale(' + fs + ')');
+				e.css('-o-transform-origin', '0 0');
+				correctIFrameSize();
+			}
+			else {
+				var ffs = (fs*100.0) + '%';
+				resized.css('font-size', ffs );
+				//resized.css('zoom', ffs );
+			}
+			resized.attr('zoom', fs);
+
+			updateUnderlayCanvas();
+		}
+		function getZoom() {
+			return parseFloat(e.attr('zoom'));
+		}
+
+
+		if (etype == 'IFRAME') {
+			e.dialog({
+			  resizeStop: function( event, ui ) { correctIFrameSize(); }
+			});
+		}
+
+		var slider = $('<div>&nbsp;</div>');
+		var mousedown = false;
+		var startZoom = null;
+
+		function handleSliderClick(s, e) {
+			var px = s.offset().left;
+			var x = e.clientX - px;
+			
+
+			var p = (parseFloat(x) / parseFloat(s.width()));
+			//var z = minZoom + p * (maxZoom - minZoom);
+			var z = minZoom + (p*p) * (maxZoom - minZoom);
+
+			setZoom(z);
+		}
+
+		slider.mouseup(function(e) {
+			handleSliderClick($(this), e);
+			mousedown = false;
+			return false;
+		});
+		slider.mousedown(function(e) {
+			if (e.which == 1) {
+				mousedown = true;
+				startZoom = getZoom();
+			}
+			return false;
+		});			
+		slider.mousemove(function(e) {
+			if (e.which == 0) mousedown = false;
+			if (mousedown) {
+				handleSliderClick($(this), e);
+			}
+		});
+		slider.bind('mousewheel', function(event) {
+			var direction = event.originalEvent.deltaY;
+			if (direction < 0) {	
+				scaleNode(1.2);
+			}
+			else {
+				scaleNode(1.0/1.2);
+			}
+			return false;
+		});
+
+		//slider.mouseleave(function(e) { mousedown = false; });
+		slider.addClass('zoomSlider');
+
+		titlebar.prepend("&nbsp;").prepend(slider);
+
+		nodes[id] = e;		
+
+		updateUnderlayCanvas();
+
+
+		var returnable = e;
+		if (f) {
+			returnable = f;
+		}
+
+		e.position = returnable.position = function(x, y) {	
+			e.parent().css('top', y);
+			e.parent().css('left', x);
+		};
+		e.setWidth = returnable.setWidth = function(w) {	e.parent().parent().css('width', w);		}
+		e.setHeight = returnable.setHeight = function(h) {	e.parent().parent().css('height', h);		}
+
+		return returnable;
+	};
+
+	return x;		
 }
 
-/*
-$(window).bind('resize', function () {
-    updateLayout();
-});
-
-function updateLayout() {
-}
-*/

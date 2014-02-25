@@ -68,6 +68,10 @@ function _updateView(force) {
 
     lastView = view;
 
+	if (currentView)
+		if (currentView.destroy)
+			currentView.destroy();
+
     v.css('font-size', '100%').removeClass('ui-widget-content view-indented overthrow overflow-hidden nobg');
 
     function indent() {
