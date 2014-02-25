@@ -107,20 +107,26 @@ function fractaldom(options) {
 		}
 	});
 
-	var underlayCanvas = $('<canvas width="200" height="200"/>');
-	x.append(underlayCanvas);
+	//var underlayCanvas = $('<canvas width="200" height="200"/>');
+	//x.append(underlayCanvas);
+
+	var underlayCanvas = $('<div/>').appendTo(x);
+	underlayCanvas.addClass('underlaySVG');
+	underlayCanvas.svg();
+	var svg = underlayCanvas.svg('get');
+
 
 	function resizeUnderlayCanvas() {
 		underlayCanvas.attr('width', x.width());
 		underlayCanvas.attr('height', x.height());
 	}
 
-	function __updateUnderlayCanvas() {
-		var c = underlayCanvas.get(0);
-		var ctx = c.getContext("2d");
-		
+
+	function _updateUnderlayCanvas() {
+
+		//var c = underlayCanvas.get(0);		
 		//ctx.clearRect(0,0,c.width,c.height);
-		c.width = c.width; //clears the canvas
+		//c.width = c.width; //clears the canvas
 
 		var labels = [];
 		for (var i = 0; i < edges.length; i++) {
@@ -147,17 +153,28 @@ function fractaldom(options) {
 				lineWidth = o.lineWidth || lineWidth;
 				lineColor = o.lineColor || lineColor;
 			}
-			ctx.lineWidth = lineWidth;
-			ctx.strokeStyle = lineColor;
 
 			var x1 = Math.round(npa.left + (npaw/2));
 			var y1 = Math.round(npa.top - docScrollTop + (npah/2));
 			var x2 = Math.round(npb.left + (npbw/2));
 			var y2 = Math.round(npb.top - docScrollTop + (npbh/2));
-			ctx.moveTo(x1,y1);
-			ctx.lineTo(x2,y2);
 
-			if (o.label) {
+			var existingLine = E.svgLine;
+			if (!existingLine) {
+				E.svgLine = svg.line(x1, y1, x2, y2,{
+					'stroke': lineColor, 
+					'stroke-width': lineWidth
+				});
+			}
+			else {
+				existingLine.setAttribute('x1',x1);
+				existingLine.setAttribute('y1',y1);
+				existingLine.setAttribute('x2',x2);
+				existingLine.setAttribute('y2',y2);
+			}
+
+
+			/*if (o.label) {
 				var text = o.label.substring(0,24);
 				ctx.fillStyle = lineColor;
   				ctx.font = "bold 24px Arial";
@@ -166,15 +183,11 @@ function fractaldom(options) {
 				var mpx = (x1+x2)/2-width/2;
 				var mpy = (y1+y2)/2;
   				ctx.fillText(text, mpx, mpy);
-			}
+			}*/
 		}
-		ctx.stroke();		
 	}
-	var _updateUnderlayCanvas = _.throttle( __updateUnderlayCanvas, Math.floor(1000.0 / parseFloat(updateUnderlayFPS)) );
+	var updateUnderlayCanvas = _.throttle( _updateUnderlayCanvas, Math.floor(1000.0 / parseFloat(updateUnderlayFPS)) );
 
-	function updateUnderlayCanvas() {
-		_updateUnderlayCanvas();
-	}
 
 	$(window).resize(function() {
 		resizeUnderlayCanvas();

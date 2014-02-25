@@ -1289,7 +1289,7 @@ a.openModal:focus {
 	background-image: url('lib/slateboxjs/cursors/grid_transparent.png');
 	cursor: crosshair;
 }
-.fractaldom_surface canvas {
+underlaySVG hasSVG {
 	pointer-events: none;
 	position: fixed;
 }
