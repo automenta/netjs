@@ -15,6 +15,33 @@ function renderGraph(s, o, v) {
 
 	d.newEdge('a', 'b', { });
 
+	var g = d.newNode('goal', { title: 'Goal', position: [400, 400] });
+	newGoalList(g, self.myself().id);
+
+	var h = d.newNode('tags', { title: 'Tags', position: [600, 600] });
+	var prefix = 'gttt';
+	newTagTree({
+		target: h,
+        newTagDiv: function(id, content) {
+            var ti = getTagIcon(id);
+			if (!ti) ti = defaultIcons['unknown'];
+
+            content = '<img style="height: 1em" src="' + ti + '"/>&nbsp;' + content;
+
+            return {
+                label: ('<button id="' + prefix + id + '" class="TagChoice")>' + content + '</button>')
+            };
+        },
+		onCreated: function() {
+			h.find('.TagChoice').each(function(x) {
+				var t = $(this);
+				t.click(function() {
+				   onTagAdded(t.attr('id').substring(prefix.length));
+				});
+			});
+		}
+	});
+
 	d.destroy = function() {
 		d.removeNodes();
 	};
@@ -305,15 +332,14 @@ function fractaldom(options) {
 			  drag: function( event, ui ) {
 				dragging = false;
 				lastPoint = null;
-
-				updateUnderlayCanvas();				
+				later(updateUnderlayCanvas);				
 			  },
 			  resize: function( event, ui ) {
 				dragging = false;
 				lastPoint = null;
 
 				updateSize();
-				updateUnderlayCanvas();
+				later(updateUnderlayCanvas);
 				return false;
 			  },
 			  close: function( event, ui ) {
@@ -376,7 +402,7 @@ function fractaldom(options) {
 			}
 			resized.attr('zoom', fs);
 
-			updateUnderlayCanvas();
+			later(updateUnderlayCanvas);
 		}
 		function getZoom() {
 			return parseFloat(e.attr('zoom'));
@@ -423,8 +449,8 @@ function fractaldom(options) {
 				handleSliderClick($(this), e);
 			}
 		});
-		slider.bind('mousewheel', function(event) {
-			var direction = event.originalEvent.deltaY;
+		slider.mousewheel(function(evt){
+	       var direction = evt.deltaY;
 			if (direction < 0) {	
 				scaleNode(1.2);
 			}
@@ -432,7 +458,7 @@ function fractaldom(options) {
 				scaleNode(1.0/1.2);
 			}
 			return false;
-		});
+    	});
 
 		//slider.mouseleave(function(e) { mousedown = false; });
 		slider.addClass('zoomSlider');

@@ -1278,12 +1278,16 @@ a.openModal:focus {
 }
 
 
-
+.ui-front {
+	z-index: 13 !important;
+}
 .fractaldom_surface {
 	overflow: hidden;
 	position: fixed;
 	width: 100%;
 	height: 100%;	
+	background-image: url('lib/slateboxjs/cursors/grid_transparent.png');
+	cursor: crosshair;
 }
 .fractaldom_surface canvas {
 	pointer-events: none;
