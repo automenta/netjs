@@ -20,6 +20,15 @@ function toggleAvatarMenu() {
 	showAvatarMenu(!$('#ViewMenu').is(':visible'));		
 }
 
+function updateIndent(viewmenushown) {
+	if (viewmenushown) {
+		$('.view-indented').addClass('view-indented-more');
+	}
+	else {
+		$('.view-indented').removeClass('view-indented-more');
+	}
+}
+
 function showAvatarMenu(b) {
     var vm = $('#ViewMenu');
     if (!b) {
@@ -27,6 +36,7 @@ function showAvatarMenu(b) {
         $('#AvatarButton').hide();
         vm.fadeOut();
         $('#toggle-menu').show();
+		updateIndent(false);
     }
     else {
         $('#toggle-menu').hide();
@@ -34,6 +44,7 @@ function showAvatarMenu(b) {
         $('#close-menu').show();
         $('#AvatarButton').show();
         vm.show();
+		updateIndent(true);
     }
 }
 
@@ -59,9 +70,6 @@ $('#ViewMenu input').click(function(x) {
     showAvatarMenu(false);
 });
 
-$('#ViewMenuExpand').click(function() {
-	$('#ViewMenu').toggleClass('ViewMenuExpanded');
-});
 
 $('#toggle-menu').click(function() {
     var vm = $('#ViewMenu');

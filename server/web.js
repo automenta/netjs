@@ -784,6 +784,23 @@ exports.start = function(options, init) {
     //express.use("/kml", expressm.static('./client/kml' , staticContentConfig ));
     express.use("/", expressm.static('./client' , staticContentConfig));        
 
+	express.post('/add/image', function(req, res) {
+        var format = req.body.format;
+        var imageBase64 = req.body.image;
+
+		imageBase64 = imageBase64.substring('data:image/gif;base64,'.length);
+
+		var buf = new Buffer(imageBase64, 'base64');
+
+		var targetFile = './upload/' + util.uuid() + '.gif';
+		var stream = fs.createWriteStream(targetFile);
+		stream.once('open', function(fd) {
+		  stream.write(buf);
+		  stream.end();
+		  res.send(targetFile);
+		});
+	});
+
     express.post('/upload', function(req, res) {
         //TODO validate permission to upload
 

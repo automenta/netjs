@@ -99,6 +99,10 @@ var generalTags = [
     {uri: 'Value', name: 'Value',
         properties: {
             'moneyAmount': {name: 'Money Amount', type: 'real', default: 0, units: currencyUnits },
+            'quantity': {name: 'Quantity', type: 'integer', default: 0 },
+            'quantityUnit': {name: 'Quantity Unit', type: 'string' },
+            'offerExpires': {name: 'Offer Expires', type: 'timepoint' },
+            'itemExpires': {name: 'Item Expires', type: 'timepoint' },
             'walletBTC': {name: 'Bitcoin Wallet', type: 'text'},
             'walletRipple': {name: 'Ripple Wallet', type: 'text'},
             'walletPayPal': {name: 'PayPal Address', type: 'text'},

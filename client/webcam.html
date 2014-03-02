@@ -1,0 +1,37 @@
+<html>
+<head>
+    <script src="lib/jquery/jquery.min.js" type="text/javascript"></script>
+
+	<script src="lib/gumhelper/gumhelper.js"></script>
+	<script src="lib/animated_gif/Animated_GIF.min.js"></script>
+	<script src="webcam.js"></script>
+</head>
+<script>
+	$(document).ready(function() {
+		$('#Start').click(function() {
+			webcamStart($('#WebcamImage'), 135, 101);
+		});
+		$('#Stop').click(function() {
+			webcamStop();
+		});
+		$('#Record').click(function() {
+			webcamRecord(5, 0.3, function(path) {
+				$('#Images').append('<img src="' + path + '"/>');
+			});
+		});
+	});
+</script>
+<body>
+	<button id="Start">Start</button>
+	<button id="Record">Record</button>
+	<button id="Stop">Stop</button>
+	<div id="WebcamInput">
+		<div id="WebcamImage"></div>
+		<div id="WebcamStatus"></div>
+	</div>
+	<div id="Images">		
+	</div>
+	
+</body>
+
+</html>

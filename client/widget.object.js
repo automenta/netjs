@@ -421,6 +421,43 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });
             d.append(drawButton);
 
+			function newWebcamWindow(onFinished) {
+                var x = newPopup('Webcam', {
+					modal: true					
+				});
+				x.dialog({
+				  beforeClose: function( event, ui ) {
+					webcamStop();
+   				  }
+				});
+
+				var recordButton = $('<button>Record</button>');
+				recordButton.click(function() {
+					webcamRecord(5, 0.3, function(path) {
+						//$('#Images').append('<img src="' + path + '"/>');
+						x.dialog("close");
+						onFinished(path);
+					});					
+				});
+				x.append(recordButton);
+
+				var statusArea = $('<div id="WebcamStatus"></div>');
+				x.append(statusArea);
+
+				var previewArea = $('<div/>');
+				x.append(previewArea);
+				
+				webcamStart(previewArea, 135, 101);
+			}
+
+            var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>');
+            webcamButton.click(function() {
+				newWebcamWindow(function(imgURL) {
+	                update(objAddDescription(getEditedFocus(), '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>'));
+				});
+            });
+            d.append(webcamButton);
+
             var uploadButton = $('<button title="Upload"><img src="/icon/rrze/actions/dial-in.png"/></button>');
             uploadButton.click(function() {
 
@@ -578,7 +615,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
              }*/
 
 
-            var saveButton = $('<button><b>Save/Share</b></button>');
+            var saveButton = $('<button style="float:right"><b>Save</b></button>');
             saveButton.click(function() {
                 var e = getEditedFocus();
                 e.author = $N.id();
@@ -600,14 +637,15 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });
             d.append(saveButton);
 
-            var exportButton = $('<button>Export</button>');
+
+            /*var exportButton = $('<button>Export</button>');
             exportButton.click(function() {
                 $.pnotify({
                     title: x.id,
                     text: JSON.stringify(x, null, 4)
                 });
             });
-            d.append(exportButton);
+            d.append(exportButton);*/
         }
 
     }

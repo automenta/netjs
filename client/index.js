@@ -28,8 +28,7 @@ function updateViewControls() {
 
 	//TODO uncheck all that are checked
 
-    $('#ViewControls #' + self.get('currentView')).attr('checked', true);
-    $('#ViewControls').buttonset('refresh');
+
 }
 
 
@@ -65,6 +64,7 @@ function _updateView(force) {
     o.empty();
     submenu.empty();
     submenu.hide();
+	updateIndent(false);
 
     lastView = view;
 
@@ -77,6 +77,7 @@ function _updateView(force) {
     function indent() {
         submenu.show();
         v.addClass('overthrow ui-widget-content view-indented');
+		updateIndent($('#ViewMenu').is(":visible"));
     }
 
     if (view === 'browse') {
@@ -128,12 +129,13 @@ function _updateView(force) {
         currentView = null;
     }
 
+
 }
 
 
 function initKeyboard() {
 	var views = [];
-	$('#ViewControls input').each(function(x) { views.push($(this).attr('id')); });
+	$('.ViewControl').each(function(x) { views.push($(this).attr('id')); });
 
 	for (var i = 0; i < views.length; i++) {
 		var f = function(I) { 
@@ -424,7 +426,10 @@ $(document).ready(function() {
 
 
     $('#close-menu').button();
-    $("#ViewControls").buttonset();
+    $(".ViewControl").click(function() {
+		var v = $(this);
+		self.set('currentView', v.attr('id'));
+	});
 
     $('#about-toggle').click(function() {
         $('#about-netention').fadeIn();

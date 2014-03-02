@@ -5,12 +5,7 @@
 
 .ui-autocomplete {  z-index: 5000 !important; }
 
-#welcomeoptions { 
-	float: left; 
-	margin-left: 60px;
-        margin-top: -8px;
-        text-align: left;
-}
+
 
 .focusMap {
     width: 98%;
@@ -594,7 +589,11 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	#embed-frame { z-index: 1; position:relative; width:100%; height:100%; min-height:100%; max-height:100%; margin:0; outline:none; border:none; overflow:auto; background:#000; padding:0; display:block;}
 	div.olMapViewport { z-index: 1 !important;; }
 	div.olControlZoom { top:auto !important; bottom:8px !important; }
-	.view-indented { width: 95% !important; right: 0 !important; left: auto !important; border-left: none !important; }
+
+.ViewControl { padding: 0; margin: 0; }
+.ViewControl img { width: 25px; }
+.view-indented { left: 55px !important;  border-left: none !important; }
+.view-indented-more { left: 160px !important; }
 
 /* User Control Panel */
 #toggle-menu {
@@ -612,18 +611,19 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 
 #NotificationArea { z-index: 5000; position: fixed; bottom: 0; right: 0; font-size: 200%; }
 
-#ViewMenu { position: fixed; z-index:15; top:0; left:0; width:600px; margin:0; padding:0; }
+#ViewMenu { position: fixed; z-index:15; top:0; left:0; width:150px; margin:0; padding:0; }
 	.viewmenu-container { position: relative; display:block; padding: 10px;	overflow: visible; text-align:center; }
 	#AvatarButton, #AvatarButton img { width: 70px; height: 70px; margin:0; padding:0; z-index:25;} 
 		#AvatarButton { position:absolute; top:0px; left:0px; margin:0px; padding:0px; }
 		#AvatarButton img { border: none; cursor: crosshair; }
-		#identity { display:block; clear:both; margin:5px 0px; padding:10px;}
-			#logout { margin-left:5px; margin-right:5px; font-size:.8em !important; text-align:center; text-decoration:none; font-weight:lighter; }
-			#logout:hover { text-decoration:underline; font-weight:bolder; }
 
-#ViewControls {	margin:0; display:block; text-align:center; clear:both; }
-	#ViewControls label {	max-width:10%; width:10%; }
-	#ViewControls .ui-button-text-only .ui-button-text { padding:.3em .1em; }
+#identity {
+	width: 75px;
+	height: 80px;
+	margin-left: 75px;
+	text-align: right;
+}
+
 
 #FocusEdit { text-align:center; height:auto; padding:15px; margin:0; display:block; clear:both; padding-top: 0; }
 #FocusEdit button { font-size:.8em; }
@@ -778,14 +778,9 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 @media (max-width : 699px) {
 	
 	#welcome { margin:0px auto; clear:both; display:block; text-align:right; }
-	#logout { width: 80px; margin:10px auto 0px auto; clear:both; display:block; padding:2px 5px; }
 #ViewMenu, #View { width:auto !important; max-width:100% !important; min-width:100% !important; }
 
-	#close-menu, #close-menu span {  z-index:-1; display:none;}
-#ViewControls {	margin:5px 0px 10px 0px; display:block; text-align:center; clear:both; }
-	#ViewControls .ui-button-text { font-size:12px; }
-	#ViewControls label { width:32%; min-width:32%; max-width:32%; padding:15px 0px; -moz-border-radius:0px !important; -webkit-border-radius:0px !important; border-radius:0px !important; }
-		#ViewControls label:last-of-type { position:relative; right:3px; width:95% !important; min-width:95% !important; max-width:95% !important; padding:15px 0px; -moz-border-radius:0px !important; -webkit-border-radius:0px !important; border-radius:0px !important; }
+
 	#FocusMainMenu button { display:block; width:100%; margin:0; }
 				.FocusButtonLabel { display:inline-block !important; }
 				.FocusButtonIcon  { display:none !important; }
@@ -794,27 +789,11 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 
 @media (min-width : 700px) {
 	#welcome { text-align:center; }
-	#logout { position:absolute !important; top:5px; right:18px; margin:0; padding:5px 10px; moz-box-shadow: 0px 0px 12px #000000; -webkit-box-shadow: 0px 0px 12px #000000; box-shadow:0px 0px 12px #000000; -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')"; filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#444444'); }
-#ViewMenu { width:600px; }
-	#close-menu { position: absolute; top:13px; left:598px; right:auto; z-index:14; text-decoration:none;}
-#ViewControls {	margin:20px 0px 10px 0px; display:block; text-align:center; clear:both; }
-	#ViewControls .ui-button-text { font-size:14px; }
-	#ViewControls label { padding:2px 3px; }
+#ViewMenu { width:150px; }
 .logon > div, .modal > div { width: 500px; }
 }
 
 
-#ViewMenuExpand { 
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	opacity: 0.7;
-	margin: 0;
-	height: 0.8em;
-}
-.ViewMenuExpanded {
-	height: 100%;
-}
 
 div.olControlZoom { top:auto !important; bottom:8px !important; }
 
@@ -879,7 +858,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     display:none !important;
 }
 
-#View, #ViewMenu, #close-menu {
+#View, #ViewMenu {
     display: none;
 }
 .ui-pnotify {
@@ -1281,38 +1260,8 @@ a.openModal:focus {
 .ui-front {
 	z-index: 13 !important;
 }
-.fractaldom_surface {
-	overflow: hidden;
-	width: 100%;
-	height: 100%;	
-	background-image: url('lib/slateboxjs/cursors/grid_transparent.png');
-	cursor: crosshair;
-}
-underlaySVG hasSVG {
-	pointer-events: none;
-	position: fixed;
-}
 
-/* TODO use a new class, applied to drawalogs */
-.fractal-dialog {
-	padding: 0 !important;
-}
-.fractal-dialog .ui-dialog-title {
-	width: auto;
-}
-.fractal-dialog .ui-dialog-titlebar {
-	padding: 0 !important;
-	text-align: center;
-}
-div.zoomSlider {
-	width: 50px;
-	height: 25px;
-	border: 1px solid black;
-	float: left;
-	cursor: crosshair;
-}
-.fractaldom {
-	overflow: scroll;
-	padding: 0 !important;
+.fractaldom_surface {
+	background-image: url('lib/slateboxjs/cursors/grid_transparent.png');
 }
 

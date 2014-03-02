@@ -1,0 +1,47 @@
+.fractaldom_surface {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;	
+	cursor: crosshair;
+
+}
+svg text::selection { background: none; }
+
+.underlaySVG svg {
+	pointer-events: none;
+}
+
+.underlaySVG {
+	position: fixed;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* TODO use a new class, applied to drawalogs */
+.fractal-dialog {
+	padding: 0 !important;
+}
+.fractal-dialog .ui-dialog-title {
+	width: auto;
+}
+.fractal-dialog .ui-dialog-titlebar {
+	padding: 0 !important;
+}
+div.zoomSlider {
+	width: 50px;
+	height: 25px;
+	border: 1px solid black;
+	float: left;
+	cursor: crosshair;
+}
+.fractaldom {
+	overflow: scroll;
+	padding: 0 !important;
+}
+.iconized {
+	white-space: normal !important;
+}

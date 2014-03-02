@@ -7,4 +7,4 @@ Netention (for Node.JS)
 
 ###[License](https://github.com/automenta/netjs/blob/master/LICENSE)
 
-
+WARNING: This software will not benefit you financially
