@@ -270,7 +270,7 @@ var generalTags = [
 		tag: ['Concept']
     },
 
-    {uri: 'Map', name: 'Map', description: '', icon: 'icon/earth.png' },
+    {uri: 'Earth', name: 'Earth', description: '', icon: 'icon/earth.png' },
 
 	{
       "uri": "Points of Interest",
@@ -278,7 +278,7 @@ var generalTags = [
       "description": "DBPedia.org",
       "icon": "http:\/\/climateviewer.com\/gallery\/lightning_bolt.png",
       "dbpediaLayer": true,
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
 	{
       "uri": "terrain-satellite",
@@ -289,7 +289,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.75,
       "tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/World_Imagery\/MapServer\/tile\/{z}\/{y}\/{x}",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "terrain-contour",
@@ -300,7 +300,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.75,
       "tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/Specialty\/DeLorme_World_Base_Map\/MapServer\/tile\/{z}\/{y}\/{x}",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "terrain-ocean",
@@ -311,7 +311,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.75,
       "tileLayer": "http:\/\/services.arcgisonline.com\/ArcGIS\/rest\/services\/Ocean_Basemap\/MapServer\/tile\/{z}\/{y}\/{x}",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     /*{
       "uri": "Weather",
@@ -329,7 +329,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/clouds\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "owm-precipitation",
@@ -340,7 +340,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/precipitation\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "owm-rain",
@@ -351,7 +351,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/rain\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "owm-pressure",
@@ -362,7 +362,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "owm-pressure_cntr",
@@ -373,7 +373,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure_cntr\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "owm-wind",
@@ -384,7 +384,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/wind\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "owm-temp",
@@ -395,7 +395,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/temp\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     },
     {
       "uri": "owm-snow",
@@ -406,7 +406,7 @@ var generalTags = [
       ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/snow\/{z}\/{x}\/{y}.png",
-  	  tag: ['Map']
+  	  tag: ['Earth']
     }
 
 ];
