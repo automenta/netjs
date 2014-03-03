@@ -370,6 +370,23 @@ function renderLeafletMap(s, o, v) {
 
 
 		}
+		else if (T.wmsLayer) {
+			var l = T.wmsLayer;
+			var o = {
+				layers: l.layer,
+				format: 'image/png',
+				transparent: true,
+				attribution: ""
+			};
+			/*if (l.crs) {
+				if (l.crs == 'EPSG4326')
+					o.crs = L.CRS.EPSG4326;
+			}*/
+			var w = L.tileLayer.wms(l.url, o);
+			w.setOpacity(strength);
+			w.addTo(map);
+			onAdded(w);
+		}
 		else if (T.tileLayer) {
 			var template = T.tileLayer;
 			var options = {

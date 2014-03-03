@@ -19,6 +19,8 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 			var T = self.getTag(t);
 			if (T) {
 				if (T.tileLayer) return false;
+				if (T.wmsLayer) return false;
+				if (T.geoJSON) return false;
 				if (T.dbpediaLayer) return false;
 			}
 			return true;

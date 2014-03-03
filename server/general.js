@@ -272,6 +272,7 @@ var generalTags = [
 
     {uri: 'Earth', name: 'Earth', description: '', icon: 'icon/earth.png' },
 
+	//http://gis.stackexchange.com/questions/6345/list-of-available-online-wms-services-weather-land-data-place-names
 	{
       "uri": "Points of Interest",
       "name": "Points of Interest",
@@ -280,13 +281,74 @@ var generalTags = [
       "dbpediaLayer": true,
   	  tag: ['Earth']
     },
+
+    {uri: 'United_States', name: 'United States', description: '', icon: 'icon/earth.png', tag: ['Earth'] },
+
+	{
+      "uri": "iem-us-nexrad",
+      "name": "United States NEXRAD Weather",
+      "description": "Weather data © 2012 IEM Nexrad",
+      "defaultStrength": 0.75,
+      "wmsLayer": {
+		url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi",
+		layer: 'nexrad-n0r-900913'
+	  },
+  	  tag: ['United_States']
+    },
+	//http://mesonet.agron.iastate.edu/GIS/goes.phtml
+	//http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_ir.cgi?VER=1.1.1&SERVICE=WMS&REQUEST=GetCapabilities
+	//http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_vis.cgi?VER=1.1.1&SERVICE=WMS&REQUEST=GetCapabilities
+	{
+      "uri": "conus_ir",
+      "name": "CONUS Infrared",
+      "description": "MesoNet - Iowa State",
+      "defaultStrength": 0.75,
+      "wmsLayer": {
+		url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_ir.cgi",
+		layer: 'ir_4km_900913'
+	  },
+  	  tag: ['United_States']
+    },
+	{
+      "uri": "conus_vis",
+      "name": "CONUS VIS",
+      "description": "MesoNet - Iowa State",
+      "defaultStrength": 0.75,
+      "wmsLayer": {
+		url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_vis.cgi",
+		layer: 'vis_1km_900913'
+	  },
+  	  tag: ['United_States']
+    },
+	{
+      "uri": "mrms_q3_24h_precipitation",
+      "name": "24h Precipitation",
+      "description": "MesoNet - Iowa State",
+      "defaultStrength": 0.75,
+      "wmsLayer": {
+		url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/us/mrms.cgi?",
+		layer: 'mrms_p24h' //mrms_p1h
+	  },
+  	  tag: ['United_States']
+    },
+	/*{
+      "uri": "flood_total_economic_loss_risk",
+      "name": "Flood Total Economic Loss Risk",
+      "description": "Columbia University",
+      "defaultStrength": 0.75,
+      "wmsLayer": {
+//http://sedac.ciesin.columbia.edu/geoserver/gwc/service/wms?LAYERS=ndh-flood-total-economic-loss-risk-deciles%3Adefault&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG%3A4326&BBOX=33.512055159416,-47.297588968117,76.2144661913,-4.5951779362334&WIDTH=256&HEIGHT=256
+//http://sedac.ciesin.columbia.edu/geoserver/gwc/service/wms?&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=ndh-flood-total-economic-loss-risk-deciles%3Adefault&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&HEIGHT=256&WIDTH=256&SRS=EPSG%3A4326&BBOX=-79.62890625,40.17887331434696,-79.453125,40.3130432088809
+		url: "http://sedac.ciesin.columbia.edu/geoserver/gwc/service/wms?",
+		layer: 'ndh-flood-total-economic-loss-risk-deciles:default',
+		crs: 'EPSG4326'
+	  },
+  	  tag: ['Earth']
+    },*/
 	{
       "uri": "terrain-satellite",
       "name": "Satellite",
       "description": "Esri \/ DeLorme",
-      "tag": [
-        "Terrain"
-      ],
       "defaultStrength": 0.75,
       "tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/World_Imagery\/MapServer\/tile\/{z}\/{y}\/{x}",
   	  tag: ['Earth']
@@ -295,20 +357,22 @@ var generalTags = [
       "uri": "terrain-contour",
       "name": "Contour",
       "description": "Esri \/ DeLorme",
-      "tag": [
-        "Terrain"
-      ],
       "defaultStrength": 0.75,
-      "tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/Specialty\/DeLorme_World_Base_Map\/MapServer\/tile\/{z}\/{y}\/{x}",
+	  "tileLayer": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?blankTile=false",
+      //"tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/Specialty\/DeLorme_World_Base_Map\/MapServer\/tile\/{z}\/{y}\/{x}",
   	  tag: ['Earth']
     },
     {
+      "uri": "cycle-map",
+      "name": "Cycle Map",
+      "description": "OpenCycleMap.org",
+      "defaultStrength": 0.75,
+	  "tileLayer": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+  	  tag: ['Earth']
+    },    {
       "uri": "terrain-ocean",
       "name": "Ocean Floor",
       "description": "Esri \/ GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri",
-      "tag": [
-        "Terrain"
-      ],
       "defaultStrength": 0.75,
       "tileLayer": "http:\/\/services.arcgisonline.com\/ArcGIS\/rest\/services\/Ocean_Basemap\/MapServer\/tile\/{z}\/{y}\/{x}",
   	  tag: ['Earth']
@@ -324,9 +388,6 @@ var generalTags = [
       "uri": "owm-clouds",
       "name": "Clouds",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/clouds\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
@@ -335,9 +396,6 @@ var generalTags = [
       "uri": "owm-precipitation",
       "name": "Precipitation",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/precipitation\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
@@ -346,9 +404,6 @@ var generalTags = [
       "uri": "owm-rain",
       "name": "Rain",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/rain\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
@@ -357,9 +412,6 @@ var generalTags = [
       "uri": "owm-pressure",
       "name": "Pressure",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
@@ -368,9 +420,6 @@ var generalTags = [
       "uri": "owm-pressure_cntr",
       "name": "Pressure Contour",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure_cntr\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
@@ -379,9 +428,6 @@ var generalTags = [
       "uri": "owm-wind",
       "name": "Wind",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/wind\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
@@ -390,9 +436,6 @@ var generalTags = [
       "uri": "owm-temp",
       "name": "Temperature",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/temp\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
@@ -401,9 +444,6 @@ var generalTags = [
       "uri": "owm-snow",
       "name": "Snow",
       "description": "OpenWeatherMap.org",
-      "tag": [
-        "Weather"
-      ],
       "defaultStrength": 0.5,
       "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/snow\/{z}\/{x}\/{y}.png",
   	  tag: ['Earth']
