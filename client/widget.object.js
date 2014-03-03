@@ -51,14 +51,19 @@ function newPopupObjectViews(objectIDs) {
 		return newPopupObjectView(objectIDs[0]);
 
 	var objects = objectIDs.map(function(i) {
-		return $N.getObject(i);
+		if (typeof i == "string")
+			return $N.getObject(i);
+		else
+			return i;
 	});
 
     var d = newPopup(objects.length + " Objects");
 	_.each(objects, function(o) {
-		d.append(newObjectSummary(o, {
-			depthRemaining: 0
-		}));
+		if (o) {
+			d.append(newObjectSummary(o, {
+				depthRemaining: 0
+			}));
+		}
 	});
     return d;
 

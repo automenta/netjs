@@ -190,13 +190,15 @@ function renderLeafletMap(s, o, v) {
 	
 
 	var testIcon = L.icon({
-		iconUrl: 'icon/emoticon/happy.svg',
+		iconUrl: 'icon/unknown.png',
 		iconSize: [32, 32],
 		iconAnchor: [16, 16],
 		popupAnchor: [0, -28]
 	});
+
 	var icons = { };
 	function getIcon(i) {
+		if (!i) return testIcon;
 		if (icons[i])
 			return icons[i];
 		else {
@@ -249,7 +251,15 @@ function renderLeafletMap(s, o, v) {
 		} );
 
 	});
+	map.on('contextmenu', function(e) {
+		var p = e.latlng;
+		//		  alert('rightclick at '+e.xy.x+','+e.xy.y);
+		
+		var n = objAddGeoLocation(objNew(), p.lat, p.lng);
 
+		$.pnotify( { title: 'New Object', text: ('@ ' + _n(p.lat) + ',' + _n(p.lng)) } );
+		newPopupObjectEdit( n );
+	});
 
 	function onEachFeature(feature, layer) {
 		var popupContent = "";
@@ -856,33 +866,6 @@ function renderOLMap(s, o, v) {
     
     return m;
 }
-
-// A control class for capturing click events...
-OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
-
-defaultHandlerOptions: {
-'single': true,
-'double': true,
-'pixelTolerance': 0,
-'stopSingle': false,
-'stopDouble': false
-},
-handleRightClicks:true,
-initialize: function(options) {
-this.handlerOptions = OpenLayers.Util.extend(
-{}, this.defaultHandlerOptions
-);
-OpenLayers.Control.prototype.initialize.apply(
-this, arguments
-); 
-this.handler = new OpenLayers.Handler.Click(
-this, this.eventMethods, this.handlerOptions
-);
-},
-CLASS_NAME: "OpenLayers.Control.Click"
-
-});
-
 
 
 L.FeatureSelect = L.Class.extend({

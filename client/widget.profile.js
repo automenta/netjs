@@ -110,11 +110,9 @@ function newNewProfileWidget(whenFinished) {
 
 	var location = configuration.mapDefaultLocation;
 
+	var lmap;
 	later(function() {
-		var lmap = initLocationChooserMap('SelfMap', location, 7, true );
-		lmap.onClicked = function(l) {
-			location = [ l.lat, l.lon ];
-		};
+		lmap = initLocationChooserMap('SelfMap', location, 7, true );
 	});
 
 	locEnabled.change(function() {
@@ -139,9 +137,9 @@ function newNewProfileWidget(whenFinished) {
         var o = objNew(uo, name);
         objAddTag(o, 'Human');
         objAddTag(o, 'User');     
-
+		var location = lmap.location();
 		if  (locationEnabled)
-		    objSetFirstValue( o, 'spacepoint', {lat: location[0], lon: location[1], planet: 'Earth'} );            
+		    objSetFirstValue( o, 'spacepoint', {lat: location.lat, lon: location.lon, planet: 'Earth'} );            
 
 		whenFinished(o);  
 	});

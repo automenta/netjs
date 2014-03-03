@@ -270,7 +270,7 @@ var generalTags = [
 		tag: ['Concept']
     },
 
-    {uri: 'Map', name: 'Map', description: ''},
+    {uri: 'Map', name: 'Map', description: '', icon: 'icon/earth.png' },
 
 	{
       "uri": "Points of Interest",

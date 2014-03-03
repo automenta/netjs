@@ -23,7 +23,58 @@ function setGeolocatedLocation(map, onUpdated) {
 }
 
 
-function initLocationChooserMap(target, location, zoom, geolocate) {    
+function initLocationChooserMap(target, location, zoom, geolocate) {
+	var map = L.map(target, {
+	}).setView( location, 12);
+
+	if (geolocate) {
+		map.on('locationfound', function(e) {
+			var p = e.latlng;
+			clickAt(p);
+			map.stopLocate();
+		});
+		map.locate({
+			setView: true,
+			enableHighAccuracy: true
+		});
+	}
+
+	var marker = L.marker(location);
+	marker.addTo(map);
+
+	var location = { lat: location[0], lng: location[1] };
+
+	function clickAt(p) {
+		location = { lat: p.lat, lng: p.lng };
+		marker.setLatLng(location);
+	}
+
+    map.location = function() {
+        return { lat: location.lat, lon: location.lng };
+    };
+
+	map.on('click', function(e) {
+		map.stopLocate();
+		var p = e.latlng;
+		clickAt(p);
+	});
+
+
+	/*L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
+		attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2012 CloudMade',
+		key: 'BC9A493B41014CAABB98F0471D759707'
+	}).addTo(map);*/
+
+	//http://leaflet-extras.github.io/leaflet-providers/preview/index.htmlfile
+	var baseLayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+	});
+	baseLayer.addTo(map);
+
+	return map;
+}
+
+function initLocationChooserMapOL(target, location, zoom, geolocate) {    
     var defaultZoomLevel = zoom || 7;
     
     /*if ((!location) && (geolocate!=false))
@@ -136,10 +187,32 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
     return m;
 }
 
-var gp1 = { }, gp2 = { };
+
+
+var gp1, gp2;
 
 //distance, in kilometers
 function geoDist(p1, p2) {
+	if (!gp1) {
+		gp1 = L.latLng(0,0);
+		gp2 = L.latLng(0,0);
+	}
+
+	if (p1[0] == p2[0])
+		if (p1[1] == p2[1])
+			return 0;
+
+    gp1.lat = p1[0];
+    gp1.lng = p1[1];
+    gp2.lat = p2[0];
+    gp2.lng = p2[1];
+    
+    //http://dev.openlayers.org/docs/files/OpenLayers/Util-js.html#Util.distVincenty
+    return gp1.distanceTo( gp2 )/1000.0;
+}
+
+//var gp1 = { }, gp2 = { };
+function geoDistOL(p1, p2) {
 	if (p1[0] == p2[0])
 		if (p1[1] == p2[1])
 			return 0;
