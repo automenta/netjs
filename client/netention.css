@@ -180,10 +180,7 @@ div.olMapViewport {
 }
 
 
-.nameInput {
-	width: 98%;
-	font-size: 150%;
-}
+
 .idLabel {
     font-size: 70%;
     opacity: 0.7;
@@ -254,11 +251,11 @@ div.olMapViewport {
     margin-right: 0.25em;    
 }
 
-.tag0 { opacity: 0.5; font-size: 80%  }
-.tag25 { opacity: 0.7; font-size: 85%  }
-.tag50 { opacity: 0.8; font-size: 90%  }
-.tag75 { opacity: 0.9; font-size: 95%  }
-.tag100 { opacity: 1.0; font-size: 100%  }*
+.tag0 { opacity: 0.5; }
+.tag25 { opacity: 0.7; }
+.tag50 { opacity: 0.8; }
+.tag75 { opacity: 0.9; }
+.tag100 { opacity: 1.0; }*
 
 
 .tagButtons {
@@ -298,7 +295,6 @@ div.olMapViewport {
 
 .MetadataLine {
     opacity: 0.8;
-    clear: both;
 }
 .MetadataLine img {
     height: 1em;
@@ -603,11 +599,13 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 } 
 #toggle-menu img { width: 45px; height: 45px; margin:0; } 
 
-#toggle-submenu {
+.toggle-submenu {
+}
+.toggle-submenu-absolute {
 	position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
 }
-#toggle-submenu button { padding: 1px; }
-#toggle-submenu input { width: 43px; }
+.toggle-submenu button { padding: 1px; }
+.toggle-submenu input { width: 43px; }
 
 #NotificationArea { z-index: 5000; position: fixed; bottom: 0; right: 0; font-size: 200%; }
 
@@ -625,7 +623,7 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 }
 
 
-#FocusEdit { text-align:center; height:auto; padding:15px; margin:0; display:block; clear:both; padding-top: 0; }
+#FocusEdit { height:auto;  margin:0; display:block; clear:both; padding: 0; }
 #FocusEdit button { font-size:.8em; }
 #FocusEdit .ObjectEditDiv .tagSection { float: none !important; }
 
@@ -680,9 +678,14 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
     .ObjectSelection, .ObjectViewPopupButton { vertical-align: middle; }
 
 /* Chat */
-        .ChatViewContent { margin-left: 1em; width: 72%; float: right; }
+        .ChatViewContent { margin-left: 1em;  }
 		.ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }
-        .ChatViewInput { position: fixed; width: 66%; right: 1em; bottom: 0; }
+        .ChatViewInput { position: fixed; text-align: right; right: 1em; bottom: 0; }
+		.nameInput {
+			padding:3px; text-indent:15px;
+			width: 70%;
+			font-size: 150%;
+		}
         .InlineSelfButton { cursor: crosshair; border: 1px solid rgba(0,0,0,0.1); font-weight: bold; }
         
 /* Team/Self Browser */
@@ -739,7 +742,6 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
         .SelfTimeCouldDoPeriod { width: 25%; float: left;  margin: 1px; vertical-align: top; }
         .SelfTimeFilled { background-color: rgba(125,125,125,0.2); }
         .SelfTimeTagTree { } 
-.nameInput { padding:3px; text-indent:15px; }
 
 /*
 *   pNotify: jquery.pnotify.default.css

@@ -421,34 +421,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });
             d.append(drawButton);
 
-			function newWebcamWindow(onFinished) {
-                var x = newPopup('Webcam', {
-					modal: true					
-				});
-				x.dialog({
-				  beforeClose: function( event, ui ) {
-					webcamStop();
-   				  }
-				});
-
-				var recordButton = $('<button>Record</button>');
-				recordButton.click(function() {
-					webcamRecord(5, 0.3, function(path) {
-						//$('#Images').append('<img src="' + path + '"/>');
-						x.dialog("close");
-						onFinished(path);
-					});					
-				});
-				x.append(recordButton);
-
-				var statusArea = $('<div id="WebcamStatus"></div>');
-				x.append(statusArea);
-
-				var previewArea = $('<div/>');
-				x.append(previewArea);
-				
-				webcamStart(previewArea, 135, 101);
-			}
 
             var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>');
             webcamButton.click(function() {
@@ -675,11 +647,11 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     var strength = t.strength;
 
     var d = newDiv().addClass('tagSection');
-    d.hover( function() {
+    /*d.hover( function() {
         d.addClass('tagSectionHovered');
     }, function() {
         d.removeClass('tagSectionHovered');
-    } );
+    } );*/
 
     if (strength == undefined)
         strength = 1.0;
@@ -689,6 +661,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     applyTagStrengthClass(d, strength);
 
 
+    d.append(tagLabel, '&nbsp;');
 
     if (editable) {
         var tagButtons = newDiv().addClass('tagButtons');
@@ -775,7 +748,6 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         //tagButtons.hide();
     }
 
-    d.append(tagLabel, '&nbsp;');
 
     var type;
     if (isPrimitive(tag)) {

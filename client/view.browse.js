@@ -9,7 +9,21 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
     var focus = s.focus();
 	var focusWhen = objWhen(focus);
 
-	if (focus) semantic = 'Relevant';
+	var ft;
+	if (focus) {
+		semantic = 'Relevant';
+		ft = objTags(focus);
+
+		//exclude tile layers from filter
+		ft = _.filter(ft, function(t) {
+			var T = self.getTag(t);
+			if (T) {
+				if (T.tileLayer) return false;
+				if (T.dbpediaLayer) return false;
+			}
+			return true;
+		});
+	}
     
     var ii = _.keys($N.layer().include);
     var ee = _.keys($N.layer().exclude);
@@ -108,7 +122,6 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 				}
 
 				if (r > 0) {
-					var ft = objTags(focus);
 					if (ft.length > 0) {
 					    var m = objTagRelevance(focus, x);
 					    r *= m;
@@ -392,7 +405,7 @@ function renderBrowseSlides(o, vv, slideControls) {
 function renderList(s, o, v) {
 	var listRenderer = renderBrowseList;
 
-	var submenu = $('#toggle-submenu');
+	var submenu = $('.toggle-submenu');
 	var slidesButton = $('<button style="width: 100%" title="Slides">Slides</button>');
 	slidesButton.click(function() {
 		listRenderer = renderBrowseSlides;

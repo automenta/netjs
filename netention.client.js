@@ -5,9 +5,6 @@ var defaultIcons = {
     'default': '/icon/rrze/status/true.png',
 
 	'unknown': '/icon/unknown.png',
-	'Can': '/icon/can.png',
-	'Need': '/icon/need.png',
-	'Not': '/icon/not.png',
 
 	'Favorite': '/icon/rrze/actions/observe.png',
 	'Goal': '/icon/rrze/status/error.png',

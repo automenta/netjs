@@ -223,12 +223,13 @@ var generalTags = [
         description: 'Has expert knowledge and is most useful in teaching others' },
 
     {uri: 'Access', name: 'Access', tag: ['Concept'] },
-        
-    {uri: 'Can', name: 'Can', tag: ['Access'], operator: true},
-    {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, properties: {
+
+    {uri: 'Can', name: 'Can', tag: ['Access'], operator: true, icon: '/icon/can.png'},
+
+    {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, icon: '/icon/need.png', properties: {
         'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
     }},
-    {uri: 'Not', name: 'Not', tag: ['Concept'], operator: true},
+    {uri: 'Not', name: 'Not', tag: ['Concept'], icon: '/icon/not.png', operator: true},
         
     //NEEDS from SparkRelief
     {uri: 'Volunteer', name: 'Volunteer', tag: ['Resource']},
@@ -267,6 +268,145 @@ var generalTags = [
             //'tagDomain': { name: 'Domain', type: 'text' }
         },
 		tag: ['Concept']
+    },
+
+    {uri: 'Map', name: 'Map', description: ''},
+
+	{
+      "uri": "Points of Interest",
+      "name": "Points of Interest",
+      "description": "DBPedia.org",
+      "icon": "http:\/\/climateviewer.com\/gallery\/lightning_bolt.png",
+      "dbpediaLayer": true,
+  	  tag: ['Map']
+    },
+	{
+      "uri": "terrain-satellite",
+      "name": "Satellite",
+      "description": "Esri \/ DeLorme",
+      "tag": [
+        "Terrain"
+      ],
+      "defaultStrength": 0.75,
+      "tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/World_Imagery\/MapServer\/tile\/{z}\/{y}\/{x}",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "terrain-contour",
+      "name": "Contour",
+      "description": "Esri \/ DeLorme",
+      "tag": [
+        "Terrain"
+      ],
+      "defaultStrength": 0.75,
+      "tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/Specialty\/DeLorme_World_Base_Map\/MapServer\/tile\/{z}\/{y}\/{x}",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "terrain-ocean",
+      "name": "Ocean Floor",
+      "description": "Esri \/ GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri",
+      "tag": [
+        "Terrain"
+      ],
+      "defaultStrength": 0.75,
+      "tileLayer": "http:\/\/services.arcgisonline.com\/ArcGIS\/rest\/services\/Ocean_Basemap\/MapServer\/tile\/{z}\/{y}\/{x}",
+  	  tag: ['Map']
+    },
+    /*{
+      "uri": "Weather",
+      "name": "Weather",
+      "description": "",
+      "icon": "http:\/\/climateviewer.com\/gallery\/nws_google.gif"
+  	  tag: ['Map']
+    },*/
+    {
+      "uri": "owm-clouds",
+      "name": "Clouds",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/clouds\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "owm-precipitation",
+      "name": "Precipitation",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/precipitation\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "owm-rain",
+      "name": "Rain",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/rain\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "owm-pressure",
+      "name": "Pressure",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "owm-pressure_cntr",
+      "name": "Pressure Contour",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure_cntr\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "owm-wind",
+      "name": "Wind",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/wind\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "owm-temp",
+      "name": "Temperature",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/temp\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
+    },
+    {
+      "uri": "owm-snow",
+      "name": "Snow",
+      "description": "OpenWeatherMap.org",
+      "tag": [
+        "Weather"
+      ],
+      "defaultStrength": 0.5,
+      "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/snow\/{z}\/{x}\/{y}.png",
+  	  tag: ['Map']
     }
 
 ];

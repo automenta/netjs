@@ -7,21 +7,53 @@ Copyright (c) 2012, 2013, 2014 See https://github.com/meatspaces/meatspace-chat/
 All rights reserved.
 */
 
+function newWebcamWindow(onFinished) {
+    var x = newPopup('Webcam', {
+		modal: true					
+	});
+	x.dialog({
+	  beforeClose: function( event, ui ) {
+		webcamStop();
+	  }
+	});
+
+	var recordButton = $('<button>Record</button>');
+	recordButton.click(function() {
+		webcamRecord(5, 0.3, function(path) {
+			//$('#Images').append('<img src="' + path + '"/>');
+			x.dialog("close");
+			onFinished(path);
+		});					
+	});
+	recordButton.hide();
+	x.append(recordButton);
+
+	var statusArea = $('<div id="WebcamStatus"></div>');
+	x.append(statusArea);
+
+	var previewArea = $('<div/>');
+	x.append(previewArea);
+	
+	webcamStart(previewArea, 135, 101, function() {
+		recordButton.show();
+	});
+}
+
 function webcamAvailable() {
   return (navigator.getMedia);
 }
 
 var videoShooter;
-function webcamStart(previewTarget, gifWidth, gifHeight) {
+function webcamStart(previewTarget, gifWidth, gifHeight, ready) {
 
   if (navigator.getMedia) {
 
     var startStreaming = function () {
       GumHelper.startVideoStreaming(function (err, stream, videoElement, videoWidth, videoHeight) {
-        if (err) {
+        /*if (err) {
           disableVideoMode();
           return;
-        }
+        }*/
 
         var cropDimens =
           VideoShooter.getCropDimensions(videoWidth, videoHeight, gifWidth, gifHeight);
@@ -44,10 +76,13 @@ function webcamStart(previewTarget, gifWidth, gifHeight) {
         videoShooter = new VideoShooter(videoElement, gifWidth, gifHeight, videoWidth, videoHeight,
           cropDimens);
         //composer.form.click();
+
+	    $('#WebcamStatus').html('Watching...');
+		ready();
       });
     };
 
-    $('#WebcamStatus').html('Watching...');
+    $('#WebcamStatus').html('Activating Webcam...');
     startStreaming();
 
     /*$(window).on('orientationchange', function() {
@@ -82,7 +117,7 @@ function webcamStop() {
 		  /*var submission = composer.inputs.reduce(function(data, input) {
 		    return (data[input.name] = input.value, data);
 		  }, { picture: picture });*/
-		  $('#WebcamStatus').html('Picture size:' + picture.length);
+		  $('#WebcamStatus').html('Picture size:' + picture.length + ", Uploading...");
 
 		  var submission = {
 			image: picture
@@ -92,8 +127,10 @@ function webcamStop() {
 		  $.post('/add/image', submission, function () {
 		    // nothing to see here?
 		  }).error(function (data) {
+			$('#WebcamStatus').html("Error uploading: " + data);
 		    //alert(data.responseJSON.error);
 		  }).always(function (data) {
+			$('#WebcamStatus').html("Finished.");
 			whenUploaded(data);
 		    /*composer.message.prop('readonly', false);
 		    composer.message.val('');

@@ -37,6 +37,10 @@ function objectify(x) {
 			return x;				
 		},
 
+		getDescription : function() {
+			return objDescription(x);
+		},
+
 		addDescription: function(d) {
 			objAddDescription(x, d);
 			return x;
@@ -155,9 +159,9 @@ function objAddValue(x, a, b, strength) {
             v.strength = strength;
     }
     
-    if (!x.value)
+    if (x.value == undefined)
         x.value = [];
-        
+
     x.value.push(v);
             
     return x;
@@ -184,7 +188,7 @@ function objName(x, newName) {
     /*  if newName is undefined, gets the name
         otherwise, sets the name to newName */
     
-    if (!newName) {
+    if (newName==undefined) {
         return x.name || '';    
     }
     else {

@@ -62,6 +62,7 @@ function _updateView(force) {
 
     v.empty();
     o.empty();
+	$('.toggle-submenu').empty();
     submenu.empty();
     submenu.hide();
 	updateIndent(false);
@@ -79,6 +80,8 @@ function _updateView(force) {
         v.addClass('overthrow ui-widget-content view-indented');
 		updateIndent($('#ViewMenu').is(":visible"));
     }
+
+	$N.router.navigate("view/" + view, {trigger: false});
 
     if (view === 'browse') {
         indent();
@@ -165,8 +168,8 @@ function initKeyboard() {
 
 
 	jwerty.key('esc', function() {	toggleAvatarMenu(); return false;	});
-	jwerty.key('ctrl+left',  function()	{	viewDelta(-1); return false;	});
-	jwerty.key('ctrl+right', function() {	viewDelta(+1); return false;	});
+	jwerty.key('ctrl+[',  function()	{	viewDelta(-1); return false;	});
+	jwerty.key('ctrl+]', function() {	viewDelta(+1); return false;	});
 }
 
 
@@ -298,7 +301,8 @@ $(document).ready(function() {
                         "object/:id/focus": "focus",
                         "tag/:tag": "tag",
                         //"new/with/tags/:t":     "newWithTags",
-                        "example": "completeExample"
+                        "example": "completeExample",
+						"view/:view": "view"
                                 //"search/:query/:page":  "query"   // #search/kiwis/p7
                     },
                     me: function() {
@@ -318,16 +322,22 @@ $(document).ready(function() {
                              text: id.substring(0, 4) + '...'
                              });*/
                         }
-                    }
+                    },
+					view: function(view) {
+						self.set('currentView', view);
+					}
 
                 });
 
                 var w = new Workspace();
                 Backbone.history.start();
+				window.$N.router = w;				
 
-                if (configuration.initialView) {
-                    $N.save('currentView', configuration.initialView);
-                }
+				if (!$N.get('currentView')) {
+		            if (configuration.initialView) {
+		                $N.save('currentView', configuration.initialView);
+		            }
+				}
 
 				updateViewControls();
 

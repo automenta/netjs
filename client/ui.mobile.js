@@ -37,12 +37,14 @@ function showAvatarMenu(b) {
         vm.fadeOut();
         $('#toggle-menu').show();
 		updateIndent(false);
+		$('.toggle-submenu-absolute').show();
     }
     else {
         $('#toggle-menu').hide();
         vm.fadeIn();
         $('#close-menu').show();
         $('#AvatarButton').show();
+		$('.toggle-submenu-absolute').hide();
         vm.show();
 		updateIndent(true);
     }

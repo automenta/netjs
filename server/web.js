@@ -708,14 +708,44 @@ exports.start = function(options, init) {
             // });
         }
     ));
+
+	var getCookies = function(request) {
+	  var cookies = {};
+	  request.headers && request.headers.cookie.split(';').forEach(function(cookie) {
+		var parts = cookie.match(/(.*?)=(.*)$/)
+		cookies[ parts[1].trim() ] = (parts[2] || '').trim();
+	  });
+	  return cookies;
+	};
+
+    express.get('/', function(req, res) {
+        //console.log('auth cookie', res.cookie('authenticated'));
+        
+		var cookies = getCookies(req);
+		
+        var anonymous = false;
+        if (req.headers.cookie)
+            if (cookies['authenticated'] === 'anonymous')
+                anonymous = true;
+        
+        if (!anonymous) {
+            res.cookie('authenticated', isAuthenticated(req.session));
+	        res.cookie('clientID', getCurrentClientID(req.session));
+		}
+        else {
+	        res.cookie('clientID', '');
+		}
+
+        res.sendfile('./client/index.html');
+    });
         
     express.get('/anonymous', function(req,res) {
 		if (options.permissions.enableAnonymous) {			
 		    res.cookie('authenticated', 'anonymous');
 		    res.cookie('clientID', '');
 		    req.session.cookie.expires = false;
-		    //res.redirect('/');  
-	        res.sendfile('./client/index.html');
+
+			res.redirect("/");
 		}
 		else
 			res.send('Anonymous disabled');
@@ -915,20 +945,6 @@ exports.start = function(options, init) {
     } */               
     
 
-    express.get('/', function(req, res) {
-        //console.log('auth cookie', res.cookie('authenticated'));
-        
-        var anonymous = false;
-        if (req.headers.cookie)
-            if (res.cookie('authenticated') === 'anonymous')
-                anonymous = true;
-        
-        if (!anonymous)
-            res.cookie('authenticated', isAuthenticated(req.session));
-        
-        res.cookie('clientID', getCurrentClientID(req.session));
-        res.sendfile('./client/index.html');
-    });
     
     /*
      express.get('/http/:url', function (req, res) {

@@ -1,18 +1,21 @@
+function onChatSend(name, desc) {
+    var o = objNew();
+	o = o.own();
+    o = objName(o, name);
+	o = objAddTag(o, 'Message');
+	if (desc)
+		o = objAddDescription(o, desc);
+	self.publish(o);
+}
+
 function renderChat(v) {
     var frame = newDiv();
     
-    var roster = newRoster().attr('class', 'ChatViewRoster');    
+    //var roster = newRoster().attr('class', 'ChatViewRoster');    
     var content = newDiv().attr('class', 'ChatViewContent');    
-    var input = newChatInput(function(x) {
-        var o = objNew();
-		o = o.own();
-        o = objName(o, x);
-		o = objAddTag(o, 'Message');
-		self.publish(o);
-
-    }).attr('class', 'ChatViewInput');
+    var input = newChatInput(onChatSend).attr('class', 'ChatViewInput ui-widget-content');
     
-    frame.append(roster);
+    //frame.append(roster);
     frame.append(content);
     frame.append(input);
     
@@ -43,8 +46,11 @@ function renderChat(v) {
         content.append(newEle('br'));
 		content.append(newEle('br'));
 
-        content.scrollTop(content.prop("scrollHeight"));
-
+		/*setTimeout(function() {
+	        $('#View').scrollTop(content.height());
+		}, 500);*/
+		//content.animate({scrollTop: content.height()}, 1000);
+		//window.scrollTo(0, document.body.scrollHeight);
 
     }
         
@@ -53,6 +59,7 @@ function renderChat(v) {
     };
     
     frame.onChange();
+
     
     return frame;
 }
@@ -78,7 +85,12 @@ function newObjectLogLine(x) {
         }
         d.append(':&nbsp;');
     }
-    d.append(x.name);
+	if (x.name.length > 0)
+	    d.append(x.name);
+	var desc = objDescription(x);
+	if (desc.length > 0) {
+		d.append('<ul>' + desc + '</ul>');
+	}
     return d;
 }
 
@@ -95,6 +107,26 @@ function newChatInput(onSend) {
         
     });
     d.append(inputBar);
+
+	var webcamButton = $('<button title="Add Webcam..."><img style="height: 1em" src="icon/play.png"></button>');
+	webcamButton.click(function() {
+		newWebcamWindow(function(imgURL) {
+            var description = '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>';
+			if (onSend)
+				onSend(inputBar.val(), description);
+            inputBar.val('');
+		});
+	});
+	d.append(webcamButton);
+
+	var moreButton = $('<button title="Add Detailed Object...">..</button>');
+	moreButton.click(function() {
+		var n = objNew();
+		n.setName(inputBar.val());
+        inputBar.val('');		
+		newPopupObjectEdit( n );
+	});
+    d.append(moreButton);
 
     /*var whatButton = $('<button>What</button>');
     d.append(whatButton);*/
