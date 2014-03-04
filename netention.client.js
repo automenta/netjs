@@ -37,17 +37,6 @@ var defaultIcons = {
 	'Animal':  '/icon/sparkrelief/cat-pets-28.png'
 };
 
-/* http://www.perbang.dk/rgbgradient/ 6 steps between: AFE500 and FF3B2E:   AFE500 E9EA08 EFBB11 F48E1A F96324 FF3B2E */
-var tagColorPresets = {
-    'Learn': '#AFE500',
-    'DoLearn': '#E9EA08',
-    'Do': '#EFBB11',
-    'DoTeach': '#F48E1A',
-    'Teach': '#F96324',
-    'Can': 'fuchsia',
-    'Need': '#bbf',
-    'Not': 'gray'
-};
 
 var themes = {
 	//BASIC

@@ -576,7 +576,7 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	#LoadingSplash ul li img { margin:5px 0 0 0;padding:0;width:90%;height:auto; filter: gray; _filter: url(filters.svg#grayscale); -webkit-filter: grayscale(1); } 
 	#LoadingSplash ul li img:hover { margin:0;padding:0;width:100%;height:auto; filter: none !important; -webkit-filter: none !important; } 
 	#openid-img { width:80%;height:auto;clear:both;display:block; margin:10px auto; }
-	#about-toggle { width:80%; height:auto; margin:10px auto; display:block; clear:both; }
+	#loginLogo { width:80%; height:auto; margin:10px auto; display:block; clear:both; }
 	
 #LoadingSplash2 { background-color: white; z-index:99; position: fixed; width: 100%; height: 100%; display: none; }
 
@@ -586,8 +586,8 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	div.olMapViewport { z-index: 1 !important;; }
 	div.olControlZoom { top:auto !important; bottom:8px !important; }
 
-.ViewControl { padding: 0; margin: 0; }
-.ViewControl img { width: 25px; }
+.ViewControl { padding: 0; margin: 5px; display: none; }
+.ViewControl img { width: 50px; height: 50px; }
 .view-indented { left: 55px !important;  border-left: none !important; width: auto !important;}
 .view-indented-more { left: 160px !important; }
 
@@ -622,6 +622,11 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	text-align: right;
 }
 
+.TagBar { font-size: 85%; }
+.TagBar .ui-buttonset label span {
+	padding-right: 0.5em;
+	padding-left: 0.5em;
+}
 
 #FocusEdit { height:auto;  margin:0; display:block; clear:both; padding: 0; }
 #FocusEdit button { font-size:.8em; }
@@ -956,10 +961,18 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     text-shadow: 0 1px 0 #fff;
 }
 
+
+.ui-widget-overlay {
+	background: black !important;
+	opacity: 0.7 !important;
+}
+
+
 /*
 * Perfect Modal
 * http://www.paulrhayes.com/2011-03/css-modal/
 */
+
 
 /* Container */
 .modal {

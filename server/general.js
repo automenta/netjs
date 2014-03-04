@@ -96,11 +96,49 @@ var generalTags = [
         },
 		tag: ['Concept']
     },
+    {uri: 'Physical', name: 'Physical',
+        properties: {
+/*
+http://build.smartthings.com/smartapps-overview/#SmartAppCapabilities
+Attribute Name	Read/Write	Data Type	Details/Comments
+isPresent	Read	Boolean	Indicates that the device is currently connected and reported data.
+ftemp	Read	Float	Temperature in Fahrenheit
+ctemp	Read	Float	Temperature in Celcius
+X	Read	Float	Accelerometer X-Axis Value
+Y	Read	Float	Accelerometer Y-Axis Value
+Z	Read	Float	Accelerometer Z-Axis Value
+reportTemp	Read/Write	Boolean	Used to tell the SmartTag to report or not to report temperature data
+reportAccelerometer	Read/Write	Boolean	Used to tell the SmartTag to report or not to report accelerometer data
+reportPresence	Read/Write	Boolean	Used to tell the SmartTag to report or not to report presence data
+reportInterval	Read/Write	Integer	The reporting interface in seconds. Minimum value is 5 seconds.
+tempDelta	Read/Write	Float	Defines the min change in temperature value that will result in an temperatureChanged event
+accelerometerData	Read/Write	Float	Defines the min change in any accelerometer axis that will result in an accelerometerChanged event
+reportOnlyChanges	Read/Write	Boolean	Used to tell the SmartHub/SmartTag only to report when data (attributes) have changed. This can be combined with the ‘reportMinimumInterval’ attribute to force a report every N seconds even if nothing has changed.
+reportMinimumInterval	Read/Write	Integer	Used to tell the SmartHub/SmartTag to report every N seconds even if nothing has changed. Not used unless ‘reportOnlyChanges’ is true.
+The SmartTag also generates events to the SmartThings Cloud. The following events are currently supported:
+
+--Voltage
+
+Event Name	Event Description
+presenceDetected	Raised when SmartTag presence changes from “not present” to “present”
+presenceLost	Raised when SmartTag presence changes from “present” to “not present”
+presenceChange	Raised in either of the above two cases. Event attributes allow the developer to understand the details.
+temperatureChanged	Raised when the temperature value changes by more than a preset amount. See capabiliites.
+temperatureReport	Raised every time the device reports its current temperature
+accelerometerChanged	Raised when the X, Y, or Z values of the accelerometer change by more than a preset amount. See capabilities.
+accelerometerReport	Raised every time the device reports its current accelerometer values.
+*/
+		},
+		tag: ['Concept']
+    },
+
+
     {uri: 'Value', name: 'Value',
         properties: {
             'moneyAmount': {name: 'Money Amount', type: 'real', default: 0, units: currencyUnits },
             'quantity': {name: 'Quantity', type: 'integer', default: 0 },
             'quantityUnit': {name: 'Quantity Unit', type: 'string' },
+            'quality': {name: 'Quality', type: 'text'},
             'offerExpires': {name: 'Offer Expires', type: 'timepoint' },
             'itemExpires': {name: 'Item Expires', type: 'timepoint' },
             'walletBTC': {name: 'Bitcoin Wallet', type: 'text'},
@@ -200,27 +238,16 @@ var generalTags = [
         description: 'You have serious objections and you’ll be extremely unhappy if this proposal goes ahead.'
     },
     
-    {uri: 'Social', name: 'Social', tag: ['Concept'], properties: {       }},
-    {uri: 'Friend', name: 'Friend', tag: ['Social'], operator: true},
-    {uri: 'Enemy', name: 'Enemy', tag: ['Social'], operator: true},
+    //{uri: 'Social', name: 'Social', tag: ['Concept'], properties: {       }},
+    //{uri: 'Friend', name: 'Friend', tag: ['Social'], operator: true},
+    //{uri: 'Enemy', name: 'Enemy', tag: ['Social'], operator: true},
     
     {uri: 'Know', name: 'Know', properties: {
             'knowledge': {name: 'Knowledge', type: 'object'}
        },
 		tag: ['Action']
 	},
-    /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
-     3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
-    {uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true,
-        description: 'No knowledge but curious to learn' },
-    {uri: 'DoLearn', name: 'DoLearn', tag: ['Know'], operator: true,
-        description: 'Some knowledge and willing to learn more while collaborating' },
-    {uri: 'Do', name: 'Do', tag: ['Know'], operator: true,
-        description: 'Can independently work' },
-    {uri: 'DoTeach', name: 'DoTeach', tag: ['Know'], operator: true,
-        description: 'Independently able to work and can teach or train' },
-    {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true,
-        description: 'Has expert knowledge and is most useful in teaching others' },
+
 
     {uri: 'Access', name: 'Access', tag: ['Concept'] },
 
@@ -523,6 +550,35 @@ exports.plugin = function($N) { return {
     start: function() {
         $N.addTags(generalTags);
         $N.addTags(emotionTags);
+
+		if ($N.client.knowLevels == 6) {
+			$N.addTags([
+				/* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
+				 3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
+			    { uri: 'Learn', name: 'Learn', tag: ['Know'], operator:true, icon: 'icon/know/k1.png' },
+				{ uri: 'LearnDo', name: 'Learn Do', tag: ['Know'], operator:true, icon: 'icon/know/k2.png' },
+				{ uri: 'DoLearn', name: 'Do Learn', tag: ['Know'], operator:true, icon: 'icon/know/k3.png' },
+				//{ uri: 'Collaborating', name: 'Collaborating', tag: ['Know'] },
+				{ uri: 'DoTeach', name: 'Do Teach', tag: ['Know'], operator:true, icon: 'icon/know/k4.png' },
+				{ uri: 'TeachDo', name: 'Teach Do', tag: ['Know'], operator:true, icon: 'icon/know/k5.png' },
+				{ uri: 'Teach', name: 'Teach', tag: ['Know'], operator:true, icon: 'icon/know/k6.png' },
+
+			]);
+		}
+		else {
+			$N.addTags([
+				{uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true,
+					description: 'No knowledge but curious to learn' },
+				{uri: 'DoLearn', name: 'DoLearn', tag: ['Know'], operator: true,
+					description: 'Some knowledge and willing to learn more while collaborating' },
+				{uri: 'Do', name: 'Do', tag: ['Know'], operator: true,
+					description: 'Can independently work' },
+				{uri: 'DoTeach', name: 'DoTeach', tag: ['Know'], operator: true,
+					description: 'Independently able to work and can teach or train' },
+				{uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true,
+					description: 'Has expert knowledge and is most useful in teaching others' }
+			]);
+		}
 
         /*function indexPDF(name, path) {
             var introPresentation = util.objNew(path, name);

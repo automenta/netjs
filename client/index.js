@@ -18,7 +18,7 @@ function updateBrand() {
 
     $('.brand').html(self.myself().name);
 
-    var avatarURL = getAvatarURL(self.myself().email);
+    var avatarURL = getAvatarURL(self.myself());
     $('#avatar-img').attr('src', avatarURL);
     $('#toggle-img').attr('src', avatarURL);
 }
@@ -240,6 +240,16 @@ $(document).ready(function() {
     if (configuration.enableAnonymous)
         $('#AnonymousLoginButton').show();
 
+	if (configuration.focusEnable)
+		$('#AvatarFocus').show();
+
+	$('#loginLogo').attr('src', configuration.loginLogo);
+
+	var conviews = configuration.views;
+	for (var i = 0; i < conviews.length; i++) {
+		var c = conviews[i];
+		$('#' + c).show();
+	}
 
 	$('#openid-open').click(function() {
 		$('#openid-login').fadeIn();

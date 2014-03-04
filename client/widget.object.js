@@ -71,19 +71,19 @@ function newPopupObjectViews(objectIDs) {
 
 
 function getAvatar(s) {
-    var e = '';
-    if (s)
-        if (s.email)
-            e = s.email;
-    var emailHash = MD5(e);
-    return $("<img>").attr("src", "http://www.gravatar.com/avatar/" + emailHash);
+	return $("<img>").attr("src", getAvatarURL(s));
 }
 
-function getAvatarURL(email) {
-    if (!email) {
-        return configuration.defaultAvatarIcon;
-    }
-    return "http://www.gravatar.com/avatar/" + MD5(email);
+function getAvatarURL(s) {
+    var e = '';
+	if (s) {
+		var e = objFirstValue(s, 'email');
+		if (e) {
+			var emailHash = MD5(e);
+			return "http://www.gravatar.com/avatar/" + emailHash;
+		}
+	}
+	return configuration.defaultAvatarIcon;
 }
 
 function newTagButton(t, onClicked) {
@@ -386,6 +386,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
          */
 
         d.addClass('ObjectEditDiv');
+
+		d.append('+');	//indicates addition of a value
 
         if (hideWidgets != true) {
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');

@@ -382,6 +382,7 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
 
 function newTagBar(s, currentTag) {
     var tagBar = $('<div/>');
+	tagBar.addClass('TagBar');
 
     //http://jqueryui.com/button/#checkbox
     var skillSet = $('<div/>');
@@ -420,20 +421,35 @@ function newTagBar(s, currentTag) {
         else 
             tagname = tt ? tt.name : tag;
         
-        var l = $('<label for="' + cid + '">' + tagname + '</label>');
+		var icon = getTagIcon(tag);
+		var iconString = '';
+		if (icon)
+			iconString = '<img src="' + icon + '" style="height: 1em"/>&nbsp;';
+
+        var l = $('<label for="' + cid + '">' + iconString + tagname + '</label>');
         l.attr('title', tooltip);
-        l.attr('style','color:' + tagColorPresets[tag]);
         target.append(l);
         return b;
     }
 
 
     {
-        tbutton('Learn', skillSet);
-        tbutton('DoLearn', skillSet);
-        tbutton('Do', skillSet);
-        tbutton('DoTeach', skillSet);
-        tbutton('Teach', skillSet);
+		if (self.getTag('LearnDo')) {
+			//6 curiosume levels
+		    tbutton('Learn', skillSet);
+		    tbutton('LearnDo', skillSet);
+		    tbutton('DoLearn', skillSet);
+		    tbutton('DoTeach', skillSet);
+		    tbutton('TeachDo', skillSet);
+		    tbutton('Teach', skillSet);
+		}
+		else {
+		    tbutton('Learn', skillSet);
+		    tbutton('DoLearn', skillSet);
+		    tbutton('Do', skillSet);
+		    tbutton('DoTeach', skillSet);
+		    tbutton('Teach', skillSet);
+		}
     }
     tagBar.append(skillSet);
     skillSet.buttonset();
@@ -486,15 +502,17 @@ function getSelfSummaryHTML(userid) {
 	x += '<script>function removeThemeSelect() { document.getElementById(\'ThemeSelect\').remove(); }</script>';
 	x += '<body>';
 
-	x += '<h1>' + user.name + '</h1>';
-
-	delete tags['name'];
-
 	var location = tags['@'];
 	if (location) {
 		x += '<div class="Location">' + _n(location[0],3) + ',' + _n(location[1],3) + '</div>';
 		delete tags['@'];
 	}
+
+	x += '<h1>' + user.name + '</h1>';
+
+	delete tags['name'];
+
+
 
 	var desc = objDescription(user);
 	if (desc) {
@@ -515,7 +533,13 @@ function getSelfSummaryHTML(userid) {
             
         //x += '<b style="color: ' + color + '">' + il + '</b>: ';
 		x += '<div class="tagSection ' + i + '_section">';
-		x += '<h2 class="' + i + '_heading">' + il + '</h2><ul>';
+
+		var icon = getTagIcon(i);
+		var iconString = '';
+		if (icon)
+			iconString = '<img src="' + icon + '" style="height: 1em"/>';
+
+		x += '<h2 class="' + i + '_heading">' + iconString + il + '</h2><ul>';
         for (var y = 0; y < tags[i].length; y++) {
             var tt = tags[i][y];
             x += '<li><a href="' + getENWikiURL(tt) + '">' + tags[i][y] + '</a></li>';
@@ -890,13 +914,16 @@ function hoursFromNow(n) {
 }
 
 function onWikiTagAdded(target) {
-    var d = newPopup(target, {width: 550});
+    var d = newPopup(target, {width: 650, modal: true});
     var tagBar = newTagBar(self, target);
     var saveButton = newTagBarSaveButton(self, target, tagBar, function() {
         d.dialog('close');
     });
+    var cancelButton = $('<button>Cancel</button>').click(function() {
+        d.dialog('close');
+    });
 
-    d.append(saveButton);        
+    d.append(saveButton, cancelButton);
     d.prepend(tagBar);
 }
 
@@ -908,7 +935,6 @@ function renderWiki(s, o, v) {
     v.append(frame);
 
     frame.onChange = function() {
-        updateTags(currentUser);
         //update user summary?
     };
 

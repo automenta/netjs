@@ -1727,13 +1727,14 @@ exports.start = function(options, init) {
     });
 
 
+    $N.client = options.client || { };
+    $N.permissions = options.permissions || { };
+	$N.enablePlugins = options.plugins || [];
+
     //setInterval(attention.update, Server.memoryUpdatePeriodMS);
 
     require('./general.js').plugin($N).start();
 
-
-    $N.permissions = options.permissions || { };
-	$N.enablePlugins = options.plugins || [];
 
 	$N.nlog = nlog;
 	$N.plugin = function(pluginfile, forceEnable) {

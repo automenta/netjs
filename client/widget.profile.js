@@ -94,10 +94,11 @@ function newNewProfileWidget(whenFinished) {
 	var d = newDiv();
 
 	var nameField = $('<input type="text" placeholder="Name"></input>');
-	
-	var createButton = $('<button>Create User</button>');
-
 	d.append(nameField).append('<br/>');
+	
+
+	var emailField = $('<input type="text" placeholder="E-Mail (optional)"></input>');
+	d.append(emailField).append('<br/>');
 
 	var locationEnabled = true;
 	var locEnabled = $('<input type="checkbox" checked="true"/>');
@@ -106,6 +107,7 @@ function newNewProfileWidget(whenFinished) {
 
     var cm = $('<div id="SelfMap"/>').appendTo(d);
 
+	var createButton = $('<button>Create User</button>');
     d.append('<br/>').append(createButton);
 
 	var location = configuration.mapDefaultLocation;
@@ -131,15 +133,21 @@ function newNewProfileWidget(whenFinished) {
 			alert('Enter a name');
 			return;
 		}
+		var email = emailField.val();
 
         var u = uuid();
         var uo = 'Self-' + u;
         var o = objNew(uo, name);
         objAddTag(o, 'Human');
         objAddTag(o, 'User');     
+					
 		var location = lmap.location();
 		if  (locationEnabled)
 		    objSetFirstValue( o, 'spacepoint', {lat: location.lat, lon: location.lon, planet: 'Earth'} );            
+
+		if (email.length > 0) {
+			objSetFirstValue( o, 'email', email);
+		}
 
 		whenFinished(o);  
 	});

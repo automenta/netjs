@@ -35,14 +35,14 @@
         <div id="LoadingSplash" style="display: none">        
             <div id="login-prompt" class="logon overthrow">
                 <div>
-                    <img alt="Welcome" id="about-toggle" title="Click here to learn about this project" src="icon/netention-logo.png" />
+                    <img alt="Welcome" id="loginLogo"/>
                     <h3 id="LoadingSplashTitle" style="text-align:center;">Login</h3>
                     <ul id="AuthSelect">
                         <li id="AnonymousLoginButton"><a href="/anonymous"><img src="icon/anonymous-login.png" alt="Anonymous Login" title="Anonymous Login" /></a></li>
                         <li><a href="/auth/google"><img src="icon/google.png" alt="Google Login" title="Login with your Google Account" /></a></li>
                         <li><img id="openid-open" src="icon/openid.png" alt="Open ID Login" title="Login with your Open ID" id="openid-toggle" /></li>
-                        <li><img src="icon/facebook.png" alt="Facebook Login" title="Login with your Facebook Account" /></li>
-                        <li><!--<a href="/auth/twitter">--><img src="icon/twitter.png" alt="Twitter Login" title="Login with your Twitter Account" /><!--</a>--></li>
+                        <li><a href="javascript:alert('Facebook login not supported yet.')"><img src="icon/facebook.png" alt="Facebook Login" title="Login with your Facebook Account" /></li>
+                        <li><a href="javascript:alert('Twitter login not supported yet.')"><!--<a href="/auth/twitter">--><img src="icon/twitter.png" alt="Twitter Login" title="Login with your Twitter Account" /></a></li>
                     </ul>
                     <div id="openid-login" style="display:none">
                         <p>Surprise! You may already have an OpenID. Find out, <a href="http://openid.net/get-an-openid/" target="_blank">click here</a>.</p>
@@ -86,28 +86,31 @@
 			<button id="TogetherJSTalk" onclick="startTalk(); return false;" title="Toggle Communicator" style="display: none">Talk</button>
 
             <button id="us" class="ViewControl" title="Us"><img src="icon/user-group.png"></button>
-            <button id="map" class="ViewControl" title="Map"><img src="icon/earth.png"></button>
-            <button id="browse" class="ViewControl" title="Browse"><img src="icon/unknown.png"></button>
+            <button id="map" class="ViewControl" title="Map"><img src="icon/rrze/emblems/globe.svg"></button>
+            <button id="browse" class="ViewControl" title="Browse"><img src="icon/rrze/emblems/folder.png"></button>
             <button id="chat" class="ViewControl" title="Chat"><img src="icon/edit.png"></button>
             <button id="graph" class="ViewControl" title="Network"><img src="icon/can.png"></button>
             <button id="trends" class="ViewControl" title="Trends"><img src="icon/vote.png"></button>
-            <button id="wiki" class="ViewControl" title="Wiki"><img src="icon/workflow.png"></button>
+            <button id="wiki" class="ViewControl" title="Wiki"><img src="icon/wikipedia.png"></button>
             <!--<input type="radio" id="options" name="ViewControls" /><label for="options">Options</label>-->
 
+			<br/>        
+
+			<div id="AvatarFocus" style="display: none">
+		        <button id="FocusNeedButton" title="Select Tag">..</button>
+		        <button id="FocusClearButton" title="Clear">[x]</button>
+				<!--
+		        <button id="FocusWhatButton">What?</button>
+		        <button id="FocusWhereButton">Where?</button>
+		        <button id="FocusWhenButton">When?</button>
+		        <input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
+		        <button id="FocusClearButton" title="Clear">[x]</button>
+				-->
+
+			    <div id="FocusEdit"></div>
+			</div>
 
 			<br/>        
-            <button id="FocusNeedButton" title="Select Tag">..</button>
-            <button id="FocusClearButton" title="Clear">[x]</button>
-			<br/>        
-			<!--
-            <button id="FocusWhatButton">What?</button>
-            <button id="FocusWhereButton">Where?</button>
-            <button id="FocusWhenButton">When?</button>
-            <input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
-            <button id="FocusClearButton" title="Clear">[x]</button>
-			-->
-
-	        <div id="FocusEdit"></div>
 
 			<div class="toggle-submenu"></div>
 

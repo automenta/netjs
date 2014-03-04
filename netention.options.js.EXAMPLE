@@ -23,7 +23,7 @@
         "initialView": "us",
         "avatarMenuDisplayInitially": false,
 		"avatarMenuTagTreeAlways": false,
-        "defaultAvatarIcon": "/icon/netention-160.jpg",
+        "defaultAvatarIcon": "/theme/default-avatar.jpg",
         "wikiStartPage": "Life",
         "showPlanOnSelfPage": true,
         "defaultTheme": "_cybernetic",
@@ -33,7 +33,10 @@
         "defaultMapMode2D": true,
 		"mapDefaultLocation": [ 40.44, -80.0  ],
         "enableTogetherJS": false,
-		"viewUpdateMS": 850
+		"viewUpdateMS": 850,
+		"knowLevels": 5,
+		"focusEnable": true,
+		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki" ]
     }
 }
 
