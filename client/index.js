@@ -398,8 +398,10 @@ $(document).ready(function() {
 		                else if ($N.myself() === undefined) {
 		                    if (configuration.requireIdentity)
 		                        openSelectProfileModal("Start a New Profile");
-							else
-	                            $N.trigger('change:attention');
+							else {
+	                            //$N.trigger('change:attention');
+								updateView();
+							}
 		                }
 					}
 
