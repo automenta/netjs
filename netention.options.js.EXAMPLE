@@ -24,6 +24,7 @@
         "avatarMenuDisplayInitially": false,
 		"avatarMenuTagTreeAlways": false,
         "defaultAvatarIcon": "/theme/default-avatar.jpg",
+		"loginLogo": "/theme/login-logo.png",
         "wikiStartPage": "Life",
         "showPlanOnSelfPage": true,
         "defaultTheme": "_cybernetic",
