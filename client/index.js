@@ -399,7 +399,7 @@ $(document).ready(function() {
 		                    if (configuration.requireIdentity)
 		                        openSelectProfileModal("Start a New Profile");
 							else
-	                            s.trigger('change:attention');
+	                            $N.trigger('change:attention');
 		                }
 					}
 
