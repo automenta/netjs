@@ -529,7 +529,7 @@ function getSelfSummaryHTML(userid) {
         if (stt)
             il = stt.name;
 
-        var color = tagColorPresets[i] || 'black'; 
+        var color = 'black'; 
             
         //x += '<b style="color: ' + color + '">' + il + '</b>: ';
 		x += '<div class="tagSection ' + i + '_section">';
