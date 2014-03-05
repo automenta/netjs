@@ -830,7 +830,7 @@ exports.start = function(options, init) {
 		stream.once('open', function(fd) {
 		  stream.write(buf);
 		  stream.end();
-		  res.send(targetFile);
+		  res.end(targetFile);
 		});
 	});
 
