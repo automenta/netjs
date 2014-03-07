@@ -150,6 +150,25 @@ var refreshActionContext = _.throttle(function() {
 }, 850);
 
 
+function setClientID($N, cid, key, otherSelves) {
+     if (cid)
+        $N.set('clientID', cid.substring(5));
+     $N.set('authorized', key);
+     $N.set('otherSelves', _.unique(otherSelves));
+
+     $N.saveLocal();
+     /*$.pnotify({
+                title: 'Connected',
+                text: that.myself().name + ' (' + that.get('clientID').substring(0,4) + ')'
+            });*/
+
+	if (TogetherJS) {
+		TogetherJS.reinitialize();
+		TogetherJS.refreshUserData();
+	}
+
+}            
+
 function identity() {
 	var a = getCookie('authenticated');
 	if (a === 'anonymous') {
@@ -192,6 +211,7 @@ var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
 
 
 function netention(f) {
+
             
     var $NClient = Backbone.Model.extend({
         
@@ -405,27 +425,10 @@ function netention(f) {
                          }); */
                  init();
             });                
-            
+
+
             socket.on('setClientID', function (cid, key, otherSelves) {
-                 if (cid)
-                    that.set('clientID', cid.substring(5));
-                 that.set('authorized', key);
-                 that.set('otherSelves', _.unique(otherSelves));
-
-                 that.saveLocal();
-                 /*$.pnotify({
-                            title: 'Connected',
-                            text: that.myself().name + ' (' + that.get('clientID').substring(0,4) + ')'
-                        });*/
-                if (whenConnected) {
-                    whenConnected();
-                }
-
-				if (TogetherJS) {
-					TogetherJS.reinitialize();
-					TogetherJS.refreshUserData();
-				}
-
+				setClientID(that, cid, key, otherSelves);
             });
             
             socket.on('notice', function(n) {
@@ -879,15 +882,19 @@ function netention(f) {
         nextCID = oldCID;
     if ((nextCID === '') || (nextCID === undefined))
         nextCID = uuid();*/
+
+	var cid = getCookie('clientID');
+	var keys = getCookie('keys');
+	var otherSelves = decodeURIComponent(getCookie('otherSelves')).split(',');
+	setClientID($N, cid, keys, otherSelves);
     
-    $N.set('clientID', getCookie('clientID'));
     //s.saveLocal();
     //console.log('saved clientID: ' + s.get('clientID'));
 
-    if (($N.get('clientID')!='undefined') || (getCookie('authenticated')==='true'))
-	    $N.connect(function() { });
-
+    //if (($N.get('clientID')!='undefined') || (getCookie('authenticated')==='true'))
+	$N.connect(function() { 	});
     f($N);
+
 	
 }
 

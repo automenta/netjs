@@ -731,13 +731,31 @@ exports.start = function(options, init) {
             if (cookies['authenticated'] === 'anonymous')
                 anonymous = true;
         
+        var key = null, email = null;
+        if (req.session) {
+            if (req.session.passport) {
+                if (req.session.passport.user) {
+                    key = req.session.passport.user.id;
+                    email = req.session.passport.user.email;
+                }
+            }
+        }
+        //Authenticated but no clientID specified
+        var cid = getCurrentClientID(req.session);
+		var possibleClients = getClientSelves(req.session);
+        if (possibleClients)
+	    	cid = possibleClients[possibleClients.length-1];
+
         if (!anonymous) {
             res.cookie('authenticated', isAuthenticated(req.session));
 	        res.cookie('clientID', getCurrentClientID(req.session));
+	        res.cookie('key', key);		
 		}
         else {
 	        res.cookie('clientID', '');
 		}
+
+        res.cookie('otherSelves', possibleClients.join(','));
 
         res.sendfile('./client/index.html');
     });
