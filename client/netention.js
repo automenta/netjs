@@ -152,7 +152,7 @@ var refreshActionContext = _.throttle(function() {
 
 function setClientID($N, cid, key, otherSelves) {
      if (cid)
-        $N.set('clientID', cid.substring(5));
+        $N.set('clientID', cid);
      $N.set('authorized', key);
      $N.set('otherSelves', _.unique(otherSelves));
 
@@ -226,13 +226,8 @@ function netention(f) {
 			this.properties = { };
 			
         },
-        
-        id : function() { 
-			var cid = this.get('clientID'); 
-			if (cid.indexOf('Self-')==0)
-				return cid.substring(5);
-			return cid;
-		},
+       
+
 
         tag : function(t) { return this.tags[t]; },            
         
@@ -278,10 +273,7 @@ function netention(f) {
         
         getObject : function(id) { return this.attention[id]; }, //deprecated
         object : function(id) { return this.attention[id]; }, 
-        
-        
-        //self
-        getSelf : function(clientID) { return this.attention['Self-' + clientID]; }, 
+                
         deleteSelf : function(clientID) {
             var os = this.get('otherSelves');
             if (os.length < 2) {
@@ -292,13 +284,12 @@ function netention(f) {
                 });
                 return;
             }
-            var sclientID = 'Self-' + clientID;
-            if (_.contains(os, sclientID)) {
-                os = _.without(os, sclientID);
+            if (_.contains(os, clientID)) {
+                os = _.without(os, clientID);
                 this.set('otherSelves', os);
                 this.saveLocal();
                 
-                this.deleteObject(this.object('Self-'+ clientID));
+                this.deleteObject(this.object(clientID));
             }
     
         },
@@ -321,15 +312,8 @@ function netention(f) {
             return this.get('layer');
         },            
         
-        myself: function() { return this.getSelf(this.id());  },
-            /*if (!o) {
-                o = objNew('Self-' + this.id(), 'Anonymous');
-                objAddTag(o, 'Human');
-                objAddTag(o, 'User');                    
-                this.setObject(o);
-            }
-            return o;*/
-        //},
+        id : function() { 	return this.get('clientID'); 	},
+		myself: function() { return this.getObject(this.id());  },
         
         become: function(target) {
             if (!target)
@@ -346,15 +330,12 @@ function netention(f) {
                         text: nextID
                     });*/
 
-                    later(function() {
-                        if (nextID.indexOf('Self-') === 0)
-                            nextID = nextID.substring(5);
-                        
+                    later(function() {                        
 						self.set('clientID', nextID);
 
                         s.connect(target, function() {
                             var os = self.get('otherSelves');
-                            os.push('Self-' + nextID);
+                            os.push(nextID);
                             
                             self.save('otherSelves', _.unique(os));
                             

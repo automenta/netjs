@@ -4,6 +4,6 @@ client/upload/*
 !client/upload/README
 nbproject/*
 /nbproject/private/
-netention.options.js
+options.js
 doc/.~lock.*
 

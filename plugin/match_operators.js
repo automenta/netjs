@@ -81,7 +81,7 @@ exports.plugin = function($N) { return {
 				            cc.addDescription(JSON.stringify(cc.tags,null,4));
 
 							_.each(implicatedAuthors, function(a) {
-								cc.add('involvesUser', 'Self-' + a);
+								cc.add('involvesUser', a);
 							});
 
 				            $N.pub(cc);

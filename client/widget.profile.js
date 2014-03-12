@@ -36,12 +36,10 @@ function newProfileWidget() {
 	if(otherSelves){
 	    for (var i = 0; i < otherSelves.length; i++) {
 	        var s = otherSelves[i];
-	        if (s.indexOf('Self-')==0)
-	            s = s.substring(5);
-	        var o = self.getSelf(s);
+	        var o = self.getObject(s);
 	        if (o) {                    
 	            var n = o.name;
-	            var selString = (o.id.substring(5) === self.id()) ? 'selected' : '';
+	            var selString = (o.id === self.id()) ? 'selected' : '';
 	            selector.append('<option value="' + s + '" ' + selString + '>' + n + '</option>');
 				c++;
 	        }
@@ -62,7 +60,7 @@ function newProfileWidget() {
 		okButton.click(function() {
 		    var id = selector.val();
 			if (id) {
-				become(self.getSelf(id));
+				become(self.getObject(id));
 				closeDialog();
 			}
 		});
@@ -136,8 +134,10 @@ function newNewProfileWidget(whenFinished) {
 		var email = emailField.val();
 
         var u = uuid();
-        var uo = 'Self-' + u;
+        var uo = u;
         var o = objNew(uo, name);
+		o.self = true;
+		o.author = uo;
         objAddTag(o, 'Human');
         objAddTag(o, 'User');     
 					

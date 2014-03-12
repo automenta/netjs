@@ -357,6 +357,7 @@ exports.start = function(options, init) {
 		    db.obj.find({author: a}, function(err, docs) {
 		        if (err) {
 		            nlog('getObjectsByAuthor: ' + err);
+					withObjects([]);
 		        }
 		        else {
 		            removeMongoID(docs);
@@ -367,6 +368,7 @@ exports.start = function(options, init) {
 	    });
     }
     $N.getObjectsByAuthor = getObjectsByAuthor;
+
 
     function getObjectsByTag(t, withObject, whenFinished) {
         //t can be a single string, or an array of strings
@@ -1022,6 +1024,15 @@ exports.start = function(options, init) {
             sendJSON(res, compactObjects(objects));
         });
     });
+
+    express.get('/object/author/:author/json', function(req, res) {
+        var author = req.params.author;
+        var objects = [];
+        getObjectsByAuthor(author, function(objects) {
+            sendJSON(res, compactObjects(objects));
+        });
+    });
+
     express.get('/object/:uri', function(req, res) {
         var uri = req.params.uri;
         res.redirect('/object.html?id=' + uri);
@@ -1130,7 +1141,7 @@ exports.start = function(options, init) {
                     if (authors[oo.author])
                         continue;
                     
-                    var authorName = attention.object('Self-'+oo.author);
+                    var authorName = attention.object(oo.author);
                     if (authorName) {
                         authorName = authorName.name; // + (' ' + (authorName.email ? ('<' + authorName.email + '>') : '')); 
                     }
@@ -1470,7 +1481,7 @@ exports.start = function(options, init) {
             var targetObjectID = target;
             var targetObject = target;
             if (typeof(target)==="string") {
-                targetObjectID = 'Self-' + target; 
+                targetObjectID = target; 
                 targetObject = null;
             }                      
             else {

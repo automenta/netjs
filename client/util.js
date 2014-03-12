@@ -566,7 +566,7 @@ exports.setTheProperty = setTheProperty;*/
 function isSelfObject(u) {  
     if (!u) 
         return false;
-    return (u.indexOf('Self-')==0);  
+    return (u.self==true);  
 }
 exports.isSelfObject = isSelfObject;
 

@@ -1375,10 +1375,10 @@ function newObjectSummary(x, options) {
     d.append(cd);
 
 	if (showAuthorName) {
-		if (!isSelfObject(x.id)) { //exclude Self- objects
+		if (!isSelfObject(x.id)) { //exclude self objects
 		    if (x.author) {
 		        var a = x.author;
-		        var as = $N.getSelf(x.author);
+		        var as = $N.getObject(x.author);
 		        if (as)
 		            a = as.name;
 				//else display UID?
@@ -1495,7 +1495,7 @@ function newObjectSummary(x, options) {
 
 
 	if (showAuthorIcon) {
-		var authorClient = $N.getSelf(authorID);
+		var authorClient = $N.getObject(authorID);
 		if (authorClient) {
 		    if (authorID) {
 		        var av = getAvatar(authorClient).attr('align', 'left');

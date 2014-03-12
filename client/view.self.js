@@ -83,7 +83,7 @@ function newGoalList(target, user, centroids) {
 		var ti = time + (i * timeUnitLengthMS);
 
 		var goals = _.filter(GOALS, function(x) {
-			if (x.author!=user.substring(5))
+			if (x.author!=user)
 				return;
 
 			var w = x.when || 0;
@@ -249,7 +249,7 @@ function renderUs(v) {
 
 				var currentUserFilter = function(o) {
 					o = $N.getObject(o);
-					return o.author == currentUser.substring(5);
+					return o.author == currentUser;
 				};
 
 				var nn = _.filter($N.objectsWithTag(o),currentUserFilter);
@@ -308,6 +308,7 @@ function renderUs(v) {
 	if ($N.myself())
 		updateUsView($N.myself().id);
 	else {
+		v.html('Not identified.');
 		//..
 	}
 
@@ -468,7 +469,6 @@ function newTagBar(s, currentTag) {
 }
 
 function getKnowledgeCodeTags(userid) {
-    userid = userid.substring(5);
     
     var tags = $N.getIncidentTags(userid, getOperatorTags());
             
@@ -482,7 +482,7 @@ function getKnowledgeCodeTags(userid) {
 		}*/
     }
     
-	var user = $N.object('Self-' + userid);
+	var user = $N.object(userid);
     tags['@'] = objSpacePointLatLng(user);
 	tags['name'] = user.name;
 
@@ -540,10 +540,13 @@ function getSelfSummaryHTML(userid) {
 			iconString = '<img src="' + icon + '" style="height: 1em"/>';
 
 		x += '<h2 class="' + i + '_heading">' + iconString + il + '</h2><ul>';
-        for (var y = 0; y < tags[i].length; y++) {
-            var tt = tags[i][y];
-            x += '<li><a href="' + getENWikiURL(tt) + '">' + tags[i][y] + '</a></li>';
-        }
+
+		if (tags[i])
+		    for (var y = 0; y < tags[i].length; y++) {
+		        var tt = tags[i][y];
+		        x += '<li><a href="' + getENWikiURL(tt) + '">' + tags[i][y] + '</a></li>';
+		    }
+
 		x += '</ul></div>';
     }
 
@@ -555,6 +558,7 @@ function getSelfSummaryHTML(userid) {
 	x += '<button onclick="setTheme(\'canneed\')">Cans & Needs</button>';
 	x += '<button onclick="setTheme(\'silly\')">Silly</button>';
 	x += '<button onclick="removeThemeSelect()" title="Remove This Mode Selector">(x)</button>';
+	x += '<a href="/object/author/' + userid + '/json" target="_blank">JSON<a>';
 	x += '</div>';
 
 	x+='</body>';
@@ -576,7 +580,7 @@ function newSelfTagList(s, user, c) {
 
     var b = $('<div/>');
          
-    var tags = $N.getIncidentTags(user.id.substring(5), _.keys(tagColorPresets));            
+    var tags = $N.getIncidentTags(user.id, _.keys(tagColorPresets));            
     
     function newTagWidget(x, i) {
         var name

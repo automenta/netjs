@@ -6,7 +6,7 @@ if (process.argv.length > 1) {
 	options = process.argv[2];
 }
 
-if (options == null) options = 'netention.options.js';
+if (options == null) options = 'options.js';
 
 //console.log('Loading server config: ' + options);
 

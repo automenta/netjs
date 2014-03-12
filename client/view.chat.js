@@ -76,7 +76,7 @@ function newInlineSelfButton(s) {
 function newObjectLogLine(x) {    
     var d = newEle('span');
     if (x.author) {
-        var a = self.getSelf(x.author);
+        var a = self.getObject(x.author);
         if (a) {
             d.append(newInlineSelfButton(a));
         }
