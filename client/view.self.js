@@ -354,13 +354,12 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
         if (selTags.length > 0) {
             var id = $N.id() + '-' + currentTag;
             var o = objNew(id, currentTag);
-            o.author = $N.id();
-            objAddTag(o, currentTag);
+            o.author = o.subject = $N.id();
 
             for (var i = 0; i < selTags.length; i++) {
                 objAddTag(o, selTags[i]);
             }
-
+            objAddTag(o, currentTag);
             
             $N.pub(o, function(err) {
                 $.pnotify({title: 'Error saving:', text: err, type:'error'});
