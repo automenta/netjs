@@ -49,12 +49,20 @@ function getMultiLine(title, value, ifEntered, ifNotEntered) {
 }
 
 var acceptsSelectionOfOne = function(s) { 	return (s.length == 1); };
+var acceptsSelectionOfOneAndOwnedByMe = function(s) { 	
+
+		if (s.length == 1) {
+			if (s[0].author == $N.id())
+				return true;
+		}
+		return false;
+	};
 var acceptsAll = function(s) { return true; };
 
 addAction({
 	menu: 'Object',
 	name: 'Edit...',
-	accepts: acceptsSelectionOfOne,
+	accepts: acceptsSelectionOfOneAndOwnedByMe,
 	run: function(selection) {
 		var x = selection[0];
 		var oid = x.id;
@@ -105,8 +113,13 @@ addAction({	menu: 'Object',	name: 'Delete',
 	run: function(selection) {
        if (confirm('Permanently delete ' + selection.length + ' object(s)?')) {
 			_.each(selection, function(x) {
-		        if (self.deleteObject(x))
-					return "Deleted " + selection.length + ' object(s).';
+				if (x.author == $N.id()) {
+				    if (self.deleteObject(x))
+						return "Deleted " + selection.length + ' object(s).';
+				}
+				else {
+					$.pnotify("Can not delete: Not author of object " + x.id);
+				}
 			});
         }
 		return null;

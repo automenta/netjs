@@ -1403,6 +1403,16 @@ exports.start = function(options, init) {
         });
 
         socket.on('pub', function(message, err, success) {
+            if ($N.server.permissions['authenticate_to_create_objects'] != false) {
+                if (!isAuthenticated(session)) {
+                    if (err)
+                        err('Not authenticated');
+                }
+            }
+
+			//var currentUser = getCurrentClientID(session);
+			//TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
+
             if ((message.focus) && (message.author)) {
                 var m = util.objExpand(message);
                 focusHistory.push(m);
@@ -1418,12 +1428,6 @@ exports.start = function(options, init) {
             }
             
             
-            if ($N.server.permissions['authenticate_to_create_objects'] != false) {
-                if (!isAuthenticated(session)) {
-                    if (err)
-                        err('Not authenticated');
-                }
-            }
             broadcast(socket, message);
             if (success)
                 success();
