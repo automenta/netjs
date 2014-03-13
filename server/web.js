@@ -755,6 +755,8 @@ exports.start = function(options, init) {
 		}
         else {
 	        res.cookie('clientID', '');
+	        res.cookie('key', 'anonymous');		
+            res.cookie('authenticated', 'anonymous');
 		}
 
         res.cookie('otherSelves', possibleClients.join(','));

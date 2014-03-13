@@ -61,7 +61,7 @@ function renderGraph(s, o, v) {
 
 	function addNode(i, name, color, width, height, icon) {
 		if (!icon) icon = defaultIcon;
-		nodes.push( { name: name, color: color, width: width, height: height, icon: icon } );
+		nodes.push( { objectID: i, name: name, color: color, width: width, height: height, icon: icon } );
 		nodeIndex[i] = nodes.length-1;
 	}
 	function addEdge(from, to) {
@@ -74,7 +74,7 @@ function renderGraph(s, o, v) {
 	var startDragPoint = null;
 	var tx = 0, ty = 0;
 	var oncell = false;
-
+	  var touched = null;
 
 	var ended = false;
 	force.on("end", function() {
@@ -108,7 +108,9 @@ function renderGraph(s, o, v) {
 	cc.mousedown(function(m) {
 		if (m.which == 2) {
 			sketching = true;
-			startDragPoint = [m.clientX, m.clientY];				
+			startDragPoint = [m.clientX, m.clientY];	
+			if (touched)
+				sketchStart = touched;			
 			return;
 		}
 
@@ -121,7 +123,16 @@ function renderGraph(s, o, v) {
 	});
 	cc.mouseup(function(m) {
 		if (sketching) {
+			if (touched) {
+				sketchEnd = touched;
+				if ((sketchStart) && (sketchEnd)) {
+					var x = objNew();
+					x.setName('Link: ' + sketchStart + ' -> ' + sketchEnd);
+					newPopupObjectEdit(x);
+				}
+			}
 			sketchPoly.setAttribute('points', '');
+			sketchStart = sketchEnd = null;
 		}
 		dragging = sketching = false;
 		lastPoint = null;
@@ -257,6 +268,25 @@ function renderGraph(s, o, v) {
 				  .enter().append("g")
 				  .attr("class", "node")
 				  .call(force.drag);
+
+
+			  node.on("mouseover", function(d) {
+				  if (d3.event.defaultPrevented) return; // ignore drag
+				  var oid = d.objectID;
+				  if (oid)
+ 					touched = oid;
+			  });
+			  node.on("mouseout", function(d) {
+				  if (d3.event.defaultPrevented) return; // ignore drag
+				  touched = null;
+			  });
+				
+			  node.on("click", function(d) {
+				  if (d3.event.defaultPrevented) return; // ignore drag
+				  var oid = d.objectID;
+				  if (oid)
+ 					newPopupObjectView(oid);
+			  });
 
 	  		  node.append("rect")
 			     .attr("x", function(d) { return -d.width/2; })
