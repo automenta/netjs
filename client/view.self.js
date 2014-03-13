@@ -111,7 +111,7 @@ function newGoalList(target, user, centroids) {
 					//now = _.unique(now.concat(results));
 					later(function() {
 					    d.dialog('close');                        
-						updateGoalList();
+						//updateGoalList();
 					});
 					//container.html(newSelfTimeList(s, x, container));
 				}));

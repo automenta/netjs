@@ -581,6 +581,11 @@ function addProperty(x, p, value) {
 exports.addProperty = addProperty;
 */
 
+function objTime(x) {
+	return x.when || x.modifiedAt || x.createdAt || null
+}
+exports.objTime = objTime;
+
 function acceptsAnotherProperty(x, p) {
     //TODO determine this by Property arity constraints
     return true;

@@ -61,12 +61,22 @@ function renderGraph(s, o, v) {
 
 	function addNode(i, name, color, width, height, icon) {
 		if (!icon) icon = defaultIcon;
-		nodes.push( { objectID: i, name: name, color: color, width: width, height: height, icon: icon } );
+		var nn = { objectID: i, name: name, color: color, width: width, height: height, icon: icon };
+		nodes.push( nn );
 		nodeIndex[i] = nodes.length-1;
+		return nn;
 	}
 	function addEdge(from, to) {
-		edges.push( { source: nodeIndex[from], target: nodeIndex[to] } );
+		var ee = { source: nodeIndex[from], target: nodeIndex[to] };
+		edges.push( ee );
+		return ee;
 	}
+
+	var timeline = false;
+	var timelineWidth = 2500;
+
+	var defaultColor = "#ddd";
+	var highlightColor = '#eee';
 
 	var scale = 1.0;
 	var dragging = false, sketching = false;
@@ -74,7 +84,7 @@ function renderGraph(s, o, v) {
 	var startDragPoint = null;
 	var tx = 0, ty = 0;
 	var oncell = false;
-	  var touched = null;
+    var touched = null;
 
 	var ended = false;
 	force.on("end", function() {
@@ -197,12 +207,25 @@ function renderGraph(s, o, v) {
 
 		renderItems(o, v, GRAPH_MAX_NODES, function(s, v, xxrr) {
 		    var tags = { };
-		    
+
+			var minTime, maxTime;		    
+			if (timeline) {
+				var times = _.map(xxrr, function(o) { return objTime(o[0]); } );
+				minTime = _.min(times);
+				maxTime = _.max(times);
+			}
+
 		    for (var i = 0; i < xxrr.length; i++) {
 		        var x = xxrr[i][0];
 		        var r = xxrr[i][1];
 
-		        addNode(x.id, x.name || "", "#ddd", 25, 25 );
+		        var N = addNode(x.id, x.name || "", defaultColor, 35, 35, getTagIcon(x) );
+				if (timeline) {
+					if (minTime!=maxTime) {
+						var when = objTime(x);
+						N.fixedX = timelineWidth * (when - minTime) / (maxTime - minTime);
+					}
+				}
 		        
 		        var rtags = objTags(x);
 
@@ -275,10 +298,13 @@ function renderGraph(s, o, v) {
 				  var oid = d.objectID;
 				  if (oid)
  					touched = oid;
+					
+				  d3.select(this).select('circle').style("fill", highlightColor);
 			  });
 			  node.on("mouseout", function(d) {
 				  if (d3.event.defaultPrevented) return; // ignore drag
 				  touched = null;
+				  d3.select(this).select('circle').style("fill", d.color);
 			  });
 				
 			  node.on("click", function(d) {
@@ -288,34 +314,44 @@ function renderGraph(s, o, v) {
  					newPopupObjectView(oid);
 			  });
 
-	  		  node.append("rect")
+	  		  /*node.append("rect")
 			     .attr("x", function(d) { return -d.width/2; })
 			     .attr("y", function(d) { return -d.height/2; })
 			     .attr("width", function(d) { return d.width; } )
 			     .attr("height", function(d) { return d.height; } )
+				 .style("fill", function(d) { return d.color; });*/
+
+			  node.append("circle")
+			     .attr("x", function(d) { return -d.width/2; })
+			     .attr("y", function(d) { return -d.height/2; })
+			     .attr("r", function(d) { return d.width; } )
 				 .style("fill", function(d) { return d.color; });
 
 			  node.append("image")
 				  .attr("xlink:href", function(d) { return d.icon; } )
-				  .attr("x", -8)
-				  .attr("y", -8)
-				  .attr("width", 16)
-				  .attr("height", 16);
+				  .attr("x", -12)
+				  .attr("y", -12)
+				  .attr("width", 25)
+				  .attr("height", 25);
 
 			  node.append("text")
 				  .attr("dx", function(d) { return -d.width/2; })
-				  .attr("dy", "1em")
+				  .attr("dy", "4em")
 				  .text(function(d) { return d.name });
 
+			  link.attr("stroke-width", 5);
+		
 			  force.on("tick", function() {
 				node.attr("transform", function(d) { 
-					//if (d.fixedX!=undefined) d.x = d.fixedX;
+					if (timeline) {
+						if (d.fixedX!=undefined) d.x = d.fixedX;
+					}
 					return "translate(" + d.x + "," + d.y + ")"; 
 				});
 
-				link.attr("x1", function(d) { return d.source.x + d.source.width/2; })
+				link.attr("x1", function(d) { return d.source.x; })
 					.attr("y1", function(d) { return d.source.y; })
-					.attr("x2", function(d) { return d.target.x - d.target.width/2; })
+					.attr("x2", function(d) { return d.target.x; })
 					.attr("y2", function(d) { return d.target.y; });
 
 			  });
@@ -330,6 +366,16 @@ function renderGraph(s, o, v) {
 	};
 
 	nd.onChange();
+
+	var submenu = $('.toggle-submenu');
+	var modeSelect = $('<select/>').appendTo(submenu);
+	modeSelect.append('<option value="Network">Network</option>');
+	modeSelect.append('<option value="Timeline">Timeline</option>');
+	modeSelect.change(function() {
+		timeline = $(this).val() == 'Timeline';
+		nd.onChange();
+	});
+
 
 	return nd;
 

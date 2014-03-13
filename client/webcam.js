@@ -124,7 +124,7 @@ function webcamStop() {
 			//format: 'gif'
 		  };
 
-		  $.post('/add/image', submission, function () {
+		  $.post('/add/image/gif', submission, function () {
 		    // nothing to see here?
 		  }).error(function (data) {
 			$('#WebcamStatus').html("Error uploading: " + data);

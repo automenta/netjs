@@ -839,7 +839,7 @@ exports.start = function(options, init) {
     //express.use("/kml", expressm.static('./client/kml' , staticContentConfig ));
     express.use("/", expressm.static('./client' , staticContentConfig));        
 
-	express.post('/add/image', function(req, res) {
+	express.post('/add/image/gif', function(req, res) {
         var format = req.body.format;
         var imageBase64 = req.body.image;
 
