@@ -246,6 +246,12 @@ div.olMapViewport {
     height: 1em;
     margin-right: 0.25em;
 }
+
+.tagLabelProperties {
+	margin-left: 2em;
+	font-size: 90%;
+}
+
 .TagButtonIcon {
     height: 1em;
     margin-right: 0.25em;    

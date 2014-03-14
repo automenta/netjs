@@ -86,7 +86,13 @@ var generalTags = [
         },
 		tag: ['Resource']
     },
-
+    {uri: 'Link', name: 'Link', description: 'A link or edge in a graph between vertices, nodes, URL\'s, or URI\'s',
+        properties: {
+            'touchObject': {name: 'Touch', type: 'object' },
+            'visitURL': {name: 'Visit', type: 'url' }
+        },
+		tag: ['Concept']
+    },
     {uri: 'Geometry', name: 'Geometry',
         properties: {
             'length': {name: 'Length', type: 'real', units: lengthUnits },

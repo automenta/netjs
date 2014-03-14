@@ -5,6 +5,7 @@ var GRAPH_MAX_NODES = 300;
 function renderGraph(s, o, v) {
 	var eid = uuid();
 	var nd = $('<div/>').attr('id', eid);
+	nd.css('height', '100%');
 	nd.appendTo(v);
 
 /*
@@ -137,7 +138,18 @@ function renderGraph(s, o, v) {
 				sketchEnd = touched;
 				if ((sketchStart) && (sketchEnd)) {
 					var x = objNew();
-					x.setName('Link: ' + sketchStart + ' -> ' + sketchEnd);
+					var S = $N.getObject(sketchStart);
+					var E = $N.getObject(sketchEnd);
+					var Sn = S ? S.name : S;
+					var En = E ? E.name : E;
+
+					x.setName('Link: ' + Sn + ' -> ' + En);
+					x.addTag('Link');
+					if (S && E) {
+						x.add('touchObject', S.id);
+						x.add('touchObject', E.id);
+					}
+
 					newPopupObjectEdit(x);
 				}
 			}
@@ -266,7 +278,29 @@ function renderGraph(s, o, v) {
 					*/
 					addEdge(x.id, tj);
 		        }
+
+
 		    }
+			//add object links
+		    for (var k = 0; k < xxrr.length; k++) {
+		        var x = xxrr[k][0];		
+		
+				if (!x.value) continue;
+
+				for (var j = 0; j < x.value.length; j++) {
+					var vi = x.value[j];
+					var vid = vi.id;
+					if (isPrimitive(vid)) continue;
+					var vidp = $N.getProperty(vid);
+					if (!vidp) continue;
+					if (vidp.type == 'object') {
+						var target = vi.value;
+						if (nodeIndex[target]) {
+							addEdge(x.id, target);
+						}
+					}
+				}
+			}
 		    
 
 			 force
@@ -363,9 +397,10 @@ function renderGraph(s, o, v) {
 		});        
 
 
+		tc.update();
 	};
 
-	nd.onChange();
+
 
 	var submenu = $('.toggle-submenu');
 
@@ -378,6 +413,10 @@ function renderGraph(s, o, v) {
 	});
 
 	var tc = newTagCloud(submenu, nd.onChange);
+
+	nd.onChange();
+
+
 
 	return nd;
 

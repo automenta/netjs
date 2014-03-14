@@ -1180,7 +1180,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     return TT.properties;
                 }
 
-                var pd = $('<ul/>');
+                var pd = $('<span/>');
+				pd.addClass('tagLabelProperties');
+
                 //pd.addClass('tagSuggestions');
                 var pp = getTagProperties(tag);
                 for (var i = 0; i < pp.length; i++) {
@@ -1208,7 +1210,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     })(i);
                 }
 
-                d.append(pd);
+                tagLabel.append(pd);
             }
 
             /*
