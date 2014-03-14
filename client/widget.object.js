@@ -1644,7 +1644,7 @@ function newObjectSummary(x, options) {
         }
         else {
             mdline.append('&nbsp;');
-            mdline.append(new Date(ww));
+            mdline.append('<span>' + new Date(ww) + '</span>');
         }
 
     }

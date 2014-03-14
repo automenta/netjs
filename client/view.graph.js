@@ -368,6 +368,7 @@ function renderGraph(s, o, v) {
 	nd.onChange();
 
 	var submenu = $('.toggle-submenu');
+
 	var modeSelect = $('<select/>').appendTo(submenu);
 	modeSelect.append('<option value="Network">Network</option>');
 	modeSelect.append('<option value="Timeline">Timeline</option>');
@@ -376,6 +377,7 @@ function renderGraph(s, o, v) {
 		nd.onChange();
 	});
 
+	var tc = newTagCloud(submenu, nd.onChange);
 
 	return nd;
 

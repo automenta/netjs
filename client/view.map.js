@@ -112,6 +112,8 @@ var map2d = true;
 function renderMap(s, o, v) {
     var mm = { };
     
+	browseTagFilters = { };	//TEMPORARY
+
     var typeSelect;
     
     function updateMap() {

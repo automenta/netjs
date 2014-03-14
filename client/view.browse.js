@@ -1,4 +1,81 @@
 var BROWSE_ITEMS_MAX_DISPLAYED = 75;
+var browseTagFilters = { };
+
+function newTagCloud(target, onChanged) {
+	var tagcloud = newDiv();
+	target.append(tagcloud);
+
+
+	function updateTagCloud() {
+		var tagcount = $N.getTagCount();
+
+		tagcloud.html('');
+
+	    for (var k in tagcount) {
+	        var ti = tagcount[k];
+	        
+	        var t = $N.tag(k);
+	        
+	        var name;
+	        if (t!=undefined)
+	            name = t.name;
+	        else
+	            name = k;                
+	        
+	        var d = $('<div/>');
+	        
+	        var ab;
+	        
+			function toggleTag(x, elem) {
+				return function() {
+					if (browseTagFilters[x]) {
+						delete browseTagFilters[x];
+						elem.css('opacity', 0.5);
+					}
+					else {
+						browseTagFilters[x] = true;
+						elem.css('opacity', 1.0);
+					}
+					onChanged();
+				}
+			}
+
+	        if (t!=undefined)
+	            ab = newTagButton(t, toggleTag(k, d));
+	        else {
+				(function() {
+			        ab = $('<a href="#">' + name + '</a>');
+					var tt = toggleTag(k, d);
+					ab.click(function() {
+						tt();
+						return false;
+					});
+				})();
+			}
+	            
+	                    
+	        d.append(ab);
+	        
+	        d.css('font-size', 100.0 * (1.0 + Math.log( ti + 1 ))*0.5 + '%');
+	        d.css('float', 'left');
+
+			if (!browseTagFilters[k]) {
+				d.css('opacity', 0.5);
+			}
+
+	        tagcloud.append(d);
+	        
+		}
+
+	}
+
+	updateTagCloud();
+
+	return {
+		update: updateTagCloud
+	};
+}
+
 
 function getRelevant(sort, scope, semantic, s, o, maxItems) { 
 
@@ -27,7 +104,7 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 		});
 	}
     
-    var ii = _.keys($N.layer().include);
+    var ii = _.union(_.keys($N.layer().include), _.keys(browseTagFilters));
     var ee = _.keys($N.layer().exclude);
     
     for (var k in s.objects()) {
@@ -227,7 +304,8 @@ function renderItems(o, v, maxItems, perItems) {
 
 }
 
-function renderBrowseList(o, v, cssClass) {
+
+function renderBrowseList(o, v, cssClass, afterCreated) {
     renderItems(o, v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
         var elements = [];
         for (var i = 0; i < xxrr.length; i++) {
@@ -242,22 +320,26 @@ function renderBrowseList(o, v, cssClass) {
             elements.push(o);
         }
         v.append(elements);
+
+		if (afterCreated)
+			afterCreated(v);
+
 	    $('body').timeago('refresh');
     });   
 }
 
+function freetileView() {
+	$('#View').freetile({
+		callback: function() {
+			$('#View').css('height', 'auto');
+		}
+	});
+}
+
 function renderBrowseGrid(o, v) {
-	renderBrowseList(o, v, 'objectGridItem');
-    //http://masonry.desandro.com/docs/intro.html
-    /*$(function() {
-        vv.imagesLoaded(function(){
-            vv.masonry({
-                // options
-                itemSelector: '.objectView',
-                columnWidth: 350
-            });//.masonry('reload');
-        });
-    });*/
+	renderBrowseList(o, v, 'objectGridItem', function(v) {
+		freetileView();
+	});
 }
 
 
@@ -405,28 +487,21 @@ function renderBrowseSlides(o, vv, slideControls) {
 
 
 function renderList(s, o, v) {
-	var listRenderer = renderBrowseList;
+
+	var listRenderer = renderBrowseGrid;
 
 	var submenu = $('.toggle-submenu');
-	var slidesButton = $('<button style="width: 100%" title="Slides">Slides</button>');
-	slidesButton.click(function() {
-		listRenderer = renderBrowseSlides;
+	var modeSelect = $('<select/>').appendTo(submenu);
+	modeSelect.append('<option value="grid">Grid</option>');
+	modeSelect.append('<option value="list">List</option>');
+	modeSelect.append('<option value="slides">Slides</option>');
+	modeSelect.change(function() {
+		var v = $(this).val();
+		if (v == 'list')		listRenderer = renderBrowseList;
+		else if (v == 'grid') 	listRenderer = renderBrowseGrid;
+		else if (v == 'slides') listRenderer = renderBrowseSlides;
 		update();
 	});
-	var listButton = $('<button style="width: 100%" title="List">List</button>');
-	listButton.click(function() {
-		listRenderer = renderBrowseList;
-		update();
-	});
-	var gridButton = $('<button style="width: 100%" title="Grid">Grid</button>');
-	gridButton.click(function() {
-		listRenderer = renderBrowseGrid;
-		update();
-	});
-
-	submenu.append(slidesButton);
-	submenu.append(listButton);
-	submenu.append(gridButton);
 
 	
 	function updateFont(s) {
@@ -438,19 +513,29 @@ function renderList(s, o, v) {
 	var textsizeSlider = $('<input type="range" name="points" min="1" value="16" max="32">');
 	textsizeSlider.change(function(x) {
 		updateFont($(this).val());
+		if (listRenderer == renderBrowseGrid) {
+			freetileView();
+		}
 	});
 	slideControls.append(textsizeSlider);
 
 	textsizeSlider.change();
-
 	submenu.append(slideControls);
+
+
+	var tc = newTagCloud(submenu, update);
 
 	//var actionMenu = $('');
 	//submenu.append(actionMenu);
 
 	function update() {
 		v.html('');
+
+
+		tc.update();
+
 		listRenderer(o, v, slideControls);
+
 		refreshActionContext();
 	}
 	update();

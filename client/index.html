@@ -68,7 +68,9 @@
 		<div id="NotificationArea"></div>
         <div id="View" style="display:none;" class="display-window "></div>
         <div id="toggle-menu" style="display:none;" class="ui-corner-all shadow"><img id="toggle-img" title="Click here to expand the control panel" class="ui-corner-all" alt="toggle menu button" src="icon/netention-button.png" /></div>
-		<div class="toggle-submenu toggle-submenu-absolute"></div>
+
+		<!--<div class="toggle-submenu toggle-submenu-absolute"></div>-->
+
 		<div id="ActionMenuWrapper"></div>
         <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;"><img id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" /></div>
         <div id="ViewMenu" style="display:none;" class="ui-widget shadow overthrow">
@@ -94,6 +96,23 @@
             <button id="wiki" class="ViewControl" title="Wiki"><img src="icon/wikipedia.png"></button>
             <!--<input type="radio" id="options" name="ViewControls" /><label for="options">Options</label>-->
 
+			<div id="welcomeoptions">
+				<select id="uitheme"/>
+				</select>
+				<br/>
+				<select id="uilanguage">
+					<option>English</option>
+					<option>Español</option> 
+					<option>Français</option>
+					<option>Русский</option> 
+					<option>עברית</option> 
+					<option>العربية</option>
+					<option>हिन्दी; हिंदी </option>
+					<option>中文(简体)</option> 
+					<option>日本語</option> 
+				</select>
+			</div>
+
 			<br/>        
 
 			<div id="AvatarFocus" style="display: none">
@@ -114,24 +133,6 @@
 
 			<div class="toggle-submenu"></div>
 
-			<br/>        
-
-			<div id="welcomeoptions">
-				<select id="uitheme"/>
-				</select>
-				<br/>
-				<select id="uilanguage">
-					<option>English</option>
-					<option>Español</option> 
-					<option>Français</option>
-					<option>Русский</option> 
-					<option>עברית</option> 
-					<option>العربية</option>
-					<option>हिन्दी; हिंदी </option>
-					<option>中文(简体)</option> 
-					<option>日本語</option> 
-				</select>
-			</div>
 
 
         </div>
@@ -176,7 +177,7 @@
         <script src="lib/pdf.js/build/pdf.js"></script>
 
 
-        <!-- <script src="lib/masonry/jquery.masonry.min.js" type="text/javascript"></script>  -->
+        <script src="lib/freetile/jquery.freetile.min.js" type="text/javascript"></script>
 
 		<!--<script src="lib/fractaldom/fractaldom.js"></script>-->
 		<script src="lib/d3/d3.v3.min.js"></script>
