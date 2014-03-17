@@ -1309,3 +1309,8 @@ svg {
 	user-select: none;
 }
 
+.TextReader textarea {
+	width: 100%;
+	min-height: 5em;
+}
+

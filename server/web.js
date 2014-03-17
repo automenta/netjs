@@ -1164,6 +1164,43 @@ exports.start = function(options, init) {
         }); 
        
     });
+
+	express.post('/read/text', function(req, res) {
+        var text = req.body.text;
+
+		//https://www.mashape.com/alchemyapi/alchemyapi-1
+		//http://www.alchemyapi.com/api/concept/textc.html
+		var alchemyKey = $N.server.permissions['alchemyapi_key'];
+		if (alchemyKey) {
+			request.post(
+				//'http://access.alchemyapi.com/calls/text/TextGetRankedConcepts',
+				'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords',
+				{ 
+					form: { 
+						apikey: alchemyKey,
+						text: text,
+						maxRetrieve: 50,
+						outputMode: 'json'
+					} 
+				},
+				function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						var result = JSON.parse(body);
+						//sendJSON(res, result.concepts);
+						sendJSON(res, result.keywords);
+					}
+					else {
+						sendJSON(res, error);
+					}
+				}
+			);
+		}
+		else {
+			sendJSON(res, "AlchemyAPI not available");
+		}
+		
+	});
+
     express.get('/input/geojson/*', function(req, res) {
 		var url = req.params[0] || '';
 
