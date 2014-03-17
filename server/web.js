@@ -1179,7 +1179,7 @@ exports.start = function(options, init) {
 					form: { 
 						apikey: alchemyKey,
 						text: text,
-						maxRetrieve: 50,
+						maxRetrieve: 128,
 						outputMode: 'json'
 					} 
 				},

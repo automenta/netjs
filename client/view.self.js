@@ -201,8 +201,21 @@ function renderUs(v) {
 
 				var readButton = $('<button>Read..</button>').appendTo(currentGoalHeader);
 				readButton.click(function() {
-				    newPopup("Read...", {width: 375, height: 450, modal: true, position: 'center'} ).
-					append(newTextReader());
+				    var p = newPopup("Read...", {width: 375, minHeight: 450, modal: true, position: 'center'} ).
+					append(newTextReader(function(data) {
+						for (var t in data) {
+							var D = data[t];
+							for (var o in D) {
+								var x = objNew();
+								x.subject = x.author = $N.id();
+								x.setName(t);
+								x.addTag(o);
+								x.addTag(t);
+								$N.pub(x);
+							}
+						}
+						p.dialog('close');
+					}));
 				});
 				
 			}
@@ -268,7 +281,9 @@ function renderUs(v) {
 					_.each(nn, function(g) {
 						uu.append( newObjectSummary( $N.getObject(g), {
 							showAuthorIcon: false,
-							showAuthorName: false
+							showAuthorName: false,
+							showMetadataLine: false,
+							showActionPopupButton: false
 						} ).removeClass("ui-widget-content ui-corner-all") );
 					});
 					sdd.append(uu);
@@ -1011,28 +1026,82 @@ function newOperatorTagTable(keywords) {
 		$('<th>' + operators[j] + '</th>').appendTo(heading);		
 	}
 
+	var rows = [];
+
 	for (var i = 0; i < keywords.length; i++) {
-		var k = keywords[i];
-		var tag = k.text;		//r = k.relevance
+		(function(I) {
+			var k = keywords[I];
+			var tag = k.text;		//r = k.relevance
 
-		var tagedit = $('<input type="text" value="' + tag + '"/>');
-		var tagsearchbutton = $('<button title="Search Wikipedia">..</button>');
+			var tagedit = $('<input type="text" value="' + tag + '"/>');
+			var tagsearchbutton = $('<button title="Search Wikipedia">..</button>');
+			tagsearchbutton.click(function() {
+				var d = newPopup("Tag", {width: 800, height: 600, modal: true})
+				d.append(newWikiBrowser([], function(t) {
+					d.dialog('close');
+					tagedit.val(t);					
+				}, {
+					initialSearch: tagedit.val()
+				}));
+			});
 
-		var row = $('<tr/>').appendTo(t);
+			var row = $('<tr/>').appendTo(t);
 
-		var tagfield = $('<td/>');
-		tagfield.append(tagedit, tagsearchbutton);
+			var tagfield = $('<td/>');
+			tagfield.append(tagedit, tagsearchbutton);
 
-		tagfield.appendTo(row);
-		for (var j = 0; j < operators.length; j++) {
-			$('<td><input type="checkbox"></td>').appendTo(row);
-		}		
+			tagfield.appendTo(row);
+
+			var rowcheckboxes = [];
+
+			for (var j = 0; j < operators.length; j++) {
+				(function (J) { 
+					var tdc = $('<td></td>').appendTo(row);
+					var idc = $('<input type="checkbox"/>').appendTo(tdc);
+					rowcheckboxes.push(function() {
+						if (idc.is(':checked')) {
+							return operators[J];
+						}
+						return null;
+					});
+				})(j);
+			}		
+
+			row.data = function() {
+				var x = {};
+				var count = 0;
+				_.each(rowcheckboxes, function(c) {
+					var cr = c();
+					if (cr!=null) {
+						x[cr] = true;
+						count++;
+					}
+				});
+				if (count == 0) return { };
+				var y = { };
+				y[tagedit.val()] = x;
+				return y;
+			};
+
+			rows.push(row);
+		})(i);
 	}
+
+	d.getData = function() {
+		var data = { };
+		_.each(rows, function(r) {
+			var rd = r.data();
+			data = _.extend(data, rd);
+		});
+		return data;
+	};
+
+	
 
 	return d;
 }
 
-function newTextReader() {
+function newTextReader(onSave) {
 	var n = newDiv().addClass('TextReader');
 	
 	var input = $('<textarea/>').appendTo(n);
@@ -1042,8 +1111,19 @@ function newTextReader() {
 	submit.click(function() {
 		var t = input.val();
 		$.post('/read/text', { text: t }, function(r) {
+
 			//results.html(JSON.stringify(r, null, 4));
-			var ott = newOperatorTagTable(r).appendTo(results);
+
+			var ott = newOperatorTagTable(r);
+			ott.appendTo(results);
+
+			$('<br/>').appendTo(results);
+
+			var saveButton = $('<button>Save</button>').appendTo(results);
+			saveButton.click(function() {
+				var data = ott.getData();
+				onSave(data);
+			});
 		});
 	});
 

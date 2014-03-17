@@ -156,7 +156,9 @@ function newTreeBrowser(selected, onTagAdded) {
     return e;   
 }
 
-function newWikiBrowser(selected, onTagAdded) {    
+function newWikiBrowser(selected, onTagAdded, options) {    
+	if (!options) options = { };
+
     var b = newDiv();
 
 	var header = newDiv();
@@ -226,6 +228,11 @@ s
                br.find('#siteSub').remove();
                br.find('#contentSub').remove();
                br.find('#jump-to-nav').remove();
+  			   if (search) {
+					br.find('.search-types').remove();
+					br.find('.mw-specialpage-summary').remove();
+					br.find('.mw-search-top-table').remove();
+			   }
                br.find('.IPA').remove();
                br.find('a').each(function(){
                    var t = $(this);
@@ -254,7 +261,13 @@ s
             //..
         }
     }
-    gotoTag(currentTag);
+	if (options.initialSearch) {
+		searchInput.val(options.initialSearch);
+		gotoTag(options.initialSearch, true);
+	}
+	else {
+	    gotoTag(currentTag);
+	}
         
     b.append(br);
     
