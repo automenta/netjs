@@ -784,9 +784,12 @@ exports.start = function(options, init) {
 				console.error('Missing configuration: ' + configFile);
 				return;
 			}
+
 			var cc = JSON.stringify( options.client );
 			var js = 'var configuration = ' + cc + ';\n';
 			js += 'configuration.enableAnonymous=' + options.permissions.enableAnonymous + ';\n';
+			js += 'configuration.siteName=\'' + $N.server.name + '\';\n';
+			js += 'configuration.siteDescription=\'' + $N.server.description + '\';\n';
 			js += data;
 			res.send(js);
 		});

@@ -1582,79 +1582,7 @@ function newObjectSummary(x, options) {
 		addPopupMenu();
 
 	if (showMetadataLine) {
-		var mdline = $('<h2></h2>');
-		mdline.addClass('MetadataLine');
-
-		var ot = objTags(x);
-		var ots = objTagStrength(x, false);
-
-		for (var i = 0; i < ot.length; i++) {
-		    var t = ot[i];
-
-		    if ($N.isProperty(t))
-		        continue;
-
-		    var tt = $N.getTag(t);
-		    if (tt) {
-		        var ttt = newTagButton(tt);
-		        applyTagStrengthClass(ttt, ots[t]);
-		        mdline.append(ttt);
-		    }
-		    else {
-		        mdline.append('<a href="#">' + t + '</a>');
-		    }
-		    mdline.append('&nbsp;');
-		}
-
-		var spacepoint = objSpacePoint(x);
-		if (spacepoint) {
-		    var lat = _n(spacepoint.lat);
-		    var lon = _n(spacepoint.lon);
-		    var mll = objSpacePointLatLng($N.myself());
-		    if (mll) {
-		        var dist = '?';
-		        //TODO check planet
-		        var sx = [spacepoint.lat, spacepoint.lon];
-		        if (mll)
-		            dist = geoDist(sx, mll);
-
-				if (dist == 0)
-			        mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + ' here</span>');
-				else
-			        mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
-		    }
-		    else {
-		        mdline.append('&nbsp;<span>[' + lat + ',' + lon + ']</span>');
-		    }
-		}
-
-		var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
-		var now = Date.now();
-		if (ww) {
-		    if (ww < now) {
-		        var tt = $('<time class="timeago"/>');
-		        function ISODateString(d) {
-		            function pad(n) {
-		                return n < 10 ? '0' + n : n
-		            }
-		            return d.getUTCFullYear() + '-'
-		                    + pad(d.getUTCMonth() + 1) + '-'
-		                    + pad(d.getUTCDate()) + 'T'
-		                    + pad(d.getUTCHours()) + ':'
-		                    + pad(d.getUTCMinutes()) + ':'
-		                    + pad(d.getUTCSeconds()) + 'Z'
-		        }
-
-		        tt.attr('datetime', ISODateString(new Date(ww)));
-		        mdline.append(tt);
-		    }
-		    else {
-		        mdline.append('&nbsp;');
-		        mdline.append('<span>' + new Date(ww) + '</span>');
-		    }
-
-		}
-
+		var mdline = newMetadataLine(x);
 		d.append(mdline);
 	}
 
@@ -1875,4 +1803,80 @@ function newTagTree(param) {
 
     return tree;
 
+}
+
+function newMetadataLine(x) {
+	var mdline = $('<h2></h2>');
+	mdline.addClass('MetadataLine');
+
+	var ot = objTags(x);
+	var ots = objTagStrength(x, false);
+
+	for (var i = 0; i < ot.length; i++) {
+	    var t = ot[i];
+
+	    if ($N.isProperty(t))
+	        continue;
+
+	    var tt = $N.getTag(t);
+	    if (tt) {
+	        var ttt = newTagButton(tt);
+	        applyTagStrengthClass(ttt, ots[t]);
+	        mdline.append(ttt);
+	    }
+	    else {
+	        mdline.append('<a href="#">' + t + '</a>');
+	    }
+	    mdline.append('&nbsp;');
+	}
+
+	var spacepoint = objSpacePoint(x);
+	if (spacepoint) {
+	    var lat = _n(spacepoint.lat);
+	    var lon = _n(spacepoint.lon);
+	    var mll = objSpacePointLatLng($N.myself());
+	    if (mll) {
+	        var dist = '?';
+	        //TODO check planet
+	        var sx = [spacepoint.lat, spacepoint.lon];
+	        if (mll)
+	            dist = geoDist(sx, mll);
+
+			if (dist == 0)
+		        mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + ' here</span>');
+			else
+		        mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
+	    }
+	    else {
+	        mdline.append('&nbsp;<span>[' + lat + ',' + lon + ']</span>');
+	    }
+	}
+
+	var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
+	var now = Date.now();
+	if (ww) {
+	    if (ww < now) {
+	        var tt = $('<time class="timeago"/>');
+	        function ISODateString(d) {
+	            function pad(n) {
+	                return n < 10 ? '0' + n : n
+	            }
+	            return d.getUTCFullYear() + '-'
+	                    + pad(d.getUTCMonth() + 1) + '-'
+	                    + pad(d.getUTCDate()) + 'T'
+	                    + pad(d.getUTCHours()) + ':'
+	                    + pad(d.getUTCMinutes()) + ':'
+	                    + pad(d.getUTCSeconds()) + 'Z'
+	        }
+
+	        tt.attr('datetime', ISODateString(new Date(ww)));
+	        mdline.append(tt);
+	    }
+	    else {
+	        mdline.append('&nbsp;');
+	        mdline.append('<span>' + new Date(ww) + '</span>');
+	    }
+
+	}
+	return mdline;
 }

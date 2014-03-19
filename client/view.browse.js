@@ -242,6 +242,7 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
     return [ _.first(relevant, maxItems), relevance ];
 }
 
+//TODO remove parameter 'o' is not functional
 function renderItems(o, v, maxItems, perItems) {
     var sort = $N.get('list-sort') || 'Recent';
     var scope = $N.get('list-scope') || 'Public';

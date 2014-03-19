@@ -1314,3 +1314,52 @@ svg {
 	min-height: 5em;
 }
 
+.Share {
+	padding: 1em;
+}
+
+.Share .Logo {
+	float: left;
+	font-size: 150%;
+}
+.Share .SelfMenu {
+	float: right;
+	font-size: 150%;
+}
+.Share .SelfMenu button {
+	font-size: 120%;
+}
+.Share .SearchMenu {
+	clear: both;
+	width: 100%;
+	text-align: center;
+	margin-top: 4em;
+	margin-bottom: 1em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	background-color: #eee;
+}
+.Share .SearchMenu input, .Share .SearchMenu button {
+	font-size: 150%;
+}
+.Share .ShareSidebar {
+	width: 20%;
+	float: left;
+}
+.Share .ShareContent {
+	width: 75%;
+	float: right;
+}
+.ShareSummary {
+	padding-bottom: 1em;
+	margin-bottom: 1em;
+	border-bottom: 1px solid gray;
+}
+.ShareSummary .ShareSummaryImage {
+	width: 20%;
+	float: left;
+}
+.ShareSummary .ShareSummaryContent {
+	width: 75%;
+	float: right;
+}

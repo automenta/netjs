@@ -127,6 +127,10 @@ function _updateView(force) {
         indent();
         currentView = renderChat(v);
     }
+    else if (view == 'share') {
+        indent();
+        currentView = renderShare(v);
+    }
     else {
         v.html('Unknown view: ' + view);
         currentView = null;
