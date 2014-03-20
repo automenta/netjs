@@ -387,8 +387,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         d.addClass('ObjectEditDiv');
 
-		d.append('+');	//indicates addition of a value
-
         if (hideWidgets != true) {
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
             whatButton.click(function() {
@@ -432,7 +430,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>');
             webcamButton.click(function() {
 				newWebcamWindow(function(imgURL) {
-	                update(objAddDescription(getEditedFocus(), '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>'));
+	                update(objAddValue(getEditedFocus(), 'media', imgURL));
 				});
             });
             d.append(webcamButton);
@@ -474,13 +472,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     complete: function(xhr) {
                         var url = xhr.responseText;
                         status.html($('<a>File uploaded</a>').attr('href', url));
-                        var ab = $('<button>Add Image To Description</button>');
                         var absURL = url.substring(1);
-                        ab.click(function() {
-                            update(objAddDescription(getEditedFocus(), '<a href="' + absURL + '"><img src="' + absURL + '"></img></a>'));
-                        });
-                        status.append('<br/>');
-                        status.append(ab);
+
+						update(objAddValue(getEditedFocus(), 'media', absURL));
+						later(function() {
+							x.dialog('close');
+						});
                     }
                 });
 
@@ -950,6 +947,15 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             d.append(new Date(t.at));
         }
     }
+	else if (type == 'media') {
+		if (editable) {
+            whenSaved.push(function(y) {
+                objAddValue(y, 'media', t.value, strength);
+            });
+		}
+		var url = t.value;
+		d.append('<img src="' + url + '"/>');
+	}
     else if (type == 'sketch') {
         var eu = uuid();
 
@@ -1632,6 +1638,10 @@ function newObjectSummary(x, options) {
                                 + new Date(vv.value.start).toISOString());
                     }
                 }
+				else if (vv.id == 'media') {
+					var url = vv.value;
+					ud.append('<img src="' + url + '"/>');
+				}
 
                 if ($N.isProperty(vv.id))
                     ud.append(newPropertyView(x, vv));

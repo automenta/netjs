@@ -6,7 +6,9 @@ function renderShare(v) {
 	header.append('<span class="Logo">' + configuration.siteName + '</span>');
 
 	var selfmenu = newDiv().addClass('SelfMenu').appendTo(frame);
-	{
+
+	var me = $N.myself();
+	if (me) {
 		var avatarImg = getAvatar($N.myself());
 		avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(selfmenu);
 
@@ -50,6 +52,7 @@ function renderShare(v) {
 	var content = newDiv().addClass('ShareContent').appendTo(frame);
 
 	function updateContent() {
+		content.html('');
 		renderItems(null, content, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
 		    var elements = [];
 
@@ -95,7 +98,13 @@ function newObjectSummary2(x) {
 	var d = newDiv().addClass('ShareSummary');
 
 	var img = newDiv().addClass('ShareSummaryImage').appendTo(d);
-	img.append('<img src="http://localhost:8080/theme/default-avatar.jpg"/>');
+
+	var firstMedia = objFirstValue(x, 'media');
+	var imgurl = 'http://localhost:8080/theme/default-avatar.jpg';
+	if (firstMedia) {
+		imgurl = firstMedia;
+	}
+	img.append('<img src="' + imgurl + '"/>');
 
 	var e = newDiv().addClass('ShareSummaryContent').appendTo(d);
 	e.append('<h1>' + x.name + '</h1>');

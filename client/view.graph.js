@@ -396,8 +396,6 @@ function renderGraph(s, o, v) {
 
 		});        
 
-
-		tc.update();
 	};
 
 
@@ -411,8 +409,6 @@ function renderGraph(s, o, v) {
 		timeline = $(this).val() == 'Timeline';
 		nd.onChange();
 	});
-
-	var tc = newTagCloud(submenu, nd.onChange);
 
 	nd.onChange();
 

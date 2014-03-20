@@ -259,11 +259,22 @@ accelerometerReport	Raised every time the device reports its current acceleromet
 
     {uri: 'Can', name: 'Can', tag: ['Access'], operator: true, icon: '/icon/can.png'},
 
+
+
+
     {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, icon: '/icon/need.png', properties: {
         'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
     }},
     {uri: 'Not', name: 'Not', tag: ['Concept'], icon: '/icon/not.png', operator: true},
         
+
+    {uri: 'Offer', name: 'Offer', tag: ['Can', 'Value'], icon: '/icon/can.png'},
+    {uri: 'Sell', name: 'Sell', tag: ['Can', 'Value'], icon: '/icon/can.png'},
+    {uri: 'Lend', name: 'Lend', tag: ['Can', 'Value'], icon: '/icon/can.png'},
+    {uri: 'Rent', name: 'Rent', tag: ['Can', 'Value'], icon: '/icon/can.png'},
+    {uri: 'Swap', name: 'Swap', tag: ['Can', 'Value'], icon: '/icon/can.png'},
+    {uri: 'GiveAway', name: 'Give Away', tag: ['Can', 'Value'], icon: '/icon/can.png'},
+
     //NEEDS from SparkRelief
     {uri: 'Volunteer', name: 'Volunteer', tag: ['Resource']},
     {uri: 'Shelter', name: 'Shelter', tag: ['Resource']},

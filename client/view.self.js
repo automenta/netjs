@@ -271,7 +271,7 @@ function renderUs(v) {
 
 				var currentUserFilter = function(o) {
 					o = $N.getObject(o);
-					return o.author == currentUser;
+					return (o.author == currentUser) && (o.subject == currentUser);
 				};
 
 				var nn = _.filter($N.objectsWithTag(o),currentUserFilter);

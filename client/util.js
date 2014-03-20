@@ -107,7 +107,7 @@ exports.objectify = objectify;
 
 function objNew(id, name, initialTags) {
 	if (!name)
-		name = id;
+		name = '';
     if (!id)
         id = uuid();
         
@@ -198,7 +198,7 @@ function objName(x, newName) {
 }
 exports.objName = objName;
 
-var primitiveRegEx = /^boolean|text|textarea|integer|real|url|object|spacepoint|timepoint|timerange|sketch$/;
+var primitiveRegEx = /^boolean|text|textarea|integer|real|url|object|spacepoint|timepoint|timerange|sketch|media$/;
 function isPrimitive(t) {
 	return primitiveRegEx.test(t);
 }

@@ -134,6 +134,7 @@ exports.start = function(options, init) {
                     $N.server.clientState = x.clientState;
                     $N.server.users = x.users || { };
                     $N.server.currentClientID = x.currentClientID || { };
+					nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
 
                     if (x.plugins) {
                         for (var pl in x.plugins) {
@@ -896,14 +897,7 @@ exports.start = function(options, init) {
         var key = getSessionKey(session);
         var cid;
         if (key) {
-            if ($N.server.currentClientID) {
-                cid = $N.server.currentClientID[key];
-            }
-            else {
-                $N.server.currentClientID = { };
-                $N.server.users = { };
-                cid = null
-            }
+            cid = $N.server.currentClientID[key];
             
             if (!cid) {
                 cid = util.uuid();
@@ -911,6 +905,7 @@ exports.start = function(options, init) {
                 $N.server.currentClientID[key] = cid;
                 saveState();
             }
+			return cid;
         }
         else {
             return '';
@@ -1585,28 +1580,26 @@ exports.start = function(options, init) {
                     }
                 }
             }
-            {
+            if (!cid) {
+                //Authenticated but no clientID specified
+                cid = getCurrentClientID(session);
                 if (!cid) {
-                    //Authenticated but no clientID specified
-                    cid = getCurrentClientID(session);
-                    if (!cid) {
-                        var possibleClients = getClientSelves(session);
-                        if (possibleClients)
-                            cid = possibleClients[possibleClients.length-1];
-                    }
-                }    
-                else {
-                    //Authenticated and clientID specified, check that the user actually owns that clientID
                     var possibleClients = getClientSelves(session);
-					if (possibleClients) {
-		                if (_.contains(possibleClients, cid)) {
-		                }
-		                else {
-		                    cid = possibleClients[possibleClients.length-1];
-		                }
-					}
-                }                
-            }            
+                    if (possibleClients)
+                        cid = possibleClients[possibleClients.length-1];
+                }
+            }    
+            else {
+                //Authenticated and clientID specified, check that the user actually owns that clientID
+                var possibleClients = getClientSelves(session);
+				if (possibleClients) {
+	                if (_.contains(possibleClients, cid)) {
+	                }
+	                else {
+	                    cid = possibleClients[possibleClients.length-1];
+	                }
+				}
+            }                
 
 			var selves = getClientSelves(session);
             nlog('connect: ' + cid + ', ' + key + ', ' + selves);

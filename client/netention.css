@@ -1359,6 +1359,10 @@ svg {
 	width: 20%;
 	float: left;
 }
+.ShareSummary .ShareSummaryImage img {
+	max-width: 100%;
+	max-height: 8em;
+}
 .ShareSummary .ShareSummaryContent {
 	width: 75%;
 	float: right;

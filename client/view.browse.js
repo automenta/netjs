@@ -1,5 +1,4 @@
 var BROWSE_ITEMS_MAX_DISPLAYED = 75;
-var browseTagFilters = { };
 
 function newTagCloud(target, onChanged) {
 	var tagcloud = newDiv();
@@ -104,7 +103,7 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 		});
 	}
     
-    var ii = _.union(_.keys($N.layer().include), _.keys(browseTagFilters));
+    var ii = _.keys($N.layer().include);
     var ee = _.keys($N.layer().exclude);
     
     for (var k in s.objects()) {
@@ -523,17 +522,11 @@ function renderList(s, o, v) {
 	textsizeSlider.change();
 	submenu.append(slideControls);
 
-
-	var tc = newTagCloud(submenu, update);
-
 	//var actionMenu = $('');
 	//submenu.append(actionMenu);
 
 	function update() {
 		v.html('');
-
-
-		tc.update();
 
 		listRenderer(o, v, slideControls);
 
