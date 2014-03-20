@@ -10,29 +10,6 @@ function renderShare(v) {
 
 	var selfmenu = newDiv().addClass('SelfMenu').appendTo(frame);
 
-	var me = $N.myself();
-	if (me) {
-
-		var editButton = $("<button title='Edit Profile'><img style='height: 1.0em; vertical-align: middle' src='" + getAvatarURL($N.myself()) + "'/>" + $N.myself().name + "</button>");
-		editButton.click(function() {
-		    newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
-			append(newObjectEdit($N.myself(), true));
-		});
-
-		var avatarImg = getAvatar($N.myself());
-		avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').prepend(editButton);
-
-		editButton.appendTo(selfmenu);
-		
-		var addButton = $('<button>Add...</button>').appendTo(selfmenu);
-		addButton.click(function() {
-			var o = objNew();
-			o.addDescription('');
-			o.add('spacepoint', { lat: 0, lon: 0 });
-
-			newPopupObjectEdit( o );
-		});
-	}
 
 	var searchMenu = newDiv().addClass('SearchMenu').appendTo(frame);
 	var searchInput = $('<input type="text" placeholder="What are you looking for?"/>').appendTo(searchMenu);
@@ -69,6 +46,31 @@ function renderShare(v) {
 	var content = newDiv().addClass('ShareContent').appendTo(frame);
 
 	function updateContent() {
+		selfmenu.html('');
+
+		var me = $N.myself();
+		if (me) {
+
+			var editButton = $("<button title='Edit Profile'><img style='height: 1.0em; vertical-align: middle' src='" + getAvatarURL($N.myself()) + "'/>" + $N.myself().name + "</button>");
+			editButton.click(function() {
+				newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
+				append(newObjectEdit($N.myself(), true));
+			});
+
+			editButton.appendTo(selfmenu);
+		
+			var addButton = $('<button>Add...</button>').appendTo(selfmenu);
+			addButton.click(function() {
+				var o = objNew();
+				o.addDescription('');
+
+				var mpdl = configuration.mapDefaultLocation || [0,0];
+				o.add('spacepoint', { lat: mpdl[0], lon: mpdl[1] });
+
+				newPopupObjectEdit( o );
+			});
+		}
+
 		content.html('');
 		renderItems(null, content, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
 		    var elements = [];

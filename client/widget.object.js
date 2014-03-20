@@ -1880,7 +1880,7 @@ function newMetadataLine(x) {
 	        }
 
 	        tt.attr('datetime', ISODateString(new Date(ww)));
-	        mdline.append(tt);
+	        mdline.append('&nbsp;',tt);
 	    }
 	    else {
 	        mdline.append('&nbsp;');
