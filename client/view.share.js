@@ -1,5 +1,8 @@
 /* Sharetribe.com inspired view */
 function renderShare(v) {
+    clearFocus();
+    renderFocus();
+
     var frame = newDiv().addClass('Share').appendTo(v);
     
     var header = newDiv().addClass('Header').appendTo(frame);
@@ -9,12 +12,26 @@ function renderShare(v) {
 
 	var me = $N.myself();
 	if (me) {
-		var avatarImg = getAvatar($N.myself());
-		avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(selfmenu);
 
-		$("<span>" + $N.myself().name + " | </span>").appendTo(selfmenu);
+		var editButton = $("<button title='Edit Profile'><img style='height: 1.0em; vertical-align: middle' src='" + getAvatarURL($N.myself()) + "'/>" + $N.myself().name + "</button>");
+		editButton.click(function() {
+		    newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
+			append(newObjectEdit($N.myself(), true));
+		});
+
+		var avatarImg = getAvatar($N.myself());
+		avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').prepend(editButton);
+
+		editButton.appendTo(selfmenu);
 		
 		var addButton = $('<button>Add...</button>').appendTo(selfmenu);
+		addButton.click(function() {
+			var o = objNew();
+			o.addDescription('');
+			o.add('spacepoint', { lat: 0, lon: 0 });
+
+			newPopupObjectEdit( o );
+		});
 	}
 
 	var searchMenu = newDiv().addClass('SearchMenu').appendTo(frame);
@@ -107,7 +124,11 @@ function newObjectSummary2(x) {
 	img.append('<img src="' + imgurl + '"/>');
 
 	var e = newDiv().addClass('ShareSummaryContent').appendTo(d);
-	e.append('<h1>' + x.name + '</h1>');
+	var titleLink = $('<a href="#"><h1>' + x.name + '</h1></a>');
+	titleLink.click(function() {
+		newPopupObjectView(x);
+	});
+	e.append(titleLink);
 	e.append(newMetadataLine(x));
 
 	if (x.author) {

@@ -98,10 +98,22 @@ function newNewProfileWidget(whenFinished) {
 	var emailField = $('<input type="text" placeholder="E-Mail (optional)"></input>');
 	d.append(emailField).append('<br/>');
 
+	var extraProperties = configuration.newUserProperties;
+	var extraPropertyInputs = [];
+	for (var i = 0; i < extraProperties.length; i++) {
+		var e = extraProperties[i];
+		var ep = $N.getProperty(e);
+		var en = ep ? ep.name : e;
+		var ei = $('<input type="text"/>');
+		d.append(en, ei, '<br/>');
+		extraPropertyInputs.push(ei);		
+	}
+
+
 	var locationEnabled = true;
 	var locEnabled = $('<input type="checkbox" checked="true"/>');
 
-	d.append(locEnabled).append('Location Enabled').append('<br/>');
+	d.append('<br/>').append(locEnabled).append('Location Enabled').append('<br/>');
 
     var cm = $('<div id="SelfMap"/>').appendTo(d);
 
@@ -125,6 +137,7 @@ function newNewProfileWidget(whenFinished) {
 		}
 	});
 
+
 	createButton.click(function() {
 		var name = nameField.val();
 		if (name.length == 0) {
@@ -140,7 +153,13 @@ function newNewProfileWidget(whenFinished) {
 		o.author = uo;
         objAddTag(o, 'Human');
         objAddTag(o, 'User');     
-					
+
+		for (var i = 0; i < extraProperties.length; i++) {
+			var e = extraProperties[i];
+			var ei = extraPropertyInputs[i];
+			objAddValue(o, e, ei.val());
+		}
+						
 		var location = lmap.location();
 		if  (locationEnabled)
 		    objSetFirstValue( o, 'spacepoint', {lat: location.lat, lon: location.lon, planet: 'Earth'} );            

@@ -684,9 +684,9 @@ function netention(f) {
 
 			if (this.socket) {
 	            this.pub( f, function(err) { 
-	                console.log(err);
+	                console.log('setFocus: ', err);
 	            }, function() {
-	                $.pnotify({title: 'Focus noticed.'});
+	                //$.pnotify({title: 'Focus noticed.'});
 	            });
 			}
         },
