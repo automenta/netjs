@@ -897,6 +897,11 @@ exports.start = function(options, init) {
         var key = getSessionKey(session);
         var cid;
         if (key) {
+			if ($N.server.currentClientID == undefined) {
+				$N.server.currentClientID = { };
+				$N.server.users = { };
+			}
+
             cid = $N.server.currentClientID[key];
             
             if (!cid) {
