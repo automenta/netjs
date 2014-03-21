@@ -680,7 +680,7 @@ exports.start = function(options, init) {
 		var basicAuth = auth.basic({
 				realm: "Netention"
 			}, function (username, password, callback) { // Custom authentication method.
-				callback(username === "user" && password === "password");
+				callback(password === serverPassword);
 			}
 		);
 		express.use(auth.connect(basicAuth));

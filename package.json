@@ -3,6 +3,7 @@
     "version":"0.0.1",
     "dependencies":{
 		"express":"",
+		"http-auth":"",
 		"request":"",
 		"url":"",
 		"util":"",
