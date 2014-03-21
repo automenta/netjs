@@ -29,7 +29,7 @@ function renderShare(v) {
 		$N.setFocus(f);
 	};
 
-	searchInput.keydown(_.throttle(updateSearchFocus, shareSearchFocusUpdateMS));
+	searchInput.on('input', _.throttle(updateSearchFocus, shareSearchFocusUpdateMS));
 
 	var searchButton = $('<button>?</button>').appendTo(searchMenu);
 
