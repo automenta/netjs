@@ -6,6 +6,7 @@
     "databaseURL": "localhost/netention_0",
     "memoryUpdatePeriodMS": 5000,
 	"httpCompress": true,
+	"password": "",
     "plugins": [
         "_rss.js", "_irc.js"
     ],

@@ -672,6 +672,21 @@ exports.start = function(options, init) {
         express.use(express.router);
     });
     
+
+	//https://github.com/gevorg/http-authenticate
+	var serverPassword = $N.server.password;
+	if ((serverPassword) && (serverPassword.length > 0)) {
+		var auth = require('http-auth');
+		var basicAuth = auth.basic({
+				realm: "Netention"
+			}, function (username, password, callback) { // Custom authentication method.
+				callback(username === "user" && password === "password");
+			}
+		);
+		express.use(auth.connect(basicAuth));
+	}
+
+
     var users = { };
     
 
