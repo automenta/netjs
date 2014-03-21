@@ -924,9 +924,11 @@ function getCookie(name) {
 
 function newPopupObjectEdit(n) {
 	var clientWidth = $(window).width();
+	var e = newObjectEdit(n, true);
     newPopup('Add...', { 
 		width: parseInt(clientWidth*0.75), 
 		position: { my: "center", at: "center", of: window } 
-	}).append(newObjectEdit(n, true));
+	}).append(e);
+	return e;
 }
 

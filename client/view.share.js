@@ -2,6 +2,9 @@ var shareSearchFocusUpdateMS = 1500;
 
 /* Sharetribe.com inspired view */
 function renderShare(v) {
+	var shareTags = [ 'Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need' ];
+	var shareCategories = ['Food', 'Services', 'Supplies' ];
+
     clearFocus();
     renderFocus();
 
@@ -39,12 +42,12 @@ function renderShare(v) {
 
 		sidebar.append('<hr/>');
 
-		var typeFilter = newCheckboxTagFilter( ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need'] );
+		var typeFilter = newCheckboxTagFilter( shareTags );
 		typeFilter.appendTo(sidebar);
 
 		sidebar.append('<hr/>');
 
-		var catFilter = newCheckboxTagFilter( ['Food', 'Services', 'Supplies' ] );
+		var catFilter = newCheckboxTagFilter( shareCategories );
 		catFilter.appendTo(sidebar);
 
 		sidebar.append('<hr/>');
@@ -82,7 +85,8 @@ function renderShare(v) {
 				var mpdl = configuration.mapDefaultLocation || [0,0];
 				o.add('spacepoint', { lat: mpdl[0], lon: mpdl[1] });
 
-				newPopupObjectEdit( o );
+				var ee = newPopupObjectEdit( o );
+				ee.addTagButtons(_.union(shareTags, ['\n'], shareCategories));
 			});
 		}
 
