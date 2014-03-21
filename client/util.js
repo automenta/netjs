@@ -145,6 +145,20 @@ function objAddTag(x, t, strength) {
 }
 exports.objAddTag = objAddTag;
 
+//remove all instances of a tag
+function objRemoveTag(x, t) {
+	while (objHasTag(x, t)) {
+		for (var i = 0; i < x.value.length; i++) {
+			if (x.value[i].id == t) {
+				x = objRemoveValue(x, i);
+				continue;
+			}
+		}
+	}
+	return x;
+}
+exports.objRemoveTag = objRemoveTag;
+
 /*
     objAddValue(x, { id: i, value: v } )
     objAddValue(x, i, v)

@@ -247,6 +247,7 @@ $(document).ready(function() {
 	if (configuration.focusEnable)
 		$('#AvatarFocus').show();
 
+	$('title').html(configuration.siteName);
 	$('#loginLogo').attr('src', configuration.loginLogo);
 
 	var conviews = configuration.views;

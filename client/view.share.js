@@ -1,3 +1,5 @@
+var shareSearchFocusUpdateMS = 1500;
+
 /* Sharetribe.com inspired view */
 function renderShare(v) {
     clearFocus();
@@ -13,6 +15,19 @@ function renderShare(v) {
 
 	var searchMenu = newDiv().addClass('SearchMenu').appendTo(frame);
 	var searchInput = $('<input type="text" placeholder="What are you looking for?"/>').appendTo(searchMenu);
+
+	var updateSearchFocus = function() {
+		var k = searchInput.val();
+		var f = $N.focus();
+		if (k.length > 0)
+			f.name = k;
+		else
+			delete f.name;
+		$N.setFocus(f);
+	};
+
+	searchInput.keydown(_.throttle(updateSearchFocus, shareSearchFocusUpdateMS));
+
 	var searchButton = $('<button>?</button>').appendTo(searchMenu);
 
 	var sidebar = newDiv().addClass('ShareSidebar').appendTo(frame);
@@ -100,6 +115,18 @@ function newCheckboxTagFilter(tags) {
 	var d = newDiv();
 	_.each(tags, function(t) {
 		var i = $('<input type="checkbox"/>');
+		i.click(function() {
+			var checked = i.is(':checked');
+			var f = $N.focus();
+			if (checked) {
+				objAddTag(f, t);
+			}
+			else {
+				objRemoveTag(f, t);
+			}
+			$N.setFocus(f);
+			renderFocus();
+		});
 		d.append(i, t, '<br/>');
 	});
 	return d;
