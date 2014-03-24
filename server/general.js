@@ -570,9 +570,9 @@ exports.plugin = function($N) { return {
 
 		if ($N.client.knowLevels == 3) {
 			$N.addTags([
-				{uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true },
-				{uri: 'Do', name: 'Do', tag: ['Know'], operator: true },
-				{uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true }
+				{uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true, icon: 'icon/know/k1.png' },
+				{uri: 'Do', name: 'Do', tag: ['Know'], operator: true, icon: 'icon/know/k4.png' },
+				{uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true, icon: 'icon/know/k5.png' }
 			]);
 		}
 		else if ($N.client.knowLevels == 6) {

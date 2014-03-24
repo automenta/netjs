@@ -349,13 +349,16 @@ function renderUs(v) {
 						objAddTag(x, 'Do');
 					}
 					else if (newValue > 0) {
-						objAddTag(x, 'Do', (1.0 - newValue));
+						if (newValue < 1.0)
+							objAddTag(x, 'Do', (1.0 - newValue));
 						objAddTag(x, 'Teach', (newValue));
 					}
 					else if (newValue < 0) {
-						objAddTag(x, 'Do', (1.0 + newValue));
+						if (newValue > -1.0)
+							objAddTag(x, 'Do', (1.0 + newValue));
 						objAddTag(x, 'Learn', (-newValue));
 					}
+					console.log(newValue, objTagStrength(x));
 					//console.log(x);
 				}
 
@@ -373,7 +376,7 @@ function renderUs(v) {
 					var slider = $('<input type="range" min="-1" max="1" step="0.1">');
 					slider.attr('value', knowTagsToRange(X));
 
-					var SLIDER_CHANGE_MS = 1500;
+					var SLIDER_CHANGE_MS = 500;
 
 					var updateTags = _.throttle(function() {
 						rangeToTags(X, parseFloat(slider.val()));
@@ -381,9 +384,19 @@ function renderUs(v) {
 					}, SLIDER_CHANGE_MS);
 
 
-					slider.change(function() {
+					function updateColor() {
+						var sv = parseFloat(slider.val());
+						var cb = hslToRgb(((sv+1.0)/2.1+0.0)/1.7, 0.5, 0.5);
+						var bgString = 'rgba(' + parseInt(cb[0]) + ',' + parseInt(cb[1]) + ',' + parseInt(cb[2]) + ',1.0)';
+						rc.css('background-color', bgString);
+					}
+					updateColor();
 
-						updateTags();
+					slider.change(function() {
+						updateColor();
+						later(function() {
+							updateTags();
+						});
 					});
 					rc.append(slider);
 
