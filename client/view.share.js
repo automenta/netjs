@@ -59,6 +59,22 @@ function renderShare(v) {
 		distCombo.append('<option>&lt; 1.00 km</option>');
 		distCombo.append('<option>&lt; 5.00 km</option>');
 		distCombo.append('<option>&lt; 10.00 km</option>');
+
+		sidebar.append('<hr/>');
+
+		var userSelect = newAuthorCombo($N.focus().who, true).appendTo(sidebar);
+		userSelect.change(function(n) {
+			var v = userSelect.val();
+			var f = $N.focus();
+			
+			if (v && (v.length > 0))
+				f.who = v;
+			else
+				delete f.who;
+
+			$N.setFocus(f);			
+		});
+
 	}
 
 	var content = newDiv().addClass('ShareContent').appendTo(frame);

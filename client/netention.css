@@ -301,6 +301,7 @@ div.olMapViewport {
 
 .MetadataLine {
     opacity: 0.8;
+    word-wrap: break-word;
 }
 .MetadataLine img {
     height: 1em;

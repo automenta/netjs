@@ -141,6 +141,39 @@ function newGoalList(target, user, centroids) {
 
 }
 
+function newAuthorCombo(currentUser, includeAll) {
+
+	var userSelect = $('<select></select>');
+
+	if (includeAll) {
+		var o = $('<option value="">Everyone</option>').appendTo(userSelect);
+		if ((currentUser == '') || (!currentUser))
+			o.attr('selected', 'selected');
+	}
+
+	if ($N.myself()) {
+		var o = $('<option value="' + $N.myself().id + '">Me (' + $N.myself().name + ')</option>').appendTo(userSelect);
+		if (currentUser == $N.myself().id)
+			o.attr('selected','selected');
+	}
+	//userSelect.append('<option>Everyone\'s</option>');
+
+	var users = $N.objectsWithTag('User');
+	_.each(users, function(uid) {
+		if (uid == $N.myself().id)
+			return; //skip self
+
+		var u = $N.getObject(uid);			
+		if (u) {
+			var o = $('<option value="' + u.id + '">' + u.name + '</option>').appendTo(userSelect);
+			if (currentUser == u.id)
+				o.attr('selected','selected');
+		}
+	});
+	return userSelect;
+}
+
+
 
 function renderUs(v) {
 
@@ -223,32 +256,12 @@ function renderUs(v) {
 			//.append('<button disabled title="Set Focus To This Goal">Focus</button>')
 			//.append('<button disabled title="Clear">[x]</button>');
 
-			var userSelect = $('<select></select>');
-			if ($N.myself()) {
-				var o = $('<option value="' + $N.myself().id + '">Me (' + $N.myself().name + ')</option>').appendTo(userSelect);
-				if (currentUser == $N.myself().id)
-					o.attr('selected','selected');
-			}
-			//userSelect.append('<option>Everyone\'s</option>');
-
-			var users = $N.objectsWithTag('User');
-			_.each(users, function(uid) {
-				if (uid == $N.myself().id)
-					return; //skip self
-
-				var u = $N.getObject(uid);			
-				if (u) {
-					var o = $('<option value="' + u.id + '">' + u.name + '</option>').appendTo(userSelect);
-					if (currentUser == u.id)
-						o.attr('selected','selected');
-				}
-			});
-
-			currentGoalHeader.prepend(userSelect);
-		
+			var userSelect = newAuthorCombo(currentUser);		
 			userSelect.change(function(v) {
 				updateUsView(userSelect.val());
 			});
+
+			currentGoalHeader.prepend(userSelect);
 
 			var operators = getOperatorTags();
 
