@@ -671,7 +671,11 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 #themeSelect {width: 250px; clear:both; font-size:1.2em; padding:3px; }
 
 /* Grid, List View */
-        .objectView { position: relative; padding: 0.25em; margin-bottom: 5px; display: block; clear: both; font-size:12px; }
+.objectView { position: relative; padding: 0.25em; margin-bottom: 5px; display: block; clear: both; font-size:12px; }
+.objectView ul li {
+word-wrap: break-word;
+}
+
 	.objectGridItem { width: 30%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 5px; z-index:2; }
 	.ObjectViewHideButton { height:30px;   position:absolute;  top:-4px; right:-4px; z-index:2; opacity:0; display:inline-block; }
 	.ObjectViewHideButton:hover { opacity:1; }

@@ -142,9 +142,10 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
                 continue;                            
         }
 
-		if (focus.who)
-			if (x.author != focus.who)
-				continue;
+		if (focus)
+			if (focus.who)
+				if (x.author != focus.who)
+					continue;
         
         //sort
         var r = 1.0;                        

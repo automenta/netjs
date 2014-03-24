@@ -1483,9 +1483,9 @@ exports.start = function(options, init) {
                 });
         
             }
-            
-            
-            broadcast(socket, message);
+			else                  
+	            broadcast(socket, message);
+
             if (success)
                 success();
         });

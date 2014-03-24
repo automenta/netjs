@@ -184,7 +184,11 @@ function newObjectSummary2(x) {
 		var authorline = newDiv();
 		var A = $N.getObject(x.author);
 		authorline.append(getAvatar(A).attr('style', 'height: 1.5em; vertical-align: middle'));
-		authorline.append(A.name);
+		var authorLink = $('<a href="#">' + A.name + '</a>');
+		authorLink.click(function() {
+			newPopupObjectView(A);
+		});
+		authorline.append(authorLink);
 	
 		e.append(authorline);
 	}
