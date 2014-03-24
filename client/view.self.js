@@ -169,7 +169,7 @@ function renderUs(v) {
 		var currentGoalHeader = $('.toggle-submenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
 		var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
 		var goalList = newDiv('goalviewList').addClass('goalviewColumn');
-		var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumn');
+		var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');
 
 		currentGoalHeader.html('');
 
@@ -252,6 +252,11 @@ function renderUs(v) {
 
 			var operators = getOperatorTags();
 
+			var currentUserFilter = function(o) {
+				o = $N.getObject(o);
+				return (o.author == currentUser) && (o.subject == currentUser);
+			};
+
 		    _.each(operators, function(o) {
 		        var O = $N.tag(o);
 
@@ -269,33 +274,122 @@ function renderUs(v) {
 				    }));
 				}).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
 
-				var currentUserFilter = function(o) {
-					o = $N.getObject(o);
-					return (o.author == currentUser) && (o.subject == currentUser);
-				};
+				if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))  ) {
+					//not a 3-vector system
+					var nn = _.filter($N.objectsWithTag(o),currentUserFilter);
 
-				var nn = _.filter($N.objectsWithTag(o),currentUserFilter);
-
-				if (nn.length > 0) {
-					var uu = $('<ul></ul>');
-					_.each(nn, function(g) {
-						uu.append( newObjectSummary( $N.getObject(g), {
-							showAuthorIcon: false,
-							showAuthorName: false,
-							showMetadataLine: false,
-							showActionPopupButton: false
-						} ).removeClass("ui-widget-content ui-corner-all") );
-					});
-					sdd.append(uu);
-				}
-				else {
-					//header.attr('style', 'font-size: 75%');
-					sdd.append('<br/>');
+					if (nn.length > 0) {
+						var uu = $('<ul></ul>');
+						_.each(nn, function(g) {
+							uu.append( newObjectSummary( $N.getObject(g), {
+								showAuthorIcon: false,
+								showAuthorName: false,
+								showMetadataLine: false,
+								showActionPopupButton: false
+							} ).removeClass("ui-widget-content ui-corner-all") );
+						});
+						sdd.append(uu);
+					}
+					else {
+						//header.attr('style', 'font-size: 75%');
+						sdd.append('<br/>');
+					}
 				}
 					            
 				sidebar.append(sdd);
 			
 		    });
+
+			if (!$N.getTag('DoLearn')) {
+				//3-vector system : sliders
+				var nn = _.filter($N.objectsWithTag(['Do', 'Learn', 'Teach']),currentUserFilter);
+				var d = newDiv().appendTo(sidebar);
+
+				d.append('<hr/>');
+
+				function knowTagsToRange(x) {
+					var s = objTagStrength(x, false);
+
+					var DO = s['Do'] || 0;
+					var LEARN = s['Learn'] || 0;
+					var TEACH = s['Teach'] || 0;
+
+					//console.log(LEARN, DO, TEACH);
+
+					if (LEARN && TEACH) {
+						console.log(x + ' has conflicting Learn and Teach strengths');
+						TEACH = null;
+						LEARN = null;
+					}
+					if (LEARN) {
+						var total = LEARN + DO;						
+						LEARN/=total;
+						DO/=total;
+						
+						return -1 * LEARN;
+					}
+					else if (TEACH) {
+						var total = TEACH + DO;						
+						TEACH/=total;
+						DO/=total;
+						
+						return 1 * TEACH;
+					}
+					else {
+						return 0;
+					}					
+				}
+
+				function rangeToTags(x, newValue) {
+					objRemoveTag(x, 'Do');
+					objRemoveTag(x, 'Learn');
+					objRemoveTag(x, 'Teach');
+
+					if (newValue == 0) {
+						objAddTag(x, 'Do');
+					}
+					else if (newValue > 0) {
+						objAddTag(x, 'Do', (1.0 - newValue));
+						objAddTag(x, 'Teach', (newValue));
+					}
+					else if (newValue < 0) {
+						objAddTag(x, 'Do', (1.0 + newValue));
+						objAddTag(x, 'Learn', (-newValue));
+					}
+					//console.log(x);
+				}
+
+				_.each(nn, function(x) {
+					var X = $N.getObject(x);
+					var lc = $('<div style="width: 48%; float: left; clear: both"/>').appendTo(d);
+					var rc = $('<div style="width: 48%; float: right"/>').appendTo(d);
+
+					var nameLink = $('<a href="#">' + X.name + '</a>');
+					nameLink.click(function() {
+						newPopupObjectView(x);
+					});
+					lc.append(nameLink);
+
+					var slider = $('<input type="range" min="-1" max="1" step="0.1">');
+					slider.attr('value', knowTagsToRange(X));
+
+					var SLIDER_CHANGE_MS = 1500;
+
+					var updateTags = _.throttle(function() {
+						rangeToTags(X, parseFloat(slider.val()));
+						$N.pub(X);
+					}, SLIDER_CHANGE_MS);
+
+
+					slider.change(function() {
+
+						updateTags();
+					});
+					rc.append(slider);
+
+					d.append('<br/>');
+				});
+			}
 		    
 
 
@@ -380,8 +474,36 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
             var o = objNew(id, currentTag);
             o.author = o.subject = $N.id();
 
-            for (var i = 0; i < selTags.length; i++) {
-                objAddTag(o, selTags[i]);
+	        for (var i = 0; i < selTags.length; i++) {
+				var T = selTags[i];
+				if (!$N.getTag('DoLearn')) {
+					//apply 3-vector
+					objRemoveTag(o, 'Do');
+					objRemoveTag(o, 'Learn');
+					objRemoveTag(o, 'Teach');
+
+					if (T == 'Learn') {
+						objAddTag(o, 'Learn');
+					}
+					else if (T == 'Teach') {
+						objAddTag(o, 'Teach');
+					}
+					else if (T == 'Do') {
+						objAddTag(o, 'Do');
+					}
+					else if (T == 'DoLearn') {
+						objAddTag(o, 'Learn', 0.5);
+						objAddTag(o, 'Do', 0.5);
+					}
+					else if (T == 'DoTeach') {
+						objAddTag(o, 'Teach', 0.5);
+						objAddTag(o, 'Do', 0.5);
+					}
+			
+					continue;
+				}
+
+                objAddTag(o, T);
             }
             objAddTag(o, currentTag);
             

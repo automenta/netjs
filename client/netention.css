@@ -1222,14 +1222,15 @@ a.openModal:focus {
 	float: right;
 }
 
-.goalviewColumn {
+.goalviewColumn, .goalviewColumnNarrow {
 	float: left;
-	width: 31%;
+	width: 38%;
 	height: 100%;
 	overflow: auto;
 	padding-left: 0.3em;
 	padding-right: 0.3em;
 }
+.goalviewColumnNarrow { width: 20%; }
 
 .goalRowHeading { font-size: 150%; font-weight: bold; }
 

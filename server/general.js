@@ -568,7 +568,14 @@ exports.plugin = function($N) { return {
         $N.addTags(generalTags);
         $N.addTags(emotionTags);
 
-		if ($N.client.knowLevels == 6) {
+		if ($N.client.knowLevels == 3) {
+			$N.addTags([
+				{uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true },
+				{uri: 'Do', name: 'Do', tag: ['Know'], operator: true },
+				{uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true }
+			]);
+		}
+		else if ($N.client.knowLevels == 6) {
 			$N.addTags([
 				/* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
 				 3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
@@ -579,10 +586,9 @@ exports.plugin = function($N) { return {
 				{ uri: 'DoTeach', name: 'Do Teach', tag: ['Know'], operator:true, icon: 'icon/know/k4.png' },
 				{ uri: 'TeachDo', name: 'Teach Do', tag: ['Know'], operator:true, icon: 'icon/know/k5.png' },
 				{ uri: 'Teach', name: 'Teach', tag: ['Know'], operator:true, icon: 'icon/know/k6.png' },
-
 			]);
 		}
-		else {
+		else /* 5 */ {
 			$N.addTags([
 				{uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true,
 					description: 'No knowledge but curious to learn' },
