@@ -115,8 +115,9 @@ function clearFocus() {
 }
 clearFocus();
 
-function renderFocus() {
-    $N.setFocus(focusValue);
+function renderFocus(skipSet) {
+	if (!skipSet)
+	    $N.setFocus(focusValue);
 
     var fe = $('#FocusEdit');
     fe.empty();

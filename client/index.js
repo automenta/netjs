@@ -426,10 +426,18 @@ $(document).ready(function() {
 					initKeyboard();
 
 		            $N.on('change:attention', updateView);
-		            $N.on('change:layer', updateView);
+		            //$N.on('change:layer', updateView);
 		            $N.on('change:currentView', updateView);
 		            $N.on('change:tags', updateView);
 		            $N.on('change:focus', updateView);
+				
+					/*
+					//USEFUL FOR DEBUGGING EVENTS:
+		            $N.on('change:attention', function() { console.log('change:attention'); });
+		            $N.on('change:currentView', function() { console.log('change:currentView'); });
+		            $N.on('change:tags', function() { console.log('change:tags'); });
+		            $N.on('change:focus', function() { console.log('change:focus'); });
+					*/
 
                 });
 

@@ -145,7 +145,7 @@ function newCheckboxTagFilter(tags) {
 				objRemoveTag(f, t);
 			}
 			$N.setFocus(f);
-			renderFocus();
+			renderFocus(true);
 		});
 		d.append(i, t, '<br/>');
 	});

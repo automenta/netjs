@@ -690,7 +690,8 @@ function netention(f) {
 	            });
 			}
 
-        	this.trigger('change:attention');
+        	$N.trigger('change:focus');
+
         },
 
         focus : function() { 
@@ -756,8 +757,12 @@ function netention(f) {
         	}
         	
             
-        	for (var i = 0; i < x.length; i++)
+			//var includesNonFocused = false;
+        	for (var i = 0; i < x.length; i++) {
         		n(x[i]);
+				/*if (!x[i].focus)
+					includesNonFocused = true;*/
+			}
                 
         	this.trigger('change:attention');
         },
