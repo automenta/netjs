@@ -487,6 +487,21 @@ exports.start = function(options, init) {
     }
 	$N.getOperatorTags = getOperatorTags;
 
+	function refactorObjectTag(fromTag, toTag) {
+		var objects = [];
+		getObjectsByTag(fromTag, function(x) {
+			objects.push(x);
+		}, function() {
+			_.each(objects, function(o) {
+				console.log('Refactor from:', o);
+				util.objRemoveTag(o, fromTag);
+				util.objAddTag(o, toTag);
+				console.log('  Refactor to:', o);
+				$N.notice(o);
+			});
+		})
+	}
+	$N.refactorObjectTag = refactorObjectTag;
 
     function getTagCounts(whenFinished) {
 
