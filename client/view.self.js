@@ -160,8 +160,9 @@ function newAuthorCombo(currentUser, includeAll) {
 
 	var users = $N.objectsWithTag('User');
 	_.each(users, function(uid) {
-		if (uid == $N.myself().id)
-			return; //skip self
+		if ($N.myself())
+			if (uid == $N.myself().id)
+				return; //skip self
 
 		var u = $N.getObject(uid);			
 		if (u) {
@@ -213,44 +214,46 @@ function renderUs(v) {
 
 			var avatarButton = $('<span/>');
 
-			var avatarImg = getAvatar($N.myself());
-			avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
+			if ($N.myself()) {
+				var avatarImg = getAvatar($N.myself());
+				avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
-			var exportButton = $('<button>Export</button>');
-			exportButton.click(function() {
-				var newwindow=window.open();
-				var newdocument=newwindow.document;
-				newdocument.write(getSelfSummaryHTML(currentUser));
-			});
-
-			currentGoalHeader.append(avatarButton, exportButton);
-
-			if (currentUser == $N.myself().id) {
-				var editButton = $('<button>Edit</button>').appendTo(currentGoalHeader);
-				editButton.click(function() {
-				    newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
-					append(newObjectEdit($N.getObject(currentUser), true));
+				var exportButton = $('<button>Export</button>');
+				exportButton.click(function() {
+					var newwindow=window.open();
+					var newdocument=newwindow.document;
+					newdocument.write(getSelfSummaryHTML(currentUser));
 				});
 
-				var readButton = $('<button>Read..</button>').appendTo(currentGoalHeader);
-				readButton.click(function() {
-				    var p = newPopup("Read...", {width: 375, minHeight: 450, modal: true, position: 'center'} ).
-					append(newTextReader(function(data) {
-						for (var t in data) {
-							var D = data[t];
-							for (var o in D) {
-								var x = objNew();
-								x.subject = x.author = $N.id();
-								x.setName(t);
-								x.addTag(o);
-								x.addTag(t);
-								$N.pub(x);
+				currentGoalHeader.append(avatarButton, exportButton);
+
+				if (currentUser == $N.myself().id) {
+					var editButton = $('<button>Edit</button>').appendTo(currentGoalHeader);
+					editButton.click(function() {
+						newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
+						append(newObjectEdit($N.getObject(currentUser), true));
+					});
+
+					var readButton = $('<button>Read..</button>').appendTo(currentGoalHeader);
+					readButton.click(function() {
+						var p = newPopup("Read...", {width: 375, minHeight: 450, modal: true, position: 'center'} ).
+						append(newTextReader(function(data) {
+							for (var t in data) {
+								var D = data[t];
+								for (var o in D) {
+									var x = objNew();
+									x.subject = x.author = $N.id();
+									x.setName(t);
+									x.addTag(o);
+									x.addTag(t);
+									$N.pub(x);
+								}
 							}
-						}
-						p.dialog('close');
-					}));
-				});
+							p.dialog('close');
+						}));
+					});
 				
+				}
 			}
 
 			//.append('<button disabled title="Set Focus To This Goal">Focus</button>')
@@ -452,8 +455,8 @@ function renderUs(v) {
 	if ($N.myself())
 		updateUsView($N.myself().id);
 	else {
-		v.html('Not identified.');
-		//..
+		var users = $N.objectsWithTag('User');
+		updateUsView(users[0]);  //start with first user
 	}
 
 }
