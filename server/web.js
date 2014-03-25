@@ -1078,7 +1078,7 @@ exports.start = function(options, init) {
 				return;
 			}
 
-		    db.obj.find().limit(n).sort({modifiedAt: -1}, function(err, objs) {
+		    db.obj.find({tag: {$not:{ $in: ['ServerState']}}}).limit(n).sort({modifiedAt: -1}, function(err, objs) {
 		        removeMongoID(objs);
 		                    
 		        sendJSON(res, compactObjects(objs));
