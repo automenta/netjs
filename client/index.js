@@ -131,6 +131,10 @@ function _updateView(force) {
         indent();
         currentView = renderShare(v);
     }
+    else if (view == 'templates') {
+        indent();
+        currentView = renderTemplatesView(v);
+    }
     else {
         v.html('Unknown view: ' + view);
         currentView = null;

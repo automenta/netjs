@@ -318,6 +318,7 @@ function netention(f) {
         become: function(target) {
             if (!target)
                 return;
+			
             
             var s = this;
             if (typeof(target)!=="string") {
@@ -329,6 +330,10 @@ function netention(f) {
                         title: 'Switched profile',
                         text: nextID
                     });*/
+
+					//if (($N.id()) && ($N.id() == nextID)) //already target
+						//return;
+
 
                     later(function() {                        
 						self.set('clientID', nextID);
@@ -359,6 +364,7 @@ function netention(f) {
         
                 
         connect: function(targetID, whenConnected) {
+			var originalTargetID = targetID;
             var suppliedObject = null;
             if (targetID) {
                 if (typeof(targetID)!=="string") {
@@ -420,8 +426,10 @@ function netention(f) {
                 that.addProperties(p);
                 that.addTags(t);                                  
         	});
-                            
-            init();
+                   
+			if (originalTargetID!=null)
+				init();
+         
             
             this.socket = socket;
                             
@@ -880,8 +888,9 @@ function netention(f) {
     //console.log('saved clientID: ' + s.get('clientID'));
 
     //if (($N.get('clientID')!='undefined') || (getCookie('authenticated')==='true'))
-	$N.connect(function() { 	});
-    f($N);
+	$N.connect(null, function() { 		});
+	f($N);
+    
 
 	
 }

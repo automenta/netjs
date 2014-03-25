@@ -305,12 +305,19 @@ accelerometerReport	Raised every time the device reports its current acceleromet
         description: "Promise or an Offer. 'I will do it, but only if you will help.'", //PledgeBank.com
 		tag: ['Concept']
     },
+
     {uri: 'Tag', name: 'Tag',
         description: "Indicates that an object defines a tag",
         properties: {
             'tagValueType': {name: 'Value Type', type: 'text'},
             //'tagDomain': { name: 'Domain', type: 'text' }
         },
+		tag: ['Concept']
+    },
+
+    {uri: 'Template', name: 'Template',
+        description: "Template object that can create instances of it",
+        properties: {        },
 		tag: ['Concept']
     },
 
@@ -557,6 +564,20 @@ var emotionTags = [
 	*/
 ];
 
+function getDefaultTemplates($N) {
+	var x = [];
+	{
+		var n = $N.objNew('SomethingNeeded', 'Something Needed');
+		n.addTag('Need');		
+		x.push(n);
+	}
+
+	for (var i = 0; i < x.length; i++)
+		x[i].addTag('Template');
+
+	return x;
+}
+
 exports.plugin = function($N) { return {
     name: 'General',
     description: 'General Tags',
@@ -603,6 +624,9 @@ exports.plugin = function($N) { return {
 			]);
 		}
 
+		_.each(getDefaultTemplates($N), function(x) {
+			$N.notice(x);
+		});
         /*function indexPDF(name, path) {
             var introPresentation = util.objNew(path, name);
             introPresentation.add('PDF');

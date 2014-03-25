@@ -38,7 +38,7 @@
 		"viewUpdateMS": 850,
 		"knowLevels": 5,
 		"focusEnable": true,
-		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki" ],
+		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki", "templates" ],
 		"newUserProperties": [ ]
     }
 }

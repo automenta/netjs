@@ -374,7 +374,6 @@ function renderUs(v) {
 							objAddTag(x, 'Do', (1.0 + newValue));
 						objAddTag(x, 'Learn', (-newValue));
 					}
-					console.log(newValue, objTagStrength(x));
 					//console.log(x);
 				}
 
@@ -389,7 +388,7 @@ function renderUs(v) {
 					});
 					lc.append(nameLink);
 
-					var slider = $('<input type="range" min="-1" max="1" step="0.1">');
+					var slider = $('<input type="range" min="-1" max="1" step="0.1">').addClass('SkillSlider');
 					slider.attr('value', knowTagsToRange(X));
 
 					var SLIDER_CHANGE_MS = 500;
@@ -402,7 +401,7 @@ function renderUs(v) {
 
 					function updateColor() {
 						var sv = parseFloat(slider.val());
-						var cb = hslToRgb(((sv+1.0)/2.1+0.0)/1.7, 0.5, 0.5);
+						var cb = hslToRgb(((sv+1.0)/2.1+0.0)/1.7, 0.9, 0.7);
 						var bgString = 'rgba(' + parseInt(cb[0]) + ',' + parseInt(cb[1]) + ',' + parseInt(cb[2]) + ',1.0)';
 						rc.css('background-color', bgString);
 					}

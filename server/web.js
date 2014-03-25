@@ -134,7 +134,7 @@ exports.start = function(options, init) {
                     $N.server.clientState = x.clientState;
                     $N.server.users = x.users || { };
                     $N.server.currentClientID = x.currentClientID || { };
-					nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
+					//nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
 
                     if (x.plugins) {
                         for (var pl in x.plugins) {
@@ -1628,12 +1628,14 @@ exports.start = function(options, init) {
             socket.emit('setClientID', cid, key, selves );
             socket.emit('setServer', $N.server.name, $N.server.description);
             
-            getObjectsByTag('Tag', function(to) {
+            getObjectsByTag(['Tag','Template'], function(to) {
                 socket.emit('notice', to);
             });
+
             /*getObjectsByTag('User', function(to) {
                 socket.emit('notice', to);
             });*/
+
             getObjectsByAuthor(cid, function(uo) {
                 socket.emit('notice', uo);
             });
