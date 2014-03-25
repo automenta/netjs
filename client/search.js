@@ -70,10 +70,10 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
 function getRelevant(sort, scope, semantic, s, o, maxItems) { 
 
     var now = Date.now();
-    var location = objSpacePointLatLng(s.myself());
+    var location = objSpacePointLatLng($N.myself());
     
     var relevance = { };
-    var focus = s.focus();
+    var focus = $N.focus();
 	var focusWhen = objWhen(focus);
 
 	var ft;
@@ -83,7 +83,7 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 
 		//exclude tile layers from filter
 		ft = _.filter(ft, function(t) {
-			var T = self.getTag(t);
+			var T = $N.getTag(t);
 			if (T) {
 				if (T.tileLayer) return false;
 				if (T.wmsLayer) return false;
@@ -95,11 +95,11 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 	}
     
     var ii = _.keys($N.layer().include);
-    var ee = _.keys($N.layer().exclude);
+    var ee = _.union(_.keys($N.layer().exclude), ['Template']);
     
-    for (var k in s.objects()) {
+    for (var k in $N.objects()) {
         
-        var x = s.getObject(k);
+        var x = $N.getObject(k);
         
         if (x.replyTo)
             continue;
