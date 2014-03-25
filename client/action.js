@@ -140,6 +140,10 @@ addAction({	menu: 'Space',	name: 'Find Nearby...',
 	description: 'Find nearby objects of certain types within a given range',
 	accepts: acceptsIfAllAreSpatial
 });
+addAction({	menu: 'Space',	name: 'Move to my location', 
+	description: 'Set the geolocation of objects to my current location',
+	accepts: acceptsAll
+});
 
 addAction({	menu: 'Text',	name: 'Change Case', description: 'UPPERCASE, lowercase, RaNDoMCaSE, & more' });
 addAction({	menu: 'Text',	name: 'Separate per line' });

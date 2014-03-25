@@ -1,18 +1,4 @@
-/*
- * Netention Web Server (run script)
- */
-var options = null;
-if (process.argv.length > 1) {
-	options = process.argv[2];
-}
+/*  Starts Netention Web Server  */
+var options = (process.argv.length > 2) ? process.argv[2] : 'options.js';
 
-if (options == null) options = 'options.js';
-
-//console.log('Loading server config: ' + options);
-
-var fs = require('fs');
-var o = JSON.parse(fs.readFileSync(options));
-
-//console.log(o);
-
-require('./server/web.js').start(o);
+require('./server/web.js').start(require('./' + options).options);

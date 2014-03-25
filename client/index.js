@@ -253,6 +253,8 @@ $(document).ready(function() {
 
 	$('title').html(configuration.siteName);
 	$('#loginLogo').attr('src', configuration.loginLogo);
+	if (configuration.favicon)
+		$('#favicon').attr('href', configuration.favicon);
 
 	var conviews = configuration.views;
 	for (var i = 0; i < conviews.length; i++) {

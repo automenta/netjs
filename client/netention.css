@@ -1373,5 +1373,12 @@ svg {
 	width: 75%;
 	float: right;
 }
-
+.ShareSummaryAction  {
+	width: 40%;
+	float: left;
+}
+.ShareSummaryAuthor {
+	width: 40%;
+	float: right;
+}
 .SkillSlider { width: 100%; }

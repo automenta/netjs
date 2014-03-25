@@ -897,21 +897,23 @@ exports.start = function(options, init) {
     
     function getSessionKey(session) {
         var key;
-        if (session)
-            if (session.passport)
+        if (session) {
+            if (session.passport) {
                 if (session.passport.user) {
-                    key = session.passport.user;
+                    return session.passport.user;
                }
-       if (key) {
-           return key;
-       }
-       return 'anonymous';
+			}
+		}
+       	return 'anonymous';
     }
     
     function getCurrentClientID(session) {
         var key = getSessionKey(session);
-        var cid;
-        if (key) {
+		if (key=='anonymous') {
+			return 'anonymous';
+		}
+        else {
+	        var cid;
 			if ($N.server.currentClientID == undefined) {
 				$N.server.currentClientID = { };
 				$N.server.users = { };
@@ -927,10 +929,8 @@ exports.start = function(options, init) {
             }
 			return cid;
         }
-        else {
-            return '';
-        }
     }
+
     function addClientSelf(session, uid) {
         var key = getSessionKey(session);
         if ((!key) || (key == '')) {
@@ -966,14 +966,9 @@ exports.start = function(options, init) {
         }
         
         var key = getSessionKey(session);        
-        if (key) {
-            var selves = $N.server.users[key];
-            return selves;
-        }
-        else /*if ((key == 'anonymous') || (!key))*/ {
-            return $N.server.users['anonymous'];
-        }
+        return $N.server.users[key];
     }
+
    /*function getClientID(session) {
         var cid = '';
         var key;
@@ -1855,11 +1850,13 @@ exports.start = function(options, init) {
         });
     }
 
-
     nlog('Ready');
 
 	if (init)
 	    init($N);
+
+	if ($N.server.start)
+		$N.server.start($N);
 
     return $N;
 

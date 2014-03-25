@@ -155,6 +155,10 @@ function renderFocus(skipSet) {
     if (focusValue.when) {
     }
 
+    if (focusValue.who) {
+		fe.append('User: ' + $N.getObject(focusValue.who).name);
+    }
+
 	var where = objSpacePointLatLng(focusValue);
     if (where) {
         var uu = uuid();

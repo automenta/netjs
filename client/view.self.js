@@ -215,7 +215,7 @@ function renderUs(v) {
 			var avatarButton = $('<span/>');
 
 			if ($N.myself()) {
-				var avatarImg = getAvatar($N.myself());
+				var avatarImg = getAvatar($N.getObject(currentUser));
 				avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
 				var exportButton = $('<button>Export</button>');

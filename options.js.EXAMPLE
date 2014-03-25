@@ -1,4 +1,4 @@
-{
+exports.options = {
     "name": "Netention",
     "description": "http://netention.org",
     "host": "localhost",
@@ -25,6 +25,7 @@
         "avatarMenuDisplayInitially": false,
 		"avatarMenuTagTreeAlways": false,
         "defaultAvatarIcon": "/theme/default-avatar.jpg",
+		"favicon": null,
 		"loginLogo": "/theme/login-logo.png",
         "wikiStartPage": "Life",
         "showPlanOnSelfPage": true,
@@ -40,6 +41,8 @@
 		"focusEnable": true,
 		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki", "templates" ],
 		"newUserProperties": [ ]
-    }
+    },
+	start: function($N) {
+	}
 }
 

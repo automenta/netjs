@@ -54,11 +54,11 @@ function renderShare(v) {
 
 		var distCombo = $('<select>').appendTo(sidebar);
 		distCombo.append('<option>Anywhere</option>');
-		distCombo.append('<option>&lt; 0.25 km</option>');
-		distCombo.append('<option>&lt; 0.50 km</option>');
-		distCombo.append('<option>&lt; 1.00 km</option>');
-		distCombo.append('<option>&lt; 5.00 km</option>');
-		distCombo.append('<option>&lt; 10.00 km</option>');
+		distCombo.append('<option>&lt; 1 km</option>');
+ 		distCombo.append('<option>&lt; 5 km</option>');
+ 		distCombo.append('<option>&lt; 20 km</option>');
+ 		distCombo.append('<option>&lt; 50 km</option>');
+ 		distCombo.append('<option>&lt; 200 km</option>');
 
 		sidebar.append('<hr/>');
 
@@ -72,7 +72,8 @@ function renderShare(v) {
 			else
 				delete f.who;
 
-			$N.setFocus(f);			
+			$N.setFocus(f);
+			renderFocus(true);		
 		});
 
 	}
@@ -93,7 +94,7 @@ function renderShare(v) {
 
 			editButton.appendTo(selfmenu);
 		
-			var addButton = $('<button>Add...</button>').appendTo(selfmenu);
+			var addButton = $('<button>Post...</button>').appendTo(selfmenu);
 			addButton.click(function() {
 				var o = objNew();
 				o.addDescription('');
@@ -146,8 +147,8 @@ function newCheckboxTagFilter(tags) {
 			}
 			$N.setFocus(f);
 			renderFocus(true);
-		});
-		d.append(i, t, '<br/>');
+		});		
+		d.append(i, newTagButton(t), '<br/>');
 	});
 	return d;
 }
@@ -179,9 +180,26 @@ function newObjectSummary2(x) {
 	});
 	e.append(titleLink);
 	e.append(newMetadataLine(x));
+	
+	var actionLine = newDiv().addClass('ShareSummaryAction').appendTo(e);
+	if ($N.id() == x.author) {
+		var editButton = $('<button>Edit</button>').appendTo(actionLine);
+		editButton.click(function() {
+			newPopupObjectEdit(x);
+		});
+		var deleteButton = $('<button>Delete</button>').appendTo(actionLine);
+		deleteButton.click(function() {
+			$N.deleteObject(x);
+		});
+	}
+	var replyButton = $('<button disabled>Reply</button>').appendTo(actionLine);
+	replyButton.click(function() {
+	});
+
 
 	if (x.author) {
-		var authorline = newDiv();
+		var authorline = newDiv().addClass('ShareSummaryAuthor');
+		
 		var A = $N.getObject(x.author);
 		authorline.append(getAvatar(A).attr('style', 'height: 1.5em; vertical-align: middle'));
 		var authorLink = $('<a href="#">' + A.name + '</a>');

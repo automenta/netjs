@@ -181,8 +181,12 @@ accelerometerReport	Raised every time the device reports its current acceleromet
     //NewsSourceLink (url)
     //see: Ushahidi.com
 
-    {uri: 'Arrive', name: 'Arrive', tag: ['Action'] },
-    {uri: 'Depart', name: 'Depart', tag: ['Action']},
+    {uri: 'Arrive', name: 'Arrive', tag: ['Action'],
+		properties: { 'arriveLocation': { name: 'Arrive location', type: 'spacepoint' }}
+	},
+    {uri: 'Depart', name: 'Depart', tag: ['Action'],
+		properties: { 'departLocation': { name: 'Depart location', type: 'spacepoint' }}
+	},
 
     {uri: 'Problem', name: 'Problem', tag: ['Concept'], 
 		properties: {
@@ -263,7 +267,7 @@ accelerometerReport	Raised every time the device reports its current acceleromet
 
 
     {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, icon: '/icon/need.png', properties: {
-        'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
+        //'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
     }},
     {uri: 'Not', name: 'Not', tag: ['Concept'], icon: '/icon/not.png', operator: true},
         
@@ -273,7 +277,7 @@ accelerometerReport	Raised every time the device reports its current acceleromet
     {uri: 'Lend', name: 'Lend', tag: ['Can', 'Value'], icon: '/icon/can.png'},
     {uri: 'Rent', name: 'Rent', tag: ['Can', 'Value'], icon: '/icon/can.png'},
     {uri: 'Swap', name: 'Swap', tag: ['Can', 'Value'], icon: '/icon/can.png'},
-    {uri: 'GiveAway', name: 'Give Away', tag: ['Can', 'Value'], icon: '/icon/can.png'},
+    {uri: 'GiveAway', name: 'Share', tag: ['Can', 'Value'], icon: '/icon/can.png'},
 
     //NEEDS from SparkRelief
     {uri: 'Volunteer', name: 'Volunteer', tag: ['Resource']},
@@ -569,6 +573,14 @@ function getDefaultTemplates($N) {
 	{
 		var n = $N.objNew('SomethingNeeded', 'Something Needed');
 		n.addTag('Need');		
+		x.push(n);
+	}
+	{
+		var n = $N.objNew('TravelRoute', 'Route to Travel');
+		n.addTag('Arrive');		
+		n.add('arriveLocation', { });
+		n.addTag('Depart');		
+		n.add('departLocation', { });
 		x.push(n);
 	}
 
