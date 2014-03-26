@@ -167,7 +167,7 @@ function newObjectSummary2(x) {
 	var img = newDiv().addClass('ShareSummaryImage').appendTo(d);
 
 	var firstMedia = objFirstValue(x, 'media');
-	var imgurl = 'http://localhost:8080/theme/default-avatar.jpg';
+	var imgurl = 'icon/placeholder.png';
 	if (firstMedia) {
 		imgurl = firstMedia;
 	}
@@ -189,7 +189,8 @@ function newObjectSummary2(x) {
 		});
 		var deleteButton = $('<button>Delete</button>').appendTo(actionLine);
 		deleteButton.click(function() {
-			$N.deleteObject(x);
+			if (confirm('Permanently delete \"' + x.name + '\"?'))
+				$N.deleteObject(x);
 		});
 	}
 	var replyButton = $('<button disabled>Reply</button>').appendTo(actionLine);

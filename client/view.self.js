@@ -273,25 +273,29 @@ function renderUs(v) {
 				return (o.author == currentUser) && (o.subject == currentUser);
 			};
 
-		    _.each(operators, function(o) {
-		        var O = $N.tag(o);
-
-				var sdd = newDiv().addClass('alternatingDiv');
-
-				var header = newTagButton(O, function() {
-					var d = newPopup("Add " + O.name, {width: 800, height: 600, modal: true});
+			function addTheTag(T) {
+				return function() {
+					var d = newPopup("Add " + T.name, {width: 800, height: 600, modal: true});
 				    d.append(newTagger([], function(results) {
-						saveAddedTags(results, o);
+						saveAddedTags(results, T.uri);
 
 				        later(function() {
 				            d.dialog('close');                        
 							updateNowDiv();
 				        });
 				    }));
-				}).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
+				}			
+			}
+
+		    _.each(operators, function(o) {
+		        var O = $N.tag(o);
+
+				var sdd = newDiv().addClass('alternatingDiv');
 
 				if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))  ) {
 					//not a 3-vector system
+					var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
+
 					var nn = _.filter($N.objectsWithTag(o),currentUserFilter);
 
 					if (nn.length > 0) {
@@ -377,10 +381,27 @@ function renderUs(v) {
 					//console.log(x);
 				}
 
+				function newLeftColDiv() { return $('<div style="width: 48%; float: left; clear: both"/>'); }
+				function newRightColDiv() { return $('<div style="width: 48%; float: right"/>'); }
+
+				newLeftColDiv().css('text-align', 'center').appendTo(d).append('<b>Knowledge</b>');
+
+				var kb = newDiv();
+				var lButton = $('<button title="Learn">L</button>').css('width', '32%').css('float', 'left').appendTo(kb);
+				var dButton = $('<button title="Do">D</button>').css('float', 'left').css('width', '34%').appendTo(kb);
+				var tButton = $('<button title="Teach">T</button>').css('width', '32%').css('float', 'left').appendTo(kb);
+				lButton.css('background-color', '#ffbbbb').click(addTheTag($N.getTag('Learn')));
+				dButton.css('background-color', '#bbffbb').click(addTheTag($N.getTag('Do')));
+				tButton.css('background-color', '#bbbbff').click(addTheTag($N.getTag('Teach')));
+
+
+
+				newRightColDiv().appendTo(d).append(kb);
+
 				_.each(nn, function(x) {
 					var X = $N.getObject(x);
-					var lc = $('<div style="width: 48%; float: left; clear: both"/>').appendTo(d);
-					var rc = $('<div style="width: 48%; float: right"/>').appendTo(d);
+					var lc = newLeftColDiv().appendTo(d);
+					var rc = newRightColDiv().appendTo(d);
 
 					var nameLink = $('<a href="#">' + X.name + '</a>');
 					nameLink.click(function() {
@@ -388,7 +409,7 @@ function renderUs(v) {
 					});
 					lc.append(nameLink);
 
-					var slider = $('<input type="range" min="-1" max="1" step="0.1">').addClass('SkillSlider');
+					var slider = $('<input type="range" min="-1" max="1" step="0.05"/>').addClass('SkillSlider');
 					slider.attr('value', knowTagsToRange(X));
 
 					var SLIDER_CHANGE_MS = 500;
