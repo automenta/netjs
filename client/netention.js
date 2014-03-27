@@ -242,7 +242,7 @@ function netention(f) {
             });
         },
         
-        subtags : function(s) {
+        getSubTags : function(s) {
 			return subtags( this.tags, s );
         },
         

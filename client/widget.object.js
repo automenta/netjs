@@ -1646,7 +1646,7 @@ function newTagTree(param) {
         else
             name = xi = i;
 		
-        var children = $N.subtags(xi);
+        var children = $N.getSubTags(xi);
 
         var label = name;
         if (stc[xi]) {
