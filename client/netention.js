@@ -243,16 +243,7 @@ function netention(f) {
         },
         
         subtags : function(s) {
-            //this might be suboptimal, use an index
-            var that = this;
-            return _.select( _.keys(this.tags), function(tt) {
-                var t = that.tags[tt];
-                if (!t.tag)
-                    return false;
-                else { 
-                    return (_.contains(t.tag, s));
-                }
-            });                
+			return subtags( this.tags, s );
         },
         
         isProperty : function(p) { return this.properties[p]!=undefined; },

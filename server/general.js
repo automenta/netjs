@@ -570,17 +570,20 @@ var emotionTags = [
 
 function getDefaultTemplates($N) {
 	var x = [];
+
 	{
-		var n = $N.objNew('SomethingNeeded', 'Something Needed');
-		n.addTag('Need');		
-		x.push(n);
+		x.push($N.objNew('SomethingNeeded', 'Something Needed').addTag('Need'));
 	}
 	{
 		var n = $N.objNew('TravelRoute', 'Route to Travel');
-		n.addTag('Arrive');		
-		n.add('arriveLocation', { });
-		n.addTag('Depart');		
-		n.add('departLocation', { });
+		n.addTag('Arrive').add('arriveLocation', { });
+		n.addTag('Depart').add('departLocation', { });
+		x.push(n);
+	}
+	{
+		var n = $N.objNew('FeelingReport', 'How it Feels');
+		n.addTag('Report');
+		n.tagSuggestions = $N.subtags('Emotion');
 		x.push(n);
 	}
 

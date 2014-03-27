@@ -1233,3 +1233,17 @@ function goals(time, goalList) {
 }
 exports.goals = goals;
 
+
+
+function subtags(tags, s) {
+    //this is suboptimal (use an index), & doesn't yet do multilevel inference
+    return _.select( _.keys(tags), function(tt) {
+        var t = tags[tt];
+        if (!t.tag)
+            return false;
+        else { 
+            return (_.contains(t.tag, s));
+        }
+    });                
+}
+exports.subtags = subtags;

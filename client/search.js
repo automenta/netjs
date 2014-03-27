@@ -1,6 +1,6 @@
 /** Search and NLP (natural language processing) support */
 
-var englishInvalidKeywords = /^and|or|to|the|if|with|which|an$/;
+var englishInvalidKeywords = /^and|or|to|the|if|it|with|which|an|how|why|what|where|when|that|can|will|object$/;
 function isValidKeyword(x) {
     if (x.length < 2) return false;
 	return !englishInvalidKeywords.test(x);

@@ -86,7 +86,7 @@ function getAvatarURL(s) {
 	return configuration.defaultAvatarIcon;
 }
 
-function newTagButton(t, onClicked) {
+function newTagButton(t, onClicked, isButton) {
     var ti = null;
 
     if (!t.uri) {
@@ -103,7 +103,8 @@ function newTagButton(t, onClicked) {
         i = $(document.createElement('img')).attr('src', ti).attr('class', 'TagButtonIcon');
     }
 
-    var b = $(document.createElement('a')).attr('href', '#');
+    var b = isButton ? $(document.createElement('button')) : $(document.createElement('a')).attr('href', '#');
+
     if (i)
         b.append(i);
 
@@ -169,7 +170,7 @@ function newReplyWidget(onReply, onCancel) {
  */
 function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
     var d = newDiv();
-	var headerTagButtons = [];
+	var headerTagButtons = ix.tagSuggestions || [];
 
     function update(x) {
         var whenSaved = [];
@@ -251,12 +252,11 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 				header.append('<br/>');
 			}
 			else {
-				var tb = $('<button>' + T + '</button>').appendTo(header);
-				tb.click(function() {
+				newTagButton(T, function() {
 			       var y = d.getEditedFocus();
 			       objAddTag(y, T);
 			       update(y);
-				});
+				}, true).appendTo(header);
 			}
 		});
 
@@ -842,8 +842,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
 
         later(function() {
-            var lat = t.value.lat || 0;
-            var lon = t.value.lon || 0;
+            var lat = t.value.lat || configuration.mapDefaultLocation[0];
+            var lon = t.value.lon || configuration.mapDefaultLocation[1];
             var zoom = t.value.zoom;
             m = initLocationChooserMap(de, [lat, lon], zoom);
 

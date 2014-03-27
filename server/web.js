@@ -297,6 +297,11 @@ exports.start = function(options, init) {
     }
     $N.addTags = addTags;
 
+	function subtags(t) {
+		return util.subtags(tags, t);
+	}
+	$N.subtags = subtags;
+
 	//TODO rename: unMongoize
     function removeMongoID(x) {
         if (Array.isArray(x)) {
