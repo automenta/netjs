@@ -266,7 +266,7 @@ function renderUs(v) {
 
 			var currentUserFilter = function(o) {
 				o = $N.getObject(o);
-				return (o.author == currentUser) && (o.subject == currentUser);
+				return (o.author == currentUser);// && (o.subject == currentUser);
 			};
 
 			function addTheTag(T) {

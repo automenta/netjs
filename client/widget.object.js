@@ -1488,7 +1488,7 @@ function newObjectSummary(x, options) {
             var axn = $('<a href="#">' + xn + '</a>');
             axn.attr('title', x.id);
             axn.click(function() {
-                newPopupObjectView(x.id);
+                newPopupObjectView(x.id, true);
             });
             haxn.append(axn, '&nbsp;');
         }

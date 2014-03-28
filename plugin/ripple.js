@@ -5,29 +5,6 @@ Ripple.com
 --Payment actions
 */
 
-//https://github.com/ripple/ripple-lib
-var ripple = require('ripple-lib');
-var _ = require('underscore');
-
-
-var RIPPLE_UPDATE_INTERVAL_MS = 1000 * 60 * 15; //15min
-
-var remote = new ripple.Remote({
-  // see the API Reference for available options
-  trusted:        true,
-  local_signing:  true,
-  local_fee:      true,
-  fee_cushion:     1.5,
-  servers: [
-    {
-        host:    's1.ripple.com'
-      , port:    443
-      , secure:  true
-    }
-  ]
-});
-
-
 exports.plugin = function($N) { return {
         name: 'Ripple',	
 		description: 'Multicurrency Wallet and Trust Network',
@@ -36,6 +13,29 @@ exports.plugin = function($N) { return {
         author: 'http://ripple.com',
         
 		start: function() { 
+
+			//https://github.com/ripple/ripple-lib
+			var ripple = require('ripple-lib');
+			var _ = require('underscore');
+
+
+			var RIPPLE_UPDATE_INTERVAL_MS = 1000 * 60 * 15; //15min
+
+			var remote = new ripple.Remote({
+			  // see the API Reference for available options
+			  trusted:        true,
+			  local_signing:  true,
+			  local_fee:      true,
+			  fee_cushion:     1.5,
+			  servers: [
+				{
+					host:    's1.ripple.com'
+				  , port:    443
+				  , secure:  true
+				}
+			  ]
+			});
+
 			$N.addTags([
                 {
                     uri: 'RippleUser', name: 'Ripple User', 
