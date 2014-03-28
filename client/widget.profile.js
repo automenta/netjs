@@ -99,14 +99,16 @@ function newNewProfileWidget(whenFinished) {
 	d.append(emailField).append('<br/>');
 
 	var extraProperties = configuration.newUserProperties;
-	var extraPropertyInputs = [];
-	for (var i = 0; i < extraProperties.length; i++) {
-		var e = extraProperties[i];
-		var ep = $N.getProperty(e);
-		var en = ep ? ep.name : e;
-		var ei = $('<input type="text"/>');
-		d.append(en, ei, '<br/>');
-		extraPropertyInputs.push(ei);		
+	if (extraProperties) {
+		var extraPropertyInputs = [];
+		for (var i = 0; i < extraProperties.length; i++) {
+			var e = extraProperties[i];
+			var ep = $N.getProperty(e);
+			var en = ep ? ep.name : e;
+			var ei = $('<input type="text"/>');
+			d.append(en, ei, '<br/>');
+			extraPropertyInputs.push(ei);		
+		}
 	}
 
 
@@ -154,10 +156,12 @@ function newNewProfileWidget(whenFinished) {
         objAddTag(o, 'Human');
         objAddTag(o, 'User');     
 
-		for (var i = 0; i < extraProperties.length; i++) {
-			var e = extraProperties[i];
-			var ei = extraPropertyInputs[i];
-			objAddValue(o, e, ei.val());
+		if (extraProperties) {
+			for (var i = 0; i < extraProperties.length; i++) {
+				var e = extraProperties[i];
+				var ei = extraPropertyInputs[i];
+				objAddValue(o, e, ei.val());
+			}
 		}
 						
 		var location = lmap.location();
