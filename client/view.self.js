@@ -210,22 +210,18 @@ function renderUs(v) {
 		function updateNowDiv() {
 			sidebar.empty();
 
-			//sidebar.html(newProtogoalMenu());	
-
 			var avatarButton = $('<span/>');
+			var avatarImg = getAvatar($N.getObject(currentUser));
+			avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
+
+			var exportButton = $('<button>Export</button>');
+			exportButton.click(function() {
+				window.open('/#user/' + currentUser);
+			});
+
+			currentGoalHeader.append(avatarButton, exportButton);
 
 			if ($N.myself()) {
-				var avatarImg = getAvatar($N.getObject(currentUser));
-				avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
-
-				var exportButton = $('<button>Export</button>');
-				exportButton.click(function() {
-					var newwindow=window.open('/#user/' + currentUser);
-					//var newdocument=newwindow.document;
-					//newdocument.write(getSelfSummaryHTML(currentUser));
-				});
-
-				currentGoalHeader.append(avatarButton, exportButton);
 
 				if (currentUser == $N.myself().id) {
 					var editButton = $('<button>Edit</button>').appendTo(currentGoalHeader);
