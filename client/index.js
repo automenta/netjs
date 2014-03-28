@@ -88,8 +88,6 @@ function _updateView(force) {
 		updateIndent($('#ViewMenu').is(":visible"));
     }
 
-	if (view!='user')
-		$N.router.navigate(view, {trigger: false});
 
     if (view === 'browse') {
         indent();
@@ -487,7 +485,9 @@ $(document).ready(function() {
     $('#close-menu').button();
     $(".ViewControl").click(function() {
 		var v = $(this);
-		self.set('currentView', v.attr('id'));
+		var vi = v.attr('id');
+		$N.router.navigate(vi, {trigger: false});
+		self.set('currentView', vi);
 	});
 
     $('#about-toggle').click(function() {

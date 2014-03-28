@@ -83,7 +83,7 @@ function newUserView(v, userid) {
 
 			if (tags[i])
 				for (var y = 0; y < tags[i].length; y++) {
-				    var tt = tags[i][y];
+				    var tt = tags[i][y][0];
 					var name = tags[i][y][0];
 					var strength = tags[i][y][1];
 					var fs = parseInt((strength * 100) + 50);
