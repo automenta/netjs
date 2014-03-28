@@ -539,13 +539,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
     update(ix);
 
-	d.addTagButtons = function(tags) {
-		later(function() {
-			headerTagButtons = tags;
-			update(d.getEditedFocus());
-		});
-	};
-
     return d;
 }
 

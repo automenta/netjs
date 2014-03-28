@@ -102,8 +102,8 @@ function renderShare(v) {
 				var mpdl = configuration.mapDefaultLocation || [0,0];
 				o.add('spacepoint', { lat: mpdl[0], lon: mpdl[1] });
 
+				o.tagSuggestions = _.union(shareTags, ['\n'], shareCategories);
 				var ee = newPopupObjectEdit( o );
-				ee.addTagButtons(_.union(shareTags, ['\n'], shareCategories));
 			});
 		}
 

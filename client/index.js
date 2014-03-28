@@ -41,6 +41,13 @@ function _updateView(force) {
     //s.saveLocal();
 
     var view = s.get('currentView');
+	var param = null;
+
+	if (view.view) {
+		param = _.clone(view);
+		view = view.view;
+		delete param.view;
+	}
 
     var o = $('#ViewOptions');
     var v = $('#View');
@@ -81,7 +88,8 @@ function _updateView(force) {
 		updateIndent($('#ViewMenu').is(":visible"));
     }
 
-	$N.router.navigate("view/" + view, {trigger: false});
+	if (view!='user')
+		$N.router.navigate(view, {trigger: false});
 
     if (view === 'browse') {
         indent();
@@ -134,6 +142,10 @@ function _updateView(force) {
     else if (view == 'templates') {
         indent();
         currentView = renderTemplatesView(v);
+    }
+    else if (view == 'user') {
+        indent();
+        currentView = newUserView(v, param ? param.userid : null);
     }
     else {
         v.html('Unknown view: ' + view);
@@ -323,8 +335,9 @@ $(document).ready(function() {
                         "tag/:tag": "tag",
                         //"new/with/tags/:t":     "newWithTags",
                         "example": "completeExample",
-						"view/:view": "view"
-                                //"search/:query/:page":  "query"   // #search/kiwis/p7
+						"user/:userid": "user",
+						":view": "view",
+                         //"search/:query/:page":  "query"   // #search/kiwis/p7
                     },
                     me: function() {
                         commitFocus($N.myself());
@@ -346,6 +359,9 @@ $(document).ready(function() {
                     },
 					view: function(view) {
 						self.set('currentView', view);
+					},
+					user: function(userid) {
+						self.set('currentView', {view: 'user', userid: userid } );
 					}
 
                 });

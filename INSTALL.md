@@ -44,8 +44,9 @@ git clone https://github.com/automenta/netjs.git ; cd netjs ; npm update
 
 ####Begin using Netention default options
 ```
-cp options.js.EXAMPLE options.js
+cp [options.js.EXAMPLE](https://github.com/automenta/netjs/blob/master/options.js.EXAMPLE) options.js
 ```
+
 
 ####Edit Netention Options
 TODO: instructions for each options in options.js
