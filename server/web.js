@@ -316,7 +316,7 @@ exports.start = function(options, init) {
 		}
     }
     
-    function getObjectSnapshot(uri, whenFinished) {
+    function getObjectByID(uri, whenFinished) {
         if (tags[uri] != undefined) {
             //it's a tag
             whenFinished(tags[uri]);
@@ -348,7 +348,8 @@ exports.start = function(options, init) {
 
         }
     }
-	$N.getObjectSnapshot = getObjectSnapshot;
+	$N.getObjectByID = getObjectByID;
+	$N.getObjectSnapshot = getObjectByID; //DEPRECATED
 
     function getObjectsByAuthor(a, withObjects) {
         var db = mongo.connect(getDatabaseURL(), collections);

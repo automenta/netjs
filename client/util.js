@@ -147,14 +147,20 @@ exports.objAddTag = objAddTag;
 
 //remove all instances of a tag
 function objRemoveTag(x, t) {
-	while (objHasTag(x, t)) {
+	var noneRemain;
+	do {
+		noneRemain = true;
+
+		if (!x.value) break;
 		for (var i = 0; i < x.value.length; i++) {
+
 			if (x.value[i].id == t) {
 				x = objRemoveValue(x, i);
+				noneRemain = false;
 				continue;
 			}
 		}
-	}
+	} while (!noneRemain);
 	return x;
 }
 exports.objRemoveTag = objRemoveTag;
