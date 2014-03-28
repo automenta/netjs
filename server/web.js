@@ -840,12 +840,12 @@ exports.start = function(options, init) {
     // Finish the authentication process by verifying the assertion.  If valid,
     // the user will be logged in.  Otherwise, authentication has failed.
     express.get('/auth/openid/return',
-            passport.authenticate('openid', {successRedirect: '/#/reconnect',
+            passport.authenticate('openid', {successRedirect: '/#',
         failureRedirect: '/'}));
 
     express.get('/auth/google', passport.authenticate('google'));
     express.get('/auth/google/return',
-            passport.authenticate('google', {successRedirect: '/#/reconnect',
+            passport.authenticate('google', {successRedirect: '/#',
         failureRedirect: '/'}));
     // -------------------------------------------------------------- PASSPORT 
 
