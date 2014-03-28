@@ -141,7 +141,7 @@ function renderItems(o, v, maxItems, perItems) {
 }
 
 
-function renderBrowseList(o, v, cssClass, afterCreated) {
+function renderBrowse(o, v, cssClass, afterCreated) {
     renderItems(o, v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
         var elements = [];
         for (var i = 0; i < xxrr.length; i++) {
@@ -172,8 +172,12 @@ function freetileView() {
 	});
 }
 
+function renderBrowseList(o, v) {
+	renderBrowse(o, v, 'objectListItem', function(v) {
+	});
+}
 function renderBrowseGrid(o, v) {
-	renderBrowseList(o, v, 'objectGridItem', function(v) {
+	renderBrowse(o, v, 'objectGridItem', function(v) {
 		freetileView();
 	});
 }
@@ -349,7 +353,7 @@ function renderList(s, o, v) {
 	var textsizeSlider = $('<input type="range" name="points" min="1" value="16" max="32">');
 	textsizeSlider.change(function(x) {
 		updateFont($(this).val());
-		if (listRenderer == renderBrowseGrid) {
+		if (listRenderer === renderBrowseGrid) {
 			freetileView();
 		}
 	});

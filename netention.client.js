@@ -40,7 +40,7 @@ var defaultIcons = {
 
 var themes = {
 	//BASIC
-    "ui-lightness":'Bright',
+    "_bright":'Bright',
     "ui-darkness":'Dark',
 
 	//ORIGINAL

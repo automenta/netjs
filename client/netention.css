@@ -676,6 +676,7 @@ word-wrap: break-word;
 }
 
 	.objectGridItem { width: 30%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 5px; z-index:2; }
+	.objectListItem { width: 98%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 0px; margin-bottom: 5px; z-index:2; }
 	.ObjectViewHideButton { height:30px;   position:absolute;  top:-4px; right:-4px; z-index:2; opacity:0; display:inline-block; }
 	.ObjectViewHideButton:hover { opacity:1; }
 	.ObjectViewHideButton button { position:relative; padding:5px; margin:0px; }
@@ -798,7 +799,7 @@ word-wrap: break-word;
 @media (max-width : 699px) {
 	
 	#welcome { margin:0px auto; clear:both; display:block; text-align:right; }
-#ViewMenu, #View { width:auto !important; max-width:100% !important; min-width:100% !important; }
+#ViewMenu, #View { width:auto !important; max-width:100% !important;  }
 
 
 	#FocusMainMenu button { display:block; width:100%; margin:0; }

@@ -1,4 +1,4 @@
-@import url('/lib/jquery-ui/1.10.4/themes/sunny/jquery-ui.min.css');
+@import url('/lib/jquery-ui/1.10.4/themes/ui-lightness/jquery-ui.min.css');
 h1 a {
     color: black;
 }
@@ -7,4 +7,6 @@ h1 a {
 }
 #ViewMenu {
     opacity: 0.94;
+    background-color: #149bdf;
 }
+
