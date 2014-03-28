@@ -508,41 +508,27 @@ accelerometerReport	Raised every time the device reports its current acceleromet
 
 //http://bioportal.bioontology.org/ontologies/MFOEM?p=classes
 var emotionTags = [
-	{ uri: 'Emotion', name: 'Emotion', tag: ['Concept'] },
+	{ uri: 'Emotion', name: 'Emotion', tag: ['Concept'], 
+		properties: {
+	        'undulyExtremeMeaning': { name: 'Is the meaning I’m assigning to this event unduly extreme?', type: 'textarea' },
+	        'harshConclusions': { name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', type: 'textarea' },
+	        'drawingGlobalConclusions': { name: 'Am I drawing global conclusions from this isolated event?', type: 'textarea' },
+	        'decidingTotalDefinition': { name: 'Am I deciding that this specific event totally defines who it affects?', type: 'textarea' },
+	        'decidingAffectedFuture': { name: 'Am I deciding that this specific event affects the future of who it affects?', type: 'textarea' },
+	        'feelBetterOrWorse': { name: 'Does this meaning lead me to feel better or worse about myself?', type: 'textarea' },
+	        'furtherGoalAction': { name: 'Is it encouraging further goal-directed action or discouraging me to give up?', type: 'textarea' }
+		}
+	},
 
     { uri: 'Emotion.calm', name: 'Calm', tag: ['Emotion'] }, //neutral
     
-    //
+    
 	{ uri: 'Emotion.happy', name: 'Happy', tag: ['Emotion'] },
 	{ uri: 'Emotion.trusting', name:'Trusting', tag: ['Emotion']},
 	{ uri: 'Emotion.anticipating', name: 'Anticipating', tag: ['Emotion']},
 	{ uri: 'Emotion.surprised', name:'Surprised', tag: ['Emotion']}, 
 	
-    //[abstract NEGATIVE supertype]
-	/*
-	"NEGATIVE EVENT" CBT Questions that Can Be Stored as Properties
-	 
-	Help decide whether the meanings you give to a negative event cause disturbance by answering:
-
-		Is the meaning I’m assigning to this event unduly extreme? 
-		Am I exaggerating a simple event to derive harsh conclusions from it?
-		Am I drawing global conclusions from this isolated event? 
-		Am I deciding that this specific event totally defines me? 
-		Am I deciding that this specific event affects my future?
-		
-		Does this meaning lead me to feel better or worse about myself? 
-		Is it encouraging further goal-directed action or discouraging me to give up?
-
-	If answers to these questions are largely ‘yes’, 
-	then you probably are disturbing yourself unnecessarily about a negative event. 
-
-	The situation may in fact be negative – but your thinking may be worsening it.
-	*/	
-    { uri: 'Emotion.sad', name: 'Sad', properties: {
-        'undulyExtremeMeaning': { name: 'Is the meaning I’m assigning to this event unduly extreme?', type: 'textarea' },
-        'harshConclusions': { name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', type: 'textarea' }
-        //...
-	}, tag: ['Emotion']},
+    { uri: 'Emotion.sad', name: 'Sad', properties: {	}, tag: ['Emotion']},
     
 	{ uri: 'Emotion.afraid', name: 'Afraid', tag: ['Emotion']},
 	{ uri: 'Emotion.angry', name: 'Angry', tag: ['Emotion']},
@@ -583,6 +569,7 @@ function getDefaultTemplates($N) {
 	{
 		var n = $N.objNew('FeelingReport', 'How it Feels');
 		n.addTag('Report');
+		n.addTag('Emotion');
 		n.tagSuggestions = $N.subtags('Emotion');
 		x.push(n);
 	}

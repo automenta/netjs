@@ -88,8 +88,7 @@ function renderShare(v) {
 
 			var editButton = $("<button title='Edit Profile'><img style='height: 1.0em; vertical-align: middle' src='" + getAvatarURL($N.myself()) + "'/>" + $N.myself().name + "</button>");
 			editButton.click(function() {
-				newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'} ).
-				append(newObjectEdit($N.myself(), true));
+				newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));
 			});
 
 			editButton.appendTo(selfmenu);
@@ -103,7 +102,7 @@ function renderShare(v) {
 				o.add('spacepoint', { lat: mpdl[0], lon: mpdl[1] });
 
 				o.tagSuggestions = _.union(shareTags, ['\n'], shareCategories);
-				var ee = newPopupObjectEdit( o );
+				var ee = newPopupObjectEdit( o, true );
 			});
 		}
 

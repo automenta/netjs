@@ -898,18 +898,32 @@ function newEle(e) {
     return $(document.createElement(e));    
 }
 
-function newPopup(title,p) {
-	var clientHeight = $(window).height();
+function newPopup(title,p,isModal) {
+
     var d = newDiv();
     d.attr('title', title);
     
     $('body').append(d);
+	if (p === true) {
+		var clientHeight = $(document).height();
+		var clientWidth = $(document).width();
+		var margin = 24;
+		var leftMargin = 64;
+		p = {
+			width: clientWidth-leftMargin-margin,
+			height: clientHeight-margin*2,
+			position: [ leftMargin, margin]
+		};
+	}
+
 	p = _.extend(p||{ }, {
-		maxHeight: parseInt(0.75 * clientHeight),
 		close: function() {
 			d.remove();
 		}
 	});
+	if (isModal)
+		p.modal = true;
+
     d.dialog(p);
     return d;    
 }
@@ -929,13 +943,9 @@ function getCookie(name) {
     return null;
 }
 
-function newPopupObjectEdit(n) {
-	var clientWidth = $(window).width();
+function newPopupObjectEdit(n, p) {
 	var e = newObjectEdit(n, true);
-    newPopup('Add...', { 
-		width: parseInt(clientWidth*0.75), 
-		position: { my: "center", at: "center", of: window } 
-	}).append(e);
+    newPopup('Add...', p).append(e);
 	return e;
 }
 

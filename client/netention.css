@@ -572,7 +572,6 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 
  /* jQuery UI overrides */
 .ui-widget-header a {color:inherit !important;}
-.ui-dialog { z-index:14 !important; }
  
  /* Loading Login Screen */
 #LoadingSplash { background: url('/theme/cybernetic/p2p_banner.jpg') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-attachment:fixed; z-index:100; width: 100%; height: 100%; position: fixed; }
@@ -1289,10 +1288,6 @@ a.openModal:focus {
 	z-index: 5000;
 }
 
-
-.ui-front {
-	z-index: 13 !important;
-}
 
 .fractaldom_surface {
 	background-image: url('lib/slateboxjs/cursors/grid_transparent.png');
