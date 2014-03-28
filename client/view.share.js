@@ -175,7 +175,7 @@ function newObjectSummary2(x) {
 	var e = newDiv().addClass('ShareSummaryContent').appendTo(d);
 	var titleLink = $('<a href="#"><h1>' + x.name + '</h1></a>');
 	titleLink.click(function() {
-		newPopupObjectView(x);
+		newPopupObjectView(x,true);
 	});
 	e.append(titleLink);
 	e.append(newMetadataLine(x));
@@ -184,7 +184,7 @@ function newObjectSummary2(x) {
 	if ($N.id() == x.author) {
 		var editButton = $('<button>Edit</button>').appendTo(actionLine);
 		editButton.click(function() {
-			newPopupObjectEdit(x);
+			newPopupObjectEdit(x,true);
 		});
 		var deleteButton = $('<button>Delete</button>').appendTo(actionLine);
 		deleteButton.click(function() {

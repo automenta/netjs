@@ -23,8 +23,13 @@ function getTagIcon(t) {
 }
 
 
+function newPopupObjectEdit(n, p) {
+	var e = newObjectEdit(n, true);
+    newPopup('Add...', p).append(e);
+	return e;
+}
 
-function newPopupObjectView(_x) {
+function newPopupObjectView(_x,p) {
     var x;
     if (typeof (_x) == "string")
         x = $N.getObject(_x);
@@ -36,7 +41,7 @@ function newPopupObjectView(_x) {
         return;
     }
 
-    var d = newPopup(x.name);
+    var d = newPopup(x.name,p);
     d.append(newObjectSummary(x, {
 		depthRemaining: 4
 	}));

@@ -943,11 +943,7 @@ function getCookie(name) {
     return null;
 }
 
-function newPopupObjectEdit(n, p) {
-	var e = newObjectEdit(n, true);
-    newPopup('Add...', p).append(e);
-	return e;
-}
+
 
 
 /**
