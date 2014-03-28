@@ -230,7 +230,7 @@ $('#FocusNeedButton').click(function() {
         objAddValue(focusValue, {id: n});
     });
     renderFocus();*/
-    var d = newPopup("Add Tag to Focus", {width: 800, height: 600, modal: true, position: 'center'});
+    var d = newPopup("Add Tag to Focus", true, true);
     d.append(newTagger([], function(x) {
         for (var i = 0; i < x.length; i++)
             objAddTag(focusValue, x[i]);

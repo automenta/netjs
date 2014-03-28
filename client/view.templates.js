@@ -11,7 +11,7 @@ function renderTemplatesView(v) {
 			var X = _.clone(T);
 			X.id = uuid();
 			objRemoveTag(X, 'Template');
-			newPopupObjectEdit(X);
+			newPopupObjectEdit(X, true);
 		});
 	});
 

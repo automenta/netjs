@@ -562,8 +562,8 @@ function getDefaultTemplates($N) {
 	}
 	{
 		var n = $N.objNew('TravelRoute', 'Route to Travel');
-		n.addTag('Arrive').add('arriveLocation', { });
 		n.addTag('Depart').add('departLocation', { });
+		n.addTag('Arrive').add('arriveLocation', { });
 		x.push(n);
 	}
 	{

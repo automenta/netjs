@@ -406,7 +406,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         if (hideWidgets != true) {
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
             whatButton.click(function() {
-                var p = newPopup('Select Tags for ' + nameInput.val(), {modal: true, position: 'center', minWidth: 400});
+                var p = newPopup('Select Tags for ' + nameInput.val(), 	true, true);
                 p.append(newTagger([], function(t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
