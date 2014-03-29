@@ -978,16 +978,12 @@ exports.start = function(options, init) {
     }
     function getClientSelves(session) {
         if (!$N.server.users)
-            return $N.server.users = { };
+            $N.server.users = { };
         
         if (!$N.server.users['anonymous']) {
             $N.server.users['anonymous'] = [ ];
         }
 
-        if (!session) {
-            return $N.server.users['anonymous'];
-        }
-        
         var key = getSessionKey(session);        
         return $N.server.users[key];
     }
