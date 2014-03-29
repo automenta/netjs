@@ -784,6 +784,8 @@ exports.start = function(options, init) {
 		var possibleClients = getClientSelves(req.session);
         if (possibleClients)
 	    	cid = possibleClients[possibleClients.length-1];
+		else
+			possibleClients = [];
 
         if (!anonymous) {
             res.cookie('authenticated', isAuthenticated(req.session));
