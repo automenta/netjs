@@ -228,12 +228,15 @@ function getRelevant(sort, scope, semantic, s, o, maxItems) {
 	    return relevance[b] - relevance[a];
 	});
     
+	/*
     if (relevant.length > maxItems) {
         o.prepend('<span>Too many: 1..' + maxItems + ' of ' + relevant.length + '</span>');
     }
     else {
         
     }
+	*/
+
     return [ _.first(relevant, maxItems), relevance ];
 }
 

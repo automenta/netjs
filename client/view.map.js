@@ -434,7 +434,7 @@ function renderLeafletMap(s, o, v) {
                 var r = xxrr[i][1];
                 //renderMapFeature(x, r);
     			var s = objSpacePoint(x);
-				if (s) {
+				if ((s) && (s.lat!=undefined) && (s.lon!=undefined)) {
 					var m = L.marker([s.lat, s.lon], {
 						icon: getIcon(getTagIcon(x)),
 						clickable: false

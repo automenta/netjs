@@ -69,6 +69,9 @@ function objectify(x) {
 		addTag : function(t) {
 			return objAddTag(x, t);
 		},
+		removeTag: function(t) {
+			return objRemoveTag(x, t);
+		},
 
 		addTags : function( tagArray ) {
 			for (var i = 0; i < tagArray.length; i++)

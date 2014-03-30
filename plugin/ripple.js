@@ -1,7 +1,10 @@
 /*
-Ripple.com
+Ripple Interface
+
 --Show users's wallet
 --Create trust graph
+
+TODO
 --Payment actions
 */
 
@@ -21,26 +24,21 @@ exports.plugin = function($N) { return {
 
 			var RIPPLE_UPDATE_INTERVAL_MS = 1000 * 60 * 15; //15min
 
-			var remote = new ripple.Remote({
-			  // see the API Reference for available options
+			var remote = new ripple.Remote({ 	  // see the API Reference for available options
 			  trusted:        true,
 			  local_signing:  true,
 			  local_fee:      true,
 			  fee_cushion:     1.5,
-			  servers: [
-				{
-					host:    's1.ripple.com'
-				  , port:    443
-				  , secure:  true
-				}
-			  ]
+			  servers: [	{	host:    's1.ripple.com', port:    443, secure:  true	}	  ]
 			});
 
 			$N.addTags([
                 {
                     uri: 'RippleUser', name: 'Ripple User', 
                     properties: {
-                        'walletBalanceXRP': { name: 'XRP Balance', type: 'number', max: 1 },
+                        'walletBalanceXRP': { name: 'XRP Balance', type: 'real', max: 1, readonly: true },
+                        'walletBalanceHRS': { name: 'Hours Balance', type: 'real', max: 1, readonly: true },
+                        'walletBalanceUSD': { name: 'USD Balance', type: 'real', max: 1, readonly: true },
                         'rippleTrust': { name: 'Ripple Trust', type: 'object' }
                     }
                 }				
@@ -61,8 +59,6 @@ exports.plugin = function($N) { return {
 					}
 
 					remote.connect(function() {
-					  /* remote connected */
-
 						var pending = _.keys(accounts);
 						var wallets = _.values(accounts);
 						var walletUsers = _.invert(accounts);
@@ -80,7 +76,7 @@ exports.plugin = function($N) { return {
 								account:a 
 							}, function(err, res) {
 								if (!err)		{
-									var balance = parseFloat(res.account_data.Balance);
+									var xrpBalance = parseFloat(res.account_data.Balance)/1e6;
 
 									remote.request_account_lines({
 										account: a
@@ -88,19 +84,32 @@ exports.plugin = function($N) { return {
 										if (!err) {
 											$N.getObjectByID(userid, function(err, U) {
 												if (!err) {
-													$N.objRemoveTag(U, 'walletBalanceXRP');
-													$N.objRemoveTag(U, 'rippleTrust');
+													U.removeTag('walletBalanceXRP');
+													U.removeTag('walletBalanceHRS');
+													U.removeTag('walletBalanceUSD');
+													U.removeTag('rippleTrust');
 
-													$N.objAddValue(U, 'walletBalanceXRP', balance);
+													U.add('walletBalanceXRP', xrpBalance);
 
+													var balances = { };
 													for (var i = 0; i < res.lines.length; i++) {
 														var L = res.lines[i];
 														var toAccount = L.account;
 														var toUser = walletUsers[toAccount];
 
 														if (wallets.indexOf(L.account)!=-1) {
-															$N.objAddValue(U, 'rippleTrust', toUser);
+															U.add('rippleTrust', toUser);
 														}
+														if (balances[L.currency] == undefined)
+															balances[L.currency] = 0;
+														balances[L.currency] += parseFloat(L.balance);
+
+													}
+													if (balances['USD']) {
+														U.add('walletBalanceUSD', balances['USD']);
+													}
+													if (balances['HRS']) {
+														U.add('walletBalanceHRS', balances['HRS']);
 													}
 
 													$N.notice(U);

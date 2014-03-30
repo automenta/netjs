@@ -715,6 +715,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
         if (editable) {
             var dd = $('<input type="text" placeholder="' + type + '"/>').appendTo(d);
+			if (prop.readonly) {
+				dd.attr('readonly','readonly');
+			}
 
             var sx = null;
             if (prop) {
