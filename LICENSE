@@ -2,7 +2,6 @@
                   Version 3, February 2014
 
  Copyright (C) 2014 NETENTION
- Originally Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
 
  Everyone is permitted to copy and distribute verbatim or modified
  copies of this license document, and changing it is allowed as long
@@ -35,3 +34,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+---
+
+It is important to understand the reason for the GPL license ( https://www.gnu.org/copyleft/gpl.html ) but we're not going to try to control you.
