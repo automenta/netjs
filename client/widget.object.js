@@ -1018,6 +1018,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         if (editable) {
             var tt = $('<span></span>');
             var ts = $('<input></input>');
+			if (prop.readonly) {
+				ts.attr('readonly','readonly');
+			}
 
             var value = t.value;
             ts.val(value);

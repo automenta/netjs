@@ -39,7 +39,7 @@ exports.plugin = function($N) { return {
                         'walletBalanceXRP': { name: 'XRP Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceHRS': { name: 'Hours Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceUSD': { name: 'USD Balance', type: 'real', max: 1, readonly: true },
-                        'rippleTrust': { name: 'Ripple Trust', type: 'object' }
+                        'rippleTrust': { name: 'Ripple Trust', type: 'object', readonly: true }
                     }
                 }				
 			]);
