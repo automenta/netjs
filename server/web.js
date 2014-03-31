@@ -1301,6 +1301,7 @@ exports.start = function(options, init) {
     express.get('/logout', function(req, res) {
         res.cookie('authenticated', '');
         res.cookie('clientID', 'undefined');
+        res.cookie('userid', '');
         req.logout();
         res.redirect('/');
     });
