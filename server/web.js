@@ -642,6 +642,45 @@ exports.start = function(options, init) {
             , OpenIDStrategy = require('passport-openid').Strategy
             , GoogleStrategy = require('passport-google').Strategy;
 
+    var users = { };
+    
+    passport.serializeUser(function(user, done) {
+      done(null, user.id);
+    });
+
+    passport.deserializeUser(function(id, done) {
+      done(null, { 'id': id });
+    });
+
+    passport.use(new OpenIDStrategy({
+            returnURL: 'http://' + $N.server.host + '/auth/openid/return',
+            realm: 'http://' + $N.server.host + '/'
+        },
+        function(identifier, done) {
+        //console.log(identifier);
+        //console.log(done);
+             done(null, {id: identifier});
+        // User.findOrCreate({ openId: identifier }, function(err, user) {
+        // done(err, user);
+        // });
+        }
+    ));
+
+    passport.use(new GoogleStrategy({
+            returnURL: 'http://' + $N.server.host + '/auth/google/return',
+            realm: 'http://' + $N.server.host + '/'
+        },
+        function(identifier, profile, done) {
+            //console.log(identifier);
+            //console.log(done);
+            //console.log('google', profile);
+            done(null, {id: identifier, email: profile.emails[0].value});
+            // User.findOrCreate({ openId: identifier }, function(err, user) {
+            // done(err, user);
+            // });
+        }
+    ));
+
 
     //express.configure(function() {
         express.use(cookieParser);
@@ -700,26 +739,6 @@ exports.start = function(options, init) {
 	});
 
 
-    /*
-    var users = { };
-    
-    passport.serializeUser(function(user, done) {
-        done(null, user.id);
-    });
-
-    passport.deserializeUser(function(id, done) {
-        var i = users[id];
-        if (!i) {
-            i = {
-                'id': id
-            };
-            users[id] = i;
-        }
-        done(null, i);
-    });
-    */
-
-    
 
 	//https://github.com/gevorg/http-authenticate
 	var serverPassword = $N.server.password;
@@ -735,45 +754,6 @@ exports.start = function(options, init) {
 	}
 
 
-    var users = { };
-    
-
-    passport.serializeUser(function(user, done) {
-      done(null, user.id);
-    });
-
-    passport.deserializeUser(function(id, done) {
-      done(null, { 'id': id });
-    });
-
-    passport.use(new OpenIDStrategy({
-            returnURL: 'http://' + $N.server.host + '/auth/openid/return',
-            realm: 'http://' + $N.server.host + '/'
-        },
-        function(identifier, done) {
-        //console.log(identifier);
-        //console.log(done);
-             done(null, {id: identifier});
-        // User.findOrCreate({ openId: identifier }, function(err, user) {
-        // done(err, user);
-        // });
-        }
-    ));
-
-    passport.use(new GoogleStrategy({
-            returnURL: 'http://' + $N.server.host + '/auth/google/return',
-            realm: 'http://' + $N.server.host + '/'
-        },
-        function(identifier, profile, done) {
-            //console.log(identifier);
-            //console.log(done);
-            //console.log('google', profile);
-            done(null, {id: identifier, email: profile.emails[0].value});
-            // User.findOrCreate({ openId: identifier }, function(err, user) {
-            // done(err, user);
-            // });
-        }
-    ));
 
 	var getCookies = function(request) {
 	  var cookies = {};

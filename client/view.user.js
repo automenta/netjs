@@ -95,7 +95,11 @@ function newUserView(v, userid) {
 
 		d.append(x);
 
-		d.append('<h2>Knowledge Code (text)</h2><pre>' + getUserTextCode(tags) + '</pre><br/>');
+		var textCode = getUserTextCode(tags);
+		if (textCode.length > 0) {
+			d.append('<h2>Tag Code (text)</h2><pre>' +  + '</pre><br/>');
+			
+		}
 
 		var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
 		d.append('<hr/>', jsonProfileLink, '<br/>');
@@ -119,8 +123,8 @@ function getUserTextCode(tags) {
 
 
 	//Knowledge Tags
-	s += 'KNOW                                  L=========D=========T\n';
-	var chartColumn = s.indexOf('L');
+	var header = 'KNOW                                  L=========D=========T\n';
+	var chartColumn = header.indexOf('L');
 	for (var j = 0; j < operatorTags.length; j++) {
 	   	var i = operatorTags[j];
 		if (isKnowledgeTag(i)) {
@@ -147,6 +151,7 @@ function getUserTextCode(tags) {
 			}
 		}
 	}
+	if (s.length > 0) s = header + s;
 	return s;
 }
 
