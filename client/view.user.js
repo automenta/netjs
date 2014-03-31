@@ -19,7 +19,7 @@ function newUserView(v, userid) {
 				tags[k] = _.map(tags[k], function(o) {
 					var O = $N.getObject(o);
 					var strength = objTagStrength(O, false);
-					return [O.name, strength[k]];
+					return [O.name, strength[k], o];
 				});
 				tags[k] = tags[k].sort(function(a, b) {
 					return b[1] - a[1];
@@ -95,10 +95,10 @@ function newUserView(v, userid) {
 
 		d.append(x);
 
-		var jsoncode = $('<div/>').appendTo(d);
-		$.getJSON('/object/author/' + userid + '/json', function(x) {
-			jsoncode.html(JSON.stringify(x));
-		});
+		d.append('<h2>Knowledge Code (text)</h2><pre>' + getUserTextCode(tags) + '</pre><br/>');
+
+		var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
+		d.append('<hr/>', jsonProfileLink, '<br/>');
 
 	}
 	else {
@@ -107,3 +107,81 @@ function newUserView(v, userid) {
 	
 	return d;
 }
+
+function isKnowledgeTag(t) {
+	return ['Do','DoTeach','DoLearn','LearnDo','TeachDo', 'Teach', 'Learn'].indexOf(t)!=-1;
+}
+
+function getUserTextCode(tags) {
+	var s = '';
+	var operatorTags = getOperatorTags();
+	var processed = {};
+
+
+	//Knowledge Tags
+	s += 'KNOW                                  L=========D=========T\n';
+	var chartColumn = s.indexOf('L');
+	for (var j = 0; j < operatorTags.length; j++) {
+	   	var i = operatorTags[j];
+		if (isKnowledgeTag(i)) {
+			if (!tags[i]) continue;			
+			for (var y = 0; y < tags[i].length; y++) {
+				var oid = tags[i][y][2];
+				var O = $N.getObject(oid);
+
+				if (processed[oid]) continue;
+				processed[oid] = true;
+
+				var line = '  ' + tags[i][y][0];
+				var spacePadding = chartColumn - line.length;
+				for (var n = 0; n < spacePadding; n++)
+					line += ' ';
+				var knowLevel = knowTagsToRange(O);
+				var chartIndex = Math.round(knowLevel * 10);
+				for (var n = -10; n <= 10; n++) {
+					if (n == chartIndex) line += '|'
+					else line += '-';
+				}
+				
+				s += line + '\n';
+			}
+		}
+	}
+	return s;
+}
+
+function knowTagsToRange(x) {
+	var s = objTagStrength(x, false);
+
+	//if (s['DoLearn'])...
+
+	var DO = s['Do'] || 0;
+	var LEARN = s['Learn'] || 0;
+	var TEACH = s['Teach'] || 0;
+
+	//console.log(LEARN, DO, TEACH);
+
+	if (LEARN && TEACH) {
+		console.log(x + ' has conflicting Learn and Teach strengths');
+		TEACH = null;
+		LEARN = null;
+	}
+	if (LEARN) {
+		var total = LEARN + DO;						
+		LEARN/=total;
+		DO/=total;
+		
+		return -1 * LEARN;
+	}
+	else if (TEACH) {
+		var total = TEACH + DO;						
+		TEACH/=total;
+		DO/=total;
+		
+		return 1 * TEACH;
+	}
+	else {
+		return 0;
+	}					
+}
+

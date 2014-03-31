@@ -323,38 +323,6 @@ function renderUs(v) {
 
 				d.append('<hr/>');
 
-				function knowTagsToRange(x) {
-					var s = objTagStrength(x, false);
-
-					var DO = s['Do'] || 0;
-					var LEARN = s['Learn'] || 0;
-					var TEACH = s['Teach'] || 0;
-
-					//console.log(LEARN, DO, TEACH);
-
-					if (LEARN && TEACH) {
-						console.log(x + ' has conflicting Learn and Teach strengths');
-						TEACH = null;
-						LEARN = null;
-					}
-					if (LEARN) {
-						var total = LEARN + DO;						
-						LEARN/=total;
-						DO/=total;
-						
-						return -1 * LEARN;
-					}
-					else if (TEACH) {
-						var total = TEACH + DO;						
-						TEACH/=total;
-						DO/=total;
-						
-						return 1 * TEACH;
-					}
-					else {
-						return 0;
-					}					
-				}
 
 				function rangeToTags(x, newValue) {
 					objRemoveTag(x, 'Do');
