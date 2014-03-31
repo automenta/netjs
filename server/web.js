@@ -642,9 +642,11 @@ exports.start = function(options, init) {
 
     var io = socketio.listen(httpServer);
 
-    io.enable('browser client minification');  // send minified client
-    io.enable('browser client etag');          // apply etag caching logic based on version number
-    io.enable('browser client gzip');          // gzip the file
+	if (io.enable) {
+		io.enable('browser client minification');  // send minified client
+		io.enable('browser client etag');          // apply etag caching logic based on version number
+		io.enable('browser client gzip');          // gzip the file
+	}
     io.set('log level', 1);                    // reduce logging
     io.set('transports', [// enable all transports (optional if you want flashsocket)
         'websocket'
@@ -655,7 +657,7 @@ exports.start = function(options, init) {
     ]);
     io.set("polling duration", 5);
 
-    var cookieParser = expressm.cookieParser('netention0')
+    var cookieParser = require('cookie-parser')('netention0')
             , sessionStore = new connect.middleware.session.MemoryStore();
     var SessionSockets = require('session.socket.io')
             , sessionSockets = new SessionSockets(io, sessionStore, cookieParser);

@@ -4,6 +4,7 @@
     "dependencies":{
 		"express":"",
 		"http-auth":"",
+		"cookie-parser":"",
 		"request":"",
 		"url":"",
 		"util":"",
