@@ -643,14 +643,14 @@ exports.start = function(options, init) {
             , GoogleStrategy = require('passport-google').Strategy;
 
 
-    express.configure(function() {
+    //express.configure(function() {
         express.use(cookieParser);
-        express.use(expressm.bodyParser());
-        express.use(expressm.session({secret: 'secret', key: 'express.sid'}));
+        express.use(require('express-session')({ secret: 'secret', key: 'express.sid', cookie: { secure: true }}));
+        express.use(require('body-parser')());
         express.use(passport.initialize());
         express.use(passport.session());
         express.use(express.router);
-    });
+    //});
 
 
     var httpServer = http.createServer(express);
@@ -688,9 +688,9 @@ exports.start = function(options, init) {
 
 		handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
 
-		if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
+		/*if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
 		  return accept('Cookie is invalid.', false);
-		}
+		}*/
 
 	  } else {
 		return accept('No cookie transmitted.', false);

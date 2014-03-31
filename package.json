@@ -7,6 +7,7 @@
 		"cookie":"",
 		"cookie-parser":"",		
 		"express-session":"",
+		"body-parser":"",
 		"request":"",
 		"url":"",
 		"util":"",
