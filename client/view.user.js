@@ -94,11 +94,24 @@ function newUserView(v, userid) {
 		}
 
 		d.append(x);
-
+	
 		var textCode = getUserTextCode(tags);
 		if (textCode.length > 0) {
-			d.append('<h2>Tag Code (text)</h2><pre>' +  + '</pre><br/>');
-			
+			d.append('<h2>Tag Code (Text)</h2><pre>' + textCode + '</pre><br/>');			
+		}
+
+		var jsonCode = getUserJSONCode(tags);
+
+		if (_.keys(jsonCode).length > 0) {
+			d.append('<h2>Tag Code (JSON)</h2><pre>' + JSON.stringify(jsonCode, null, 4) + '</pre><br/>');			
+
+			var jsonCodeCompact = JSON.stringify(jsonCode);
+			d.append('<h2>Tag Code (JSON Compact)</h2><pre>' + jsonCodeCompact + '</pre><br/>');
+
+			var jid = uuid();
+			d.append('<h2>QR Code</h2>');
+			d.append(newDiv(jid));
+			new QRCode(document.getElementById(jid), jsonCodeCompact);
 		}
 
 		var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
@@ -116,6 +129,41 @@ function isKnowledgeTag(t) {
 	return ['Do','DoTeach','DoLearn','LearnDo','TeachDo', 'Teach', 'Learn'].indexOf(t)!=-1;
 }
 
+function getUserJSONCode(tags) {
+	var jc = { };
+	var operatorTags = getOperatorTags();
+	var processed = {};
+	for (var j = 0; j < operatorTags.length; j++) {
+	   	var i = operatorTags[j];
+		if (isKnowledgeTag(i)) {
+			if (!jc['Know']) jc['Know'] = { };
+
+			if (!tags[i]) continue;			
+			for (var y = 0; y < tags[i].length; y++) {
+				var oid = tags[i][y][2];
+				var O = $N.getObject(oid);
+
+				if (processed[oid]) continue;
+				processed[oid] = true;
+				jc['Know'][O.name] = knowTagsToRange(O);
+
+			}
+		}
+		else {
+
+			if (!tags[i]) continue;							
+
+			jc[i] = [];
+			for (var y = 0; y < tags[i].length; y++) {
+				var oid = tags[i][y][2];
+				var O = $N.getObject(oid);
+				jc[i].push(O.name);
+			}
+		}
+	}
+	return jc;
+}
+
 function getUserTextCode(tags) {
 	var s = '';
 	var operatorTags = getOperatorTags();
@@ -123,7 +171,7 @@ function getUserTextCode(tags) {
 
 
 	//Knowledge Tags
-	var header = 'KNOW                                  L=========D=========T\n';
+	var header = 'Know                                  L=========D=========T\n';
 	var chartColumn = header.indexOf('L');
 	for (var j = 0; j < operatorTags.length; j++) {
 	   	var i = operatorTags[j];
@@ -152,6 +200,19 @@ function getUserTextCode(tags) {
 		}
 	}
 	if (s.length > 0) s = header + s;
+	for (var j = 0; j < operatorTags.length; j++) {
+	   	var i = operatorTags[j];
+		if (!isKnowledgeTag(i)) {
+			if (!tags[i]) continue;			
+			s += i + '\n';
+			for (var y = 0; y < tags[i].length; y++) {
+				var oid = tags[i][y][2];
+				var O = $N.getObject(oid);
+				s += '  ' + O.name + '\n';
+			}
+		}
+	}
+
 	return s;
 }
 
