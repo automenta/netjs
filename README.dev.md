@@ -7,6 +7,7 @@
 [Web Server API](https://github.com/automenta/netjs/blob/master/server/web.js)
 
 # Developer Skills
+```
 Know                                  L=========D=========T
   Cryptography                        --|------------------
   Artificial_intelligence             ----|----------------
@@ -28,4 +29,5 @@ Know                                  L=========D=========T
 Need
   Computer
   Internet
+```
 
