@@ -4,6 +4,7 @@ var feature = require('./feature.js');
 var expressm = require('express');
 var express = expressm();
 var connect = require('connect');
+var cookie = require('cookie');
 var http = require('http')
         , url = require('url')
         , fs = require('fs')
@@ -634,6 +635,24 @@ exports.start = function(options, init) {
 
     http.globalAgent.maxSockets = 256;
 
+    var cookieParser = require('cookie-parser')('netention0');
+
+    //PASSPORT -------------------------------------------------------------- 
+    var passport = require('passport')
+            , OpenIDStrategy = require('passport-openid').Strategy
+            , GoogleStrategy = require('passport-google').Strategy;
+
+
+    express.configure(function() {
+        express.use(cookieParser);
+        express.use(expressm.bodyParser());
+        express.use(expressm.session({secret: 'secret', key: 'express.sid'}));
+        express.use(passport.initialize());
+        express.use(passport.session());
+        express.use(express.router);
+    });
+
+
     var httpServer = http.createServer(express);
 
     httpServer.listen($N.server.port);
@@ -657,15 +676,29 @@ exports.start = function(options, init) {
     ]);
     io.set("polling duration", 5);
 
-    var cookieParser = require('cookie-parser')('netention0');
-    var sessionStore = require('express-session').MemoryStore();
+    /*var sessionStore = require('express-session').MemoryStore();
     var SessionSockets = require('session.socket.io')
-            , sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
+            , sessionSockets = new SessionSockets(io, sessionStore, cookieParser);*/
 
-    //PASSPORT -------------------------------------------------------------- 
-    var passport = require('passport')
-            , OpenIDStrategy = require('passport-openid').Strategy
-            , GoogleStrategy = require('passport-google').Strategy;
+	io.set('authorization', function (handshakeData, accept) {
+
+	  if (handshakeData.headers.cookie) {
+
+		handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
+
+		handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
+
+		if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
+		  return accept('Cookie is invalid.', false);
+		}
+
+	  } else {
+		return accept('No cookie transmitted.', false);
+	  } 
+
+	  accept(null, true);
+	});
+
 
     /*
     var users = { };
@@ -686,14 +719,6 @@ exports.start = function(options, init) {
     });
     */
 
-    express.configure(function() {
-        express.use(cookieParser);
-        express.use(expressm.bodyParser());
-        express.use(expressm.session({store: sessionStore}));
-        express.use(passport.initialize());
-        express.use(passport.session());
-        express.use(express.router);
-    });
     
 
 	//https://github.com/gevorg/http-authenticate
@@ -1465,258 +1490,264 @@ exports.start = function(options, init) {
 
     }
 
-    sessionSockets.on('connection', function(err, socket, session) {
+	//    sessionSockets.on('connection', function(err, socket, session) {
+	io.sockets.on('connection', function (socket) {
 
-        //https://github.com/LearnBoost/socket.io/wiki/Rooms
-        socket.on('subscribe', function(channel, sendAll) {
-            sub(socket, channel, sendAll);
-        });
-        socket.on('unsubscribe', function(channel) {
-            unsub(socket, channel);
-        });
+		var session = socket.handshake.sessionID;
+    	{
+		    //https://github.com/LearnBoost/socket.io/wiki/Rooms
+		    socket.on('subscribe', function(channel, sendAll) {
+		        sub(socket, channel, sendAll);
+		    });
+		    socket.on('unsubscribe', function(channel) {
+		        unsub(socket, channel);
+		    });
 
-        socket.on('pub', function(message, err, success) {
-            if ($N.server.permissions['authenticate_to_create_objects'] != false) {
-                if (!isAuthenticated(session)) {
-                    if (err)
-                        err('Not authenticated');
-                }
-            }
+		    socket.on('pub', function(message, err, success) {
+		        if ($N.server.permissions['authenticate_to_create_objects'] != false) {
+		            if (!isAuthenticated(session)) {
+		                if (err)
+		                    err('Not authenticated');
+		            }
+		        }
 
-			//var currentUser = getCurrentClientID(session);
-			//TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
+				//var currentUser = getCurrentClientID(session);
+				//TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
 
-            if ((message.focus) && (message.author)) {
-                var m = util.objExpand(message);
-                focusHistory.push(m);
+		        if ((message.focus) && (message.author)) {
+		            var m = util.objExpand(message);
+		            focusHistory.push(m);
 
-				plugins('onFocus', m);
-                
-                //remove elements in focusHistory that are older than focusHistoryMaxAge (seconds)
-                var now = Date.now();
-                focusHistory = _.filter(focusHistory, function(f) {
-                    return f.whenCreated > (now - focusHistoryMaxAge*1000); 
-                });
-        
-            }
-			else                  
-	            broadcast(socket, message);
+					plugins('onFocus', m);
+		            
+		            //remove elements in focusHistory that are older than focusHistoryMaxAge (seconds)
+		            var now = Date.now();
+		            focusHistory = _.filter(focusHistory, function(f) {
+		                return f.whenCreated > (now - focusHistoryMaxAge*1000); 
+		            });
+		    
+		        }
+				else                  
+			        broadcast(socket, message);
 
-            if (success)
-                success();
-        });
+		        if (success)
+		            success();
+		    });
 
-        socket.on('getPlugins', function(f) {
-            f($N.server.plugins);
-        });
+		    socket.on('getPlugins', function(f) {
+		        f($N.server.plugins);
+		    });
 
-        socket.on('setPlugin', function(pid, enabled, callback) {
-			if ($N.server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
-                callback('Plugin enabling and disabling not allowed');
-                return;
-			}
-            if ($N.server.permissions['authenticate_to_configure_plugins'] != false) {
-                if (!isAuthenticated(session)) {
-                    callback('Unable to configure plugins (not logged in)');
-                    return;
-                }
-            }
-
-            var pm = $N.server.plugins[pid];
-            if (pm) {
-                if (!(pm.valid == false)) {
-                    var currentState = pm.enabled;
-                    if (currentState != enabled) {
-                        if (enabled) {
-                            pm.enabled = true;
-							if (pm.start)
-	                            pm.start();
-                            nlog('Plugin ' + pid + ' enabled');
-                        }
-                        else {
-                            pm.enabled = false;
-							if (pm.stop)
-	                            pm.stop();
-                            nlog('Plugin ' + pid + ' disabled');
-                        }
-                        saveState(function() {
-                            //nlog('saved state');                            
-                        }, function(err) {
-                            nlog('error saving state on plugin activation');
-                            nlog(err);
-                        });
-                        callback();
-                        return;
-                    }
-                }
-            }
-            callback('Unable to set activity of plugin ' + pid + ' to ' + enabled);
-
-        });
-
-        socket.on('become', function(target, onResult) {
-            var targetObjectID = target;
-            var targetObject = target;
-            if (typeof(target)==="string") {
-                targetObjectID = target; 
-                targetObject = null;
-            }                      
-            else {
-                targetObjectID = target.id;
-            }
-            
-            function pubAndSucceed(x) {
-                pub(x, function() {
-                    addClientSelf(session, targetObjectID);
-                    saveState();
-                    if (onResult)
-                        onResult(targetObjectID);           
-                });                
-            }
-            
-            var sessionKey = getSessionKey(session);
-            var keyRequired = ($N.server.permissions['authenticate_to_create_profiles']!=false);
-            if (!targetObject) { 
-                var selves = getClientSelves(session);
-                if (_.contains(selves, target)) {
-                    if (onResult)
-                        onResult(targetObjectID);
-                }
-                else {
-                    if (keyRequired) {
-                        if (onResult)
-                            onResult(null); //not the author
-                    }
-                    else {
-                        pubAndSucceed(targetObject);
-                    }
-                }
-                
-            }
-            else {
-
-                if ((keyRequired && sessionKey) || (!keyRequired)) {
-                    pubAndSucceed(targetObject);
-                }
-                else {
-                    if (onResult)
-                        onResult();
-                }
-            }
-
-        });
-        
-        socket.on('connect', function(cid, callback) {
-            var key = null, email = null;
-            if (session) {
-                if (session.passport) {
-                    if (session.passport.user) {
-                        key = session.passport.user.id;
-                        email = session.passport.user.email;
-                    }
-                }
-            }
-            if (!cid) {
-                //Authenticated but no clientID specified
-                cid = getCurrentClientID(session);
-                if (!cid) {
-                    var possibleClients = getClientSelves(session);
-                    if (possibleClients)
-                        cid = possibleClients[possibleClients.length-1];
-                }
-            }    
-            else {
-                //Authenticated and clientID specified, check that the user actually owns that clientID
-                var possibleClients = getClientSelves(session);
-				if (possibleClients) {
-	                if (_.contains(possibleClients, cid)) {
-	                }
-	                else {
-	                    cid = possibleClients[possibleClients.length-1];
-	                }
+		    socket.on('setPlugin', function(pid, enabled, callback) {
+				if ($N.server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
+		            callback('Plugin enabling and disabling not allowed');
+		            return;
 				}
-            }                
+		        if ($N.server.permissions['authenticate_to_configure_plugins'] != false) {
+		            if (!isAuthenticated(session)) {
+		                callback('Unable to configure plugins (not logged in)');
+		                return;
+		            }
+		        }
 
-			var selves = getClientSelves(session);
-            nlog('connect: ' + cid + ', ' + key + ', ' + selves);
-                        
-            socket.set('clientID', cid);
-            socket.emit('setClientID', cid, key, selves );
-            socket.emit('setServer', $N.server.name, $N.server.description);
-            
-            getObjectsByTag(['Tag','Template'], function(to) {
-                socket.emit('notice', to);
-            });
+		        var pm = $N.server.plugins[pid];
+		        if (pm) {
+		            if (!(pm.valid == false)) {
+		                var currentState = pm.enabled;
+		                if (currentState != enabled) {
+		                    if (enabled) {
+		                        pm.enabled = true;
+								if (pm.start)
+			                        pm.start();
+		                        nlog('Plugin ' + pid + ' enabled');
+		                    }
+		                    else {
+		                        pm.enabled = false;
+								if (pm.stop)
+			                        pm.stop();
+		                        nlog('Plugin ' + pid + ' disabled');
+		                    }
+		                    saveState(function() {
+		                        //nlog('saved state');                            
+		                    }, function(err) {
+		                        nlog('error saving state on plugin activation');
+		                        nlog(err);
+		                    });
+		                    callback();
+		                    return;
+		                }
+		            }
+		        }
+		        callback('Unable to set activity of plugin ' + pid + ' to ' + enabled);
 
-            /*getObjectsByTag('User', function(to) {
-                socket.emit('notice', to);
-            });*/
+		    });
 
-            getObjectsByAuthor(cid, function(uo) {
-                socket.emit('notice', uo);
-            });
+		    socket.on('become', function(target, onResult) {
+		        var targetObjectID = target;
+		        var targetObject = target;
+		        if (typeof(target)==="string") {
+		            targetObjectID = target; 
+		            targetObject = null;
+		        }                      
+		        else {
+		            targetObjectID = target.id;
+		        }
+		        
+		        function pubAndSucceed(x) {
+		            pub(x, function() {
+		                addClientSelf(session, targetObjectID);
+		                saveState();
+		                if (onResult)
+		                    onResult(targetObjectID);           
+		            });                
+		        }
+		        
+		        var sessionKey = getSessionKey(session);
+		        var keyRequired = ($N.server.permissions['authenticate_to_create_profiles']!=false);
+		        if (!targetObject) { 
+		            var selves = getClientSelves(session);
+		            if (_.contains(selves, target)) {
+		                if (onResult)
+		                    onResult(targetObjectID);
+		            }
+		            else {
+		                if (keyRequired) {
+		                    if (onResult)
+		                        onResult(null); //not the author
+		                }
+		                else {
+		                    pubAndSucceed(targetObject);
+		                }
+		            }
+		            
+		        }
+		        else {
 
-			if (callback) callback();
-            
-        });
+		            if ((keyRequired && sessionKey) || (!keyRequired)) {
+		                pubAndSucceed(targetObject);
+		            }
+		            else {
+		                if (onResult)
+		                    onResult();
+		            }
+		        }
 
-        socket.on('updateSelf', function(s, getObjects) {
-            socket.get('clientID', function(err, c) {
-                if (c == null) {
-                    socket.emit('reconnect');
-                }
-                else {
-                    socket.clientID = c;
+		    });
+		    
+		    socket.on('connect', function(cid, callback) {
+		        var key = null, email = null;
+		        if (session) {
+		            if (session.passport) {
+		                if (session.passport.user) {
+		                    key = session.passport.user.id;
+		                    email = session.passport.user.email;
+		                }
+		            }
+		        }
+		        if (!cid) {
+		            //Authenticated but no clientID specified
+		            cid = getCurrentClientID(session);
+		            if (!cid) {
+		                var possibleClients = getClientSelves(session);
+		                if (possibleClients)
+		                    cid = possibleClients[possibleClients.length-1];
+		            }
+		        }    
+		        else {
+		            //Authenticated and clientID specified, check that the user actually owns that clientID
+		            var possibleClients = getClientSelves(session);
+					if (possibleClients) {
+			            if (_.contains(possibleClients, cid)) {
+			            }
+			            else {
+			                cid = possibleClients[possibleClients.length-1];
+			            }
+					}
+		        }                
 
-                    notice(s);
+				var selves = getClientSelves(session);
+		        nlog('connect: ' + cid + ', ' + key + ', ' + selves);
+		                    
+		        socket.set('clientID', cid);
+		        socket.emit('setClientID', cid, key, selves );
+		        socket.emit('setServer', $N.server.name, $N.server.description);
+		        
+		        getObjectsByTag(['Tag','Template'], function(to) {
+		            socket.emit('notice', to);
+		        });
 
-                    //broadcast client's self
-                    socket.broadcast.emit('notice', s);
+		        /*getObjectsByTag('User', function(to) {
+		            socket.emit('notice', to);
+		        });*/
 
-                    s.created = Date.now();
-                    updateInterests(c, s, socket, getObjects);
-                }
-            });
-        });
+		        getObjectsByAuthor(cid, function(uo) {
+		            socket.emit('notice', uo);
+		        });
 
-        /*
-         socket.on('getSentencized', function(urlOrText, withResult) {
-         cortexit.getSentencized(urlOrText, withResult);
-         });
-         */
+				if (callback) callback();
+		        
+		    });
 
-        socket.on('getObjects', function(query, withObjects) {
-            var db = mongo.connect(getDatabaseURL(), collections);
-            db.obj.find(function(err, docs) {
-                removeMongoID(docs);
-                withObjects(docs);
-                db.close();
-            });
-        });
+		    socket.on('updateSelf', function(s, getObjects) {
+		        socket.get('clientID', function(err, c) {
+		            if (c == null) {
+		                socket.emit('reconnect');
+		            }
+		            else {
+		                socket.clientID = c;
 
-        socket.on('delete', function(objectID, whenFinished) {
-            if ($N.server.permissions['authenticate_to_delete_objects'] != false) {
-                if (!isAuthenticated(session)) {
-                    whenFinished('Unable to delete (not logged in)');
-                    return;
-                }
-            }
+		                notice(s);
 
-            if (!util.isSelfObject(objectID)) {
-                deleteObject(objectID, whenFinished);
-                whenFinished(null);
-            }
-            else {
-                var os = getClientSelves(session);
-                if (_.contains(os, objectID)) {
-                    deleteObject(objectID, whenFinished);
-                    whenFinished(null);                    
-                }
-                else {
-                    whenFinished('Unable to delete user profile');
-                }
-            }
-        });
+		                //broadcast client's self
+		                socket.broadcast.emit('notice', s);
+
+		                s.created = Date.now();
+		                updateInterests(c, s, socket, getObjects);
+		            }
+		        });
+		    });
+
+		    /*
+		     socket.on('getSentencized', function(urlOrText, withResult) {
+		     cortexit.getSentencized(urlOrText, withResult);
+		     });
+		     */
+
+		    socket.on('getObjects', function(query, withObjects) {
+		        var db = mongo.connect(getDatabaseURL(), collections);
+		        db.obj.find(function(err, docs) {
+		            removeMongoID(docs);
+		            withObjects(docs);
+		            db.close();
+		        });
+		    });
+
+		    socket.on('delete', function(objectID, whenFinished) {
+		        if ($N.server.permissions['authenticate_to_delete_objects'] != false) {
+		            if (!isAuthenticated(session)) {
+		                whenFinished('Unable to delete (not logged in)');
+		                return;
+		            }
+		        }
+
+		        if (!util.isSelfObject(objectID)) {
+		            deleteObject(objectID, whenFinished);
+		            whenFinished(null);
+		        }
+		        else {
+		            var os = getClientSelves(session);
+		            if (_.contains(os, objectID)) {
+		                deleteObject(objectID, whenFinished);
+		                whenFinished(null);                    
+		            }
+		            else {
+		                whenFinished('Unable to delete user profile');
+		            }
+		        }
+		    });
+
+		}
+
 
     });
 
