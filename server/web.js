@@ -778,33 +778,25 @@ exports.start = function(options, init) {
             if (cookies['authenticated'] === 'anonymous')
                 anonymous = true;
         
-        var key = null, email = null;
-        if (req.session) {
-            if (req.session.passport) {
-                if (req.session.passport.user) {
-                    key = req.session.passport.user.id;
-                    email = req.session.passport.user.email;
-                }
-            }
-        }
+		var key = getSessionKey(req);
+
         //Authenticated but no clientID specified
-        var cid = getCurrentClientID(req.session);
-		var possibleClients = getClientSelves(req.session);
+        var cid = getCurrentClientID(key);
+		var possibleClients = getClientSelves(key);
         if (possibleClients)
 	    	cid = possibleClients[possibleClients.length-1];
 		else
 			possibleClients = [];
 
         if (!anonymous) {
-            res.cookie('authenticated', isAuthenticated(req.session));
-	        res.cookie('clientID', getCurrentClientID(req.session));
 	        res.cookie('key', key);		
+            res.cookie('authenticated', key!=undefined);
 		}
         else {
-	        res.cookie('clientID', '');
-	        res.cookie('key', 'anonymous');		
             res.cookie('authenticated', 'anonymous');
 		}
+        res.cookie('clientID', getCurrentClientID(key));
+        res.cookie('key', key);		
 
         res.cookie('otherSelves', possibleClients.join(','));
 
@@ -851,13 +843,21 @@ exports.start = function(options, init) {
     // Finish the authentication process by verifying the assertion.  If valid,
     // the user will be logged in.  Otherwise, authentication has failed.
     express.get('/auth/openid/return',
-            passport.authenticate('openid', {successRedirect: '/#',
-        failureRedirect: '/'}));
+            passport.authenticate('openid', {_successRedirect: '/#', failureRedirect: '/'}),
+			function(req, res) {
+                res.cookie('userid', req.user.id);
+				res.redirect('/#');
+			}
+	);
 
     express.get('/auth/google', passport.authenticate('google'));
     express.get('/auth/google/return',
-            passport.authenticate('google', {successRedirect: '/#',
-        failureRedirect: '/'}));
+            passport.authenticate('google', {_successRedirect: '/#', failureRedirect: '/'}),
+			function(req, res) {
+                res.cookie('userid', req.user.id);
+				res.redirect('/#');
+			}
+	);
     // -------------------------------------------------------------- PASSPORT 
 
 
@@ -926,21 +926,20 @@ exports.start = function(options, init) {
         });
     });
     
-    function getSessionKey(session) {
-        var key;
-        if (session) {
-            if (session.passport) {
-                if (session.passport.user) {
-                    return session.passport.user;
-               }
-			}
-		}
-       	return 'anonymous';
+
+    function getSessionKey(req) {
+		if (!req) return undefined;
+
+		if (typeof req == "string")
+			return req;
+
+		var cookies = getCookies(req);
+		return cookies['userid'];
     }
     
-    function getCurrentClientID(session) {
-        var key = getSessionKey(session);
-		if (key=='anonymous') {
+    function getCurrentClientID(req) {
+        var key = getSessionKey(req);
+		if (!key) {
 			return 'anonymous';
 		}
         else {
@@ -962,8 +961,8 @@ exports.start = function(options, init) {
         }
     }
 
-    function addClientSelf(session, uid) {
-        var key = getSessionKey(session);
+    function addClientSelf(req, uid) {
+        var key = getSessionKey(req);
         if ((!key) || (key == '')) {
             key = 'anonymous';
         }
@@ -984,7 +983,7 @@ exports.start = function(options, init) {
         saveState();       
         
     }
-    function getClientSelves(session) {
+    function getClientSelves(req) {
         if (!$N.server.users)
             $N.server.users = { };
         
@@ -992,45 +991,10 @@ exports.start = function(options, init) {
             $N.server.users['anonymous'] = [ ];
         }
 
-        var key = getSessionKey(session);        
+        var key = getSessionKey(req) || 'anonymous';        
         return $N.server.users[key];
     }
 
-   /*function getClientID(session) {
-        var cid = '';
-        var key;
-        if (session)
-            if (session.passport)
-                if (session.passport.user) {
-                    key = session.passport.user;
-               }
-       if (key)
-           cid = util.MD5(key);
-       return cid;
-    } */               
-    
-
-    
-    /*
-     express.get('/http/:url', function (req, res) {
-     if (Server.permissions['authenticate_to_proxy_http']!=false) {
-     if (!isAuthenticated(req.session)) {
-     res.send('Authentication required');
-     }
-     }
-     
-     var uri = decodeURIComponent(req.params.url);
-     request(uri, function (error, response, body) {
-     res.setHeader('Content-type', 'text/plain');
-     if (!error)  {
-     res.send(response.body);
-     }
-     else {
-     res.send(error);
-     }
-     });    
-     });
-     */
 
     express.get('/log', function(req, res) {
         sendJSON(res, logMemory.buffer);
@@ -1461,20 +1425,12 @@ exports.start = function(options, init) {
     }
     $N.pub = pub;
 
-    function isAuthenticated(ses) {           
-        if (ses)
-            if (ses.passport)
-                if (ses.passport.user) {
-                    return true;
-                }
-        return false;
-
-    }
 
 	//    sessionSockets.on('connection', function(err, socket, session) {
 	io.sockets.on('connection', function (socket) {
 
 		var session = socket.handshake.sessionID;
+		var request = socket.handshake;
     	{
 		    //https://github.com/LearnBoost/socket.io/wiki/Rooms
 		    socket.on('subscribe', function(channel, sendAll) {
@@ -1486,7 +1442,7 @@ exports.start = function(options, init) {
 
 		    socket.on('pub', function(message, err, success) {
 		        if ($N.server.permissions['authenticate_to_create_objects'] != false) {
-		            if (!isAuthenticated(session)) {
+		            if (!getClientKey(session)) {
 		                if (err)
 		                    err('Not authenticated');
 		            }
@@ -1519,7 +1475,7 @@ exports.start = function(options, init) {
 		        f($N.server.plugins);
 		    });
 
-		    socket.on('setPlugin', function(pid, enabled, callback) {
+		    /*socket.on('setPlugin', function(pid, enabled, callback) {
 				if ($N.server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
 		            callback('Plugin enabling and disabling not allowed');
 		            return;
@@ -1561,7 +1517,7 @@ exports.start = function(options, init) {
 		        }
 		        callback('Unable to set activity of plugin ' + pid + ' to ' + enabled);
 
-		    });
+		    });*/
 
 		    socket.on('become', function(target, onResult) {
 		        var targetObjectID = target;
@@ -1576,17 +1532,17 @@ exports.start = function(options, init) {
 		        
 		        function pubAndSucceed(x) {
 		            pub(x, function() {
-		                addClientSelf(session, targetObjectID);
+		                addClientSelf(request, targetObjectID);
 		                saveState();
 		                if (onResult)
 		                    onResult(targetObjectID);           
 		            });                
 		        }
 		        
-		        var sessionKey = getSessionKey(session);
+		        var sessionKey = getSessionKey(request);
 		        var keyRequired = ($N.server.permissions['authenticate_to_create_profiles']!=false);
 		        if (!targetObject) { 
-		            var selves = getClientSelves(session);
+		            var selves = getClientSelves(sessionKey);
 		            if (_.contains(selves, target)) {
 		                if (onResult)
 		                    onResult(targetObjectID);
@@ -1617,26 +1573,20 @@ exports.start = function(options, init) {
 		    
 		    socket.on('connect', function(cid, callback) {
 		        var key = null, email = null;
-		        if (session) {
-		            if (session.passport) {
-		                if (session.passport.user) {
-		                    key = session.passport.user.id;
-		                    email = session.passport.user.email;
-		                }
-		            }
-		        }
+
+				var key = getSessionKey(request);
 		        if (!cid) {
 		            //Authenticated but no clientID specified
-		            cid = getCurrentClientID(session);
+		            cid = getCurrentClientID(key);
 		            if (!cid) {
-		                var possibleClients = getClientSelves(session);
+		                var possibleClients = getClientSelves(key);
 		                if (possibleClients)
 		                    cid = possibleClients[possibleClients.length-1];
 		            }
 		        }    
 		        else {
 		            //Authenticated and clientID specified, check that the user actually owns that clientID
-		            var possibleClients = getClientSelves(session);
+		            var possibleClients = getClientSelves(key);
 					if (possibleClients) {
 			            if (_.contains(possibleClients, cid)) {
 			            }
@@ -1646,7 +1596,7 @@ exports.start = function(options, init) {
 					}
 		        }                
 
-				var selves = getClientSelves(session);
+				var selves = getClientSelves(key);
 		        nlog('connect: ' + cid + ', ' + key + ', ' + selves);
 		                    
 		        socket.set('clientID', cid);
@@ -1704,12 +1654,12 @@ exports.start = function(options, init) {
 		    });
 
 		    socket.on('delete', function(objectID, whenFinished) {
-		        if ($N.server.permissions['authenticate_to_delete_objects'] != false) {
+		        /*if ($N.server.permissions['authenticate_to_delete_objects'] != false) {
 		            if (!isAuthenticated(session)) {
 		                whenFinished('Unable to delete (not logged in)');
 		                return;
 		            }
-		        }
+		        }*/
 
 		        if (!util.isSelfObject(objectID)) {
 		            deleteObject(objectID, whenFinished);
