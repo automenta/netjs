@@ -657,8 +657,8 @@ exports.start = function(options, init) {
     ]);
     io.set("polling duration", 5);
 
-    var cookieParser = require('cookie-parser')('netention0')
-            , sessionStore = new connect.middleware.session.MemoryStore();
+    var cookieParser = require('cookie-parser')('netention0');
+    var sessionStore = new expressm.session.MemoryStore();
     var SessionSockets = require('session.socket.io')
             , sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 
