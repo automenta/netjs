@@ -5,6 +5,7 @@
 		"express":"",
 		"http-auth":"",
 		"cookie-parser":"",
+		"express-session":"",
 		"request":"",
 		"url":"",
 		"util":"",
