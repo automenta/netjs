@@ -1,3 +1,17 @@
+/*
+Netention Web Server
+
+Know                                  L=========D=========T
+  Load_testing                        --|------------------
+  Access_control                      ---------|-----------
+  MongoDB                             ---------|-----------
+  WebSocket                           ----------|----------
+  Representational_state_transfer     ------------|--------
+  Hypertext_Transfer_Protocol         ------------|--------
+  Node.js                             -------------|-------
+  JSON                                --------------|------
+  JavaScript                          ----------------|----
+*/
 var memory = require('./memory.js');
 var util = require('../client/util.js');
 var feature = require('./feature.js');

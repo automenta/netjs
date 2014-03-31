@@ -106,7 +106,7 @@ function newUserView(v, userid) {
 			d.append('<h2>Tag Code (JSON)</h2><pre>' + JSON.stringify(jsonCode, null, 4) + '</pre><br/>');			
 
 			var jsonCodeCompact = JSON.stringify(jsonCode);
-			d.append('<h2>Tag Code (JSON Compact)</h2><pre>' + jsonCodeCompact + '</pre><br/>');
+			d.append('<h2>Tag Code (JSON Compact)</h2>' + jsonCodeCompact + '<br/>');
 
 			var jid = uuid();
 			d.append('<h2>QR Code</h2>');
