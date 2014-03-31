@@ -1299,9 +1299,11 @@ exports.start = function(options, init) {
 
     });
     express.get('/logout', function(req, res) {
-        res.cookie('authenticated', '');
-        res.cookie('clientID', 'undefined');
-        res.cookie('userid', '');
+        res.clearCookie('key');
+        res.clearCookie('authenticated');
+        res.clearCookie('clientID');
+        res.clearCookie('otherSelves');
+        res.clearCookie('userid');
         req.logout();
         res.redirect('/');
     });
@@ -1443,7 +1445,7 @@ exports.start = function(options, init) {
 
 		    socket.on('pub', function(message, err, success) {
 		        if ($N.server.permissions['authenticate_to_create_objects'] != false) {
-		            if (!getClientKey(session)) {
+		            if (!getSessionKey(session)) {
 		                if (err)
 		                    err('Not authenticated');
 		            }
