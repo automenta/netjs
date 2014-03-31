@@ -642,50 +642,11 @@ exports.start = function(options, init) {
             , OpenIDStrategy = require('passport-openid').Strategy
             , GoogleStrategy = require('passport-google').Strategy;
 
-    var users = { };
-    
-    passport.serializeUser(function(user, done) {
-      done(null, user.id);
-    });
-
-    passport.deserializeUser(function(id, done) {
-      done(null, { 'id': id });
-    });
-
-    passport.use(new OpenIDStrategy({
-            returnURL: 'http://' + $N.server.host + '/auth/openid/return',
-            realm: 'http://' + $N.server.host + '/'
-        },
-        function(identifier, done) {
-        //console.log(identifier);
-        //console.log(done);
-             done(null, {id: identifier});
-        // User.findOrCreate({ openId: identifier }, function(err, user) {
-        // done(err, user);
-        // });
-        }
-    ));
-
-    passport.use(new GoogleStrategy({
-            returnURL: 'http://' + $N.server.host + '/auth/google/return',
-            realm: 'http://' + $N.server.host + '/'
-        },
-        function(identifier, profile, done) {
-            //console.log(identifier);
-            //console.log(done);
-            //console.log('google', profile);
-            done(null, {id: identifier, email: profile.emails[0].value});
-            // User.findOrCreate({ openId: identifier }, function(err, user) {
-            // done(err, user);
-            // });
-        }
-    ));
-
 
     //express.configure(function() {
         express.use(cookieParser);
-        express.use(require('express-session')({ secret: 'secret', key: 'express.sid', cookie: { secure: true }}));
         express.use(require('body-parser')());
+        express.use(require('express-session')({ secret: 'secret', key: 'express.sid', cookie: { secure: true }}));
         express.use(passport.initialize());
         express.use(passport.session());
         express.use(express.router);
@@ -754,6 +715,45 @@ exports.start = function(options, init) {
 		express.use(auth.connect(basicAuth));
 	}
 
+    var users = { };
+    
+    passport.serializeUser(function(user, done) {
+      done(null, user.id);
+    });
+
+    passport.deserializeUser(function(id, done) {
+      done(null, { 'id': id });
+    });
+
+    passport.use(new OpenIDStrategy({
+            returnURL: 'http://' + $N.server.host + '/auth/openid/return',
+            realm: 'http://' + $N.server.host + '/'
+        },
+        function(identifier, done) {
+        //console.log(identifier);
+        //console.log(done);
+             done(null, {id: identifier});
+        // User.findOrCreate({ openId: identifier }, function(err, user) {
+        // done(err, user);
+        // });
+        }
+    ));
+
+    passport.use(new GoogleStrategy({
+            returnURL: 'http://' + $N.server.host + '/auth/google/return',
+            realm: 'http://' + $N.server.host + '/'
+        },
+        function(identifier, profile, done) {
+            //console.log(identifier);
+            //console.log(done);
+            //console.log('google', profile);
+            done(null, {id: identifier, email: profile.emails[0].value});
+            // User.findOrCreate({ openId: identifier }, function(err, user) {
+            // done(err, user);
+            // });
+        }
+    ));
+
 
 
 	var getCookies = function(request) {
@@ -770,7 +770,7 @@ exports.start = function(options, init) {
 
     express.get('/', function(req, res) {
         //console.log('auth cookie', res.cookie('authenticated'));
-        
+
 		var cookies = getCookies(req);
 		
         var anonymous = false;
