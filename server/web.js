@@ -725,7 +725,8 @@ exports.start = function(options, init) {
 
 		handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
 
-		handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
+		if (handshakeData.cookie['express.sid'])
+			handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
 
 		/*if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
 		  return accept('Cookie is invalid.', false);
