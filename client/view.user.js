@@ -7,6 +7,7 @@ function newUserView(v, userid) {
 			d.append('User ' + userid + ' not found.');
 			return;
 		}
+		user = objectify(user);
 
 		var operatorTags = getOperatorTags();
 
@@ -95,23 +96,38 @@ function newUserView(v, userid) {
 
 		d.append(x);
 	
-		var textCode = getUserTextCode(tags);
+		var textCode = getUserTextCode(tags, user);
 		if (textCode.length > 0) {
 			d.append('<h2>Tag Code (Text)</h2><pre>' + textCode + '</pre><br/>');			
 		}
 
-		var jsonCode = getUserJSONCode(tags);
+		var jsonCode = getUserJSONCode(tags, user);
+
+		function simplifyJSON(j) {
+			//http://stackoverflow.com/questions/11233498/json-stringify-without-quotes-on-properties
+			return j.replace(/\"([^(\")"]+)\":/g,"$1:");  //This will remove all the quotes
+		}
 
 		if (_.keys(jsonCode).length > 0) {
-			d.append('<h2>Tag Code (JSON)</h2><pre>' + JSON.stringify(jsonCode, null, 4) + '</pre><br/>');			
+			d.append('<h2>Tag Code (JSON)</h2><pre>' + simplifyJSON(JSON.stringify(jsonCode, null, 4)) + '</pre><br/>');			
 
-			var jsonCodeCompact = JSON.stringify(jsonCode);
+			var jsonCodeCompact = simplifyJSON(JSON.stringify(jsonCode));
 			d.append('<h2>Tag Code (JSON Compact)</h2>' + jsonCodeCompact + '<br/>');
+
+			var url = document.location.origin + '/code/' + encodeURIComponent(jsonCodeCompact);
+			d.append('<br/><a href="' + url + '">URL</a>')
 
 			var jid = uuid();
 			d.append('<h2>QR Code</h2>');
 			d.append(newDiv(jid));
-			new QRCode(document.getElementById(jid), jsonCodeCompact);
+			new QRCode(document.getElementById(jid), { text: url,
+				width : 512, 
+				height : 512,
+				typeNumber : 40,
+				colorDark : "#000000",
+				colorLight : "#ffffff",
+				correctLevel : 1
+			});
 		}
 
 		var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
@@ -129,8 +145,14 @@ function isKnowledgeTag(t) {
 	return ['Do','DoTeach','DoLearn','LearnDo','TeachDo', 'Teach', 'Learn'].indexOf(t)!=-1;
 }
 
-function getUserJSONCode(tags) {
+function getUserJSONCode(tags, user) {
 	var jc = { };
+
+	jc['name'] = user.name;
+	var location = user.earthPoint();
+	if (location)
+		jc['where'] = dloc(location);
+
 	var operatorTags = getOperatorTags();
 	var processed = {};
 	for (var j = 0; j < operatorTags.length; j++) {
@@ -161,11 +183,21 @@ function getUserJSONCode(tags) {
 			}
 		}
 	}
+
+
 	return jc;
 }
+function dloc(l) {
+	return [parseFloat(l[0].toFixed(3)), parseFloat(l[1].toFixed(3))];
+}
 
-function getUserTextCode(tags) {
+function getUserTextCode(tags, user) {
 	var s = '';
+	var nameline = user.name;
+	var location = user.earthPoint();
+	if (location)
+		nameline += ' @' + JSON.stringify(dloc(location));
+
 	var operatorTags = getOperatorTags();
 	var processed = {};
 
@@ -173,7 +205,7 @@ function getUserTextCode(tags) {
 	//Knowledge Tags
 	var header = 'Know                                  L=========D=========T\n';
 	var chartColumn = header.indexOf('L');
-	for (var j = 0; j < operatorTags.length; j++) {
+	for (var j = operatorTags.length-1; j >=0; j--) {
 	   	var i = operatorTags[j];
 		if (isKnowledgeTag(i)) {
 			if (!tags[i]) continue;			
@@ -200,6 +232,8 @@ function getUserTextCode(tags) {
 		}
 	}
 	if (s.length > 0) s = header + s;
+	s = nameline + '\n'  + s;
+
 	for (var j = 0; j < operatorTags.length; j++) {
 	   	var i = operatorTags[j];
 		if (!isKnowledgeTag(i)) {
