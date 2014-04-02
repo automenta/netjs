@@ -8,11 +8,24 @@ function newMainView(v) {
     var e = newDiv().addClass('gridster').appendTo(d);
     var grid = $('<ul/>').appendTo(e);
     
+    var preventClick = false;
+    
     var gridster = grid.gridster({
         widget_base_dimensions: [110, 110],
         widget_margins: [6, 6],
         resize: {
             enabled: true
+        },
+        draggable: {
+            start: function() {
+               preventClick = true;     
+            },
+            stop: function(event, ui){
+                later(function() {
+                   preventClick = false; 
+                });
+                return false;
+            }
         }
     }).data('gridster');
     
@@ -20,6 +33,8 @@ function newMainView(v) {
 
     var conviews = configuration.views;
     _.each(conviews, function(v) {
+        if (v === 'main') return;
+        
         var c = $('#' + v);
         var name = c.attr('title');
         var icon = c.find('img').attr('src');        
@@ -30,7 +45,15 @@ function newMainView(v) {
         b.css('background-image', 'url(' + icon + ')');
         b.css('background-repeat', 'no-repeat');
         b.css('background-size', 'contain');
+        b.css('background-position','center');
+        
         gridster.add_widget(b, 1, 1);
+        
+        
+        b.click(function() {
+            if (!preventClick)
+                $N.set('currentView', v);     
+        });
                     
     });
 
