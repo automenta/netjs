@@ -1796,7 +1796,7 @@ function newMetadataLine(x) {
                 dist = geoDist(sx, mll);
 
             if (dist == 0)
-                mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + ' here</span>');
+                mdline.append('&nbsp;<span>(here)</span>');
             else
                 mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
         }

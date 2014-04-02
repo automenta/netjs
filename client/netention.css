@@ -1383,10 +1383,27 @@ svg {
 .mainViewButton {
     list-style: none;
     cursor: pointer;
-    border: 1px solid gray;
 }
 
 .preview-holder {
     list-style: none !important;
     border: 2px solid gray !important;
+}
+
+.chatViewLineContent {
+    float: left;
+}
+.chatViewLineAuthor {
+    clear: both;
+    width: 200px;    
+    float: left;
+    text-align: right;    
+    padding-right: 15px;
+    margin-bottom: 0.5em;
+}
+.chatViewLineContent ul {
+    font-size: 75%;    
+}
+.chatViewLineAuthor img {
+    height: 1em;
 }
