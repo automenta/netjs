@@ -1,8 +1,8 @@
-function renderTrends(s, o, v) {
-    var aa = s.objects();
+function newTrendsView(v) {
+    var aa = $N.objects();
     var serverTagCount = { };
-    var localTagCount = s.getTagCount();
-    var selfTagCount = s.getTagCount(true);
+    var localTagCount = $N.getTagCount();
+    var selfTagCount = $N.getTagCount(true);
 
     
     var yy = newDiv();
@@ -26,7 +26,7 @@ function renderTrends(s, o, v) {
             var ti = tags[k];
             
             var name = ti;
-            var t = s.tag(ti);
+            var t = $N.tag(ti);
             
             if (t!=undefined)
                 name = t.name;
@@ -47,7 +47,7 @@ function renderTrends(s, o, v) {
                 ab = $('<a href="' + url + '">' + name + '</a>');
                 
             ab.click(function() {
-                s.set('currentView', 'list');
+                $N.set('currentView', 'list');
                 Backbone.history.navigate(url, true);  
             });
             
@@ -79,7 +79,7 @@ function renderTrends(s, o, v) {
         
     }
     
-    s.getServerAttention(function(r) {
+    $N.getServerAttention(function(r) {
         serverTagCount = r;
         displayTags();
     });

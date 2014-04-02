@@ -1,32 +1,33 @@
 function startTalk() {
 
-	TogetherJSConfig_on_ready = function () {};
-	TogetherJSConfig_toolName = 'Collaboration';
-	TogetherJSConfig_getUserName = function () {
-		return $N.myself().name;
-	};
-	//TogetherJSConfig_getUserAvatar = function () {return avatarUrl;};
+    TogetherJSConfig_on_ready = function() {
+    };
+    TogetherJSConfig_toolName = 'Collaboration';
+    TogetherJSConfig_getUserName = function() {
+        return $N.myself().name;
+    };
+    //TogetherJSConfig_getUserAvatar = function () {return avatarUrl;};
 
-	TogetherJSConfig_dontShowClicks = true;
-	TogetherJSConfig_suppressJoinConfirmation = true;
-	TogetherJSConfig_suppressInvite = true;
+    TogetherJSConfig_dontShowClicks = true;
+    TogetherJSConfig_suppressJoinConfirmation = true;
+    TogetherJSConfig_suppressInvite = true;
 
-	//TogetherJS.refreshUserData()
-	TogetherJS(this);
+    //TogetherJS.refreshUserData()
+    TogetherJS(this);
 
 }
 
 function toggleAvatarMenu() {
-	showAvatarMenu(!$('#ViewMenu').is(':visible'));		
+    showAvatarMenu(!$('#ViewMenu').is(':visible'));
 }
 
 function updateIndent(viewmenushown) {
-	if (viewmenushown) {
-		$('.view-indented').addClass('view-indented-more');
-	}
-	else {
-		$('.view-indented').removeClass('view-indented-more');
-	}
+    if (viewmenushown) {
+        $('.view-indented').addClass('view-indented-more');
+    }
+    else {
+        $('.view-indented').removeClass('view-indented-more');
+    }
 }
 
 function showAvatarMenu(b) {
@@ -36,31 +37,34 @@ function showAvatarMenu(b) {
         $('#AvatarButton').hide();
         vm.fadeOut();
         $('#toggle-menu').show();
-		updateIndent(false);
-		$('.toggle-submenu-absolute').show();
+        updateIndent(false);
+        $('.toggle-submenu-absolute').show();
     }
     else {
         $('#toggle-menu').hide();
         vm.fadeIn();
         $('#close-menu').show();
         $('#AvatarButton').show();
-		$('.toggle-submenu-absolute').hide();
+        $('.toggle-submenu-absolute').hide();
         vm.show();
-		updateIndent(true);
+        updateIndent(true);
     }
 }
 
 function openSelectProfileModal(title) {
-	if (!title) title = 'Profiles';
+    if (!title)
+        title = 'Profiles';
     //var d = newPopup(title, {width: '450px', modal: true});
-	$('#LoadingSplash').show();
-	$('#LoadingSplashTitle').html('Authenticated: ' + getCookie('authenticated'));
-	$('#LoadingSplashTitle').append(' (<a href="/logout">Logout</a>)');
-	$('#AuthSelect').hide();
-	$('#ProfileSelect').html(newProfileWidget());
+    $('#LoadingSplash').show();
+    $('#LoadingSplashTitle').html('Authenticated: ' + getCookie('authenticated'));
+    $('#LoadingSplashTitle').append(' (<a href="/logout">Logout</a>)');
+    $('#AuthSelect').hide();
+    $('#ProfileSelect').html(newProfileWidget());
 }
 
-$('#SelectProfileButton').click(function() { openSelectProfileModal()  });
+$('#SelectProfileButton').click(function() {
+    openSelectProfileModal()
+});
 
 $('#ViewMenu input').click(function(x) {
     var b = $(this);
@@ -89,7 +93,7 @@ $('#AvatarButton').click(function() {
 
 
 $('#AddContentButton').click(function() {
-	newPopupObjectEdit( objNew() );
+    newPopupObjectEdit(objNew());
 });
 
 $('#FocusButton').click(function() {
@@ -116,77 +120,77 @@ function clearFocus() {
 clearFocus();
 
 function renderFocus(skipSet) {
-	if (!skipSet)
-	    $N.setFocus(focusValue);
+    if (!skipSet)
+        $N.setFocus(focusValue);
 
     var fe = $('#FocusEdit');
     fe.empty();
 
-	var newFocusValue = _.clone(focusValue);
+    var newFocusValue = _.clone(focusValue);
 
     var noe = newObjectEdit(newFocusValue, true, true, function(xx) {
         focusValue = xx;
         renderFocus();
-    }, function(x) {			
+    }, function(x) {
         focusValue = x;
         $N.setFocus(x);
-    }, [ 'spacepoint' ]); //do not show spacepoint property, custom renderer is below
+    }, ['spacepoint']); //do not show spacepoint property, custom renderer is below
 
     fe.append(noe);
 
-	if ((configuration.avatarMenuTagTreeAlways) || (focusValue.what)) {
-		var tt = newFocusTagTree(focusValue, function(tag, newStrength) {
+    if ((configuration.avatarMenuTagTreeAlways) || (focusValue.what)) {
+        var tt = newFocusTagTree(focusValue, function(tag, newStrength) {
 
-			var tags = objTags(focusValue);
-			var existingIndex = _.indexOf(tags, tag);
+            var tags = objTags(focusValue);
+            var existingIndex = _.indexOf(tags, tag);
 
-			if (existingIndex!=-1)
-				objRemoveValue(focusValue, existingIndex);
+            if (existingIndex != -1)
+                objRemoveValue(focusValue, existingIndex);
 
-			if (newStrength > 0) {
-	            objAddTag(focusValue, tag, newStrength);
-			}
+            if (newStrength > 0) {
+                objAddTag(focusValue, tag, newStrength);
+            }
 
-		    renderFocus();
-		});
-		tt.attr('style', 'height: ' + Math.floor($(window).height()*0.4) + 'px !important' );
-		fe.append(tt);
-	}
+            renderFocus();
+        });
+        tt.attr('style', 'height: ' + Math.floor($(window).height() * 0.4) + 'px !important');
+        fe.append(tt);
+    }
     if (focusValue.when) {
     }
 
     if (focusValue.who) {
-		fe.append('User: ' + $N.getObject(focusValue.who).name);
+        fe.append('User: ' + $N.getObject(focusValue.who).name);
     }
 
-	var where = objSpacePointLatLng(focusValue);
+    var where = objSpacePointLatLng(focusValue);
     if (where) {
         var uu = uuid();
         var m = newDiv(uu);
         m.attr('style', 'height: 250px; width: 95%');	//TODO use css
         fe.append(m);
         var lmap = initLocationChooserMap(uu, where, 3);
-		lmap.onClicked = function(l) {
-			var newFocus = _.clone(focusValue);
-			objSetFirstValue(newFocus, 'spacepoint', { lat: l.lat, lon: l.lon, planet: 'Earth'});
-			$N.setFocus(newFocus);
-		};
+        lmap.onClicked = function(l) {
+            var newFocus = _.clone(focusValue);
+            objSetFirstValue(newFocus, 'spacepoint', {lat: l.lat, lon: l.lon, planet: 'Earth'});
+            $N.setFocus(newFocus);
+        };
     }
 }
 
 $('#FocusWhereButton').click(function() {
     if (!objSpacePointLatLng(focusValue)) {
         /*focusValue.where = _.clone(objSpacePoint($N.myself()) || 
-			{lat: configuration.mapDefaultLocation[0] , lon: configuration.mapDefaultLocation[0], planet: 'Earth'});*/
-		objSetFirstValue(focusValue, 'spacepoint', { lat: configuration.mapDefaultLocation[0], lon: configuration.mapDefaultLocation[1], planet: 'Earth'});
+         {lat: configuration.mapDefaultLocation[0] , lon: configuration.mapDefaultLocation[0], planet: 'Earth'});*/
+        objSetFirstValue(focusValue, 'spacepoint', {lat: configuration.mapDefaultLocation[0], lon: configuration.mapDefaultLocation[1], planet: 'Earth'});
         renderFocus();
     }
     else {
         if (confirm("Remove focus's 'Where'?")) {
-			var tags = objTags(focusValue, true);
-			var spi = _.indexOf(tags, 'spacepoint');
-			if (spi!=-1)
-				objRemoveValue(focusValue, spi);
+            var tags = objTags(focusValue, true);
+            var spi = _.indexOf(tags, 'spacepoint');
+            if (spi != -1)
+                objRemoveValue(focusValue, spi);
             renderFocus();
         }
     }
@@ -195,8 +199,8 @@ $('#FocusWhereButton').click(function() {
 var periodMS = FOCUS_KEYWORD_UPDATE_PERIOD;
 var ty = _.throttle(function() {
     var t = $('#FocusKeywords').val();
-	var newFocus = _.clone(focusValue);
-	newFocus.name = t;
+    var newFocus = _.clone(focusValue);
+    newFocus.name = t;
     $N.setFocus(newFocus);
 }, periodMS);
 
@@ -213,7 +217,7 @@ $('#FocusClearButton').click(function() {
 });
 
 $('#FocusWhatButton').click(function() {
-	focusValue.what = !focusValue.what;
+    focusValue.what = !focusValue.what;
     renderFocus();
 });
 $('#FocusWhenButton').click(function() {
@@ -225,11 +229,11 @@ $('#FocusWhenButton').click(function() {
 
 $('#FocusNeedButton').click(function() {
     /*var needs = ['Volunteer', 'Shelter', 'Food', 'Tools', 'Health', 'Transport', 'Service', 'Animal'];
-	//TODO select child tags of 'Support' (their parent tag) to avoid hardcoding it here
-    _.each(needs, function(n) {
-        objAddValue(focusValue, {id: n});
-    });
-    renderFocus();*/
+     //TODO select child tags of 'Support' (their parent tag) to avoid hardcoding it here
+     _.each(needs, function(n) {
+     objAddValue(focusValue, {id: n});
+     });
+     renderFocus();*/
     var d = newPopup("Add Tag to Focus", true, true);
     d.append(newTagger([], function(x) {
         for (var i = 0; i < x.length; i++)
@@ -242,8 +246,8 @@ $('#FocusNeedButton').click(function() {
 });
 
 if (configuration.avatarMenuTagTreeAlways) {
-	$('#FocusWhatButton').hide();
-	renderFocus();	//force a render
+    $('#FocusWhatButton').hide();
+    renderFocus();	//force a render
 }
 
 

@@ -26,7 +26,7 @@ function updateBrand() {
 function updateViewControls() {
     //select the current view in the ViewControls
 
-	//TODO uncheck all that are checked
+    //TODO uncheck all that are checked
 
 
 }
@@ -41,13 +41,13 @@ function _updateView(force) {
     //s.saveLocal();
 
     var view = s.get('currentView');
-	var param = null;
+    var param = null;
 
-	if (view.view) {
-		param = _.clone(view);
-		view = view.view;
-		delete param.view;
-	}
+    if (view.view) {
+        param = _.clone(view);
+        view = view.view;
+        delete param.view;
+    }
 
     var o = $('#ViewOptions');
     var v = $('#View');
@@ -69,82 +69,79 @@ function _updateView(force) {
 
     v.empty();
     o.empty();
-	$('.toggle-submenu').empty();
+    $('.toggle-submenu').empty();
     submenu.empty();
     submenu.hide();
-	updateIndent(false);
+    updateIndent(false);
 
     lastView = view;
 
-	if (currentView)
-		if (currentView.destroy)
-			currentView.destroy();
+    if (currentView)
+        if (currentView.destroy)
+            currentView.destroy();
 
     v.css('font-size', '100%').removeClass('ui-widget-content view-indented overthrow overflow-hidden nobg');
 
     function indent() {
         submenu.show();
         v.addClass('overthrow ui-widget-content view-indented');
-		updateIndent($('#ViewMenu').is(":visible"));
+        updateIndent($('#ViewMenu').is(":visible"));
     }
 
 
     if (view === 'browse') {
         indent();
-        currentView = renderList(s, o, v);
+        currentView = newListView(v);
     }
     else if (view === 'us') {
         indent();
-        currentView = renderUs(v);
+        currentView = newUsView(v);
     }
     else if (view === 'map') {
         v.addClass('overflow-hidden');
         v.addClass('nobg');
-        currentView = renderMap(s, o, v);
+        currentView = newMapView(v);
     }
     else if (view === 'trends') {
         indent();
-        currentView = renderTrends(s, o, v);
+        currentView = newTrendsView(v);
     }
-    else if (view == 'graph') {
+    else if (view === 'graph') {
         v.addClass('overflow-hidden');
-        currentView = renderGraph(s, o, v);
+        currentView = newGraphView(v);
     }
-    /*    else if (view == 'slides') {
-     currentView = renderSlides(s, o, v);
-     }*/
-    else if (view == 'self') {
+    else if (view === 'wiki') {
         indent();
-        currentView = renderSelf(s, o, v);
+        currentView = newWikiView(v);
     }
-    else if (view == 'wiki') {
-        indent();
-        currentView = renderWiki(s, o, v);
-    }
-    else if (view == 'plan') {
-        indent();
-        currentView = renderPlan(v);
-    }
-    else if (view == 'options') {
+    else if (view === 'options') {
         indent();
         currentView = renderOptions(s, o, v);
     }
-    else if (view == 'chat') {
+    else if (view === 'chat') {
         indent();
-        currentView = renderChat(v);
+        currentView = newChatView(v);
     }
-    else if (view == 'share') {
+    else if (view === 'share') {
         indent();
-        currentView = renderShare(v);
+        currentView = newShareView(v);
     }
-    else if (view == 'templates') {
+    else if (view === 'templates') {
         indent();
-        currentView = renderTemplatesView(v);
+        currentView = newTemplatesView(v);
     }
-    else if (view == 'user') {
+    else if (view === 'user') {
         indent();
         currentView = newUserView(v, param ? param.userid : null);
     }
+    else if (view === 'main') {
+        indent();
+        currentView = newMainView(v);
+    }   
+    else if (view === 'time') {
+        indent();
+        currentView = newTimeView(v);
+    }   
     else {
         v.html('Unknown view: ' + view);
         currentView = null;
@@ -155,39 +152,52 @@ function _updateView(force) {
 
 
 function initKeyboard() {
-	var views = [];
-	$('.ViewControl').each(function(x) { views.push($(this).attr('id')); });
+    var views = [];
+    $('.ViewControl').each(function(x) {
+        views.push($(this).attr('id'));
+    });
 
-	for (var i = 0; i < views.length; i++) {
-		var f = function(I) { 
-			jwerty.key('ctrl+' + (1+I), function() {
-				later(function() {
-					self.set('currentView', views[I]); 
-					updateViewControls();
-				});
-				return false; 
-			})
-		};
-		f(i);
-	}
-	
-	var viewDelta = function(delta) {
-		var currentIndex = _.indexOf( views, self.get('currentView') );
-		var nextIndex = currentIndex + delta;
+    for (var i = 0; i < views.length; i++) {
+        var f = function(I) {
+            jwerty.key('ctrl+' + (1 + I), function() {
+                later(function() {
+                    self.set('currentView', views[I]);
+                    updateViewControls();
+                });
+                return false;
+            })
+        };
+        f(i);
+    }
 
-		if (nextIndex < 0) nextIndex = views.length - 1;
-		if (nextIndex >= views.length) nextIndex = 0;
+    var viewDelta = function(delta) {
+        var currentIndex = _.indexOf(views, self.get('currentView'));
+        var nextIndex = currentIndex + delta;
 
-		later(function() {
-			self.set('currentView', views[nextIndex]); 
-			updateViewControls();
-		});
-	};
+        if (nextIndex < 0)
+            nextIndex = views.length - 1;
+        if (nextIndex >= views.length)
+            nextIndex = 0;
+
+        later(function() {
+            self.set('currentView', views[nextIndex]);
+            updateViewControls();
+        });
+    };
 
 
-	jwerty.key('esc', function() {	toggleAvatarMenu(); return false;	});
-	jwerty.key('ctrl+[',  function()	{	viewDelta(-1); return false;	});
-	jwerty.key('ctrl+]', function() {	viewDelta(+1); return false;	});
+    jwerty.key('esc', function() {
+        toggleAvatarMenu();
+        return false;
+    });
+    jwerty.key('ctrl+[', function() {
+        viewDelta(-1);
+        return false;
+    });
+    jwerty.key('ctrl+]', function() {
+        viewDelta(+1);
+        return false;
+    });
 }
 
 
@@ -258,23 +268,23 @@ $(document).ready(function() {
     if (configuration.enableAnonymous)
         $('#AnonymousLoginButton').show();
 
-	if (configuration.focusEnable)
-		$('#AvatarFocus').show();
+    if (configuration.focusEnable)
+        $('#AvatarFocus').show();
 
-	$('title').html(configuration.siteName);
-	$('#loginLogo').attr('src', configuration.loginLogo);
-	if (configuration.favicon)
-		$('#favicon').attr('href', configuration.favicon);
+    $('title').html(configuration.siteName);
+    $('#loginLogo').attr('src', configuration.loginLogo);
+    if (configuration.favicon)
+        $('#favicon').attr('href', configuration.favicon);
 
-	var conviews = configuration.views;
-	for (var i = 0; i < conviews.length; i++) {
-		var c = conviews[i];
-		$('#' + c).show();
-	}
+    var conviews = configuration.views;
+    for (var i = 0; i < conviews.length; i++) {
+        var c = conviews[i];
+        $('#' + c).show();
+    }
 
-	$('#openid-open').click(function() {
-		$('#openid-login').fadeIn();
-	});
+    $('#openid-open').click(function() {
+        $('#openid-login').fadeIn();
+    });
 
 
     $('.logout').show();
@@ -305,10 +315,10 @@ $(document).ready(function() {
     $('#NotificationArea').html('Loading...');
 
     netention(function($N) {
-		$('#NotificationArea').html('System loaded.');
+        $('#NotificationArea').html('System loaded.');
 
         window.self = $N; //DEPRECATED
-		window.$N = $N;
+        window.$N = $N;
 
         setTheme($N.get('theme'));
 
@@ -333,9 +343,9 @@ $(document).ready(function() {
                         "tag/:tag": "tag",
                         //"new/with/tags/:t":     "newWithTags",
                         "example": "completeExample",
-						"user/:userid": "user",
-						":view": "view",
-                         //"search/:query/:page":  "query"   // #search/kiwis/p7
+                        "user/:userid": "user",
+                        ":view": "view",
+                        //"search/:query/:page":  "query"   // #search/kiwis/p7
                     },
                     me: function() {
                         commitFocus($N.myself());
@@ -355,26 +365,26 @@ $(document).ready(function() {
                              });*/
                         }
                     },
-					view: function(view) {
-						self.set('currentView', view);
-					},
-					user: function(userid) {
-						self.set('currentView', {view: 'user', userid: userid } );
-					}
+                    view: function(view) {
+                        self.set('currentView', view);
+                    },
+                    user: function(userid) {
+                        self.set('currentView', {view: 'user', userid: userid});
+                    }
 
                 });
 
                 var w = new Workspace();
                 Backbone.history.start();
-				window.$N.router = w;				
+                window.$N.router = w;
 
-				if (!$N.get('currentView')) {
-		            if (configuration.initialView) {
-		                $N.save('currentView', configuration.initialView);
-		            }
-				}
+                if (!$N.get('currentView')) {
+                    if (configuration.initialView) {
+                        $N.save('currentView', configuration.initialView);
+                    }
+                }
 
-				updateViewControls();
+                updateViewControls();
 
                 $('body').timeago();
                 updateView = _.throttle(function() {
@@ -395,69 +405,71 @@ $(document).ready(function() {
 
                 $.getScript(configuration.ui, function(data) {
 
-		            var ii = identity();
+                    var ii = identity();
 
-		            if (ii === ID_AUTHENTICATED) {
-		                $('#NotificationArea').html('Authorized.');
-		            }
-		            else if (ii === ID_ANONYMOUS) {
-		                $('#NotificationArea').html('Anonymous.');
-		            }
-		            else {
-		                $('#NotificationArea').html('Read-only public access.');
-		                /*$('.loginlink').click(function() {
-		                    $('#LoadingSplash').show();
-		                    nn.hide();
-		                });*/
-		            }
+                    if (ii === ID_AUTHENTICATED) {
+                        $('#NotificationArea').html('Authorized.');
+                    }
+                    else if (ii === ID_ANONYMOUS) {
+                        $('#NotificationArea').html('Anonymous.');
+                    }
+                    else {
+                        $('#NotificationArea').html('Read-only public access.');
+                        /*$('.loginlink').click(function() {
+                         $('#LoadingSplash').show();
+                         nn.hide();
+                         });*/
+                    }
 
                     $('#View').show();
                     $('#LoadingSplash2').hide();
-					
-
-					var alreadyLoggedIn = false;
-					if (configuration.autoLoginDefaultProfile) {
-						var otherSelves = _.filter($N.get("otherSelves"), function(f) { return $N.getObject(f)!=null; } );
-						if (otherSelves.length >= 1) {
-							$N.become(otherSelves[0]);
-							alreadyLoggedIn = true;
-						}
-					}
 
 
-					if (!alreadyLoggedIn) {
-		                if (isAnonymous()) {
-		                    //show profile chooser
-		                    openSelectProfileModal("Anonymous Profiles");
-		                }
-		                else if ($N.myself() === undefined) {
-		                    if (configuration.requireIdentity)
-		                        openSelectProfileModal("Start a New Profile");
-							else {
-	                            //$N.trigger('change:attention');
-								updateView();
-							}
-		                }
-					}
+                    var alreadyLoggedIn = false;
+                    if (configuration.autoLoginDefaultProfile) {
+                        var otherSelves = _.filter($N.get("otherSelves"), function(f) {
+                            return $N.getObject(f) != null;
+                        });
+                        if (otherSelves.length >= 1) {
+                            $N.become(otherSelves[0]);
+                            alreadyLoggedIn = true;
+                        }
+                    }
 
-					$('#NotificationArea').html('Ready...');
-					$('#NotificationArea').fadeOut();
 
-					initKeyboard();
+                    if (!alreadyLoggedIn) {
+                        if (isAnonymous()) {
+                            //show profile chooser
+                            openSelectProfileModal("Anonymous Profiles");
+                        }
+                        else if ($N.myself() === undefined) {
+                            if (configuration.requireIdentity)
+                                openSelectProfileModal("Start a New Profile");
+                            else {
+                                //$N.trigger('change:attention');
+                                updateView();
+                            }
+                        }
+                    }
 
-		            $N.on('change:attention', updateView);
-		            //$N.on('change:layer', updateView);
-		            $N.on('change:currentView', updateView);
-		            $N.on('change:tags', updateView);
-		            $N.on('change:focus', updateView);
-				
-					/*
-					//USEFUL FOR DEBUGGING EVENTS:
-		            $N.on('change:attention', function() { console.log('change:attention'); });
-		            $N.on('change:currentView', function() { console.log('change:currentView'); });
-		            $N.on('change:tags', function() { console.log('change:tags'); });
-		            $N.on('change:focus', function() { console.log('change:focus'); });
-					*/
+                    $('#NotificationArea').html('Ready...');
+                    $('#NotificationArea').fadeOut();
+
+                    initKeyboard();
+
+                    $N.on('change:attention', updateView);
+                    //$N.on('change:layer', updateView);
+                    $N.on('change:currentView', updateView);
+                    $N.on('change:tags', updateView);
+                    $N.on('change:focus', updateView);
+
+                    /*
+                     //USEFUL FOR DEBUGGING EVENTS:
+                     $N.on('change:attention', function() { console.log('change:attention'); });
+                     $N.on('change:currentView', function() { console.log('change:currentView'); });
+                     $N.on('change:tags', function() { console.log('change:tags'); });
+                     $N.on('change:focus', function() { console.log('change:focus'); });
+                     */
 
                 });
 
@@ -484,17 +496,17 @@ $(document).ready(function() {
 
     $('#close-menu').button();
     $(".ViewControl").click(function() {
-		var v = $(this);
-		var vi = v.attr('id');
-		$N.router.navigate(vi, {trigger: false});
-		self.set('currentView', vi);
-	});
+        var v = $(this);
+        var vi = v.attr('id');
+        $N.router.navigate(vi, {trigger: false});
+        self.set('currentView', vi);
+    });
 
     $('#about-toggle').click(function() {
         $('#about-netention').fadeIn();
     });
 
-	
+
 
 
 });

@@ -1378,3 +1378,15 @@ svg {
 	float: right;
 }
 .SkillSlider { width: 100%; }
+
+
+.mainViewButton {
+    list-style: none;
+    cursor: pointer;
+    border: 1px solid gray;
+}
+
+.preview-holder {
+    list-style: none !important;
+    border: 2px solid gray !important;
+}

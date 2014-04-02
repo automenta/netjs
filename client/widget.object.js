@@ -24,12 +24,12 @@ function getTagIcon(t) {
 
 
 function newPopupObjectEdit(n, p) {
-	var e = newObjectEdit(n, true);
+    var e = newObjectEdit(n, true);
     newPopup('Add...', p).append(e);
-	return e;
+    return e;
 }
 
-function newPopupObjectView(_x,p) {
+function newPopupObjectView(_x, p) {
     var x;
     if (typeof (_x) == "string")
         x = $N.getObject(_x);
@@ -41,54 +41,54 @@ function newPopupObjectView(_x,p) {
         return;
     }
 
-    var d = newPopup(x.name,p);
+    var d = newPopup(x.name, p);
     d.append(newObjectSummary(x, {
-		depthRemaining: 4
-	}));
+        depthRemaining: 4
+    }));
     return d;
 
 }
 
 function newPopupObjectViews(objectIDs) {
-	if (objectIDs.length == 0)
-		return;
-	if (objectIDs.length == 1)
-		return newPopupObjectView(objectIDs[0]);
+    if (objectIDs.length == 0)
+        return;
+    if (objectIDs.length == 1)
+        return newPopupObjectView(objectIDs[0]);
 
-	var objects = objectIDs.map(function(i) {
-		if (typeof i == "string")
-			return $N.getObject(i);
-		else
-			return i;
-	});
+    var objects = objectIDs.map(function(i) {
+        if (typeof i == "string")
+            return $N.getObject(i);
+        else
+            return i;
+    });
 
     var d = newPopup(objects.length + " Objects");
-	_.each(objects, function(o) {
-		if (o) {
-			d.append(newObjectSummary(o, {
-				depthRemaining: 0
-			}));
-		}
-	});
+    _.each(objects, function(o) {
+        if (o) {
+            d.append(newObjectSummary(o, {
+                depthRemaining: 0
+            }));
+        }
+    });
     return d;
 
 }
 
 
-function getAvatar(s) {
-	return $("<img>").attr("src", getAvatarURL(s));
+function newAvatarImage(s) {
+    return $("<img>").attr("src", getAvatarURL(s));
 }
 
 function getAvatarURL(s) {
     var e = '';
-	if (s) {
-		var e = objFirstValue(s, 'email');
-		if (e) {
-			var emailHash = MD5(e);
-			return "http://www.gravatar.com/avatar/" + emailHash;
-		}
-	}
-	return configuration.defaultAvatarIcon;
+    if (s) {
+        var e = objFirstValue(s, 'email');
+        if (e) {
+            var emailHash = MD5(e);
+            return "http://www.gravatar.com/avatar/" + emailHash;
+        }
+    }
+    return configuration.defaultAvatarIcon;
 }
 
 function newTagButton(t, onClicked, isButton) {
@@ -125,8 +125,10 @@ function newTagButton(t, onClicked, isButton) {
         return o;
     }
 
-	if (!onClicked)
-		onClicked = function() {       newPopupObjectView(tagObject(t));    };
+    if (!onClicked)
+        onClicked = function() {
+            newPopupObjectView(tagObject(t));
+        };
 
     b.click(onClicked);
 
@@ -175,7 +177,7 @@ function newReplyWidget(onReply, onCancel) {
  */
 function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
     var d = newDiv();
-	var headerTagButtons = ix.tagSuggestions || [];
+    var headerTagButtons = ix.tagSuggestions || [];
 
     function update(x) {
         var whenSaved = [];
@@ -191,9 +193,10 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             n.createdAt = x.createdAt;
             n.author = x.author;
 
-			if (x.subject) n.subject = x.subject;
+            if (x.subject)
+                n.subject = x.subject;
 
-			//TODO copy any other metadata
+            //TODO copy any other metadata
 
             for (var i = 0; i < whenSaved.length; i++) {
                 var w = whenSaved[i];
@@ -251,19 +254,20 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         }
         //d.append($('<span>' + x.id + '</span>').addClass('idLabel'));
 
-		var header = newDiv().appendTo(d);;
-		_.each(headerTagButtons, function(T) {
-			if (T == '\n') {
-				header.append('<br/>');
-			}
-			else {
-				newTagButton(T, function() {
-			       var y = d.getEditedFocus();
-			       objAddTag(y, T);
-			       update(y);
-				}, true).appendTo(header);
-			}
-		});
+        var header = newDiv().appendTo(d);
+        ;
+        _.each(headerTagButtons, function(T) {
+            if (T == '\n') {
+                header.append('<br/>');
+            }
+            else {
+                newTagButton(T, function() {
+                    var y = d.getEditedFocus();
+                    objAddTag(y, T);
+                    update(y);
+                }, true).appendTo(header);
+            }
+        });
 
         if (x.value) {
             var tags = []; //tags & properties, actually
@@ -272,10 +276,10 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             for (var i = 0; i < x.value.length; i++) {
                 var t = x.value[i];
-	
-				if (excludeTags)
-					if (_.contains(excludeTags, t.id))
-						continue;
+
+                if (excludeTags)
+                    if (_.contains(excludeTags, t.id))
+                        continue;
 
                 tags.push(t.id);
                 var tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
@@ -290,12 +294,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 if (!t)
                     continue;
 
-		        var prop = t.properties;
-		        if (!prop)
-		            continue;
-		        var propVal = _.map(prop, function(pid) {
-		            return $N.getProperty(pid);
-		        });
+                var prop = t.properties;
+                if (!prop)
+                    continue;
+                var propVal = _.map(prop, function(pid) {
+                    return $N.getProperty(pid);
+                });
 
                 for (var j = 0; j < prop.length; j++) {
                     if (propVal[j].min)
@@ -339,12 +343,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             //skip suggestions when editing a Tag
             ts.empty();
         }
-		else {
-		    if (hideWidgets != true) {
-		        if (editable)
-		            ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
-		    }
-		}
+        else {
+            if (hideWidgets != true) {
+                if (editable)
+                    ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
+            }
+        }
 
         d.getEditedFocus = getEditedFocus;
 
@@ -411,7 +415,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         if (hideWidgets != true) {
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
             whatButton.click(function() {
-                var p = newPopup('Select Tags for ' + nameInput.val(), 	true, true);
+                var p = newPopup('Select Tags for ' + nameInput.val(), true, true);
                 p.append(newTagger([], function(t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
@@ -450,9 +454,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>');
             webcamButton.click(function() {
-				newWebcamWindow(function(imgURL) {
-	                update(objAddValue(getEditedFocus(), 'media', imgURL));
-				});
+                newWebcamWindow(function(imgURL) {
+                    update(objAddValue(getEditedFocus(), 'media', imgURL));
+                });
             });
             d.append(webcamButton);
 
@@ -495,10 +499,10 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         status.html($('<a>File uploaded</a>').attr('href', url));
                         var absURL = url.substring(1);
 
-						update(objAddValue(getEditedFocus(), 'media', absURL));
-						later(function() {
-							x.dialog('close');
-						});
+                        update(objAddValue(getEditedFocus(), 'media', absURL));
+                        later(function() {
+                            x.dialog('close');
+                        });
                     }
                 });
 
@@ -531,13 +535,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
 
             /*var exportButton = $('<button>Export</button>');
-            exportButton.click(function() {
-                $.pnotify({
-                    title: x.id,
-                    text: JSON.stringify(x, null, 4)
-                });
-            });
-            d.append(exportButton);*/
+             exportButton.click(function() {
+             $.pnotify({
+             title: x.id,
+             text: JSON.stringify(x, null, 4)
+             });
+             });
+             d.append(exportButton);*/
         }
 
     }
@@ -567,10 +571,10 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
     var d = newDiv().addClass('tagSection');
     /*d.hover( function() {
-        d.addClass('tagSectionHovered');
-    }, function() {
-        d.removeClass('tagSectionHovered');
-    } );*/
+     d.addClass('tagSectionHovered');
+     }, function() {
+     d.removeClass('tagSectionHovered');
+     } );*/
 
     if (strength == undefined)
         strength = 1.0;
@@ -601,57 +605,72 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             });
             tagButtons.append(downButton);
         }
-        
+
         {
             var disableButton = $('<button title="Disable">&nbsp;</button>').appendTo(tagButtons);
             var p25Button = $('<button title="25%">&nbsp;</button>').appendTo(tagButtons);
             var p50Button = $('<button title="50%">&nbsp;</button>').appendTo(tagButtons);
             var p75Button = $('<button title="75%">&nbsp;</button>').appendTo(tagButtons);
             var p100Button = $('<button title="100%">&nbsp;</button>').appendTo(tagButtons);
-            
+
             var currentButton = null;
-            if (strength == 0) currentButton = disableButton;
-            if (strength == 1.0) currentButton = p100Button;
-            if (strength == 0.75) currentButton = p75Button;
-            if (strength == 0.5) currentButton = p50Button;
-            if (strength == 0.25) currentButton = p25Button;
+            if (strength == 0)
+                currentButton = disableButton;
+            if (strength == 1.0)
+                currentButton = p100Button;
+            if (strength == 0.75)
+                currentButton = p75Button;
+            if (strength == 0.5)
+                currentButton = p50Button;
+            if (strength == 0.25)
+                currentButton = p25Button;
             if (currentButton)
                 currentButton.addClass('tagButtonSelected');
-            
-            disableButton.click(function() { onStrengthChange(index, 0); });
-            p25Button.click(function() { onStrengthChange(index, 0.25); });
-            p50Button.click(function() { onStrengthChange(index, 0.5); });
-            p75Button.click(function() { onStrengthChange(index, 0.75); });
-            p100Button.click(function() { onStrengthChange(index, 1.0); });
-        }
-        /*
-        if (strength > 0.25) {
-            var weakenButton = $('<a href="#" title="Decrease">-</a>');
-            weakenButton.addClass('tagButton');
-            weakenButton.click(function() {
-                onStrengthChange(index, strength - 0.25);
-            });
-            tagButtons.append(weakenButton);
-        }
-        if (strength < 1.0) {
-            var strengthButton = $('<a href="#" title="Increase">+</a>');
-            strengthButton.addClass('tagButton');
-            strengthButton.click(function() {
-                onStrengthChange(index, strength + 0.25);
-            });
-            tagButtons.append(strengthButton);
-        }
 
-        if (strength > 0) {
-            var disableButton = $('<a href="#" title="Disable">x</a>');
-            disableButton.addClass('tagButton');
             disableButton.click(function() {
                 onStrengthChange(index, 0);
             });
-            tagButtons.append(disableButton);
+            p25Button.click(function() {
+                onStrengthChange(index, 0.25);
+            });
+            p50Button.click(function() {
+                onStrengthChange(index, 0.5);
+            });
+            p75Button.click(function() {
+                onStrengthChange(index, 0.75);
+            });
+            p100Button.click(function() {
+                onStrengthChange(index, 1.0);
+            });
         }
-        else {
-        }*/
+        /*
+         if (strength > 0.25) {
+         var weakenButton = $('<a href="#" title="Decrease">-</a>');
+         weakenButton.addClass('tagButton');
+         weakenButton.click(function() {
+         onStrengthChange(index, strength - 0.25);
+         });
+         tagButtons.append(weakenButton);
+         }
+         if (strength < 1.0) {
+         var strengthButton = $('<a href="#" title="Increase">+</a>');
+         strengthButton.addClass('tagButton');
+         strengthButton.click(function() {
+         onStrengthChange(index, strength + 0.25);
+         });
+         tagButtons.append(strengthButton);
+         }
+         
+         if (strength > 0) {
+         var disableButton = $('<a href="#" title="Disable">x</a>');
+         disableButton.addClass('tagButton');
+         disableButton.click(function() {
+         onStrengthChange(index, 0);
+         });
+         tagButtons.append(disableButton);
+         }
+         else {
+         }*/
 
         var removeButton = $('<a href="#" title="Remove">X</a>');
         removeButton.addClass('tagButton');
@@ -715,9 +734,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
         if (editable) {
             var dd = $('<input type="text" placeholder="' + type + '"/>').appendTo(d);
-			if (prop.readonly) {
-				dd.attr('readonly','readonly');
-			}
+            if (prop.readonly) {
+                dd.attr('readonly', 'readonly');
+            }
 
             var sx = null;
             if (prop) {
@@ -775,7 +794,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         var ii = $('<input type="checkbox">');
 
         var value = t.value;
-        if (value==undefined) {
+        if (value == undefined) {
             if (defaultValue)
                 value = defaultValue;
             else
@@ -825,8 +844,10 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             ee.append(ar);
 
             whenSaved.push(function(y) {
-				if (!m) return;
-				if (!m.location) return;
+                if (!m)
+                    return;
+                if (!m.location)
+                    return;
 
                 var l = m.location();
                 objAddValue(y, tag, {
@@ -865,15 +886,15 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             d.append(new Date(t.at));
         }
     }
-	else if (type == 'media') {
-		if (editable) {
+    else if (type == 'media') {
+        if (editable) {
             whenSaved.push(function(y) {
                 objAddValue(y, 'media', t.value, strength);
             });
-		}
-		var url = t.value;
-		d.append('<img src="' + url + '"/>');
-	}
+        }
+        var url = t.value;
+        d.append('<img src="' + url + '"/>');
+    }
     else if (type == 'sketch') {
         var eu = uuid();
 
@@ -1018,9 +1039,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         if (editable) {
             var tt = $('<span></span>');
             var ts = $('<input></input>');
-			if (prop.readonly) {
-				ts.attr('readonly','readonly');
-			}
+            if (prop.readonly) {
+                ts.attr('readonly', 'readonly');
+            }
 
             var value = t.value;
             ts.val(value);
@@ -1108,7 +1129,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 }
 
                 var pd = $('<span/>');
-				pd.addClass('tagLabelProperties');
+                pd.addClass('tagLabelProperties');
 
                 //pd.addClass('tagSuggestions');
                 var pp = getTagProperties(tag);
@@ -1117,13 +1138,13 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                         var ppv = pp[I];
                         var PP = $N.getProperty(ppv);
 
-						//TODO dont include if max present reached
-				        if (PP.max)
-				            if (PP.max > 0) {
-								var existing = objValues(x, ppv).length;
-								if (PP.max <= existing)
-									return;
-							}
+                        //TODO dont include if max present reached
+                        if (PP.max)
+                            if (PP.max > 0) {
+                                var existing = objValues(x, ppv).length;
+                                if (PP.max <= existing)
+                                    return;
+                            }
 
                         var ppn = PP.name;
                         var appv = $('<a href="#" title="' + PP.type + '">' + ppn + '</a>');
@@ -1203,10 +1224,10 @@ function newPropertyView(x, vv) {
 
     }
     else if ((p.type == 'integer') || (p.type == 'real')) {
-		if (vv.value)
-	        if (vv.value.unit) {
-    	        return $('<li>' + p.name + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
-    	    }
+        if (vv.value)
+            if (vv.value.unit) {
+                return $('<li>' + p.name + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
+            }
         return $('<li>' + p.name + ': ' + vv.value + '</li>');
     }
     else {
@@ -1237,16 +1258,17 @@ function newPropertyView(x, vv) {
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
  */
 function newObjectSummary(x, options) {
-	if (!options) options = { };
+    if (!options)
+        options = {};
 
-	var onRemoved = options.onRemoved;
-	var scale = options.scale;
-	var depthRemaining = options.depthRemaining;
-	var nameClickable = (options.nameClickable != undefined) ? options.nameClickable : true;
-	var showAuthorIcon = (options.showAuthorIcon != undefined) ? options.showAuthorIcon : true;
-	var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
-	var showMetadataLine = (options.showMetadataLine != undefined) ? options.showMetadataLine : true;
-	var showActionPopupButton = (options.showActionPopupButton !=undefined) ? options.showActionPopupButton : true;
+    var onRemoved = options.onRemoved;
+    var scale = options.scale;
+    var depthRemaining = options.depthRemaining;
+    var nameClickable = (options.nameClickable != undefined) ? options.nameClickable : true;
+    var showAuthorIcon = (options.showAuthorIcon != undefined) ? options.showAuthorIcon : true;
+    var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
+    var showMetadataLine = (options.showMetadataLine != undefined) ? options.showMetadataLine : true;
+    var showActionPopupButton = (options.showActionPopupButton != undefined) ? options.showActionPopupButton : true;
 
     if (!x) {
         return newDiv().html('Object Missing');
@@ -1305,19 +1327,19 @@ function newObjectSummary(x, options) {
 
     d.append(cd);
 
-	if (showAuthorName) {
-		if (!isSelfObject(x.id)) { //exclude self objects
-		    if (x.author) {
-		        var a = x.author;
-		        var as = $N.getObject(x.author);
-		        if (as)
-		            a = as.name;
-				//else display UID?
+    if (showAuthorName) {
+        if (!isSelfObject(x.id)) { //exclude self objects
+            if (x.author) {
+                var a = x.author;
+                var as = $N.getObject(x.author);
+                if (as)
+                    a = as.name;
+                //else display UID?
 
-		        xn = a + ': ' + xn;
-		    }
-		}
-	}
+                xn = a + ': ' + xn;
+            }
+        }
+    }
 
     var replies = newDiv();
 
@@ -1329,8 +1351,8 @@ function newObjectSummary(x, options) {
             for (var i = 0; i < r.length; i++) {
                 var p = r[i];
                 replies.append(newObjectSummary($N.getObject(p), {
-					'depthRemaining': depthRemaining - 1
-				}));
+                    'depthRemaining': depthRemaining - 1
+                }));
             }
         }
         else {
@@ -1425,17 +1447,17 @@ function newObjectSummary(x, options) {
     hb.hide();
 
 
-	if (showAuthorIcon) {
-		var authorClient = $N.getObject(authorID);
-		if (authorClient) {
-		    if (authorID) {
-		        var av = getAvatar(authorClient).attr('align', 'left');
+    if (showAuthorIcon) {
+        var authorClient = $N.getObject(authorID);
+        if (authorClient) {
+            if (authorID) {
+                var av = newAvatarImage(authorClient).attr('align', 'left');
 
-		        d.append(av);
-		        av.wrap('<div class="AvatarIcon"/>');
-		    }
-		}
-	}
+                d.append(av);
+                av.wrap('<div class="AvatarIcon"/>');
+            }
+        }
+    }
 
     //Selection Checkbox
     var selectioncheck = $('<input type="checkbox"/>');
@@ -1445,44 +1467,44 @@ function newObjectSummary(x, options) {
         refreshActionContext();
     });
 
-	var haxn = null;
+    var haxn = null;
 
-	function addPopupMenu() {
-		var popupmenuButton = $('<button title="Actions...">&gt;</button>');
-		popupmenuButton.addClass('ObjectViewPopupButton');
-		popupmenuButton.click(function() {			
-			function closeMenu() {
-				popupmenuButton.remove();
-				addPopupMenu();
-			}
-			
-			if (popupmenuButton.children().length > 0) {
-				//click the popup menu button again to disappear an existing menu
-				closeMenu();
-				return;
-			}
+    function addPopupMenu() {
+        var popupmenuButton = $('<button title="Actions...">&gt;</button>');
+        popupmenuButton.addClass('ObjectViewPopupButton');
+        popupmenuButton.click(function() {
+            function closeMenu() {
+                popupmenuButton.remove();
+                addPopupMenu();
+            }
 
-			var d = newContextMenu([x], true, function() {
-				//callback function when an item is clicked
-				closeMenu();
-			});
+            if (popupmenuButton.children().length > 0) {
+                //click the popup menu button again to disappear an existing menu
+                closeMenu();
+                return;
+            }
 
-			d.addClass('ActionMenuPopup');
-			var closeButton = $('<button>Close</button>');
-			closeButton.click(function() {
-				closeMenu();
-			});
+            var d = newContextMenu([x], true, function() {
+                //callback function when an item is clicked
+                closeMenu();
+            });
 
-			d.append(closeButton);
-			popupmenuButton.append(d);
-		});
+            d.addClass('ActionMenuPopup');
+            var closeButton = $('<button>Close</button>');
+            closeButton.click(function() {
+                closeMenu();
+            });
 
-		if (haxn) {
-			haxn.append(popupmenuButton);
-		}
-		else
-			d.append(popupmenuButton);
-	}
+            d.append(closeButton);
+            popupmenuButton.append(d);
+        });
+
+        if (haxn) {
+            haxn.append(popupmenuButton);
+        }
+        else
+            d.append(popupmenuButton);
+    }
 
     //Name
     if (x.name) {
@@ -1505,13 +1527,13 @@ function newObjectSummary(x, options) {
         d.append(selectioncheck);
     }
 
-	if (showActionPopupButton)
-		addPopupMenu();
+    if (showActionPopupButton)
+        addPopupMenu();
 
-	if (showMetadataLine) {
-		var mdline = newMetadataLine(x);
-		d.append(mdline);
-	}
+    if (showMetadataLine) {
+        var mdline = newMetadataLine(x);
+        d.append(mdline);
+    }
 
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
 
@@ -1559,10 +1581,10 @@ function newObjectSummary(x, options) {
                                 + new Date(vv.value.start).toISOString());
                     }
                 }
-				else if (vv.id == 'media') {
-					var url = vv.value;
-					ud.append('<img src="' + url + '"/>');
-				}
+                else if (vv.id == 'media') {
+                    var url = vv.value;
+                    ud.append('<img src="' + url + '"/>');
+                }
 
                 if ($N.isProperty(vv.id))
                     ud.append(newPropertyView(x, vv));
@@ -1649,7 +1671,7 @@ function newTagTree(param) {
         }
         else
             name = xi = i;
-		
+
         var children = $N.getSubTags(xi);
 
         var label = name;
@@ -1670,7 +1692,7 @@ function newTagTree(param) {
                 subtree(b.children, $N.tag(c));
             });
         }
-		b.id = xi;
+        b.id = xi;
 
         root.push(b);
     }
@@ -1707,107 +1729,107 @@ function newTagTree(param) {
 
     tree.appendTo(a);
 
-	later(function() {
-		a.hide();
-		a.tree({
-		    data: T,
-			useContextMenu: false,
-		    autoEscape: false,
-		    selectable: false,
-		    //slide: false,
-			autoOpen: false
-		});
+    later(function() {
+        a.hide();
+        a.tree({
+            data: T,
+            useContextMenu: false,
+            autoEscape: false,
+            selectable: false,
+            //slide: false,
+            autoOpen: false
+        });
 
-		//autoOpen seems broken in jqtree, so manually open the first level:
+        //autoOpen seems broken in jqtree, so manually open the first level:
 
-		a.find('.jqtree-toggler').click();
-		a.find('.jqtree-toggler').click();
+        a.find('.jqtree-toggler').click();
+        a.find('.jqtree-toggler').click();
 
-		//all should be closed now.  now open the first row:
+        //all should be closed now.  now open the first row:
 
-		a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
-		a.show();
+        a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
+        a.show();
 
-		if (param.onCreated)
-			param.onCreated(a);
-	});
+        if (param.onCreated)
+            param.onCreated(a);
+    });
 
     return tree;
 
 }
 
 function newMetadataLine(x) {
-	var mdline = $('<h2></h2>');
-	mdline.addClass('MetadataLine');
+    var mdline = $('<h2></h2>');
+    mdline.addClass('MetadataLine');
 
-	var ot = objTags(x);
-	var ots = objTagStrength(x, false);
+    var ot = objTags(x);
+    var ots = objTagStrength(x, false);
 
-	for (var i = 0; i < ot.length; i++) {
-	    var t = ot[i];
+    for (var i = 0; i < ot.length; i++) {
+        var t = ot[i];
 
-	    if ($N.isProperty(t))
-	        continue;
+        if ($N.isProperty(t))
+            continue;
 
-	    var tt = $N.getTag(t);
-	    if (tt) {
-	        var ttt = newTagButton(tt);
-	        applyTagStrengthClass(ttt, ots[t]);
-	        mdline.append(ttt);
-	    }
-	    else {
-	        mdline.append('<a href="#">' + t + '</a>');
-	    }
-	    mdline.append('&nbsp;');
-	}
+        var tt = $N.getTag(t);
+        if (tt) {
+            var ttt = newTagButton(tt);
+            applyTagStrengthClass(ttt, ots[t]);
+            mdline.append(ttt);
+        }
+        else {
+            mdline.append('<a href="#">' + t + '</a>');
+        }
+        mdline.append('&nbsp;');
+    }
 
-	var spacepoint = objSpacePoint(x);
-	if (spacepoint) {
-	    var lat = _n(spacepoint.lat);
-	    var lon = _n(spacepoint.lon);
-	    var mll = objSpacePointLatLng($N.myself());
-	    if (mll) {
-	        var dist = '?';
-	        //TODO check planet
-	        var sx = [spacepoint.lat, spacepoint.lon];
-	        if (mll)
-	            dist = geoDist(sx, mll);
+    var spacepoint = objSpacePoint(x);
+    if (spacepoint) {
+        var lat = _n(spacepoint.lat);
+        var lon = _n(spacepoint.lon);
+        var mll = objSpacePointLatLng($N.myself());
+        if (mll) {
+            var dist = '?';
+            //TODO check planet
+            var sx = [spacepoint.lat, spacepoint.lon];
+            if (mll)
+                dist = geoDist(sx, mll);
 
-			if (dist == 0)
-		        mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + ' here</span>');
-			else
-		        mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
-	    }
-	    else {
-	        mdline.append('&nbsp;<span>[' + lat + ',' + lon + ']</span>');
-	    }
-	}
+            if (dist == 0)
+                mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + ' here</span>');
+            else
+                mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
+        }
+        else {
+            mdline.append('&nbsp;<span>[' + lat + ',' + lon + ']</span>');
+        }
+    }
 
-	var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
-	var now = Date.now();
-	if (ww) {
-	    if (ww < now) {
-	        var tt = $('<time class="timeago"/>');
-	        function ISODateString(d) {
-	            function pad(n) {
-	                return n < 10 ? '0' + n : n
-	            }
-	            return d.getUTCFullYear() + '-'
-	                    + pad(d.getUTCMonth() + 1) + '-'
-	                    + pad(d.getUTCDate()) + 'T'
-	                    + pad(d.getUTCHours()) + ':'
-	                    + pad(d.getUTCMinutes()) + ':'
-	                    + pad(d.getUTCSeconds()) + 'Z'
-	        }
+    var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
+    var now = Date.now();
+    if (ww) {
+        if (ww < now) {
+            var tt = $('<time class="timeago"/>');
+            function ISODateString(d) {
+                function pad(n) {
+                    return n < 10 ? '0' + n : n
+                }
+                return d.getUTCFullYear() + '-'
+                        + pad(d.getUTCMonth() + 1) + '-'
+                        + pad(d.getUTCDate()) + 'T'
+                        + pad(d.getUTCHours()) + ':'
+                        + pad(d.getUTCMinutes()) + ':'
+                        + pad(d.getUTCSeconds()) + 'Z'
+            }
 
-	        tt.attr('datetime', ISODateString(new Date(ww)));
-	        mdline.append('&nbsp;',tt);
-	    }
-	    else {
-	        mdline.append('&nbsp;');
-	        mdline.append('<span>' + new Date(ww) + '</span>');
-	    }
+            tt.attr('datetime', ISODateString(new Date(ww)));
+            mdline.append('&nbsp;', tt);
+        }
+        else {
+            mdline.append('&nbsp;');
+            mdline.append('<span>' + new Date(ww) + '</span>');
+        }
 
-	}
-	return mdline;
+    }
+    return mdline;
 }

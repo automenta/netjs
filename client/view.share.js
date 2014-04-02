@@ -1,7 +1,7 @@
 var shareSearchFocusUpdateMS = 1500;
 
 /* Sharetribe.com inspired view */
-function renderShare(v) {
+function newShareView(v) {
 	var shareTags = [ 'Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn' ];
 	var shareCategories = ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Animal' ];
 
@@ -107,7 +107,7 @@ function renderShare(v) {
 		}
 
 		content.html('');
-		renderItems(null, content, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
+		renderItems(content, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
 		    var elements = [];
 
 		    for (var i = 0; i < xxrr.length; i++) {
@@ -201,7 +201,7 @@ function newObjectSummary2(x) {
 		var authorline = newDiv().addClass('ShareSummaryAuthor');
 		
 		var A = $N.getObject(x.author);
-		authorline.append(getAvatar(A).attr('style', 'height: 1.5em; vertical-align: middle'));
+		authorline.append(newAvatarImage(A).attr('style', 'height: 1.5em; vertical-align: middle'));
 		var authorLink = $('<a href="#">' + A.name + '</a>');
 		authorLink.click(function() {
 			newPopupObjectView(A, true);

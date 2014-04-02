@@ -2,7 +2,7 @@ var GRAPH_MAX_NODES = 300;
 
 
 
-function renderGraph(s, o, v) {
+function newGraphView(v) {
 	var eid = uuid();
 	var nd = $('<div/>').attr('id', eid);
 	nd.css('height', '100%');
@@ -217,7 +217,7 @@ function renderGraph(s, o, v) {
 		nodeIndex = { };
 
 
-		renderItems(o, v, GRAPH_MAX_NODES, function(s, v, xxrr) {
+		renderItems(v, GRAPH_MAX_NODES, function(s, v, xxrr) {
 		    var tags = { };
 
 			var minTime, maxTime;		    

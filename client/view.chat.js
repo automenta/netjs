@@ -8,7 +8,7 @@ function onChatSend(name, desc) {
 	self.publish(o);
 }
 
-function renderChat(v) {
+function newChatView(v) {
     var frame = newDiv();
     
     //var roster = newRoster().attr('class', 'ChatViewRoster');    
@@ -31,7 +31,7 @@ function renderChat(v) {
         var s = self;
         var o = newDiv();
         
-        var rel = getRelevant(sort, scope, semantic, s, o, maxItems);
+        var rel = getRelevant(sort, scope, semantic, s, maxItems);
         var rr = rel[0];
         if (rr.length == 0) {
             content.html('No messages.');

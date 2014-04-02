@@ -1,4 +1,4 @@
-function renderTemplatesView(v) {
+function newTemplatesView(v) {
 	var d = newDiv().appendTo(v);
 
 	var sidebar= newDiv().addClass('goalviewSidebar').appendTo(d);

@@ -84,7 +84,7 @@ function renderMapMarker(x, createMarkerFunction) {
 
 var map2d = true;
 
-function renderMap(s, o, v) {
+function newMapView(v) {
     var mm = { };
     
 	browseTagFilters = { };	//TEMPORARY
@@ -126,11 +126,11 @@ function renderMap(s, o, v) {
             mm.onChange = m.onChange;       
             mm.location = m.location;*/
 
-            var m = renderLeafletMap(s, o, v);
+            var m = renderLeafletMap(v);
 			mm.onChange = m.onChange;
         }
         else {
-			var m = renderCesiumMap(o, v);
+			var m = renderCesiumMap(v);
 			if (m.onChange)
 				mm.onChange = m.onChange;
         }
@@ -143,7 +143,7 @@ function renderMap(s, o, v) {
     return mm;
 }
 
-function renderLeafletMap(s, o, v) {
+function renderLeafletMap(v) {
     var e = uuid();
 	var mapdiv = $('<div style="width: 100%; height: 100%"/>').attr('id', e).appendTo(v);
 
@@ -428,7 +428,7 @@ function renderLeafletMap(s, o, v) {
 
 		var currentMapNow = Date.now();
 
-        renderItems(o, v, MAP_MAX_ITEMS, function(s, v, xxrr) {
+        renderItems(v, MAP_MAX_ITEMS, function(s, v, xxrr) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 var r = xxrr[i][1];

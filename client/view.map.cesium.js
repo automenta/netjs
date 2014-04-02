@@ -3,7 +3,7 @@
 var cesiumLoaded = false;
 var MAX_CESIUM_ITEMS = 250;
 
-function renderCesiumMap(o, v) {
+function renderCesiumMap(v) {
 	var cc = { };
 	var viewer;
 
@@ -104,7 +104,7 @@ function renderCesiumMap(o, v) {
 
 	    currentMapNow = Date.now();        
 
-        renderItems(o, v, MAX_CESIUM_ITEMS, function(s, v, xxrr) {
+        renderItems(v, MAX_CESIUM_ITEMS, function(s, v, xxrr) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 var r = xxrr[i][1];        

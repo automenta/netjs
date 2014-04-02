@@ -67,7 +67,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
     }
 }
 
-function getRelevant(sort, scope, semantic, s, o, maxItems) { 
+function getRelevant(sort, scope, semantic, s, maxItems) { 
 
     var now = Date.now();
     var location = objSpacePointLatLng($N.myself());
