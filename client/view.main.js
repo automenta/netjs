@@ -10,11 +10,11 @@ function newMainView(v) {
     
     var preventClick = false;
     
-    var gridster = grid.gridster({
+    var go = {
         widget_base_dimensions: [110, 110],
         widget_margins: [6, 6],
         resize: {
-            enabled: true
+            enabled: true      
         },
         draggable: {
             start: function() {
@@ -27,7 +27,10 @@ function newMainView(v) {
                 return false;
             }
         }
-    }).data('gridster');
+    };
+    go.resize.start = go.draggable.start;
+    go.resize.stop = go.draggable.stop;
+    var gridster = grid.gridster(go).data('gridster');
     
     //gridster.add_widget('<li class="mainViewButton">ABC</li>', 1, 1, 2, 2);
 

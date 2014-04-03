@@ -25,7 +25,7 @@ function getTagIcon(t) {
 
 function newPopupObjectEdit(n, p) {
     var e = newObjectEdit(n, true);
-    newPopup('Add...', p).append(e);
+    newPopup('Edit', p).append(e);
     return e;
 }
 
@@ -1470,8 +1470,12 @@ function newObjectSummary(x, options) {
     var haxn = null;
 
     function addPopupMenu() {
-        var popupmenuButton = $('<button title="Actions...">&gt;</button>');
-        popupmenuButton.addClass('ObjectViewPopupButton');
+        var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton');
+        editButton.click(function() {
+            newPopupObjectEdit(x, true); 
+        });
+        
+        var popupmenuButton = $('<button title="Actions...">&gt;</button>').addClass('ObjectViewPopupButton');
         popupmenuButton.click(function() {
             function closeMenu() {
                 popupmenuButton.remove();
@@ -1500,10 +1504,10 @@ function newObjectSummary(x, options) {
         });
 
         if (haxn) {
-            haxn.append(popupmenuButton);
+            haxn.append(editButton, popupmenuButton);
         }
         else
-            d.append(popupmenuButton);
+            d.append(editButton, popupmenuButton);
     }
 
     //Name
