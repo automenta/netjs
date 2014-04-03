@@ -1628,17 +1628,21 @@ exports.start = function(options, init) {
                 socket.emit('setClientID', cid, key, selves);
                 socket.emit('setServer', $N.server.name, $N.server.description);
 
-                getObjectsByTag(['Tag', 'Template'], function(to) {
-                    socket.emit('notice', to);
+                var tagsAndTemplates = [];
+                getObjectsByTag(['Tag', 'Template'], function(o) {
+                    tagsAndTemplates.push(o);
+                }, function() {
+                    if (tagsAndTemplates.length > 0)
+                        socket.emit('notice', tagsAndTemplates);                    
                 });
 
                 /*getObjectsByTag('User', function(to) {
                  socket.emit('notice', to);
                  });*/
 
-                getObjectsByAuthor(cid, function(uo) {
+                /*getObjectsByAuthor(cid, function(uo) {
                     socket.emit('notice', uo);
-                });
+                });*/
 
                 if (callback)
                     callback();
@@ -1720,14 +1724,20 @@ exports.start = function(options, init) {
 
     function sub(socket, channel, sendExisting) {
         //nlog(socket.clientID + ' subscribed ' + channel );
+        
         socket.join(channel);
 
         if (sendExisting) {
-            getObjectsByTag(channel, function(objects) {
-                socket.emit('notice', objects);
+            var objects = [];
+            getObjectsByTag(channel, function(o) {
+                objects.push(o);
+            }, function() {
+                if (objects.length > 0)
+                    socket.emit('notice', objects);                
             });
         }
     }
+    
     function unsub(socket, channel) {
         nlog(socket.clientID + ' unsubscribed ' + channel);
         socket.leave(channel);

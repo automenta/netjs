@@ -4,7 +4,8 @@
 
 "use strict";
 
-var FOCUS_KEYWORD_UPDATE_PERIOD = 1500;
+var FOCUS_KEYWORD_UPDATE_PERIOD = 1500; //milliseconds
+var viewDebounceMS = 100;
 
 var updateView;
 
@@ -387,11 +388,12 @@ $(document).ready(function() {
                 updateViewControls();
 
                 $('body').timeago();
-                updateView = _.throttle(function() {
+                
+                updateView = _.debounce(_.throttle(function() {
                     later(function() {
                         _updateView();
                     });
-                }, configuration.viewUpdateMS);
+                }, configuration.viewUpdateMS), viewDebounceMS);
 
 
                 var msgs = ['I think', 'I feel', 'I wonder', 'I know', 'I want'];
@@ -458,7 +460,6 @@ $(document).ready(function() {
                     initKeyboard();
 
                     $N.on('change:attention', updateView);
-                    //$N.on('change:layer', updateView);
                     $N.on('change:currentView', updateView);
                     $N.on('change:tags', updateView);
                     $N.on('change:focus', updateView);

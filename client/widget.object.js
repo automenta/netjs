@@ -118,6 +118,7 @@ function newTagButton(t, onClicked, isButton) {
     else
         b.append(t);
 
+    ///temporary solution
     function tagObject(tag) {
         var o = objNew();
         o.name = tag.name;
@@ -524,8 +525,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     });
                 }, function() {
                     $.pnotify({
-                        title: 'Saved (' + x.id.substring(0, 6) + ')',
-                        text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object           
+                        title: 'Saved (' + x.id.substring(0, 6) + ')'
+                        //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object           
                     });
                     $N.notice(e);
                 });
@@ -1470,10 +1471,14 @@ function newObjectSummary(x, options) {
     var haxn = null;
 
     function addPopupMenu() {
-        var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton');
-        editButton.click(function() {
-            newPopupObjectEdit(x, true); 
-        });
+        var ms = $N.myself();
+        if (ms)
+            if (ms.id === x.author) { 
+                var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton');
+                editButton.click(function() {
+                    newPopupObjectEdit(x, true); 
+                });
+            }
         
         var popupmenuButton = $('<button title="Actions...">&gt;</button>').addClass('ObjectViewPopupButton');
         popupmenuButton.click(function() {
@@ -1535,8 +1540,7 @@ function newObjectSummary(x, options) {
         addPopupMenu();
 
     if (showMetadataLine) {
-        var mdline = newMetadataLine(x);
-        d.append(mdline);
+        newMetadataLine(x).appendTo(d);
     }
 
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
@@ -1763,8 +1767,7 @@ function newTagTree(param) {
 }
 
 function newMetadataLine(x) {
-    var mdline = $('<h2></h2>');
-    mdline.addClass('MetadataLine');
+    var mdline = $('<h2></h2>').addClass('MetadataLine');
 
     var ot = objTags(x);
     var ots = objTagStrength(x, false);
@@ -1799,13 +1802,13 @@ function newMetadataLine(x) {
             if (mll)
                 dist = geoDist(sx, mll);
 
-            if (dist == 0)
+            if (dist === 0)
                 mdline.append('&nbsp;<span>(here)</span>');
             else
                 mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
         }
         else {
-            mdline.append('&nbsp;<span>[' + lat + ',' + lon + ']</span>');
+            mdline.append('&nbsp;','<span>[' + lat + ',' + lon + ']</span>');
         }
     }
 
@@ -1830,8 +1833,7 @@ function newMetadataLine(x) {
             mdline.append('&nbsp;', tt);
         }
         else {
-            mdline.append('&nbsp;');
-            mdline.append('<span>' + new Date(ww) + '</span>');
+            mdline.append('&nbsp;<span>' + new Date(ww) + '</span>');
         }
 
     }
