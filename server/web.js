@@ -808,14 +808,12 @@ exports.start = function(options, init) {
             possibleClients = [];
 
         if (!anonymous) {
-            res.cookie('key', key);
             res.cookie('authenticated', key != undefined);
         }
         else {
             res.cookie('authenticated', 'anonymous');
         }
         res.cookie('clientID', getCurrentClientID(key));
-        res.cookie('key', key);
 
         res.cookie('otherSelves', possibleClients.join(','));
 
@@ -950,7 +948,7 @@ exports.start = function(options, init) {
         if (!req)
             return undefined;
 
-        if (typeof req == "string")
+        if (typeof req === "string")
             return req;
 
         var cookies = getCookies(req);
@@ -1321,7 +1319,6 @@ exports.start = function(options, init) {
 
     });
     express.get('/logout', function(req, res) {
-        res.clearCookie('key');
         res.clearCookie('authenticated');
         res.clearCookie('clientID');
         res.clearCookie('otherSelves');
