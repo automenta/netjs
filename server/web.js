@@ -1454,8 +1454,9 @@ exports.start = function(options, init) {
     //    sessionSockets.on('connection', function(err, socket, session) {
     io.sockets.on('connection', function(socket) {
 
-        var session = socket.handshake.sessionID;
         var request = socket.handshake;
+        var session = request ? request.sessionID : null;
+        
         {
             //https://github.com/LearnBoost/socket.io/wiki/Rooms
             socket.on('subscribe', function(channel, sendAll) {
