@@ -1453,10 +1453,15 @@ exports.start = function(options, init) {
 
     //    sessionSockets.on('connection', function(err, socket, session) {
     io.sockets.on('connection', function(socket) {
-
-        var request = socket.handshake;
-        var session = request ? request.sessionID : null;
         
+        var request;
+        if (socket.handshake)
+            request = socket.handshake;
+        else
+            request = socket.conn.request;
+        
+        var session = getSessionKey(request);
+                
         {
             //https://github.com/LearnBoost/socket.io/wiki/Rooms
             socket.on('subscribe', function(channel, sendAll) {
@@ -1468,7 +1473,7 @@ exports.start = function(options, init) {
 
             socket.on('pub', function(message, err, success) {
                 if ($N.server.permissions['authenticate_to_create_objects'] != false) {
-                    if (!getSessionKey(session)) {
+                    if (!session) {
                         if (err)
                             err('Not authenticated');
                     }
@@ -1565,10 +1570,9 @@ exports.start = function(options, init) {
                     });
                 }
 
-                var sessionKey = getSessionKey(request);
                 var keyRequired = ($N.server.permissions['authenticate_to_create_profiles'] != false);
                 if (!targetObject) {
-                    var selves = getClientSelves(sessionKey);
+                    var selves = getClientSelves(session);
                     if (_.contains(selves, target)) {
                         if (onResult)
                             onResult(targetObjectID);
