@@ -1012,8 +1012,8 @@ exports.start = function(options, init) {
             $N.server.users['anonymous'] = [];
         }
 
-        var key = getSessionKey(req) || 'anonymous';
-        return $N.server.users[key];
+        var key = getSessionKey(req) || 'anonymous';        
+        return $N.server.users[decodeURIComponent('key')];
     }
 
 
