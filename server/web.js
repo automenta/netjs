@@ -1629,8 +1629,6 @@ exports.start = function(options, init) {
                 var selves = getClientSelves(key);
                 nlog('connect: ' + cid + ', ' + key + ', ' + selves);
 
-                socket.set('clientID', cid);
-
                 var tagsAndTemplates = [];
                 getObjectsByTag(['Tag', 'Template'], function(o) {
                     tagsAndTemplates.push(o);
