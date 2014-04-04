@@ -713,7 +713,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
         if (editable) {
             var dd = $('<textarea/>').addClass('tagDescription');
-            if (prop.readonly) {
+            if ((prop) && (prop.readonly)) {
                 dd.attr('readonly', 'readonly');
             }
 
