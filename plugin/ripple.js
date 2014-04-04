@@ -17,12 +17,14 @@ exports.plugin = function($N) { return {
         
 		start: function() { 
 
+
+			var RIPPLE_UPDATE_INTERVAL_MS = 1000 * 60 * 15; //15min
+			var defaultPaymentCurrency = 'HRS';
+
 			//https://github.com/ripple/ripple-lib
 			var ripple = require('ripple-lib');
 			var _ = require('underscore');
 
-
-			var RIPPLE_UPDATE_INTERVAL_MS = 1000 * 60 * 15; //15min
 
 			var remote = new ripple.Remote({ 	  // see the API Reference for available options
 			  trusted:        true,
@@ -94,10 +96,15 @@ exports.plugin = function($N) { return {
 													var nn = encodeURIComponent(U.name);
 													var trustURL = 'https://ripple.com//trust?to=' + accounts[userid] +'&name=' + nn;
 													var payURL = 'https://ripple.com//send?to=' + accounts[userid] +'&name=' + nn;
+													if (defaultPaymentCurrency) {
+														var ams = '&amount=0' + encodeURIComponent('/' + defaultPaymentCurrency);
+														payURL = payURL + ams;
+														trustURL = trustURL + ams;
+													}
 
 													var a = 
 														'[<a target="_blank" href="' + trustURL + '">Trust</a>]&nbsp;' +
-														'[<a target="_blank" href="' + payURL + '">Pay</a>]';
+														'[<a target="_blank" href="' + payURL + '">Send</a>]';
 													;
 													U.add('rippleActions', a);
 
