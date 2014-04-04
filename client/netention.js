@@ -385,7 +385,7 @@ function netention(f) {
 
             var socket = this.socket;
             if (!socket) {
-                socket = io.connect('/', {
+                this.socket = socket = io.connect('/', {
                     'transports': ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
                     'reconnect': true,
                     'try multiple transports': true
@@ -433,12 +433,8 @@ function netention(f) {
             }
 
 
-            if (originalTargetID != null)
-                init();
-            else if (whenConnected)
-                whenConnected();
+            init();
 
-            this.socket = socket;
 
             return socket;
         },

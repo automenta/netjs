@@ -1590,7 +1590,7 @@ exports.start = function(options, init) {
                 }
                 else {
 
-                    if ((keyRequired && sessionKey) || (!keyRequired)) {
+                    if ((keyRequired && session) || (!keyRequired)) {
                         pubAndSucceed(targetObject);
                     }
                     else {
