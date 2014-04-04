@@ -360,11 +360,13 @@ function newUsView(v) {
         updateGoalList();
 
         {
-            var iu = $N.objectsWithTag('involvesUser');
+            //TODO find more robust way of displaying these
+            
+            /*var iu = $N.objectsWithTag('involvesUser');
             _.each(iu, function(x) {
                 var X = $N.getObject(x);
                 involvesList.append(newObjectSummary(X));
-            });
+            });*/
 
         }
 

@@ -42,9 +42,11 @@ function newPopupObjectView(_x, p) {
     }
 
     var d = newPopup(x.name, p);
-    d.append(newObjectSummary(x, {
+	var s = newObjectSummary(x, {
         depthRemaining: 4
-    }));
+    });
+	s.css('border', 'none');
+    d.append(s);
     return d;
 
 }
@@ -711,6 +713,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
         if (editable) {
             var dd = $('<textarea/>').addClass('tagDescription');
+            if (prop.readonly) {
+                dd.attr('readonly', 'readonly');
+            }
 
             if (t.value)
                 dd.val(t.value);
@@ -1178,6 +1183,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
     }
 
+	if (t.description)
+		d.append('<ul>' + t.description + '</ul>');
+
     return d;
 }
 
@@ -1235,23 +1243,6 @@ function newPropertyView(x, vv) {
     }
     else {
         var v = $('<li>' + p.name + ': ' + vv.value + '</li>');
-
-        //Property Actions
-        //TODO HACK make this more abstract and extendable by plugins
-
-        if ((vv.id == 'walletBTC') || (vv.id == 'walletPayPal') || (vv.id == 'walletRipple')) {
-            var payButton = $('<button>Pay</button>');
-            payButton.click(function() {
-                alert('Payments not implemented yet.');
-            });
-
-            var vu = $('<ul/>');
-            vu.append(payButton);
-            v.append(vu);
-
-        }
-
-
         return v;
     }
 }

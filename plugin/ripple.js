@@ -39,7 +39,8 @@ exports.plugin = function($N) { return {
                         'walletBalanceXRP': { name: 'XRP Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceHRS': { name: 'Hours Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceUSD': { name: 'USD Balance', type: 'real', max: 1, readonly: true },
-                        'rippleTrust': { name: 'Ripple Trust', type: 'object', readonly: true }
+                        'rippleTrust': { name: 'Ripple Trust', type: 'object', readonly: true },
+                        'rippleActions': { name: 'Ripple Actions', type: 'textarea', readonly: true }
                     }
                 }				
 			]);
@@ -88,6 +89,17 @@ exports.plugin = function($N) { return {
 													U.removeTag('walletBalanceHRS');
 													U.removeTag('walletBalanceUSD');
 													U.removeTag('rippleTrust');
+													U.removeTag('rippleActions');
+
+													var nn = encodeURIComponent(U.name);
+													var trustURL = 'https://ripple.com//trust?to=' + accounts[userid] +'&name=' + nn;
+													var payURL = 'https://ripple.com//send?to=' + accounts[userid] +'&name=' + nn;
+
+													var a = 
+														'[<a target="_blank" href="' + trustURL + '">Trust</a>]&nbsp;' +
+														'[<a target="_blank" href="' + payURL + '">Pay</a>]';
+													;
+													U.add('rippleActions', a);
 
 													U.add('walletBalanceXRP', xrpBalance);
 
@@ -99,6 +111,9 @@ exports.plugin = function($N) { return {
 
 														if (wallets.indexOf(L.account)!=-1) {
 															U.add('rippleTrust', toUser);
+															/*var td = JSON.stringify(L);
+															U.add({id: 'rippleTrust', value: toUser, 
+																description: td});*/
 														}
 														if (balances[L.currency] == undefined)
 															balances[L.currency] = 0;
@@ -111,6 +126,7 @@ exports.plugin = function($N) { return {
 													if (balances['HRS']) {
 														U.add('walletBalanceHRS', balances['HRS']);
 													}
+
 
 													$N.notice(U);
 												}

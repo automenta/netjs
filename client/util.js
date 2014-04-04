@@ -250,7 +250,7 @@ function objDescription(x) {
     if (x.value) {
         for (var i = 0; i < x.value.length; i++) {
             var ii = x.value[i];
-            if (ii.id == 'textarea') {
+            if ((ii.id == 'textarea') && (ii.value)) {
                 c = c + ii.value + ' ';
             }
         }
