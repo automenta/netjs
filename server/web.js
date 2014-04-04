@@ -1601,7 +1601,7 @@ exports.start = function(options, init) {
 
             });
 
-            socket.on('connect', function(cid, callback) {
+            socket.on('connectID', function(cid, callback) {
                 var key = null, email = null;
 
                 var key = getSessionKey(request);
@@ -1630,8 +1630,6 @@ exports.start = function(options, init) {
                 nlog('connect: ' + cid + ', ' + key + ', ' + selves);
 
                 socket.set('clientID', cid);
-                socket.emit('setClientID', cid, key, selves);
-                socket.emit('setServer', $N.server.name, $N.server.description);
 
                 var tagsAndTemplates = [];
                 getObjectsByTag(['Tag', 'Template'], function(o) {
@@ -1649,8 +1647,7 @@ exports.start = function(options, init) {
                     socket.emit('notice', uo);
                 });*/
 
-                if (callback)
-                    callback();
+                callback(cid, key, selves);
 
             });
 

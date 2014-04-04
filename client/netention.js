@@ -406,10 +406,6 @@ function netention(f) {
                 });
 
 
-                socket.on('setClientID', function(cid, key, otherSelves) {
-                    setClientID($N, cid, key, otherSelves);
-                });
-
                 socket.on('notice', function(n) {
                     $N.notice(n);
                 });
@@ -420,8 +416,9 @@ function netention(f) {
                 });                
             }
 
-            function init() {
-                socket.emit('connect', targetID);
+            socket.emit('connectID', targetID, function(_cid, _key, _selves) {
+                setClientID($N, _cid, _key, _selves);
+
                 socket.emit('subscribe', 'User', true);
                 $.getJSON('/object/author/' + targetID + '/json', function(j) {
                     $N.notice(j);
@@ -430,10 +427,8 @@ function netention(f) {
                         whenConnected = null;
                     }
                 });
-            }
 
-
-            init();
+            });
 
 
             return socket;
@@ -840,7 +835,7 @@ function netention(f) {
             });
         },
         save: function(key, value) {
-            self.set(key, value);
+            $N.set(key, value);
             var k = localStorePrefix + key;
             localStorage[k] = JSON.stringify(value);
         }
