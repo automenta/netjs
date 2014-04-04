@@ -955,7 +955,7 @@ exports.start = function(options, init) {
             return req;
 
         var cookies = getCookies(req);
-        return cookies['userid'];
+        return decodeURIComponent(cookies['userid']);
     }
 
     function getCurrentClientID(req) {
@@ -1013,7 +1013,7 @@ exports.start = function(options, init) {
         }
 
         var key = getSessionKey(req) || 'anonymous';        
-        return $N.server.users[decodeURIComponent('key')];
+        return $N.server.users[key];
     }
 
 
