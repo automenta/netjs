@@ -659,7 +659,6 @@ exports.start = function(options, init) {
             , GoogleStrategy = require('passport-google').Strategy;
 
 
-    //express.configure(function() {
     express.use(cookieParser);
     express.use(require('body-parser')());
     //express.use(expressm.methodOverride());
@@ -667,9 +666,7 @@ exports.start = function(options, init) {
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
     express.use(passport.initialize());
     express.use(passport.session());
-    express.use(express.router);
     
-    //});
 
 
     var httpServer = http.createServer(express);
