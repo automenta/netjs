@@ -1414,18 +1414,23 @@ exports.start = function(options, init) {
 
         var targets = {};
 
-        var ot = util.objTags(message);
+        /*var ot = util.objTags(message);
         for (var t = 0; t < ot.length; t++) {
             var chan = ot[t];
 
-            var cc = io.sockets.clients(chan);
+            var cc;
+            if (io.sockets.clients)
+                cc = io.sockets.clients(chan);
+            else
+                cc = io.sockets.sockets;
+            
             for (var cck in cc) {
                 var i = cc[cck].id;
                 if (socket)
                     if (i != socket.id)
                         targets[i] = '';
             }
-        }
+        }*/
 
         cmessage = util.objCompact(message);
 
