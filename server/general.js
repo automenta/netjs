@@ -80,7 +80,8 @@ var generalTags = [
 
     {uri: 'Item', name: 'Item', //combined Event into this one..
         properties: {
-            'count': {name: 'Count', type: 'integer'},
+            'quantity': {name: 'Quantity', type: 'integer'},
+            //'stockCount': {name: 'Stock Count', type: 'integer'},
             'individualWeight': {name: 'Weight (individual)', type: 'real'},
             'color': {name: 'Color', type: 'text'}
         },

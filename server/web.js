@@ -955,7 +955,9 @@ exports.start = function(options, init) {
             return req;
 
         var cookies = getCookies(req);
-        return decodeURIComponent(cookies['userid']);
+        var userid = cookies['userid'];
+        if (!userid) return null;
+        return decodeURIComponent(userid);
     }
 
     function getCurrentClientID(req) {
