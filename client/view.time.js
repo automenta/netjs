@@ -48,8 +48,11 @@ function newTimeView(v) {
     var goalRowsGrid = $('<ul/>').appendTo(goalRows);
     
     var goalRowsGridster = goalRowsGrid.gridster(goalGridsterParam).data('gridster');
+
+
     
-    foreachGoal(numTimeSegments, timeUnitLengthMS, $N.id(), function(time, goals, column) {
+    
+    foreachGoal(numTimeSegments, timeUnitLengthMS, $N.id(), function(time, goals, centroids, column) {
         colTimes[column] = time;
 
         var b = $('<li class="mainViewButton"></li>');
@@ -95,7 +98,7 @@ function newTimeView(v) {
         
         headerRowGrid.append(b);
         
-        _.each(goals, function(g) {
+        function addGoal(g) {
             var gg = $('<li class="mainViewButton"></li>');
             gg.css('font-size', goalWidgetScale);
             var O = newObjectSummary(g, {
@@ -107,8 +110,12 @@ function newTimeView(v) {
             O.css('height', '95%');
             
             gg.append(O);
-            goalRowsGridster.add_widget(gg, 1, 1, 1+column, 1);
-        });
+            goalRowsGridster.add_widget(gg, 1, 1, 1+column, 1);                    
+        }
+        
+        _.each(goals, addGoal);
+        _.each(centroids, addGoal);
+        
     });
     
     
@@ -143,7 +150,6 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
             return ((w >= ti) && (w < ti + timeUnitLengthMS));
         });
 
-        onTimeSegment(ti, goals, i);
 
 /*
         var ts = new Date(ti);
@@ -184,13 +190,16 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
         });
 */
 
-        /*if (centroids) {
-            _.each(_.filter(centroids, function(c) {
+
+        var centroids = $N.objectsWithTag('GoalCentroid', true) || [];
+        if (centroids) {
+            centroids = _.filter(centroids, function(c) {
                 return (c.when >= ti) && (c.when < ti + timeUnitLengthMS);
-            }), function(g) {
-                newObjectSummary(g).addClass("miniGoalSummary centroidSummary").appendTo(d);
             });
-        }*/
+        }
+        
+        onTimeSegment(ti, goals, centroids, i);
+
 
     }
 

@@ -497,13 +497,15 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     },
                     complete: function(xhr) {
                         var url = xhr.responseText;
-                        status.html($('<a>File uploaded</a>').attr('href', url));
-                        var absURL = url.substring(1);
+                        if ((url) && (url.length > 0)) {
+                            status.html($('<a>File uploaded</a>').attr('href', url));
+                            var absURL = url.substring(1);
 
-                        update(objAddValue(getEditedFocus(), 'media', absURL));
-                        later(function() {
-                            x.dialog('close');
-                        });
+                            update(objAddValue(getEditedFocus(), 'media', absURL));
+                            later(function() {
+                                x.dialog('close');
+                            });
+                        }
                     }
                 });
 

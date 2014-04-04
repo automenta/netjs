@@ -662,8 +662,8 @@ exports.start = function(options, init) {
     //express.configure(function() {
     express.use(cookieParser);
     express.use(require('body-parser')());
-    express.use(expressm.methodOverride());
-    express.use(expressm.multipart());
+    //express.use(expressm.methodOverride());
+    express.use(require('parted')());
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
     express.use(passport.initialize());
     express.use(passport.session());
@@ -726,7 +726,7 @@ exports.start = function(options, init) {
     if ((serverPassword) && (serverPassword.length > 0)) {
         var auth = require('http-auth');
         var basicAuth = auth.basic({
-            realm: "Netention"
+            realm: $N.server.name
         }, function(username, password, callback) { // Custom authentication method.
             callback(password === serverPassword);
         }
@@ -925,19 +925,25 @@ exports.start = function(options, init) {
 
     express.post('/upload', function(req, res) {
         //TODO validate permission to upload
+        if ((!req.files) || (!req.files.uploadfile) || (!req.files.uploadfile.path)) { 
+            res.send('');
+            return; 
+        }        
         
         var temp_path = req.files.uploadfile.path;
         var save_path = './upload/' + util.uuid() + '_' + req.files.uploadfile.name;
 
         fs.rename(temp_path, save_path, function(error) {
-            if (error)
-                throw error;
+            if (error) {
+                res.send('');
+                return;
+            }             
 
             fs.unlink(temp_path, function() {
                 if (error)
-                    throw error;
-                //res.send("File uploaded to: <a href='" + save_path + "'>here</a>.");
-                res.send(save_path);
+                    res.send('');
+                else
+                    res.send(save_path);
             });
 
         });
