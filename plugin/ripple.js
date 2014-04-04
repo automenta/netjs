@@ -99,7 +99,7 @@ exports.plugin = function($N) { return {
 													if (defaultPaymentCurrency) {
 														var ams = '&amount=0' + encodeURIComponent('/' + defaultPaymentCurrency);
 														payURL = payURL + ams;
-														trustURL = trustURL + ams;
+														//trustURL = trustURL + ams; //currently ripple.com responds weird when this is added to a trust URL
 													}
 
 													var a = 
