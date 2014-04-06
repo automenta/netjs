@@ -56,8 +56,16 @@ function openSelectProfileModal(title) {
         title = 'Profiles';
     //var d = newPopup(title, {width: '450px', modal: true});
     $('#LoadingSplash').show();
-    $('#LoadingSplashTitle').html('Authenticated: ' + getCookie('authenticated'));
-    $('#LoadingSplashTitle').append(' (<a href="/logout">Logout</a>)');
+    $('#LoadingSplashTitle').html(
+		(configuration.connection == 'local') ?
+			'' :
+			'Authenticated: ' + getCookie('authenticated')
+	);
+    $('#LoadingSplashTitle').append(
+		(configuration.connection == 'local') ?
+			'' :
+			' (<a href="/logout">Logout</a>)'
+	);
     $('#AuthSelect').hide();
     $('#ProfileSelect').html(newProfileWidget());
 }

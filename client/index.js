@@ -426,17 +426,22 @@ $(document).ready(function() {
                     $('#View').show();
                     $('#LoadingSplash2').hide();
 
+                    $N.on('change:attention', updateView);
+                    $N.on('change:currentView', updateView);
+                    $N.on('change:tags', updateView);
+                    $N.on('change:focus', updateView);
 
-                    var alreadyLoggedIn = false;
-                    if (configuration.autoLoginDefaultProfile) {
-                        var otherSelves = _.filter($N.get("otherSelves"), function(f) {
-                            return $N.getObject(f) != null;
-                        });
-                        if (otherSelves.length >= 1) {
-                            $N.become(otherSelves[0]);
-                            alreadyLoggedIn = true;
-                        }
-                    }
+
+	                var alreadyLoggedIn = false;
+	                if ((configuration.autoLoginDefaultProfile) || (configuration.connection=='local')) {
+	                    var otherSelves = _.filter($N.get("otherSelves"), function(f) {
+	                        return $N.getObject(f) != null;
+	                    });
+	                    if (otherSelves.length >= 1) {
+	                        $N.become(otherSelves[0]);
+	                        alreadyLoggedIn = true;
+	                    }
+	                }
 
 
                     if (!alreadyLoggedIn) {
@@ -459,10 +464,6 @@ $(document).ready(function() {
 
                     initKeyboard();
 
-                    $N.on('change:attention', updateView);
-                    $N.on('change:currentView', updateView);
-                    $N.on('change:tags', updateView);
-                    $N.on('change:focus', updateView);
 
                     /*
                      //USEFUL FOR DEBUGGING EVENTS:

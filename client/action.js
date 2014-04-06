@@ -83,7 +83,7 @@ addAction({
 		y.when = Date.now();
 		y.author = self.id();
 
-		self.publish(y);
+		$N.pub(y);
 
 		return "Cloned to " + y.id;
 	}
@@ -208,7 +208,7 @@ addAction({	menu: 'Visual',	name: 'Apply CSS Style...' ,
 		getMultiLine('Apply CSS Style', existingStyle, function(style) {
 			_.each(selection, function(s) {
 				s.style = style;
-				self.publish(s);
+				$N.pub(s);
 			});
 		});
 		

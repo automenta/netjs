@@ -162,7 +162,6 @@ function setClientID($N, cid, key, otherSelves) {
     $N.set('authorized', key);
     $N.set('otherSelves', _.unique(otherSelves));
 
-    $N.saveLocal();
     /*$.pnotify({
      title: 'Connected',
      text: that.myself().name + ' (' + that.get('clientID').substring(0,4) + ')'
@@ -285,7 +284,6 @@ function netention(f) {
             if (_.contains(os, clientID)) {
                 os = _.without(os, clientID);
                 this.set('otherSelves', os);
-                this.saveLocal();
 
                 this.deleteObject(this.object(clientID));
             }
@@ -319,14 +317,17 @@ function netention(f) {
             if (!target)
                 return;
 
+			var targetID = target;
             if (typeof (target) !== "string") {
                 this.notice(target);
+				targetID = target.id;
             }
+
 			if (configuration.connection == 'local') {
                 var os = $N.get('otherSelves');
-                os.push(target);
+                os.push(targetID);
 
-                $N.set('clientID', target);
+                $N.set('clientID', targetID);
                 $N.save('otherSelves', _.unique(os));
 
 				$N.trigger('change:attention');
@@ -444,7 +445,8 @@ function netention(f) {
 
             return socket;
         },
-        loadLocal: function() {
+
+/*        loadLocal: function() {
             var entries = 0;
             for (var k in localStorage) {
                 if (k.indexOf(localStorePrefix) === 0) {
@@ -454,7 +456,7 @@ function netention(f) {
                 }
             }
             console.log('Self loaded (' + entries + ')');
-        },
+        },*/
         loadSchemaJSON: function(url, f) {
             var that = this;
 
@@ -465,12 +467,7 @@ function netention(f) {
             });
 
         },
-        saveLocal: function() {
-            //DEPRECATED delete this function
 
-            //console.log('SAVING');
-            //localStorage.self = JSON.stringify(this.attributes);
-        },
         addProperty: function(p) {
             this.properties[p.uri] = p;
         },
@@ -568,8 +565,6 @@ function netention(f) {
                 var that = this;
                 this.socket.emit('delete', id, function(err) {
                     if (!err) {
-                        that.saveLocal();
-
                         that.trigger('change:deleted');
                         that.trigger('change:attention');
 
@@ -625,19 +620,6 @@ function netention(f) {
          return ((w >= from) && (w < to));
          } );
          },*/
-
-        getLatestObjects: function(num, onFinished) {
-            //$.getJSON('/object/tag/User/json', function(users) {
-			if (configuration.connection == 'local') {
-                onFinished();
-				return;
-			}
-
-            $.getJSON('/object/latest/' + num + '/json', function(objs) {
-                $N.notice(objs);
-                onFinished();
-            });
-        },
 
         getObjects: function(query, onObject, onFinished) {
             var that = this;
@@ -786,33 +768,45 @@ function netention(f) {
                 this.socket.emit('unsubscribe', channel);
             }
         },
-        publish: function(obj) {
-            self.pub(obj, function(err) {
-                $.pnotify({
-                    title: 'Unable to save ' + obj.id,
-                    type: 'Error'
-                });
-            }, function() {
-                $.pnotify({
-                    title: 'Saved (' + obj.id.substring(0, 6) + ')'
-                });
-                self.notice(obj);
-            });
-        },
+        /*publish: function(obj) {
+			if (configuration.connection == 'local') {
+	            $N.notice(obj);
+			}
+			else {
+		        self.pub(obj, function(err) {
+		            $.pnotify({
+		                title: 'Unable to save ' + obj.id,
+		                type: 'Error'
+		            });
+		        }, function() {
+		            $.pnotify({
+		                title: 'Saved (' + obj.id.substring(0, 6) + ')'
+		            });
+		            $N.notice(obj);
+		        });
+			}
+        },*/
         pub: function(object, onErr, onSuccess) {
-            if (this.socket) {
-                this.socket.emit('pub', objCompact(object), function(err) {
-                    if (onErr)
-                        onErr(object);
-                    $.pnotify({title: 'Error saving:', text: err, type: 'error'});
-                }, onSuccess);
-            }
-            else {
-                if (onErr)
-                    onErr('Not connected.');
-                else
-                    console.log('Not connected.');
-            }
+			if (configuration.connection == 'local') {
+	            //$N.notice(obj);
+				onSuccess();
+			}
+			else {
+
+		        if (this.socket) {
+		            this.socket.emit('pub', objCompact(object), function(err) {
+		                if (onErr)
+		                    onErr(object);
+		                $.pnotify({title: 'Error saving:', text: err, type: 'error'});
+		            }, onSuccess);
+		        }
+		        else {
+		            if (onErr)
+		                onErr('Not connected.');
+		            else
+		                console.log('Not connected.');
+		        }
+			}
         },
         //THIS NEEDS UPDATED
         getClientInterests: function(f) {
@@ -854,8 +848,40 @@ function netention(f) {
             $N.set(key, value);
             var k = localStorePrefix + key;
             localStorage[k] = JSON.stringify(value);
-        }
+        },
 
+		loadAll: function() {
+			var loadedSelf = localStorage['self'] || "{ }";
+			var loadedAttention = localStorage['obj'] || "{ }";
+			if (loadedSelf) {
+				_.extend($N.attributes, JSON.parse(loadedSelf)); 
+				$N.attention = JSON.parse(loadedAttention);
+			}
+			else {
+			}
+
+		},
+		saveAll: function() {
+			if (configuration.connection == 'local') {
+	            localStorage.self = JSON.stringify($N.attributes);
+	            localStorage.obj = JSON.stringify($N.attention);
+			}
+		},
+
+		//TODO rename to 'load initial objects' or something
+        getLatestObjects: function(num, onFinished) {
+            //$.getJSON('/object/tag/User/json', function(users) {
+			if (configuration.connection == 'local') {
+				$N.loadAll();
+	            onFinished();
+				return;
+			}
+
+            $.getJSON('/object/latest/' + num + '/json', function(objs) {
+                $N.notice(objs);
+                onFinished();
+            });
+        },
 
     });
 
@@ -863,25 +889,11 @@ function netention(f) {
     var $N = _.extend(new $NClient(), exports);
 
     $N.clear();
-    //s.loadLocal();
-
-    //console.log('loaded clientID: ' + s.get('clientID'));
-    /*var oldCID = s.get('clientID');
-     var nextCID = window.clientID;
-     if ((nextCID === '') || (nextCID === undefined))
-     nextCID = oldCID;
-     if ((nextCID === '') || (nextCID === undefined))
-     nextCID = uuid();*/
 
     var cid = getCookie('clientID');
     var keys = getCookie('keys');
     var otherSelves = decodeURIComponent(getCookie('otherSelves')).split(',');
     setClientID($N, cid, keys, otherSelves);
-
-    //s.saveLocal();
-    //console.log('saved clientID: ' + s.get('clientID'));
-
-    //if (($N.get('clientID')!='undefined') || (getCookie('authenticated')==='true'))
 
 	if (configuration.connection == 'websocket') {
 		$N.connect(null, function() {
@@ -889,6 +901,15 @@ function netention(f) {
 		});
 	}
 	else {
+		window.addEventListener("beforeunload", function (e) {
+			$N.saveAll();
+			  /*var confirmationMessage = "Saved everything";
+
+			  (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
+			  return confirmationMessage;                                //Webkit, Safari, Chrome etc.
+				*/
+		});
+
 		f("/ontology.static.json", $N);
 	}
 
