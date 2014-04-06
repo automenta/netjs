@@ -198,6 +198,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             if (x.subject)
                 n.subject = x.subject;
+			if (x.when)
+				n.when = x.when;
 
             //TODO copy any other metadata
 

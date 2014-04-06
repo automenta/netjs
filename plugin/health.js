@@ -26,40 +26,59 @@ Neurobehavioral Ontology
 http://bioportal.bioontology.org/ontologies/NBO/?p=classes
 
 
+http://HumanAPI.co
 https://github.com/maccman/humanapi
-	Human.profile
-	Human.summary
-	Human.all_activity
-	Human.activity
-	Human.daily_activity
-	Human.series_activity
-	Human.blood_glucose
-	Human.all_blood_glucose
-	Human.daily_blood_glucose
-	Human.blood_pressure
-	Human.all_blood_pressures
-	Human.daily_blood_pressure
-	Human.bmi
-	Human.all_bmis
-	Human.daily_bmi
-	Human.body_fat
-	Human.all_body_fats
-	Human.daily_body_fat
-	Human.genetic_traits
-	Human.heart_rate
-	Human.all_heart_rates
-	Human.daily_heart_rate
-	Human.height
-	Human.all_heights
-	Human.daily_height
-	Human.all_locations
-	Human.daily_location
-	Human.sleep
-	Human.all_sleep
-	Human.daily_sleep
-	Human.weight
-	Human.all_weight
-	Human.daily_weight
+
+	GET /v1/human Returns a summary of the user's current health data
+	GET /v1/human/profile Returns the profile of the authenticated user
+	GET /v1/human/blood_glucose Returns the most recent blood glucose reading
+	GET /v1/human/blood_glucose/readings Returns a list of blood glucose readings
+	GET /v1/human/blood_glucose/readings/{id} Returns a specific blood glucose reading
+	GET /v1/human/blood_glucose/readings/daily/{date} Returns blood glucose readings for a specific date
+	GET /v1/human/blood_oxygen Returns the most recent blood oxygen reading
+	GET /v1/human/blood_oxygen/readings Returns a list of blood oxygen readings
+	GET /v1/human/blood_oxygen/readings/{id} Returns a specific blood oxygen reading
+	GET /v1/human/blood_oxygen/readings/daily/{date} Returns blood oxygen readings for a specific date
+	GET /v1/human/blood_pressure Returns the most recent blood pressure reading
+	GET /v1/human/blood_pressure/readings Returns a list of blood pressure readings
+	GET /v1/human/blood_pressure/readings/{id} Returns a specific blood pressure reading
+	GET /v1/human/blood_pressure/readings/daily/{date} Returns blood pressure readings for a specific date
+	GET /v1/human/bmi Returns the most recent BMI reading
+	GET /v1/human/bmi/readings Returns a list of BMI readings
+	GET /v1/human/bmi/readings/{id} Returns a specific BMI reading
+	GET /v1/human/bmi/readings/daily/{date} Returns BMI readings for a specific date
+	GET /v1/human/body_fat Returns the most recent body fat reading
+	GET /v1/human/body_fat/readings Returns a list of body fat readings
+	GET /v1/human/body_fat/readings/{id} Returns a specific body fat reading
+	GET /v1/human/body_fat/readings/daily/{date} Returns body fat readings for a specific date
+	GET /v1/human/heart_rate Returns the most recent heart rate reading
+	GET /v1/human/heart_rate/readings Returns a list of heart rate readings
+	GET /v1/human/heart_rate/readings/{id} Returns a specific heart rate reading
+	GET /v1/human/heart_rate/readings/daily/{date} Returns heart rate readings for a specific date
+	GET /v1/human/height Returns the most recent height reading
+	GET /v1/human/height/readings Returns a list of height readings
+	GET /v1/human/height/readings/{id} Returns a specific height reading
+	GET /v1/human/height/readings/daily/{date} Returns height readings for a specific date
+	GET /v1/human/weight Returns the most recent weight reading
+	GET /v1/human/weight/readings Returns a list of weight readings
+	GET /v1/human/weight/readings/{id} Returns a specific weight reading
+	GET /v1/human/weight/readings/daily/{date} Returns weight readings for a specific date
+	GET /v1/human/activities Returns a list of activity segments
+	GET /v1/human/activities/{id} Returns an activity by id
+	GET /v1/human/activities/daily/{date} Returns a list of activity segments for a specific date
+	GET /v1/human/activities/summary Returns summary of the most recent active minutes
+	GET /v1/human/activities/summary/{date} Returns summary of the active minutes by a specific date
+	GET /v1/human/locations Returns a list of location segments
+	GET /v1/human/locations/{id} Returns a location by id
+	GET /v1/human/locations/daily/{date} Returns a list of location segments for a specific date
+	GET /v1/human/sleeps Returns a list of sleep segments
+	GET /v1/human/sleeps/{id} Returns a location by id
+	GET /v1/human/sleeps/daily/{date} Returns a list of sleep segments for a specific date
+	GET /v1/human/sleeps/summary Returns a summary of the most recent sleep reading
+	GET /v1/human/sleeps/summary/{date} Returns a summary of sleep readings for a specific date
+	GET /v1/human/genetic/traits Returns the genetic traits of the human
+
+
 
 OpenRMS Patient
 	First/Last

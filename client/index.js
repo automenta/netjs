@@ -315,7 +315,7 @@ $(document).ready(function() {
 
     $('#NotificationArea').html('Loading...');
 
-    netention(function($N) {
+    netention(function(schemaURL, $N) {
         $('#NotificationArea').html('System loaded.');
 
         window.self = $N; //DEPRECATED
@@ -325,7 +325,7 @@ $(document).ready(function() {
 
         $N.clear();
 
-        $N.loadSchemaJSON('/ontology/json', function() {
+        $N.loadSchemaJSON(schemaURL, function() {
             $('#NotificationArea').html('Ontology ready. Loading objects...');
 
             $N.getLatestObjects(configuration.maxStartupObjects, function() {

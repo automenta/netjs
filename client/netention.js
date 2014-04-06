@@ -230,7 +230,7 @@ function netention(f) {
             this.tags = {};
             this.properties = {};
 
- },
+		 },
         tag: function(t) {
             return this.tags[t];
         },
@@ -322,41 +322,52 @@ function netention(f) {
             if (typeof (target) !== "string") {
                 this.notice(target);
             }
-            this.socket.emit('become', target, function(nextID) {
-                if (nextID) {
-                    /*$.pnotify( {
-                     title: 'Switched profile',
-                     text: nextID
-                     });*/
+			if (configuration.connection == 'local') {
+                var os = $N.get('otherSelves');
+                os.push(target);
 
-                    //if (($N.id()) && ($N.id() == nextID)) //already target
-                    //return;
+                $N.set('clientID', target);
+                $N.save('otherSelves', _.unique(os));
+
+				$N.trigger('change:attention');
+		        updateBrand(); //TODO use backbone Model instead of global fucntion                                
+			}
+			else {
+		        this.socket.emit('become', target, function(nextID) {
+		            if (nextID) {
+		                /*$.pnotify( {
+		                 title: 'Switched profile',
+		                 text: nextID
+		                 });*/
+
+		                //if (($N.id()) && ($N.id() == nextID)) //already target
+		                //return;
 
 
-                    later(function() {
-                        $N.set('clientID', nextID);
+		                later(function() {
+		                    $N.set('clientID', nextID);
 
-                        $N.connect(target, function() {
-                            var os = $N.get('otherSelves');
-                            os.push(nextID);
+		                    $N.connect(target, function() {
+		                        var os = $N.get('otherSelves');
+		                        os.push(nextID);
 
-                            $N.save('otherSelves', _.unique(os));
+		                        $N.save('otherSelves', _.unique(os));
 
-                            $N.trigger('change:attention');
-                            updateBrand(); //TODO use backbone Model instead of global fucntion                                
-                        });
-                    });
-                }
-                else {
-                    $.pnotify({
-                        title: 'Unable to switch profile',
-                        text: err + ' ' + (typeof (target) === "string" ? target : target.id),
-                        type: 'Error'
-                    });
+		                        $N.trigger('change:attention');
+		                        updateBrand(); //TODO use backbone Model instead of global fucntion                                
+		                    });
+		                });
+		            }
+		            else {
+		                $.pnotify({
+		                    title: 'Unable to switch profile',
+		                    text: err + ' ' + (typeof (target) === "string" ? target : target.id),
+		                    type: 'Error'
+		                });
 
-                }
-    });
-
+		            }
+	  		  });
+		   }
         },
         connect: function(targetID, whenConnected) {
             var originalTargetID = targetID;
@@ -617,13 +628,18 @@ function netention(f) {
 
         getLatestObjects: function(num, onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
+			if (configuration.connection == 'local') {
+                onFinished();
+				return;
+			}
+
             $.getJSON('/object/latest/' + num + '/json', function(objs) {
                 $N.notice(objs);
                 onFinished();
             });
         },
-        getObjects
-        : function(query, onObject, onFinished) {
+
+        getObjects: function(query, onObject, onFinished) {
             var that = this;
             this.socket.emit('getObjects', query, function(objs) {
                 for (var k in objs) {
@@ -866,10 +882,15 @@ function netention(f) {
     //console.log('saved clientID: ' + s.get('clientID'));
 
     //if (($N.get('clientID')!='undefined') || (getCookie('authenticated')==='true'))
-    $N.connect(null, function() {
-        f($N);
-    });
 
+	if (configuration.connection == 'websocket') {
+		$N.connect(null, function() {
+		    f("/ontology/json", $N);
+		});
+	}
+	else {
+		f("/ontology.static.json", $N);
+	}
 
 
 }
