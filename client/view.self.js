@@ -395,9 +395,6 @@ function getPlan() {
 }
 
 
-function getENWikiURL(t) {
-    return 'http://en.wikipedia.org/wiki/' + t;
-}
 
 function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
     var saveButton = $('<button>Save</button>');

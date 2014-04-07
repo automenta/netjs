@@ -28,7 +28,8 @@ var configuration = {
 	"focusEnable":false,
 	"views":["us","map","browse","wiki","graph","share","templates","chat","main","trends","time"],
 	"newUserProperties":[],
-	"enableAnonymous": true
+	"enableAnonymous": true,
+	"wikiProxy": "http://www.automenta.com/proxy/proxy.php?url="
 };
 
 
