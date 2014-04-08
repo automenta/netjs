@@ -13,6 +13,183 @@ var updateView;
 var lastView = null;
 var currentView = null;
 
+var Actions = [];
+var ActionMenu = {};
+
+
+function loadCSS(url, med) {
+    $(document.head).append(
+            $("<link/>")
+            .attr({
+                rel: "stylesheet",
+                type: "text/css",
+                href: url,
+                media: (med !== undefined) ? med : ""
+            })
+    );
+}
+
+function loadJS(url) {
+    $(document.head).append(
+            $("<script/>")
+            .attr({
+                type: "text/javascript",
+                src: url
+            })
+            );
+}
+
+function later(f) {
+    //setTimeout(f, 0);
+    setImmediate(f);
+}
+
+var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
+
+
+
+function addAction(a) {
+    if (!a.menu) 	//{ 		console.error('addAction missing menu: ' + a); 	return; 	}
+        a.menu = 'Other';
+    if (!a.name) {
+        console.error('addAction missing name: ' + a);
+        return;
+    }
+    if (!a.accepts) //{ 		console.error('addAction missing accepts: ' + a); 	return; 	}
+        a.accepts = function() {
+            return false;
+        }
+
+    Actions.push(a);
+    if (!ActionMenu[a.menu])
+        ActionMenu[a.menu] = [];
+    ActionMenu[a.menu].push(a);
+}
+
+function newContextMenu(s, excludeEmptyMenus, clickCallback) {
+    //s = list of objects
+
+    var u = $('<ul class="ActionMenu"></ul>');
+
+    /*u.append('<li><a href="#">Action1</a></li>');
+     u.append('<li><a href="#">SubMenu</a><ul><li><a href="#">Action2</a></li></ul></li>');*/
+
+    _.each(ActionMenu, function(v, k) {
+        var menu = k;
+        var submenu = $('<li><a href="#">' + menu + '</a></li>');
+        var subcontents = $('<ul style="width: 80%"></ul>');
+        submenu.append(subcontents);
+
+        var added = 0;
+
+        _.each(v, function(vv) {
+            var a = $('<a href="#">' + vv.name + '</a>');
+
+            if (vv.description)
+                a.attr('title', vv.description);
+
+            var accepts = vv.accepts(s);
+
+            if (accepts) {
+                var clickFunction = function() {
+                    if (vv.run) {
+                        later(function() {
+                            var result = vv.run(s);
+                            if (result)
+                                $.pnotify(result);
+                        });
+                    }
+                    else {
+                        $.pnotify('"' + vv.name + '" not ready yet.');
+                    }
+
+                    if (clickCallback)
+                        clickCallback(vv.name);
+                }
+                added++;
+            }
+            else {
+                if (excludeEmptyMenus)
+                    return;
+
+                a.attr('style', 'opacity: 0.4');
+                a.attr('disabled', 'true');
+            }
+
+            a.click(clickFunction);
+
+            var la = $('<li></li>');
+            la.append(a);
+            subcontents.append(la);
+        });
+
+        if ((added == 0) && (excludeEmptyMenus))
+            return;
+
+        u.append(submenu);
+
+    });
+
+    u.menu();
+
+    return u;
+}
+
+var refreshActionContext = _.throttle(function() {
+    later(function() {
+        var s = [];
+
+        //get selected items from .ObjectSelection
+        $('.ObjectSelection:checked').each(function(index) {
+            var x = $(this);
+            var aoid = x.attr('oid');
+            if (aoid) {
+                var o = self.getObject(aoid);
+                if (o)
+                    s.push(o);
+            }
+        });
+
+        //jquery menu - http://jqueryui.com/menu/#default
+
+        /*if ($('.ActionMenu').destroy)
+         $('.ActionMenu').destroy();*/
+
+        //dont render the menu if the wrapper isnt visible:
+        if (!$('#ActionMenuWrapper').is(':visible')) {
+            return;
+        }
+
+        $('#ActionMenuWrapper').html('');
+
+        if (s.length == 0)
+            return;
+
+        var u = newContextMenu(s);
+        u.addClass('ActionMenuGlobal');
+
+        var selectedLabel = $('<div style="float:right"><i>' + s.length + ' selected. </i></div>');
+
+        var clearButton = $('<button>Clear</button>');
+        clearButton.click(function() {
+            later(function() {
+                $('.ObjectSelection:checked').each(function(index) {
+                    var x = $(this);
+                    x.prop('checked', false);
+                });
+                refreshActionContext();
+            });
+        });
+        selectedLabel.append(clearButton);
+
+        u.append(selectedLabel);
+
+
+        $('#ActionMenuWrapper').append(u);
+    });
+}, 850);
+
+
 function updateBrand() {
     if (!self.myself())
         return;

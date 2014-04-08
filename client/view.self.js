@@ -141,8 +141,9 @@ function newUsView(v) {
             var avatarImg = newAvatarImage($N.getObject(currentUser));
             avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
-            var exportButton = $('<button>Export</button>');
+            var exportButton = $('<button>Share</button>');
             exportButton.click(function() {
+				$N.saveAll();
                 window.open('/#user/' + currentUser);
             });
 

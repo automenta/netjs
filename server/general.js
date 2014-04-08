@@ -630,6 +630,7 @@ exports.plugin = function($N) { return {
 		_.each(getDefaultTemplates($N), function(x) {
 			$N.notice(x);
 		});
+
         /*function indexPDF(name, path) {
             var introPresentation = util.objNew(path, name);
             introPresentation.add('PDF');
@@ -644,3 +645,112 @@ exports.plugin = function($N) { return {
     }
 
 }; };
+
+
+//VCARD Fields http://en.wikipedia.org/wiki/VCard
+/*
+| <code>ADR</code> A structured representation of the physical delivery address for the vCard object. || <code>ADR;TYPE=home:;;123 Main St.;Springfield;IL;12345;USA</code>
+| <code>AGENT</code> || |  |  || Information about another person who will act on behalf of the vCard object. Typically this would be an area administrator, assistant, or secretary for the individual.  Can be either a URL or an embedded vCard. || <code>AGENT:<nowiki>http://mi5.gov.uk/007</nowiki></code>
+| <code>ANNIVERSARY</code>  |  Defines the person's anniversary. || <code>ANNIVERSARY:19901021</code>
+| <code>BDAY</code> Date of birth of the individual associated with the vCard. || <code>BDAY:19700310</code>
+| <code>BEGIN</code> || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || All vCards must start with this property. || <code>BEGIN:VCARD</code>
+| <code>CALADRURI</code>  |  A URL to use for sending a scheduling request to the person's calendar. || <code>CALADRURI:<nowiki>http://example.com/calendar/jdoe</nowiki></code>
+| <code>CALURI</code>  |  A URL to the person's calendar. || <code>CALURI:<nowiki>http://example.com/calendar/jdoe</nowiki></code>
+| <code>CATEGORIES</code> A list of "tags" that can be used to describe the object represented by this vCard. || <code>CATEGORIES:swimmer,biker</code>
+| <code>CLASS</code> Describes the sensitivity of the information in the vCard. || <code>CLASS:public</code>
+| <code>CLIENTPIDMAP</code>  |  Used for synchronizing different revisions of the same vCard. || <code>CLIENTPIDMAP:1;urn:uuid:3df403f4-5924-4bb7-b077-3c711d9eb34b</code>
+| <code>EMAIL</code> The address for electronic mail communication with the vCard object. || <code>EMAIL:johndoe@hotmail.com</code>
+| <code>END</code> || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || All vCards must end with this property. || <code>END:VCARD</code>
+| <code>FBURL</code>  |  Defines a URL that shows when the person is "free" or "busy" on their calendar. || <code>FBURL:<nowiki>http://example.com/fb/jdoe</nowiki></code>
+| <code>FN</code> || |  | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || The formatted name string associated with the vCard object. || <code>FN:Dr. John Doe</code>
+| <code>GENDER</code>  |  Defines the person's gender. || <code>GENDER:F</code>
+| <code>GEO</code> Specifies a latitude and longitude. || '''2.1''', '''3.0''': <code>GEO:39.95;-75.1667</code><br>'''4.0''': <code>GEO:geo:39.95,-75.1667</code>
+| <code>IMPP</code> || || | {{Check mark|16|color=light green}}* || |  Defines an instant messenger handle.<br><br>* This property was introduced in a separate RFC when the latest vCard version was 3.0.  Therefore, 3.0 vCards may use this property, even though it's not part of the 3.0 specs. || <code>IMPP:aim:johndoe@aol.com</code>
+| <code>KEY</code> The public encryption key associated with the vCard object.  It may point to an external URL, may be plain text, or may be embedded in the vCard as a [[Base64]] encoded block of text. || style="font-size:0.8em" | '''2.1''': <code>KEY;PGP:<nowiki>http://example.com/key.pgp</nowiki></code><br>'''2.1''': <code>KEY;PGP;ENCODING=BASE64:[base64-data]</code><br>'''3.0''': <code>KEY;TYPE=PGP:<nowiki>http://example.com/key.pgp</nowiki></code><br>'''3.0''': <code>KEY;TYPE=PGP;ENCODING=B:[base64-data]</code><br>'''4.0''': <code>KEY;MEDIATYPE=application/pgp-keys:<nowiki>http://example.com/key.pgp</nowiki></code><br>'''4.0''': <code>KEY:data:application/pgp-keys;base64,[base64-data]</code>
+| <code>KIND</code>  |  Defines the type of entity that this vCard represents, such as an individual or organization. || <code>KIND:individual</code>
+| <code>LABEL</code> || |  |  | {{Check mark|16|color=light green}}* || Represents the actual text that should be put on the mailing label when delivering a physical package to the person/object associated with the vCard (related to the <code>ADR</code> property).<br><br>* Not supported in version 4.0.  Instead, this information is stored in the <code>LABEL</code> parameter of the <code>ADR</code> property. || <code>LABEL;TYPE=HOME:123 Main St.\nSpringfield, IL 12345\nUSA</code>
+| <code>LANG</code>  |  Defines a language that the person speaks. || <code>LANG:fr-CA</code>
+| <code>LOGO</code> An image or graphic of the logo of the organization that is associated with the individual to which the vCard belongs.  It may point to an external URL or may be embedded in the vCard as a [[Base64]] encoded block of text. || style="font-size:0.8em" | '''2.1''': <code>LOGO;PNG:<nowiki>http://example.com/logo.png</nowiki></code><br>'''2.1''': <code>LOGO;PNG;ENCODING=BASE64:[base64-data]</code><br>'''3.0''': <code>LOGO;TYPE=PNG:<nowiki>http://example.com/logo.png</nowiki></code><br>'''3.0''': <code>PHOTO;TYPE=PNG;ENCODING=B:[base64-data]</code><br>'''4.0''': <code>LOGO;MEDIATYPE=image/png:<nowiki>http://example.com/logo.png</nowiki></code><br>'''4.0''': <code>PHOTO:data:image/png;base64,[base64-data]</code>
+| <code>MAILER</code> || |  |  || Type of email program used. || <code>MAILER:Thunderbird</code>
+| <code>MEMBER</code>  |  Defines a member that is part of the group that this vCard represents.  Acceptable values include:{{unordered list| a "mailto:" URL containing an email address | a UID which references the member's own vCard }}The <code>KIND</code> property must be set to "group" in order to use this property. || <code>MEMBER:urn:uuid:03a0e51f-d1aa-4385-8a53-e29025acd8af</code>
+| <code>N</code> || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || |  A structured representation of the name of the person, place or thing associated with the vCard object. || <code>N:Doe;John;;Dr;</code>
+| <code>NAME</code> Provides a textual representation of the <code>SOURCE</code> property. ||
+| <code>NICKNAME</code>  |  One or more descriptive/familiar names for the object represented by this vCard. || <code>NICKNAME:Jon,Johnny</code>
+| <code>NOTE</code> Specifies supplemental information or a comment that is associated with the vCard. || <code>NOTE:I am proficient in Tiger-Crane Style,\nand I am more than proficient in the exquisite art of the Samurai sword.</code>
+| <code>ORG</code> The name and optionally the unit(s) of the organization associated with the vCard object. This property is based on the X.520 Organization Name attribute and the X.520 Organization Unit attribute. || <code>ORG:Google;GMail Team;Spam Detection Squad</code>
+| <code>PHOTO</code> An image or photograph of the individual associated with the vCard.  It may point to an external URL or may be embedded in the vCard as a [[Base64]] encoded block of text. || style="font-size:0.8em" | '''2.1''': <code>PHOTO;JPEG:<nowiki>http://example.com/photo.jpg</nowiki></code><br>'''2.1''': <code>PHOTO;JPEG;ENCODING=BASE64:[base64-data]</code><br>'''3.0''': <code>PHOTO;TYPE=JPEG:<nowiki>http://example.com/photo.jpg</nowiki></code><br>'''3.0''': <code>PHOTO;TYPE=JPEG;ENCODING=B:[base64-data]</code><br>'''4.0''': <code>PHOTO;MEDIATYPE=image/jpeg:<nowiki>http://example.com/photo.jpg</nowiki></code><br>'''4.0''': <code>PHOTO:data:image/jpeg;base64,[base64-data]</code>
+| <code>PRODID</code>   |  The identifier for the product that created the vCard object. || <code>PRODID:-//ONLINE DIRECTORY//NONSGML Version 1//EN</code>
+| <code>PROFILE</code>   || States that the vCard is a vCard. || <code>PROFILE:VCARD</code>
+| <code>RELATED</code>  |  Another entity that the person is related to.  Acceptable values include:{{unordered list| a "mailto:" URL containing an email address | a UID which references the person's own vCard }} || <code>RELATED;TYPE=friend:urn:uuid:03a0e51f-d1aa-4385-8a53-e29025acd8af</code>
+| <code>REV</code> A timestamp for the last time the vCard was updated. || <code>REV:20121201T134211Z</code>
+| <code>ROLE</code> The role, occupation, or business category of the vCard object within an organization. || <code>ROLE:Executive</code>
+| <code>SORT-STRING</code> || |  |  | {{Check mark|16|color=light green}}* || Defines a string that should be used when an application sorts this vCard in some way.<br><br>* Not supported in version 4.0.  Instead, this information is stored in the <code>SORT-AS</code> parameter of the <code>N</code> and/or <code>ORG</code> properties. || <code>SORT-STRING:Doe</code>
+| <code>SOUND</code> By default, if this property is not grouped with other properties it specifies the pronunciation of the <code>FN</code> property of the vCard object.  It may point to an external URL or may be embedded in the vCard as a [[Base64]] encoded block of text. || style="font-size:0.8em" | '''2.1''': <code>SOUND;OGG:<nowiki>http://example.com/sound.ogg</nowiki></code><br>'''2.1''': <code>SOUND;OGG;ENCODING=BASE64:[base64-data]</code><br>'''3.0''': <code>SOUND;TYPE=OGG:<nowiki>http://example.com/sound.ogg</nowiki></code><br>'''3.0''': <code>SOUND;TYPE=OGG;ENCODING=B:[base64-data]</code><br>'''4.0''': <code>SOUND;MEDIATYPE=audio/ogg:<nowiki>http://example.com/sound.ogg</nowiki></code><br>'''4.0''': <code>SOUND:data:audio/ogg;base64,[base64-data]</code>
+| <code>SOURCE</code> A URL that can be used to get the latest version of this vCard. || <code>SOURCE:<nowiki>http://johndoe.com/vcard.vcf</nowiki></code>
+| <code>TEL</code> The canonical number string for a telephone number for telephony communication with the vCard object. || <code>TEL;TYPE=cell:(123) 555-5832</code>
+| <code>TITLE</code> Specifies the job title, functional position or function of the individual associated with the vCard object within an organization. || <code>TITLE:V.P. Research and Development</code>
+| <code>TZ</code> The time zone of the vCard object. || '''2.1''', '''3.0''': <code>TZ:-0500</code><br>'''4.0''': <code>TZ:America/New_York</code>
+| <code>UID</code> Specifies a value that represents a persistent, globally unique identifier associated with the object. || <code>UID:urn:uuid:da418720-3754-4631-a169-db89a02b831b</code>
+| <code>URL</code> A URL pointing to a website that represents the person in some way. || <code>URL:<nowiki>http://www.johndoe.com</nowiki></code>
+| <code>VERSION</code> || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || The version of the vCard specification.  In versions 3.0 and 4.0, this must come right after the <code>BEGIN</code> property. || <code>VERSION:3.0</code>
+| <code>XML</code>  |  Any XML data that is attached to the vCard. This is used if the vCard was encoded in XML (xCard standard) and the XML document contained elements which are not part of the xCard standard. || <code>XML:&lt;b&gt;Not an xCard XML element&lt;/b&gt;</code>
+|}
+
+A handful of separate specifications define additional vCard properties.
+
+| <code>BIRTHPLACE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The location of the individual's birth. || <code>BIRTHPLACE;VALUE=text:Maida Vale\, London\, England</code>
+| <code>DEATHDATE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The individual's time of death. || <code>DEATHDATE:19540607</code>
+| <code>DEATHPLACE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The location of the individual death. || <code>DEATHPLACE;VALUE=uri:geo:53.328,-2.229409</code>
+| <code>EXPERTISE</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A professional subject area that the person has knowledge of. || <code>EXPERTISE;LEVEL=expert:Computer Science</code>
+| <code>HOBBY</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A recreational activity that the person actively engages in. || <code>HOBBY;LEVEL=high:knitting</code>
+| <code>IMPP</code> || [http://tools.ietf.org/html/rfc4770 RFC 4770] || Defines an instant messenger handle.  This was added to the official vCard specification in version 4.0. || <code>IMPP:aim:johndoe@aol.com</code>
+| <code>INTEREST</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A recreational activity that the person is interested in, but does not necessarily take part in. || <code>INTEREST;LEVEL=high:baseball</code>
+| <code>ORG-DIRECTORY</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A URI representing the person's work place, which can be used to lookup information on the person's co-workers. || <code>ORG-DIRECTORY:<nowiki>http://www.company.com/employees</nowiki></code>
+|}
+
+| <code>X-ABUID</code> || string || Apple [[Address Book (application)|Address Book]] [[UUID]] for that entry
+| <code>X-ANNIVERSARY</code> || YYYY-MM-DD || arbitrary anniversary (in addition to <code>BDAY</code>, birthday)
+| <code>X-ASSISTANT</code> || string || assistant name (instead of <code>AGENT</code>)
+| <code>X-MANAGER</code> || string || manager name
+| <code>X-SPOUSE</code> || string || spouse name
+| <code>X-GENDER</code> || string || value <code>Male</code> or <code>Female</code>
+| <code>X-AIM</code> || string || rowspan="9" | Instant Messaging (IM) contact information; <code>TYPE</code> parameter as for <code>TEL</code> 
+| <code>X-ICQ</code> || string 
+| <code>X-GOOGLE-TALK</code> || string 
+| <code>X-JABBER</code> || string  
+| <code>X-MSN</code> || string  
+| <code>X-YAHOO</code> || string 
+| <code>X-TWITTER</code> || string 
+| <code>X-SKYPE</code>, <code>X-SKYPE-USERNAME</code> || string 
+| <code>X-GADUGADU</code> || string 
+| <code>X-GROUPWISE</code> || string ||
+| <code>X-MS-IMADDRESS</code> || string || IM address in VCF attachment from Outlook (right click Contact, Send Full Contact, Internet Format.)
+| <code>X-MS-CARDPICTURE</code> || string || Works as <code>PHOTO</code> or <code>LOGO</code>. Contains an image of the Card in Outlook.
+| <code>X-PHONETIC-FIRST-NAME</code>, <code>X-PHONETIC-LAST-NAME</code> || string || alternative spellings, for assisting with the pronunciation of unfamiliar names
+
+| <code>X-MOZILLA-HTML</code> || <code>TRUE</code>/<code>FALSE</code> || mail recipient prefers HTML-formatted email
+| <code>X-MOZILLA-PROPERTY</code> || string || Thunderbird specific settings
+
+| <code>X-EVOLUTION-ANNIVERSARY</code> || YYYY-MM-DD || arbitrary anniversary (in addition to <code>BDAY</code>, birthday)
+| <code>X-EVOLUTION-ASSISTANT</code> || string || assistant name (instead of <code>Agent</code>)
+| <code>X-EVOLUTION-BLOG-URL</code> || string/URL || blog URL
+| <code>X-EVOLUTION-FILE-AS</code> || string || file under different name (in addition to <code>N</code>, name components; and <code>FN</code>, full name)
+| <code>X-EVOLUTION-MANAGER</code> || string || manager name
+| <code>X-EVOLUTION-SPOUSE</code> || string || spouse name
+| <code>X-EVOLUTION-VIDEO-URL</code> || string/URL || video chat address
+| <code>X-EVOLUTION-CALLBACK</code> || <code>TEL TYPE</code> parameter value || - || callback phone number
+| <code>X-EVOLUTION-RADIO</code> || <code>TEL TYPE</code> parameter value || - || radio contact information
+| <code>X-EVOLUTION-TELEX</code> || <code>TEL TYPE</code> parameter value || - || [[Telegraphy#Telex|Telex]] contact information
+| <code>X-EVOLUTION-TTYTDD</code> || <code>TEL TYPE</code> parameter value || - || TTY [[Telecommunications device for the deaf|TDD]] contact information
+
+| <code>X-KADDRESSBOOK-BlogFeed</code> || string/URL || blog URL
+| <code>X-KADDRESSBOOK-X-Anniversary</code> || ISO date || arbitrary anniversary, in addition to <code>BDAY</code> = birthday
+| <code>X-KADDRESSBOOK-X-AssistantsName</code> || string || assistant name (instead of <code>Agent</code>)
+| <code>X-KADDRESSBOOK-X-IMAddress</code> || string || im address
+| <code>X-KADDRESSBOOK-X-ManagersName</code> || string || manager name
+| <code>X-KADDRESSBOOK-X-Office</code> || string || office description
+| <code>X-KADDRESSBOOK-X-Profession</code> || string || profession
+| <code>X-KADDRESSBOOK-X-SpouseName</code> || string || spouse name
+
+
+*/

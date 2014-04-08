@@ -105,7 +105,7 @@ function newUserView(v, userid) {
 
 		function simplifyJSON(j) {
 			//http://stackoverflow.com/questions/11233498/json-stringify-without-quotes-on-properties
-			return j.replace(/\"([^(\")"]+)\":/g,"$1:");  //This will remove all the quotes
+			return j.replace(/\"([^(\")"]+)\":/g,"$1:");  //This will remove all the quotes to make more compact
 		}
 
 		if (_.keys(jsonCode).length > 0) {
@@ -114,13 +114,13 @@ function newUserView(v, userid) {
 			var jsonCodeCompact = simplifyJSON(JSON.stringify(jsonCode));
 			d.append('<h2>Tag Code (JSON Compact)</h2>' + jsonCodeCompact + '<br/>');
 
-			var url = document.location.origin + '/code/' + encodeURIComponent(jsonCodeCompact);
-			d.append('<br/><a href="' + url + '">URL</a>')
+			/*var url = document.location.origin + '/code/' + encodeURIComponent(jsonCodeCompact);
+			d.append('<br/><a href="' + url + '">URL</a>')*/
 
 			var jid = uuid();
 			d.append('<h2>QR Code</h2>');
 			d.append(newDiv(jid));
-			new QRCode(document.getElementById(jid), { text: url,
+			new QRCode(document.getElementById(jid), { text: jsonCodeCompact,
 				width : 512, 
 				height : 512,
 				typeNumber : 40,

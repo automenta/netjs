@@ -12,6 +12,7 @@ var ExampleAction = {
 };
 */
 
+
 function getMultiLine(title, value, ifEntered, ifNotEntered) {
 	var d = newDiv();
 	$('body').append(d);
