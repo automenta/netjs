@@ -14,13 +14,29 @@ function newTimeView(v) {
         widget_margins: [6, 6],
         min_cols: numTimeSegments
     };
+
+	function updateGoal(g, when, duration) {
+        var G = $N.getObject(g);
+		if (when)
+	        G.when = targetTime;
+		if (duration)
+			G.duration = duration;
+        $N.pub(G);
+	}
     
+	var resizingGoalID = null;
     var goalGridsterParam = _.extend(_.clone(gridsterParam), {
         resize: {
             enabled: true,
             max_size: [Infinity, 1],
+			start: function(e, ui, $widget) {
+				resizingGoalID = $widget.attr('goalid');
+			},
             stop: function(e, ui, $widget) {
-                //console.log($widget, 'resized');
+                var cols = $widget.attr('data-sizex');
+                var colTime = cols * timeUnitLengthMS;
+				updateGoal(resizingGoalID, null, colTime);
+				resizingGoalID = null;
             }    
         },
         draggable: {
@@ -31,9 +47,7 @@ function newTimeView(v) {
                 var g = p.attr('goalid');
                 var targetCol = p.attr('data-col')-1;
                 var targetTime = colTimes[targetCol];
-                var G = $N.getObject(g);
-                G.when = targetTime;
-                $N.pub(G);
+				updateGoal(g, targetTime, null);
                 //console.log(, , 'dragged');
             }
         }        
@@ -60,7 +74,7 @@ function newTimeView(v) {
         b.attr('data-row', 1);
         b.css('border-bottom', '1px solid gray');
             
-        b.append(name);
+        //b.append(name);
         
         var ts = new Date(time);
         
@@ -110,7 +124,11 @@ function newTimeView(v) {
             O.css('height', '95%');
             
             gg.append(O);
-            goalRowsGridster.add_widget(gg, 1, 1, 1+column, 1);                    
+
+			var duration = g.duration || timeUnitLengthMS;
+			var cols = parseInt(Math.round(parseFloat(duration) / parseFloat(timeUnitLengthMS)));
+
+            goalRowsGridster.add_widget(gg, cols, 1, 1+column, 1);                    
         }
         
         _.each(goals, addGoal);

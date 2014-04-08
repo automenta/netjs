@@ -79,10 +79,6 @@ function newTrendsView(v) {
         
     }
     
-    $N.getServerAttention(function(r) {
-        serverTagCount = r;
-        displayTags();
-    });
     
     var updateFocusInterval = 5 * 1000;
     var focusHistory = 60 * 10; //10 mins
@@ -140,12 +136,20 @@ function newTrendsView(v) {
 	return d;
     }
 
-    function updateFocus() {
-        $.getJSON('/focus/' + focusHistory, function(result) {
-            yy.html(newFocusHistory(result));
-        });
-    }
-    setTimeout(updateFocus, updateFocusInterval);
-    updateFocus();
+ 	if (configuration.connection != 'local') {
+		$N.getServerAttention(function(r) {
+		    serverTagCount = r;
+		    displayTags();
+		});
+	   function updateFocus() {
+		    $.getJSON('/focus/' + focusHistory, function(result) {
+		        yy.html(newFocusHistory(result));
+		    });
+		}
+		setTimeout(updateFocus, updateFocusInterval);
+		updateFocus();
+	}
+	else
+		displayTags();
        
 }

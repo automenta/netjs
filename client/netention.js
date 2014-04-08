@@ -613,7 +613,8 @@ function netention(f) {
         pub: function(object, onErr, onSuccess) {
 			if (configuration.connection == 'local') {
 	            //$N.notice(obj);
-				onSuccess();
+				if (onSuccess)
+					onSuccess();
 			}
 			else {
 
