@@ -352,12 +352,16 @@ function netention(f) {
             var id = x.id;
             var that = this;
 
-            if ((!this.socket) && (!localOnly)) {
-                $.pnotify({
-                    title: 'Unable to delete: Not connected, must login.'
-                });
-                return false;
-            }
+			if (configuration.connection!='local') {
+		        if ((!this.socket) && (!localOnly)) {
+		            $.pnotify({
+		                title: 'Unable to delete: Not connected, must login.'
+		            });
+		            return false;
+		        }				
+			}
+			else
+				localOnly = true;
 
             function removeLocal() {
                 that.get('deleted')[id] = Date.now();
@@ -401,6 +405,13 @@ function netention(f) {
             }
             else {
                 removeLocal();
+		        $.pnotify({
+		            title: 'Deleted',
+		            text: id,
+		            addclass: "stack-bottomleft",
+		            stack: stack_bottomleft
+		        });
+				$N.trigger('change:attention');
             }
             return true;
 

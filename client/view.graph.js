@@ -115,9 +115,12 @@ function newGraphView(v) {
 		updateSVGTransform();
 	});
 
+   cc.bind("contextmenu",function(e){
+          return false;
+   }); 
 
 	cc.mousedown(function(m) {
-		if (m.which == 2) {
+		if (m.which == 3) {
 			sketching = true;
 			startDragPoint = [m.clientX, m.clientY];	
 			if (touched)
@@ -205,8 +208,31 @@ function newGraphView(v) {
 		}
 	});
 
+	var node = null;
+	var nodePositions = { };
+	function savePositions() {
+		nodePositions = { };
+		if (node) {
+			node.attr("transform", function(d) { 
+				nodePositions[d.objectID] = [d.x, d.y];
+			});
+		}
+	}
+	function loadPositions() {
+		if (node) {
+			node.attr("transform", function(d) { 
+				var existingPosition = nodePositions[d.objectID];
+				if (existingPosition) {
+					d.x = existingPosition[0];
+					d.y = existingPosition[1];
+				}							
+			});
+		}
+	}
+
 	nd.onChange = function() {
-		
+		savePositions();
+
 		force.stop();
 
 		svg.selectAll(".node").remove();
@@ -250,8 +276,11 @@ function newGraphView(v) {
 				//add Tags (intensional inheritance)
 		        for (var j = 0; j < rtags.length; j++) {
 		            var tj = rtags[j];
+
+					if (tj == 'Link') continue; //ignore the Link tag
+
 		            var exists = tags[tj];
-		            if (!exists) {
+		            if (!exists) {						
 		                var ttj = s.tag(tj) || s.object(tj) || null; // || { name: '<' + tj + '>' };
 						if (!ttj)
 							continue;
@@ -281,6 +310,7 @@ function newGraphView(v) {
 
 
 		    }
+
 			//add object links
 		    for (var k = 0; k < xxrr.length; k++) {
 		        var x = xxrr[k][0];		
@@ -305,8 +335,8 @@ function newGraphView(v) {
 
 			 force
 				  .nodes(nodes)
-				  .links(edges)
-				  .start();
+				  .links(edges);
+//				  .start();
 
 			  var drag = force.drag()
 				.on("dragstart", function() {
@@ -320,11 +350,15 @@ function newGraphView(v) {
 				  .enter().append("line")
 				  .attr("class", "link");
 
-			  var node = svg.selectAll(".node")
+			  node = svg.selectAll(".node")
 				  .data(nodes)
 				  .enter().append("g")
 				  .attr("class", "node")
 				  .call(force.drag);
+
+			loadPositions();
+
+				force.start();
 
 
 			  node.on("mouseover", function(d) {
@@ -389,7 +423,6 @@ function newGraphView(v) {
 					.attr("y2", function(d) { return d.target.y; });
 
 			  });
-
 
 
 
