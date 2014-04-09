@@ -182,10 +182,10 @@ accelerometerReport	Raised every time the device reports its current acceleromet
     //NewsSourceLink (url)
     //see: Ushahidi.com
 
-    {uri: 'Arrive', name: 'Arrive', tag: ['Action'],
+    {uri: '_Arrive', name: 'Arrive', tag: ['Action'],
 		properties: { 'arriveLocation': { name: 'Arrive location', type: 'spacepoint' }}
 	},
-    {uri: 'Depart', name: 'Depart', tag: ['Action'],
+    {uri: '_Depart', name: 'Depart', tag: ['Action'],
 		properties: { 'departLocation': { name: 'Depart location', type: 'spacepoint' }}
 	},
 

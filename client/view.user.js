@@ -20,7 +20,16 @@ function newUserView(v, userid) {
 				tags[k] = _.map(tags[k], function(o) {
 					var O = $N.getObject(o);
 					var strength = objTagStrength(O, false);
-					return [O.name, strength[k], o];
+					var firstNonOperatorTag = null;
+					var allTags = objTags(O, false);
+					for (var m = 0; m < allTags.length; m++) {
+						var s = allTags[m];
+						if (operatorTags.indexOf(s)==-1) {
+							firstNonOperatorTag = s;
+							break;
+						}
+					}
+					return [O.name, strength[k], o, firstNonOperatorTag];
 				});
 				tags[k] = tags[k].sort(function(a, b) {
 					return b[1] - a[1];
@@ -87,8 +96,9 @@ function newUserView(v, userid) {
 				    var tt = tags[i][y][0];
 					var name = tags[i][y][0];
 					var strength = tags[i][y][1];
+					var tagID = tags[i][y][3];
 					var fs = parseInt((strength * 100) + 50);
-				    x += '<li><a href="' + getENWikiURL(tt) + '" style="font-size: ' + fs + '%">' + name + '</a></li>';
+				    x += '<li><a href="' + getENWikiURL(tagID) + '" style="font-size: ' + fs + '%">' + name + '</a></li>';
 				}
 
 			x += '</ul></div>';
@@ -98,7 +108,7 @@ function newUserView(v, userid) {
 	
 		var textCode = getUserTextCode(tags, user);
 		if (textCode.length > 0) {
-			d.append('<h2>Tag Code (Text)</h2><pre>' + textCode + '</pre><br/>');			
+			d.append('<h2>Tag Summary (Text)</h2><pre>' + textCode + '</pre><br/>');			
 		}
 
 		var jsonCode = getUserJSONCode(tags, user);
@@ -154,6 +164,26 @@ function getUserJSONCode(tags, user) {
 		jc['where'] = dloc(location);
 
 	var operatorTags = getOperatorTags();
+	var operatorObjects = [];
+	for (var j = 0; j < operatorTags.length; j++) {
+	   	var i = operatorTags[j];
+		if (!tags[i]) continue;
+		for (var y = 0; y < tags[i].length; y++) {
+			var oid = tags[i][y][2];
+			operatorObjects.push(oid);
+		}
+	}
+
+	jc['objects'] = [];
+
+	operatorObjects = _.unique(operatorObjects);
+	_.each(operatorObjects, function(o) {
+		var O = $N.getObject(o);
+		var Oc = objCompact(O);
+		jc['objects'].push(Oc);	
+	});
+
+	/*var operatorTags = getOperatorTags();
 	var processed = {};
 	for (var j = 0; j < operatorTags.length; j++) {
 	   	var i = operatorTags[j];
@@ -167,7 +197,7 @@ function getUserJSONCode(tags, user) {
 
 				if (processed[oid]) continue;
 				processed[oid] = true;
-				jc['Know'][O.name] = knowTagsToRange(O);
+				jc['Know'][tags[i][y][3]] = knowTagsToRange(O);
 
 			}
 		}
@@ -179,10 +209,10 @@ function getUserJSONCode(tags, user) {
 			for (var y = 0; y < tags[i].length; y++) {
 				var oid = tags[i][y][2];
 				var O = $N.getObject(oid);
-				jc[i].push(O.name);
+				jc[i].push(tags[i][y][3]);
 			}
 		}
-	}
+	}*/
 
 
 	return jc;
@@ -201,6 +231,23 @@ function getUserTextCode(tags, user) {
 	var operatorTags = getOperatorTags();
 	var processed = {};
 
+	function getTitleString(tl) {
+		var name = tl[0];
+		var tagID = tl[3];
+		if (name!=tagID)
+			return name + ' [' + tagID + ']';
+		return name;
+	}
+	function getValueString(O, exceptTags) {
+		var s = '';
+		_.each(O.value, function(v) {
+			if (exceptTags.indexOf(v.id)==-1) {
+				s+= '     ' + (v.id == 'textarea' ? '' : (v.id + ': ')) + JSON.stringify(v.value) + '\n';
+			}
+		});
+		if (s.length > 0) s= '\n' + s;
+		return s;
+	}
 
 	//Knowledge Tags
 	var header = 'Know                                  L=========D=========T\n';
@@ -216,7 +263,7 @@ function getUserTextCode(tags, user) {
 				if (processed[oid]) continue;
 				processed[oid] = true;
 
-				var line = '  ' + tags[i][y][0];
+				var line = '  ' + getTitleString(tags[i][y]);
 				var spacePadding = chartColumn - line.length;
 				for (var n = 0; n < spacePadding; n++)
 					line += ' ';
@@ -227,7 +274,7 @@ function getUserTextCode(tags, user) {
 					else line += '-';
 				}
 				
-				s += line + '\n';
+				s += line + getValueString(O, ['Do','Learn', 'Teach', tags[i][y][3]] ) + '\n';
 			}
 		}
 	}
@@ -242,7 +289,7 @@ function getUserTextCode(tags, user) {
 			for (var y = 0; y < tags[i].length; y++) {
 				var oid = tags[i][y][2];
 				var O = $N.getObject(oid);
-				s += '  ' + O.name + '\n';
+				s += '  ' + getTitleString(tags[i][y]) + getValueString(O, [i,tags[i][y][3]]) + '\n';				
 			}
 		}
 	}

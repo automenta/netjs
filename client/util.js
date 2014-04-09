@@ -211,7 +211,7 @@ function objName(x, newName) {
 }
 exports.objName = objName;
 
-var primitiveRegEx = /^boolean|text|textarea|integer|real|url|object|spacepoint|timepoint|timerange|sketch|media$/;
+var primitiveRegEx = /^(boolean|text|textarea|integer|real|url|object|spacepoint|timepoint|timerange|sketch|media)$/;
 function isPrimitive(t) {
     return primitiveRegEx.test(t);
 }
@@ -306,8 +306,10 @@ function objTags(x, includePrimitives) {
                 newValues.push(vv);
             }
     }
-    if (includePrimitives)
+
+    if (includePrimitives) {
         return _.pluck(newValues, 'id');
+	}
     else {
         return _.uniq(_.pluck(newValues, 'id').filter(function(t) {
             return !isPrimitive(t)

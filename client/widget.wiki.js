@@ -1,5 +1,10 @@
 function getENWikiURL(t) {
-    return 'http://en.wikipedia.org/wiki/' + t;
+	if (t == null) return '#';
+
+	if (t[0] == '_')
+		return 'http://en.wiktionary.org/wiki/' + t.substring(1).toLowerCase();
+	else
+	    return 'http://en.wikipedia.org/wiki/' + t;
 }
 
 
