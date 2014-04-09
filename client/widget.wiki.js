@@ -150,3 +150,64 @@ function newWikiBrowser(selected, onTagAdded, options) {
     
     return b;    
 }
+
+function newWikiView(v) {
+
+    var frame = newDiv().attr('class', 'SelfView');
+    frame.append(newWikiBrowser($N, onWikiTagAdded));
+
+    v.append(frame);
+
+    frame.onChange = function() {
+        //update user summary?
+    };
+
+    return frame;
+
+    /*
+     var roster = newRoster();
+     roster.addClass('SelfRoster');
+     
+     var contentTags = newDiv().attr('class', 'SelfViewTags');
+     var contentTime = newDiv().attr('class', 'SelfViewTime');
+     var content = newDiv().attr('class', 'SelfViewContent');
+     
+     frame.append(roster);
+     frame.append(content);
+     
+     var currentUser = $N.myself();
+     
+     function summaryUser(x) {
+     currentUser = x;
+     content.html('');
+     content.append(newSelfSummary(s, x, content));
+     content.append(contentTags);       
+     content.append(contentTime);       
+     updateTags(x);
+     }
+     
+     function updateTags(x) {
+     contentTags.html(newSelfTagList(s, x, content));
+     
+     if (x)
+     if (configuration.showPlanOnSelfPage) {
+     //contentTime.html(newSelfTimeList(x, contentTime));
+     }
+     
+     roster.html(newRoster(function(x) {
+     summaryUser(x);
+     }));
+     }
+     
+     summaryUser(currentUser);
+     
+     v.append(frame);
+     
+     frame.onChange = function() {
+     updateTags(currentUser);
+     //update user summary?
+     };
+     */
+
+}
+

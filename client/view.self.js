@@ -144,7 +144,8 @@ function newUsView(v) {
             var exportButton = $('<button>Share</button>');
             exportButton.click(function() {
 				$N.saveAll();
-                window.open('/#user/' + currentUser);
+                //window.open('/#user/' + currentUser);
+				$N.router.navigate('/#user/' + currentUser, {trigger: true});
             });
 
             currentGoalHeader.append(avatarButton, exportButton);
@@ -528,7 +529,7 @@ function newTagBar(s, currentTag) {
 
 
     {
-        if (self.getTag('LearnDo')) {
+        if (configuration.knowLevels == 6) {
             //6 curiosume levels
             tbutton('Learn', skillSet);
             tbutton('LearnDo', skillSet);
@@ -537,11 +538,16 @@ function newTagBar(s, currentTag) {
             tbutton('TeachDo', skillSet);
             tbutton('Teach', skillSet);
         }
-        else {
+        else if (configuration.knowLevels == 5) {
             tbutton('Learn', skillSet);
             tbutton('DoLearn', skillSet);
             tbutton('Do', skillSet);
             tbutton('DoTeach', skillSet);
+            tbutton('Teach', skillSet);
+        }
+        else if (configuration.knowLevels == 3) {
+            tbutton('Learn', skillSet);
+            tbutton('Do', skillSet);
             tbutton('Teach', skillSet);
         }
     }

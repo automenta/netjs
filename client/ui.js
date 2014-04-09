@@ -554,7 +554,7 @@ $(document).ready(function() {
 
                 var w = new Workspace();
                 Backbone.history.start();
-                window.$N.router = w;
+                $N.router = w;
 
                 if (!$N.get('currentView')) {
                     if (configuration.initialView) {

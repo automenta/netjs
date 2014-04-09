@@ -111,34 +111,35 @@ function newUserView(v, userid) {
 			d.append('<h2>Tag Summary (Text)</h2><pre>' + textCode + '</pre><br/>');			
 		}
 
-		var jsonCode = getUserJSONCode(tags, user);
+		var jsonCode = getUserJSONCode(userid);
 
 		function simplifyJSON(j) {
 			//http://stackoverflow.com/questions/11233498/json-stringify-without-quotes-on-properties
 			return j.replace(/\"([^(\")"]+)\":/g,"$1:");  //This will remove all the quotes to make more compact
 		}
 
-		if (_.keys(jsonCode).length > 0) {
-			d.append('<h2>Tag Code (JSON)</h2><pre>' + simplifyJSON(JSON.stringify(jsonCode, null, 4)) + '</pre><br/>');			
+		d.append('<h2>Tag Code (JSON)</h2><pre class="UserTagCode">' + simplifyJSON(JSON.stringify(jsonCode, null, 4)) + '</pre><br/>');			
 
-			var jsonCodeCompact = simplifyJSON(JSON.stringify(jsonCode));
-			d.append('<h2>Tag Code (JSON Compact)</h2>' + jsonCodeCompact + '<br/>');
+		var jsonCodeCompact = simplifyJSON(JSON.stringify(jsonCode));
+		d.append('<h2>Tag Code (JSON Compact)</h2>' + jsonCodeCompact + '<br/>');
 
-			/*var url = document.location.origin + '/code/' + encodeURIComponent(jsonCodeCompact);
-			d.append('<br/><a href="' + url + '">URL</a>')*/
+		/*var jsonCodeJSONH = JSONH.stringify(jsonCode);
+		d.append('<h2>Tag Code (JSONH)</h2>' + jsonCodeJSONH + '<br/>');*/
 
-			var jid = uuid();
-			d.append('<h2>QR Code</h2>');
-			d.append(newDiv(jid));
-			new QRCode(document.getElementById(jid), { text: jsonCodeCompact,
-				width : 512, 
-				height : 512,
-				typeNumber : 40,
-				colorDark : "#000000",
-				colorLight : "#ffffff",
-				correctLevel : 1
-			});
-		}
+		/*var url = document.location.origin + '/code/' + encodeURIComponent(jsonCodeCompact);
+		d.append('<br/><a href="' + url + '">URL</a>')*/
+
+		var jid = uuid();
+		d.append('<h2>QR Code</h2>');
+		d.append(newDiv(jid));
+		new QRCode(document.getElementById(jid), { text: jsonCodeCompact,
+			width : 512, 
+			height : 512,
+			typeNumber : 40,
+			colorDark : "#000000",
+			colorLight : "#ffffff",
+			correctLevel : 1
+		});
 
 		var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
 		d.append('<hr/>', jsonProfileLink, '<br/>');
@@ -155,7 +156,19 @@ function isKnowledgeTag(t) {
 	return ['Do','DoTeach','DoLearn','LearnDo','TeachDo', 'Teach', 'Learn'].indexOf(t)!=-1;
 }
 
-function getUserJSONCode(tags, user) {
+function getUserJSONCode(user) { 
+	var objects = _.filter($N.objects(), function(v, k) {
+		return (v.author == user);
+	});	
+	objects = _.map(objects, function(o) {
+		var n = objCompact(o);
+		delete n.author;
+		return n;
+	});
+	return objects;
+}
+
+function getUserJSONCodeOLD(tags, user) {
 	var jc = { };
 
 	jc['name'] = user.name;

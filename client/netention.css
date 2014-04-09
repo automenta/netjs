@@ -1407,3 +1407,8 @@ svg {
 .chatViewLineAuthor img {
     height: 1em;
 }
+
+.UserTagCode {
+	max-height: 300px;
+	overflow: scroll;
+}
