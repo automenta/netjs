@@ -405,13 +405,15 @@ function netention(f) {
             }
             else {
                 removeLocal();
-		        $.pnotify({
-		            title: 'Deleted',
-		            text: id,
-		            addclass: "stack-bottomleft",
-		            stack: stack_bottomleft
-		        });
-				$N.trigger('change:attention');
+				if (configuration.connection=='local') {
+				    $.pnotify({
+				        title: 'Deleted',
+				        text: id,
+				        addclass: "stack-bottomleft",
+				        stack: stack_bottomleft
+				    });
+					$N.trigger('change:attention');
+				}
             }
             return true;
 
