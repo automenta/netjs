@@ -1229,7 +1229,7 @@ a.openModal:focus {
 
 .goalviewColumn, .goalviewColumnNarrow {
 	float: left;
-	width: 38%;
+	width: 49%;
 	height: 100%;
 	overflow: auto;
 	padding-left: 0.3em;

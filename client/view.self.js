@@ -130,7 +130,7 @@ function newUsView(v) {
         var currentGoalHeader = $('.toggle-submenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
         var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
         var goalList = newDiv('goalviewList').addClass('goalviewColumn');
-        var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');
+        //var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');
 
         currentGoalHeader.html('');
 
@@ -372,7 +372,7 @@ function newUsView(v) {
 
         }
 
-        v.append(sidebar, goalList, involvesList);
+        v.append(sidebar, goalList/*, involvesList*/);
     }
 
     if ($N.myself())
