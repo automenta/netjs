@@ -47,7 +47,7 @@ exports.plugin = function($N) { return {
                 }				
 			]);
 
-			function updateRippleData() {
+			function _updateRippleData() {
 				var accounts = { };
 
 				$N.getObjectsByTag('User', function(u) {
@@ -165,6 +165,15 @@ exports.plugin = function($N) { return {
 				});
 
 
+			}
+
+			function updateRippleData() {
+				try {
+					_updateRippleData();
+				}
+				catch (e) {
+					console.error(e);
+				}
 			}
 
 			updateRippleData();
