@@ -242,7 +242,10 @@ function getUserTextCode(tags, user) {
 		var s = '';
 		_.each(O.value, function(v) {
 			if (exceptTags.indexOf(v.id)==-1) {
-				s+= '     ' + (v.id == 'textarea' ? '' : (v.id + ': ')) + JSON.stringify(v.value) + '\n';
+				if (v.value)
+					s+= '     ' + (v.id == 'textarea' ? '' : (v.id + ': ')) + JSON.stringify(v.value) + '\n';
+				else
+					s+= '     ' + v.id;
 			}
 		});
 		if (s.length > 0) s= '\n' + s;
@@ -250,7 +253,7 @@ function getUserTextCode(tags, user) {
 	}
 
 	//Knowledge Tags
-	var header = 'Know                                  L=========D=========T\n';
+	var header = 'Know                                    L=========D=========T\n';
 	var chartColumn = header.indexOf('L');
 	for (var j = operatorTags.length-1; j >=0; j--) {
 	   	var i = operatorTags[j];
@@ -263,8 +266,8 @@ function getUserTextCode(tags, user) {
 				if (processed[oid]) continue;
 				processed[oid] = true;
 
-				var line = '  ' + getTitleString(tags[i][y]);
-				var spacePadding = chartColumn - line.length;
+				var line = getTitleString(tags[i][y]);
+				var spacePadding = chartColumn - line.length-2;
 				for (var n = 0; n < spacePadding; n++)
 					line += ' ';
 				var knowLevel = knowTagsToRange(O);
@@ -274,7 +277,8 @@ function getUserTextCode(tags, user) {
 					else line += '-';
 				}
 				
-				s += line + getValueString(O, ['Do','Learn', 'Teach', tags[i][y][3]] ) + '\n';
+				s += '  ' + (line + getValueString(O, ['Do','Learn', 'Teach', tags[i][y][3]] ) + '\n').trim() + '\n';
+				
 			}
 		}
 	}
