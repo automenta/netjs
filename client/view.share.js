@@ -3,7 +3,7 @@ var shareSearchFocusUpdateMS = 1500;
 /* Sharetribe.com inspired view */
 function newShareView(v) {
     var shareTags = ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'];
-    var shareCategories = ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Animal'];
+    var shareCategories = ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'];
 
     clearFocus();
     renderFocus();
