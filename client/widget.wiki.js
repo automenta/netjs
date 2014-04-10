@@ -55,10 +55,12 @@ function newWikiBrowser(selected, onTagAdded, options) {
         var url;
 		var extractContent;
 		if (configuration.wikiProxy) {
-			if (search)
-				url = configuration.wikiProxy + 'en.wikipedia.org/wiki/' + t;
+			if (search) {
+				var tt = t.replace(/ /g,'_'); //hack, TODO find a proper way of doing this
+				url = configuration.wikiProxy + 'en.wikipedia.org/w/index.php?search=' + encodeURIComponent(tt);
+			}
 			else
-				url = configuration.wikiProxy + 'en.wikipedia.org/wiki/' + t;
+				url = configuration.wikiProxy + 'en.wikipedia.org/wiki/' + encodeURIComponent(t);
 			extractContent = true;
 		}
 		else {
