@@ -33,6 +33,8 @@ function newMainView(v) {
     var gridster = grid.gridster(go).data('gridster');
     
     //gridster.add_widget('<li class="mainViewButton">ABC</li>', 1, 1, 2, 2);
+	var cols = 3;
+	var x = 1, y = 1;
 
     var conviews = configuration.views;
     _.each(conviews, function(v) {
@@ -50,7 +52,11 @@ function newMainView(v) {
         b.css('background-size', 'contain');
         b.css('background-position','center');
         
-        gridster.add_widget(b, 1, 1);
+        gridster.add_widget(b, 1, 1, x++, y);
+		if (x == cols+1) {
+			x = 1;
+			y++;
+		}
         
         
         b.click(function() {
