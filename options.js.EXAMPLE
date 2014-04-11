@@ -40,7 +40,9 @@ exports.options = {
 		"knowLevels": 5,
 		"focusEnable": true,
 		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki", "templates" ],
-		"newUserProperties": [ ]
+		"newUserProperties": [ ],
+		"shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
+		"shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal']
     },
 	start: function($N) {
 	}

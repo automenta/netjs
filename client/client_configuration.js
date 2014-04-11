@@ -28,6 +28,8 @@ var configuration = {
 	"focusEnable":false,
 	"views":["us","map","browse","wiki","graph","share","templates","chat","main","trends","time"],
 	"newUserProperties":[],
+	"shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
+	"shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'],
 	"enableAnonymous": true,
 	"wikiProxy": "http://www.automenta.com/proxy/proxy.php?url="
 };

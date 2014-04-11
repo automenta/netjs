@@ -129,6 +129,7 @@ function newUserView(v, userid) {
 		/*var url = document.location.origin + '/code/' + encodeURIComponent(jsonCodeCompact);
 		d.append('<br/><a href="' + url + '">URL</a>')*/
 
+		/*
 		var jid = uuid();
 		d.append('<h2>QR Code</h2>');
 		d.append(newDiv(jid));
@@ -140,11 +141,23 @@ function newUserView(v, userid) {
 			colorLight : "#ffffff",
 			correctLevel : 1
 		});
+		*/
 
-		var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
-		d.append('<hr/>', jsonProfileLink, '<br/>');
+		if (configuration.connection === 'websocket') {
+			var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
+			d.append('<hr/>', jsonProfileLink, '<br/>');
+		}
+		
+		/*{
+			var email = "email address"
+			var subject = "subject"
+			var body = encodeURIComponent(jsonCodeCompact);
+
+			d.append('<form name="form" action=\"mailto:' + email + '\?subject='+ subject +'\&body='+ body + '\" method=\"post\" enctype=\"text/plain\"><input type="submit"/></form>');
+		}*/
 
 	}
+
 	else {
 		d.append('index of users');
 	}

@@ -144,8 +144,8 @@ function newUsView(v) {
             var exportButton = $('<button>Share</button>');
             exportButton.click(function() {
 				$N.saveAll();
-                //window.open('/#user/' + currentUser);
-				$N.router.navigate('/#user/' + currentUser, {trigger: true});
+                window.open('/#user/' + currentUser);
+				//$N.router.navigate('/#user/' + currentUser, {trigger: true});
             });
 
             currentGoalHeader.append(avatarButton, exportButton);

@@ -1,9 +1,10 @@
 var shareSearchFocusUpdateMS = 1500;
+var supressCheckboxTagFilter = false;
 
 /* Sharetribe.com inspired view */
 function newShareView(v) {
-    var shareTags = ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'];
-    var shareCategories = ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'];
+    var shareTags = configuration.shareTags; 
+    var shareCategories = configuration.shareCategories;
 
     clearFocus();
     renderFocus();
@@ -42,16 +43,54 @@ function newShareView(v) {
 
         sidebar.append('<hr/>');
 
-        var typeFilter = newCheckboxTagFilter(shareTags);
-        typeFilter.appendTo(sidebar);
+        var modeCombo = $('<select>').appendTo(sidebar);
 
-        sidebar.append('<hr/>');
+		var sb = newDiv().appendTo(sidebar);
+
+        var typeFilter = newCheckboxTagFilter(shareTags);
+        typeFilter.appendTo(sb);
+
+        sb.append('<hr/>');
 
         var catFilter = newCheckboxTagFilter(shareCategories);
-        catFilter.appendTo(sidebar);
+        catFilter.appendTo(sb);
+
+
+        modeCombo.append('<option value="all">All</option>');
+        //modeCombo.append('<option value="posts">Posts</option>');
+        modeCombo.append('<option value="users">Users</option>');
+		modeCombo.change(function() {
+        	var v = modeCombo.val();
+
+	        var f = $N.focus();
+
+			supressCheckboxTagFilter = true;
+			typeFilter.find('input').removeAttr('checked');
+			catFilter.find('input').removeAttr('checked');
+			supressCheckboxTagFilter = false;
+
+			if (v == 'all') {
+				sb.show();
+				f.value = [];
+			}
+			else if (v == 'users') {
+				sb.hide();
+
+				f.value = [];
+				objAddTag(f, 'User');
+			}
+			else if (v == 'posts') {
+				sb.show();
+				f.value = [];
+			}
+
+	        $N.setFocus(f);
+	        renderFocus(true);
+ 		});
 
         sidebar.append('<hr/>');
 
+		//distance filter
         var distCombo = $('<select>').appendTo(sidebar);
         distCombo.append('<option>Anywhere</option>');
         distCombo.append('<option>&lt; 1 km</option>');
@@ -62,6 +101,8 @@ function newShareView(v) {
 
         sidebar.append('<hr/>');
 
+
+		//user filter
         var userSelect = newAuthorCombo($N.focus().who, true).appendTo(sidebar);
         userSelect.change(function(n) {
             var v = userSelect.val();
@@ -76,6 +117,12 @@ function newShareView(v) {
             renderFocus(true);
         });
 
+		//trust filter
+        var i = $('<input type="checkbox" disabled/>');
+        i.click(function() {
+            var checked = i.is(':checked');
+        });
+        sidebar.append('<br/>', i, 'Trusted Sources', '<br/>');
     }
 
     var content = newDiv().addClass('ShareContent').appendTo(frame);
@@ -136,6 +183,8 @@ function newCheckboxTagFilter(tags) {
     _.each(tags, function(t) {
         var i = $('<input type="checkbox"/>');
         i.click(function() {
+			if (supressCheckboxTagFilter) return;
+
             var checked = i.is(':checked');
             var f = $N.focus();
             if (checked) {
