@@ -145,6 +145,7 @@ accelerometerReport	Raised every time the device reports its current acceleromet
             'moneyAmount': {name: 'Money Amount', type: 'real', default: 0, units: currencyUnits },
             'quantity': {name: 'Quantity', type: 'integer', default: 0 },
             'quantityUnit': {name: 'Quantity Unit', type: 'string' },
+            'quantityPerTime': {name: 'Quantity per Day', type: 'real'}, 
             'quality': {name: 'Quality', type: 'text'},
             'offerExpires': {name: 'Offer Expires', type: 'timepoint' },
             'itemExpires': {name: 'Item Expires', type: 'timepoint' },
