@@ -149,8 +149,8 @@ function newGraphView(v) {
 					x.setName('Link: ' + Sn + ' -> ' + En);
 					x.addTag('Link');
 					if (S && E) {
-						x.add('touchObject', S.id);
-						x.add('touchObject', E.id);
+						x.add('incidentObject', S.id);
+						x.add('incidentObject', E.id);
 					}
 
 					newPopupObjectEdit(x);
