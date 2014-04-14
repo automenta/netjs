@@ -264,7 +264,7 @@ function newGoalList(target, user, centroids) {
         
         var d = newDiv().addClass('alternatingDiv').append('<span class="goalRowHeading">' + ts + '</span>');
 
-        var addbutton = $('<button title="Add Tag">[+]</button>').appendTo(d);
+        var addbutton = $('<a href="#" title="Add Tag">[+]</a>').appendTo(d);
 
         var y = function() {
             var tti = ti;

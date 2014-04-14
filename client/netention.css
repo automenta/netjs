@@ -1381,7 +1381,7 @@ svg {
 	width: 40%;
 	float: right;
 }
-.SkillSlider { width: 100%; }
+.SkillSlider { width: 98%; }
 
 
 .mainViewButton {
@@ -1398,6 +1398,7 @@ svg {
     float: left;
 }
 .chatViewLineAuthor {
+	border-top: 1px solid gray;
     clear: both;
     width: 200px;    
     float: left;

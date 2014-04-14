@@ -21,6 +21,10 @@ function newChatView(v) {
 
     v.append(frame);
 
+	var scrollbottom = _.debounce(function() {
+        v.scrollTop(content.height()*20);
+	}, 150);
+
     function updateContent() {
         content.html('');
 
@@ -46,7 +50,7 @@ function newChatView(v) {
         content.append(newEle('br'));
         content.append(newEle('br'));
 
-        v.scrollTop(content.height());
+		later(scrollbottom);
     }
 
     frame.onChange = function() {
@@ -62,26 +66,30 @@ function newChatView(v) {
 function newInlineSelfButton(s) {
     var x = newEle('a').attr('class', 'InlineSelfButton');
     x.prepend(newAvatarImage(s));
-    x.click(function() {
-        newPopupObjectView(s.id);
-    });
     x.append(s.name);
     return x;
 }
 
 function newObjectLogLine(x) {
-    var line = newEle('span');
+    var line = newEle('div');
     var d = newDiv().addClass('chatViewLineAuthor').appendTo(line);
     var e = newDiv().addClass('chatViewLineContent').appendTo(line);
 
     if (x.author) {
         var a = self.getObject(x.author);
         if (a) {
-            d.append(newInlineSelfButton(a));
+            b = newInlineSelfButton(a, x);
         }
         else {
-            d.append(x.author);
+            b = $('<a href="#">' + x.author + '</a>');
         }
+		b.click(function() {
+			if (x.author === $N.id())
+			    newPopupObjectEdit(x);
+			else
+			    newPopupObjectView(x.id);
+		});
+		d.append(b);
     }
     else {
         d.append('(System)');

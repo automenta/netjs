@@ -287,9 +287,9 @@ function newUsView(v) {
                 var lButton = $('<button title="Learn">L</button>').css('width', '32%').css('float', 'left').appendTo(kb);
                 var dButton = $('<button title="Do">D</button>').css('float', 'left').css('width', '34%').appendTo(kb);
                 var tButton = $('<button title="Teach">T</button>').css('width', '32%').css('float', 'left').appendTo(kb);
-                lButton.css('background-color', '#ffbbbb').click(addTheTag($N.getTag('Learn')));
-                dButton.css('background-color', '#bbffbb').click(addTheTag($N.getTag('Do')));
-                tButton.css('background-color', '#bbbbff').click(addTheTag($N.getTag('Teach')));
+                lButton.css('color', '#aa0000').click(addTheTag($N.getTag('Learn')));
+                dButton.css('color', '#00aa00').click(addTheTag($N.getTag('Do')));
+                tButton.css('color', '#0000aa').click(addTheTag($N.getTag('Teach')));
 
 
 
@@ -304,7 +304,8 @@ function newUsView(v) {
                     nameLink.click(function() {
                         newPopupObjectView(x);
                     });
-                    lc.append(nameLink);
+					var colorSquare = $('<span>&nbsp;&nbsp;&nbsp;</span>&nbsp;');
+                    lc.append(colorSquare, nameLink);
 
                     var slider = $('<input type="range" min="-1" max="1" step="0.05"/>').addClass('SkillSlider');
 
@@ -325,7 +326,7 @@ function newUsView(v) {
                         var sv = parseFloat(slider.val());
                         var cb = hslToRgb(((sv + 1.0) / 2.1 + 0.0) / 1.7, 0.9, 0.7);
                         var bgString = 'rgba(' + parseInt(cb[0]) + ',' + parseInt(cb[1]) + ',' + parseInt(cb[2]) + ',1.0)';
-                        rc.css('background-color', bgString);
+                        colorSquare.css('background-color', bgString);
                     }
                     updateColor();
 
