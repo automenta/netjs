@@ -250,7 +250,7 @@ function newUsView(v) {
                 var nn = _.filter($N.objectsWithTag(['Do', 'Learn', 'Teach']), currentUserFilter);
                 var d = newDiv().appendTo(sidebar);
 
-                d.append('<hr/>');
+                d.append('<br/>');
 
 
                 function rangeToTags(x, newValue) {
@@ -281,7 +281,7 @@ function newUsView(v) {
                     return $('<div style="width: 48%; float: right"/>');
                 }
 
-                newLeftColDiv().css('text-align', 'center').appendTo(d).append('<b>Knowledge</b>');
+                newLeftColDiv().addClass('goalRowHeading').appendTo(d).append('Knowledge');
 
                 var kb = newDiv();
                 var lButton = $('<button title="Learn">L</button>').css('width', '32%').css('float', 'left').appendTo(kb);
