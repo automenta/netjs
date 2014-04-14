@@ -592,8 +592,8 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	div.olMapViewport { z-index: 1 !important;; }
 	div.olControlZoom { top:auto !important; bottom:8px !important; }
 
-.ViewControl { padding: 0; margin: 5px; display: none; }
-.ViewControl img { width: 50px; height: 50px; }
+.ViewControl { padding: 0; margin-top: 3px; margin-bottom: 3px; display: none; }
+.ViewControl img { width: 45px;  }
 .view-indented { left: 55px !important;  border-left: none !important; width: auto !important;}
 .view-indented-more { left: 160px !important; }
 
