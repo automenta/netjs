@@ -256,13 +256,23 @@ function netention(f) {
                 setClientID($N, _cid, _key, _selves);
 
                 socket.emit('subscribe', 'User', true);
-                $.getJSON('/object/author/' + targetID + '/json', function(j) {
-                    $N.notice(j);
-                    if (whenConnected) {
-                        whenConnected();
-                        whenConnected = null;
-                    }
-                });
+				if (targetID) {
+		            $.getJSON('/object/author/' + targetID + '/json', function(j) {
+		                $N.notice(j);
+			            if (whenConnected) {
+			                whenConnected();     whenConnected = null;
+			            }					
+		            }) .fail(function() {
+			            if (whenConnected) {
+			                whenConnected();     whenConnected = null;
+			            }					
+					});
+				}
+				else {
+	                if (whenConnected) {
+	                    whenConnected();     whenConnected = null;
+	                }					
+				}
 
             });
 
