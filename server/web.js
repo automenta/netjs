@@ -1049,31 +1049,35 @@ exports.start = function(options, init) {
     }
 
 
-	function objAccessFilter(objs, req) {
+	function objCanSendTo(o, cid) {
 		var ObjScope = util.ObjScope;
+		var scope = o.scope || options.client.defaultScope;
+		if (scope == ObjScope.ServerSelf) {
+			if (o.author)
+				return (o.author == cid);
+			return true;
+		}
+		else if (scope == ObjScope.ServerFollow) {
+
+		}
+		/*else if (scope == ObjScope.Global) {
+		}*/
+		return true;
+	}
+
+	function objAccessFilter(objs, req) {
         var cid = getCurrentClientID(req);
 
-		console.log('objAccessFilter', cid, getClientSelves(req), getSessionKey(req));
+		//console.log('objAccessFilter', cid, getClientSelves(req), getSessionKey(req));
 
 		return _.filter(objs, function(o) {
-			var scope = o.scope || options.client.defaultScope;
-			if (scope == ObjScope.ServerSelf) {
-				if (o.author)
-					return (o.author == cid);
-				return true;
-			}
-			else if (scope == ObjScope.ServerFollow) {
-
-			}
-			/*else if (scope == ObjScope.Global) {
-			}*/
-			return true;
+			return objCanSendTo(o, cid);
 		});
 	}
 
 
-    function broadcast(socket, message, whenFinished) {
-        notice(message, whenFinished, socket);
+    function broadcast(socket, o, whenFinished) {
+        notice(o, whenFinished, socket);
 
         var targets = {};
 
@@ -1095,20 +1099,27 @@ exports.start = function(options, init) {
             }
         }*/
 
-        cmessage = util.objCompact(message);
+        co = util.objCompact(o);
 
         /*for (var t in targets) {
             io.sockets.socket(t).emit('notice', cmessage);
         }*/
-        io.sockets.in('*').emit('notice', cmessage);
+		if (o.scope >= util.ObjScope.ServerAll)
+	        io.sockets.in('*').emit('notice', co);
+		else if (o.scope >= util.ObjScope.ServerSelfAndCertainOthers) {
+			//TODO decide on a per-socket basis			
+		}
+		else {
+			//dont send at all
+		}
 
 
-        message = util.objectify(util.objExpand(message));
+        o = util.objectify(util.objExpand(o));
 
-        if (!message.removed)
-            plugins("onPub", message);
+        if (!o.removed)
+            plugins("onPub", o);
         else
-            plugins("onDelete", message);
+            plugins("onDelete", o);
 
     }
     $N.broadcast = broadcast;

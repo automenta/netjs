@@ -175,7 +175,6 @@ function netention(f) {
 
 
 		                later(function() {
-							$N.clearObjects();
 
 		                    $N.set('clientID', nextID);
 
@@ -185,8 +184,13 @@ function netention(f) {
 
 		                        $N.save('otherSelves', _.unique(os));
 
-		                        $N.trigger('change:attention');
-		                        updateBrand(); //TODO use backbone Model instead of global fucntion                                
+								$N.clearObjects();
+
+			                    updateBrand(); //TODO use backbone Model instead of global fucntion                                
+						        $N.getLatestObjects(1000, function() {
+				                    //$N.trigger('change:attention');
+								});
+
 		                    });
 		                });
 		            }
