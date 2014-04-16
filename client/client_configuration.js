@@ -30,6 +30,7 @@ var configuration = {
 	"newUserProperties":[],
 	"shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
 	"shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'],
+	"defaultScope": 2,
 	"enableAnonymous": true,
 	"wikiProxy": "http://www.automenta.com/proxy/proxy.php?url="
 };

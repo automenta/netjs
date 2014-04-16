@@ -10,8 +10,9 @@ var ID_AUTHENTICATED = 2;
 
 
 function setClientID($N, cid, key, otherSelves) {
-    if (cid)
+    if (cid) {
         $N.set('clientID', cid);
+	}
     $N.set('authorized', key);
     $N.set('otherSelves', _.unique(otherSelves));
 
@@ -44,16 +45,20 @@ function netention(f) {
 
     var $NClient = Backbone.Model.extend({
         clear: function() {
-            this.set('deleted', {});
-            this.set('replies', {});
-            this.set('layer', {include: [], exclude: []});
-            this.set('focus', null);
+			this.clearObjects();
             this.set('clientID', 'undefined');
             this.attention = {};
             this.tags = {};
             this.properties = {};
-
 		 },
+		 clearObjects: function() {
+            this.attention = {};
+            this.set('deleted', {});
+            this.set('replies', {});
+            this.set('layer', {include: [], exclude: []});
+            this.set('focus', null);
+		 },
+
         tag: function(t) {
             return this.tags[t];
         },
@@ -170,6 +175,8 @@ function netention(f) {
 
 
 		                later(function() {
+							$N.clearObjects();
+
 		                    $N.set('clientID', nextID);
 
 		                    $N.connect(target, function() {
@@ -254,24 +261,27 @@ function netention(f) {
 
             socket.emit('connectID', targetID, function(_cid, _key, _selves) {
                 setClientID($N, _cid, _key, _selves);
+				setCookie('clientID', _cid);
 
                 socket.emit('subscribe', 'User', true);
+
+				function doWhenConnected() {
+		            if (whenConnected) {
+		                whenConnected();     
+						whenConnected = null;
+		            }					
+				}
+
 				if (targetID) {
 		            $.getJSON('/object/author/' + targetID + '/json', function(j) {
 		                $N.notice(j);
-			            if (whenConnected) {
-			                whenConnected();     whenConnected = null;
-			            }					
-		            }) .fail(function() {
-			            if (whenConnected) {
-			                whenConnected();     whenConnected = null;
-			            }					
+						doWhenConnected();
+		            }).fail(function() {
+						doWhenConnected()
 					});
 				}
 				else {
-	                if (whenConnected) {
-	                    whenConnected();     whenConnected = null;
-	                }					
+					doWhenConnected();
 				}
 
             });
@@ -811,7 +821,9 @@ function getCookie(name) {
     }
     return null;
 }
-
+function setCookie(key, value) {
+	document.cookie = key + '=' + value;
+}
 
 
 

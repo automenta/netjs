@@ -42,7 +42,8 @@ exports.options = {
 		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki", "templates" ],
 		"newUserProperties": [ ],
 		"shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
-		"shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal']
+		"shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'],
+		"defaultScope": 7
     },
 	start: function($N) {
 	}

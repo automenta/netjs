@@ -149,7 +149,7 @@ exports.start = function(options, init) {
                     $N.server.interestTime = x.interestTime;
                     $N.server.clientState = x.clientState;
                     $N.server.users = x.users || {};
-                    $N.server.currentClientID = x.currentClientID || {};
+                    //$N.server.currentClientID = x.currentClientID || {};
                     //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
 
                     if (x.plugins) {
@@ -799,10 +799,9 @@ exports.start = function(options, init) {
         //Authenticated but no clientID specified
         var cid = getCurrentClientID(key);
         var possibleClients = getClientSelves(key);
-        if (possibleClients)
-            cid = possibleClients[possibleClients.length - 1];
-        else
+        if (!possibleClients)
             possibleClients = [];
+            //cid = possibleClients[possibleClients.length - 1];
 
         if (!anonymous) {
             res.cookie('authenticated', key != undefined);
@@ -810,7 +809,7 @@ exports.start = function(options, init) {
         else {
             res.cookie('authenticated', 'anonymous');
         }
-        res.cookie('clientID', getCurrentClientID(key));
+        res.cookie('clientID', cid);
 
         res.cookie('otherSelves', possibleClients.join(','));
 
@@ -961,27 +960,47 @@ exports.start = function(options, init) {
     }
 
     function getCurrentClientID(req) {
+		if (!req)
+			return null;
+
+		var cookies = getCookies(req);
+
+        if (/*($N.server.currentClientID === undefined) ||*/ ($N.server.users === undefined)) {
+            //$N.server.currentClientID = {};
+            $N.server.users = {};
+        }
+
         var key = getSessionKey(req);
         if (!key) {
-            return 'anonymous';
+            key = 'anonymous';
         }
-        else {
-            var cid;
-            if ($N.server.currentClientID == undefined) {
-                $N.server.currentClientID = {};
-                $N.server.users = {};
-            }
 
-            cid = $N.server.currentClientID[key];
+		if (!cookies.authenticated)
+			return null;
 
-            if (!cid) {
-                cid = util.uuid();
-                $N.server.users[key] = [cid];
-                $N.server.currentClientID[key] = cid;
-                saveState();
-            }
-            return cid;
+		var cid;
+		if (cookies.authenticated) {
+			cid = cookies.clientID;
+			if ($N.server.users[key].indexOf(cid)==-1) {
+				//they are trying to spoof the clientID, deny access because key is invalid
+				return null;
+			}
+		}
+
+		if (!cid) {
+			if ($N.server.users[key]) {
+				cid = $N.server.users[key][0];
+			}
+		}
+
+        if (!cid) {
+            cid = util.uuid();
+            $N.server.users[key] = [cid];
+            //$N.server.currentClientID[key] = cid;
+            saveState();
         }
+
+        return cid;
     }
 
     function addClientSelf(req, uid) {
@@ -1029,6 +1048,71 @@ exports.start = function(options, init) {
         });
     }
 
+
+	function objAccessFilter(objs, req) {
+		var ObjScope = util.ObjScope;
+        var cid = getCurrentClientID(req);
+
+		console.log('objAccessFilter', cid, getClientSelves(req), getSessionKey(req));
+
+		return _.filter(objs, function(o) {
+			var scope = o.scope || options.client.defaultScope;
+			if (scope == ObjScope.ServerSelf) {
+				if (o.author)
+					return (o.author == cid);
+				return true;
+			}
+			else if (scope == ObjScope.ServerFollow) {
+
+			}
+			/*else if (scope == ObjScope.Global) {
+			}*/
+			return true;
+		});
+	}
+
+
+    function broadcast(socket, message, whenFinished) {
+        notice(message, whenFinished, socket);
+
+        var targets = {};
+
+        /*var ot = util.objTags(message);
+        for (var t = 0; t < ot.length; t++) {
+            var chan = ot[t];
+
+            var cc;
+            if (io.sockets.clients)
+                cc = io.sockets.clients(chan);
+            else
+                cc = io.sockets.sockets;
+            
+            for (var cck in cc) {
+                var i = cc[cck].id;
+                if (socket)
+                    if (i != socket.id)
+                        targets[i] = '';
+            }
+        }*/
+
+        cmessage = util.objCompact(message);
+
+        /*for (var t in targets) {
+            io.sockets.socket(t).emit('notice', cmessage);
+        }*/
+        io.sockets.in('*').emit('notice', cmessage);
+
+
+        message = util.objectify(util.objExpand(message));
+
+        if (!message.removed)
+            plugins("onPub", message);
+        else
+            plugins("onDelete", message);
+
+    }
+    $N.broadcast = broadcast;
+
     /*
      express.get('/object/users/json', function(req, res) {
      var userObjects = [];
@@ -1041,6 +1125,7 @@ exports.start = function(options, init) {
      express.get('/users/json', function(req, res) {
      res.redirect('/object/tag/User/json');        
      });*/
+
     express.get('/object/tag/:tag/json', function(req, res) {
         var tag = req.params.tag;
         if (tag.indexOf(',')) {
@@ -1050,6 +1135,7 @@ exports.start = function(options, init) {
         getObjectsByTag(tag, function(o) {
             objects.push(o);
         }, function() {
+			objects = objAccessFilter(objects, req);			
             sendJSON(res, compactObjects(objects));
         });
     });
@@ -1057,20 +1143,22 @@ exports.start = function(options, init) {
     express.get('/object/author/:author/json', function(req, res) {
         var author = req.params.author;
         var objects = [];
-        getObjectsByAuthor(author, function(objects) {
-            sendJSON(res, compactObjects(objects));
+        getObjectsByAuthor(author, function(objs) {
+			objs = objAccessFilter(objs, req);
+            sendJSON(res, compactObjects(objs));
         });
     });
 
-    express.get('/object/:uri', function(req, res) {
-        var uri = req.params.uri;
-        res.redirect('/object.html?id=' + uri);
-    });
     express.get('/object/:uri/json', function(req, res) {
         var uri = req.params.uri;
         getObjectSnapshot(uri, function(err, x) {
-            if (x)
-                sendJSON(res, util.objCompact(x));
+            if (x) {
+				var objs = objAccessFilter([x], req);
+				if (objs.length == 1)
+	                sendJSON(res, util.objCompact(objs[0]));
+				else
+	                sendJSON(res, ['Unknown', uri]);				
+			}
             else
                 sendJSON(res, ['Unknown', uri]);
         });
@@ -1090,11 +1178,18 @@ exports.start = function(options, init) {
             db.obj.find({tag: {$not: {$in: ['ServerState']}}}).limit(n).sort({modifiedAt: -1}, function(err, objs) {
                 removeMongoID(objs);
 
+				objs = objAccessFilter(objs, req);
+
                 sendJSON(res, compactObjects(objs));
                 db.close();
             });
         });
     });
+
+    /*express.get('/object/:uri', function(req, res) {
+        var uri = req.params.uri;
+        res.redirect('/object.html?id=' + uri);
+    });*/
 
 
     /*express.get('/users/plan', function(req, res) {
@@ -1407,50 +1502,6 @@ exports.start = function(options, init) {
     });
 
 
-
-
-    var channelListeners = {};
-
-    function broadcast(socket, message, whenFinished) {
-        notice(message, whenFinished, socket);
-
-        var targets = {};
-
-        /*var ot = util.objTags(message);
-        for (var t = 0; t < ot.length; t++) {
-            var chan = ot[t];
-
-            var cc;
-            if (io.sockets.clients)
-                cc = io.sockets.clients(chan);
-            else
-                cc = io.sockets.sockets;
-            
-            for (var cck in cc) {
-                var i = cc[cck].id;
-                if (socket)
-                    if (i != socket.id)
-                        targets[i] = '';
-            }
-        }*/
-
-        cmessage = util.objCompact(message);
-
-        for (var t in targets) {
-            io.sockets.socket(t).emit('notice', cmessage);
-        }
-        io.sockets.in('*').emit('notice', cmessage);
-
-
-        message = util.objectify(util.objExpand(message));
-
-        if (!message.removed)
-            plugins("onPub", message);
-        else
-            plugins("onDelete", message);
-
-    }
-    $N.broadcast = broadcast;
 
     function pub(message, whenFinished) {
         broadcast(null, message, whenFinished);

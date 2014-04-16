@@ -6,6 +6,22 @@ else {
     _ = require('underscore');
 }
 
+
+var ObjScope = {
+	//level -1: store in local browser temporarily
+	Local: 1, //store in local browser permanently
+	ServerSelf: 2,  //level 2: store on server but only for me (encrypted?)
+	ServerSelfAndCertainOthers: 3, //store on server but only for me and certain people
+	ServerFollowOrFollowed: 4,  //store on server but share with who i follow or follows me
+	ServerFollow: 5, //store on server but share with who i follow
+	ServerAll: 6, //store on server for all server users
+	Global: 7, //store on server for public access (inter-server)
+	GlobalAdvertise: 8 //store on server for public advertisement (push)
+};
+exports.ObjScope = ObjScope;
+
+
+
 function _n(x, places) {
     if (!places)
         places = 2;
