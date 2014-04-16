@@ -1061,42 +1061,12 @@ exports.start = function(options, init) {
 			return;
 		}
 
-		userRelations = { };
-
 		var users = [];
         getObjectsByTag('User', function(o) {
             users.push(o);
         }, function() {
-			//...
-			var userids = [];
-			for (var i = 0; i < users.length; i++) {
-				var u = users[i];
-				var uid = u.id;
-			
-				userRelations[uid] = { 
-					'trusts': [ ],
-					'trustedBy': [ ]
-				};
+			userRelations = util.objUserRelations(users);
 
-				userids.push(uid);
-			}
-			for (var i = 0; i < users.length; i++) {
-				var u = users[i];
-				var uid = u.id;
-
-				for (var j = 0; j < u.value.length; j++) {
-					var v = u.value[j];
-
-					if ((v.id == 'trusts') || (v.id == 'rippleTrust')) {
-						//TODO abstract to a function like: relate(uid, target, 'trusts', 'trustedBy');
-						var target = v.value;
-						if ((target) && (userids.indexOf(target)!=-1)) {
-							userRelations[uid]['trusts'].push(target);
-							userRelations[target]['trustedBy'].push(uid);
-						}					
-					}
-				}
-			}
 			invalidateUserRelations = false;
 
 			whenFinished(userRelations);
@@ -1684,7 +1654,7 @@ exports.start = function(options, init) {
              
              });*/
 
-            socket.on('become', function(target, onResult) {
+            socket.on('become', function(target, _onResult) {
                 var targetObjectID = target;
                 var targetObject = target;
                 if (typeof (target) === "string") {
@@ -1694,6 +1664,16 @@ exports.start = function(options, init) {
                 else {
                     targetObjectID = target.id;
                 }
+
+				onResult = function(nextID) {
+					var oldID = socket.clientID;
+					socket.clientID = nextID;
+
+					if (oldID!=nextID)
+			            nlog('became: ' + oldID + ' -> ' + nextID + ' @ ' + socket.id);
+
+					_onResult(nextID);
+				};
 
                 function pubAndSucceed(x) {
                     pub(x, function() {
@@ -1761,7 +1741,7 @@ exports.start = function(options, init) {
                 }
 
                 var selves = getClientSelves(key);
-                nlog('connect: ' + cid + ', ' + key + ', ' + selves);
+                nlog('connect: ' + cid + ', ' + key + ', ' + selves + ' @ ' + socket.id);
 
                 var tagsAndTemplates = [];
                 getObjectsByTag(['Tag', 'Template'], function(o) {
@@ -1785,7 +1765,7 @@ exports.start = function(options, init) {
 
             });
 
-            socket.on('updateSelf', function(s, getObjects) {
+            /*socket.on('updateSelf', function(s, getObjects) {
                 socket.get('clientID', function(err, c) {
                     if (c == null) {
                         socket.emit('reconnect');
@@ -1802,7 +1782,7 @@ exports.start = function(options, init) {
                         updateInterests(c, s, socket, getObjects);
                     }
                 });
-            });
+            });*/
 
             /*
              socket.on('getSentencized', function(urlOrText, withResult) {

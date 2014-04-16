@@ -660,6 +660,41 @@ exports.acceptsAnotherProperty = acceptsAnotherProperty;
  */
 
 
+function objUserRelations(users) {
+	var userRelations = { };
+	//...
+	var userids = [];
+	for (var i = 0; i < users.length; i++) {
+		var u = users[i];
+		var uid = u.id;
+	
+		userRelations[uid] = { 
+			'trusts': [ ],
+			'trustedBy': [ ]
+		};
+
+		userids.push(uid);
+	}
+	for (var i = 0; i < users.length; i++) {
+		var u = users[i];
+		var uid = u.id;
+
+		for (var j = 0; j < u.value.length; j++) {
+			var v = u.value[j];
+
+			if ((v.id == 'trusts') || (v.id == 'rippleTrust')) {
+				//TODO abstract to a function like: relate(uid, target, 'trusts', 'trustedBy');
+				var target = v.value;
+				if ((target) && (userids.indexOf(target)!=-1)) {
+					userRelations[uid]['trusts'].push(target);
+					userRelations[target]['trustedBy'].push(uid);
+				}					
+			}
+		}
+	}
+	return userRelations;
+}
+exports.objUserRelations = objUserRelations;
 
 
 

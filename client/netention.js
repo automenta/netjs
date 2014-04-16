@@ -178,8 +178,8 @@ function netention(f) {
 		                later(function() {
 
 		                    $N.set('clientID', nextID);
-
-		                    $N.connect(target, function() {
+							setCookie('clientID', nextID);
+		                    //$N.connect(target, function() {
 		                        var os = $N.get('otherSelves');
 		                        os.push(nextID);
 
@@ -192,7 +192,7 @@ function netention(f) {
 					                updateBrand(); //TODO use backbone Model instead of global fucntion                         
 								});
 
-		                    });
+		                    //});
 		                });
 		            }
 		            else {
@@ -222,7 +222,8 @@ function netention(f) {
                 if (os) {
                     if (os.length > 0) {
                         if (!_.contains(os, 'Self_' + targetID)) {
-                            targetID = os[os.length - 1];
+                            //targetID = os[os.length - 1];
+							targetID = os[0];
                         }
                     }
                 }
@@ -231,66 +232,86 @@ function netention(f) {
                 $N.save('clientID', targetID);
             }
 
+			function reconnect() {
+		        socket.emit('connectID', targetID, function(_cid, _key, _selves) {
+		            setClientID($N, _cid, _key, _selves);
+					setCookie('clientID', _cid);
+
+		            socket.emit('subscribe', 'User', true);
+
+					function doWhenConnected() {
+				        if (whenConnected) {
+				            whenConnected();     
+							whenConnected = null;
+				        }					
+					}
+
+					if (targetID) {
+				        $.getJSON('/object/author/' + targetID + '/json', function(j) {
+				            $N.notice(j);
+							doWhenConnected();
+				        }).fail(function() {
+							doWhenConnected()
+						});
+					}
+					else {
+						doWhenConnected();
+					}
+
+		        });
+			}
+
             var socket = this.socket;
             if (!socket) {
-                this.socket = socket = io.connect('/', {
-                    'transports': ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
-                    'reconnect': true,
-                    'try multiple transports': true
-                });
-                
-                socket.on('disconnect', function() {
-                    $.pnotify({
-                        title: 'Disconnected.'                 
-                     }); 
-                });
-                /*socket.on('reconnecting', function() {
+                /*this.socket = socket = io.connect('/', {
                 });*/
-                socket.on('reconnect', function() {
-                    $.pnotify({
-                        title: 'Reconnected.'
-                     }); 
-                     init();
-                });
+				this.socket = socket = io('http://localhost', {
+                    'transports': ['websocket', /*'flashsocket',*/ 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
+                    'reconnection': true,
+					'reconnectionDelay': 750,
+ 				    'reconnectionDelayMax': 25,
+                    'try multiple transports': true
+				});
+				socket.on('connect', function(){
+		            socket.on('disconnect', function() {
+		                $.pnotify({
+		                    title: 'Disconnected.'                 
+		                 }); 
+		            });
+		            /*socket.on('reconnecting', function() {
+		                $.pnotify({
+		                    title: 'Reconnecting..'
+		                 }); 
+		            });*/
+					/*
+		            socket.on('reconnect', function() {
+		                $.pnotify({
+		                    title: 'Reconnected.'
+		                 }); 
+		                 init();
+		            });*/
 
+					/*socket.on('error', function(){
+					  	socket.socket.reconnect();
+					});*/
 
-                socket.on('notice', function(n) {
-                    $N.notice(n);
-                });
+		            socket.on('notice', function(n) {
+		                $N.notice(n);
+		            });
 
-                socket.on('addTags', function(t, p) {
-                    $N.addProperties(p);
-                    $N.addTags(t);
-                });                
+		            socket.on('addTags', function(t, p) {
+		                $N.addProperties(p);
+		                $N.addTags(t);
+		            });
+
+		            $.pnotify({
+		                title: 'Connected.'
+		            }); 
+
+					reconnect();
+
+				});        
             }
-
-            socket.emit('connectID', targetID, function(_cid, _key, _selves) {
-                setClientID($N, _cid, _key, _selves);
-				setCookie('clientID', _cid);
-
-                socket.emit('subscribe', 'User', true);
-
-				function doWhenConnected() {
-		            if (whenConnected) {
-		                whenConnected();     
-						whenConnected = null;
-		            }					
-				}
-
-				if (targetID) {
-		            $.getJSON('/object/author/' + targetID + '/json', function(j) {
-		                $N.notice(j);
-						doWhenConnected();
-		            }).fail(function() {
-						doWhenConnected()
-					});
-				}
-				else {
-					doWhenConnected();
-				}
-
-            });
-
 
             return socket;
         },
