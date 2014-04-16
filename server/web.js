@@ -270,6 +270,9 @@ exports.start = function(options, init) {
         if (_tag.length > 0)
             o._tag = _tag;
 
+		if (_.contains(_tag, 'User'))
+			invalidateUserRelations = true;
+
         //nlog('notice: ' + JSON.stringify(o, null, 4));
 
         if (o.modifiedAt === undefined)
@@ -1048,9 +1051,15 @@ exports.start = function(options, init) {
         });
     }
 
-	var userRelations =  { };
+	var invalidateUserRelations = true;
+	var userRelations;
 
 	function updateUserRelations(whenFinished) {
+		if (!invalidateUserRelations) {
+			whenFinished(userRelations);
+			return;
+		}
+
 		userRelations = { };
 
 		var users = [];
@@ -1058,6 +1067,37 @@ exports.start = function(options, init) {
             users.push(o);
         }, function() {
 			//...
+			var userids = [];
+			for (var i = 0; i < users.length; i++) {
+				var u = users[i];
+				var uid = u.id;
+			
+				userRelations[uid] = { 
+					'trusts': [ ],
+					'trustedBy': [ ]
+				};
+
+				userids.push(uid);
+			}
+			for (var i = 0; i < users.length; i++) {
+				var u = users[i];
+				var uid = u.id;
+
+				for (var j = 0; j < u.value.length; j++) {
+					var v = u.value[j];
+
+					if ((v.id == 'trusts') || (v.id == 'rippleTrust')) {
+						//TODO abstract to a function like: relate(uid, target, 'trusts', 'trustedBy');
+						var target = v.value;
+						if ((target) && (userids.indexOf(target)!=-1)) {
+							userRelations[uid]['trusts'].push(target);
+							userRelations[target]['trustedBy'].push(uid);
+						}					
+					}
+				}
+			}
+			invalidateUserRelations = false;
+
 			whenFinished(userRelations);
         });		
 	}
@@ -1071,20 +1111,29 @@ exports.start = function(options, init) {
 			return true;
 		}
 		else if (scope == ObjScope.ServerFollow) {
+			if (o.author) {
+				if (o.author == cid) //self
+					return true;
 
+				var whoOsAuthorTrusts = userRelations[o.author]['trusts'];
+				return (whoOsAuthorTrusts.indexOf(cid)!=-1);
+			}
+			return true;
 		}
 		/*else if (scope == ObjScope.Global) {
 		}*/
 		return true;
 	}
 
-	function objAccessFilter(objs, req) {
+	function objAccessFilter(objs, req, withObjects) {
         var cid = getCurrentClientID(req);
 
 		//console.log('objAccessFilter', cid, getClientSelves(req), getSessionKey(req));
 
-		return _.filter(objs, function(o) {
-			return objCanSendTo(o, cid);
+		updateUserRelations(function(rels) {
+			withObjects(_.filter(objs, function(o) {
+				return objCanSendTo(o, cid);
+			}));
 		});
 	}
 
@@ -1116,12 +1165,14 @@ exports.start = function(options, init) {
 	        	io.sockets.in('*').emit('notice', co); //send to everyone
 		}
 		else {
-			for (var i = 0; i < allsockets.length; i++) {
-				var sid = allsockets[i].clientID;
-				if (objCanSendTo(o, sid)) {
-					sendToSocket(i);
+			updateUserRelations(function() {
+				for (var i = 0; i < allsockets.length; i++) {
+					var sid = allsockets[i].clientID;
+					if (objCanSendTo(o, sid)) {
+						sendToSocket(i);
+					}
 				}
-			}
+			});
 		}
 
 
@@ -1157,17 +1208,19 @@ exports.start = function(options, init) {
         getObjectsByTag(tag, function(o) {
             objects.push(o);
         }, function() {
-			objects = objAccessFilter(objects, req);			
-            sendJSON(res, compactObjects(objects));
+			objAccessFilter(objects, req, function(sharedObjects) {
+	            sendJSON(res, compactObjects(sharedObjects));
+			});			
         });
     });
 
     express.get('/object/author/:author/json', function(req, res) {
         var author = req.params.author;
         var objects = [];
-        getObjectsByAuthor(author, function(objs) {
-			objs = objAccessFilter(objs, req);
-            sendJSON(res, compactObjects(objs));
+        getObjectsByAuthor(author, function(objects) {
+			objAccessFilter(objects, req, function(sharedObjects) {
+            	sendJSON(res, compactObjects(sharedObjects));
+			});
         });
     });
 
@@ -1175,11 +1228,12 @@ exports.start = function(options, init) {
         var uri = req.params.uri;
         getObjectSnapshot(uri, function(err, x) {
             if (x) {
-				var objs = objAccessFilter([x], req);
-				if (objs.length == 1)
-	                sendJSON(res, util.objCompact(objs[0]));
-				else
-	                sendJSON(res, ['Unknown', uri]);				
+				objAccessFilter([x], req, function(objs) {
+					if (objs.length == 1)
+			            sendJSON(res, util.objCompact(objs[0]));
+					else
+			            sendJSON(res, ['Unknown', uri]);				
+				});
 			}
             else
                 sendJSON(res, ['Unknown', uri]);
@@ -1198,12 +1252,11 @@ exports.start = function(options, init) {
             }
 
             db.obj.find({tag: {$not: {$in: ['ServerState']}}}).limit(n).sort({modifiedAt: -1}, function(err, objs) {
-                removeMongoID(objs);
-
-				objs = objAccessFilter(objs, req);
-
-                sendJSON(res, compactObjects(objs));
-                db.close();
+				objAccessFilter(objs, req, function(sharedObjects) {
+	                removeMongoID(sharedObjects);
+	                sendJSON(res, compactObjects(sharedObjects));
+	                db.close();
+				});
             });
         });
     });
@@ -1759,10 +1812,11 @@ exports.start = function(options, init) {
             socket.on('getObjects', function(query, withObjects) {
                 var db = mongo.connect(getDatabaseURL(), collections);
                 db.obj.find(function(err, docs) {
-					docs = objAccessFilter(request, docs);
-                    removeMongoID(docs);					
-                    withObjects(docs);
-                    db.close();
+					objAccessFilter(request, docs, function(dd) {
+		                removeMongoID(dd);
+		                withObjects(dd);
+		                db.close();
+					});
                 });
             });
 
