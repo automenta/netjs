@@ -425,7 +425,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 p.append(newTagger([], function(t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
-                        objAddTag(y, t[i]);
+						var T = $N.getTag(t[i]);
+						if (T.reserved) {
+							$.pnotify('Tag "' + T.name + '" can not be added to objects.');
+						}
+						else
+	                        objAddTag(y, t[i]);
                     }
                     update(y);
                     p.dialog('close');
@@ -1682,6 +1687,7 @@ function newTagTree(param) {
 
     function subtree(root, i) {
         var name, xi;
+
         if (i.name) {
             name = i.name;
             xi = i.uri;

@@ -1048,6 +1048,19 @@ exports.start = function(options, init) {
         });
     }
 
+	var userRelations =  { };
+
+	function updateUserRelations(whenFinished) {
+		userRelations = { };
+
+		var users = [];
+        getObjectsByTag('User', function(o) {
+            users.push(o);
+        }, function() {
+			//...
+			whenFinished(userRelations);
+        });		
+	}
 
 	function objCanSendTo(o, cid) {
 		var ObjScope = util.ObjScope;
@@ -1079,26 +1092,6 @@ exports.start = function(options, init) {
     function broadcast(socket, o, whenFinished) {
         notice(o, whenFinished, socket);
 
-        var targets = {};
-
-        /*var ot = util.objTags(message);
-        for (var t = 0; t < ot.length; t++) {
-            var chan = ot[t];
-
-            var cc;
-            if (io.sockets.clients)
-                cc = io.sockets.clients(chan);
-            else
-                cc = io.sockets.sockets;
-            
-            for (var cck in cc) {
-                var i = cc[cck].id;
-                if (socket)
-                    if (i != socket.id)
-                        targets[i] = '';
-            }
-        }*/
-
         co = util.objCompact(o);
 
 		var allsockets = io.sockets.in('*').sockets;
@@ -1106,36 +1099,27 @@ exports.start = function(options, init) {
 
 		var scope = o.scope || options.client.defaultScope;
 
-		if (scope >= util.ObjScope.ServerAll) {
-			//roundtrip mode:
-	        //io.sockets.in('*').emit('notice', co);
+		function sendToSocket(i) {
+			if (socket) {
+				if (allsockets[i]!==socket)
+					allsockets[i].emit('notice', o);
+			}
+			else {
+				allsockets[i].emit('notice', o);
+			}
+		}
 
-			//non-roundtrip mode:
+		if (scope >= util.ObjScope.ServerAll) {		
 			if (socket)
 				socket.broadcast.emit('notice', co); //send to everyone except originating socket
 			else
-	        	io.sockets.in('*').emit('notice', co);
-
-		}
-		else if (scope >= util.ObjScope.ServerSelfAndCertainOthers) {
-			//TODO decide on a per-socket basis			
-		    /*for (var t in targets) {
-		        io.sockets.socket(t).emit('notice', cmessage);
-		    }*/
+	        	io.sockets.in('*').emit('notice', co); //send to everyone
 		}
 		else {
-			//send only if there are multiple sockets with the private object's author's 'clientID
-			//so that if multiple sockets are connected by the clientID, they all receive the private object
 			for (var i = 0; i < allsockets.length; i++) {
 				var sid = allsockets[i].clientID;
-				if (sid == o.author) {
-					if (socket) {
-						if (allsockets[i]!==socket)
-							allsockets[i].emit('notice', o);
-					}
-					else {
-						allsockets[i].emit('notice', o);
-					}
+				if (objCanSendTo(o, sid)) {
+					sendToSocket(i);
 				}
 			}
 		}
@@ -1775,7 +1759,8 @@ exports.start = function(options, init) {
             socket.on('getObjects', function(query, withObjects) {
                 var db = mongo.connect(getDatabaseURL(), collections);
                 db.obj.find(function(err, docs) {
-                    removeMongoID(docs);
+					docs = objAccessFilter(request, docs);
+                    removeMongoID(docs);					
                     withObjects(docs);
                     db.close();
                 });

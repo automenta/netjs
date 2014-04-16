@@ -220,7 +220,7 @@ accelerometerReport	Raised every time the device reports its current acceleromet
 
     {uri: 'Favorite', name: 'Favorite', tag: ['Concept']},
 
-    {uri: 'User', name: 'User', tag: ['Resource']},
+    {uri: 'User', name: 'User', tag: ['Resource'], reserved: true },
     //{ uri: 'Netention', name: 'Netention'}, //Netention itself, meta 
 
     {uri: 'Message', name: 'Message', tag: ['Resource']},

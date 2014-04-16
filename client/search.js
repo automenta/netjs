@@ -35,6 +35,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
         }
         
         for (var t in types) {
+			if (types[t].reserved) continue;
             if (keywordMatchesTag(keyword, t)) {
                 matched[t] = true;
             }
