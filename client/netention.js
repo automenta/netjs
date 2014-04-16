@@ -57,6 +57,7 @@ function netention(f) {
             this.set('replies', {});
             this.set('layer', {include: [], exclude: []});
             this.set('focus', null);
+			this.userRelations = null;
 		 },
 
         tag: function(t) {
@@ -617,6 +618,9 @@ function netention(f) {
                 if (objHasTag(y, 'Tag')) {
                     that.addTags([objTagObjectToTag(y)]);
                 }
+				if (objHasTag(y, 'User')) {
+					that.userRelations = null; //force recalculation of userRelations
+				}
             }
 
 

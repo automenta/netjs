@@ -118,11 +118,30 @@ function newShareView(v) {
         });
 
 		//trust filter
-        var i = $('<input type="checkbox" disabled/>');
-        i.click(function() {
-            var checked = i.is(':checked');
-        });
-        sidebar.append('<br/>', i, 'Trusted Sources', '<br/>');
+        var itrust = $('<input type="checkbox"/>');
+        var trustme = $('<input type="checkbox"/>');
+
+		function updateTrustFilter() {
+            var itrusting = itrust.is(':checked');
+            var trustingme = trustme.is(':checked');
+
+			var f = $N.focus();
+			if (itrusting || trustingme) {
+				f.userRelation = { itrust: itrusting, trustme: trustingme };
+			}
+			else
+				delete f.userRelation;
+
+			$N.setFocus(f);
+			renderFocus(true);
+		}
+
+        itrust.click(updateTrustFilter);
+        sidebar.append('<br/>', itrust, 'Sources I Trust', '<br/>');
+
+        trustme.click(updateTrustFilter);
+        sidebar.append(trustme, 'Sources Trusting Me', '<br/>');
+
     }
 
     var content = newDiv().addClass('ShareContent').appendTo(frame);

@@ -68,6 +68,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
     }
 }
 
+
 function getRelevant(sort, scope, semantic, s, maxItems) { 
 
     var now = Date.now();
@@ -93,6 +94,13 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
 			}
 			return true;
 		});
+
+		if (focus.userRelation) {
+			if ($N.userRelations == null) {
+				$N.userRelations = objUserRelations( $N.objectsWithTag('User', true) );
+			}
+		}
+
 	}
     
     var ii = _.keys($N.layer().include);
@@ -143,11 +151,27 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
                 continue;                            
         }
 
-		if (focus)
+		if (focus) {
 			if (focus.who)
 				if (x.author != focus.who)
 					continue;
         
+			if (focus.userRelation) {
+				if (x.author) {
+					if (focus.userRelation.itrust) {
+						//do I trust the author of the object?
+						if ( $N.userRelations[$N.id()]['trusts'].indexOf(x.author) == -1 )
+							continue;
+					}
+					if (focus.userRelation.trustme) {
+						//do I trust the author of the object?
+						if ( $N.userRelations[$N.id()]['trustedBy'].indexOf(x.author) == -1 )
+							continue;
+					}
+				}
+			}
+		}
+
         //sort
         var r = 1.0;                        
         if (sort == 'Recent') {

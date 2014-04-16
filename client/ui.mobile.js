@@ -168,7 +168,15 @@ function renderFocus(skipSet) {
     }
 
     if (focusValue.who) {
-        fe.append('User: ' + $N.getObject(focusValue.who).name);
+        fe.append('User: ' + $N.getObject(focusValue.who).name + '<br/>');
+    }
+    if (focusValue.userRelation) {
+		if (focusValue.userRelation.itrust) {
+	        fe.append('Sources I Trust<br/>');
+		}
+		if (focusValue.userRelation.trustme) {
+	        fe.append('Sources Trusting Me<br/>');
+		}
     }
 
     var where = objSpacePointLatLng(focusValue);
