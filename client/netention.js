@@ -266,7 +266,7 @@ function netention(f) {
             if (!socket) {
                 /*this.socket = socket = io.connect('/', {
                 });*/
-				this.socket = socket = io('http://localhost', {
+				this.socket = socket = io('/', {
                     'transports': ['websocket', /*'flashsocket',*/ 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
                     'reconnection': true,
 					'reconnectionDelay': 750,
