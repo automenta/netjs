@@ -143,6 +143,7 @@ function netention(f) {
             return this.getObject(this.id());
         },
         become: function(target) {
+
             if (!target)
                 return;
 
@@ -163,7 +164,7 @@ function netention(f) {
 		        updateBrand(); //TODO use backbone Model instead of global fucntion                                
 			}
 			else {
-		        this.socket.emit('become', target, function(nextID) {
+		        this.socket.emit('become', targetID, function(nextID) {
 		            if (nextID) {
 		                /*$.pnotify( {
 		                 title: 'Switched profile',
@@ -186,9 +187,9 @@ function netention(f) {
 
 								$N.clearObjects();
 
-			                    updateBrand(); //TODO use backbone Model instead of global fucntion                                
 						        $N.getLatestObjects(1000, function() {
 				                    //$N.trigger('change:attention');
+					                updateBrand(); //TODO use backbone Model instead of global fucntion                         
 								});
 
 		                    });
@@ -643,13 +644,16 @@ function netention(f) {
 					onSuccess();
 			}
 			else {
-
 		        if (this.socket) {
 		            this.socket.emit('pub', objCompact(object), function(err) {
 		                if (onErr)
 		                    onErr(object);
 		                $.pnotify({title: 'Error saving:', text: err, type: 'error'});
-		            }, onSuccess);
+		            }, function() {
+						$N.notice(object);
+						if (onSuccess)
+							onSuccess();
+					});
 		        }
 		        else {
 		            if (onErr)

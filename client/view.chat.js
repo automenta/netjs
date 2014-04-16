@@ -5,7 +5,8 @@ function onChatSend(name, desc) {
     o = objAddTag(o, 'Message');
     if (desc)
         o = objAddDescription(o, desc);
-    $N.pub(o);
+    $N.pub(o, function() { }, function() { console.log('sent'); });
+
 }
 
 function newChatView(v) {

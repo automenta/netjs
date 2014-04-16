@@ -1101,16 +1101,43 @@ exports.start = function(options, init) {
 
         co = util.objCompact(o);
 
-        /*for (var t in targets) {
-            io.sockets.socket(t).emit('notice', cmessage);
-        }*/
-		if (o.scope >= util.ObjScope.ServerAll)
-	        io.sockets.in('*').emit('notice', co);
-		else if (o.scope >= util.ObjScope.ServerSelfAndCertainOthers) {
+		var allsockets = io.sockets.in('*').sockets;
+
+
+		var scope = o.scope || options.client.defaultScope;
+
+		if (scope >= util.ObjScope.ServerAll) {
+			//roundtrip mode:
+	        //io.sockets.in('*').emit('notice', co);
+
+			//non-roundtrip mode:
+			if (socket)
+				socket.broadcast.emit('notice', co); //send to everyone except originating socket
+			else
+	        	io.sockets.in('*').emit('notice', co);
+
+		}
+		else if (scope >= util.ObjScope.ServerSelfAndCertainOthers) {
 			//TODO decide on a per-socket basis			
+		    /*for (var t in targets) {
+		        io.sockets.socket(t).emit('notice', cmessage);
+		    }*/
 		}
 		else {
-			//dont send at all
+			//send only if there are multiple sockets with the private object's author's 'clientID
+			//so that if multiple sockets are connected by the clientID, they all receive the private object
+			for (var i = 0; i < allsockets.length; i++) {
+				var sid = allsockets[i].clientID;
+				if (sid == o.author) {
+					if (socket) {
+						if (allsockets[i]!==socket)
+							allsockets[i].emit('notice', o);
+					}
+					else {
+						allsockets[i].emit('notice', o);
+					}
+				}
+			}
 		}
 
 
@@ -1713,6 +1740,8 @@ exports.start = function(options, init) {
                 /*getObjectsByAuthor(cid, function(uo) {
                     socket.emit('notice', uo);
                 });*/
+
+				socket.clientID = cid;
 
                 callback(cid, key, selves);
 

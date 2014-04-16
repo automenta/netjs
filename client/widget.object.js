@@ -548,7 +548,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         title: 'Saved (' + x.id.substring(0, 6) + ')'
                         //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object           
                     });
-                    $N.notice(e);
                 });
                 d.parent().dialog('close');
             });
