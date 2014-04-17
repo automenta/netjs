@@ -618,7 +618,7 @@ function netention(f) {
                 if (objHasTag(y, 'Tag')) {
                     that.addTags([objTagObjectToTag(y)]);
                 }
-				if (objHasTag(y, 'User')) {
+				if (objHasTag(y, 'Trust')) { //|| Value || etc..
 					that.userRelations = null; //force recalculation of userRelations
 				}
             }
