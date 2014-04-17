@@ -165,7 +165,7 @@ function netention(f) {
 		        updateBrand(); //TODO use backbone Model instead of global fucntion                                
 			}
 			else {
-		        this.socket.emit('become', targetID, function(nextID) {
+		        this.socket.emit('become', target, function(nextID) {
 		            if (nextID) {
 		                /*$.pnotify( {
 		                 title: 'Switched profile',

@@ -985,9 +985,11 @@ exports.start = function(options, init) {
 		var cid;
 		if (cookies.authenticated) {
 			cid = cookies.clientID;
-			if ($N.server.users[key].indexOf(cid)==-1) {
-				//they are trying to spoof the clientID, deny access because key is invalid
-				return null;
+			if ((cid) && ($N.server.users[key])) {
+				if ($N.server.users[key].indexOf(cid)==-1) {
+					//they are trying to spoof the clientID, deny access because key is invalid
+					return null;
+				}
 			}
 		}
 
@@ -1663,6 +1665,7 @@ exports.start = function(options, init) {
                 }
                 else {
                     targetObjectID = target.id;
+					targetObject = target;
                 }
 
 				onResult = function(nextID) {
