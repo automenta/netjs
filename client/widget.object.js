@@ -181,7 +181,7 @@ function newReplyWidget(onReply, onCancel) {
 function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
     var d = newDiv();
     var headerTagButtons = ix.tagSuggestions || [];
-
+	
     function update(x) {
         var whenSaved = [];
         var nameInput = null;
@@ -221,6 +221,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             update(rr);
         };
         var onStrengthChange = function(i, newStrength) {
+			if (x.readonly)
+				return;
             var y = getEditedFocus();
             if (!y.value)
                 y.value = [];
@@ -233,6 +235,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             update(y);
         };
         var onOrderChange = function(fromIndex, toIndex) {
+			if (x.readonly)
+				return;
             //http://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another
             var y = getEditedFocus();
             y.value.splice(toIndex, 0, y.value.splice(fromIndex, 1)[0]);
@@ -307,12 +311,14 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     return $N.getProperty(pid);
                 });
 
-                for (var j = 0; j < prop.length; j++) {
-                    if (propVal[j].min)
-                        if (propVal[j].min > 0)
-                            if (!_.contains(tags, prop[j]))
-                                missingProp.push(prop[j]);
-                }
+				if (!x.readonly) {
+		            for (var j = 0; j < prop.length; j++) {
+		                if (propVal[j].min)
+		                    if (propVal[j].min > 0)
+		                        if (!_.contains(tags, prop[j]))
+		                            missingProp.push(prop[j]);
+		            }
+				}
             }
 
             for (var i = 0; i < missingProp.length; i++) {
@@ -350,10 +356,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             ts.empty();
         }
         else {
-            if (hideWidgets != true) {
-                if (editable)
-                    ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
-            }
+			if (!x.readonly) {
+		        if (hideWidgets != true) {
+		            if (editable)
+		                ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
+		        }
+			}
         }
 
         d.getEditedFocus = getEditedFocus;
@@ -418,7 +426,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         d.addClass('ObjectEditDiv');
 
-        if (hideWidgets != true) {
+        if ((hideWidgets != true) && (!x.readonly)) {
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
             whatButton.click(function() {
                 var p = newPopup('Select Tags for ' + nameInput.val(), true, true);
@@ -1144,7 +1152,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if (ti) {
                 tagLabel.prepend('<img src="' + ti + '"/>');
             }
-            if (editable) {
+			if ((!x.readonly) && (editable)) {
                 /*var pb = $('<button>...</button>');
                  tagLabel.append(pb);*/
 

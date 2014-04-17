@@ -257,7 +257,7 @@ accelerometerReport	Raised every time the device reports its current acceleromet
     {uri: 'Trust', name: 'Trust', properties: {
             'trusts': {name: 'in', type: 'object', min: 1}
        },
-	   tag: ['Action'], operator: true	},
+	   tag: ['Action'], operator: true, icon: '/icon/trade.png'	},
     {uri: 'Distrust', name: 'Distrust', properties: {
             'distrusts': {name: 'in', type: 'object', min: 1}
        },

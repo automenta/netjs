@@ -97,7 +97,7 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
 
 		if (focus.userRelation) {
 			if ($N.userRelations == null) {
-				$N.userRelations = objUserRelations( $N.objectsWithTag('User', true) );
+				$N.userRelations = objUserRelations( $N.objectsWithTag('Trust', true) );
 			}
 		}
 
@@ -160,12 +160,12 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
 				if (x.author) {
 					if (focus.userRelation.itrust) {
 						//do I trust the author of the object?
-						if ( $N.userRelations[$N.id()]['trusts'].indexOf(x.author) == -1 )
+						if ( $N.userRelations[$N.id()]['trusts'][x.author]==undefined )
 							continue;
 					}
 					if (focus.userRelation.trustme) {
 						//do I trust the author of the object?
-						if ( $N.userRelations[$N.id()]['trustedBy'].indexOf(x.author) == -1 )
+						if ( $N.userRelations[$N.id()]['trustedBy'][x.author]==undefined )
 							continue;
 					}
 				}

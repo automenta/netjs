@@ -36,15 +36,20 @@ exports.plugin = function($N) { return {
 
 			$N.addTags([
                 {
-                    uri: 'RippleUser', name: 'Ripple User', 
+                    uri: 'RippleUser', name: 'Ripple User', icon: '/icon/wallet.png',
                     properties: {
                         'walletBalanceXRP': { name: 'XRP Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceHRS': { name: 'Hours Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceUSD': { name: 'USD Balance', type: 'real', max: 1, readonly: true },
-                        'rippleTrust': { name: 'Ripple Trust', type: 'object', readonly: true },
                         'rippleActions': { name: 'Ripple Actions', type: 'textarea', readonly: true }
                     }
-                }				
+                },		
+                {
+                    uri: 'RippleTrust', name: 'Ripple Trust', icon: '/icon/wallet.png',
+                    properties: {
+                        'rippleTrusts': { name: 'in', type: 'object', min: 1, readonly: true }
+                    }
+                },
 			]);
 
 			function _updateRippleData() {
@@ -90,7 +95,6 @@ exports.plugin = function($N) { return {
 													U.removeTag('walletBalanceXRP');
 													U.removeTag('walletBalanceHRS');
 													U.removeTag('walletBalanceUSD');
-													U.removeTag('rippleTrust');
 													U.removeTag('rippleActions');
 
 													var nn = encodeURIComponent(U.name);
@@ -111,22 +115,43 @@ exports.plugin = function($N) { return {
 													U.add('walletBalanceXRP', xrpBalance);
 
 													var balances = { };
+													var trusts = { };
 													for (var i = 0; i < res.lines.length; i++) {
 														var L = res.lines[i];
 														var toAccount = L.account;
 														var toUser = walletUsers[toAccount];
 
 														if (wallets.indexOf(L.account)!=-1) {
-															U.add('rippleTrust', toUser);
-															/*var td = JSON.stringify(L);
-															U.add({id: 'rippleTrust', value: toUser, 
-																description: td});*/
+															if (parseFloat(L.limit) > 0) {
+																//U.add('rippleTrust', toUser);
+																trusts[toUser] = L;
+																/*var td = JSON.stringify(L);
+																U.add({id: 'rippleTrust', value: toUser, 
+																	description: td});*/
+															}
 														}
 														if (balances[L.currency] == undefined)
 															balances[L.currency] = 0;
 														balances[L.currency] += parseFloat(L.balance);
 
 													}
+													var userRippleTrustObjId = U.id + '.rippleTrust';
+													if (_.keys(trusts).length > 0) {
+														var rt = $N.objNew(userRippleTrustObjId);
+														rt.name = 'Ripple Trust';
+														rt.author = rt.subject = U.id;
+														rt.readonly = true;
+														rt.addTag('Trust');
+														rt.addTag('RippleTrust');
+														_.each(trusts, function(v, k) {
+															rt.add('rippleTrusts', k);
+														});
+														$N.pub(rt);
+													}
+													else {
+														$N.deleteObject(userRippleTrustObjId);
+													}
+
 													if (balances['USD']) {
 														U.add('walletBalanceUSD', balances['USD']);
 													}
@@ -135,7 +160,7 @@ exports.plugin = function($N) { return {
 													}
 
 
-													$N.notice(U);
+													$N.pub(U);
 												}
 
 											});

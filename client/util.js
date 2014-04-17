@@ -660,38 +660,38 @@ exports.acceptsAnotherProperty = acceptsAnotherProperty;
  */
 
 
-function objUserRelations(users) {
+function objUserRelations(trusts) {
 	var userRelations = { };
 	//...
 	var userids = [];
-	for (var i = 0; i < users.length; i++) {
-		var u = users[i];
-		var uid = u.id;
-	
+
+	function index(uid) {
+		if (userRelations[uid]) return;
+
 		userRelations[uid] = { 
-			'trusts': [ ],
-			'trustedBy': [ ]
+			'trusts': { },
+			'trustedBy': { }
 		};
 
 		userids.push(uid);
 	}
-	for (var i = 0; i < users.length; i++) {
-		var u = users[i];
-		var uid = u.id;
 
-		for (var j = 0; j < u.value.length; j++) {
-			var v = u.value[j];
-
-			if ((v.id == 'trusts') || (v.id == 'rippleTrust')) {
-				//TODO abstract to a function like: relate(uid, target, 'trusts', 'trustedBy');
+	for (var i = 0; i < trusts.length; i++) {
+		var uid = trusts[i].author;
+		index(uid);
+		for (var j = 0; j < trusts[i].value.length; j++) {
+			var v = trusts[i].value[j];
+			if ((v.id == 'trusts') || (v.id == 'rippleTrusts')) {
 				var target = v.value;
-				if ((target) && (userids.indexOf(target)!=-1)) {
-					userRelations[uid]['trusts'].push(target);
-					userRelations[target]['trustedBy'].push(uid);
-				}					
+				if (target) {
+					index(target);
+					userRelations[uid]['trusts'][target] = 1;
+					userRelations[target]['trustedBy'][uid] = 1;
+				}
 			}
 		}
 	}
+
 	return userRelations;
 }
 exports.objUserRelations = objUserRelations;

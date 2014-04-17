@@ -270,8 +270,8 @@ exports.start = function(options, init) {
         if (_tag.length > 0)
             o._tag = _tag;
 
-		if (_.contains(_tag, 'User'))
-			invalidateUserRelations = true;
+		if (_.contains(_tag, 'Trust')) //|| Value || ...
+			userRelations = null;
 
         //nlog('notice: ' + JSON.stringify(o, null, 4));
 
@@ -1054,22 +1054,19 @@ exports.start = function(options, init) {
         });
     }
 
-	var invalidateUserRelations = true;
-	var userRelations;
+	var userRelations = null;
 
 	function updateUserRelations(whenFinished) {
-		if (!invalidateUserRelations) {
+		if (userRelations) {
 			whenFinished(userRelations);
 			return;
 		}
 
 		var users = [];
-        getObjectsByTag('User', function(o) {
+        getObjectsByTag(['Trust'], function(o) {
             users.push(o);
         }, function() {
 			userRelations = util.objUserRelations(users);
-
-			invalidateUserRelations = false;
 
 			whenFinished(userRelations);
         });		
@@ -1090,7 +1087,7 @@ exports.start = function(options, init) {
 
 				if (userRelations[o.author]) {
 					var whoOsAuthorTrusts = userRelations[o.author]['trusts'];
-					return (whoOsAuthorTrusts.indexOf(cid)!=-1);
+					return (whoOsAuthorTrusts[cid]!==undefined);
 				}
 				else
 					return false;
@@ -1818,16 +1815,19 @@ exports.start = function(options, init) {
 
                 if (!util.isSelfObject(objectID)) {
                     deleteObject(objectID, whenFinished);
-                    whenFinished(null);
+					if (whenFinished)
+	                    whenFinished(null);
                 }
                 else {
                     var os = getClientSelves(session);
                     if (_.contains(os, objectID)) {
                         deleteObject(objectID, whenFinished);
-                        whenFinished(null);
+						if (whenFinished)
+	                        whenFinished(null);
                     }
                     else {
-                        whenFinished('Unable to delete user profile');
+						if (whenFinished)
+	                        whenFinished('Unable to delete user profile');
                     }
                 }
             });

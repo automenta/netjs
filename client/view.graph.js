@@ -60,9 +60,9 @@ function newGraphView(v) {
 
 	var defaultIcon = getTagIcon("unknown");
 
-	function addNode(i, name, color, width, height, icon) {
+	function addNode(i, name, color, width, height, icon, shape) {
 		if (!icon) icon = defaultIcon;
-		var nn = { objectID: i, name: name, color: color, width: width, height: height, icon: icon };
+		var nn = { objectID: i, name: name, color: color, width: width, height: height, icon: icon, shape: shape };
 		nodes.push( nn );
 		nodeIndex[i] = nodes.length-1;
 		return nn;
@@ -76,7 +76,8 @@ function newGraphView(v) {
 	var timeline = false;
 	var timelineWidth = 2500;
 
-	var defaultColor = "#ddd";
+	var defaultColor = "#ccc";
+	var tagColor = "#ddd";
 	var highlightColor = '#eee';
 
 	var scale = 1.0;
@@ -304,7 +305,7 @@ function newGraphView(v) {
 						if (ttj)
 							tagIcon = getTagIcon(tj);
 
-						addNode(tj, ttj.name, "#ddd", 50, 50, tagIcon);
+						addNode(tj, ttj.name, tagColor, 50, 50, tagIcon);
 
 		            }
 
