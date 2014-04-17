@@ -41,7 +41,8 @@ exports.plugin = function($N) { return {
                         'walletBalanceXRP': { name: 'XRP Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceHRS': { name: 'Hours Balance', type: 'real', max: 1, readonly: true },
                         'walletBalanceUSD': { name: 'USD Balance', type: 'real', max: 1, readonly: true },
-                        'rippleActions': { name: 'Ripple Actions', type: 'textarea', readonly: true }
+                        'rippleActions': { name: 'Ripple Actions', type: 'textarea', readonly: true },
+                        'walletRipple': { name: 'Ripple Wallet', type: 'text', min: 1, max: 1 }
                     }
                 },		
                 {
