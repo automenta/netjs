@@ -1088,8 +1088,12 @@ exports.start = function(options, init) {
 				if (o.author == cid) //self
 					return true;
 
-				var whoOsAuthorTrusts = userRelations[o.author]['trusts'];
-				return (whoOsAuthorTrusts.indexOf(cid)!=-1);
+				if (userRelations[o.author]) {
+					var whoOsAuthorTrusts = userRelations[o.author]['trusts'];
+					return (whoOsAuthorTrusts.indexOf(cid)!=-1);
+				}
+				else
+					return false;
 			}
 			return true;
 		}
