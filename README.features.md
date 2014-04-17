@@ -18,8 +18,8 @@ Designed to serve clients and connect to other servers and services to form an o
  * **HTTP AJAJ REST API** (_Express framework_)
  * **WebSockets API** (_socket.io_)
    * Real-time server push
- * Serves static content (HTML, JS, CSS, images, etc...) for client applications 
- * Each account contains **multiple Selves**
+ * **Static content** (HTML, JS, CSS, images, etc...) served for client applications 
+ * **Multiple Selves** - each account may maintani one or more selves
   * Automatically creates default Self on first login
   * Create new Selves
   * Delete Selves
@@ -36,9 +36,9 @@ Designed to serve clients and connect to other servers and services to form an o
    * Twitter
    * _TODO:_ Facebook
  * **Site-wide password** (HTTP Basic authentication, optional)
- * Create, edit, remove, and serve **user objects** in database
- * Stores and serves **uploaded files**
- * Sharing scopes
+ * **User Objects** - Create, edit, remove, and publish
+ * **Uploaded files** - stored and served
+ * **Sharing scopes**
   * Private - only accessible by author
   * Trusted - only accessible by those "trusted" by author
   * Public - accessible by all
@@ -50,26 +50,26 @@ Designed to serve clients and connect to other servers and services to form an o
 ----
 
 # Web Client (HTML5/JS)
- * jQuery + jQueryUI **dynamically generated GUI widgets**
+ * **Dynamically Generated HTML Widgets** - jQuery + jQueryUI
  * **Responsive layout** for Desktop and Mobile
  * **Browser compatibility**
    * Chrome
    * Firefox
    * Android
- * Multiple **Views** which can be enabled or disabled in site configuration
- * Multiple **Themes**
+ * **Views** which can be enabled or disabled in site configuration
+ * **Themes**
    * Default theme specified in client configuration
    * Selectable by users
- * Completely **Rebrand-able**
- * Operates in **Local (offline) mode**, without server
+ * **Rebrand-able** in all aspects
+ * **Local (offline) mode**, operating without server
   * Only needs the contents of client/* placed on a web-server
   * Offline configuration: client_configuration.js
   * Offline static ontology: ontology.static.json
   * Loads statically provided objects from HTTP
   * Stores objects in localStorage
   * Additional functionality via PHP scripts
- * Semantic **Focus** selects relevant objects
- * Hotkeys
+ * **Focus** selects semantically relevant objects
+ * **Hotkeys** and **Voice Input**
 
 ----
 
@@ -121,7 +121,9 @@ _TODO:_ The data values for certain types may be interpreted according to the mo
 ----
 
 # Object
-A **netention object**, or simply "**nobject**",  semantically expresses a discrete unit of thought and all its related quantifiable and qualifiable characteristics, along with metadata describing provenance information.  They are canonically serializable as **JSON** objects which is a compact representation readily manipulated by Javascript, most programming languages (via libraries), and certain NoSQL databases.
+A **netention object**, or simply "**nobject**",  semantically expresses a discrete unit of thought and all its related quantifiable and qualifiable characteristics, along with metadata describing provenance information.  
+
+They are canonically serializable as **JSON** objects which is a compact representation readily manipulated by Javascript, most programming languages (via libraries), and certain NoSQL databases.
  * **name** - string representing a title or subject-line
  * **author** - ID of the author
  * **createdAt** - unix time this object was created
@@ -159,6 +161,7 @@ The server can then aggregate all user focus objects, as they change, and analyz
 # Widgets
 
 ## Object Summary
+### Metadata Line
 
 ## Object Editor
 
@@ -181,6 +184,8 @@ The server can then aggregate all user focus objects, as they change, and analyz
 ## Share View Object Summary
 
 ## Map Location Chooser
+
+## Action Menu
 
 ----
 
@@ -207,3 +212,76 @@ The server can then aggregate all user focus objects, as they change, and analyz
 ## Graph View
 
 ## Main Menu View
+
+## Plugin View
+__TODO:__ Should only be used and accessible by administrators because it affects all users.
+
+----
+
+# Actions
+Actions are client-side operations that may be invoked on a set of zero or more selected objects.  Their relevance is determined contextually; certain operations pertain to certain kinds and amounts of objects.  Changing the selection set updates the set of possible actions.
+
+__See:__ client/actions.js
+
+----
+# Server Plugins
+Server plugins provide server-side functionality, such as:
+ * Enhancing the ontology with extra tags and properties
+ * Importing or generating data from remote systems
+ * Exporting data to remote systems
+ * Modifying data
+ * Triggering actions
+
+Each plugin can be activated and deactivated during run-time, with a list of plugins to automatically activate on startup specified in options.js.  A plugin exposes a standard interface that provides it with access to server functionality and allows the server to call the event handlers it defines.
+
+----
+
+# Connections
+_TODO:_ Connections provide information and actions about how the client and/or server interface with remote systems.
+
+In **Local** mode, they provide ways for the offline client to connect to remote systems.
+
+----
+
+# Server Configuration
+The server configuration (**options.js**) specifies all information necessary for the server to start.  It also includes the client configuration which is served to the client.
+
+See **options.js.EXAMPLE** for notes about each configuration option.
+
+----
+
+# Client Configuration
+In **WebSocket** mode, the client configuration is provided by the client section of the server's configuration in **options.js**
+
+In **Local** mode, the client configuration is provided by **client/client_configuration.js**
+
+----
+# Utility API
+A set of functions shared by both the client and server systems.  Includes functions for inspecting and manipulating nobjects.
+
+See: **client/util.h**
+
+----
+
+# Client API
+The **$N** global object provides an interface to all client functionality:
+ * Connection and Disconnection
+ * Publishing, updating, deleting, and retrieving objects
+ * Becoming Selves
+ * Accessing and changing configuration data
+ * ...
+
+
+----
+
+# Server HTTP API
+The server object, referenced by **$N** (separate and different from the client's $N) provides an inteface to all server functionality:
+ * Publishing, updating, deleting, and retrieving objects
+ * Adding URL handlers
+ * Accessing and changing configuration data
+ * ...
+
+----
+
+# Server WebSockets API
+...
