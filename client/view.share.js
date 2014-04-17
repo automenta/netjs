@@ -272,12 +272,17 @@ function newObjectSummary2(x) {
         var authorline = newDiv().addClass('ShareSummaryAuthor');
 
         var A = $N.getObject(x.author);
-        authorline.append(newAvatarImage(A).attr('style', 'height: 1.5em; vertical-align: middle'));
-        var authorLink = $('<a href="#">' + A.name + '</a>');
-        authorLink.click(function() {
-            newPopupObjectView(A, true);
-        });
-        authorline.append(authorLink);
+		if (A) {
+		    authorline.append(newAvatarImage(A).attr('style', 'height: 1.5em; vertical-align: middle'));
+		    var authorLink = $('<a href="#">' + A.name + '</a>');
+		    authorLink.click(function() {
+		        newPopupObjectView(A, true);
+		    });
+		    authorline.append(authorLink);
+		}
+		else {
+			//missing author?
+		}
 
         e.append(authorline);
     }
