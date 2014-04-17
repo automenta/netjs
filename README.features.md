@@ -2,14 +2,14 @@
 **License:** 100% Open-Source Software - WTFPL / MIT License
 
 # Components
-Javascript Client & Server for Ubiquity, Simplicity, and Ease
+**100% Javascript** Client & Server for ubiquity, simplicity, and ease
 * **Client**: HTML5/Javascript
- * [javascript client libraries]
+ * [javascript client libraries, see client/index.html]
 * **Server**: Node.JS
  * [npm's: see package.json]
  * **Databases**
     * **MongoDB** - Native NoSQL Database
-    * _TODO: other databases_
+    * _TODO:_ support other databases
 
 ----
 
@@ -159,6 +159,10 @@ The server can then aggregate all user focus objects, as they change, and analyz
 ----
 
 # Widgets
+Widgets are dynamically generated HTML5 user-interface components that are utilized repeatedly by views and other widgets.
+
+## Avatar Menu
+Provides access to views, identity manipulation, display of the current focus, common actions (such as creating a new object), and additional controls specific to, and added by the current view.  It can be minimized and maximized by clicking the avatar square (displaying the current user's avatar icon).
 
 ## Object Summary
 ### Metadata Line
@@ -190,6 +194,7 @@ The server can then aggregate all user focus objects, as they change, and analyz
 ----
 
 # Views
+A View is a particular mode of interacting with the client user-interface.  One view is active at any time (support for views containing multiple embedded views will be eventually possible).  Changes to the client's identity, focus, or memory can trigger a view to refresh, unless the **view lock** (_TODO_) is active.
 
 ## Browse View
 
@@ -274,12 +279,16 @@ The **$N** global object provides an interface to all client functionality:
 
 ----
 
-# Server HTTP API
+# Server API
 The server object, referenced by **$N** (separate and different from the client's $N) provides an inteface to all server functionality:
  * Publishing, updating, deleting, and retrieving objects
  * Adding URL handlers
  * Accessing and changing configuration data
  * ...
+
+----
+
+# Server HTTP API
 
 ----
 
