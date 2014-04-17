@@ -8,9 +8,11 @@ Javascript Client & Server for Ubiquity, Simplicity, and Ease
 * **Server**: Node.JS
  * [npm's: see package.json]
  * **Databases**
-   * **MongoDB** - Native NoSQL Database
-   * _TODO: other databases_
-    
+    * **MongoDB** - Native NoSQL Database
+    * _TODO: other databases_
+
+----
+
 # Web Server
 Designed to serve clients and connect to other servers and services to form an organic, decentralized P2P network of semantically relevant data exchange.
  * **HTTP AJAJ REST API** (_Express framework_)
@@ -45,6 +47,8 @@ Designed to serve clients and connect to other servers and services to form an o
   * _TODO:_ online configuration for administrator
  * **Plugin** activation & deactivation
 
+----
+
 # Web Client (HTML5/JS)
  * jQuery + jQueryUI **dynamically generated GUI widgets**
  * **Responsive layout** for Desktop and Mobile
@@ -66,6 +70,8 @@ Designed to serve clients and connect to other servers and services to form an o
   * Additional functionality via PHP scripts
  * Semantic **Focus** selects relevant objects
  * Hotkeys
+
+----
 
 # Ontology
 Collection of **Tags** providing a common semantic vocabulary for describing reality and imagination.  A default ontology is provided by the server for clients to use.
@@ -111,3 +117,93 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
    * **readonly** (optional) - prevents editing
 
 _TODO:_ The data values for certain types may be interpreted according to the mode of the object: whether it is real or imaginary.  Imaginary descriptions allow one to use boolean expressions (indefinite descriptions) to describe aspects of an ideal or desired reality that can be matched with constant values (definite descriptions) pertaining to real (factual) objects.
+
+----
+
+# Object
+A **netention object**, or simply "**nobject**",  semantically expresses a discrete unit of thought and all its related quantifiable and qualifiable characteristics, along with metadata describing provenance information.  They are canonically serializable as **JSON** objects which is a compact representation readily manipulated by Javascript, most programming languages (via libraries), and certain NoSQL databases.
+ * **name** - string representing a title or subject-line
+ * **author** - ID of the author
+ * **createdAt** - unix time this object was created
+ * **modifiedAt** - unix time this object was last modified.  if not present, assumed to be the same as createdAt
+ * _TODO:_ **expiresAt** - unix time by which this object should be automatically removed
+ * **removed** - indicates that any instances of an object with this ID should be deleted (used for broadcasting deletion)
+ * **scope** - integer indicating the sharing/privacy level (see ObjScope constants in util.js)
+ * **value** - array of value entries (for preserving their order)
+   * **id** - URI of the tag this represents, or the property this provides a value for
+   * **value** - object representing the data value (not used if id refers to a tag)
+   * **strength** - value from 0 to 100% (0.0 to 1.0) indicating the relative strength or weight of this value in relation to other values in this object
+
+----
+
+# Focus
+Each **focus** is a method of describing what one is thinking about or interested in.  It functions as a semantic analog-to-digital converter for expressing one’s mental state in a machine-readable data structure.  A focus may be used to compare relevancy with known data objects in order to filter and data, or to create a new (prototype) data object (which may be stored for future use and/or shared with others).
+
+It is expressed as a nobject with optional extra metadata.  Its values represent a proportional-strength tag vector.  Other metadata fields indicate filtering and sorting modes.  
+
+The server can then aggregate all user focus objects, as they change, and analyze their attention dynamics.
+
+ * **Keywords** (provided by the name field)
+ * **Tags**
+ * **Who** - selects by author
+ * _TODO:_ **Where** - geolocation
+ * _TODO:_ **When** - time range
+ * **userRelation.itrust** - objects by those that I "trust"
+ * **userRelation.trustme** - objects by those that "trust" me
+ * ...
+
+**See**: client/search.js
+
+----
+
+# Widgets
+
+## Object Summary
+
+## Object Editor
+
+## Tag Selector
+
+### Tree Tagger
+### Wiki Tagger
+### Emotion Tagger
+### User Tagger
+### Need Tagger
+### URL Taggger
+### Favorites Tagger
+
+## Focus Editor
+
+## Self Inventory
+
+## Timeline
+
+## Share View Object Summary
+
+## Map Location Chooser
+
+----
+
+# Views
+
+## Browse View
+
+## Chat View
+
+## Time  View
+
+## Map View
+
+## Self View
+
+## Share View
+
+## Trends View
+
+## Templates View
+
+## Wiki View
+
+## Graph View
+
+## Main Menu View
