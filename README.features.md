@@ -19,7 +19,7 @@ Designed to serve clients and connect to other servers and services to form an o
  * **WebSockets API** (_socket.io_)
    * Real-time server push
  * **Static content** (HTML, JS, CSS, images, etc...) served for client applications 
- * **Multiple Selves** - each account may maintani one or more selves
+ * **Multiple Selves** - each account may maintain one or more selves
   * Automatically creates default Self on first login
   * Create new Selves
   * Delete Selves
@@ -89,28 +89,28 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
    * **name**
    * **description** (optional)
    * **type** - data type
-    * **boolean**
-    * **integer**
-    * **real** (floating point number)
-        * Unit types (optional)
-    * **text** (string)
-    * **textarea** (multiline HTML string)
-    * **url** (URL string)
-    * **spacepoint** (point in space)
-        * latitude
-        * longitude
-        * altitude
-        * planet ID
-    * _TODO:_  **spaceregion** (region in space)
-        * geocircular
-        * geopolygonal
-        * geoquadrilateral      
-    * **timepoint** (point in time, unixtime integer)
-    * _TODO:_ **timerange**
-    * **sketch** (vector drawing)
-    * **object** (reference to another object)
-        * tag restrictions (optional)
-    * **media** (URL to an image, video, or other embeddable content) 
+        * **boolean**
+        * **integer**
+        * **real** (floating point number)
+            * Unit types (optional)
+        * **text** (string)
+        * **textarea** (multiline HTML string)
+        * **url** (URL string)
+        * **spacepoint** (point in space)
+            * latitude
+            * longitude
+            * altitude
+            * planet ID
+        * _TODO:_  **spaceregion** (region in space)
+            * geocircular
+            * geopolygonal
+            * geoquadrilateral      
+        * **timepoint** (point in time, unixtime integer)
+        * _TODO:_ **timerange**
+        * **sketch** (vector drawing)
+        * **object** (reference to another object)
+            * tag restrictions (optional)
+        * **media** (URL to an image, video, or other embeddable content) 
    * **default** (optional) - default value
    * **min** (optional) - integer of minimum allowed instances (arity)
    * **max** (optional) - integer of maximum allowed instances (arity)
@@ -139,7 +139,7 @@ They are canonically serializable as **JSON** objects which is a compact represe
 ----
 
 # Focus
-Each **focus** is a method of describing what one is thinking about or interested in.  It functions as a semantic analog-to-digital converter for expressing one’s mental state in a machine-readable data structure.  A focus may be used to compare relevancy with known data objects in order to filter and data, or to create a new (prototype) data object (which may be stored for future use and/or shared with others).
+A **focus** describes what one is thinking about or interested in.  It functions as a semantic analog-to-digital converter for expressing one’s mental state in a machine-readable data structure.  A focus may be used to compare relevancy with known data objects in order to filter and data, or to create a new (prototype) data object (which may be stored for future use and/or shared with others).
 
 It is expressed as a nobject with optional extra metadata.  Its values represent a proportional-strength tag vector.  Other metadata fields indicate filtering and sorting modes.  
 
