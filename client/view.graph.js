@@ -67,8 +67,8 @@ function newGraphView(v) {
 		nodeIndex[i] = nodes.length-1;
 		return nn;
 	}
-	function addEdge(from, to) {
-		var ee = { source: nodeIndex[from], target: nodeIndex[to] };
+	function addEdge(from, to, style) {
+		var ee = { source: nodeIndex[from], target: nodeIndex[to], style: style };
 		edges.push( ee );
 		return ee;
 	}
@@ -244,7 +244,6 @@ function newGraphView(v) {
 
 
 		renderItems(v, GRAPH_MAX_NODES, function(s, v, xxrr) {
-		    var tags = { };
 
 			var minTime, maxTime;		    
 			if (timeline) {
@@ -255,7 +254,6 @@ function newGraphView(v) {
 
 		    for (var i = 0; i < xxrr.length; i++) {
 		        var x = xxrr[i][0];
-		        var r = xxrr[i][1];
 
 		        var N = addNode(x.id, x.name || "", defaultColor, 35, 35, getTagIcon(x) );
 				if (timeline) {
@@ -264,23 +262,40 @@ function newGraphView(v) {
 						N.fixedX = timelineWidth * (when - minTime) / (maxTime - minTime);
 					}
 				}
+			}
+
+		    for (var i = 0; i < xxrr.length; i++) {
+		        var x = xxrr[i][0];
+		        var r = xxrr[i][1];
+
+		        /*var N = addNode(x.id, x.name || "", defaultColor, 35, 35, getTagIcon(x) );
+				if (timeline) {
+					if (minTime!=maxTime) {
+						var when = objTime(x);
+						N.fixedX = timelineWidth * (when - minTime) / (maxTime - minTime);
+					}
+				}*/
 		        
-		        var rtags = objTags(x);
+		        var rtags = _.map(objTags(x), function(o) {
+					return [o, { stroke: '#333', strokeWidth: 6 }];
+				});
+
+				if (x.author)
+					rtags.push([x.author, { stroke: '#bbb', strokeWidth: 3 } ]);
+				if (x.subject)
+					rtags.push([x.subject, { stroke: '#bbb', strokeWidth: 3  } ]);
 
 		        if (!rtags) 
 		            continue;
 
-				if (x.author)
-					rtags.push('Self-' + x.author);
-
 				//add Tags (intensional inheritance)
 		        for (var j = 0; j < rtags.length; j++) {
-		            var tj = rtags[j];
+		            var tj = rtags[j][0];
+					var edgeStyle = rtags[j][1];
 
 					if (tj == 'Link') continue; //ignore the Link tag
 
-		            var exists = tags[tj];
-		            if (!exists) {						
+		            if (nodeIndex[tj]==undefined) {
 		                var ttj = s.tag(tj) || s.object(tj) || null; // || { name: '<' + tj + '>' };
 						if (!ttj)
 							continue;
@@ -291,23 +306,10 @@ function newGraphView(v) {
 
 						addNode(tj, ttj.name, "#ddd", 50, 50, tagIcon);
 
-		                tags[tj] = true;
 		            }
 
-					/*
-						EDGE OPTIONS
-
-					    , lineColor: option.lineColor || _self._.options.lineColor
-					    , lineWidth: option.lineWidth || _self._.options.lineWidth
-					    , lineOpacity: option.lineOpacity || _self._.options.lineOpacity
-					    , blnStraight: option.isStraightLine || false
-					    , showParentArrow: option.showParentArrow || false
-					    , showChildArrow: option.showChildArrow || false
-						option.editable //whether the edge can be modified
-					*/
-					addEdge(x.id, tj);
+					addEdge(x.id, tj, edgeStyle);
 		        }
-
 
 		    }
 
@@ -326,7 +328,7 @@ function newGraphView(v) {
 					if (vidp.type == 'object') {
 						var target = vi.value;
 						if (nodeIndex[target]) {
-							addEdge(x.id, target);
+							addEdge(x.id, target, { });
 						}
 					}
 				}
@@ -407,7 +409,16 @@ function newGraphView(v) {
 				  .attr("dy", "4em")
 				  .text(function(d) { return d.name });
 
-			  link.attr("stroke-width", 5);
+
+			  link.attr("stroke-width", function(l) {
+					if ((l.style) && (l.style.strokeWidth))
+						return l.style.strokeWidth;
+					return 3;
+			  }).attr("stroke", function(l) {
+					if ((l.style) && (l.style.stroke))
+						return l.style.stroke;
+					return 'black';
+			  });
 		
 			  force.on("tick", function() {
 				node.attr("transform", function(d) { 

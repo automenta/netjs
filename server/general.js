@@ -52,9 +52,9 @@ var generalTags = [
             'male': {name: 'Male', type: 'boolean'},
             'female': {name: 'Female', type: 'boolean'},
             'email': {name: 'E-Mail', type: 'text'},
-            'friend': {name: 'Friend', type: 'object'},
-            'trusts': {name: 'Trusts', type: 'object'},
-            'parent': {name: 'Parent', type: 'object', tag: ['Human']}
+            //'friend': {name: 'Friend', type: 'object'},
+            //'trusts': {name: 'Trusts', type: 'object'},
+            //'parent': {name: 'Parent', type: 'object', tag: ['Human']}
 
             /*
              <select name="ext_sel[]" id="ext_sel2">  <option value="" selected="selected">select 3rd filter...</option>  <option value="languages">Spoken languages</option>  <option value="body">Body type</option>  <option value="height">Height</option>  <option value="weight">Weight</option>  <option value="hair">Hair color</option>  <option value="eyes">Eye color</option>  <option value="sexuality">Sexuality</option>  <option value="relationship">Status</option>  <option value="children">Children</option>  <option value="education">Education</option>  <option value="star_sign">Star sign</option>  <option value="drinking">Drinking</option>  <option value="smoking">Smoking</option>  </select>
@@ -83,7 +83,17 @@ var generalTags = [
             'quantity': {name: 'Quantity', type: 'integer'},
             //'stockCount': {name: 'Stock Count', type: 'integer'},
             'individualWeight': {name: 'Weight (individual)', type: 'real'},
-            'color': {name: 'Color', type: 'text'}
+            'color': {name: 'Color', type: 'text'},
+            'moneyAmount': {name: 'Money Amount', type: 'real', default: 0, units: currencyUnits },
+            'quantityUnit': {name: 'Quantity Unit', type: 'string' },
+            'quantityPerTime': {name: 'Quantity per Day', type: 'real'}, 
+            'quality': {name: 'Quality', type: 'text'},
+            'offerExpires': {name: 'Offer Expires', type: 'timepoint' },
+            'itemExpires': {name: 'Item Expires', type: 'timepoint' },
+            'walletBTC': {name: 'Bitcoin Wallet', type: 'text'},
+            'walletRipple': {name: 'Ripple Wallet', type: 'text'},
+            'walletPayPal': {name: 'PayPal Address', type: 'text'},
+            'walletRTN': {name: 'Bank Account', type: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
         },
 		tag: ['Resource']
     },
@@ -140,22 +150,6 @@ accelerometerReport	Raised every time the device reports its current acceleromet
     },
 
 
-    {uri: 'Value', name: 'Value',
-        properties: {
-            'moneyAmount': {name: 'Money Amount', type: 'real', default: 0, units: currencyUnits },
-            'quantity': {name: 'Quantity', type: 'integer', default: 0 },
-            'quantityUnit': {name: 'Quantity Unit', type: 'string' },
-            'quantityPerTime': {name: 'Quantity per Day', type: 'real'}, 
-            'quality': {name: 'Quality', type: 'text'},
-            'offerExpires': {name: 'Offer Expires', type: 'timepoint' },
-            'itemExpires': {name: 'Item Expires', type: 'timepoint' },
-            'walletBTC': {name: 'Bitcoin Wallet', type: 'text'},
-            'walletRipple': {name: 'Ripple Wallet', type: 'text'},
-            'walletPayPal': {name: 'PayPal Address', type: 'text'},
-            'walletRTN': {name: 'Bank Account', type: 'text'}, //http://en.wikipedia.org/wiki/Routing_transit_number
-        },
-		tag: ['Concept']
-    },
     {uri: 'Contract', name: 'Contract',
         properties: {
             //http://www.therichest.org/business/most-traded-currencies/
@@ -260,6 +254,19 @@ accelerometerReport	Raised every time the device reports its current acceleromet
 		tag: ['Action']
 	},
 
+    {uri: 'Trust', name: 'Trust', properties: {
+            'trusts': {name: 'in', type: 'object', min: 1}
+       },
+	   tag: ['Action'], operator: true	},
+    {uri: 'Distrust', name: 'Distrust', properties: {
+            'distrusts': {name: 'in', type: 'object', min: 1}
+       },
+	   tag: ['Action'], operator: true	},
+    {uri: 'Value', name: 'Value', description: 'Represents valuing, preference, or having importance',
+	   properties: {
+            'values': {name: 'in', type: 'object', min: 1}
+       },
+	   tag: ['Action'], operator: true	},
 
     {uri: 'Access', name: 'Access', tag: ['Concept'] },
 

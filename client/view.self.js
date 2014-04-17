@@ -195,21 +195,35 @@ function newUsView(v) {
 
             var currentUserFilter = function(o) {
                 o = $N.getObject(o);
-                return (o.author == currentUser);// && (o.subject == currentUser);
+				if (o.subject)
+					if (o.subject!=currentUser) return false;
+
+                return (o.author == currentUser);
             };
 
             function addTheTag(T) {
-                return function() {
-                    var d = newPopup("Add " + T.name, {width: 800, height: 600, modal: true});
-                    d.append(newTagger([], function(results) {
-                        saveAddedTags(results, T.uri);
+				if ((T.uri == 'Trust') || (T.uri == 'Distrust') || (T.uri == 'Value')) {
+		            return function() {
+						var x = objNew();
+						x.name = T.name;
+						x.author = x.subject = $N.id();
+						x.addTag(T.uri);
+						newPopupObjectEdit(x);		
+		            }
+				}
+				else {
+		            return function() {
+		                var d = newPopup("Add " + T.name, {width: 800, height: 600, modal: true});
+		                d.append(newTagger([], function(results) {
+		                    saveAddedTags(results, T.uri);
 
-                        later(function() {
-                            d.dialog('close');
-                            updateNowDiv();
-                        });
-                    }));
-                }
+		                    later(function() {
+		                        d.dialog('close');
+		                        updateNowDiv();
+		                    });
+		                }));
+		            }
+				}
             }
 
             _.each(operators, function(o) {
@@ -226,12 +240,21 @@ function newUsView(v) {
                     if (nn.length > 0) {
                         var uu = $('<ul></ul>');
                         _.each(nn, function(g) {
-                            uu.append(newObjectSummary($N.getObject(g), {
+							var G = $N.getObject(g);
+							var ss = newObjectSummary(G, {
                                 showAuthorIcon: false,
                                 showAuthorName: false,
                                 showMetadataLine: false,
-                                showActionPopupButton: false
-                            }).removeClass("ui-widget-content ui-corner-all"));
+                                showActionPopupButton: false,
+								titleClickMode: 'edit'
+                            }).removeClass("ui-widget-content ui-corner-all");
+							if (G.name == O.name) {
+								ss.find('h1 a').html('&gt;&gt;');
+								ss.find('h1').replaceTag($('<div style="float: left">'), true);
+								ss.find('ul').replaceTag($('<div style="float: left">'), true);
+								ss.find('li').replaceTag($('<div>'), true);
+							}
+                            uu.append(ss);
                         });
                         sdd.append(uu);
                     }
@@ -281,7 +304,7 @@ function newUsView(v) {
                     return $('<div style="width: 48%; float: right"/>');
                 }
 
-                newLeftColDiv().addClass('goalRowHeading').appendTo(d).append('Knowledge');
+                newLeftColDiv().addClass('goalRowHeading').appendTo(d).append('Know');
 
                 var kb = newDiv();
                 var lButton = $('<button title="Learn">L</button>').css('width', '32%').css('float', 'left').appendTo(kb);

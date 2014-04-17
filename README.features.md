@@ -19,11 +19,11 @@ Designed to serve clients and connect to other servers and services to form an o
  * **WebSockets API** (_socket.io_)
    * Real-time server push
  * **Static content** (HTML, JS, CSS, images, etc...) served for client applications 
- * **Multiple Selves** - each account may maintain one or more selves
-  * Automatically creates default Self on first login
-  * Create new Selves
-  * Delete Selves
-  * Switch between Selves ('become')
+ * **Multiple Identities** - each account contains one or more identities
+  * Automatically creates default identity on first login
+  * Create new identities
+  * Delete identities
+  * Switch between identities ('become')
   * Logout
  * **Public access** (no authentication, optionally disabled)
   *  Login link available
@@ -124,8 +124,10 @@ _TODO:_ The data values for certain types may be interpreted according to the mo
 A **netention object**, or simply "**nobject**",  semantically expresses a discrete unit of thought and all its related quantifiable and qualifiable characteristics, along with metadata describing provenance information.  
 
 They are canonically serializable as **JSON** objects which is a compact representation readily manipulated by Javascript, most programming languages (via libraries), and certain NoSQL databases.
+ * **id** - URI of this object; typically a randomly generated UUID
  * **name** - string representing a title or subject-line
  * **author** - ID of the author
+ * **subject** - ID of who or what the object describes
  * **createdAt** - unix time this object was created
  * **modifiedAt** - unix time this object was last modified.  if not present, assumed to be the same as createdAt
  * _TODO:_ **expiresAt** - unix time by which this object should be automatically removed
@@ -280,7 +282,7 @@ The **$N** global object provides an interface to all client functionality:
 ----
 
 # Server API
-The server object, referenced by **$N** (separate and different from the client's $N) provides an inteface to all server functionality:
+The server object, referenced by **$N** (separate and different from the client's $N) provides an interface to all server functionality:
  * Publishing, updating, deleting, and retrieving objects
  * Adding URL handlers
  * Accessing and changing configuration data

@@ -689,3 +689,29 @@ $(document).ready(function() {
 
 
 });
+
+
+//http://stackoverflow.com/questions/918792/use-jquery-to-change-an-html-tag
+$.extend({
+    replaceTag: function (currentElem, newTagObj, keepProps) {
+        var $currentElem = $(currentElem);
+        var i, $newTag = $(newTagObj).clone();
+        if (keepProps) {//{{{
+            var newTag = $newTag[0];
+            newTag.className = currentElem.className;
+            $.extend(newTag.classList, currentElem.classList);
+            $.extend(newTag.attributes, currentElem.attributes);
+        }//}}}
+        $currentElem.wrapAll($newTag);
+        $currentElem.contents().unwrap();
+        //return node;
+    }
+});
+
+$.fn.extend({
+    replaceTag: function (newTagObj, keepProps) {
+        this.each(function() {
+            jQuery.replaceTag(this, newTagObj, keepProps);
+        });
+    }
+});

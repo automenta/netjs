@@ -1243,6 +1243,7 @@ a.openModal:focus {
 
 .goalRowHeading { font-size: 150%; font-weight: bold; }
 
+.alternatingDiv { clear: both; }
 .alternatingDiv:nth-child(even) {	background-color: rgba(255,255,255,0.3); }
 .alternatingDiv:nth-child(odd) {	background-color: rgba(240,240,240,0.5); }
 .alternatingDiv ul { margin: 0; }
@@ -1299,7 +1300,6 @@ a.openModal:focus {
 }
 .link {
 	pointer-events: none;
-    stroke: #000;
 }
 
 .node text {

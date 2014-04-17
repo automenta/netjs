@@ -1284,6 +1284,7 @@ function newObjectSummary(x, options) {
     var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
     var showMetadataLine = (options.showMetadataLine != undefined) ? options.showMetadataLine : true;
     var showActionPopupButton = (options.showActionPopupButton != undefined) ? options.showActionPopupButton : true;
+    var titleClickMode = (options.titleClickMode != undefined) ? options.titleClickMode : 'view';
 
     if (!x) {
         return newDiv().html('Object Missing');
@@ -1539,7 +1540,10 @@ function newObjectSummary(x, options) {
             var axn = $('<a href="#">' + xn + '</a>');
             axn.attr('title', x.id);
             axn.click(function() {
-                newPopupObjectView(x.id, true);
+				if ((x.author == $N.id()) && (titleClickMode == 'edit'))
+					newPopupObjectEdit(x, true);
+				else
+	                newPopupObjectView(x.id, true);
             });
             haxn.append(axn, '&nbsp;');
         }
