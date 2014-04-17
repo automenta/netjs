@@ -68,47 +68,46 @@ Designed to serve clients and connect to other servers and services to form an o
  * Hotkeys
 
 # Ontology
-Collection of **Tags** providing a common semantic vocabulary for describing reality and imagination.
+Collection of **Tags** providing a common semantic vocabulary for describing reality and imagination.  A default ontology is provided by the server for clients to use.
+
  * **uri** (Uniform Resource Identifier)
  * **name**
  * **description** (optional)
    * Used along with Name to match keywords for auto-suggesting tags while editing objects
  * **tag** - Array of (zero or more) super-tags that they inherit from, forming a **type hierarchy**
+ * **reserved** (optional) - prevents use by users
+ * **icon** (optional) - relative URL to an icon image                         
+ * **operator** (optional) - indicates if a tag that operates on other tags
  * **properties** - Set of (zero or more) data-typed properties for which values may be specified
-   * URI
-   * Name
-   * Description (optional)
-   * Data Type
-     * **boolean**
-     * **integer**
-     * **real** (floating point number)
-       * Unit types (optional)
-     * **text** (string)
-     * **textarea** (multiline HTML string)
-     * **url** (URL string)
-     * **spacepoint** (point in space)
-       * latitude
-       * longitude
-       * altitude
-       * planet ID
-     * _TODO:_  **spaceregion** (region in space)
-       * geocircular
-       * geopolygonal
-       * geoquadrilateral      
-     * **timepoint** (point in time, unixtime integer)
-     * _TODO:_ **timerange**
-     * **sketch** (vector drawing)
-     * **object** (reference to another object)
-       * tag restrictions (optional)
-     * **media** (URL to an image, video, or other embeddable content) 
-
-
+   * **uri**
+   * **name**
+   * **description** (optional)
+   * **type** - data type
+    * **boolean**
+    * **integer**
+    * **real** (floating point number)
+        * Unit types (optional)
+    * **text** (string)
+    * **textarea** (multiline HTML string)
+    * **url** (URL string)
+    * **spacepoint** (point in space)
+        * latitude
+        * longitude
+        * altitude
+        * planet ID
+    * _TODO:_  **spaceregion** (region in space)
+        * geocircular
+        * geopolygonal
+        * geoquadrilateral      
+    * **timepoint** (point in time, unixtime integer)
+    * _TODO:_ **timerange**
+    * **sketch** (vector drawing)
+    * **object** (reference to another object)
+        * tag restrictions (optional)
+    * **media** (URL to an image, video, or other embeddable content) 
    * **default** (optional) - default value
    * **min** (optional) - integer of minimum allowed instances (arity)
    * **max** (optional) - integer of maximum allowed instances (arity)
-   * **readronly** (optional) - prevents editing
-   * **reserved** (optional) - prevents use by users
-   * **icon** (optional) - relative URL to an icon image                         
- * Operator flag (optional) - indicates a tag that operates on other tags
+   * **readonly** (optional) - prevents editing
 
 _TODO:_ The data values for certain types may be interpreted according to the mode of the object: whether it is real or imaginary.  Imaginary descriptions allow one to use boolean expressions (indefinite descriptions) to describe aspects of an ideal or desired reality that can be matched with constant values (definite descriptions) pertaining to real (factual) objects.
