@@ -1,7 +1,9 @@
 function newTagger(selected, onFinished, tagRestrictions, maxTags) {    
     if (!selected)
         selected = [];
-
+    if (!Array.isArray(selected))
+        selected = [selected];
+    
     var tags = _.clone(selected);
 
     var d = newDiv();
@@ -69,6 +71,9 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
             addOption('&#9733;', newNeedsBrowser); //favorites
         }
         else {
+            if (!Array.isArray(tagRestrictions))
+                tagRestrictions = [tagRestrictions];
+            
             _.each(tagRestrictions, function(t) {
                 var T = $N.getTag(t);
                 if (T)

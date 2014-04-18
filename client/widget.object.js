@@ -1081,7 +1081,17 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             }
 
             var value = t.value;
-            ts.val(value);
+
+            function updateTS(x) {
+                var X = $N.getObject(x) || $N.getTag(x) || { name: x };
+                if (X.name!=x)
+                    ts.val(X.name + ' (' + x + ')');
+                else
+                    ts.val(X.name);
+                ts.result = x;
+            }
+            updateTS(value);
+            
 
             //http://jqueryui.com/autocomplete/#default
             //http://jqueryui.com/autocomplete/#categories
@@ -1120,11 +1130,13 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             var mb = $('<button title="Find Object">...</button>');
             mb.click(function() {
-                //TODO popup object browser 
-                var tagRestrictions = null;
+                var tagRestrictions = prop.tag;
                 var pp = newPopup("Select Object", true, true);
-                var tagger = newTagger(value, function(tags) {
-                    ts.val(JSON.stringify(tags));
+                var tagger = newTagger(null, function(tags) {
+                    ts.result = tags = tags[0];
+                    
+                    updateTS(tags);
+                    
                     pp.dialog('close');
                 }, tagRestrictions, 1);
                 pp.append(tagger);
@@ -1136,7 +1148,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             d.append(tt);
 
             whenSaved.push(function(y) {
-                objAddValue(y, tag, ts.val(), strength);
+                objAddValue(y, tag, ts.result || ts.val(), strength);
             });
         }
     }
