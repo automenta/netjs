@@ -92,10 +92,16 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
         * **boolean**
         * **integer**
         * **real** (floating point number)
-            * Unit types (optional)
+            * unit (optional: string array of measurement units)
+            * _TODO:_ precision (optional: integer, number decimals)
+            * _TODO:_ minValue, maxValue (optional: float)
+            * _TODO:_ mode (optional: "numeric"|"slider"|"spinner"; slider available if minValue and maxValue specified)
+            * _TODO:_ increment (optional: float)
         * **text** (string)
         * **textarea** (multiline HTML string)
+            * _TODO:_ html (optional: boolean, default=true; if true, activates rich-text editor)
         * **url** (URL string)
+            * _TODO:_ iframe (boolean, width, height)
         * **spacepoint** (point in space)
             * latitude
             * longitude
@@ -106,11 +112,17 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
             * geopolygonal
             * geoquadrilateral      
         * **timepoint** (point in time, unixtime integer)
-        * _TODO:_ **timerange**
+        * _TODO:_ **timerange** (start and stop timepoints, which may be -Inf,+Inf)
+        * _TODO:_ **timeduration** (integer, in milliseconds)
         * **sketch** (vector drawing)
         * **object** (reference to another object)
-            * tag restrictions (optional)
-        * **media** (URL to an image, video, or other embeddable content) 
+            * _TODO_: tag restrictions (optional)
+        * **media** (URL to a file, image, video, or other embeddable content)
+            * _TODO_: allowed MIME-types
+        * _TODO:_ **select**
+            * options (string array)
+            * min, max (integer, number that can be selected)
+            
    * **default** (optional) - default value
    * **min** (optional) - integer of minimum allowed instances (arity)
    * **max** (optional) - integer of maximum allowed instances (arity)
@@ -199,6 +211,10 @@ Provides access to views, identity manipulation, display of the current focus, c
 A View is a particular mode of interacting with the client user-interface.  One view is active at any time (support for views containing multiple embedded views will be eventually possible).  Changes to the client's identity, focus, or memory can trigger a view to refresh, unless the **view lock** (_TODO_) is active.
 
 ## Browse View
+ * List
+ * Grid
+ * Slides
+ * _TODO:_ Table
 
 ## Chat View
 

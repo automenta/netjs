@@ -11,17 +11,22 @@ var generalTags = [
     {uri: 'Concept', name: 'Concept', description: 'An abstract concept' },
 
     {uri: 'Action', name: 'Action', //combined Event into this one..
-		description: 'Something that may be accomplished',
+		description: 'An action or event that may be accomplished or attended',
         properties: {
             'active': {name: 'Active', type: 'boolean'},
             'startsAt': {name: 'Starts At', type: 'text' /*datetime*/},
             'stopsAt': {name: 'Stops At', type: 'text' /*datetime*/},
             'maxAttendance': {name: 'Maximum Attendance', type: 'integer' /*datetime*/}
             //Inviting (person)
+			//Invitation (text)
             //Completed?
             //RSVP by
             //Reason (why)
             //Needs Volunteers?
+			//Attendees
+			//Agenda/Plan
+			//Log
+
             /*
              Are you about to take a big decision? How do you know it's the right one? Here are the five tests:
              The Eternal Recurrence Test - this thing you are about to do: if you had to watch yourself performing this action an infinite number of times, would you still go ahead? If so, do it. If not, don't.
@@ -78,22 +83,24 @@ var generalTags = [
      
      */
 
-    {uri: 'Item', name: 'Item', //combined Event into this one..
+    {uri: 'Item', name: 'Item', 
         properties: {
+			'purpose': { name: 'Purpose', type: 'textarea' },
             'quantity': {name: 'Quantity', type: 'integer'},
             //'stockCount': {name: 'Stock Count', type: 'integer'},
             'individualWeight': {name: 'Weight (individual)', type: 'real'},
             'color': {name: 'Color', type: 'text'},
-            'moneyAmount': {name: 'Money Amount', type: 'real', default: 0, units: currencyUnits },
+            'itemCost': {name: 'Cost', type: 'real', default: 0, units: currencyUnits },
             'quantityUnit': {name: 'Quantity Unit', type: 'string' },
             'quantityPerTime': {name: 'Quantity per Day', type: 'real'}, 
             'quality': {name: 'Quality', type: 'text'},
             'offerExpires': {name: 'Offer Expires', type: 'timepoint' },
-            'itemExpires': {name: 'Item Expires', type: 'timepoint' },
-            'walletBTC': {name: 'Bitcoin Wallet', type: 'text'},
-            'walletRipple': {name: 'Ripple Wallet', type: 'text'},
-            'walletPayPal': {name: 'PayPal Address', type: 'text'},
-            'walletRTN': {name: 'Bank Account', type: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
+            'itemExpires': {name: 'Expires', type: 'timepoint' },
+			'itemPaid': { name: 'Paid', type: 'boolean' },
+            'walletBTC': {name: 'Pay Bitcoin Wallet', type: 'text'},
+            'walletRipple': {name: 'Pay Ripple Wallet', type: 'text'},
+            'walletPayPal': {name: 'Pay PayPal Address', type: 'text'},
+            'walletRTN': {name: 'Pay Bank Account (RTN)', type: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
         },
 		tag: ['Resource']
     },
@@ -195,7 +202,25 @@ accelerometerReport	Raised every time the device reports its current acceleromet
     {uri: 'Cause', name: 'Cause', tag: ['Concept']},
     {uri: 'Effect', name: 'Effect', tag: ['Concept']},
     {uri: 'Internet', name: 'Internet', tag: ['Resource']},
-    {uri: 'Goal', name: 'Goal',
+
+	/*
+    {uri: 'Role', name: 'Role', description: 'A position, job, occupation, or role',
+        properties: {
+            'roleSalaryHour': {name: 'Salary (per hour)', type: 'real', units: currencyUnits },
+
+        },
+		tag: ['Concept']
+    },
+	*/
+
+	/*
+	Idea
+		how to improve
+		time to implement
+		status: Brainstorming, Pitched, Being Refined, Accepted, Complete
+	*/
+
+    {uri: 'Goal', name: 'Goal', description: 'A goal, dream, project, program, plan, opportunity, or deliverable',
         properties: {
             /*'repeatPeriod': {name: 'Repeat period (sec)', type: 'real', unit: 'time'},
             'repeatDelay': {name: 'Repeat phase (sec)', type: 'real', unit: 'time'},
@@ -203,10 +228,19 @@ accelerometerReport	Raised every time the device reports its current acceleromet
 			//'goalAlert': { name: 'Alert', type: 'text', default: 'at [time/date] -or- every X [minutes|hours|days|weeks] at [time/date]'},
             'requiresAcknowledgement': {name: 'Require Acknowledgement', type: 'boolean'},
             'lastAcknowledgement': {name: 'Repeat started', type: 'timepoint', readonly: true},
-            'goalEnabled': {name: 'Enabled', type: 'boolean', default: true}
+            'goalEnabled': {name: 'Enabled', type: 'boolean', default: true},
+			'goalDependency': { name: 'Depends On', type: 'object', tag: 'Goal' },
+			'goalWorker': { name: 'Worker', type: 'object', tag: 'Human' },
+			'goalProgress': { name: 'Progress', type: 'real', min: 0, max: 1, mode: 'slider' },
+			'goalDeadline': { name: 'Deadline', type: 'timepoint', max: 1 },
+            'goalCost': {name: 'Cost', type: 'real', default: 0, units: currencyUnits },
+            'goalBudgeted': {name: 'Budgeted', description: 'How much funding currently budgeted toward this', type: 'real', default: 0, units: currencyUnits },
+			'goalObjective': { name: 'Objective', type: 'textarea', description: 'What to accomplish and how to measure progress' }
+
+			//status: not started, planning, in progress, completed
         },
 		tag: ['Concept']
-    }, //=Project=Program=Plan=Opportunity
+    },
 
 	{uri: 'GoalCentroid', name: 'Possible Goal', tag: [ 'Goal', 'Imaginary' ]},
 
@@ -545,6 +579,7 @@ var emotionTags = [
 
     { uri: 'Emotion.tired', name: 'Tired', tag: ['Emotion'] },
     { uri: 'Emotion.energized', name: 'Energized', tag: ['Emotion'] }
+    //{ uri: 'Emotion.creative', name: 'Creative', tag: ['Emotion'] }
 
 	/*CBT thought record: 
 		http://www.psychologytools.org/assets/files/Worksheets/CBT_Thought_Record.pdf
@@ -760,5 +795,7 @@ A handful of separate specifications define additional vCard properties.
 | <code>X-KADDRESSBOOK-X-Profession</code> || string || profession
 | <code>X-KADDRESSBOOK-X-SpouseName</code> || string || spouse name
 
+Country
+ZIP Code
 
 */
