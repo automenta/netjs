@@ -565,7 +565,7 @@ function netention(f) {
         notice: function(x) {
 
             if (!Array.isArray(x)) {
-                this.notice([x]);
+                return this.notice([x]);
             }
 
             var attention = this.attention;
@@ -624,14 +624,15 @@ function netention(f) {
             }
 
 
-            //var includesNonFocused = false;
+            var includesNonFocused = false;
             for (var i = 0; i < x.length; i++) {
-                n(x[i]);
-                /*if (!x[i].focus)
-                 includesNonFocused = true;*/
+                if (!x[i].focus) {
+                	n(x[i]);
+					includesNonFocused = true;
+				}
             }
-
-            this.trigger('change:attention');
+			if (includesNonFocused)
+	            this.trigger('change:attention');
         },
         subscribe: function(channel, f) {
             if (this.socket) {
