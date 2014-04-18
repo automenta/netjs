@@ -1075,10 +1075,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     else if (type == 'object') {
         if (editable) {
             var tt = $('<span></span>');
-            var ts = $('<input></input>');
-            if (prop.readonly) {
-                ts.attr('readonly', 'readonly');
-            }
+            var ts = $('<input></input>').attr('readonly', 'readonly');
 
             var value = t.value;
 
@@ -1126,24 +1123,28 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 //                }
 //            });
 
-
-
-            var mb = $('<button title="Find Object">...</button>');
-            mb.click(function() {
-                var tagRestrictions = prop.tag;
-                var pp = newPopup("Select Object", true, true);
-                var tagger = newTagger(null, function(tags) {
-                    ts.result = tags = tags[0];
-                    
-                    updateTS(tags);
-                    
-                    pp.dialog('close');
-                }, tagRestrictions, 1);
-                pp.append(tagger);
-            });
-
             tt.append(ts);
-            tt.append(mb);
+
+            if (!prop.readonly) {
+                var mb = $('<button title="Find Object">...</button>');
+                mb.click(function() {
+                    var tagRestrictions = prop.tag;
+                    var pp = newPopup("Select Object", true, true);
+                    var tagger = newTagger(null, function(tags) {
+                        ts.result = tags = tags[0];
+
+                        updateTS(tags);
+
+                        pp.dialog('close');
+                    }, tagRestrictions, 1);
+                    pp.append(tagger);
+                });
+                ts.click(function() {
+                   if (ts.val()=='')
+                       mb.click();
+                });
+                tt.append(mb);
+            }
 
             d.append(tt);
 
