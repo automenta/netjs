@@ -42,10 +42,10 @@ function newPopupObjectView(_x, p) {
     }
 
     var d = newPopup(x.name, p);
-	var s = newObjectSummary(x, {
+    var s = newObjectSummary(x, {
         depthRemaining: 4
     });
-	s.css('border', 'none');
+    s.css('border', 'none');
     d.append(s);
     return d;
 
@@ -181,7 +181,7 @@ function newReplyWidget(onReply, onCancel) {
 function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
     var d = newDiv();
     var headerTagButtons = ix.tagSuggestions || [];
-	
+
     function update(x) {
         var whenSaved = [];
         var nameInput = null;
@@ -198,9 +198,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             if (x.subject)
                 n.subject = x.subject;
-			if (x.when)
-				n.when = x.when;
-			n.scope = x.scope || configuration.defaultScope;
+            if (x.when)
+                n.when = x.when;
+            n.scope = x.scope || configuration.defaultScope;
 
             //TODO copy any other metadata
 
@@ -221,8 +221,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             update(rr);
         };
         var onStrengthChange = function(i, newStrength) {
-			if (x.readonly)
-				return;
+            if (x.readonly)
+                return;
             var y = getEditedFocus();
             if (!y.value)
                 y.value = [];
@@ -235,8 +235,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             update(y);
         };
         var onOrderChange = function(fromIndex, toIndex) {
-			if (x.readonly)
-				return;
+            if (x.readonly)
+                return;
             //http://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another
             var y = getEditedFocus();
             y.value.splice(toIndex, 0, y.value.splice(fromIndex, 1)[0]);
@@ -311,14 +311,14 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     return $N.getProperty(pid);
                 });
 
-				if (!x.readonly) {
-		            for (var j = 0; j < prop.length; j++) {
-		                if (propVal[j].min)
-		                    if (propVal[j].min > 0)
-		                        if (!_.contains(tags, prop[j]))
-		                            missingProp.push(prop[j]);
-		            }
-				}
+                if (!x.readonly) {
+                    for (var j = 0; j < prop.length; j++) {
+                        if (propVal[j].min)
+                            if (propVal[j].min > 0)
+                                if (!_.contains(tags, prop[j]))
+                                    missingProp.push(prop[j]);
+                    }
+                }
             }
 
             for (var i = 0; i < missingProp.length; i++) {
@@ -356,12 +356,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             ts.empty();
         }
         else {
-			if (!x.readonly) {
-		        if (hideWidgets != true) {
-		            if (editable)
-		                ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
-		        }
-			}
+            if (!x.readonly) {
+                if (hideWidgets != true) {
+                    if (editable)
+                        ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
+                }
+            }
         }
 
         d.getEditedFocus = getEditedFocus;
@@ -433,12 +433,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 p.append(newTagger([], function(t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
-						var T = $N.getTag(t[i]);
-						if (T.reserved) {
-							$.pnotify('Tag "' + T.name + '" can not be added to objects.');
-						}
-						else
-	                        objAddTag(y, t[i]);
+                        var T = $N.getTag(t[i]);
+                        if (T.reserved) {
+                            $.pnotify('Tag "' + T.name + '" can not be added to objects.');
+                        }
+                        else
+                            objAddTag(y, t[i]);
                     }
                     update(y);
                     p.dialog('close');
@@ -530,20 +530,20 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });
             d.append(uploadButton);
 
-	        var scopeSelect = $('<select style="float:right"/>');
-			scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
-			scopeSelect.append('<option value="5">Trusted</option>'); //store on server but share with who i follow
-			scopeSelect.append('<option value="7">Public</option>'); //store on server for public access (inter-server)
-			scopeSelect.val(getEditedFocus().scope);
-			if (configuration.connection == 'local')
-				scopeSelect.attr('disabled', 'disabled');
-			else {
-				scopeSelect.change(function() {
-					var e = getEditedFocus();
-					e.scope = parseInt(scopeSelect.val());
-					update(e);
-				});
-			}
+            var scopeSelect = $('<select style="float:right"/>');
+            scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
+            scopeSelect.append('<option value="5">Trusted</option>'); //store on server but share with who i follow
+            scopeSelect.append('<option value="7">Public</option>'); //store on server for public access (inter-server)
+            scopeSelect.val(getEditedFocus().scope);
+            if (configuration.connection == 'local')
+                scopeSelect.attr('disabled', 'disabled');
+            else {
+                scopeSelect.change(function() {
+                    var e = getEditedFocus();
+                    e.scope = parseInt(scopeSelect.val());
+                    update(e);
+                });
+            }
 
             var saveButton = $('<button style="float:right"><b>Save</b></button>');
             saveButton.click(function() {
@@ -559,13 +559,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 }, function() {
                     $.pnotify({
                         title: 'Saved (' + x.id.substring(0, 6) + ')'
-                        //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object           
+                                //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object           
                     });
                 });
                 d.parent().dialog('close');
             });
             d.append(saveButton);
-			d.append(scopeSelect);
+            d.append(scopeSelect);
 
 
             /*var exportButton = $('<button>Export</button>');
@@ -1086,44 +1086,48 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             //http://jqueryui.com/autocomplete/#default
             //http://jqueryui.com/autocomplete/#categories
 
-            //TODO filter by tag specified by ontology property metadata
-            var data = [];
-            for (var k in $N.objects()) {
-                var v = $N.object(k);
-                if (value == k) {
-                    ts.val(v.name);
-                    ts.result = value;
-                }
+//            //TODO filter by tag specified by ontology property metadata
+//            var data = [];
+//            for (var k in $N.objects()) {
+//                var v = $N.object(k);
+//                if (value == k) {
+//                    ts.val(v.name);
+//                    ts.result = value;
+//                }
+//
+//                data.push({
+//                    value: k,
+//                    label: v.name
+//                });
+//            }
+//            ts.autocomplete({
+//                source: data,
+//                select: function(event, ui) {
+//                    ts.result = ui.item.value;
+//                    ts.val(ui.item.label);
+//                    /*
+//                     $( "#project" ).val( ui.item.label );
+//                     $( "#project-id" ).val( ui.item.value );
+//                     $( "#project-description" ).html( ui.item.desc );
+//                     $( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
+//                     */
+//
+//                    return false;
+//                }
+//            });
 
-                data.push({
-                    value: k,
-                    label: v.name
-                });
-            }
-            ts.autocomplete({
-                source: data,
-                select: function(event, ui) {
-                    ts.result = ui.item.value;
-                    ts.val(ui.item.label);
-                    /*
-                     $( "#project" ).val( ui.item.label );
-                     $( "#project-id" ).val( ui.item.value );
-                     $( "#project-description" ).html( ui.item.desc );
-                     $( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
-                     */
 
-                    return false;
-                }
-            });
-
-            //TODO handle specific tag restriction
-            /*$N.objectsWithTag(t) {
-             
-             }*/
 
             var mb = $('<button title="Find Object">...</button>');
             mb.click(function() {
                 //TODO popup object browser 
+                var tagRestrictions = null;
+                var pp = newPopup("Select Object", true, true);
+                var tagger = newTagger(value, function(tags) {
+                    ts.val(JSON.stringify(tags));
+                    pp.dialog('close');
+                }, tagRestrictions, 1);
+                pp.append(tagger);
             });
 
             tt.append(ts);
@@ -1132,7 +1136,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             d.append(tt);
 
             whenSaved.push(function(y) {
-                objAddValue(y, tag, ts.result || ts.val(), strength);
+                objAddValue(y, tag, ts.val(), strength);
             });
         }
     }
@@ -1152,7 +1156,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if (ti) {
                 tagLabel.prepend('<img src="' + ti + '"/>');
             }
-			if ((!x.readonly) && (editable)) {
+            if ((!x.readonly) && (editable)) {
                 /*var pb = $('<button>...</button>');
                  tagLabel.append(pb);*/
 
@@ -1212,8 +1216,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
     }
 
-	if (t.description)
-		d.append('<ul>' + t.description + '</ul>');
+    if (t.description)
+        d.append('<ul>' + t.description + '</ul>');
 
     return d;
 }
@@ -1496,13 +1500,13 @@ function newObjectSummary(x, options) {
     function addPopupMenu() {
         var ms = $N.myself();
         if (ms)
-            if (ms.id === x.author) { 
+            if (ms.id === x.author) {
                 var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton');
                 editButton.click(function() {
-                    newPopupObjectEdit(x, true); 
+                    newPopupObjectEdit(x, true);
                 });
             }
-        
+
         var popupmenuButton = $('<button title="Actions...">&gt;</button>').addClass('ObjectViewPopupButton');
         popupmenuButton.click(function() {
             function closeMenu() {
@@ -1545,13 +1549,18 @@ function newObjectSummary(x, options) {
             haxn.html(xn);
         }
         else {
-            var axn = $('<a href="#">' + xn + '</a>');
+            var xxn = xn.length > 0 ? xn : '?';
+            var axn = $('<a href="#">' + xxn + '</a>');
             axn.attr('title', x.id);
             axn.click(function() {
-				if ((x.author == $N.id()) && (titleClickMode == 'edit'))
-					newPopupObjectEdit(x, true);
-				else
-	                newPopupObjectView(x.id, true);
+                if ((x.author === $N.id()) && (titleClickMode === 'edit'))
+                    newPopupObjectEdit(x, true);
+                else if (typeof(titleClickMode) === 'function') {
+                    titleClickMode(x);
+                }
+                else {
+                    newPopupObjectView(x.id, true);
+                }
             });
             haxn.append(axn, '&nbsp;');
         }
@@ -1835,7 +1844,7 @@ function newMetadataLine(x) {
                 mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
         }
         else {
-            mdline.append('&nbsp;','<span>[' + lat + ',' + lon + ']</span>');
+            mdline.append('&nbsp;', '<span>[' + lat + ',' + lon + ']</span>');
         }
     }
 
