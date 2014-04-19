@@ -105,9 +105,9 @@ function newTagButton(t, onClicked, isButton) {
     var ti = null;
 
     if (!t.uri) {
-        var tagObject = $N.getTag(t);
-        if (tagObject)
-            t = tagObject;
+        var to = $N.getTag(t);
+        if (to)
+            t = to;
     }
     if (t.uri) {
         ti = getTagIcon(t.uri);
