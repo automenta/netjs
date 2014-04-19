@@ -663,13 +663,12 @@ exports.start = function(options, init) {
 
 
     express.use(cookieParser);
-    express.use(require('body-parser')());
+    express.use(require('body-parser')({ limit: '1mb' }));
     //express.use(expressm.methodOverride());
     express.use(require('parted')());
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
     express.use(passport.initialize());
     express.use(passport.session());
-    
 
 
     var httpServer = http.createServer(express);
@@ -906,16 +905,25 @@ exports.start = function(options, init) {
     //express.use("/kml", expressm.static('./client/kml' , staticContentConfig ));
     express.use("/", expressm.static('./client', staticContentConfig));
 
-    express.post('/add/image/gif', function(req, res) {
+    express.post('/uploadgif', function(req, res) {
+        
         var format = req.body.format;
         var imageBase64 = req.body.image;
+        
 
+        if ((!imageBase64) && (!format)) {
+            res.end('');
+            return;
+        }
+        
         imageBase64 = imageBase64.substring('data:image/gif;base64,'.length);
 
         var buf = new Buffer(imageBase64, 'base64');
 
         var targetFile = './upload/' + util.uuid() + '.gif';
         var stream = fs.createWriteStream(targetFile);
+        
+               
         stream.once('open', function(fd) {
             stream.write(buf);
             stream.end();
@@ -924,6 +932,7 @@ exports.start = function(options, init) {
     });
 
     express.post('/upload', function(req, res) {
+        
         //TODO validate permission to upload
         if ((!req.files) || (!req.files.uploadfile) || (!req.files.uploadfile.path)) { 
             res.send('');

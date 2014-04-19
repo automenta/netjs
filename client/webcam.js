@@ -120,24 +120,20 @@ function webcamStop() {
 		  $('#WebcamStatus').html('Picture size:' + picture.length + ", Uploading...");
 
 		  var submission = {
-			image: picture
-			//format: 'gif'
+			image: picture,
+			format: 'gif'
 		  };
+                   
 
-		  $.post('/add/image/gif', submission, function () {
-		    // nothing to see here?
-		  }).error(function (data) {
-			$('#WebcamStatus').html("Error uploading: " + data);
-		    //alert(data.responseJSON.error);
-		  }).always(function (data) {
+                  var f = $('<form action="/uploadgif" method="post" enctype="multipart/form-data"><input type="submit" value="Upload" /></div></form>');
+                  f.ajaxSubmit({
+                      data: submission,
+                     success: function(data) {
 			$('#WebcamStatus').html("Finished.");
-			whenUploaded(data);
-		    /*composer.message.prop('readonly', false);
-		    composer.message.val('');
-		    composer.blocker.addClass('hidden');
-		    counter.text(CHAR_LIMIT);
-		    isPosting = false;*/
-		  });
+			whenUploaded(data);                         
+                     } 
+                  });
+                
 		}, numFrames, frameInterval, function (captureProgress) {
 			$('#WebcamStatus').html('Capturing: ' + captureProgress);
 		    //progressCircleTo(captureProgress);
