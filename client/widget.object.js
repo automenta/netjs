@@ -78,7 +78,7 @@ function newPopupObjectViews(objectIDs) {
 
 
 function newAvatarImage(s) {
-    return $("<img>").attr("src", getAvatarURL(s));
+    return $(newEle('img')).attr("src", getAvatarURL(s));
 }
 
 function getAvatarURL(s) {
@@ -91,6 +91,14 @@ function getAvatarURL(s) {
         }
     }
     return configuration.defaultAvatarIcon;
+}
+
+///temporary solution
+function tagObject(tag) {
+    var o = objNew();
+    o.name = tag.name;
+    o = objAddDescription(o, tag.uri + ' [tag]');
+    return o;
 }
 
 function newTagButton(t, onClicked, isButton) {
@@ -107,10 +115,13 @@ function newTagButton(t, onClicked, isButton) {
 
     var i = null;
     if (ti != null) {
-        i = $(document.createElement('img')).attr('src', ti).attr('class', 'TagButtonIcon');
+        i = $(document.createElement('img')).attr({
+			'src': ti,
+			'class': 'TagButtonIcon'
+		});
     }
 
-    var b = isButton ? $(document.createElement('button')) : $(document.createElement('a')).attr('href', '#');
+    var b = isButton ? $(newEle('button')) : $(newEle('a')).attr('href', '#');
 
     if (i)
         b.append(i);
@@ -120,13 +131,6 @@ function newTagButton(t, onClicked, isButton) {
     else
         b.append(t);
 
-    ///temporary solution
-    function tagObject(tag) {
-        var o = objNew();
-        o.name = tag.name;
-        o = objAddDescription(o, tag.uri + ' [tag]');
-        return o;
-    }
 
     if (!onClicked)
         onClicked = function() {
@@ -641,11 +645,13 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
 
         {
-            var disableButton = $('<button title="Disable">&nbsp;</button>').appendTo(tagButtons);
-            var p25Button = $('<button title="25%">&nbsp;</button>').appendTo(tagButtons);
-            var p50Button = $('<button title="50%">&nbsp;</button>').appendTo(tagButtons);
-            var p75Button = $('<button title="75%">&nbsp;</button>').appendTo(tagButtons);
-            var p100Button = $('<button title="100%">&nbsp;</button>').appendTo(tagButtons);
+            var disableButton = $('<button title="Disable">&nbsp;</button>');
+            var p25Button = $('<button title="25%">&nbsp;</button>');
+            var p50Button = $('<button title="50%">&nbsp;</button>');
+            var p75Button = $('<button title="75%">&nbsp;</button>');
+            var p100Button = $('<button title="100%">&nbsp;</button>');
+
+			tagButtons.append(disableButton, p25Button, p50Button, p75Button, p100Button);
 
             var currentButton = null;
             if (strength == 0)
@@ -745,6 +751,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if ((prop) && (prop.readonly)) {
                 dd.attr('readonly', 'readonly');
             }
+
+			if (prop.description)
+				dd.attr('placeholder', prop.description);
 
             if (t.value)
                 dd.val(t.value);
@@ -1127,6 +1136,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             if (!prop.readonly) {
                 var mb = $('<button title="Find Object">...</button>');
+
+				ts.attr('placeholder', prop.tag ? JSON.stringify(prop.tag) : 'Object' );
+
                 mb.click(function() {
                     var tagRestrictions = prop.tag;
                     var pp = newPopup("Select Object", true, true);
@@ -1815,6 +1827,18 @@ function newTagTree(param) {
 
 }
 
+function ISODateString(d) {
+    function pad(n) {
+        return n < 10 ? '0' + n : n
+    }
+    return d.getUTCFullYear() + '-'
+            + pad(d.getUTCMonth() + 1) + '-'
+            + pad(d.getUTCDate()) + 'T'
+            + pad(d.getUTCHours()) + ':'
+            + pad(d.getUTCMinutes()) + ':'
+            + pad(d.getUTCSeconds()) + 'Z'
+}
+
 function newMetadataLine(x) {
     var mdline = $('<h2></h2>').addClass('MetadataLine');
 
@@ -1866,17 +1890,6 @@ function newMetadataLine(x) {
     if (ww) {
         if (ww < now) {
             var tt = $('<time class="timeago"/>');
-            function ISODateString(d) {
-                function pad(n) {
-                    return n < 10 ? '0' + n : n
-                }
-                return d.getUTCFullYear() + '-'
-                        + pad(d.getUTCMonth() + 1) + '-'
-                        + pad(d.getUTCDate()) + 'T'
-                        + pad(d.getUTCHours()) + ':'
-                        + pad(d.getUTCMinutes()) + ':'
-                        + pad(d.getUTCSeconds()) + 'Z'
-            }
 
             tt.attr('datetime', ISODateString(new Date(ww)));
             mdline.append('&nbsp;', tt);

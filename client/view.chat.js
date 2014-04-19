@@ -1,10 +1,13 @@
-function onChatSend(name, desc) {
+function onChatSend(name, desc, tag) {
     var o = objNew();
     o = o.own();
     o = objName(o, name);
     o = objAddTag(o, 'Message');
     if (desc)
         o = objAddDescription(o, desc);
+	if (tag)
+		o = o.add(tag);
+
     $N.pub(o, function() { }, function() { console.log('sent'); });
 
 }
@@ -127,9 +130,9 @@ function newChatInput(onSend) {
     var webcamButton = $('<button title="Add Webcam..."><img style="height: 1em" src="icon/play.png"></button>');
     webcamButton.click(function() {
         newWebcamWindow(function(imgURL) {
-            var description = '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>';
+            //var description = '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>';
             if (onSend)
-                onSend(inputBar.val(), description);
+                onSend(inputBar.val(), null, { 'media': imgURL} );
             inputBar.val('');
         });
     });

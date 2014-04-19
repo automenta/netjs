@@ -17,22 +17,18 @@ function newWebcamWindow(onFinished) {
 	  }
 	});
 
-	var recordButton = $('<button>Record</button>');
+	var recordButton = $('<button>Record</button>').appendTo(x);
 	recordButton.click(function() {
 		webcamRecord(5, 0.3, function(path) {
-			//$('#Images').append('<img src="' + path + '"/>');
 			x.dialog("close");
 			onFinished(path);
 		});					
 	});
 	recordButton.hide();
-	x.append(recordButton);
 
-	var statusArea = $('<div id="WebcamStatus"></div>');
-	x.append(statusArea);
+	var statusArea = $('<div id="WebcamStatus"></div>').appendTo(statusArea);
 
-	var previewArea = $('<div/>');
-	x.append(previewArea);
+	var previewArea = $('<div/>').appendTo(x);
 	
 	webcamStart(previewArea, 135, 101, function() {
 		recordButton.show();

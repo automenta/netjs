@@ -241,7 +241,8 @@ function newObjectSummary2(x) {
     img.append('<img src="' + imgurl + '"/>');
 
     var e = newDiv().addClass('ShareSummaryContent').appendTo(d);
-    var titleLink = $('<a href="#"><h1>' + x.name + '</h1></a>');
+	var xnn = x.name || '?';
+    var titleLink = $('<a href="#"><h1>' + xnn + '</h1></a>');
     titleLink.click(function() {
         newPopupObjectView(x, true);
     });
