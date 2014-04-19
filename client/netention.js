@@ -830,7 +830,9 @@ function newPopup(title, p, isModal) {
     p = _.extend(p || {}, {
         close: function() {
             d.remove();
-        }
+        },
+		show: 'fade', 
+		hide: 'fade' //'drop'
     });
     if (isModal)
         p.modal = true;

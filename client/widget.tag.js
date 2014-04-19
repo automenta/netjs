@@ -64,7 +64,7 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
             addOption('Index', newTreeBrowser);
             addOption('Wiki', newWikiBrowser);
             addOption('Object', newObjectSelector(null));
-            addOption('Who', newNullBrowser);
+            addOption('Who', newObjectSelector($N.getTag('User')));
             addOption('Emotion', newEmotionBrowser);
             addOption('Body', newBodyBrowser);
             addOption('Needs', newNeedsBrowser);
