@@ -85,9 +85,14 @@ function netention(f) {
         }, //DEPRECATED
 
         /* returns a list of object id's */
-        objectsWithTag: function(t, fullObject) {
+        objectsWithTag: function(t, fullObject, includeSubTags) {
             //TODO support subtags
             var r = [];
+
+			if (includeSubTags) {
+				t = _.union([t], $N.getSubTags(t));
+			}
+
             for (var k in this.objects()) {
                 var v = this.getObject(k);
                 if (objHasTag(v, t))

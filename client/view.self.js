@@ -235,7 +235,7 @@ function newUsView(v) {
                     //not a 3-vector system
                     var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
 
-                    var nn = _.filter($N.objectsWithTag(o), currentUserFilter);
+                    var nn = _.filter($N.objectsWithTag(o, false, true), currentUserFilter);
 
                     if (nn.length > 0) {
                         var uu = $('<ul></ul>');

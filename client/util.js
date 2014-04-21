@@ -493,8 +493,10 @@ function objHasTag(x, t) {
             continue;
 
         if (tIsArray) {
-            if (_.contains(t, vid))
-                return true;
+			if (t.indexOf(vid)!=-1) //may be slightly faster than _.contains
+				return true;
+            /*if (_.contains(t, vid))
+                return true;*/
         }
         else {
             if (vid == t)
