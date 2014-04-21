@@ -206,17 +206,21 @@ exports.start = function(options, init) {
 
                 //remove replies                
                 var db2 = mongo.connect(getDatabaseURL(), collections);
-                db2.obj.remove({replyTo: objectID}, function(err, docs) {
+                db2.obj.remove( { $or: [ {replyTo: objectID}, { author: objectID } ] } , function(err, docs) {
                     db2.close();
 
                     //nlog('deleted ' + objectID);
 
                     if (!err) {
+						//TODO publish deleted objects here
+
+						//console.log('DELETED: ', docs);
+						
                         if (whenFinished)
                             whenFinished();
                     }
                     else {
-                        nlog('deleteObject [replies]: ' + err);
+                        nlog('deleteObject [replies & authored]: ' + err);
                         if (whenFinished)
                             whenFinished(err);
                     }

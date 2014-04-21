@@ -33,8 +33,8 @@ Designed to serve clients and connect to other servers and services to form an o
  * **Authentication access** (_Passport.js_)
    * OpenID
    * Google Accounts
-   * Twitter
-   * _TODO:_ Facebook
+   * Facebook
+   * _TODO:_ Twitter
  * **Site-wide password** (HTTP Basic authentication, optional)
  * **User Objects** - Create, edit, remove, and publish
  * **Uploaded files** - stored and served
