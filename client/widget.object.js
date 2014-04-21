@@ -752,8 +752,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 dd.attr('readonly', 'readonly');
             }
 
-			if (prop.description)
-				dd.attr('placeholder', prop.description);
+			if (prop)
+				if (prop.description)
+					dd.attr('placeholder', prop.description);
 
             if (t.value)
                 dd.val(t.value);

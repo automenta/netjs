@@ -171,6 +171,8 @@ function isKnowledgeTag(t) {
 
 function getUserJSONCode(user) { 
 	var objects = _.filter($N.objects(), function(v, k) {
+		if (!objIsPublic(v)) return false;
+
 		return (v.author == user);
 	});	
 	objects = _.map(objects, function(o) {
@@ -247,6 +249,10 @@ function dloc(l) {
 	return [parseFloat(l[0].toFixed(3)), parseFloat(l[1].toFixed(3))];
 }
 
+function objIsPublic(o) {
+	return (o.scope || configuration.defaultScope) >= ObjScope.Global;
+}
+
 function getUserTextCode(tags, user) {
 	var s = '';
 	var nameline = user.name;
@@ -289,6 +295,8 @@ function getUserTextCode(tags, user) {
 				var oid = tags[i][y][2];
 				var O = $N.getObject(oid);
 
+				if (!objIsPublic(O)) continue;
+
 				if (processed[oid]) continue;
 				processed[oid] = true;
 
@@ -319,6 +327,9 @@ function getUserTextCode(tags, user) {
 			for (var y = 0; y < tags[i].length; y++) {
 				var oid = tags[i][y][2];
 				var O = $N.getObject(oid);
+
+				if (!objIsPublic(O)) continue;
+
 				s += '  ' + getTitleString(tags[i][y]) + getValueString(O, [i,tags[i][y][3]]) + '\n';				
 			}
 		}
