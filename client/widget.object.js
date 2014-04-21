@@ -438,7 +438,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
                         var T = $N.getTag(t[i]);
-                        if (T.reserved) {
+                        if ((T) && (T.reserved)) {
                             $.pnotify('Tag "' + T.name + '" can not be added to objects.');
                         }
                         else
@@ -739,8 +739,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         type = prop.type;
         tagLabel.html(prop.name);
 
-        if (prop.default) {
-            defaultValue = prop.default;
+        if (prop['default']) {
+            defaultValue = prop['default'];
         }
     }
 
