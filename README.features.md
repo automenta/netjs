@@ -144,6 +144,7 @@ They are canonically serializable as **JSON** objects which is a compact represe
  * **modifiedAt** - unix time this object was last modified.  if not present, assumed to be the same as createdAt
  * _TODO:_ **expiresAt** - unix time by which this object should be automatically removed
  * **removed** - indicates that any instances of an object with this ID should be deleted (used for broadcasting deletion)
+ * **hidden** - indicates the object should not ordinarily be displayed in lists and feeds
  * **scope** - integer indicating the sharing/privacy level (see ObjScope constants in util.js)
  * **value** - array of value entries (for preserving their order)
    * **id** - URI of the tag this represents, or the property this provides a value for

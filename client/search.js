@@ -112,7 +112,9 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
         
         if (x.replyTo)
             continue;
-        
+        if (x.hidden)
+			continue;
+
         //TAG filter
         var allowed = true;
         var tags = objTags(x);

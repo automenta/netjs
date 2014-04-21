@@ -141,6 +141,7 @@ exports.plugin = function($N) { return {
 														var rt = $N.objNew(userRippleTrustObjId);
 														rt.name = 'Ripple Trust';
 														rt.author = rt.subject = U.id;
+														rt.hidden = true;
 														rt.readonly = true;
 														rt.addTag('Trust');
 														rt.addTag('RippleTrust');
