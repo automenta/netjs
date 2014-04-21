@@ -23,6 +23,7 @@
 		"passport-openid":"",
 		"passport-google":"",
 		"passport-twitter":"",
+		"passport-facebook":"",
 		"session.socket.io":"",
 		"connect":"",
 		"underscore":"",

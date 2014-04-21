@@ -772,6 +772,23 @@ exports.start = function(options, init) {
     }
     ));
 
+	if (options.permissions.facebook_key) {
+		var fbkey = options.permissions.facebook_key.split(":");
+		var appid = fbkey[0];
+		var appsecret = fbkey[1];
+		
+		var FacebookStrategy = require('passport-facebook').Strategy;
+
+		passport.use(new FacebookStrategy({
+			clientID: appid,
+			clientSecret: appsecret,
+			callbackURL: "http://" + $N.server.host + "/auth/facebook/callback"
+		  },
+		  function(accessToken, refreshToken, profile, done) {
+			done(null, {id: accessToken } );
+		  }
+		));		
+	}
 
 
     var getCookies = function(request) {
@@ -876,6 +893,26 @@ exports.start = function(options, init) {
     );
     // -------------------------------------------------------------- PASSPORT 
 
+
+	if (options.permissions.facebook_key) {
+		// Redirect the user to Facebook for authentication.  When complete,
+		// Facebook will redirect the user back to the application at
+		//     /auth/facebook/callback
+		express.get('/auth/facebook', passport.authenticate('facebook'));
+
+		// Facebook will redirect the user to this URL after approval.  Finish the
+		// authentication process by attempting to obtain an access token.  If
+		// access was granted, the user will be logged in.  Otherwise,
+		// authentication has failed.
+		express.get('/auth/facebook/callback', 
+		    passport.authenticate('facebook', { _successRedirect: '/',
+				                              failureRedirect: '/login' }), 
+            function(req, res) {
+                res.cookie('userid', req.user.id);
+                res.redirect('/#');
+            }
+		);
+	}
 
     express.all('*', function(req, res, next) {
         res.header('Access-Control-Allow-Origin', '*');
