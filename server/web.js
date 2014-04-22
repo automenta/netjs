@@ -768,18 +768,34 @@ exports.start = function(options, init) {
 	var LocalStrategy = require('passport-local').Strategy;
 	passport.use(new LocalStrategy(
 	  function(username, password, done) {
-		console.log('Local login:', username, password);
-		/*User.findOne({ username: username }, function(err, user) {
-		  if (err) { return done(err); }
-		  if (!user) {
-		    return done(null, false, { message: 'Incorrect username.' });
-		  }
-		  if (!user.validPassword(password)) {
-		    return done(null, false, { message: 'Incorrect password.' });
-		  }
-		  return done(null, user);
-		});*/
-		done(null, { id: username });
+
+		if (!$N.server.localPasswords) {
+			$N.server.localPasswords = { };
+		}
+
+		if ((username.length == 0) || (username.indexOf('@')==-1)) {
+			done(null, false, "Invalid username");
+			return;
+		}
+
+		username = username.toLowerCase();
+
+		var pws = $N.server.localPasswords;
+		if (pws[username]) {
+			if (pws[username] == password)
+				done(null, { id: username });
+			else
+				done(null, false, "Incorrect password");
+			return;
+		}
+		else {
+			//console.log('Creating local login: ', username);
+			pws[username] = password;
+			saveState();
+			done(null, { id: username });
+			return;
+		}
+
 	  }
 	));
 
@@ -913,10 +929,9 @@ exports.start = function(options, init) {
 	express.get('/login',
 	  passport.authenticate('local', { _successRedirect: '/#',
 		                               failureRedirect: '/',
-		                               failureFlash: true  }), 
+		                               failureFlash: false  }), 
 		function(req, res) {
-			console.log(req.user);
-            //res.cookie('userid', req.user.id);
+            res.cookie('userid', req.user.id);
             res.redirect('/#');
 		}
 	);

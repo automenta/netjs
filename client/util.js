@@ -1109,6 +1109,10 @@ function subtags(tags, s) {
 }
 exports.subtags = subtags;
 
+function hashpassword(p) {
+	return MD5(p + '$4lT_');
+}
+exports.hashpassword = hashpassword;
 
 //Chris Coyier's MD5 Library
 //http://css-tricks.com/snippets/javascript/javascript-md5/

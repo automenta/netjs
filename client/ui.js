@@ -468,8 +468,11 @@ $(document).ready(function() {
         $('#openid-login').hide();
         $('#password-login').fadeIn();
     });
-	$('#password-login button').click(function() {
-		window.location.href = '/login?username=uuu&password=ppp'; 
+	$('#password-login-login').click(function() {
+		var u = $('#login_email').val();
+		var ph = hashpassword( $('#login_password').val() );
+
+		window.location.href = '/login?username=' + encodeURIComponent(u) + '&password=' + ph; 
 	});
 
     $('.logout').show();
