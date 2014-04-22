@@ -176,7 +176,25 @@ exports.start = function(options, init) {
 
     }
 
-    function deleteObject(objectID, whenFinished, contentAddedToDeletedObject) {
+    function deleteObject(objectID, whenFinished, contentAddedToDeletedObject, byClientID) {
+
+		if (byClientID) {
+			getObjectByID(objectID, function(err, o) {
+				if (!o) {
+					whenFinished('Does not exist');
+					return;
+				}
+
+				if (o.author != byClientID) {
+					whenFinished('Not authorized');
+					return;
+				}
+				deleteObject(objectID, whenFinished, contentAddedToDeletedObject, null);
+			});
+			return;
+		}
+
+
         attention.remove(objectID);
 
         function objectRemoved(uri) {
@@ -1618,7 +1636,8 @@ exports.start = function(options, init) {
             request = socket.conn.request;
         
         var session = getSessionKey(request);
-                
+
+
         {
             //https://github.com/LearnBoost/socket.io/wiki/Rooms
             socket.on('subscribe', function(channel, sendAll) {
@@ -1863,17 +1882,19 @@ exports.start = function(options, init) {
                  }
                  }*/
 
+				if (!socket.clientID) {
+					//not sure if this will ever happen, but better to be safe so that the clientID parameter to deleteObject will never be undefined or null
+					whenFinished('Unidentified');
+					return;
+				}
+
                 if (!util.isSelfObject(objectID)) {
-                    deleteObject(objectID, whenFinished);
-					if (whenFinished)
-	                    whenFinished(null);
+                    deleteObject(objectID, whenFinished, null, socket.clientID);
                 }
                 else {
                     var os = getClientSelves(session);
                     if (_.contains(os, objectID)) {
-                        deleteObject(objectID, whenFinished);
-						if (whenFinished)
-	                        whenFinished(null);
+                        deleteObject(objectID, whenFinished, null, socket.clientID);
                     }
                     else {
 						if (whenFinished)

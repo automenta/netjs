@@ -400,8 +400,11 @@ function netention(f) {
 
         },
         deleteObject: function(x, localOnly) {
-
-            var id = x.id;
+			var id;
+			if (typeof x == "string")
+				id = x;
+			else
+            	id = x.id;
             var that = this;
 
 			if (configuration.connection!='local') {

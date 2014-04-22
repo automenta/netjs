@@ -115,7 +115,7 @@ addAction({	menu: 'Object',	name: 'Delete',
        if (confirm('Permanently delete ' + selection.length + ' object(s)?')) {
 			_.each(selection, function(x) {
 				if (x.author == $N.id()) {
-				    if (self.deleteObject(x))
+				    if ($N.deleteObject(x))
 						return "Deleted " + selection.length + ' object(s).';
 				}
 				else {
