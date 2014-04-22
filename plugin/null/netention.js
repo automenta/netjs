@@ -7,6 +7,7 @@ exports.plugin = function($N) { return {
         author: 'http://netention.org',
 
 		start: function() { },
+		onConnect: function(who) {	},
 		onPub: function(x) { },
 		onDelete: function(x) { },
 		stop: function() { }

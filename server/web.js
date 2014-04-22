@@ -1742,8 +1742,10 @@ exports.start = function(options, init) {
 					var oldID = socket.clientID;
 					socket.clientID = nextID;
 
-					if (oldID!=nextID)
-			            nlog('became: ' + oldID + ' -> ' + nextID + ' @ ' + socket.id);
+					if (oldID!=nextID) {
+			            //nlog('became: ' + oldID + ' -> ' + nextID + ' @ ' + socket.id);
+			            plugins("onConnect", { id: nextID, prevID: oldID } );
+					}
 
 					_onResult(nextID);
 				};
@@ -1814,7 +1816,8 @@ exports.start = function(options, init) {
                 }
 
                 var selves = getClientSelves(key);
-                nlog('connect: ' + cid + ', ' + key + ', ' + selves + ' @ ' + socket.id);
+                //nlog('connect: ' + cid + ', ' + key + ', ' + selves + ' @ ' + socket.id);
+	            plugins("onConnect", { id: cid } );
 
                 var tagsAndTemplates = [];
                 getObjectsByTag(['Tag', 'Template'], function(o) {

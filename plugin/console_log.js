@@ -14,7 +14,7 @@ exports.plugin = function($N) { return {
     },
 
 	onConnect: function(who) {
-		console.log('connect', who);
+		console.log('connect', JSON.stringify(who));
 	},
     
 	onFocus: function(who, focus) {

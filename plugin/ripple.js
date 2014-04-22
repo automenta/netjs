@@ -34,6 +34,7 @@ exports.plugin = function($N) { return {
 			  servers: [	{	host:    's1.ripple.com', port:    443, secure:  true	}	  ]
 			});
 
+
 			$N.addTags([
                 {
                     uri: 'RippleUser', name: 'Ripple User', icon: '/icon/wallet.png',
@@ -53,12 +54,22 @@ exports.plugin = function($N) { return {
                 },
 			]);
 
-			function _updateRippleData() {
+			function _updateRippleData(specificUser) {
 				var accounts = { };
+				var accountsUpdate = { };
 
 				$N.getObjectsByTag('User', function(u) {
-					var wallet = u.firstValue('walletRipple');
-					if (wallet) {
+					var wallet = u.firstValue('walletRipple');					
+					if (wallet) {					
+
+						if (specificUser) {
+							if (u.id==specificUser) {
+								accountsUpdate[u.id] = true;
+							}
+						}
+						else {
+							accountsUpdate[u.id] = true;
+						}
 						accounts[u.id] = wallet;
 					}
 				}, function() {
@@ -77,6 +88,10 @@ exports.plugin = function($N) { return {
 							var userid = pending.pop();
 							if (!userid) {
 								finished();
+								return;
+							}
+							if (!accountsUpdate[userid]) {
+								nextAccount();
 							}
 
 							var a = accounts[userid];
@@ -90,6 +105,7 @@ exports.plugin = function($N) { return {
 									remote.request_account_lines({
 										account: a
 									}, function(err, res) {
+
 										if (!err) {
 											$N.getObjectByID(userid, function(err, U) {
 												if (!err) {
@@ -194,9 +210,9 @@ exports.plugin = function($N) { return {
 
 			}
 
-			function updateRippleData() {
+			function updateRippleData(specificUser) {
 				try {
-					_updateRippleData();
+					_updateRippleData(specificUser);
 				}
 				catch (e) {
 					console.error(e);
@@ -206,7 +222,13 @@ exports.plugin = function($N) { return {
 			updateRippleData();
 			setInterval(updateRippleData, RIPPLE_UPDATE_INTERVAL_MS);
 
+			this.updateRippleData = updateRippleData;
 
-		}
+		},
+
+		onConnect: function(who) {
+			if (this.updateRippleData)
+				this.updateRippleData(who.id);
+		},
 }; };
 
