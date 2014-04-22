@@ -461,9 +461,16 @@ $(document).ready(function() {
     }
 
     $('#openid-open').click(function() {
+        $('#password-login').hide();
         $('#openid-login').fadeIn();
     });
-
+	$('#password-open').click(function() {
+        $('#openid-login').hide();
+        $('#password-login').fadeIn();
+    });
+	$('#password-login button').click(function() {
+		window.location.href = '/login?username=uuu&password=ppp'; 
+	});
 
     $('.logout').show();
 

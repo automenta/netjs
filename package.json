@@ -24,6 +24,7 @@
 		"passport-google":"",
 		"passport-twitter":"",
 		"passport-facebook":"",
+		"passport-local":"",
 		"session.socket.io":"",
 		"connect":"",
 		"underscore":"",

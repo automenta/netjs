@@ -765,6 +765,24 @@ exports.start = function(options, init) {
         done(null, {'id': id});
     });
 
+	var LocalStrategy = require('passport-local').Strategy;
+	passport.use(new LocalStrategy(
+	  function(username, password, done) {
+		console.log('Local login:', username, password);
+		/*User.findOne({ username: username }, function(err, user) {
+		  if (err) { return done(err); }
+		  if (!user) {
+		    return done(null, false, { message: 'Incorrect username.' });
+		  }
+		  if (!user.validPassword(password)) {
+		    return done(null, false, { message: 'Incorrect password.' });
+		  }
+		  return done(null, user);
+		});*/
+		done(null, { id: username });
+	  }
+	));
+
     passport.use(new OpenIDStrategy({
         returnURL: 'http://' + $N.server.host + '/auth/openid/return',
         realm: 'http://' + $N.server.host + '/'
@@ -778,6 +796,8 @@ exports.start = function(options, init) {
         // });
     }
     ));
+
+
 
     passport.use(new GoogleStrategy({
         returnURL: 'http://' + $N.server.host + '/auth/google/return',
@@ -888,6 +908,19 @@ exports.start = function(options, init) {
             res.send(js);
         });
     });
+
+
+	express.get('/login',
+	  passport.authenticate('local', { _successRedirect: '/#',
+		                               failureRedirect: '/',
+		                               failureFlash: true  }), 
+		function(req, res) {
+			console.log(req.user);
+            //res.cookie('userid', req.user.id);
+            res.redirect('/#');
+		}
+	);
+
 
     // Accept the OpenID identifier and redirect the user to their OpenID
     // provider for authentication.  When complete, the provider will redirect
