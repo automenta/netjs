@@ -25,7 +25,10 @@ function setGeolocatedLocation(map, onUpdated) {
 
 function initLocationChooserMap(target, location, zoom, geolocate) {
 	var map = L.map(target, {
+		attributionControl: false
 	}).setView( location, 12);
+
+	map.addControl(newLeafletGeoCoder());
 
 	if (geolocate) {
 		map.on('locationfound', function(e) {

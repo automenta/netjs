@@ -870,10 +870,6 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         var m;
 
         if (editable) {
-            var lr = $('<input type="text" placeholder="Where" />');
-            lr.css('width', 'auto');
-            ee.append(lr);
-
             var cr = $('<select/>');
             cr.css('width', 'auto');
             cr.append('<option value="earth" selected>Earth</option>');
@@ -886,7 +882,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             });
             ee.append(cr);
 
-            var ar = $('<input type="text" placeholder="Altitude" />');
+            var ar = $('<input type="text" disabled="disabled" placeholder="Altitude" />');
             ar.css('width', '15%');
             ee.append(ar);
 

@@ -31,6 +31,7 @@ Designed to serve clients and connect to other servers and services to form an o
    * One-click entry: No password or credentials
    * All anonymous users share a set of Selves
  * **Authentication access** (_Passport.js_)
+   * E-Mail/Password
    * OpenID
    * Google Accounts
    * Facebook

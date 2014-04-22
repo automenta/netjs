@@ -143,6 +143,23 @@ function newMapView(v) {
     return mm;
 }
 
+function newLeafletGeoCoder() {
+	return new L.Control.OSMGeocoder({    
+		collapsed: true, /* Whether its collapsed or not */
+		position: 'topright', /* The position of the control */
+		text: 'Go', /* The text of the submit button */
+		bounds: null, /* a L.LatLngBounds object to limit the results to */
+		email: null, /* an email string with a contact to provide to Nominatim. Useful if you are doing lots of queries */
+		callback: function (results) {
+		        var bbox = results[0].boundingbox,
+		            first = new L.LatLng(bbox[0], bbox[2]),
+		            second = new L.LatLng(bbox[1], bbox[3]),
+		            bounds = new L.LatLngBounds([first, second]);
+		        this._map.fitBounds(bounds);
+		}
+	});
+}
+
 function renderLeafletMap(v) {
     var e = uuid();
 	var mapdiv = $('<div style="width: 100%; height: 100%"/>').attr('id', e).appendTo(v);
@@ -152,7 +169,8 @@ function renderLeafletMap(v) {
 	tooltip.hide();
 
 	var map = L.map(e, {
-		worldCopyJump: true
+		worldCopyJump: true,
+		zoomControl: false
 	}).setView( configuration.mapDefaultLocation || [0,0], 11);
 
 	/*L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
@@ -166,6 +184,9 @@ function renderLeafletMap(v) {
 	});
 	baseLayer.addTo(map);
 	
+	new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
+
+	map.addControl(newLeafletGeoCoder());
 
 	var testIcon = L.icon({
 		iconUrl: 'icon/unknown.png',
