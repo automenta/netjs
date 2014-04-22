@@ -1606,59 +1606,9 @@ function newObjectSummary(x, options) {
 
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
 
+
     if (!mini) {
-        var desc = objDescription(x);
-        if (desc) {
-            d.append('<p>' + desc + '</p>');
-        }
-
-
-        if (x.value) {
-            var ud = $('<ul>');
-            d.append(ud);
-            for (var vi = 0; vi < x.value.length; vi++) {
-                var vv = x.value[vi];
-
-                if (vv.id == 'sketch') {
-                    var eu = uuid();
-
-                    var ee = newDiv(eu);
-
-                    ud.append(ee);
-
-                    var options = {
-                        width: 250,
-                        height: 250,
-                        editing: false
-                    };
-                    if (vv.value) {
-                        options.strokes = JSON.parse(vv.value);
-                    }
-                    later(function() {
-                        var sketchpad = Raphael.sketchpad(eu, options);
-                    });
-                    continue;
-                }
-                else if (vv.id == 'timerange') {
-                    /*if (ISODateString) {
-                     ud.append(ISODateString(new Date(vv.value.start)) + ' '
-                     + ISODateString(new Date(vv.value.start)));
-                     }
-                     else*/ {
-                        //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
-                        ud.append(new Date(vv.value.start).toISOString() + ' '
-                                + new Date(vv.value.start).toISOString());
-                    }
-                }
-                else if (vv.id == 'media') {
-                    var url = vv.value;
-                    ud.append('<img src="' + url + '"/>');
-                }
-
-                if ($N.isProperty(vv.id))
-                    ud.append(newPropertyView(x, vv));
-            }
-        }
+		d.append(newObjectDetails(x));
     }
 
     if (!mini) {
@@ -1676,6 +1626,63 @@ function newObjectSummary(x, options) {
     }
 
     return d;
+}
+
+function newObjectDetails(x) {
+	var d = newDiv();
+    var desc = objDescription(x);
+    if (desc) {
+        d.append('<p>' + desc + '</p>');
+    }
+
+
+    if (x.value) {
+        var ud = $('<ul>');
+        d.append(ud);
+        for (var vi = 0; vi < x.value.length; vi++) {
+            var vv = x.value[vi];
+
+            if (vv.id == 'sketch') {
+                var eu = uuid();
+
+                var ee = newDiv(eu);
+
+                ud.append(ee);
+
+                var options = {
+                    width: 250,
+                    height: 250,
+                    editing: false
+                };
+                if (vv.value) {
+                    options.strokes = JSON.parse(vv.value);
+                }
+                later(function() {
+                    var sketchpad = Raphael.sketchpad(eu, options);
+                });
+                continue;
+            }
+            else if (vv.id == 'timerange') {
+                /*if (ISODateString) {
+                 ud.append(ISODateString(new Date(vv.value.start)) + ' '
+                 + ISODateString(new Date(vv.value.start)));
+                 }
+                 else*/ {
+                    //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
+                    ud.append(new Date(vv.value.start).toISOString() + ' '
+                            + new Date(vv.value.start).toISOString());
+                }
+            }
+            else if (vv.id == 'media') {
+                var url = vv.value;
+                ud.append('<img src="' + url + '"/>');
+            }
+
+            if ($N.isProperty(vv.id))
+                ud.append(newPropertyView(x, vv));
+        }
+    }
+	return d;
 }
 
 

@@ -249,6 +249,8 @@ function newObjectSummary2(x) {
     e.append(titleLink);
     e.append(newMetadataLine(x));
 
+	e.append(newObjectDetails(x));
+
     var actionLine = newDiv().addClass('ShareSummaryAction').appendTo(e);
     if ($N.id() == x.author) {
         var editButton = $('<button>Edit</button>').appendTo(actionLine);
@@ -287,6 +289,7 @@ function newObjectSummary2(x) {
 
         e.append(authorline);
     }
+
 
     d.append('<div style="clear: both"/>');
     return d;
