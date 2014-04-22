@@ -32,7 +32,6 @@
 		"cheerio":"",
 		"rdfstore":"",
 		"kmeans":"",
-		"telehash": "",
 		"jsdom": "",
 		"togeojson":"",
 		"rivescript":""
