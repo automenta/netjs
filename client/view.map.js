@@ -188,6 +188,43 @@ function renderLeafletMap(v) {
 
 	map.addControl(newLeafletGeoCoder());
 
+
+	//https://github.com/Leaflet/Leaflet.draw -------------
+
+	// FeatureGroup to store editable layers
+	var drawnItems;
+	if (localStorage['mapdraw']) {
+		drawnItems = new L.geoJson(JSON.parse(localStorage['mapdraw']));
+	}
+	else {
+		drawnItems = new L.FeatureGroup();
+	}
+	map.addLayer(drawnItems);
+
+	// Draw control and pass it the FeatureGroup of editable layers
+	var drawControl = new L.Control.Draw({
+		edit: {
+		    featureGroup: drawnItems
+		},
+		position: "bottomleft"
+	});
+	map.addControl(drawControl);
+
+	map.on('draw:created', function (e) {
+		var type = e.layerType,
+		    layer = e.layer;
+
+		/*if (type === 'marker') {
+		    layer.bindPopup('A popup!');
+		}*/
+
+		drawnItems.addLayer(layer);
+		localStorage['mapdraw'] = JSON.stringify(drawnItems.toGeoJSON());
+	});
+
+	//------------
+
+
 	var testIcon = L.icon({
 		iconUrl: 'icon/unknown.png',
 		iconSize: [32, 32],
