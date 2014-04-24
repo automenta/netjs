@@ -512,10 +512,10 @@ $(document).ready(function() {
 
         $N.clear();
 
-        $N.loadSchemaJSON(schemaURL, function() {
+        $N.loadOntology(schemaURL, function() {
             $('#NotificationArea').html('Ontology ready. Loading objects...');
 
-            $N.getLatestObjects(configuration.maxStartupObjects, function() {
+            $N.getUserObjects(function() {
 
                 $N.listenAll(true);
 

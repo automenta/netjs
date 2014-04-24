@@ -1819,14 +1819,13 @@ exports.start = function(options, init) {
                             if (onResult)
                                 onResult(null); //not the author
                         }
-                        else {
+                        /*else {
                             pubAndSucceed(targetObject);
-                        }
+                        }*/
                     }
 
                 }
                 else {
-
                     if ((keyRequired && session) || (!keyRequired)) {
                         pubAndSucceed(targetObject);
                     }
@@ -1975,6 +1974,7 @@ exports.start = function(options, init) {
         socket.join(channel);
 
         if (sendExisting) {
+
             var objects = [];
             getObjectsByTag(channel, function(o) {
                 objects.push(o);

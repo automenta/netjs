@@ -388,11 +388,11 @@ function objTagStrength(x, normalize, noProperties) {
 }
 exports.objTagStrength = objTagStrength;
 
-function objTagRelevance(x, y) {
+function objTagRelevance(x, y, noProperties) {
     /* dot product of the normalized tag vectors */
 
-    var xx = objTagStrength(x, false, true);
-    var yy = objTagStrength(y, false, true);
+    var xx = objTagStrength(x, false, noProperties);
+    var yy = objTagStrength(y, false, noProperties);
 
     var xxk = _.keys(xx);
     var yyk = _.keys(yy);
@@ -1022,7 +1022,7 @@ function objCompact(o) {
             var ia = v.id;
             var va = v.value || null;
             var s = v.strength || null;
-            if (s)
+            if ((s) && (s!=1.0))
                 newValues.push([ia, va, s]);
             else if (va)
                 newValues.push([ia, va]);

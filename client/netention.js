@@ -193,10 +193,13 @@ function netention(f) {
 
 								$N.clearObjects();
 
-						        $N.getLatestObjects(1000, function() {
-				                    //$N.trigger('change:attention');
-					                updateBrand(); //TODO use backbone Model instead of global fucntion                         
+								$N.getAuthorObjects(nextID, function() {
+								    $N.getLatestObjects(1000, function() {
+						                //$N.trigger('change:attention');
+							            updateBrand(); //TODO use backbone Model instead of global function
+									});
 								});
+
 
 		                    //});
 		                });
@@ -243,7 +246,7 @@ function netention(f) {
 		            setClientID($N, _cid, _key, _selves);
 					setCookie('clientID', _cid);
 
-		            socket.emit('subscribe', 'User', true);
+		            socket.emit('subscribe', 'User');
 
 					function doWhenConnected() {
 				        if (whenConnected) {
@@ -252,17 +255,7 @@ function netention(f) {
 				        }					
 					}
 
-					if (targetID) {
-				        $.getJSON('/object/author/' + targetID + '/json', function(j) {
-				            $N.notice(j);
-							doWhenConnected();
-				        }).fail(function() {
-							doWhenConnected()
-						});
-					}
-					else {
-						doWhenConnected();
-					}
+					doWhenConnected();
 
 		        });
 			}
@@ -322,7 +315,7 @@ function netention(f) {
             return socket;
         },
 
-        loadSchemaJSON: function(url, f) {
+        loadOntology: function(url, f) {
             var that = this;
 
             $.getJSON(url, function(schema) {
@@ -770,6 +763,29 @@ function netention(f) {
                 onFinished();
             });
         },
+        getUserObjects: function(onFinished) {
+            //$.getJSON('/object/tag/User/json', function(users) {
+			if (configuration.connection == 'local') {
+				$N.loadAll();
+	            onFinished();
+				return;
+			}
+
+            $.getJSON('/object/tag/User/json', function(objs) {
+                $N.notice(objs);
+                onFinished();
+            });
+        },
+		getAuthorObjects: function(userID, onFinished) {
+			if (configuration.connection == 'local') {
+	            onFinished();
+				return;
+			}
+			$.getJSON('/object/author/' + userID + '/json', function(j) {
+			    $N.notice(j);
+	            onFinished();
+			});
+		}
 
     });
 
