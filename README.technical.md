@@ -1,5 +1,3 @@
-![Netention logo](https://raw.github.com/automenta/netjs/master/doc/netention_logo_6.small.png)
-
 Netention for Node.JS
 =====================
 
@@ -63,9 +61,4 @@ A network consists of a community-managed P2P decentralized web network to which
 
 HOW TO HELP
 ===========
-Join in the discussion, don't be afraid to ask questions, and THINK BIG!
-* Mailing list: https://groups.google.com/forum/#!forum/netention-dev
 * IRC Channel: freenode.net #netention
-* Blog: http://blog.automenta.com
-
-![Netention logo](https://raw.github.com/automenta/netjs/master/doc/netention_logo_1.png)
