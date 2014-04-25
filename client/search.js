@@ -13,6 +13,47 @@ function getKeywords(s) {
 }
 
 function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
+	var matched = $N.searchOntology(t);
+    
+    mt.html('');    
+   
+    _.each(matched, function(mm) {
+        (function() {
+			var m = mm[0];
+			var score = mm[1];
+			console.loo
+
+            var e = getEditedFocus();
+            if (objHasTag(e, m))
+                return;
+                
+            var mx = self.getTag(m);
+			if (!mx)
+				return;
+
+            var mn = mx.name;
+            
+            //var bb = $('<button>' + mn + '?</button>');
+			var ti = getTagIcon(m);
+			if (ti)
+				mn = '<img src="' + ti + '"/>"' + mn;
+
+            var bb = $('<a href="#">' + mn + '?</a>');
+            bb.click(function() {
+                onAdd( { id: mx.uri } );
+            });
+
+			var opacity = 0.5 + (score / 2.0);
+			bb.css('opacity', opacity);
+
+            mt.append('+');
+            mt.append(bb);                        
+            mt.append('&nbsp;');
+        })();
+    });
+}
+
+function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
     t = getKeywords(t);
     
     var keywords = _.filter(t, isValidKeyword);

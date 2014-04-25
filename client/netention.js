@@ -50,6 +50,12 @@ function netention(f) {
             this.attention = {};
             this.tags = {};
             this.properties = {};
+			this.ontoIndex = lunr(function () {
+				this.field('name', {boost: 4});
+				this.field('description');
+				this.field('properties');
+				this.ref('id');
+			});
 		 },
 		 clearObjects: function() {
             this.attention = {};
@@ -325,6 +331,30 @@ function netention(f) {
             });
 
         },
+		searchOntology: function(query) {
+			var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
+			var results =  { };
+			for (var i = 0; i < terms.length; i++) {
+				var T = terms[i];
+				var r = this.ontoIndex.search(T);
+				for (var j = 0; j < r.length; j++) {
+					var R = r[j];
+					var id = R.ref;
+					var score = R.score;
+					if (!results[id])
+						results[id] = score;
+					else
+						results[id] += score;
+				}
+			}
+			results = _.map(_.keys(results), function(r) {
+				return [ r, results[r] ];
+			});
+			results = results.sort(function(a, b) {
+				return b[1] - a[1];
+			});
+			return results;
+		},
 
         addProperty: function(p) {
             this.properties[p.uri] = p;
@@ -354,6 +384,12 @@ function netention(f) {
 
                 t.properties = propertyIDs;
             }
+
+		 	this.ontoIndex.add({
+				id: t.uri,
+				name: t.name,
+				description: t.description
+		  	});
 
             if (t.icon)
                 defaultIcons[t.uri] = t.icon;
