@@ -36,9 +36,9 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
             //var bb = $('<button>' + mn + '?</button>');
 			var ti = getTagIcon(m);
 			if (ti)
-				mn = '<img src="' + ti + '"/>"' + mn;
+				mn = '<img src="' + ti + '"/>' + mn;
 
-            var bb = $('<a href="#">' + mn + '?</a>');
+            var bb = $('<a href="#">+' + mn + '?</a>');
             bb.click(function() {
                 onAdd( { id: mx.uri } );
             });
@@ -46,9 +46,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus) {
 			var opacity = 0.5 + (score / 2.0);
 			bb.css('opacity', opacity);
 
-            mt.append('+');
             mt.append(bb);                        
-            mt.append('&nbsp;');
         })();
     });
 }

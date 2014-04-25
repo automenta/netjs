@@ -3,6 +3,8 @@ var ONTO_SEARCH_PERIOD_MS = 1500; //TODO move this to client.js
 
 //t is either a tag ID, or an object with zero or more tags
 function getTagIcon(t) {
+	if (!t)
+		return defaultIcons['unknown'];
 
     if (t.id) {
         //try all the tags, return the first
@@ -283,7 +285,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
         });
 
-        var ts = $('<ul/>').addClass('tagSuggestions').appendTo(d);
+		var tsw = $('<div class="tagSuggestionsWrap"></div>').appendTo(d);
+        var ts = $('<div/>').addClass('tagSuggestions').appendTo(tsw);
 
         if (x.value) {
             var tags = []; //tags & properties, actually
@@ -338,7 +341,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         var lastValue = null;
         function search() {
-            if (!ts.is(':visible')) {
+            if (!tsw.is(':visible')) {
                 //clearInterval(ontoSearcher);
                 return;
             }
@@ -639,6 +642,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
     var tagLabel = $('<span>' + tag + '</span>').addClass('tagLabel');
 
+	var tagIcon = $('<img src="' + getTagIcon(null) + '"/>');
+
     applyTagStrengthClass(d, strength);
 
 
@@ -763,6 +768,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         if (prop['default']) {
             defaultValue = prop['default'];
         }
+		d.addClass('propertySection');
     }
 
     if (type == 'textarea') {
@@ -1196,9 +1202,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if ($N.tags[tag] != undefined) {
                 tagLabel.html(TAG.name);
             }
-            if (ti) {
-                tagLabel.prepend('<img src="' + ti + '"/>');
-            }
+			if (ti)
+				tagIcon.attr('src', ti);
+
             if ((!x.readonly) && (editable)) {
                 /*var pb = $('<button>...</button>');
                  tagLabel.append(pb);*/
@@ -1212,10 +1218,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     return TT.properties;
                 }
 
-                var pd = $('<span/>');
-                pd.addClass('tagLabelProperties');
+				var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
+                var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
 
-                //pd.addClass('tagSuggestions');
                 var pp = getTagProperties(tag);
                 for (var i = 0; i < pp.length; i++) {
                     (function(I) {
@@ -1231,18 +1236,16 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                             }
 
                         var ppn = PP.name;
-                        var appv = $('<a href="#" title="' + PP.type + '">' + ppn + '</a>');
+                        var appv = $('<a href="#" title="' + PP.type + '">+' + ppn + '</a>');
                         var defaultValue = '';
                         appv.click(function() {
                             onAdd(ppv, defaultValue);
                         });
 
-
-                        pd.append('+', appv, '&nbsp;');
+                        pd.append(appv, '&nbsp;');
                     })(i);
                 }
 
-                tagLabel.append(pd);
             }
 
             /*
@@ -1258,6 +1261,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
              }*/
         }
     }
+
+	tagIcon.prependTo(tagLabel);
 
     if (t.description)
         d.append('<ul>' + t.description + '</ul>');

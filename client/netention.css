@@ -228,8 +228,14 @@ div.olMapViewport {
 
 .tagSection {
     width: 100%;
+    padding-top: 0.75em;
+    margin-top: 0.75em;
     margin-bottom: 0.75em;
+	border-top: 1px solid gray;
     clear: both;
+}
+.propertySection .tagLabel img {
+	margin-left: 1.5em;
 }
 
 .tagDescription {
@@ -238,7 +244,6 @@ div.olMapViewport {
 }
 
 .tagLabel {
-    float: left;
     font-weight: bold;
     font-size: 125%;
 }
@@ -493,13 +498,32 @@ div.olMapViewport {
 	font-size: 150%;
 }
 
+.tagSuggestionsWrap {
+	overflow: auto;
+	max-width: 100%;
+	margin-left: 1em;
+}
+
 .tagSuggestions {
     margin: 0em;
 	margin-top: 0.25em;
 	margin-bottom: 0.25em;
-    max-height: 8em;
     overflow: auto;
+    display: table;
+    table-layout: fixed;
 }
+.tagSuggestions a {
+	text-decoration:none;
+	font-size: 75%;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+	min-width: 4em;
+}
+.tagSuggestions a:hover {
+	color: #33b;
+}
+
 .tagSuggestions img {
 	height: 1em;
 }
