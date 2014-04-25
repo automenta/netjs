@@ -283,6 +283,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
         });
 
+        var ts = $('<ul/>').addClass('tagSuggestions').appendTo(d);
+
         if (x.value) {
             var tags = []; //tags & properties, actually
 
@@ -331,9 +333,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
         }
 
-        var ts = $('<ul/>');
-
-        d.append(ts.addClass('tagSuggestions'));
 
         var ontoSearcher;
 
@@ -431,6 +430,24 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         d.addClass('ObjectEditDiv');
 
         if ((hideWidgets != true) && (!x.readonly)) {
+			var addButtonWrap = newDiv();
+
+			var addButtons = newEle('span').appendTo(addButtonWrap);
+
+			var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
+			addDisplay.hover(function() {
+				if (!addButtons.is(':visible'))
+					addButtons.fadeIn();
+			});
+			addDisplay.click(function() {
+				if (addButtons.is(':visible'))
+					addButtons.fadeOut();
+				else
+					addButtons.fadeIn();
+			});		
+
+			addButtons.hide();
+
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
             whatButton.click(function() {
                 var p = newPopup('Select Tags for ' + nameInput.val(), true, true);
@@ -448,31 +465,31 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     p.dialog('close');
                 }));
             });
-            d.append(whatButton);
+            addButtons.append(whatButton);
 
             var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/actions/quote.png"></button>');
             howButton.click(function() {
                 update(objAddValue(getEditedFocus(), 'textarea', ''));
             });
-            d.append(howButton);
+            addButtons.append(howButton);
 
             var whenButton = $('<button disabled title="When?" id="AddWhenButton" ><img src="/icon/clock.png"></button>');
-            d.append(whenButton);
+            addButtons.append(whenButton);
 
             var whereButton = $('<button title="Where?"><img src="/icon/rrze/emblems/globe.png"></button>');
             whereButton.click(function() {
                 update(objAddValue(getEditedFocus(), 'spacepoint', ''));
             });
-            d.append(whereButton);
+            addButtons.append(whereButton);
 
             var whoButton = $('<button disabled title="Who?" id="AddWhoButton"><img src="/icon/rrze/categories/user-group.png"></button>');
-            d.append(whoButton);
+            addButtons.append(whoButton);
 
             var drawButton = $('<button title="Draw"><img src="/icon/rrze/emblems/pen.png"/></button>');
             drawButton.click(function() {
                 update(objAddValue(getEditedFocus(), 'sketch', ''));
             });
-            d.append(drawButton);
+            addButtons.append(drawButton);
 
 
             var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>');
@@ -481,7 +498,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     update(objAddValue(getEditedFocus(), 'media', imgURL));
                 });
             });
-            d.append(webcamButton);
+            addButtons.append(webcamButton);
 
             var uploadButton = $('<button title="Upload"><img src="/icon/rrze/actions/dial-in.png"/></button>');
             uploadButton.click(function() {
@@ -532,7 +549,10 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 });
 
             });
-            d.append(uploadButton);
+            addButtons.append(uploadButton);
+
+
+			d.append(addButtonWrap);
 
             var scopeSelect = $('<select style="float:right"/>');
             scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
@@ -731,6 +751,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     if (isPrimitive(tag)) {
         //tagLabel.hide();    
         type = tag;
+		tagLabel.hide();
     }
 
     var prop = $N.getProperty(tag);
