@@ -374,7 +374,7 @@ exports.start = function(options, init) {
                 db.obj.find({'id': uri}, function(err, docs) {
                     db.close();
                     if (err) {
-                        nlog('getObjectSnapshot: ' + err);
+                        nlog('getObjectByID: ' + err);
                         whenFinished(err, null);
                     }
                     else if (docs.length == 1) {
@@ -1316,7 +1316,7 @@ exports.start = function(options, init) {
 
     express.get('/object/:uri/json', function(req, res) {
         var uri = req.params.uri;
-        getObjectSnapshot(uri, function(err, x) {
+        getObjectByID(uri, function(err, x) {
             if (x) {
 				objAccessFilter([x], req, function(objs) {
 					if (objs.length == 1)
@@ -1406,7 +1406,7 @@ exports.start = function(options, init) {
 						title:  o.name,
 						description: content,
 						url: $N.server.host + '/object/' + o.id + '/json',
-						//guid: $N.server.host + '/' + o.id, // optional - defaults to url
+						guid: 'netention://object/' + o.id,
 						categories: util.objTags(o, false),
 						author: o.author || 'none', // optional - defaults to feed author property
 						date: util.objWhen(o), // any format that js Date can parse.

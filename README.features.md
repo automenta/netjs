@@ -47,6 +47,7 @@ Designed to serve clients and connect to other servers and services to form an o
   * options.js file
   * _TODO:_ online configuration for administrator
  * **Plugin** activation & deactivation
+ * **RSS Feed** Outputs
 
 ----
 
