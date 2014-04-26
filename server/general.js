@@ -636,6 +636,7 @@ exports.plugin = function($N) {
             }
 
             _.each(getDefaultTemplates($N), function(x) {
+				x.createdAt = null;
                 $N.notice(x);
             });
 

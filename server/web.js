@@ -1330,26 +1330,107 @@ exports.start = function(options, init) {
         });
     });
 
-    express.get('/object/latest/:num/json', function(req, res) {
-        var n = parseInt(req.params.num);
+	function getLatestObjects(n, withObjects, withError) {
         var db = mongo.connect(getDatabaseURL(), collections);
         db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
-
             if (err) {
-                console.error('ENSURE INDEX modifiedAt', err);
                 db.close();
+				withError('ENSURE INDEX modifiedAt ' + err);
                 return;
             }
 
-            db.obj.find({tag: {$not: {$in: ['ServerState']}}}).limit(n).sort({modifiedAt: -1}, function(err, objs) {
+			//TODO scope >= PUBLIC
+            db.obj.find({tag: {$not: {$in: ['ServerState']}}}).limit(n).sort({modifiedAt:-1}, function(err, objs) {
+                db.close();
+				withObjects(objs);
+            });
+        });
+	}
+
+    express.get('/object/latest/:num/json', function(req, res) {
+        var n = parseInt(req.params.num);
+		var MAX_LATEST_OBJECTS = 8192;
+		if (n > MAX_LATEST_OBJECTS) n = MAX_LATEST_OBJECTS;
+
+		getLatestObjects(n, 
+			function(objs) {
 				objAccessFilter(objs, req, function(sharedObjects) {
 	                removeMongoID(sharedObjects);
 	                sendJSON(res, compactObjects(sharedObjects));
-	                db.close();
 				});
-            });
-        });
+			}, 
+			function(error) {
+				console.error('object/latest/:num/json', error);
+			}
+		);
     });
+    express.get('/object/latest/rss', function(req, res) {
+		var NUM_OBJECTS = 64;
+
+		var feedOptions = {
+			title: $N.server.name,
+			description: $N.server.description,
+			feed_url: $N.server.host + '/object/latest/rss',
+			site_url: $N.server.host,
+			image_url: $N.server.client.loginLogo,
+			generator: 'Netention',
+			//docs: 'http://example.com/rss/docs.html',
+			//author: '',
+			//managingEditor: '',
+			//webMaster: '',
+			//copyright: '',
+			language: 'en',
+			//categories: ['Category 1','Category 2','Category 3'],
+			pubDate: Date.now()
+			//ttl: '60'
+		};
+
+		getLatestObjects(NUM_OBJECTS, function(objs) {
+			objAccessFilter(objs, req, function(sharedObjects) {
+                removeMongoID(sharedObjects);
+				var compacted = compactObjects(sharedObjects);
+
+				var RSS = require('rss'); //https://github.com/dylang/node-rss
+				var feed = new RSS(feedOptions);
+				var escapehtml = require('escape-html');
+
+
+				for (var i = 0; i < sharedObjects.length; i++) {
+					var o = sharedObjects[i];
+					//var oh = 
+					var oc = escapehtml(JSON.stringify(compacted[i]));
+
+					var content = util.objDescription(o) + '<hr/>' + oc;
+
+					var item = {
+						title:  o.name,
+						description: content,
+						url: $N.server.host + '/object/' + o.id + '/json',
+						//guid: $N.server.host + '/' + o.id, // optional - defaults to url
+						categories: util.objTags(o, false),
+						author: o.author || 'none', // optional - defaults to feed author property
+						date: util.objWhen(o), // any format that js Date can parse.
+						//lat: 33.417974, //optional latitude field for GeoRSS
+						//long: -111.933231, //optional longitude field for GeoRSS
+						//enclosure: {url:'...', file:'path-to-file'} // optional enclosure
+					};
+					var where = util.objSpacePointLatLng(o);
+					if (where) {
+						item.lat = where[0];
+						item.long = where[1];
+					}
+					feed.item(item);
+				}
+
+		        res.writeHead(200, {'content-type': 'application/rss+xml'});
+				res.end(feed.xml());
+			});
+		}, 
+		function(error) {
+			console.error('object/latest/rss', error);
+		});
+    });
+
 
     /*express.get('/object/:uri', function(req, res) {
         var uri = req.params.uri;
