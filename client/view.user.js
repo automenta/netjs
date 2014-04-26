@@ -166,7 +166,7 @@ function newUserView(v, userid) {
 	return d;
 }
 
-function newSelfReport(userid) {
+function newSelfSummary(userid) {
 	var x = objNew();
 	var U = $N.getObject(userid);
 	if (!U) return x;
@@ -175,10 +175,10 @@ function newSelfReport(userid) {
 
 	x.name = U.name
 	if (U.id == $N.id()) {
-		x.name = x.name + ' (Report)';
+		x.name = x.name + ' (Summary)';
 	}
 	else {
-		x.name = x.name + ' (Report by ' + $N.myself().name + ')';
+		x.name = x.name + ' (Summary by ' + $N.myself().name + ')';
 	}
 
 	x.author = $N.id();

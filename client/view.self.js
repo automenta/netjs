@@ -141,12 +141,12 @@ function newUsView(v) {
             var avatarImg = newAvatarImage($N.getObject(currentUser));
             avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
-            var exportButton = $('<button>Report Self</button>');
+            var exportButton = $('<button>Summarize</button>');
             exportButton.click(function() {
 				$N.saveAll();
                 //window.open('/#user/' + currentUser);
 				//$N.router.navigate('/#user/' + currentUser, {trigger: true});
-				newPopupObjectEdit( newSelfReport(currentUser), true );
+				newPopupObjectEdit( newSelfSummary(currentUser), true );
             });
 
             currentGoalHeader.append(avatarButton, exportButton);
