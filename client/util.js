@@ -557,8 +557,9 @@ function objValues(object, id) {
     var v = [];
     if (object.value) {
         for (var k = 0; k < object.value.length; k++) {
-            if (object.value[k].id == id)
-                v.push(object.value[k].value);
+			if (object.value[k])
+	            if (object.value[k].id == id)
+    	            v.push(object.value[k].value);
         }
     }
     return v;

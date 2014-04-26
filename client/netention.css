@@ -234,6 +234,11 @@ div.olMapViewport {
 	border-top: 1px solid gray;
     clear: both;
 }
+
+.tagSectionEditable {
+	cursor: crosshair;
+}
+
 .propertySection .tagLabel img {
 	margin-left: 1.5em;
 }

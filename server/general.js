@@ -92,10 +92,11 @@ var generalTags = [
             'offerExpires': {name: 'Offer Expires', type: 'timepoint'},
             'itemExpires': {name: 'Expires', type: 'timepoint'},
             'itemPaid': {name: 'Paid', type: 'boolean'},
-            'walletBTC': {name: 'Pay Bitcoin Wallet', type: 'text'},
-            'walletRipple': {name: 'Pay Ripple Wallet', type: 'text'},
-            'walletPayPal': {name: 'Pay PayPal Address', type: 'text'},
-            'walletRTN': {name: 'Pay Bank Account (RTN)', type: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
+            'payWalletBTC': {name: 'Pay Bitcoin Wallet', type: 'text'},
+            'payWalletRipple': {name: 'Pay Ripple Wallet', type: 'text'},
+            'payWalletPayPal': {name: 'Pay PayPal Address', type: 'text'},
+            'payWalletRTN': {name: 'Pay Bank Account (RTN)', type: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
+
         },
         tag: ['Resource']
     },

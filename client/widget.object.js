@@ -433,7 +433,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         d.addClass('ObjectEditDiv');
 
         if ((hideWidgets != true) && (!x.readonly)) {
-			var addButtonWrap = newDiv();
+			var addButtonWrap = newDiv().addClass('tagSection').css('text-align', 'center');
 
 			var addButtons = newEle('span').appendTo(addButtonWrap);
 
@@ -631,6 +631,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     var strength = t.strength;
 
     var d = newDiv().addClass('tagSection');
+	
     /*d.hover( function() {
      d.addClass('tagSectionHovered');
      }, function() {
@@ -650,7 +651,25 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     d.append(tagLabel, '&nbsp;');
 
     if (editable) {
+		d.addClass('tagSectionEditable');
+
         var tagButtons = newDiv().addClass('tagButtons');
+		/*d.hover(function() {
+			//tagButtons.fadeIn();			
+		}, function() {
+			//tagButtons.fadeOut();
+		});*/
+
+		d.click(function() {
+			if (!tagButtons.is(':visible')) {
+				tagButtons.fadeIn();
+			}
+			else {
+				tagButtons.fadeOut();
+			}
+		});
+
+		tagButtons.hide();
 
         if (index > 0) {
             var upButton = $('<a href="#" title="Move Up">^</a>');
@@ -744,7 +763,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 onRemove(index);
         });
         tagButtons.append(removeButton);
-        d.append(tagButtons);
+
+		tagButtons.appendTo(d);
 
         //d.hover(function(){ tagButtons.fadeIn(200);}, function() { tagButtons.fadeOut(200);});
         //d.hover(function(){ tagButtons.show();}, function() { tagButtons.hide();});                
