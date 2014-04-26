@@ -1,3 +1,4 @@
+//becoming DEPRECATED
 function newUserView(v, userid) {
 	var d = newDiv().appendTo(v);
 
@@ -165,6 +166,84 @@ function newUserView(v, userid) {
 	return d;
 }
 
+function newSelfReport(userid) {
+	var x = objNew();
+	var U = $N.getObject(userid);
+	if (!U) return x;
+
+	U = objectify(U);
+
+	x.name = U.name
+	if (U.id == $N.id()) {
+		x.name = x.name + ' (Report)';
+	}
+	else {
+		x.name = x.name + ' (Report by ' + $N.myself().name + ')';
+	}
+
+	x.author = $N.id();
+	x.subject = U.id;
+
+	var operatorTags = getOperatorTags();
+
+	function getKnowledgeCodeTags(userid) {
+	
+		var tags = $N.getIncidentTags(userid, operatorTags);
+			    
+		for (var k in tags) {
+			var l = tags[k];
+			tags[k] = _.map(tags[k], function(o) {
+				var O = $N.getObject(o);
+				var strength = objTagStrength(O, false);
+				var firstNonOperatorTag = null;
+				var allTags = objTags(O, false);
+				for (var m = 0; m < allTags.length; m++) {
+					var s = allTags[m];
+					if (operatorTags.indexOf(s)==-1) {
+						firstNonOperatorTag = s;
+						break;
+					}
+				}
+				return [O.name, strength[k], o, firstNonOperatorTag];
+			});
+			tags[k] = tags[k].sort(function(a, b) {
+				return b[1] - a[1];
+			});
+
+			/*for (var i = 0; i < l.length; i++) {
+			    l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
+			}*/
+		}
+	
+		var user = $N.object(userid);
+		tags['@'] = objSpacePointLatLng(U);
+		tags['name'] = user.name;
+
+		return tags;
+	}
+
+	var tags = getKnowledgeCodeTags(userid);
+	delete tags['name'];
+
+	var textCode = getUserTextCode(tags, U);
+	if (textCode.length > 0) {
+		x.addDescription('<pre>\n' + textCode + '</pre>');			
+	}
+
+	/*var jsonCode = getUserJSONCode(userid);
+
+	function simplifyJSON(j) {
+		//http://stackoverflow.com/questions/11233498/json-stringify-without-quotes-on-properties
+		return j.replace(/\"([^(\")"]+)\":/g,"$1:");  //This will remove all the quotes to make more compact
+	}
+
+
+	var jsonCodeCompact = simplifyJSON(JSON.stringify(jsonCode));
+	x.addDescription(jsonCodeCompact);*/
+
+	return x;
+}
+
 function isKnowledgeTag(t) {
 	return ['Do','DoTeach','DoLearn','LearnDo','TeachDo', 'Teach', 'Learn'].indexOf(t)!=-1;
 }
@@ -255,7 +334,7 @@ function objIsPublic(o) {
 
 function getUserTextCode(tags, user) {
 	var s = '';
-	var nameline = user.name;
+	var nameline = user.name + ' (' + user.id + ')';
 	var location = user.earthPoint();
 	if (location)
 		nameline += ' @' + JSON.stringify(dloc(location));

@@ -186,7 +186,28 @@ addAction({	menu: 'Tag',	name: 'Remove All Tags' });
 addAction({	menu: 'Tag',	name: 'Add SuperCategories...' });
 
 addAction({	menu: 'Meaning',	name: 'Auto-Tag...' });
-addAction({	menu: 'Meaning',	name: 'Identify Entities', description: 'NLP "who, what, where, when, ..." entity extraction to identify mentioned entities' });
+addAction({	menu: 'Meaning',	name: 'Identify Entities', description: 'NLP "who, what, where, when, ..." entity extraction to identify mentioned entities' , 
+	accepts: acceptsAll,
+	run: function(selection) {
+		var text = ''; //TODO get text from concatenating all objects in the selectioncheck
+
+        var p = newPopup("Read...", {width: 375, minHeight: 450, modal: true, position: 'center'}).
+                append(newTextReader(text, function(data) {
+                    for (var t in data) {
+                        var D = data[t];
+                        for (var o in D) {
+                            var x = objNew();
+                            x.subject = x.author = $N.id();
+                            x.setName(t);
+                            x.addTag(o);
+                            x.addTag(t);
+                            $N.pub(x);
+                        }
+                    }
+                    p.dialog('close');
+                }));
+	}
+});
 
 addAction({	menu: 'Analyze',	name: 'Compare Tags', description: 'Tags shared, differences, and other analyse' });
 addAction({	menu: 'Analyze',	name: 'Create Timeline...' });

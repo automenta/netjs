@@ -141,11 +141,12 @@ function newUsView(v) {
             var avatarImg = newAvatarImage($N.getObject(currentUser));
             avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
-            var exportButton = $('<button>Share</button>');
+            var exportButton = $('<button>Report Self</button>');
             exportButton.click(function() {
 				$N.saveAll();
-                window.open('/#user/' + currentUser);
+                //window.open('/#user/' + currentUser);
 				//$N.router.navigate('/#user/' + currentUser, {trigger: true});
+				newPopupObjectEdit( newSelfReport(currentUser), true );
             });
 
             currentGoalHeader.append(avatarButton, exportButton);
@@ -153,30 +154,12 @@ function newUsView(v) {
             if ($N.myself()) {
 
                 if (currentUser == $N.myself().id) {
-                    var editButton = $('<button>Edit</button>').appendTo(currentGoalHeader);
+                    var editButton = $('<button>Edit Self</button>').appendTo(currentGoalHeader);
                     editButton.click(function() {
                         newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'}).
                                 append(newObjectEdit($N.getObject(currentUser), true));
                     });
 
-                    var readButton = $('<button>Read..</button>').appendTo(currentGoalHeader);
-                    readButton.click(function() {
-                        var p = newPopup("Read...", {width: 375, minHeight: 450, modal: true, position: 'center'}).
-                                append(newTextReader(function(data) {
-                                    for (var t in data) {
-                                        var D = data[t];
-                                        for (var o in D) {
-                                            var x = objNew();
-                                            x.subject = x.author = $N.id();
-                                            x.setName(t);
-                                            x.addTag(o);
-                                            x.addTag(t);
-                                            $N.pub(x);
-                                        }
-                                    }
-                                    p.dialog('close');
-                                }));
-                    });
 
                 }
             }
@@ -1107,10 +1090,12 @@ function newOperatorTagTable(keywords) {
     return d;
 }
 
-function newTextReader(onSave) {
+function newTextReader(text, onSave) {
     var n = newDiv().addClass('TextReader');
 
     var input = $('<textarea/>').appendTo(n);
+	input.val(text);
+
     var submit = $('<button>Read</button>').appendTo(n);
     var results = newDiv().appendTo(n);
 
