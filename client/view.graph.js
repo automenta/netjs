@@ -445,7 +445,7 @@ function newGraphView(v) {
 
 
 
-	var submenu = $('.toggle-submenu');
+	var submenu = $('#AvatarViewMenu');
 
 	var modeSelect = $('<select/>').appendTo(submenu);
 	modeSelect.append('<option value="Network">Network</option>');

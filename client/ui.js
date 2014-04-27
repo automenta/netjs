@@ -229,7 +229,7 @@ function _updateView(force) {
 
     var o = $('#ViewOptions');
     var v = $('#View');
-    var submenu = $('#toggle-submenu');
+    var submenu = $('#AvatarViewMenu');
 
     if (v.is(':visible')) {
     }
@@ -247,12 +247,14 @@ function _updateView(force) {
 
     v.empty();
     o.empty();
-    $('.toggle-submenu').empty();
+    $('#AvatarViewMenu').empty();
     submenu.empty();
-    submenu.hide();
+
     updateIndent(false);
 
     lastView = view;
+	$('#ViewMenu a').removeClass('ViewActive');
+	$('#' + view).addClass('ViewActive');
 
     if (currentView)
         if (currentView.destroy)
@@ -426,14 +428,6 @@ var TogetherJS;
 
 $(document).ready(function() {
 
-    var themeSelect = $('#uitheme');
-    for (var k in themes) {
-        themeSelect.append($('<option id="' + k + '">' + themes[k] + '</option>'));
-    }
-    themeSelect.change(function() {
-        var t = $(this).children(":selected").attr("id");
-        setTheme(t);
-    });
 
     if (configuration.enableTogetherJS) {
         loadJS('https://togetherjs.com/togetherjs-min.js');

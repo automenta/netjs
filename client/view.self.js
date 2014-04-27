@@ -127,7 +127,7 @@ function newUsView(v) {
     function updateUsView(currentUser) {
         v.empty();
 
-        var currentGoalHeader = $('.toggle-submenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
+        var currentGoalHeader = $('#AvatarViewMenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
         var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
         var goalList = newDiv('goalviewList').addClass('goalviewColumn');
         //var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');

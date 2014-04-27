@@ -82,8 +82,6 @@
         <div id="View" style="display:none;" class="display-window "></div>
         <div id="toggle-menu" style="display:none;" class="ui-corner-all shadow"><img id="toggle-img" title="Click here to expand the control panel" class="ui-corner-all" alt="toggle menu button" src="icon/netention-button.png" /></div>
 
-        <!--<div class="toggle-submenu toggle-submenu-absolute"></div>-->
-
         <div id="ActionMenuWrapper"></div>
         <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;"><img id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" /></div>
         <div id="ViewMenu" style="display:none;" class="ui-widget shadow overthrow">
@@ -91,67 +89,45 @@
             <!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
             <!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
 
-            <div id="identity">
+            <div id="identity" class="section">
                 <span id="welcome">
-                    <button id="SelectProfileButton" class="brand" title="Select Profile">Anonymous</button><br/>
-                    <button id="AddContentButton" title="New...">[+]</button>
+                    <button id="SelectProfileButton" class="brand" title="Identity">Anonymous</button><br/>
                 </span>
             </div>
 
-            <button id="TogetherJSTalk" onclick="startTalk();
-                                return false;" title="Toggle Communicator" style="display: none">Talk</button>
+			<div class="section">
+		        <button id="TogetherJSTalk" onclick="startTalk();
+		                            return false;" title="Toggle Communicator" style="display: none">Talk</button>
 
-            <button id="main" class="ViewControl" title="Main"><img src="icon/view.main.svg"></button>
-            <button id="us" class="ViewControl" title="Us"><img src="icon/view.us.svg"></button>
-            <button id="map" class="ViewControl" title="Map"><img src="icon/view.map.svg"></button>
-            <button id="time" class="ViewControl" title="Time"><img src="icon/view.time.svg"></button>
-            <button id="browse" class="ViewControl" title="Browse"><img src="icon/view.browse.svg"></button>
-            <button id="chat" class="ViewControl" title="Chat"><img src="icon/view.chat.svg"></button>
-            <button id="graph" class="ViewControl" title="Network"><img src="icon/view.graph.svg"></button>
-            <button id="share" class="ViewControl" title="Share"><img src="icon/view.share.svg"></button>
-            <button id="trends" class="ViewControl" title="Trends"><img src="icon/view.trends.svg"></button>
-            <button id="wiki" class="ViewControl" title="Wiki"><img src="icon/view.wiki.svg"></button>
-            <button id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></button>
-            <!--<input type="radio" id="options" name="ViewControls" /><label for="options">Options</label>-->
+		        <a href="#" id="main" class="ViewControl" title="Main"><img src="icon/view.main.svg"></a>
+		        <a href="#" id="us" class="ViewControl" title="Us"><img src="icon/view.us.svg"></a>
+		        <a href="#" id="map" class="ViewControl" title="Map"><img src="icon/view.map.svg"></a>
+		        <a href="#" id="time" class="ViewControl" title="Time"><img src="icon/view.time.svg"></a>
+		        <a href="#" id="browse" class="ViewControl" title="Browse"><img src="icon/view.browse.svg"></a>
+		        <a href="#" id="chat" class="ViewControl" title="Chat"><img src="icon/view.chat.svg"></a>
+		        <a href="#" id="graph" class="ViewControl" title="Network"><img src="icon/view.graph.svg"></a>
+		        <a href="#" id="share" class="ViewControl" title="Share"><img src="icon/view.share.svg"></a>
+		        <a href="#" id="trends" class="ViewControl" title="Trends"><img src="icon/view.trends.svg"></a>
+		        <a href="#" id="wiki" class="ViewControl" title="Wiki"><img src="icon/view.wiki.svg"></a>
+		        <a href="#" id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></a>
+			</div>
 
-            <div id="welcomeoptions">
-                <select id="uitheme"/>
-                </select>
-                <br/>
-                <select id="uilanguage">
-                    <option>English</option>
-                    <option>Español</option> 
-                    <option>Français</option>
-                    <option>Русский</option> 
-                    <option>עברית</option> 
-                    <option>العربية</option>
-                    <option>हिन्दी; हिंदी </option>
-                    <option>中文(简体)</option> 
-                    <option>日本語</option> 
-                </select>
-            </div>
+            <div id="AvatarViewMenu" class="section"></div>
 
-            <br/>        
-
-            <div id="AvatarFocus">
-                <button id="FocusNeedButton" title="Select Tag">..</button>
+            <div id="AvatarFocus" class="section">
+                <button id="AddContentButton" title="New...">[+]</button>
+                <button id="FocusNeedButton" title="Focus">..</button>
                 <button id="FocusClearButton" title="Clear">[x]</button>
                 <!--
-        <button id="FocusWhatButton">What?</button>
-        <button id="FocusWhereButton">Where?</button>
-        <button id="FocusWhenButton">When?</button>
-        <input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
-        <button id="FocusClearButton" title="Clear">[x]</button>
+				<button id="FocusWhatButton">What?</button>
+				<button id="FocusWhereButton">Where?</button>
+				<button id="FocusWhenButton">When?</button>
+				<input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
+				<button id="FocusClearButton" title="Clear">[x]</button>
                 -->
 
                 <div id="FocusEdit"></div>
             </div>
-
-            <br/>        
-
-            <div class="toggle-submenu"></div>
-
-
 
         </div>
         <!-- END HIDDEN UNTIL LOADED -->

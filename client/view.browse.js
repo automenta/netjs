@@ -320,7 +320,7 @@ function newListView(v) {
 
     var listRenderer = renderBrowseGrid;
 
-    var submenu = $('.toggle-submenu');
+    var submenu = $('#AvatarViewMenu');
     var modeSelect = $('<select/>').appendTo(submenu);
     modeSelect.append('<option value="grid">Grid</option>');
     modeSelect.append('<option value="list">List</option>');

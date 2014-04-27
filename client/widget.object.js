@@ -439,14 +439,20 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
 			var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
 			addDisplay.hover(function() {
-				if (!addButtons.is(':visible'))
+				if (!addButtons.is(':visible')) {
 					addButtons.fadeIn();
+					addDisplay.text('-');
+				}
 			});
 			addDisplay.click(function() {
-				if (addButtons.is(':visible'))
+				if (addButtons.is(':visible')) {
 					addButtons.fadeOut();
-				else
+					addDisplay.text('+');
+				}
+				else {
 					addButtons.fadeIn();
+					addDisplay.text('-');
+				}
 			});		
 
 			addButtons.hide();
@@ -591,8 +597,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 });
                 d.parent().dialog('close');
             });
-            d.append(saveButton);
-            d.append(scopeSelect);
+            addButtonWrap.append(saveButton, scopeSelect);
 
 
             /*var exportButton = $('<button>Export</button>');
@@ -1478,11 +1483,10 @@ function newObjectSummary(x, options) {
                                     name: text,
                                     id: uuid(),
                                     value: [],
+									author: $N.id(),
                                     replyTo: [x.id],
                                     createdAt: Date.now()
                                 };
-
-
 
                                 $N.pub(rr, function(err) {
                                     $.pnotify({
@@ -1855,7 +1859,7 @@ function newTagTree(param) {
             useContextMenu: false,
             autoEscape: false,
             selectable: false,
-            //slide: false,
+            slide: false,
             autoOpen: false
         });
 

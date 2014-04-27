@@ -520,7 +520,7 @@ var generalTags = [
 
 //http://bioportal.bioontology.org/ontologies/MFOEM?p=classes
 var emotionTags = [
-    {uri: 'Emotion', name: 'Emotion', tag: ['Concept'],
+    {uri: 'Emotion', name: 'Emotion', tag: ['Concept'], description: 'How something feels or seems',
         properties: {
             'undulyExtremeMeaning': {name: 'Is the meaning I’m assigning to this event unduly extreme?', type: 'textarea'},
             'harshConclusions': {name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', type: 'textarea'},

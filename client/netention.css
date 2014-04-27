@@ -630,8 +630,20 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	div.olMapViewport { z-index: 1 !important;; }
 	div.olControlZoom { top:auto !important; bottom:8px !important; }
 
-.ViewControl { padding: 0; margin-top: 3px; margin-bottom: 3px; display: none; }
-.ViewControl img { width: 45px;  }
+.ViewControl { 
+	padding: 0; margin: 0;
+	display: block; 
+	float: left;
+	border: 0; 
+	background-color: #333;
+	opacity: 0.6;
+}
+.ViewControl:hover, .ViewActive { 
+	opacity: 1.0;
+	background-color: #111;
+}
+.ViewControl img { width: 48px;  }
+
 .view-indented { left: 55px !important;  border-left: none !important; width: auto !important;}
 .view-indented-more { left: 160px !important; }
 
@@ -643,13 +655,13 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 } 
 #toggle-menu img { width: 45px; height: 45px; margin:0; } 
 
-.toggle-submenu {
+#AvatarViewMenu {
 }
-.toggle-submenu-absolute {
+/*.toggle-submenu-absolute {
 	position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
-}
-.toggle-submenu button { padding: 1px; }
-.toggle-submenu input { width: 43px; }
+}*/
+#AvatarViewMenu button { padding: 1px; }
+#AvatarViewMenu input { width: 43px; }
 
 #NotificationArea { z-index: 5000; position: fixed; bottom: 0; right: 0; font-size: 200%; }
 
@@ -666,9 +678,19 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 		#AvatarButton { position:absolute; top:0px; left:0px; margin:0px; padding:0px; }
 		#AvatarButton img { border: none; cursor: crosshair; }
 
+#ViewMenu .section {
+	clear: both;
+	padding-top: 0.5em;
+}
+
+#AvatarFocus {
+	position: absolute;
+	bottom: 0;
+}
+
 #identity {
 	width: 75px;
-	height: 80px;
+	height: 65px;
 	margin-left: 75px;
 	text-align: right;
 }
@@ -682,7 +704,11 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 #FocusEdit { height:auto;  margin:0; display:block; clear:both; padding: 0; }
 #FocusEdit button { font-size:.8em; }
 #FocusEdit .ObjectEditDiv .tagSection { float: none !important; }
-
+#FocusEdit .tagSection {
+	padding: 0;
+	margin: 0;
+	clear: both;
+}
 
 #FocusMainMenu { clear:both; width:100%; margin:0px 0px 20px 0px; padding:0;  }
 #Focus { width: 98%; border:none; margin:20px 0px; }

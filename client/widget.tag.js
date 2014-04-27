@@ -90,10 +90,11 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
 
         var clearButton = $('<button>x</button>');
         clearButton.click(function() {
-            if (confirm('Clear selected tags?')) {
-                tags = [];
-                tagsCombo.update();
-            }
+			if (tags.length)
+		        if (confirm('Clear selected tags?')) {
+		            tags = [];
+		            tagsCombo.update();
+		        }
         });
         saveBar.append(clearButton);
 

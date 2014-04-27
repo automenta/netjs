@@ -38,14 +38,12 @@ function showAvatarMenu(b) {
         vm.fadeOut();
         $('#toggle-menu').show();
         updateIndent(false);
-        $('.toggle-submenu-absolute').show();
     }
     else {
         $('#toggle-menu').hide();
         vm.fadeIn();
         $('#close-menu').show();
         $('#AvatarButton').show();
-        $('.toggle-submenu-absolute').hide();
         vm.show();
         updateIndent(true);
     }
@@ -101,7 +99,7 @@ $('#AvatarButton').click(function() {
 
 
 $('#AddContentButton').click(function() {
-    newPopupObjectEdit(objNew());
+    newPopupObjectEdit(objNew(), { title: 'New...' } );
 });
 
 $('#FocusButton').click(function() {
@@ -143,6 +141,8 @@ function renderFocus(skipSet) {
         focusValue = x;
         $N.setFocus(x);
     }, ['spacepoint']); //do not show spacepoint property, custom renderer is below
+
+	noe.find('.tagSuggestionsWrap').remove();
 
     fe.append(noe);
 
