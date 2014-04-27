@@ -346,7 +346,7 @@ var generalTags = [
         "uri": "Points of Interest",
         "name": "Points of Interest",
         "description": "DBPedia.org",
-        "icon": "http:\/\/climateviewer.com\/gallery\/lightning_bolt.png",
+        //"icon": "http:\/\/climateviewer.com\/gallery\/lightning_bolt.png",
         "dbpediaLayer": true,
         tag: ['Earth']
     },

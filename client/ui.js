@@ -678,7 +678,7 @@ $(document).ready(function() {
 
 
     $('#close-menu').button();
-    $(".ViewControl").click(function() {
+    $("#ViewSelect .ViewControl").click(function() {
         var v = $(this);
         var vi = v.attr('id');
         $N.router.navigate(vi, {trigger: false});

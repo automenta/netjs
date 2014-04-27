@@ -99,7 +99,12 @@ $('#AvatarButton').click(function() {
 
 
 $('#AddContentButton').click(function() {
-    newPopupObjectEdit(objNew(), { title: 'New...' } );
+	var o = objNew();
+	var focus = $N.focus();
+	if (focus)
+		if (focus.value)
+			o.value = focus.value;
+    newPopupObjectEdit(o, { title: 'New...' } );
 });
 
 $('#FocusButton').click(function() {
@@ -118,10 +123,31 @@ if (configuration.avatarMenuDisplayInitially)
 else
     showAvatarMenu(false);
 
+
+function isFocusClear() {
+	if (!focusValue)
+		return true;
+
+	if (focusValue.value)
+		if (focusValue.value.length > 0)
+			return false;
+	if (focusValue.when)
+		return false;
+	if (focusValue.where)
+		return false;
+	if (focusValue.who)
+		return false;
+	if (focusValue.userRelation)
+		return false;
+	return true;
+}
+
 var focusValue;
 function clearFocus() {
     $('#FocusKeywords').val('');
-    focusValue = {tags: [], when: null, where: null};
+    focusValue = { when: null, where: null};
+	//userRelation = null
+	$('#FocusClearButton').hide();
 }
 clearFocus();
 
@@ -141,6 +167,11 @@ function renderFocus(skipSet) {
         focusValue = x;
         $N.setFocus(x);
     }, ['spacepoint']); //do not show spacepoint property, custom renderer is below
+
+	if (!isFocusClear())
+		$('#FocusClearButton').show();
+	else
+		$('#FocusClearButton').hide();
 
 	noe.find('.tagSuggestionsWrap').remove();
 

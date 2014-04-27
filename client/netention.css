@@ -642,7 +642,7 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 	opacity: 1.0;
 	background-color: #111;
 }
-.ViewControl img { width: 48px;  }
+.ViewControl img { width: 45px;  }
 
 .view-indented { left: 55px !important;  border-left: none !important; width: auto !important;}
 .view-indented-more { left: 160px !important; }
@@ -686,6 +686,7 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 #AvatarFocus {
 	position: absolute;
 	bottom: 0;
+	padding-bottom: 0.5em;
 }
 
 #identity {

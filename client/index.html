@@ -95,7 +95,7 @@
                 </span>
             </div>
 
-			<div class="section">
+			<div id="ViewSelect" class="section">
 		        <button id="TogetherJSTalk" onclick="startTalk();
 		                            return false;" title="Toggle Communicator" style="display: none">Talk</button>
 
@@ -115,9 +115,9 @@
             <div id="AvatarViewMenu" class="section"></div>
 
             <div id="AvatarFocus" class="section">
-                <button id="AddContentButton" title="New...">[+]</button>
-                <button id="FocusNeedButton" title="Focus">..</button>
-                <button id="FocusClearButton" title="Clear">[x]</button>
+				<a id="AddContentButton" href="#" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
+				<a id="FocusNeedButton" href="#" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
+				<a id="FocusClearButton" href="#" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
                 <!--
 				<button id="FocusWhatButton">What?</button>
 				<button id="FocusWhereButton">Where?</button>

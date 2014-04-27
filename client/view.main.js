@@ -15,24 +15,8 @@ function newMainView(v) {
         var t = $(this).children(":selected").attr("id");
         setTheme(t);
     });
-	
-            
-                
-                /*
-                <select id="uilanguage">
-                    <option>English</option>
-                    <option>Español</option> 
-                    <option>Français</option>
-                    <option>Русский</option> 
-                    <option>עברית</option> 
-                    <option>العربية</option>
-                    <option>हिन्दी; हिंदी </option>
-                    <option>中文(简体)</option> 
-                    <option>日本語</option> 
-                </select>
-            </div>
-	*/
 
+	header.append('<select id="uilanguage"><option>English</option><option>Español</option> <option>Français</option><option>Русский</option><option>עברית</option><option>العربية</option><option>हिन्दी; हिंदी</option><option>中文(简体)</option><option>日本語</option></select>');
     
     var e = newDiv().addClass('gridster').appendTo(d);
     var grid = $('<ul/>').appendTo(e);
