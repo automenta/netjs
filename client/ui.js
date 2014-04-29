@@ -26,7 +26,7 @@ function loadCSS(url, med) {
                 href: url,
                 media: (med !== undefined) ? med : ""
             })
-    );
+            );
 }
 
 function loadJS(url) {
@@ -253,8 +253,8 @@ function _updateView(force) {
     updateIndent(false);
 
     lastView = view;
-	$('#ViewMenu a').removeClass('ViewActive');
-	$('#' + view).addClass('ViewActive');
+    $('#ViewMenu a').removeClass('ViewActive');
+    $('#' + view).addClass('ViewActive');
 
     if (currentView)
         if (currentView.destroy)
@@ -317,11 +317,11 @@ function _updateView(force) {
     else if (view === 'main') {
         indent();
         currentView = newMainView(v);
-    }   
+    }
     else if (view === 'time') {
         indent();
         currentView = newTimeView(v);
-    }   
+    }
     else {
         v.html('Unknown view: ' + view);
         currentView = null;
@@ -378,6 +378,48 @@ function initKeyboard() {
         viewDelta(+1);
         return false;
     });
+}
+
+function viewRead(urlstring) {
+    var urls = urlstring.split('+');
+
+    var f = objNew();
+    
+    _.each(urls, function(u) {        
+        var x = objNew();
+        x.id = 'read:' + u;
+        x.name = u;
+        x.addTag(x.id);
+        f.addTag(x.id);
+        
+        $.get(u, function(h) {           
+            var ext = u.split('.');
+            var type = 'html';
+            if (ext.length > 1) {
+                ext = ext[ext.length-1];
+                if (ext === 'md')
+                    type = 'markdown';
+                else if (ext === 'html')
+                    type = 'html';
+            }
+            
+            x.add('media', { content: h, type: type }  );
+            $N.notice(x);    
+        }).error(function(e) {
+            x.addDescription('Error Loading', JSON.stringify(e));
+            $N.notice(x);
+        });
+    });
+
+    
+    f.author = $N.id();
+    f.focus = 'change';
+
+    $N.set('currentView', 'browse');
+    
+    focusValue = f;    
+    renderFocus(false);
+
 }
 
 
@@ -458,16 +500,16 @@ $(document).ready(function() {
         $('#password-login').hide();
         $('#openid-login').fadeIn();
     });
-	$('#password-open').click(function() {
+    $('#password-open').click(function() {
         $('#openid-login').hide();
         $('#password-login').fadeIn();
     });
-	$('#password-login-login').click(function() {
-		var u = $('#login_email').val();
-		var ph = hashpassword( $('#login_password').val() );
+    $('#password-login-login').click(function() {
+        var u = $('#login_email').val();
+        var ph = hashpassword($('#login_password').val());
 
-		window.location.href = '/login?username=' + encodeURIComponent(u) + '&password=' + ph; 
-	});
+        window.location.href = '/login?username=' + encodeURIComponent(u) + '&password=' + ph;
+    });
 
     $('.logout').show();
 
@@ -527,7 +569,8 @@ $(document).ready(function() {
                         "example": "completeExample",
                         "user/:userid": "user",
                         ":view": "view",
-                        //"search/:query/:page":  "query"   // #search/kiwis/p7
+                        "read/*url": "read"
+                                //"search/:query/:page":  "query"   // #search/kiwis/p7
                     },
                     me: function() {
                         commitFocus($N.myself());
@@ -552,13 +595,15 @@ $(document).ready(function() {
                     },
                     user: function(userid) {
                         self.set('currentView', {view: 'user', userid: userid});
+                    },
+                    read: function(url) {
+                        later(function(){
+                            viewRead(url);                            
+                        });
                     }
 
                 });
 
-                var w = new Workspace();
-                Backbone.history.start();
-                $N.router = w;
 
                 if (!$N.get('currentView')) {
                     if (configuration.initialView) {
@@ -569,7 +614,7 @@ $(document).ready(function() {
                 updateViewControls();
 
                 $('body').timeago();
-                
+
                 updateView = _.debounce(_.throttle(function() {
                     later(function() {
                         _updateView();
@@ -613,16 +658,16 @@ $(document).ready(function() {
                     $N.on('change:focus', updateView);
 
 
-	                var alreadyLoggedIn = false;
-	                if ((configuration.autoLoginDefaultProfile) || (configuration.connection=='local')) {
-	                    var otherSelves = _.filter($N.get("otherSelves"), function(f) {
-	                        return $N.getObject(f) != null;
-	                    });
-	                    if (otherSelves.length >= 1) {
-	                        $N.become(otherSelves[0]);
-	                        alreadyLoggedIn = true;
-	                    }
-	                }
+                    var alreadyLoggedIn = false;
+                    if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'local')) {
+                        var otherSelves = _.filter($N.get("otherSelves"), function(f) {
+                            return $N.getObject(f) != null;
+                        });
+                        if (otherSelves.length >= 1) {
+                            $N.become(otherSelves[0]);
+                            alreadyLoggedIn = true;
+                        }
+                    }
 
 
                     if (!alreadyLoggedIn) {
@@ -645,6 +690,8 @@ $(document).ready(function() {
 
                     initKeyboard();
 
+                    var w = new Workspace();
+                    $N.router = w;
 
                     /*
                      //USEFUL FOR DEBUGGING EVENTS:
@@ -697,7 +744,7 @@ $(document).ready(function() {
 
 //http://stackoverflow.com/questions/918792/use-jquery-to-change-an-html-tag
 $.extend({
-    replaceTag: function (currentElem, newTagObj, keepProps) {
+    replaceTag: function(currentElem, newTagObj, keepProps) {
         var $currentElem = $(currentElem);
         var i, $newTag = $(newTagObj).clone();
         if (keepProps) {//{{{
@@ -712,10 +759,114 @@ $.extend({
     }
 });
 
+function isFocusClear() {
+    if (!focusValue)
+        return true;
+
+    if (focusValue.value)
+        if (focusValue.value.length > 0)
+            return false;
+    if (focusValue.when)
+        return false;
+    if (focusValue.where)
+        return false;
+    if (focusValue.who)
+        return false;
+    if (focusValue.userRelation)
+        return false;
+    return true;
+}
+
+var focusValue;
+function clearFocus() {
+    $('#FocusKeywords').val('');
+    focusValue = {when: null, where: null};
+    //userRelation = null
+    $('#FocusClearButton').hide();
+}
+clearFocus();
+
+function renderFocus(skipSet) {
+    if (!skipSet)
+        $N.setFocus(focusValue);
+
+    var fe = $('#FocusEdit');
+    fe.empty();
+
+    var newFocusValue = _.clone(focusValue);
+
+    var noe = newObjectEdit(newFocusValue, true, true, function(xx) {
+        focusValue = xx;
+        renderFocus();
+    }, function(x) {
+        focusValue = x;
+        $N.setFocus(x);
+    }, ['spacepoint']); //do not show spacepoint property, custom renderer is below
+
+    if (!isFocusClear())
+        $('#FocusClearButton').show();
+    else
+        $('#FocusClearButton').hide();
+
+    noe.find('.tagSuggestionsWrap').remove();
+
+    fe.append(noe);
+
+    if ((configuration.avatarMenuTagTreeAlways) || (focusValue.what)) {
+        var tt = newFocusTagTree(focusValue, function(tag, newStrength) {
+
+            var tags = objTags(focusValue);
+            var existingIndex = _.indexOf(tags, tag);
+
+            if (existingIndex != -1)
+                objRemoveValue(focusValue, existingIndex);
+
+            if (newStrength > 0) {
+                objAddTag(focusValue, tag, newStrength);
+            }
+
+            renderFocus();
+        });
+        tt.attr('style', 'height: ' + Math.floor($(window).height() * 0.4) + 'px !important');
+        fe.append(tt);
+    }
+    if (focusValue.when) {
+    }
+
+    if (focusValue.who) {
+        fe.append('User: ' + $N.getObject(focusValue.who).name + '<br/>');
+    }
+    if (focusValue.userRelation) {
+        if (focusValue.userRelation.itrust) {
+            fe.append('Sources I Trust<br/>');
+        }
+        if (focusValue.userRelation.trustme) {
+            fe.append('Sources Trusting Me<br/>');
+        }
+    }
+
+    var where = objSpacePointLatLng(focusValue);
+    if (where) {
+        var uu = uuid();
+        var m = newDiv(uu);
+        m.attr('style', 'height: 250px; width: 95%');	//TODO use css
+        fe.append(m);
+        var lmap = initLocationChooserMap(uu, where, 3);
+        lmap.onClicked = function(l) {
+            var newFocus = _.clone(focusValue);
+            objSetFirstValue(newFocus, 'spacepoint', {lat: l.lat, lon: l.lon, planet: 'Earth'});
+            $N.setFocus(newFocus);
+        };
+    }
+}
+
+
 $.fn.extend({
-    replaceTag: function (newTagObj, keepProps) {
+    replaceTag: function(newTagObj, keepProps) {
         this.each(function() {
             jQuery.replaceTag(this, newTagObj, keepProps);
         });
     }
 });
+
+

@@ -148,13 +148,13 @@ function renderBrowse(v, cssClass, afterCreated) {
                 depthRemaining: 1,
             });
             if (cssClass)
-                o.addClass(cssClass);
+                o.addClass(cssClass(xxrr.length));
             elements.push(o);
         }
         v.append(elements);
 
         if (afterCreated)
-            afterCreated(v);
+            afterCreated(v, xxrr.length);
 
         $('body').timeago('refresh');
     });
@@ -169,11 +169,19 @@ function freetileView() {
 }
 
 function renderBrowseList(v) {
-    renderBrowse(v, 'objectListItem', function(v) {
+    renderBrowse(v, function(numitems) {
+        return 'objectListItem';
+    }, function(v) {
     });
 }
 function renderBrowseGrid(v) {
-    renderBrowse(v, 'objectGridItem', function(v) {
+    renderBrowse(v, function(numitems) {
+        if (numitems > 2)
+            return 'objectGridItem3';
+        if (numitems > 1)
+            return 'objectGridItem2';
+        return 'objectListItem';
+    }, function(v) {
         freetileView();
     });
 }

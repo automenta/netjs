@@ -1724,8 +1724,19 @@ function newObjectDetails(x) {
                 }
             }
             else if (vv.id == 'media') {
-                var url = vv.value;
-                ud.append('<img src="' + url + '"/>');
+                if (typeof vv.value == 'string') {
+                    var url = vv.value;
+                    ud.append('<img src="' + url + '"/>');
+                }
+                else {
+                    var V = vv.value;
+                    if (V.type == 'html') {
+                        ud.append(V.content);
+                    }
+                    else if (V.type == 'markdown') {
+                        ud.append( newDiv().addClass('markdown').html( markdown.toHTML(V.content )) );
+                    }
+                }
             }
 
             if ($N.isProperty(vv.id))

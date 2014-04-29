@@ -1,7 +1,7 @@
 /*
  Netention Web Server
  
- Know                                  L=========D=========T
+ Know                                L=========D=========T
  Load_testing                        --|------------------
  Access_control                      ---------|-----------
  MongoDB                             ---------|-----------
@@ -96,6 +96,8 @@ exports.start = function(options, init) {
                 $N.server.plugins[kv].plugin = p;
 
 
+                //console.log(v, $N.server.plugins[kv]);
+                
                 //TODO add required plugins parameter to add others besides 'general'
                 if (($N.server.plugins[kv].enabled) || (v == 'general')) {
                     $N.nlog('Started plugin: ' + p.name);
@@ -1009,7 +1011,9 @@ exports.start = function(options, init) {
     //express.use(expressm.staticCache());
     express.use("/plugin", expressm.static('./plugin', staticContentConfig));
     express.use("/doc", expressm.static('./doc', staticContentConfig));
+        
     //express.use("/kml", expressm.static('./client/kml' , staticContentConfig ));
+    
     express.use("/", expressm.static('./client', staticContentConfig));
 
     express.post('/uploadgif', function(req, res) {
@@ -2169,13 +2173,13 @@ exports.start = function(options, init) {
 
 
     $N.nlog = nlog;
-    $N.plugin = function(pluginfile, forceEnable) {
+    /*$N.plugin = function(pluginfile, forceEnable) {
         plugin(pluginfile, forceEnable);
-    };
+    };*/
     $N.saveState = saveState;
 
     function loadPlugins() {
-		var pluginOption = { };
+	var pluginOption = { };
 
         if ($N.enablePlugins) {
             _.each($N.enablePlugins, function(v, x) {
@@ -2183,7 +2187,7 @@ exports.start = function(options, init) {
                     $N.server.plugins[x] = {};
 				
                 $N.server.plugins[x].enabled = true;
-				pluginOption[x] = v;
+		pluginOption[x] = v;
             });
         }
 
@@ -2196,7 +2200,11 @@ exports.start = function(options, init) {
                 file = file + '/netention.js';
             }
 
-            plugin(file, pluginOption[ifile]);
+            if (pluginOption[ifile]) {
+                var po = pluginOption[ifile];
+                if (po.enable != false)
+                    plugin(file, pluginOption[ifile]);
+            }
         });
     }
 

@@ -55,15 +55,15 @@ function openSelectProfileModal(title) {
     //var d = newPopup(title, {width: '450px', modal: true});
     $('#LoadingSplash').show();
     $('#LoadingSplashTitle').html(
-		(configuration.connection == 'local') ?
-			'' :
-			'Authenticated: ' + getCookie('authenticated')
-	);
+            (configuration.connection == 'local') ?
+            '' :
+            'Authenticated: ' + getCookie('authenticated')
+            );
     $('#LoadingSplashTitle').append(
-		(configuration.connection == 'local') ?
-			'' :
-			' (<a href="/logout">Logout</a>)'
-	);
+            (configuration.connection == 'local') ?
+            '' :
+            ' (<a href="/logout">Logout</a>)'
+            );
     $('#AuthSelect').hide();
     $('#ProfileSelect').html(newProfileWidget());
 }
@@ -99,12 +99,12 @@ $('#AvatarButton').click(function() {
 
 
 $('#AddContentButton').click(function() {
-	var o = objNew();
-	var focus = $N.focus();
-	if (focus)
-		if (focus.value)
-			o.value = focus.value;
-    newPopupObjectEdit(o, { title: 'New...' } );
+    var o = objNew();
+    var focus = $N.focus();
+    if (focus)
+        if (focus.value)
+            o.value = focus.value;
+    newPopupObjectEdit(o, {title: 'New...'});
 });
 
 $('#FocusButton').click(function() {
@@ -124,106 +124,6 @@ else
     showAvatarMenu(false);
 
 
-function isFocusClear() {
-	if (!focusValue)
-		return true;
-
-	if (focusValue.value)
-		if (focusValue.value.length > 0)
-			return false;
-	if (focusValue.when)
-		return false;
-	if (focusValue.where)
-		return false;
-	if (focusValue.who)
-		return false;
-	if (focusValue.userRelation)
-		return false;
-	return true;
-}
-
-var focusValue;
-function clearFocus() {
-    $('#FocusKeywords').val('');
-    focusValue = { when: null, where: null};
-	//userRelation = null
-	$('#FocusClearButton').hide();
-}
-clearFocus();
-
-function renderFocus(skipSet) {
-    if (!skipSet)
-        $N.setFocus(focusValue);
-
-    var fe = $('#FocusEdit');
-    fe.empty();
-
-    var newFocusValue = _.clone(focusValue);
-
-    var noe = newObjectEdit(newFocusValue, true, true, function(xx) {
-        focusValue = xx;
-        renderFocus();
-    }, function(x) {
-        focusValue = x;
-        $N.setFocus(x);
-    }, ['spacepoint']); //do not show spacepoint property, custom renderer is below
-
-	if (!isFocusClear())
-		$('#FocusClearButton').show();
-	else
-		$('#FocusClearButton').hide();
-
-	noe.find('.tagSuggestionsWrap').remove();
-
-    fe.append(noe);
-
-    if ((configuration.avatarMenuTagTreeAlways) || (focusValue.what)) {
-        var tt = newFocusTagTree(focusValue, function(tag, newStrength) {
-
-            var tags = objTags(focusValue);
-            var existingIndex = _.indexOf(tags, tag);
-
-            if (existingIndex != -1)
-                objRemoveValue(focusValue, existingIndex);
-
-            if (newStrength > 0) {
-                objAddTag(focusValue, tag, newStrength);
-            }
-
-            renderFocus();
-        });
-        tt.attr('style', 'height: ' + Math.floor($(window).height() * 0.4) + 'px !important');
-        fe.append(tt);
-    }
-    if (focusValue.when) {
-    }
-
-    if (focusValue.who) {
-        fe.append('User: ' + $N.getObject(focusValue.who).name + '<br/>');
-    }
-    if (focusValue.userRelation) {
-		if (focusValue.userRelation.itrust) {
-	        fe.append('Sources I Trust<br/>');
-		}
-		if (focusValue.userRelation.trustme) {
-	        fe.append('Sources Trusting Me<br/>');
-		}
-    }
-
-    var where = objSpacePointLatLng(focusValue);
-    if (where) {
-        var uu = uuid();
-        var m = newDiv(uu);
-        m.attr('style', 'height: 250px; width: 95%');	//TODO use css
-        fe.append(m);
-        var lmap = initLocationChooserMap(uu, where, 3);
-        lmap.onClicked = function(l) {
-            var newFocus = _.clone(focusValue);
-            objSetFirstValue(newFocus, 'spacepoint', {lat: l.lat, lon: l.lon, planet: 'Earth'});
-            $N.setFocus(newFocus);
-        };
-    }
-}
 
 $('#FocusWhereButton').click(function() {
     if (!objSpacePointLatLng(focusValue)) {

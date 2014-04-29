@@ -12,7 +12,7 @@ var ID_AUTHENTICATED = 2;
 function setClientID($N, cid, key, otherSelves) {
     if (cid) {
         $N.set('clientID', cid);
-	}
+    }
     $N.set('authorized', key);
     $N.set('otherSelves', _.unique(otherSelves));
 
@@ -45,27 +45,26 @@ function netention(f) {
 
     var $NClient = Backbone.Model.extend({
         clear: function() {
-			this.clearObjects();
+            this.clearObjects();
             this.set('clientID', 'undefined');
             this.attention = {};
             this.tags = {};
             this.properties = {};
-			this.ontoIndex = lunr(function () {
-				this.field('name', {boost: 4});
-				this.field('description');
-				this.field('properties');
-				this.ref('id');
-			});
-		 },
-		 clearObjects: function() {
+            this.ontoIndex = lunr(function() {
+                this.field('name', {boost: 4});
+                this.field('description');
+                this.field('properties');
+                this.ref('id');
+            });
+        },
+        clearObjects: function() {
             this.attention = {};
             this.set('deleted', {});
             this.set('replies', {});
             this.set('layer', {include: [], exclude: []});
             this.set('focus', null);
-			this.userRelations = null;
-		 },
-
+            this.userRelations = null;
+        },
         tag: function(t) {
             return this.tags[t];
         },
@@ -95,9 +94,9 @@ function netention(f) {
             //TODO support subtags
             var r = [];
 
-			if (includeSubTags) {
-				t = _.union([t], $N.getSubTags(t));
-			}
+            if (includeSubTags) {
+                t = _.union([t], $N.getSubTags(t));
+            }
 
             for (var k in this.objects()) {
                 var v = this.getObject(k);
@@ -159,67 +158,71 @@ function netention(f) {
             if (!target)
                 return;
 
-			var targetID = target;
+            var targetID = target;
             if (typeof (target) !== "string") {
                 this.notice(target);
-				targetID = target.id;
+                targetID = target.id;
             }
 
-			if (configuration.connection == 'local') {
+            if (configuration.connection == 'local') {
                 var os = $N.get('otherSelves');
                 os.push(targetID);
 
                 $N.set('clientID', targetID);
                 $N.save('otherSelves', _.unique(os));
 
-				$N.trigger('change:attention');
-		        updateBrand(); //TODO use backbone Model instead of global fucntion                                
-			}
-			else {
-		        this.socket.emit('become', target, function(nextID) {
-		            if (nextID) {
-		                /*$.pnotify( {
-		                 title: 'Switched profile',
-		                 text: nextID
-		                 });*/
+                $N.trigger('change:attention');
+                updateBrand(); //TODO use backbone Model instead of global fucntion            
+                
+                $N.startURLRouter();
+            }
+            else {
+                this.socket.emit('become', target, function(nextID) {
+                    if (nextID) {
+                        /*$.pnotify( {
+                         title: 'Switched profile',
+                         text: nextID
+                         });*/
 
-		                //if (($N.id()) && ($N.id() == nextID)) //already target
-		                //return;
-
-
-		                later(function() {
-
-		                    $N.set('clientID', nextID);
-							setCookie('clientID', nextID);
-		                    //$N.connect(target, function() {
-		                        var os = $N.get('otherSelves');
-		                        os.push(nextID);
-
-		                        $N.save('otherSelves', _.unique(os));
-
-								$N.clearObjects();
-
-								$N.getAuthorObjects(nextID, function() {
-								    $N.getLatestObjects(1000, function() {
-						                //$N.trigger('change:attention');
-							            updateBrand(); //TODO use backbone Model instead of global function
-									});
-								});
+                        //if (($N.id()) && ($N.id() == nextID)) //already target
+                        //return;
 
 
-		                    //});
-		                });
-		            }
-		            else {
-		                $.pnotify({
-		                    title: 'Unable to switch profile',
-		                    text: err + ' ' + (typeof (target) === "string" ? target : target.id),
-		                    type: 'Error'
-		                });
+                        later(function() {
 
-		            }
-	  		  });
-		   }
+                            $N.set('clientID', nextID);
+                            setCookie('clientID', nextID);
+                            //$N.connect(target, function() {
+                            var os = $N.get('otherSelves');
+                            os.push(nextID);
+
+                            $N.save('otherSelves', _.unique(os));
+
+                            $N.clearObjects();
+
+                            $N.getAuthorObjects(nextID, function() {
+                                $N.getLatestObjects(1000, function() {
+                                    //$N.trigger('change:attention');
+                                    updateBrand(); //TODO use backbone Model instead of global function
+                                    
+                                    $N.startURLRouter();
+                                });
+                            });
+
+
+                            //});
+                        });
+                    }
+                    else {
+                        $.pnotify({
+                            title: 'Unable to switch profile',
+                            text: err + ' ' + (typeof (target) === "string" ? target : target.id),
+                            type: 'Error'
+                        });
+
+                    }
+                });
+            }
         },
         connect: function(targetID, whenConnected) {
             var originalTargetID = targetID;
@@ -238,7 +241,7 @@ function netention(f) {
                     if (os.length > 0) {
                         if (!_.contains(os, 'Self_' + targetID)) {
                             //targetID = os[os.length - 1];
-							targetID = os[0];
+                            targetID = os[0];
                         }
                     }
                 }
@@ -247,80 +250,79 @@ function netention(f) {
                 $N.save('clientID', targetID);
             }
 
-			function reconnect() {
-		        socket.emit('connectID', targetID, function(_cid, _key, _selves) {
-		            setClientID($N, _cid, _key, _selves);
-					setCookie('clientID', _cid);
+            function reconnect() {
+                socket.emit('connectID', targetID, function(_cid, _key, _selves) {
+                    setClientID($N, _cid, _key, _selves);
+                    setCookie('clientID', _cid);
 
-		            socket.emit('subscribe', 'User');
+                    socket.emit('subscribe', 'User');
 
-					function doWhenConnected() {
-				        if (whenConnected) {
-				            whenConnected();     
-							whenConnected = null;
-				        }					
-					}
+                    function doWhenConnected() {
+                        if (whenConnected) {
+                            whenConnected();
+                            whenConnected = null;
+                        }
+                    }
 
-					doWhenConnected();
+                    doWhenConnected();
 
-		        });
-			}
+                });
+            }
 
             var socket = this.socket;
             if (!socket) {
                 /*this.socket = socket = io.connect('/', {
-                });*/
-				this.socket = socket = io.connect('/', {
+                 });*/
+                this.socket = socket = io.connect('/', {
                     'transports': ['websocket', /*'flashsocket',*/ 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
                     'reconnection': true,
-					'reconnectionDelay': 750,
- 				    'reconnectionDelayMax': 25,
+                    'reconnectionDelay': 750,
+                    'reconnectionDelayMax': 25,
                     'try multiple transports': true
-				});
-				socket.on('connect', function(){
-		            socket.on('disconnect', function() {
-		                $.pnotify({
-		                    title: 'Disconnected.'                 
-		                 }); 
-		            });
-		            /*socket.on('reconnecting', function() {
-		                $.pnotify({
-		                    title: 'Reconnecting..'
-		                 }); 
-		            });*/
-					/*
-		            socket.on('reconnect', function() {
-		                $.pnotify({
-		                    title: 'Reconnected.'
-		                 }); 
-		                 init();
-		            });*/
+                });
+                socket.on('connect', function() {
+                    socket.on('disconnect', function() {
+                        $.pnotify({
+                            title: 'Disconnected.'
+                        });
+                    });
+                    /*socket.on('reconnecting', function() {
+                     $.pnotify({
+                     title: 'Reconnecting..'
+                     }); 
+                     });*/
+                    /*
+                     socket.on('reconnect', function() {
+                     $.pnotify({
+                     title: 'Reconnected.'
+                     }); 
+                     init();
+                     });*/
 
-					/*socket.on('error', function(){
-					  	socket.socket.reconnect();
-					});*/
+                    /*socket.on('error', function(){
+                     socket.socket.reconnect();
+                     });*/
 
-		            socket.on('notice', function(n) {
-		                $N.notice(n);
-		            });
+                    socket.on('notice', function(n) {
+                        $N.notice(n);
+                    });
 
-		            socket.on('addTags', function(t, p) {
-		                $N.addProperties(p);
-		                $N.addTags(t);
-		            });
+                    socket.on('addTags', function(t, p) {
+                        $N.addProperties(p);
+                        $N.addTags(t);
+                    });
 
-		            $.pnotify({
-		                title: 'Connected.'
-		            }); 
+                    $.pnotify({
+                        title: 'Connected.'
+                    });
 
-					reconnect();
+                    reconnect();
 
-				});        
+                });
             }
 
             return socket;
         },
-
         loadOntology: function(url, f) {
             var that = this;
 
@@ -331,31 +333,30 @@ function netention(f) {
             });
 
         },
-		searchOntology: function(query) {
-			var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
-			var results =  { };
-			for (var i = 0; i < terms.length; i++) {
-				var T = terms[i];
-				var r = this.ontoIndex.search(T);
-				for (var j = 0; j < r.length; j++) {
-					var R = r[j];
-					var id = R.ref;
-					var score = R.score;
-					if (!results[id])
-						results[id] = score;
-					else
-						results[id] += score;
-				}
-			}
-			results = _.map(_.keys(results), function(r) {
-				return [ r, results[r] ];
-			});
-			results = results.sort(function(a, b) {
-				return b[1] - a[1];
-			});
-			return results;
-		},
-
+        searchOntology: function(query) {
+            var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
+            var results = {};
+            for (var i = 0; i < terms.length; i++) {
+                var T = terms[i];
+                var r = this.ontoIndex.search(T);
+                for (var j = 0; j < r.length; j++) {
+                    var R = r[j];
+                    var id = R.ref;
+                    var score = R.score;
+                    if (!results[id])
+                        results[id] = score;
+                    else
+                        results[id] += score;
+                }
+            }
+            results = _.map(_.keys(results), function(r) {
+                return [r, results[r]];
+            });
+            results = results.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+            return results;
+        },
         addProperty: function(p) {
             this.properties[p.uri] = p;
         },
@@ -385,11 +386,11 @@ function netention(f) {
                 t.properties = propertyIDs;
             }
 
-		 	this.ontoIndex.add({
-				id: t.uri,
-				name: t.name,
-				description: t.description
-		  	});
+            this.ontoIndex.add({
+                id: t.uri,
+                name: t.name,
+                description: t.description
+            });
 
             if (t.icon)
                 defaultIcons[t.uri] = t.icon;
@@ -429,23 +430,26 @@ function netention(f) {
 
         },
         deleteObject: function(x, localOnly) {
-			var id;
-			if (typeof x == "string")
-				id = x;
-			else
-            	id = x.id;
+            var id;
+            if (typeof x == "string")
+                id = x;
+            else
+                id = x.id;
             var that = this;
 
-			if (configuration.connection!='local') {
-		        if ((!this.socket) && (!localOnly)) {
-		            $.pnotify({
-		                title: 'Unable to delete: Not connected, must login.'
-		            });
-		            return false;
-		        }				
-			}
-			else
-				localOnly = true;
+            if (x.author == undefined)
+                localOnly = true;
+            
+            if (configuration.connection != 'local') {
+                if ((!this.socket) && (!localOnly)) {
+                    $.pnotify({
+                        title: 'Unable to delete: Not connected, must login.'
+                    });
+                    return false;
+                }
+            }
+            else
+                localOnly = true;
 
             function removeLocal() {
                 that.get('deleted')[id] = Date.now();
@@ -489,20 +493,17 @@ function netention(f) {
             }
             else {
                 removeLocal();
-				if (configuration.connection=='local') {
-				    $.pnotify({
-				        title: 'Deleted',
-				        text: id,
-				        addclass: "stack-bottomleft",
-				        stack: stack_bottomleft
-				    });
-					$N.trigger('change:attention');
-				}
+                $.pnotify({
+                    title: 'Deleted',
+                    text: id,
+                    addclass: "stack-bottomleft",
+                    stack: stack_bottomleft
+                });
+                $N.trigger('change:attention');
             }
             return true;
 
         },
-        
         getPlugins: function(withPlugins) {
             var that = this;
             this.socket.emit('getPlugins', function(p) {
@@ -512,11 +513,9 @@ function netention(f) {
                     withPlugins(p);
             });
         },
-        
         setPlugin: function(pid, enabled, callback) {
             this.socket.emit('setPlugin', pid, enabled, callback);
         },
-        
         /*getGoals: function(from, to, mineOnly ) {
          var that = this;
          
@@ -570,18 +569,22 @@ function netention(f) {
              }
              */
 
-            f.id = uuid();
-            f.focus = 'change';
-            f.whenCreated = Date.now();
-            f.author = this.id();
+            if (!f.id)
+                f.id = uuid();
+            if (!f.focus)
+                f.focus = 'change';
+            if (!f.createdAt)
+                f.createdAt = Date.now();
+            if (!f.author)
+                f.author = this.id();
 
             if (f.when == null)
                 delete f.when;
             if (f.where == null)
                 delete f.where;
-            if (f.tags)
-                if (f.tags.length == 0)
-                    delete f.tags;
+            /*if (f.tags)
+             if (f.tags.length == 0)
+             delete f.tags;*/
 
             this.set('focus', f);
 
@@ -655,21 +658,21 @@ function netention(f) {
                 if (objHasTag(y, 'Tag')) {
                     that.addTags([objTagObjectToTag(y)]);
                 }
-				if (objHasTag(y, 'Trust')) { //|| Value || etc..
-					that.userRelations = null; //force recalculation of userRelations
-				}
+                if (objHasTag(y, 'Trust')) { //|| Value || etc..
+                    that.userRelations = null; //force recalculation of userRelations
+                }
             }
 
 
             var includesNonFocused = false;
             for (var i = 0; i < x.length; i++) {
                 if (!x[i].focus) {
-                	n(x[i]);
-					includesNonFocused = true;
-				}
+                    n(x[i]);
+                    includesNonFocused = true;
+                }
             }
-			if (includesNonFocused)
-	            this.trigger('change:attention');
+            if (includesNonFocused)
+                this.trigger('change:attention');
         },
         subscribe: function(channel, f) {
             if (this.socket) {
@@ -683,48 +686,48 @@ function netention(f) {
             }
         },
         /*publish: function(obj) {
-			if (configuration.connection == 'local') {
-	            $N.notice(obj);
-			}
-			else {
-		        self.pub(obj, function(err) {
-		            $.pnotify({
-		                title: 'Unable to save ' + obj.id,
-		                type: 'Error'
-		            });
-		        }, function() {
-		            $.pnotify({
-		                title: 'Saved (' + obj.id.substring(0, 6) + ')'
-		            });
-		            $N.notice(obj);
-		        });
-			}
-        },*/
+         if (configuration.connection == 'local') {
+         $N.notice(obj);
+         }
+         else {
+         self.pub(obj, function(err) {
+         $.pnotify({
+         title: 'Unable to save ' + obj.id,
+         type: 'Error'
+         });
+         }, function() {
+         $.pnotify({
+         title: 'Saved (' + obj.id.substring(0, 6) + ')'
+         });
+         $N.notice(obj);
+         });
+         }
+         },*/
         pub: function(object, onErr, onSuccess) {
-			if (configuration.connection == 'local') {
-	            $N.notice(object);
-				if (onSuccess)
-					onSuccess();
-			}
-			else {
-		        if (this.socket) {
-		            this.socket.emit('pub', objCompact(object), function(err) {
-		                if (onErr)
-		                    onErr(object);
-		                $.pnotify({title: 'Error saving:', text: err, type: 'error'});
-		            }, function() {
-						$N.notice(object);
-						if (onSuccess)
-							onSuccess();
-					});
-		        }
-		        else {
-		            if (onErr)
-		                onErr('Not connected.');
-		            else
-		                console.log('Not connected.');
-		        }
-			}
+            if (configuration.connection == 'local') {
+                $N.notice(object);
+                if (onSuccess)
+                    onSuccess();
+            }
+            else {
+                if (this.socket) {
+                    this.socket.emit('pub', objCompact(object), function(err) {
+                        if (onErr)
+                            onErr(object);
+                        $.pnotify({title: 'Error saving:', text: err, type: 'error'});
+                    }, function() {
+                        $N.notice(object);
+                        if (onSuccess)
+                            onSuccess();
+                    });
+                }
+                else {
+                    if (onErr)
+                        onErr('Not connected.');
+                    else
+                        console.log('Not connected.');
+                }
+            }
         },
         //THIS NEEDS UPDATED
         getClientInterests: function(f) {
@@ -766,33 +769,31 @@ function netention(f) {
             $N.set(key, value);
             localStorage[key] = JSON.stringify(value);
         },
+        loadAll: function() {
+            var loadedSelf = localStorage['self'] || "{ }";
+            var loadedAttention = localStorage['obj'] || "{ }";
+            if (loadedSelf) {
+                _.extend($N.attributes, JSON.parse(loadedSelf));
+                $N.attention = JSON.parse(loadedAttention);
+            }
+            else {
+            }
 
-		loadAll: function() {
-			var loadedSelf = localStorage['self'] || "{ }";
-			var loadedAttention = localStorage['obj'] || "{ }";
-			if (loadedSelf) {
-				_.extend($N.attributes, JSON.parse(loadedSelf)); 
-				$N.attention = JSON.parse(loadedAttention);
-			}
-			else {
-			}
-
-		},
-		saveAll: function() {
-			if (configuration.connection == 'local') {
-	            localStorage.self = JSON.stringify($N.attributes);
-	            localStorage.obj = JSON.stringify($N.attention);
-			}
-		},
-
-		//TODO rename to 'load initial objects' or something
+        },
+        saveAll: function() {
+            if (configuration.connection == 'local') {
+                localStorage.self = JSON.stringify($N.attributes);
+                localStorage.obj = JSON.stringify($N.attention);
+            }
+        },
+        //TODO rename to 'load initial objects' or something
         getLatestObjects: function(num, onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
-			if (configuration.connection == 'local') {
-				$N.loadAll();
-	            onFinished();
-				return;
-			}
+            if (configuration.connection == 'local') {
+                $N.loadAll();
+                onFinished();
+                return;
+            }
 
             $.getJSON('/object/latest/' + num + '/json', function(objs) {
                 $N.notice(objs);
@@ -801,27 +802,31 @@ function netention(f) {
         },
         getUserObjects: function(onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
-			if (configuration.connection == 'local') {
-				$N.loadAll();
-	            onFinished();
-				return;
-			}
+            if (configuration.connection == 'local') {
+                $N.loadAll();
+                onFinished();
+                return;
+            }
 
             $.getJSON('/object/tag/User/json', function(objs) {
                 $N.notice(objs);
                 onFinished();
             });
         },
-		getAuthorObjects: function(userID, onFinished) {
-			if (configuration.connection == 'local') {
-	            onFinished();
-				return;
-			}
-			$.getJSON('/object/author/' + userID + '/json', function(j) {
-			    $N.notice(j);
-	            onFinished();
-			});
-		}
+        getAuthorObjects: function(userID, onFinished) {
+            if (configuration.connection == 'local') {
+                onFinished();
+                return;
+            }
+            $.getJSON('/object/author/' + userID + '/json', function(j) {
+                $N.notice(j);
+                onFinished();
+            });
+        },
+        startURLRouter: function() {
+            Backbone.history.start();            
+        }
+        
 
     });
 
@@ -835,23 +840,23 @@ function netention(f) {
     var otherSelves = decodeURIComponent(getCookie('otherSelves')).split(',');
     setClientID($N, cid, keys, otherSelves);
 
-	if (configuration.connection == 'websocket') {
-		$N.connect(null, function() {
-		    f("/ontology/json", $N);
-		});
-	}
-	else {
-		window.addEventListener("beforeunload", function (e) {
-			$N.saveAll();
-			  /*var confirmationMessage = "Saved everything";
+    if (configuration.connection == 'websocket') {
+        $N.connect(null, function() {
+            f("/ontology/json", $N);
+        });
+    }
+    else {
+        window.addEventListener("beforeunload", function(e) {
+            $N.saveAll();
+            /*var confirmationMessage = "Saved everything";
+             
+             (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
+             return confirmationMessage;                                //Webkit, Safari, Chrome etc.
+             */
+        });
 
-			  (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
-			  return confirmationMessage;                                //Webkit, Safari, Chrome etc.
-				*/
-		});
-
-		f("ontology.static.json", $N);
-	}
+        f("ontology.static.json", $N);
+    }
 
 
 }
@@ -891,8 +896,8 @@ function newPopup(title, p, isModal) {
         close: function() {
             d.remove();
         },
-		show: 'fade', 
-		hide: 'fade' //'drop'
+        show: 'fade',
+        hide: 'fade' //'drop'
     });
     if (isModal)
         p.modal = true;
@@ -918,7 +923,7 @@ function getCookie(name) {
     return null;
 }
 function setCookie(key, value) {
-	document.cookie = key + '=' + value;
+    document.cookie = key + '=' + value;
 }
 
 

@@ -119,8 +119,10 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
         * **sketch** (vector drawing)
         * **object** (reference to another object)
             * _TODO_: tag restrictions (optional)
-        * **media** (URL to a file, image, video, or other embeddable content)
-            * _TODO_: allowed MIME-types
+        * media (URL to a file, image, video, or other embeddable content)
+            * type: image
+            * type: markdown
+            * type: html
         * timeseries (timeseries data, multiple keyed values per time index)
         * _TODO:_ **select**
             * options (string array)
