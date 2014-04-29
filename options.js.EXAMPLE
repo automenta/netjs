@@ -7,9 +7,10 @@ exports.options = {
     "memoryUpdatePeriodMS": 5000,
 	"httpCompress": true,
 	"password": "",
-    "plugins": [
-        "_rss.js", "_irc.js"
-    ],
+    "plugins": {
+        "_rss.js": {},
+		"_irc.js": {}
+    },
     "permissions": {
         "enableAnonymous": true,
         "authenticate_to_configure_plugins": false,

@@ -61,7 +61,7 @@ exports.start = function(options, init) {
     var collections = ["obj"];
 
 
-    function plugin(kv) {
+    function plugin(kv, options) {
         var v = kv;
 
         var p = require('../plugin/' + v).plugin;
@@ -99,7 +99,7 @@ exports.start = function(options, init) {
                 //TODO add required plugins parameter to add others besides 'general'
                 if (($N.server.plugins[kv].enabled) || (v == 'general')) {
                     $N.nlog('Started plugin: ' + p.name);
-                    p.start();
+                    p.start(options);
                     enabled = true;
                 }
 
@@ -1808,7 +1808,7 @@ exports.start = function(options, init) {
             });
 
             socket.on('getPlugins', function(f) {
-                f($N.server.plugins);
+                f(_.keys($N.server.plugins));
             });
 
             /*socket.on('setPlugin', function(pid, enabled, callback) {
@@ -2161,7 +2161,7 @@ exports.start = function(options, init) {
 
     $N.client = options.client || {};
     $N.permissions = options.permissions || {};
-    $N.enablePlugins = options.plugins || [];
+    $N.enablePlugins = options.plugins || { };
 
     //setInterval(attention.update, Server.memoryUpdatePeriodMS);
 
@@ -2175,12 +2175,15 @@ exports.start = function(options, init) {
     $N.saveState = saveState;
 
     function loadPlugins() {
+		var pluginOption = { };
+
         if ($N.enablePlugins) {
-            _.each($N.enablePlugins, function(x) {
+            _.each($N.enablePlugins, function(v, x) {
                 if (!$N.server.plugins[x])
                     $N.server.plugins[x] = {};
-
+				
                 $N.server.plugins[x].enabled = true;
+				pluginOption[x] = v;
             });
         }
 
@@ -2193,7 +2196,7 @@ exports.start = function(options, init) {
                 file = file + '/netention.js';
             }
 
-            plugin(file);
+            plugin(file, pluginOption[ifile]);
         });
     }
 

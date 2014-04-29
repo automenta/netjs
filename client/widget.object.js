@@ -1310,6 +1310,10 @@ function newPropertyView(x, vv) {
         var u = vv.value;
         return ('<li>' + p.name + ': <a target="_blank" href="' + u + '">' + u + '</a></li>');
     }
+    else if (p.type == 'timeseries') {
+        var u = vv.value;
+        return ('<li>' + p.name + '<br/><textarea>' + JSON.stringify(u) +'</textarea></li');
+    }
     else if ((p.type == 'integer') && (p.incremental)) {
         function goprev() {
             objSetFirstValue(x, vv.id, ii - 1);

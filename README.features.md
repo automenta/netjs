@@ -121,6 +121,7 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
             * _TODO_: tag restrictions (optional)
         * **media** (URL to a file, image, video, or other embeddable content)
             * _TODO_: allowed MIME-types
+        * timeseries (timeseries data, multiple keyed values per time index)
         * _TODO:_ **select**
             * options (string array)
             * min, max (integer, number that can be selected)

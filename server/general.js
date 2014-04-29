@@ -522,6 +522,8 @@ var generalTags = [
 var emotionTags = [
     {uri: 'Emotion', name: 'Emotion', tag: ['Concept'], description: 'How something feels or seems',
         properties: {
+			'emotionWhatDoing': {name: 'What I am Doing', type: 'textarea'},
+			'emotionWhoWith': {name: 'Who I am With', type: 'object', tag: 'Human' },
             'undulyExtremeMeaning': {name: 'Is the meaning I’m assigning to this event unduly extreme?', type: 'textarea'},
             'harshConclusions': {name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', type: 'textarea'},
             'drawingGlobalConclusions': {name: 'Am I drawing global conclusions from this isolated event?', type: 'textarea'},
