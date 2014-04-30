@@ -452,6 +452,9 @@ function netention(f) {
                 localOnly = true;
 
             function removeLocal() {
+                if (!$N.getObject(id))
+                    return false;
+                
                 that.get('deleted')[id] = Date.now();
                 delete (that.objects())[id];
 
@@ -464,6 +467,8 @@ function netention(f) {
                 if (replies)
                     for (var k = 0; k < replies.length; k++)
                         that.deleteObject(k, true);
+                
+                return true;
             }
 
             if (!localOnly) {
@@ -492,14 +497,15 @@ function netention(f) {
                 });
             }
             else {
-                removeLocal();
-                $.pnotify({
-                    title: 'Deleted',
-                    text: id,
-                    addclass: "stack-bottomleft",
-                    stack: stack_bottomleft
-                });
-                $N.trigger('change:attention');
+                if (removeLocal()) {
+                    $.pnotify({
+                        title: 'Deleted',
+                        text: id,
+                        addclass: "stack-bottomleft",
+                        stack: stack_bottomleft
+                    });
+                    $N.trigger('change:attention');
+                }
             }
             return true;
 

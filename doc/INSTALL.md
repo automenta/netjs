@@ -4,8 +4,21 @@ Install Netention for Node.JS on Ubuntu Linux
 Requirements
 ------------
 
-###Node.JS
-http://nodejs.org (latest version preferably)
+###Node.JS http://nodejs.org
+
+(latest version, preferably)
+
+####[Install from Package Manager...](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
+
+####...or Build & Install from Source Code
+Note: See http://nodejs.org to find the latest version, which may be ahead of the one linked in the instructions here.
+```
+wget http://nodejs.org/dist/v0.10.24/node-v0.10.24.tar.gz
+tar xvzf node-v0.10.24.tar.gz 
+cd node-v0.10.24/
+./configure ; make ; sudo make install
+sudo npm -g install always
+```
 
 ###MongoDB
 http://mongodb.org
@@ -24,16 +37,6 @@ Instructions
 ------------
 
 ###The following commands run from the *parent directory in which Netention will be installed*
-
-####Build & Install Node.JS from Source Code
-Note: See http://nodejs.org to find the latest version, which may be ahead of the one linked in the instructions here.
-```
-wget http://nodejs.org/dist/v0.10.24/node-v0.10.24.tar.gz
-tar xvzf node-v0.10.24.tar.gz 
-cd node-v0.10.24/
-./configure ; make ; sudo make install
-sudo npm -g install always
-```
 
 ####Get the latest Netention source code
 ```

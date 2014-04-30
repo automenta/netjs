@@ -5,29 +5,29 @@ function onChatSend(name, desc, tag) {
     o = objAddTag(o, 'Message');
     if (desc)
         o = objAddDescription(o, desc);
-	if (tag)
-		o = o.add(tag);
+    if (tag)
+        o = o.add(tag);
 
-    $N.pub(o, function() { }, function() { console.log('sent'); });
+    $N.pub(o, function() {
+    }, function() {
+        console.log('sent');
+    });
 
 }
 
 function newChatView(v) {
-    var frame = newDiv();
-
     //var roster = newRoster().attr('class', 'ChatViewRoster');    
-    var content = newDiv().attr('class', 'ChatViewContent');
-    var input = newChatInput(onChatSend).attr('class', 'ChatViewInput ui-widget-content');
+    var content = newDiv().addClass('ChatViewContent');
+    var input = newChatInput(onChatSend).addClass('ChatViewInput');
 
     //frame.append(roster);
-    frame.append(content);
-    frame.append(input);
+    v.append(content);
+    v.append(input);
 
-    v.append(frame);
 
-	var scrollbottom = _.debounce(function() {
-        v.scrollTop(content.height()*20);
-	}, 150);
+    var scrollbottom = _.debounce(function() {
+        content.scrollTop(content.height() * 20);
+    }, 150);
 
     function updateContent() {
         content.html('');
@@ -48,23 +48,19 @@ function newChatView(v) {
         for (var i = rr.length - 1; i >= 0; i--) {
             var x = self.object(rr[i]);
             content.append(newObjectLogLine(x));
-            content.append(newEle('br'));
         }
 
-        content.append(newEle('br'));
-        content.append(newEle('br'));
-
-		later(scrollbottom);
+        later(scrollbottom);
     }
 
-    frame.onChange = function() {
+    content.onChange = function() {
         updateContent();
     };
 
-    frame.onChange();
+    content.onChange();
 
 
-    return frame;
+    return content;
 }
 
 function newInlineSelfButton(s) {
@@ -75,7 +71,13 @@ function newInlineSelfButton(s) {
 }
 
 function newObjectLogLine(x) {
-    var line = newEle('div');
+    var line = newEle('div').addClass('ChatViewContentLine');
+    line.hover(function() {
+       line.addClass('ChatViewContentLineHover');
+    }, function() {
+       line.removeClass('ChatViewContentLineHover');        
+    });
+    
     var d = newDiv().addClass('chatViewLineAuthor').appendTo(line);
     var e = newDiv().addClass('chatViewLineContent').appendTo(line);
 
@@ -87,29 +89,29 @@ function newObjectLogLine(x) {
         else {
             b = $('<a href="#">' + x.author + '</a>');
         }
-		b.click(function() {
-			if (x.author === $N.id())
-			    newPopupObjectEdit(x);
-			else
-			    newPopupObjectView(x.id);
-		});
-		d.append(b);
+        b.click(function() {
+            if (x.author === $N.id())
+                newPopupObjectEdit(x);
+            else
+                newPopupObjectView(x.id);
+        });
+        d.append(newEle('p').append(b));
     }
     else {
         d.append('(System)');
     }
-    
+
     if (x.name.length > 0)
-        e.append('<span>' + x.name + '</span>');
+        e.append('<p>' + x.name + '</p>');
     var desc = objDescription(x);
     if (desc.length > 0) {
-        e.append('<span>' + desc + '</span>');
+        e.append('<p>' + desc + '</p>');
     }
     var firstMedia = objFirstValue(x, 'media');
     if (firstMedia) {
-        e.append('<span><img src="' + firstMedia + '"/></span>');
+        e.append('<p><img src="' + firstMedia + '"/></p>');
     }
-    
+
     return line;
 }
 
@@ -132,7 +134,7 @@ function newChatInput(onSend) {
         newWebcamWindow(function(imgURL) {
             //var description = '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>';
             if (onSend)
-                onSend(inputBar.val(), null, { 'media': imgURL} );
+                onSend(inputBar.val(), null, {'media': imgURL});
             inputBar.val('');
         });
     });

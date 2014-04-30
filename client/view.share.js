@@ -235,7 +235,7 @@ function newObjectSummary2(x) {
 
     var firstMedia = objFirstValue(x, 'media');
     var imgurl = 'icon/placeholder.png';
-    if (firstMedia) {
+    if ((firstMedia) && (typeof firstMedia == "string")) {
         imgurl = firstMedia;
     }
     img.append('<img src="' + imgurl + '"/>');

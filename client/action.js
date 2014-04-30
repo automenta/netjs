@@ -258,8 +258,9 @@ addAction({menu: 'Audio', name: 'Add from Sound Search...'});
 
 addAction({menu: 'Share', name: 'To TeleHash'});
 addAction({menu: 'Share', name: 'To Twitter'});
-//Twitter share: https://dev.twitter.com/docs/tweet-button#properties
-addAction({menu: 'Share', name: 'To E-Mail'});
+    //Twitter share: https://dev.twitter.com/docs/tweet-button#properties
+addAction({menu: 'Share', name: 'To G-Mail'});
+    //Open IFrame to GMail Mobile, showing object contents above the iframe for copy & paste
 addAction({menu: 'Share', name: 'To Blog'});
 addAction({menu: 'Share', name: 'To Forum'});
 addAction({menu: 'Share', name: 'To Torrent'});

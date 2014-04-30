@@ -499,8 +499,10 @@ div.olMapViewport {
 
 .nameInput {
 	padding:3px; text-indent:15px;
-	width: 98%;
 	font-size: 150%;
+}
+.nameInputWide {
+	width: 98%;    
 }
 
 .tagSuggestionsWrap {
@@ -771,11 +773,37 @@ word-wrap: break-word;
     .markdown { padding: 0.25em; }
     
 /* Chat */
-        .ChatViewContent { margin-left: 1em;  }
-		.ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }
-        .ChatViewInput { position: fixed; text-align: right; right: 1em; bottom: 0; }
+.ChatViewContent { position: fixed; height: 100%; margin-left: 1em; height: 90%; overflow: auto;  }
+.ChatViewContentLine { border-left: 3px solid transparent; border-bottom: 1px solid gray; display: inline-block; width: 95%; }
+.ChatViewContentLine p { margin: 0; }
+.ChatViewContentLineHover { border-left: 3px solid gray; }
+        .ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }
+.ChatViewInput { position: fixed; right: 2em; text-align: right; bottom: 0; }
 
-        .InlineSelfButton { cursor: crosshair; border: 1px solid rgba(0,0,0,0.1); font-weight: bold; }
+.InlineSelfButton { cursor: crosshair; border: 1px solid rgba(0,0,0,0.1); font-weight: bold; }
+.chatViewLineContent {
+    float: left;
+}
+.chatViewLineContent img {
+    max-height: 4em;
+}
+
+.chatViewLineAuthor {
+    clear: both;
+    width: 200px;    
+    float: left;
+    text-align: right;    
+    padding-right: 15px;
+    margin-bottom: 0.5em;
+}
+.chatViewLineContent ul {
+    font-size: 75%;    
+}
+.chatViewLineAuthor img {
+    height: 1em;
+}
+
+        
         
 /* Team/Self Browser */
         .SelfView { width: 100%; }
@@ -1460,24 +1488,6 @@ svg {
     border: 2px solid gray !important;
 }
 
-.chatViewLineContent {
-    float: left;
-}
-.chatViewLineAuthor {
-	border-top: 1px solid gray;
-    clear: both;
-    width: 200px;    
-    float: left;
-    text-align: right;    
-    padding-right: 15px;
-    margin-bottom: 0.5em;
-}
-.chatViewLineContent ul {
-    font-size: 75%;    
-}
-.chatViewLineAuthor img {
-    height: 1em;
-}
 
 .UserTagCode {
 	max-height: 300px;
