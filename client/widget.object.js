@@ -340,6 +340,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         var ontoSearcher;
 
         var lastValue = null;
+        var ontocache = { };
         function search() {
             if (!tsw.is(':visible')) {
                 //clearInterval(ontoSearcher);
@@ -352,7 +353,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             var v = nameInput.val();
             if (lastValue != v) {
-                updateTagSuggestions(v, ts, onAdd, getEditedFocus);
+                updateTagSuggestions(v, ts, onAdd, getEditedFocus, ontocache);
                 lastValue = v;
             }
         }

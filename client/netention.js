@@ -333,12 +333,19 @@ function netention(f) {
             });
 
         },
-        searchOntology: function(query) {
+        searchOntology: function(query, ontocache) {
             var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
             var results = {};
             for (var i = 0; i < terms.length; i++) {
                 var T = terms[i];
-                var r = this.ontoIndex.search(T);
+                
+                var r = ontocache[T];
+                
+                if (!r)
+                    r = this.ontoIndex.search(T);
+                
+                ontocache[T] = r;
+                
                 for (var j = 0; j < r.length; j++) {
                     var R = r[j];
                     var id = R.ref;
@@ -349,6 +356,9 @@ function netention(f) {
                         results[id] += score;
                 }
             }
+            
+            console.log('ontocache', ontocache);
+            
             results = _.map(_.keys(results), function(r) {
                 return [r, results[r]];
             });
