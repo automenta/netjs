@@ -3,8 +3,8 @@ var ONTO_SEARCH_PERIOD_MS = 1500; //TODO move this to client.js
 
 //t is either a tag ID, or an object with zero or more tags
 function getTagIcon(t) {
-	if (!t)
-		return defaultIcons['unknown'];
+    if (!t)
+        return defaultIcons['unknown'];
 
     if (t.id) {
         //try all the tags, return the first
@@ -118,9 +118,9 @@ function newTagButton(t, onClicked, isButton) {
     var i = null;
     if (ti != null) {
         i = $(document.createElement('img')).attr({
-			'src': ti,
-			'class': 'TagButtonIcon'
-		});
+            'src': ti,
+            'class': 'TagButtonIcon'
+        });
     }
 
     var b = isButton ? $(newEle('button')) : $(newEle('a')).attr('href', '#');
@@ -285,7 +285,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
         });
 
-		var tsw = $('<div class="tagSuggestionsWrap"></div>').appendTo(d);
+        var tsw = $('<div class="tagSuggestionsWrap"></div>').appendTo(d);
         var ts = $('<div/>').addClass('tagSuggestions').appendTo(tsw);
 
         if (x.value) {
@@ -433,29 +433,29 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         d.addClass('ObjectEditDiv');
 
         if ((hideWidgets != true) && (!x.readonly)) {
-			var addButtonWrap = newDiv().addClass('tagSection').css('text-align', 'center');
+            var addButtonWrap = newDiv().addClass('tagSection').css('text-align', 'right');
 
-			var addButtons = newEle('span').appendTo(addButtonWrap);
+            var addButtons = newEle('span').appendTo(addButtonWrap);
 
-			var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
-			addDisplay.hover(function() {
-				if (!addButtons.is(':visible')) {
-					addButtons.fadeIn();
-					addDisplay.text('-');
-				}
-			});
-			addDisplay.click(function() {
-				if (addButtons.is(':visible')) {
-					addButtons.fadeOut();
-					addDisplay.text('+');
-				}
-				else {
-					addButtons.fadeIn();
-					addDisplay.text('-');
-				}
-			});		
+            var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
+            addDisplay.hover(function() {
+                if (!addButtons.is(':visible')) {
+                    addButtons.fadeIn();
+                    addDisplay.text('-');
+                }
+            });
+            addDisplay.click(function() {
+                if (addButtons.is(':visible')) {
+                    addButtons.fadeOut();
+                    addDisplay.text('+');
+                }
+                else {
+                    addButtons.fadeIn();
+                    addDisplay.text('-');
+                }
+            });
 
-			addButtons.hide();
+            addButtons.hide();
 
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
             whatButton.click(function() {
@@ -561,7 +561,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             addButtons.append(uploadButton);
 
 
-			d.append(addButtonWrap);
+            d.append(addButtonWrap);
 
             var scopeSelect = $('<select style="float:right"/>');
             scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
@@ -636,7 +636,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     var strength = t.strength;
 
     var d = newDiv().addClass('tagSection');
-	
+
     /*d.hover( function() {
      d.addClass('tagSectionHovered');
      }, function() {
@@ -648,7 +648,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
     var tagLabel = $('<span>' + tag + '</span>').addClass('tagLabel');
 
-	var tagIcon = $('<img src="' + getTagIcon(null) + '"/>');
+    var tagIcon = $('<img src="' + getTagIcon(null) + '"/>');
 
     applyTagStrengthClass(d, strength);
 
@@ -656,25 +656,25 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     d.append(tagLabel, '&nbsp;');
 
     if (editable) {
-		d.addClass('tagSectionEditable');
+        d.addClass('tagSectionEditable');
 
         var tagButtons = newDiv().addClass('tagButtons');
-		/*d.hover(function() {
-			//tagButtons.fadeIn();			
-		}, function() {
-			//tagButtons.fadeOut();
-		});*/
+        /*d.hover(function() {
+         //tagButtons.fadeIn();			
+         }, function() {
+         //tagButtons.fadeOut();
+         });*/
 
-		d.click(function() {
-			if (!tagButtons.is(':visible')) {
-				tagButtons.fadeIn();
-			}
-			else {
-				tagButtons.fadeOut();
-			}
-		});
+        d.click(function() {
+            if (!tagButtons.is(':visible')) {
+                tagButtons.fadeIn();
+            }
+            else {
+                tagButtons.fadeOut();
+            }
+        });
 
-		tagButtons.hide();
+        tagButtons.hide();
 
         if (index > 0) {
             var upButton = $('<a href="#" title="Move Up">^</a>');
@@ -700,7 +700,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             var p75Button = $('<button title="75%">&nbsp;</button>');
             var p100Button = $('<button title="100%">&nbsp;</button>');
 
-			tagButtons.append(disableButton, p25Button, p50Button, p75Button, p100Button);
+            tagButtons.append(disableButton, p25Button, p50Button, p75Button, p100Button);
 
             var currentButton = null;
             if (strength == 0)
@@ -769,7 +769,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         });
         tagButtons.append(removeButton);
 
-		tagButtons.appendTo(d);
+        tagButtons.appendTo(d);
 
         //d.hover(function(){ tagButtons.fadeIn(200);}, function() { tagButtons.fadeOut(200);});
         //d.hover(function(){ tagButtons.show();}, function() { tagButtons.hide();});                
@@ -781,7 +781,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     if (isPrimitive(tag)) {
         //tagLabel.hide();    
         type = tag;
-		tagLabel.hide();
+        tagLabel.hide();
     }
 
     var prop = $N.getProperty(tag);
@@ -793,7 +793,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         if (prop['default']) {
             defaultValue = prop['default'];
         }
-		d.addClass('propertySection');
+        d.addClass('propertySection');
     }
 
     if (type == 'textarea') {
@@ -804,9 +804,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 dd.attr('readonly', 'readonly');
             }
 
-			if (prop)
-				if (prop.description)
-					dd.attr('placeholder', prop.description);
+            if (prop)
+                if (prop.description)
+                    dd.attr('placeholder', prop.description);
 
             if (t.value)
                 dd.val(t.value);
@@ -1138,15 +1138,15 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             var value = t.value;
 
             function updateTS(x) {
-                var X = $N.getObject(x) || $N.getTag(x) || { name: x };
-                if (X.name!=x)
+                var X = $N.getObject(x) || $N.getTag(x) || {name: x};
+                if (X.name != x)
                     ts.val(X.name + ' (' + x + ')');
                 else
                     ts.val(X.name);
                 ts.result = x;
             }
             updateTS(value);
-            
+
 
             //http://jqueryui.com/autocomplete/#default
             //http://jqueryui.com/autocomplete/#categories
@@ -1186,7 +1186,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if (!prop.readonly) {
                 var mb = $('<button title="Find Object">...</button>');
 
-				ts.attr('placeholder', prop.tag ? JSON.stringify(prop.tag) : 'Object' );
+                ts.attr('placeholder', prop.tag ? JSON.stringify(prop.tag) : 'Object');
 
                 mb.click(function() {
                     var tagRestrictions = prop.tag;
@@ -1201,8 +1201,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     pp.append(tagger);
                 });
                 ts.click(function() {
-                   if (ts.val()=='')
-                       mb.click();
+                    if (ts.val() == '')
+                        mb.click();
                 });
                 tt.append(mb);
             }
@@ -1227,8 +1227,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if ($N.tags[tag] != undefined) {
                 tagLabel.html(TAG.name);
             }
-			if (ti)
-				tagIcon.attr('src', ti);
+            if (ti)
+                tagIcon.attr('src', ti);
 
             if ((!x.readonly) && (editable)) {
                 /*var pb = $('<button>...</button>');
@@ -1243,7 +1243,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     return TT.properties;
                 }
 
-				var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
+                var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
                 var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
 
                 var pp = getTagProperties(tag);
@@ -1287,7 +1287,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
     }
 
-	tagIcon.prependTo(tagLabel);
+    tagIcon.prependTo(tagLabel);
 
     if (t.description)
         d.append('<ul>' + t.description + '</ul>');
@@ -1312,7 +1312,7 @@ function newPropertyView(x, vv) {
     }
     else if (p.type == 'timeseries') {
         var u = vv.value;
-        return ('<li>' + p.name + '<br/><textarea>' + JSON.stringify(u) +'</textarea></li');
+        return ('<li>' + p.name + '<br/><textarea>' + JSON.stringify(u) + '</textarea></li');
     }
     else if ((p.type == 'integer') && (p.incremental)) {
         function goprev() {
@@ -1487,7 +1487,7 @@ function newObjectSummary(x, options) {
                                     name: text,
                                     id: uuid(),
                                     value: [],
-									author: $N.id(),
+                                    author: $N.id(),
                                     replyTo: [x.id],
                                     createdAt: Date.now()
                                 };
@@ -1631,7 +1631,7 @@ function newObjectSummary(x, options) {
             axn.click(function() {
                 if ((x.author === $N.id()) && (titleClickMode === 'edit'))
                     newPopupObjectEdit(x, true);
-                else if (typeof(titleClickMode) === 'function') {
+                else if (typeof (titleClickMode) === 'function') {
                     titleClickMode(x);
                 }
                 else {
@@ -1658,7 +1658,7 @@ function newObjectSummary(x, options) {
 
 
     if (!mini) {
-		d.append(newObjectDetails(x));
+        d.append(newObjectDetails(x));
     }
 
     if (!mini) {
@@ -1679,7 +1679,7 @@ function newObjectSummary(x, options) {
 }
 
 function newObjectDetails(x) {
-	var d = newDiv();
+    var d = newDiv();
     var desc = objDescription(x);
     if (desc) {
         d.append('<p>' + desc + '</p>');
@@ -1734,7 +1734,7 @@ function newObjectDetails(x) {
                         ud.append(V.content);
                     }
                     else if (V.type == 'markdown') {
-                        ud.append( newDiv().addClass('markdown').html( markdown.toHTML(V.content )) );
+                        ud.append(newDiv().addClass('markdown').html(markdown.toHTML(V.content)));
                     }
                 }
             }
@@ -1743,7 +1743,7 @@ function newObjectDetails(x) {
                 ud.append(newPropertyView(x, vv));
         }
     }
-	return d;
+    return d;
 }
 
 

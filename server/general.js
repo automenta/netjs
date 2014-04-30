@@ -117,7 +117,43 @@ var generalTags = [
         tag: ['Concept']
     },
     {uri: 'Physical', name: 'Physical',
+        //https://en.wikipedia.org/wiki/Physical_quantity
+        //https://en.wikipedia.org/wiki/Category:Units_of_measurement
+        //https://en.wikipedia.org/wiki/Category:Physical_quantities
+        //https://en.wikipedia.org/wiki/Template:Meteorological_variables
+        //https://en.wikipedia.org/wiki/Water_pollution#Measurement
+        //https://en.wikipedia.org/wiki/Air_pollution  https://en.wikipedia.org/wiki/Air_quality_index  https://en.wikipedia.org/wiki/National_Ambient_Air_Quality_Standards  https://en.wikipedia.org/wiki/Indoor_air_quality  https://en.wikipedia.org/wiki/Particulates
         properties: {
+            physicalIonizingRadiation: { name: "Ionizing Radiation", type: 'real', units: [
+                    //https://en.wikipedia.org/wiki/Category:Units_of_radiation_dose
+                    //http://orise.orau.gov/reacts/guide/measure.htm
+                    "rem", "sieverts", "rad", "gray", "roentgen", "curie"
+            ] },
+            physicalTemperature: { name: "Temperature", type: 'real', units: [
+                    "fahrenheit", "celsius", "kelvin"
+            ] },
+            physicalLightLevel: { name: "Light Level", type: 'real', units: [ 'candela '] },
+            physicalSoundLevel: { name: "Sound Level", type: 'real', units: [ 'decibel '] },
+            physicalAtmosphericPressure: { //https://en.wikipedia.org/wiki/Atmosphere_(unit)
+                name: "Atmospheric Pressure", type: 'real', units: [ 'pascal', 'atmosphere', 'inches of Hg' ]
+            },
+            physicalOxygenConcentration: { 
+                name: "Oxygen Concentration", type: 'real', units: [ 'O2 to N2 Ratio' ]
+            },
+            physicalCO2Concentration: { 
+                name: "CO2 Concentration", type: 'real', units: [ 'ppm' ]
+            },
+            
+            //ozone concentration
+            //CO2 concentration
+            //O2 concentration
+            //other pollution
+            //humidity: %
+            //visibility: km
+            //wind direction
+            //wind speed
+            //gravity
+            
             /*
              http://build.smartthings.com/smartapps-overview/#SmartAppCapabilities
              Attribute Name	Read/Write	Data Type	Details/Comments
@@ -519,6 +555,7 @@ var generalTags = [
 ];
 
 //http://bioportal.bioontology.org/ontologies/MFOEM?p=classes
+//https://en.wikipedia.org/wiki/Category:Psychometrics
 var emotionTags = [
     {uri: 'Emotion', name: 'Emotion', tag: ['Concept'], description: 'How something feels or seems',
         properties: {
