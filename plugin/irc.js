@@ -99,6 +99,9 @@ exports.plugin = function($N) {
                         m.setName(to);
                         m.fromIRC = true; //avoid rebroadcast                        
                     }
+                    else {
+                        messageObject[t].modifiedAt = Date.now();
+                    }
                     
                     messageObject[t].addDescription(from + ': ' + text + '<br/>');
                     $N.pub(messageObject[t]);

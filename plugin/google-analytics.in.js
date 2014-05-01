@@ -9,8 +9,6 @@ exports.plugin = function($N) {
         author: 'http://google.com',
         start: function(options) {
             var ga = require('googleanalytics');
-
-            console.log('google analytics', options);
             
             $N.addTags([
                 {
