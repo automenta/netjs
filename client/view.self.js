@@ -1,3 +1,5 @@
+var GOAL_EXPIRATION_INTERVAL = 2 * 60 * 60 * 1000; //2 hours, in MS
+
 function getOperatorTags() {
     return _.filter(_.keys($N.tags), function(t) {
         return $N.tag(t).operator;
@@ -33,11 +35,12 @@ function saveAddedTags(gt, tag, when) {
 
         if (when) {
             ng.when = when;
+            ng.expiresAt = when + GOAL_EXPIRATION_INTERVAL;
             var location = objSpacePoint($N.myself());
             if (location)
                 objAddValue(ng, 'spacepoint', location);
         }
-
+        
         ng.own();
         if (G)
             ng = objName(ng, G.name);
