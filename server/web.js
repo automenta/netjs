@@ -2264,8 +2264,7 @@ exports.start = function(options, init) {
             var ids = _.map(objs, function(o) { return o.id; } );
             deleteObjects(ids);
         });
-    }
-    
+    }    
     setInterval(removeExpired, expiresRemovalIntervalMS);
     removeExpired();
 

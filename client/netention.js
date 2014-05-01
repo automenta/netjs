@@ -556,8 +556,8 @@ function netention(f) {
                 onFinished();
             });
         },
-        getReplies: function(uri) {
-            return  this.get('replies')[uri] || [];
+        getReplies: function(id) {
+            return  this.get('replies')[id] || [];
         },
         listenAll: function(b) {
             if (b) {
@@ -639,14 +639,22 @@ function netention(f) {
                 }
 
                 if (y.replyTo) {
-                    var p = replies[y.replyTo];
-                    if (p) {
-                        if (!_.contains(p, y.id))
-                            p.push(y.id);
+                    var rt = y.replyTo;
+                    if (!Array.isArray(rt)) {
+                        rt = [ rt ];
                     }
-                    else {
-
-                        replies[y.replyTo] = [y.id];
+                    for (var n = 0; n < rt.length; n++) {
+                        var rtt = rt[n];
+                        
+                        var p = replies[rtt];
+                        if (p) {
+                            if (!_.contains(p, y.id))
+                                p.push(y.id);
+                        }
+                        else {
+                            replies[rtt] = [y.id];
+                        }
+                        
                     }
                 }
 

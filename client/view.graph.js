@@ -257,17 +257,20 @@ function newGraphView(v) {
                 minTime = _.min(times);
                 maxTime = _.max(times);
             }
-
-            for (var i = 0; i < xxrr.length; i++) {
-                var x = xxrr[i][0];
-
+            
+            function addNodeForObject(x) {
                 var N = addNode(x.id, x.name || "", defaultColor, 35, 35, getTagIcon(x));
                 if (timeline) {
                     if (minTime != maxTime) {
                         var when = objTime(x);
                         N.fixedX = timelineWidth * (when - minTime) / (maxTime - minTime);
                     }
-                }
+                }                
+            }
+
+            for (var i = 0; i < xxrr.length; i++) {
+                var x = xxrr[i][0];
+                addNodeForObject(x);
             }
 
             for (var i = 0; i < xxrr.length; i++) {
@@ -302,7 +305,12 @@ function newGraphView(v) {
                     if (x.subject)
                         rtags.push([x.subject, {stroke: '#bbb', strokeWidth: 3}]);
                 }
-
+                if (includeEdges['Reply']) {
+                    var replies = $N.getReplies(x.id);
+                    for (var j = 0; j < replies.length; j++) {
+                        rtags.push([replies[j], {stroke: '#bbb', strokeWidth: 3}]);                        
+                    }
+                }
  
                 if (rtags) {
 
@@ -314,15 +322,29 @@ function newGraphView(v) {
                             continue; //ignore the Link tag
 
                         if (nodeIndex[tj] == undefined) {
-                            var ttj = s.tag(tj) || s.object(tj) || null; // || { name: '<' + tj + '>' };
+                            var tag;
+                            var ttj = s.tag(tj);
+                            if (ttj) {
+                                tag = true;
+                            }
+                            else {
+                                ttj = s.object(tj) || null; // || { name: '<' + tj + '>' };
+                                tag = false;
+                            }
                             if (!ttj)
                                 continue;
 
-                            var tagIcon = null;
-                            if (ttj)
-                                tagIcon = getTagIcon(tj);
+                            if (tag) {
+                                var tagIcon = null;
+                                if (ttj)
+                                    tagIcon = getTagIcon(tj);
 
-                            addNode(tj, ttj.name, tagColor, 50, 50, tagIcon);
+                                addNode(tj, ttj.name, tagColor, 50, 50, tagIcon);
+                            }
+                            else {
+                                //add node for object
+                                addNodeForObject(ttj);
+                            }
 
                         }
 
@@ -347,6 +369,8 @@ function newGraphView(v) {
                 console.log('value', t);
             }
             */
+
+
 
             //add object links
             if (includeEdges['Object']) {
@@ -522,7 +546,7 @@ function newGraphView(v) {
     submenu.append('<hr/>');
     submenu.append('Edges:<br/>');
     
-    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Trust' /*, 'Value'*/ ];
+    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust' /*, 'Value'*/ ];
     _.each(edgeTypes, function(e) {
         var includeCheck = $('<input type="checkbox"/>').appendTo(submenu);
         submenu.append(e + '<br/>');

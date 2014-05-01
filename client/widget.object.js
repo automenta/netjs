@@ -340,7 +340,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         var ontoSearcher;
 
         var lastValue = null;
-        var ontocache = { };
+        var ontocache = {};
         function search() {
             if (!tsw.is(':visible')) {
                 //clearInterval(ontoSearcher);
@@ -1358,6 +1358,50 @@ function newPropertyView(x, vv) {
     }
 }
 
+function newReplyPopup(x) {
+    var pp = newPopup("Reply to: " + x.name);
+    function closeReplyDialog() {
+        pp.dialog('close');
+    }
+
+    pp.append(newReplyWidget(
+            //on reply
+            function(text) {
+
+                closeReplyDialog();
+
+                var rr = {
+                    name: text,
+                    id: uuid(),
+                    value: [],
+                    author: $N.id(),
+                    replyTo: [x.id],
+                    createdAt: Date.now()
+                };
+
+                $N.pub(rr, function(err) {
+                    $.pnotify({
+                        title: 'Error replying (' + x.id.substring(0, 6) + ')',
+                        text: err,
+                        type: 'Error'
+                    })
+                }, function() {
+                    $N.notice(rr);
+                    refreshReplies();
+                    $.pnotify({
+                        title: 'Replied (' + x.id.substring(0, 6) + ')'
+                    })
+                });
+
+            },
+            //on cancel
+            function() {
+                closeReplyDialog();
+            }
+    ));
+    
+}
+
 
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
@@ -1476,49 +1520,15 @@ function newObjectSummary(x, options) {
         replyButton = $('<button title="Reply" class="ui-widget-content ui-button">r</button>');
         replyButton.click(function() {
 
-            newReply.show();
-            newReply.empty();
-            newReply.append(newReplyWidget(
-                    //on reply
-                            function(text) {
-
-                                newReply.hide();
-
-                                var rr = {
-                                    name: text,
-                                    id: uuid(),
-                                    value: [],
-                                    author: $N.id(),
-                                    replyTo: [x.id],
-                                    createdAt: Date.now()
-                                };
-
-                                $N.pub(rr, function(err) {
-                                    $.pnotify({
-                                        title: 'Error replying (' + x.id.substring(0, 6) + ')',
-                                        text: err,
-                                        type: 'Error'
-                                    })
-                                }, function() {
-                                    $N.notice(rr);
-                                    refreshReplies();
-                                    $.pnotify({
-                                        title: 'Replied (' + x.id.substring(0, 6) + ')'
-                                    })
-                                });
-
-                            },
-                            //on cancel
-                                    function() {
-                                        newReply.hide();
-                                    }
-                            ));
-                            replyButton.enabled = false;
-                        });
-                hb.append(replyButton);
+            newReplyPopup(x);
+            
+                    
+            replyButton.enabled = false;
+        });
+        hb.append(replyButton);
 
 
-            }
+    }
 
 
     if (replyButton)
@@ -1668,10 +1678,6 @@ function newObjectSummary(x, options) {
         replies.hide();
         d.append(replies);
 
-        var newReply = newDiv();
-        newReply.addClass('ObjectReply objectView');
-        newReply.hide();
-        d.append(newReply);
 
         refreshReplies();
     }

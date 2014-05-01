@@ -77,8 +77,8 @@ function objectify(x) {
                 x.author = self.id();
             return x;
         },
-        addTag: function(t) {
-            return objAddTag(x, t);
+        addTag: function(t, strength) {
+            return objAddTag(x, t, strength);
         },
         removeTag: function(t) {
             return objRemoveTag(x, t);

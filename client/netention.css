@@ -773,7 +773,7 @@ word-wrap: break-word;
     .markdown { padding: 0.25em; }
     
 /* Chat */
-.ChatViewContent { position: fixed; height: 100%; margin-left: 1em; height: 90%; overflow: auto;  }
+.ChatViewContent { position: fixed; height: 100%; margin-left: 1em; height: 90%; width: 98%; overflow: auto;  }
 .ChatViewContentLine { border-left: 3px solid transparent; border-bottom: 1px solid gray; display: inline-block; width: 95%; }
 .ChatViewContentLine p { margin: 0; }
 .ChatViewContentLineHover { border-left: 3px solid gray; }

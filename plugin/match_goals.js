@@ -51,8 +51,6 @@
 var _ = require('underscore');
 var kmeans = require('kmeans'); //https://github.com/olalonde/kmeans.js
 
-var updatePeriodMS = 5000;
-
 exports.plugin = function($N) {
     return {
         name: 'Goal Matching',
@@ -63,7 +61,7 @@ exports.plugin = function($N) {
         options: {},
         version: '1.0',
         author: 'http://netention.org',
-        start: function() {
+        start: function(options) {
             var that = this;
 
             this.matchingTags = ['Goal'];
@@ -113,11 +111,18 @@ exports.plugin = function($N) {
                                 cc.setName('Possible Goal ' + i);
 
                                 cc.addTag(that.centroidTag);
+                                
+                                _.each(cc.tags, function(v, k) {
+                                   cc.addTag(k, v); 
+                                });
 
                                       //JSON.stringify(cc.tags, null, 4) + ' ' + JSON.stringify(cc.implicates, null, 4)
                                 var d = _.map(_.keys(cc.tags), function(k) { return k + '(' + (100.0 * cc.tags[k]).toFixed(2) + '%)' } ).join(', ');
-                                d += ' for ' + cc.implicates.join(', ');
+                                d += ' for ' + cc.replyTo.join(', ');
+                                                                
                                 cc.addDescription(d);
+                                
+                                delete cc.tags;
 
                                 $N.pub(cc);
                             }
@@ -127,7 +132,7 @@ exports.plugin = function($N) {
 
             }
 
-            this.updateCentroids = _.throttle(_updateCentroids, updatePeriodMS);
+            this.updateCentroids = _.throttle(_updateCentroids, options.updatePeriodMS);
             this.updateCentroids();
         },
         onPub: function(x) {
@@ -335,15 +340,22 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
         }
 
         var restags = {};
+        var tagSum = 0;
         for (var k = 3; k < mm.length; k++) {
             var t = tags[k - 3];
-            if (mm[k] > 0)
+            if (mm[k] > 0) {
                 restags[t] = mm[k];
+                tagSum += restags[t];                
+            }
         }
+        if (tagSum > 0)
+            _.each(restags, function(v, k) {
+                restags[k]/=tagSum;
+            });
 
         res.tags = restags;
 
-        res.implicates = mi[i].map(function(n) {
+        res.replyTo = mi[i].map(function(n) {
             return objects[n].id;
         });
 
