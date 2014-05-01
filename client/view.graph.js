@@ -349,29 +349,30 @@ function newGraphView(v) {
             */
 
             //add object links
-            for (var k = 0; k < xxrr.length; k++) {
-                var x = xxrr[k][0];
+            if (includeEdges['Object']) {
+                for (var k = 0; k < xxrr.length; k++) {
+                    var x = xxrr[k][0];
 
-                if (!x.value)
-                    continue;
+                    if (!x.value)
+                        continue;
 
-                for (var j = 0; j < x.value.length; j++) {
-                    var vi = x.value[j];
-                    var vid = vi.id;
-                    if (isPrimitive(vid))
-                        continue;
-                    var vidp = $N.getProperty(vid);
-                    if (!vidp)
-                        continue;
-                    if (vidp.type == 'object') {
-                        var target = vi.value;
-                        if (nodeIndex[target]) {
-                            addEdge(x.id, target, {});
+                    for (var j = 0; j < x.value.length; j++) {
+                        var vi = x.value[j];
+                        var vid = vi.id;
+                        if (isPrimitive(vid))
+                            continue;
+                        var vidp = $N.getProperty(vid);
+                        if (!vidp)
+                            continue;
+                        if (vidp.type == 'object') {
+                            var target = vi.value;
+                            if (nodeIndex[target]) {
+                                addEdge(x.id, target, {});
+                            }
                         }
                     }
                 }
             }
-
 
             force
                     .nodes(nodes)
@@ -521,7 +522,7 @@ function newGraphView(v) {
     submenu.append('<hr/>');
     submenu.append('Edges:<br/>');
     
-    var edgeTypes = ['Type', 'Author', 'Subject', 'Trust' /*, 'Value'*/ ];
+    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Trust' /*, 'Value'*/ ];
     _.each(edgeTypes, function(e) {
         var includeCheck = $('<input type="checkbox"/>').appendTo(submenu);
         submenu.append(e + '<br/>');
