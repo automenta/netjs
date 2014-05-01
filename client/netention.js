@@ -356,9 +356,7 @@ function netention(f) {
                         results[id] += score;
                 }
             }
-            
-            console.log('ontocache', ontocache);
-            
+                        
             results = _.map(_.keys(results), function(r) {
                 return [r, results[r]];
             });

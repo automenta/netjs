@@ -60,8 +60,26 @@ exports.start = function(options, init) {
     }
     var collections = ["obj"];
 
+    function startPlugin(kv, options) {
+        var v = kv;
 
-    function plugin(kv, options) {
+        var p = require('../plugin/' + v).plugin;
+        if (typeof (p) == "function")
+            p = p($N);
+        else if (p != undefined) {
+            console.error(v + ' plugin format needs upgraded');
+            return;
+        }
+        
+        $N.server.plugins[v] = { enabled: true, plugin: p };        
+        
+        $N.nlog('Started plugin: ' + p.name);
+        p.start(options);
+           
+    }
+
+    //deprecated
+    function _plugin(kv, options) {
         var v = kv;
 
         var p = require('../plugin/' + v).plugin;
@@ -118,12 +136,13 @@ exports.start = function(options, init) {
 
         //console.log('Loaded invalid plugin: ' + v);
     }
-    $N.plugin = plugin;
+    //$N.plugin = plugin;
 
     function plugins(operation, parameter) {
         var plugins = $N.server.plugins;
+
         for (var p in plugins) {
-            if (plugins[p].enabled) {
+            if (plugins[p].enabled!=false) {
                 var pp = plugins[p].plugin;
                 if (!pp)
                     continue;
@@ -154,14 +173,14 @@ exports.start = function(options, init) {
                     //$N.server.currentClientID = x.currentClientID || {};
                     //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
 
-                    if (x.plugins) {
+                    /*if (x.plugins) {
                         for (var pl in x.plugins) {
                             if (!$N.server.plugins[pl])
                                 $N.server.plugins[pl] = {};
                             if (x.plugins[pl].enabled)
                                 $N.server.plugins[pl].enabled = x.plugins[pl].enabled;
                         }
-                    }
+                    }*/
 
                     /* logMemory = util.createRingBuffer(256);
                      logMemory.buffer = x.logMemoryBuffer;
@@ -2179,18 +2198,9 @@ exports.start = function(options, init) {
     $N.saveState = saveState;
 
     function loadPlugins() {
+        
 	var pluginOption = { };
-
-        if ($N.enablePlugins) {
-            _.each($N.enablePlugins, function(v, x) {
-                if (!$N.server.plugins[x])
-                    $N.server.plugins[x] = {};
-				
-                $N.server.plugins[x].enabled = true;
-		pluginOption[x] = v;
-            });
-        }
-
+                
         fs.readdirSync("./plugin").forEach(function(ifile) {
             var file = ifile + '';
             if (file === 'README')
@@ -2199,11 +2209,16 @@ exports.start = function(options, init) {
             if (file.indexOf('.js') == -1) {//avoid directories
                 file = file + '/netention.js';
             }
+            
+            if (!$N.server.plugins[file])
+                return;
 
-            if (pluginOption[ifile]) {
-                var po = pluginOption[ifile];
+            pluginOption[file] = $N.server.plugins[file];
+
+            if (pluginOption[file]) {
+                var po = pluginOption[file];
                 if (po.enable != false)
-                    plugin(file, pluginOption[ifile]);
+                    startPlugin(file, pluginOption[file]);
             }
         });
     }

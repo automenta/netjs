@@ -10,6 +10,8 @@ exports.plugin = function($N) {
         start: function(options) {
             var ga = require('googleanalytics');
 
+            console.log('google analytics', options);
+            
             $N.addTags([
                 {
                     uri: 'GoogleAnalytics', name: 'Google Analytics',
