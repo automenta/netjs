@@ -212,7 +212,7 @@ function newUsView(v) {
             _.each(operators, function(o) {
                 var O = $N.tag(o);
 
-                var sdd = newDiv().addClass('alternatingDiv');
+                var sdd = newDiv().addClass('operatorDiv');
 
                 if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))) {
                     //not a 3-vector system
