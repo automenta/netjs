@@ -64,8 +64,8 @@ function objectify(x) {
             objTouch(x);
             return x;
         },
-        add: function(k, v) {
-            return objAddValue(x, k, v);
+        add: function(k, v, strength) {
+            return objAddValue(x, k, v, strength);
         },
         /*x.objSpacePoint = function(latitude, longitude) {
          return objSpacePointLatLng

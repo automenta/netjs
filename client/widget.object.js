@@ -1668,16 +1668,12 @@ function newObjectSummary(x, options) {
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
 
 
-    if (!mini) {
-        d.append(newObjectDetails(x));
-    }
+    d.append(newObjectDetails(x));
 
     if (!mini) {
-
         replies.addClass('ObjectReply');
         replies.hide();
         d.append(replies);
-
 
         refreshReplies();
     }
@@ -1746,8 +1742,17 @@ function newObjectDetails(x) {
                 }
             }
 
-            if ($N.isProperty(vv.id))
-                ud.append(newPropertyView(x, vv));
+            if ($N.isProperty(vv.id)) {
+                var strength = vv.strength || 1.0;
+                
+                var pv = newPropertyView(x, vv);                
+                if (pv) {
+                    if (typeof pv == "string")
+                        pv = $(pv);
+                    pv.css('opacity', 0.5 + (strength/2.0));
+                    ud.append(pv);
+                }
+            }
         }
     }
     return d;

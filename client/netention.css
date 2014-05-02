@@ -763,7 +763,7 @@ word-wrap: break-word;
 	.objectView img { max-height: 12em;	z-index:2; }
 	.MessageSubject { width: 100%; font-size: 125%;	z-index:2; }
 	.MessageDescription { width: 98%; z-index:2; }
-	.ObjectReply { margin:0.2em 0 0.1em 0; font-size: 80%;	z-index:2;}
+	.ObjectReply { margin:0.1em 0.2em 0.1em 0.2em; font-size: 80%;	z-index:2;}
 	.reply-section { text-align:left; }
 	.object-reply-button { padding:1px 4px !important; }
     .ObjectEditDiv button img { height: 1em; }

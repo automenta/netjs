@@ -4,40 +4,40 @@ function newTimeView(v) {
 
     var goalWidgetSize = [170, 170];
     var goalWidgetScale = '75%';
-    
+
     var d = newDiv().appendTo(v);
 
-    var colTimes = { };
-    
+    var colTimes = {};
+
     var gridsterParam = {
         widget_base_dimensions: goalWidgetSize,
         widget_margins: [6, 6],
         min_cols: numTimeSegments
     };
 
-	function updateGoal(g, when, duration) {
+    function updateGoal(g, when, duration) {
         var G = $N.getObject(g);
-		if (when)
-	        G.when = targetTime;
-		if (duration)
-			G.duration = duration;
+        if (when)
+            G.when = when;
+        if (duration)
+            G.duration = duration;
         $N.pub(G);
-	}
-    
-	var resizingGoalID = null;
+    }
+
+    var resizingGoalID = null;
     var goalGridsterParam = _.extend(_.clone(gridsterParam), {
         resize: {
             enabled: true,
             max_size: [Infinity, 1],
-			start: function(e, ui, $widget) {
-				resizingGoalID = $widget.attr('goalid');
-			},
+            start: function(e, ui, $widget) {
+                resizingGoalID = $widget.attr('goalid');
+            },
             stop: function(e, ui, $widget) {
                 var cols = $widget.attr('data-sizex');
                 var colTime = cols * timeUnitLengthMS;
-				updateGoal(resizingGoalID, null, colTime);
-				resizingGoalID = null;
-            }    
+                updateGoal(resizingGoalID, null, colTime);
+                resizingGoalID = null;
+            }
         },
         draggable: {
             start: function() {
@@ -45,50 +45,51 @@ function newTimeView(v) {
             stop: function(event, ui) {
                 var p = ui.$player;
                 var g = p.attr('goalid');
-                var targetCol = p.attr('data-col')-1;
+                var targetCol = p.attr('data-col') - 1;
                 var targetTime = colTimes[targetCol];
-				updateGoal(g, targetTime, null);
+                updateGoal(g, targetTime, null);
                 //console.log(, , 'dragged');
             }
-        }        
+        }
     });
 
     var headerRow = newDiv().addClass('gridster').appendTo(d);
     var headerRowGrid = $('<ul/>').appendTo(headerRow);
 
     d.append('<br/><br/>');
-    
+
     var goalRows = newDiv().addClass('gridster').appendTo(d);
     var goalRowsGrid = $('<ul/>').appendTo(goalRows);
-    
+
     var goalRowsGridster = goalRowsGrid.gridster(goalGridsterParam).data('gridster');
 
 
-    
-    
+
+
     foreachGoal(numTimeSegments, timeUnitLengthMS, $N.id(), function(time, goals, centroids, column) {
         colTimes[column] = time;
 
         var b = $('<li class="mainViewButton"></li>');
-        b.attr('data-col', 1+column);
+        b.attr('data-col', 1 + column);
         b.attr('data-row', 1);
         b.css('border-bottom', '1px solid gray');
-            
+
         //b.append(name);
-        
+
         var ts = new Date(time);
-        
-        if ((ts.getHours() !== 0) || (ts.getMinutes()!==0)) {
+
+        if ((ts.getHours() !== 0) || (ts.getMinutes() !== 0)) {
             var m = ts.getMinutes();
-            if (m === 0) m = '00';                        
+            if (m === 0)
+                m = '00';
             ts = ts.getHours() + ":" + m;
         }
         else {
             ts = ts.toDateString();
-            ts = ts.substring(0, ts.length-5);
+            ts = ts.substring(0, ts.length - 5);
         }
         b.append(ts);
-        
+
         var addbutton = $('<button title="Add Tag">[+]</button>').appendTo(b);
 
         var y = function() {
@@ -109,9 +110,9 @@ function newTimeView(v) {
             });
         };
         y();
-        
+
         headerRowGrid.append(b);
-        
+
         function addGoal(g) {
             var gg = $('<li class="mainViewButton"></li>');
             gg.css('font-size', goalWidgetScale);
@@ -122,27 +123,27 @@ function newTimeView(v) {
             });
             gg.attr('goalid', g.id);
             O.css('height', '95%');
-            
+
             gg.append(O);
 
-			var duration = g.duration || timeUnitLengthMS;
-			var cols = parseInt(Math.round(parseFloat(duration) / parseFloat(timeUnitLengthMS)));
+            var duration = g.duration || timeUnitLengthMS;
+            var cols = parseInt(Math.round(parseFloat(duration) / parseFloat(timeUnitLengthMS)));
 
-            goalRowsGridster.add_widget(gg, cols, 1, 1+column, 1);                    
+            goalRowsGridster.add_widget(gg, cols, 1, 1 + column, 1);
         }
-        
+
         _.each(goals, addGoal);
         _.each(centroids, addGoal);
-        
+
     });
-    
-    
-    
+
+
+
     var headerRowGridster = headerRowGrid.gridster(gridsterParam).data('gridster');
-    
+
     headerRowGridster.disable();
 
-    
+
     return d;
 }
 
@@ -169,44 +170,44 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
         });
 
 
-/*
-        var ts = new Date(ti);
-        if (ts.getHours() != 0) {
-            ts = ts.getHours() + ":00";
-        }
-
-        var d = newDiv().addClass('alternatingDiv').append('<span class="goalRowHeading">' + ts + '</span>');
-
-        var addbutton = $('<button title="Add Tag">[+]</button>').appendTo(d);
-
-        var y = function() {
-            var tti = ti;
-            var tts = ts;
-            addbutton.click(function() {
-                var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
-                d.append(newTagger([], function(results) {
-                    saveAddedTags(results, 'Goal', tti + timeUnitLengthMS / 2);
-
-                    //now = _.unique(now.concat(results));
-                    later(function() {
-                        d.dialog('close');
-                        //updateGoalList();
-                    });
-                    //container.html(newSelfTimeList(s, x, container));
-                }));
-            });
-        };
-        y();
-
-        _.each(goals, function(g) {
-            var ogg = objTags(g);
-            if (_.contains(ogg, 'GoalCentroid'))
-                return;
-
-            var gg = newObjectSummary(g).addClass("miniGoalSummary");
-            d.append(gg);
-        });
-*/
+        /*
+         var ts = new Date(ti);
+         if (ts.getHours() != 0) {
+         ts = ts.getHours() + ":00";
+         }
+         
+         var d = newDiv().addClass('alternatingDiv').append('<span class="goalRowHeading">' + ts + '</span>');
+         
+         var addbutton = $('<button title="Add Tag">[+]</button>').appendTo(d);
+         
+         var y = function() {
+         var tti = ti;
+         var tts = ts;
+         addbutton.click(function() {
+         var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
+         d.append(newTagger([], function(results) {
+         saveAddedTags(results, 'Goal', tti + timeUnitLengthMS / 2);
+         
+         //now = _.unique(now.concat(results));
+         later(function() {
+         d.dialog('close');
+         //updateGoalList();
+         });
+         //container.html(newSelfTimeList(s, x, container));
+         }));
+         });
+         };
+         y();
+         
+         _.each(goals, function(g) {
+         var ogg = objTags(g);
+         if (_.contains(ogg, 'GoalCentroid'))
+         return;
+         
+         var gg = newObjectSummary(g).addClass("miniGoalSummary");
+         d.append(gg);
+         });
+         */
 
 
         var centroids = $N.objectsWithTag('GoalCentroid', true) || [];
@@ -215,7 +216,7 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
                 return (c.when >= ti) && (c.when < ti + timeUnitLengthMS);
             });
         }
-        
+
         onTimeSegment(ti, goals, centroids, i);
 
 
@@ -251,17 +252,18 @@ function newGoalList(target, user, centroids) {
 
 
         var ts = new Date(ti);
-        
-        if ((ts.getHours() !== 0) || (ts.getMinutes()!==0)) {
+
+        if ((ts.getHours() !== 0) || (ts.getMinutes() !== 0)) {
             var m = ts.getMinutes();
-            if (m === 0) m = '00';                        
+            if (m === 0)
+                m = '00';
             ts = ts.getHours() + ":" + m;
         }
         else {
             ts = ts.toDateString();
-            ts = ts.substring(0, ts.length-5);
+            ts = ts.substring(0, ts.length - 5);
         }
-        
+
         var d = newDiv().addClass('alternatingDiv').append('<span class="goalRowHeading">' + ts + '</span>');
 
         var addbutton = $('<a href="#" title="Add Tag">[+]</a>').appendTo(d);
