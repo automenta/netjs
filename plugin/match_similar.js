@@ -160,7 +160,7 @@ exports.plugin = function($N) {
                 numMatches++;
             }, function() {
                 if (numMatches > 0) {                   
-                    var n = $N.objNew('similarTo:' + x.id);
+                    var n = $N.objNew(x.id + '.Similar');
                     //n.name = 'Similar';
                     n.replyTo = [ x.id ];
                     n.addTag('Similar');

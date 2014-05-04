@@ -506,13 +506,15 @@ function netention(f) {
             }
             else {
                 if (removeLocal()) {
-                    $.pnotify({
-                        title: 'Deleted',
-                        text: id,
-                        addclass: "stack-bottomleft",
-                        stack: stack_bottomleft
-                    });
-                    $N.trigger('change:attention');
+                    if (x.author) {
+                        $.pnotify({
+                            title: 'Deleted',
+                            text: id,
+                            addclass: "stack-bottomleft",
+                            stack: stack_bottomleft
+                        });
+                        $N.trigger('change:attention');
+                    }
                 }
             }
             return true;

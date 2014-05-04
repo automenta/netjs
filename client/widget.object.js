@@ -1418,7 +1418,9 @@ function newObjectSummary(x, options) {
     var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
     var showMetadataLine = (options.showMetadataLine != undefined) ? options.showMetadataLine : true;
     var showActionPopupButton = (options.showActionPopupButton != undefined) ? options.showActionPopupButton : true;
+    var showSelectionCheck = (options.showSelectionCheck!=undefined) ? options.showSelectionCheck : true;
     var titleClickMode = (options.titleClickMode != undefined) ? options.titleClickMode : 'view';
+    var showTime = (options.showTime!=undefined) ? options.showTime : true;
 
     if (!x) {
         return newDiv().html('Object Missing');
@@ -1575,13 +1577,15 @@ function newObjectSummary(x, options) {
     }
 
     //Selection Checkbox
-    var selectioncheck = $('<input type="checkbox"/>');
-    selectioncheck.addClass('ObjectSelection');
-    selectioncheck.attr('oid', x.id);
-    selectioncheck.click(function() {
-        refreshActionContext();
-    });
-
+    if (showSelectionCheck) {
+        var selectioncheck = $('<input type="checkbox"/>');
+        selectioncheck.addClass('ObjectSelection');
+        selectioncheck.attr('oid', x.id);
+        selectioncheck.click(function() {
+            refreshActionContext();
+        });
+    }
+    
     var haxn = null;
 
     function addPopupMenu() {
@@ -1662,7 +1666,7 @@ function newObjectSummary(x, options) {
         addPopupMenu();
 
     if (showMetadataLine) {
-        newMetadataLine(x).appendTo(d);
+        newMetadataLine(x, showTime).appendTo(d);
     }
 
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
@@ -1920,7 +1924,7 @@ function ISODateString(d) {
             + pad(d.getUTCSeconds()) + 'Z'
 }
 
-function newMetadataLine(x) {
+function newMetadataLine(x, showTime) {
     var mdline = $('<h2></h2>').addClass('MetadataLine');
 
     var ot = objTags(x);
@@ -1966,19 +1970,21 @@ function newMetadataLine(x) {
         }
     }
 
-    var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
-    var now = Date.now();
-    if (ww) {
-        if (ww < now) {
-            var tt = $('<time class="timeago"/>');
+    if (showTime!=false) {
+        var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
+        var now = Date.now();
+        if (ww) {
+            if (ww < now) {
+                var tt = $('<time class="timeago"/>');
 
-            tt.attr('datetime', ISODateString(new Date(ww)));
-            mdline.append('&nbsp;', tt);
-        }
-        else {
-            mdline.append('&nbsp;<span>' + new Date(ww) + '</span>');
-        }
+                tt.attr('datetime', ISODateString(new Date(ww)));
+                mdline.append('&nbsp;', tt);
+            }
+            else {
+                mdline.append('&nbsp;<span>' + new Date(ww) + '</span>');
+            }
 
+        }
     }
     return mdline;
 }

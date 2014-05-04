@@ -1,4 +1,112 @@
 function newTimeView(v) {
+    // Instantiate our timeline object.
+    timeline = new links.Timeline(v[0]);
+
+    //http://visjs.org/docs/timeline.html
+    var data = [    ];
+    var options = {
+         'width':  '100%',
+         //'height': '300px',
+         'editable': true,   // enable dragging and editing events
+         'style': 'box',
+         'cluster': true,
+    };
+
+
+    
+    
+
+
+
+    /*function updateGoal(g, when, duration) {
+        var G = $N.getObject(g);
+        if (when)
+            G.when = when;
+        if (duration)
+            G.duration = duration;
+        $N.pub(G);
+    }*/
+    var times = { };
+
+    var numTimeSegments = 48;
+    var timeUnitLengthMS = 30 * 60 * 1000; //30min
+    foreachGoal(numTimeSegments, timeUnitLengthMS, $N.id(), function(time, goals, centroids, column) {
+        function addGoal(g) {
+            var duration = g.duration || timeUnitLengthMS;
+            var gs = newObjectSummary(g, {
+                depthRemaining: 0,
+                nameClickable: false,
+                showActionPopupButton: false,
+                showSelectionCheck: false,
+                showTime: false,
+                showAuthorName: false,
+            });
+            var G = {
+                    'id': g.id,
+                    'start': g.when,
+                    'end': g.when + duration,
+                    'content': '<div class="timelineLabel" uid="' + g.id + '">' + gs.html() + '</span>'
+            };
+            G.editable = (g.author === $N.id());
+            if (G.editable) {
+                times[g.id] = [ G.start, G.end ];
+            }
+            
+            data.push(G);            
+        }
+
+        _.each(goals, addGoal);
+        _.each(centroids, addGoal);
+
+    });
+
+    timeline.draw(data, options);
+    
+    v.find('.timelineLabel').click(function() {
+        var uid = $(this).attr('uid');
+        newPopupObjectView($N.getObject(uid));
+    });
+    
+    function changed(x) {
+       var d = timeline.getData();
+       for (var i = 0; i < d.length; i++) {
+           if (d[i].editable) {
+               var D = d[i];
+               var id = D.id;
+               var lastTimes = times[id];
+                var dstart = D.start;
+                var dend = D.end;
+                if (dstart.getTime)
+                    dstart = dstart.getTime();
+                if (dend.getTime)
+                    dend = dend.getTime();
+               if ((lastTimes[0]!=dstart) || (lastTimes[1]!=dend)) {
+                   console.log(id + ' changed to ' + dstart + ' ' + dend);
+                   times[id] = [ dstart, dend ];
+                   
+                   var G = $N.getObject(id);
+                   if (G) {
+                       G.when = dstart;
+                       G.duration = dend - dstart;
+                       $N.pub(G);
+                   }
+               }
+           }
+       }
+    }
+    
+    //links.events.addListener(timeline, 'rangechanged', changed);
+    links.events.addListener(timeline, 'edit', changed);
+    links.events.addListener(timeline, 'add', changed);
+    links.events.addListener(timeline, 'change', changed);
+    links.events.addListener(timeline, 'changed', changed);
+
+
+    return timeline;
+}
+
+
+function newTimeViewGridster(v) {
     var numTimeSegments = 48;
     var timeUnitLengthMS = 30 * 60 * 1000; //30min
 

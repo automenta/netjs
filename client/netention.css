@@ -1497,3 +1497,9 @@ svg {
 	max-height: 300px;
 	overflow: scroll;
 }
+
+.timeline-navigation-delete { display: none }
+.timelineLabel {
+    cursor: crosshair;
+    font-size: 60%;
+}
