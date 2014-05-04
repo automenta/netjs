@@ -28,7 +28,7 @@ function newTimeView(v) {
     }*/
     var times = { };
 
-    var numTimeSegments = 48;
+    var numTimeSegments = 128;
     var timeUnitLengthMS = 30 * 60 * 1000; //30min
     foreachGoal(numTimeSegments, timeUnitLengthMS, $N.id(), function(time, goals, centroids, column) {
         function addGoal(g) {
@@ -81,7 +81,6 @@ function newTimeView(v) {
                 if (dend.getTime)
                     dend = dend.getTime();
                if ((lastTimes[0]!=dstart) || (lastTimes[1]!=dend)) {
-                   console.log(id + ' changed to ' + dstart + ' ' + dend);
                    times[id] = [ dstart, dend ];
                    
                    var G = $N.getObject(id);
@@ -97,15 +96,28 @@ function newTimeView(v) {
     
     //links.events.addListener(timeline, 'rangechanged', changed);
     links.events.addListener(timeline, 'edit', changed);
-    links.events.addListener(timeline, 'add', changed);
     links.events.addListener(timeline, 'change', changed);
     links.events.addListener(timeline, 'changed', changed);
+    links.events.addListener(timeline, 'add', function() {
+        var dd = timeline.getData();
+        var tti = dd[dd.length-1].start.getTime();
+        var d = newPopup("Add a Goal at " + new Date(tti), {width: 800, height: 600, modal: true});
+        d.append(newTagger([], function(results) {
+            saveAddedTags(results, 'Goal', tti);
+            later(function() {
+                d.dialog('close');
+            });
+        }));        
+        dd.pop();
+        
+        timeline.draw(dd, options);
+    });
 
 
     return timeline;
 }
 
-
+//DEPRECATED:
 function newTimeViewGridster(v) {
     var numTimeSegments = 48;
     var timeUnitLengthMS = 30 * 60 * 1000; //30min
