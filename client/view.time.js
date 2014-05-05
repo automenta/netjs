@@ -10,12 +10,8 @@ function newTimeView(v) {
          'editable': true,   // enable dragging and editing events
          'style': 'box',
          'cluster': true,
+        groupsChangeable : false,
     };
-
-
-    
-    
-
 
 
     /*function updateGoal(g, when, duration) {
@@ -30,7 +26,7 @@ function newTimeView(v) {
 
     var numTimeSegments = 128;
     var timeUnitLengthMS = 30 * 60 * 1000; //30min
-    foreachGoal(numTimeSegments, timeUnitLengthMS, $N.id(), function(time, goals, centroids, column) {
+    foreachTimedObject(null, function(goals, centroids) {
         function addGoal(g) {
             var duration = g.duration || timeUnitLengthMS;
             var gs = newObjectSummary(g, {
@@ -41,12 +37,22 @@ function newTimeView(v) {
                 showTime: false,
                 showAuthorName: false,
             });
+            
             var G = {
                     'id': g.id,
                     'start': g.when,
                     'end': g.when + duration,
                     'content': '<div class="timelineLabel" uid="' + g.id + '">' + gs.html() + '</span>'
             };
+            if (g.author == $N.id()) {
+                G.group = 'me';
+            }
+            else if (g.author) {
+                G.group = 'others';
+            }
+            else {
+                G.group = 'system';
+            }
             G.editable = (g.author === $N.id());
             if (G.editable) {
                 times[g.id] = [ G.start, G.end ];
@@ -267,6 +273,40 @@ function newTimeViewGridster(v) {
     return d;
 }
 
+function foreachTimedObject(user, withObjects) { 
+    var time = new Date();
+    time.setMinutes(0);
+    time.setSeconds(0);
+    time.setMilliseconds(0);
+    time = time.getTime();
+
+    var GOALS = $N.objectsWithTag('Goal', true);
+
+
+    var goals = _.filter(GOALS, function(x) {
+        if (user)
+            if (x.author != user)
+                return;
+
+        var w = x.when || 0;
+        return (w >= time);
+    });
+
+
+
+    var centroids = $N.objectsWithTag('GoalCentroid', true) || [];
+    if (centroids) {
+        centroids = _.filter(centroids, function(c) {
+            return (c.when >= time);
+        });
+    }
+
+    withObjects(goals, centroids);
+
+
+    
+}
+
 function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
 
     var time = new Date();
@@ -282,8 +322,9 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
         var ti = time + (i * timeUnitLengthMS);
 
         var goals = _.filter(GOALS, function(x) {
-            if (x.author != user)
-                return;
+            if (user)
+                if (x.author != user)
+                    return;
 
             var w = x.when || 0;
             return ((w >= ti) && (w < ti + timeUnitLengthMS));
