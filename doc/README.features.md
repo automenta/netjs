@@ -4,9 +4,9 @@
 # Components
 **100% Javascript** Client & Server for ubiquity, simplicity, and ease
 * **Client**: HTML5/Javascript
- * [javascript client libraries, see client/index.html]
+ * [javascript client libraries, see [client/index.html](../client/index.html)]
 * **Server**: Node.JS
- * [npm's: see package.json]
+ * [npm's: see [package.json](../package.json)]
  * **Databases**
     * **MongoDB** - Native NoSQL Database
     * _TODO:_ support other databases

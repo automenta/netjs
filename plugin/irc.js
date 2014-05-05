@@ -107,8 +107,10 @@ exports.plugin = function($N) {
                     $N.pub(messageObject[t]);
                     bufferedMessages++;
                     
-                    if (bufferedMessages >= options.maxMessagesPerObject)
+                    if (bufferedMessages >= options.maxMessagesPerObject) {
+                        bufferedMessages = 0;
                         delete messageObject[t];
+                    }
                 }
 
 
