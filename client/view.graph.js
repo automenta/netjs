@@ -70,7 +70,8 @@ function newGraphView(v) {
     }
     function addEdge(from, to, style) {
         var ee = {source: nodeIndex[from], target: nodeIndex[to], style: style};
-        edges.push(ee);
+        if (ee.source && ee.target)
+            edges.push(ee);
         return ee;
     }
 
@@ -358,7 +359,7 @@ function newGraphView(v) {
                 var t = objUserRelations($N.objectsWithTag('Trust', true));
                 for (var u in t) {
                     for (var v in t[u]['trusts']) {
-                        addEdge(u, v, { });
+                        addEdge(u, v, edgeStyle);
                     }
                 }
             }
