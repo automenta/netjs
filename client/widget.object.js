@@ -564,19 +564,21 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             d.append(addButtonWrap);
 
-            var scopeSelect = $('<select style="float:right"/>');
-            scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
-            scopeSelect.append('<option value="5">Trusted</option>'); //store on server but share with who i follow
-            scopeSelect.append('<option value="7">Public</option>'); //store on server for public access (inter-server)
-            scopeSelect.val(getEditedFocus().scope);
-            if (configuration.connection == 'local')
-                scopeSelect.attr('disabled', 'disabled');
-            else {
-                scopeSelect.change(function() {
-                    var e = getEditedFocus();
-                    e.scope = parseInt(scopeSelect.val());
-                    update(e);
-                });
+            if (!objHasTag(getEditedFocus(), 'User')) {
+                var scopeSelect = $('<select style="float:right"/>');
+                scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
+                scopeSelect.append('<option value="5">Trusted</option>'); //store on server but share with who i follow
+                scopeSelect.append('<option value="7">Public</option>'); //store on server for public access (inter-server)
+                scopeSelect.val(getEditedFocus().scope);
+                if (configuration.connection == 'local')
+                    scopeSelect.attr('disabled', 'disabled');
+                else {
+                    scopeSelect.change(function() {
+                        var e = getEditedFocus();
+                        e.scope = parseInt(scopeSelect.val());
+                        update(e);
+                    });
+                }
             }
 
             var saveButton = $('<button style="float:right"><b>Save</b></button>');
