@@ -84,6 +84,9 @@ exports.plugin = function($N) {
                         var wallets = _.values(accounts);
                         var walletUsers = _.invert(accounts);
 
+	                    pending = _.intersection(pending, _.keys(accountsUpdate));
+
+
                         //https://github.com/ripple/ripple-lib/blob/develop/docs/REFERENCE.md#2-remote-functions
                         function nextAccount() {
                             var userid = pending.pop();
@@ -92,7 +95,7 @@ exports.plugin = function($N) {
                                 return;
                             }
                             if (!accountsUpdate[userid]) {
-                                nextAccount();
+                                //nextAccount();
 								return;
                             }
 
@@ -110,9 +113,10 @@ exports.plugin = function($N) {
 
                                         if (!err) {
                                             $N.getObjectByID(userid, function(err, U) {
-                                                var originalU = _.clone(U);
 
                                                 if (!err) {
+	                                                //var originalU = _.clone(U);
+
                                                     U.removeTag('walletBalanceXRP');
                                                     U.removeTag('walletBalanceHRS');
                                                     U.removeTag('walletBalanceUSD');
