@@ -300,16 +300,17 @@ function newGraphView(v) {
 
                 if (includeEdges['Author']) {
                     if (x.author)
-                        rtags.push([x.author, {stroke: '#bbb', strokeWidth: 3}]);
+                        rtags.push([x.author, {stroke: '#fbb', strokeWidth: 3}]);
                 }                
                 if (includeEdges['Subject']) {                
                     if (x.subject)
-                        rtags.push([x.subject, {stroke: '#bbb', strokeWidth: 3}]);
+                        rtags.push([x.subject, {stroke: '#bbf', strokeWidth: 3}]);
                 }
                 if (includeEdges['Reply']) {
                     var replies = $N.getReplies(x.id);
                     for (var j = 0; j < replies.length; j++) {
-                        rtags.push([replies[j], {stroke: '#bbb', strokeWidth: 3}]);                        
+                        rtags.push([replies[j], {stroke: '#bfb', strokeWidth: 3}]);                        
+						xxrr.push([$N.getObject(replies[j]), 1]);
                     }
                 }
  
@@ -392,7 +393,7 @@ function newGraphView(v) {
                         if (vidp.type == 'object') {
                             var target = vi.value;
                             if (nodeIndex[target]) {
-                                addEdge(x.id, target, {});
+                                addEdge(x.id, target, { opacity: (vi.strength||1.0) });
                             }
                         }
                     }
@@ -499,7 +500,11 @@ function newGraphView(v) {
                 if ((l.style) && (l.style.stroke))
                     return l.style.stroke;
                 return 'black';
-            });
+            }).attr("opacity", function(l) {
+                if ((l.style) && (l.style.opacity))
+                    return l.style.opacity;
+                return 1.0;
+			});
 
             force.on("tick", function() {
                 node.attr("transform", function(d) {

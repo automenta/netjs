@@ -1420,7 +1420,6 @@ function newSimilaritySummary(x) {
 	function newSimilarityList(X) {
 		var d = newEle('ul');
 		_.each(X.value, function(v) {
-			console.log(v);
 			if (v.id == 'similarTo') {
 				var stf =  v.strength || 1.0;
 				var st = parseFloat(stf*100.0).toFixed(1);
@@ -1508,12 +1507,10 @@ function newSimilaritySummary(x) {
 
 	var g = newDiv().addClass('SimilaritySection');
 
-	var e = newDiv();
-	e.append('<h1>Similarity</h1>');
+	var e = newDiv().css('float','left');
+	var eb = $('<button title="Similarity"></button>').appendTo(e);
+	eb.append(newTagButton('Similar').find('img'));
 
-	var f = newDiv();
-	var simtableCheck = $('<input type="checkbox">').appendTo(f);
-	f.append("Table");
 
 	g.append(e);
 
@@ -1521,11 +1518,10 @@ function newSimilaritySummary(x) {
 
 	g.append(h);
 
-	h.append(f);
 
 	var areaMap = null;	
-	simtableCheck.click(function() {
-		if (simtableCheck.is(':checked')) {
+	eb.click(function() {
+		if ((!areaMap) || (!areaMap.is(':visible'))) {
 			if (!areaMap) {
 				areaMap = newSimilarityAreaMap(s);
 				h.append(areaMap);			
