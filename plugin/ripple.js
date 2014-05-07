@@ -26,14 +26,6 @@ exports.plugin = function($N) {
             var _ = require('underscore');
 
 
-            var remote = new ripple.Remote({// see the API Reference for available options
-                trusted: true,
-                local_signing: true,
-                local_fee: true,
-                fee_cushion: 1.5,
-                servers: [{host: 's1.ripple.com', port: 443, secure: true}]
-            });
-
 
             $N.addTags([
                 {
@@ -74,6 +66,15 @@ exports.plugin = function($N) {
                     }
                 }, function() {
 
+
+				    var remote = new ripple.Remote({// see the API Reference for available options
+				        trusted: true,
+				        local_signing: true,
+				        local_fee: true,
+				        fee_cushion: 1.5,
+				        servers: [{host: 's1.ripple.com', port: 443, secure: true}]
+				    });
+
                     function finished() {
                         remote.disconnect();
                     }
@@ -92,6 +93,7 @@ exports.plugin = function($N) {
                             }
                             if (!accountsUpdate[userid]) {
                                 nextAccount();
+								return;
                             }
 
                             var a = accounts[userid];
@@ -178,9 +180,8 @@ exports.plugin = function($N) {
                                                     if (balances['HRS']) {
                                                         U.add('walletBalanceHRS', balances['HRS']);
                                                     }
-
-                                                    if (!_.deepEquals(U, originalU))
-                                                        $N.pub(U);
+                                                    
+                                                    $N.pub(U);
                                                 }
 
                                             });
