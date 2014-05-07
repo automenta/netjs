@@ -1512,3 +1512,10 @@ svg {
 	margin-left: 1.5em;
 	margin-right: 1.5em;
 }
+.SimilaritySection li {
+	display: inline;
+	padding-left: 0 !important;
+}
+a:hover {
+	color: blue !important;
+}

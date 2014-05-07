@@ -215,6 +215,9 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
                             continue;
                     }
                 }
+				else {
+					continue;
+				}
             }
         }
 

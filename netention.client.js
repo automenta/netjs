@@ -41,7 +41,8 @@ var defaultIcons = {
 var themes = {
 	//BASIC
     "_bright":'Bright',
-    "ui-darkness":'Dark',
+    //"ui-darkness":'Dark',
+    "_dark":'Dark',
 
 	//ORIGINAL
     "_matrix-green":'Matrix (green)',

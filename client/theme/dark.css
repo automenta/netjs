@@ -2,6 +2,7 @@
 
 body {
     color: white;
+	background-color: black;
 }
 h1, .objectView h1, h3, .objectView h3 {
     color: white;
@@ -24,6 +25,9 @@ h1 a {
 
 a {
     color: #ffd278; 
+}
+a:hover {
+	color: #aaf !important;
 }
 
 #View  {
