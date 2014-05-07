@@ -23,8 +23,6 @@ https://github.com/ushahidi/swiftmeme
 */
 
 exports.plugin = function($N) {
-
-    
     return {
         name: 'Natural Language Processing',
         description: 'Annotates published objects with NLP metadata for advanced analysis',
@@ -41,8 +39,8 @@ exports.plugin = function($N) {
 				if (x.wordFrequencyAt == lastModified)
 					return x;
 
-			var fulltext = util.objName(x) + ' ' + util.objDescription(x);
-			fulltext = fulltext.trim();
+			var fulltext = util.objText(x);
+
 			if (fulltext.length == 0) return x;
 
 			var STOPWORD_FACTOR = 0.1;
@@ -62,7 +60,7 @@ exports.plugin = function($N) {
 			var total = 0;
 			_.each(termWeight, function(v, k) {
 				if (stopwords[k]) {
-					v *= STOPWORD_FACTOR;
+					v = STOPWORD_FACTOR * Math.log(v);
 					termWeight[k] = v;
 				}
 				total += v;
@@ -75,8 +73,6 @@ exports.plugin = function($N) {
 			//console.log(x.id, 'full text', fulltext, termWeight);
 			x.wordFrequency = termWeight;
 			x.wordFrequencyAt = lastModified;
-
-			$N.notice(x);
 
 			return x;
         },

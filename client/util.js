@@ -1072,6 +1072,13 @@ function objExpand(o) {
 }
 exports.objExpand = objExpand;
 
+//returns full-text representation of an objectID
+//TODO omit HTML tags
+//TODO include HTML/Markdown "media" fields
+function objText(x) {
+	return (objName(x) + ' ' + objDescription(x)).trim();
+}
+exports.objText = objText;
 
 function wordSimilarity(a, b) {
 	var num = 0, denA = 0, denB = 0;
@@ -1082,12 +1089,14 @@ function wordSimilarity(a, b) {
 	_.each(a, function(v, k) {
 		denA += v;
 		if (b[k]) {
-			num += a[k]*b[k];
+			num += (1.0+a[k])*(1.0+b[k]);
 			count++;
 		}
 	});
 	if ((denA > 0) && (denB > 0)) {
-		return count * num / (Math.max(denA, denB));
+		//return count * num / (Math.max(denA, denB));
+		console.log(a, b, num);
+		return num;
 	}	
 	return 0;
 }

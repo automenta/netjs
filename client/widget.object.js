@@ -1404,6 +1404,89 @@ function newReplyPopup(x) {
     
 }
 
+function newSimilaritySummary(x) {
+	var d = newDiv();
+	var s = { };
+	for (var i = 0; i < x.value.length; i++) {
+		var v = x.value[i];
+		if (v.id == 'similarTo')
+			s[v.value] = v.strength || 1.0;	
+	}
+	var width = 100;
+	var height = 100;
+
+	var treemap = d3.layout.treemap()
+		.size([width, height])
+		//.sticky(true)
+		.value(function(d) { return d.size; });
+
+	var div = d3.selectAll(d.toArray() )
+		.style("position", "relative")
+		.style("width", (width ) + "%")
+		.style("height", "10em")
+		.style("left", 0 + "px")
+		.style("top", 0 + "px");
+
+	var data = {
+		name: '',
+		children: [
+		]
+	};
+	_.each(s, function(v, k) {
+		var o = $N.getObject(k);
+		if (o)
+			data.children.push( { id: o.id, name: o.name, size: v });
+	});
+
+	var color = d3.scale.category20c();
+
+	  var node = div.datum(data).selectAll(".node")
+		  .data(treemap.nodes)
+		  .enter().append("div")
+		  .attr("class", "node")
+		  .style("position", "absolute")
+		  .style("border", "1px solid gray")
+		  .style("overflow", "hidden")
+		  .style("cursor", "crosshair")
+		  .style("text-align", "center")
+		  .call(position)
+		  .on('click', function(d) {
+			newPopupObjectView(d.id);
+		   })
+		  .style("background", function(d) { return color(d.name); })
+		  .text(function(d) { return d.children ? null : d.name; });
+
+	  d3.selectAll("input").on("change", function change() {
+		var value = this.value === "count"
+			? function() { return 1; }
+			: function(d) { return d.size; };
+
+		node
+			.data(treemap.value(value).nodes).call(position);
+	/*		  	.transition()
+			.duration(1500)
+			.call(position);*/
+	  });
+
+	function position() {
+	  this.style("left", function(d) { return (d.x) + "%"; })
+		  .style("top", function(d) { return (d.y) + "%"; })
+		  .style("width", function(d) { return d.dx + "%"; })
+		  .style("height", function(d) { return d.dy + "%"; });
+	}
+
+	//d.hide();
+
+	var e = newDiv();
+	var simlink = $('<a>Similarity...</a>');
+	/*simlink.click(function() {
+		d.toggle();
+	});*/
+	e.append(simlink);
+	e.append('<br/>');
+	e.append(d);
+	return e;
+}
 
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
@@ -1428,6 +1511,18 @@ function newObjectSummary(x, options) {
         return newDiv().html('Object Missing');
     }
 
+	//check for Similarity
+	var ot = objTags(x);
+	if ((ot[0] == 'Similar') && (ot[1] == 'similarTo')) {
+		/*showMetadataLine = false;
+		showActionPopupButton = false;
+		showSelectionCheck = false;
+		showTime = false;
+		nameClickable = false;*/
+		return newSimilaritySummary(x);
+	}
+
+	//check for PDF
     if (objHasTag(x, 'PDF')) {
         var ee = uuid();
         var cd = $('<canvas/>')
