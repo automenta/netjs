@@ -1196,7 +1196,7 @@ exports.start = function(options, init) {
         sendJSON(res, logMemory.buffer);
     });
 
-    function compactObjects(list) {
+    function compactObjects(list) {		
         return list.map(function(o) {
             return util.objCompact(o);
         });

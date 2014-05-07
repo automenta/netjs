@@ -104,7 +104,16 @@ addAction({
     }
 });
 addAction({menu: 'Object', name: 'Anonymize'});
-addAction({menu: 'Object', name: 'Touch'});
+addAction({menu: 'Object', name: 'Refresh', accepts: acceptsAll, 
+    run: function(selection) {
+        _.each(selection, function(x) {
+            if (x.author == $N.id()) {
+				objTouch(x);
+				$N.pub(x);
+			}
+		});
+	}	
+});
 addAction({menu: 'Object', name: 'Encrypt...'});
 addAction({menu: 'Object', name: 'Decrypt...'});
 addAction({menu: 'Object', name: 'View Source', description: 'Display object\'s JSON source',

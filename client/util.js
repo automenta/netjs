@@ -1005,42 +1005,52 @@ function objCompact(o) {
         if (o.modifiedAt == o.createdAt)
             delete o.modifiedAt;
 
-    if (!o.value)
-        return o;
     //console.log(o.name);
     //console.log(  o);
 
     var y = _.clone(o);
 
+	var k = _.keys(y);
+	for (var i = 0; i < k.length; i++) {
+		var K = k[i];
+		if (K[0] == '_') {
+			delete y[K];
+		}
+	}
+
+
     //TODO ---- fix the rest of this
+    if (o.value) {
 
-    var newValues = [];
+		var newValues = [];
 
-    //console.log(o.value.length + ' values');
-    for (var i = 0; i < o.value.length; i++) {
-        var v = o.value[i];
-        if (!v)
-            continue;
+		//console.log(o.value.length + ' values');
+		for (var i = 0; i < o.value.length; i++) {
+		    var v = o.value[i];
+		    if (!v)
+		        continue;
 
-        //console.log(i + '//' + v);
-        if (((v.value) && (v.value.lat)) || (Array.isArray(v))) {
-            newValues.push(v);
-        }
-        else {
-            var ia = v.id;
-            var va = v.value || null;
-            var s = v.strength || null;
-            if ((s) && (s!=1.0))
-                newValues.push([ia, va, s]);
-            else if (va)
-                newValues.push([ia, va]);
-            else if (ia)
-                newValues.push(ia);
-            else
-                newValues.push(v);
-        }
-    }
-    y.value = newValues;
+		    //console.log(i + '//' + v);
+		    if (((v.value) && (v.value.lat)) || (Array.isArray(v))) {
+		        newValues.push(v);
+		    }
+		    else {
+		        var ia = v.id;
+		        var va = v.value || null;
+		        var s = v.strength || null;
+		        if ((s) && (s!=1.0))
+		            newValues.push([ia, va, s]);
+		        else if (va)
+		            newValues.push([ia, va]);
+		        else if (ia)
+		            newValues.push(ia);
+		        else
+		            newValues.push(v);
+		    }
+		}
+		y.value = newValues;
+	}
+
     //console.log('newValue:: ' + newValues);
     //console.dir(y.value);
     //console.log('-----');

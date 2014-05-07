@@ -1426,7 +1426,7 @@ function newSimilaritySummary(x) {
 				var o = $N.getObject(v.value);				
 				var name = o ? o.name : "?";
 				var li = $('<li></li>').appendTo(d);
-				var lia = $('<a href="#">' + name + ' (' + st + '%)</a>').appendTo(li);
+				var lia = $('<a href="#">' + name /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
 				lia.click(function() {
 					newPopupObjectView(v.value);
 				});
@@ -1740,6 +1740,10 @@ function newObjectSummary(x, options) {
             if (ms.id === x.author) {
                 var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton');
                 editButton.click(function() {
+					var windowParent = editButton.parent().parent().parent();
+					if (windowParent.hasClass('ui-dialog-content')) {
+						windowParent.dialog('close');
+					}
                     newPopupObjectEdit(x, true);
                 });
             }

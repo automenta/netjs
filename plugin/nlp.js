@@ -35,8 +35,8 @@ exports.plugin = function($N) {
         prePub: function(x) {
 			var lastModified = x.modifiedAt || x.createdAt;
 
-			if (x.wordFrequencyAt)
-				if (x.wordFrequencyAt == lastModified)
+			if (x._wordFrequencyAt)
+				if (x._wordFrequencyAt == lastModified)
 					return x;
 
 			var fulltext = util.objText(x);
@@ -71,8 +71,8 @@ exports.plugin = function($N) {
 			});	
 
 			//console.log(x.id, 'full text', fulltext, termWeight);
-			x.wordFrequency = termWeight;
-			x.wordFrequencyAt = lastModified;
+			x._wordFrequency = termWeight;
+			x._wordFrequencyAt = lastModified;
 
 			return x;
         },

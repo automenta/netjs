@@ -68,8 +68,8 @@ exports.plugin = function($N) {
 		m.totalSimilarity = m.tagSimilarity;
 
 
-		if (a.wordFrequency && b.wordFrequency) {
-			m.wordSimilarity = util.wordSimilarity(a.wordFrequency, b.wordFrequency);
+		if (a._wordFrequency && b._wordFrequency) {
+			m.wordSimilarity = util.wordSimilarity(a._wordFrequency, b._wordFrequency);
 			m.totalSimilarity += m.wordSimilarity;			
 		}
 		return m;

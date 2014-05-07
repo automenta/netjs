@@ -1323,20 +1323,28 @@ a.openModal:focus {
 #GoalHeader button {
 	float: right;
 }
+.usContainer {
+    overflow: auto;
+    display: table;
+    table-layout: fixed;
+}
 
 .goalviewColumn, .goalviewColumnNarrow {
-	float: left;
-	width: 49%;
+	width: 30%;
+	min-width: 275px;
 	height: 100%;
 	overflow: auto;
 	padding-left: 0.3em;
 	padding-right: 0.3em;
+    display: table-cell;
 }
+
+
 .goalviewColumnNarrow { width: 20%; }
 
-.goalRowHeading { font-size: 150%; font-weight: bold; }
+.goalRowHeading { font-size: 150%; font-weight: bold; margin-bottom: 0.5em; }
 
-.alternatingDiv, .operatorDiv { clear: both; }
+.alternatingDiv { clear: both; }
 .alternatingDiv:nth-child(even) {	background-color: rgba(255,255,255,0.3); }
 .alternatingDiv:nth-child(odd) {	background-color: rgba(240,240,240,0.5); }
 .operatorDiv ul, .alternatingDiv ul { margin: 0; }
@@ -1508,6 +1516,10 @@ svg {
 	margin-top: 1em;
 	margin-bottom: 1em;
 }
+.objectViewBorderless .SimilaritySection {
+	margin-left: 1em;
+}
+
 .SimilaritySection button { padding: 0; }
 
 .SimilaritySection ul {

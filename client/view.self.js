@@ -129,8 +129,10 @@ function newUsView(v) {
 
     function updateUsView(currentUser) {
         v.empty();
+		var container = newDiv().addClass('usContainer').appendTo(v);
 
         var currentGoalHeader = $('#AvatarViewMenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
+
         var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
         var goalList = newDiv('goalviewList').addClass('goalviewColumn');
         //var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');
@@ -215,9 +217,9 @@ function newUsView(v) {
             _.each(operators, function(o) {
                 var O = $N.tag(o);
 
-                var sdd = newDiv().addClass('operatorDiv');
 
                 if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))) {
+	                var sdd = newDiv().addClass('ui-widget-content').addClass('goalviewColumn').addClass	('operatorDiv');
                     //not a 3-vector system
                     var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
 
@@ -233,7 +235,7 @@ function newUsView(v) {
                                 showMetadataLine: false,
                                 showActionPopupButton: false,
 								titleClickMode: 'edit'
-                            }).removeClass("ui-widget-content ui-corner-all");
+                            }).removeClass("ui-widget-content ui-corner-all").addClass('objectViewBorderless');
 							if (G.name == O.name) {
 								ss.find('h1 a').html('&gt;&gt;');
 								ss.find('h1').replaceTag($('<div style="float: left">'), true);
@@ -248,9 +250,9 @@ function newUsView(v) {
                         //header.attr('style', 'font-size: 75%');
                         sdd.append('<br/>');
                     }
+	                container.append(sdd);
                 }
 
-                sidebar.append(sdd);
 
             });
 
@@ -258,9 +260,6 @@ function newUsView(v) {
                 //3-vector system : sliders
                 var nn = _.filter($N.objectsWithTag(['Do', 'Learn', 'Teach']), currentUserFilter);
                 var d = newDiv().appendTo(sidebar);
-
-                d.append('<br/>');
-
 
                 function rangeToTags(x, newValue) {
                     objRemoveTag(x, 'Do');
@@ -382,7 +381,10 @@ function newUsView(v) {
 
         }
 
-        v.append(sidebar, goalList/*, involvesList*/);
+		sidebar.addClass('ui-widget-content');
+		goalList.addClass('ui-widget-content');
+
+        container.prepend(sidebar, goalList/*, involvesList*/);
     }
 
     if ($N.myself())
