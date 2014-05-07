@@ -1503,3 +1503,12 @@ svg {
     cursor: crosshair;
     font-size: 60%;
 }
+
+.SimilaritySection {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+.SimilaritySection ul {
+	margin-left: 1.5em;
+	margin-right: 1.5em;
+}

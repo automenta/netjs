@@ -397,6 +397,11 @@ function objTagRelevance(x, y, noProperties) {
     var xxk = _.keys(xx);
     var yyk = _.keys(yy);
 
+	var den = parseFloat(Math.max(xxk.length, yyk.length));
+
+	if ((xxk.length == 0) && (yyk.length == 0))
+		return 0;
+
     var r = 0;
 
     for (var i = 0; i < xxk.length; i++) {
@@ -407,7 +412,9 @@ function objTagRelevance(x, y, noProperties) {
         }
     }
 
-    return r;
+    var result = r/den;
+
+	return result;
 
 }
 exports.objTagRelevance = objTagRelevance;
@@ -1095,7 +1102,7 @@ function wordSimilarity(a, b) {
 	});
 	if ((denA > 0) && (denB > 0)) {
 		//return count * num / (Math.max(denA, denB));
-		console.log(a, b, num);
+		//console.log(a, b, num);
 		return num;
 	}	
 	return 0;

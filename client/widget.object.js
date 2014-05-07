@@ -1405,87 +1405,140 @@ function newReplyPopup(x) {
 }
 
 function newSimilaritySummary(x) {
-	var d = newDiv();
 	var s = { };
+	var count = 0;
 	for (var i = 0; i < x.value.length; i++) {
 		var v = x.value[i];
-		if (v.id == 'similarTo')
+		if (v.id == 'similarTo') {
 			s[v.value] = v.strength || 1.0;	
+			count++;
+		}
 	}
-	var width = 100;
-	var height = 100;
+	if (count == 0) return newDiv();
 
-	var treemap = d3.layout.treemap()
-		.size([width, height])
-		//.sticky(true)
-		.value(function(d) { return d.size; });
 
-	var div = d3.selectAll(d.toArray() )
-		.style("position", "relative")
-		.style("width", (width ) + "%")
-		.style("height", "10em")
-		.style("left", 0 + "px")
-		.style("top", 0 + "px");
-
-	var data = {
-		name: '',
-		children: [
-		]
-	};
-	_.each(s, function(v, k) {
-		var o = $N.getObject(k);
-		if (o)
-			data.children.push( { id: o.id, name: o.name, size: v });
-	});
-
-	var color = d3.scale.category20c();
-
-	  var node = div.datum(data).selectAll(".node")
-		  .data(treemap.nodes)
-		  .enter().append("div")
-		  .attr("class", "node")
-		  .style("position", "absolute")
-		  .style("border", "1px solid gray")
-		  .style("overflow", "hidden")
-		  .style("cursor", "crosshair")
-		  .style("text-align", "center")
-		  .call(position)
-		  .on('click', function(d) {
-			newPopupObjectView(d.id);
-		   })
-		  .style("background", function(d) { return color(d.name); })
-		  .text(function(d) { return d.children ? null : d.name; });
-
-	  d3.selectAll("input").on("change", function change() {
-		var value = this.value === "count"
-			? function() { return 1; }
-			: function(d) { return d.size; };
-
-		node
-			.data(treemap.value(value).nodes).call(position);
-	/*		  	.transition()
-			.duration(1500)
-			.call(position);*/
-	  });
-
-	function position() {
-	  this.style("left", function(d) { return (d.x) + "%"; })
-		  .style("top", function(d) { return (d.y) + "%"; })
-		  .style("width", function(d) { return d.dx + "%"; })
-		  .style("height", function(d) { return d.dy + "%"; });
+	function newSimilarityList(X) {
+		var d = newEle('ul');
+		_.each(X.value, function(v) {
+			console.log(v);
+			if (v.id == 'similarTo') {
+				var stf =  v.strength || 1.0;
+				var st = parseFloat(stf*100.0).toFixed(1);
+				var o = $N.getObject(v.value);				
+				var name = o ? o.name : "?";
+				var li = $('<li></li>').appendTo(d);
+				var lia = $('<a href="#">' + name + ' (' + st + '%)</a>').appendTo(li);
+				lia.click(function() {
+					newPopupObjectView(v.value);
+				});
+				lia.css('opacity', 0.5 + (0.5 * stf));
+			}
+		});
+		return d;
 	}
 
-	//d.hide();
+	function newSimilarityAreaMap(s) {
+		var d = newDiv().css("clear", "both");
+
+		var width = 100;
+		var height = 100;
+
+		var treemap = d3.layout.treemap()
+			.size([width, height])
+			//.sticky(true)
+			.value(function(d) { return d.size; });
+
+		var div = d3.selectAll(d.toArray() )
+			.style("position", "relative")
+			.style("width", (width ) + "%")
+			.style("height", "10em")
+			.style("left", 0 + "px")
+			.style("top", 0 + "px");
+
+		var data = {
+			name: '',
+			children: [
+			]
+		};
+		_.each(s, function(v, k) {
+			var o = $N.getObject(k);
+			if (o)
+				data.children.push( { id: o.id, name: o.name, size: v });
+		});
+
+		var color = d3.scale.category20c();
+
+		  var node = div.datum(data).selectAll(".node")
+			  .data(treemap.nodes)
+			  .enter().append("div")
+			  .attr("class", "node")
+			  .style("position", "absolute")
+			  .style("border", "1px solid gray")
+			  .style("overflow", "hidden")
+			  .style("cursor", "crosshair")
+			  .style("text-align", "center")
+			  .call(position)
+			  .on('click', function(d) {
+				newPopupObjectView(d.id);
+			   })
+			  .style("background", function(d) { return color(d.name); })
+			  .text(function(d) { return d.children ? null : d.name; });
+
+		  d3.selectAll("input").on("change", function change() {
+			var value = this.value === "count"
+				? function() { return 1; }
+				: function(d) { return d.size; };
+
+			node
+				.data(treemap.value(value).nodes).call(position);
+		/*		  	.transition()
+				.duration(1500)
+				.call(position);*/
+		  });
+
+		function position() {
+		  this.style("left", function(d) { return (d.x) + "%"; })
+			  .style("top", function(d) { return (d.y) + "%"; })
+			  .style("width", function(d) { return d.dx + "%"; })
+			  .style("height", function(d) { return d.dy + "%"; });
+		}
+		return d;
+	}
+
+
+	var g = newDiv().addClass('SimilaritySection');
 
 	var e = newDiv();
-	var simlink = $('<a>Similarity...</a>');
-	/*simlink.click(function() {
-		d.toggle();
-	});*/
-	e.append(simlink);
-	e.append('<br/>');
-	e.append(d);
-	return e;
+	e.append('<h1>Similarity</h1>');
+
+	var f = newDiv();
+	var simtableCheck = $('<input type="checkbox">').appendTo(f);
+	f.append("Table");
+
+	g.append(e);
+
+	var h = newSimilarityList(x);
+
+	g.append(h);
+
+	h.append(f);
+
+	var areaMap = null;	
+	simtableCheck.click(function() {
+		if (simtableCheck.is(':checked')) {
+			if (!areaMap) {
+				areaMap = newSimilarityAreaMap(s);
+				h.append(areaMap);			
+			}
+			areaMap.show();
+		}
+		else {
+			areaMap.hide();
+		}
+		freetileView();
+	});
+
+	return g;
 }
 
 /**
