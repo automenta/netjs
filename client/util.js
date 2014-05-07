@@ -1073,6 +1073,27 @@ function objExpand(o) {
 exports.objExpand = objExpand;
 
 
+function wordSimilarity(a, b) {
+	var num = 0, denA = 0, denB = 0;
+	var count = 0;
+	_.each(b, function(v, k) {
+		denB += v;
+	});
+	_.each(a, function(v, k) {
+		denA += v;
+		if (b[k]) {
+			num += a[k]*b[k];
+			count++;
+		}
+	});
+	if ((denA > 0) && (denB > 0)) {
+		return count * num / (Math.max(denA, denB));
+	}	
+	return 0;
+}
+
+exports.wordSimilarity = wordSimilarity;
+
 function goals(time, goalList) {
     /*var m = objNew();
      objName(m, 'Synchronous @ 1min');

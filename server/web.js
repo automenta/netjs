@@ -147,10 +147,13 @@ exports.start = function(options, init) {
                 if (!pp)
                     continue;
                 if (pp[operation]) {
-                    pp[operation](parameter);
+                    var result = pp[operation](parameter);
+					if (result)
+						parameter = result;
                 }
             }
         }
+		return parameter;
     }
     $N.plugins = plugins;
 
@@ -1258,6 +1261,9 @@ exports.start = function(options, init) {
 
 
     function broadcast(socket, o, whenFinished) {
+        if (!o.removed)
+            o = plugins("prePub", o);
+
         notice(o, whenFinished, socket);
 
         co = util.objCompact(o);

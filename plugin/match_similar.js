@@ -62,10 +62,18 @@ function getPropertySimilarity(a, b, commonTags) {
 
 exports.plugin = function($N) {
     function match(a, b) {       
-        return {
+        var m = {
             'tagSimilarity': $N.objTagRelevance(a, b)
         };
-    }    
+		m.totalSimilarity = m.tagSimilarity;
+
+
+		if (a.wordFrequency && b.wordFrequency) {
+			m.wordSimilarity = util.wordSimilarity(a.wordFrequency, b.wordFrequency);
+			m.totalSimilarity += m.wordSimilarity;			
+		}
+		return m;
+    }
     
     return {
         name: 'Semantic Property Matching',
@@ -140,8 +148,8 @@ exports.plugin = function($N) {
         onPub: function(x) {
 
             if (!x.author)       return;
-            if (!x.value)        return;
-            
+            if (!x.value)        return;            
+
             var that = this;
             
             //TODO add 'defined(author)=true' to query somehow to optimize result size
@@ -153,8 +161,9 @@ exports.plugin = function($N) {
                     return;
                 if (o.id === x.id)
                     return;
-                if (o.author === x.author)
-                    return;
+
+                /*if (o.author === x.author)
+                    return;*/
 
                 matches[o.id] = match(x, o);
                 numMatches++;
@@ -167,7 +176,7 @@ exports.plugin = function($N) {
                                         
                     var matchids = _.keys(matches);
                     matchids.sort(function(a, b) {
-                        return matches[b].tagSimilarity - matches[a].tagSimilarity;
+                        return matches[b].totalSimilarity - matches[a].totalSimilarity;
                     });
                     
                     matchids = matchids.splice(0, Math.min(that.options.maxResults, matchids.length));
@@ -175,13 +184,13 @@ exports.plugin = function($N) {
                     var maxSimilarity = 0;
                     for (var j = 0; j < matchids.length; j++) {
                         var m = matchids[j];
-                        var s = matches[m].tagSimilarity;
+                        var s = matches[m].totalSimilarity;
                         if (s > maxSimilarity) maxSimilarity = s;
                     }
                                                                                 
                     for (var j = 0; j < matchids.length; j++) {
                         var m = matchids[j];
-                        var s = matches[m].tagSimilarity;
+                        var s = matches[m].totalSimilarity;
                         if (maxSimilarity > 0)
                             s/=maxSimilarity;
                         n.add('similarTo', m, s);
@@ -190,7 +199,6 @@ exports.plugin = function($N) {
                     $N.pub(n);
                 }
             });
-
 
         },
         stop: function() {

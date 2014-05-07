@@ -8,6 +8,7 @@ exports.plugin = function($N) { return {
 
 		start: function() { },
 		onConnect: function(who) {	},
+        prePub: function(x) { return x; },
 		onPub: function(x) { },
 		onDelete: function(x) { },
 		stop: function() { }

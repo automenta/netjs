@@ -37,6 +37,8 @@
 		"kmeans":"",
 		"jsdom": "",
 		"togeojson":"",
-		"rivescript":""
+		"rivescript":"",
+		"natural":"",
+		"stopwords":""
     }
 }
