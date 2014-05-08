@@ -70,7 +70,8 @@ function newGraphView(v) {
     }
     function addEdge(from, to, style) {
         var ee = {source: nodeIndex[from], target: nodeIndex[to], style: style};
-        if (ee.source && ee.target)
+
+        if ((ee.source!=undefined) && (ee.target!=undefined))
             edges.push(ee);
         return ee;
     }
@@ -272,6 +273,14 @@ function newGraphView(v) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 addNodeForObject(x);
+
+                if (includeEdges['Reply']) {
+                    var replies = $N.getReplies(x.id);
+                    for (var j = 0; j < replies.length; j++) {
+						var RO = $N.getObject(replies[j]);
+						xxrr.push([RO, 1]);
+                    }
+                }
             }
 
             for (var i = 0; i < xxrr.length; i++) {
@@ -300,19 +309,19 @@ function newGraphView(v) {
 
                 if (includeEdges['Author']) {
                     if (x.author)
-                        rtags.push([x.author, {stroke: '#fbb', strokeWidth: 3}]);
+                        rtags.push([x.author, {stroke: '#b66', strokeWidth: 3}]);
                 }                
                 if (includeEdges['Subject']) {                
                     if (x.subject)
-                        rtags.push([x.subject, {stroke: '#bbf', strokeWidth: 3}]);
+                        rtags.push([x.subject, {stroke: '#66b', strokeWidth: 3}]);
                 }
                 if (includeEdges['Reply']) {
                     var replies = $N.getReplies(x.id);
                     for (var j = 0; j < replies.length; j++) {
-                        rtags.push([replies[j], {stroke: '#bfb', strokeWidth: 3}]);                        
-						xxrr.push([$N.getObject(replies[j]), 1]);
+                        rtags.push([replies[j], {stroke: '#6b6', strokeWidth: 3}]);                        
                     }
                 }
+
  
                 if (rtags) {
 
@@ -392,7 +401,7 @@ function newGraphView(v) {
                             continue;
                         if (vidp.type == 'object') {
                             var target = vi.value;
-                            if (nodeIndex[target]) {
+                            if (nodeIndex[target]!=undefined) {
                                 addEdge(x.id, target, { opacity: (vi.strength||1.0) });
                             }
                         }

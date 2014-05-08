@@ -1427,6 +1427,7 @@ function newSimilaritySummary(x) {
 				var name = o ? o.name : "?";
 				var li = $('<li></li>').appendTo(d);
 				var lia = $('<a href="#">' + name /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
+				li.append('&nbsp;');
 				lia.click(function() {
 					newPopupObjectView(v.value);
 				});
