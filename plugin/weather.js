@@ -1,3 +1,69 @@
+var request = require('request');
+var _ = require('underscore');
+
+exports.plugin = function($N) {
+    return {
+        name: 'Weather',
+        description: 'Weather forecasts',
+        options: {},
+        version: '1.0',
+        author: 'http://openweathermap.org',
+        start: function(options) {
+
+			var locations = options.locations;
+
+			_.each(locations, function(location) {
+		        request.get(
+					{
+		                ////http://api.openweathermap.org/data/2.5/forecast?q=London,us&mode=json
+			            url: 'http://api.openweathermap.org/data/2.5/forecast',
+						qs: {
+							q: location,
+							mode: 'json',
+							units: 'metric'
+						}
+					},
+					function(error, response, body) {
+						if (error) {
+							console.error('weather.js', error);
+							return;
+						}
+
+						var data = JSON.parse(body);
+
+						var where = [ data.city.coord.lat, data.city.coord.lon ];
+
+						//http://bugs.openweathermap.org/projects/api/wiki/Weather_Data
+						_.each(data.list, function(d) {
+							var title = d.weather[0].main + ': ' + d.weather[0].description;
+							var when = parseInt(d.dt+'000');
+							var temp = d.main.temp;
+							var cloudiness = d.clouds.all;
+							var rainMM = d.rain['3h'];
+
+							var o = $N.objNew();
+							o.id = 'weather.' + encodeURIComponent(location) + '.' + when;	
+							o.when = when;
+							o.duration = 1000*(60*60*3 - 60); //3 hours-1 min
+							o.expiresAt = when + 1000*60*60*6; //6hours
+							o.name = title;
+							o.earthPoint(where[0], where[1]);
+							o.addDescription(JSON.stringify([temp, cloudiness, rainMM]));
+
+							o.addTag('Goal');
+
+							$N.pub(o);
+						});
+
+					}
+		        );
+			});
+        }
+    }
+};
+
+
+
 /*
 Weather
 	http://www.openweathermap.org/
