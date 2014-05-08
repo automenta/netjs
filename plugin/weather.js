@@ -10,6 +10,17 @@ exports.plugin = function($N) {
         author: 'http://openweathermap.org',
         start: function(options) {
 
+            $N.addTags([
+                {
+                    uri: 'Weather', name: 'Weather',
+                    properties: {
+                        'rainVolumePerHour': {name: 'Rain (mm per hour)', description: 'Volume mm per hour', type: 'real', max: 1, readonly: true },
+                        'snowVolumePerHour': {name: 'Snow (mm per hour)', description: 'Volume mm per hour', type: 'real', max: 1, readonly: true },
+                        'cloudCover': {name: 'Cloud Cover (%)', type: 'real', max: 1, readonly: true },
+                    }
+                }
+            ], ['Physical','Nature']);
+
 			var locations = options.locations;
 
 			_.each(locations, function(location) {
@@ -40,6 +51,7 @@ exports.plugin = function($N) {
 							var temp = d.main.temp;
 							var cloudiness = d.clouds.all;
 							var rainMM = d.rain['3h'];
+							//TODO snow
 
 							var o = $N.objNew();
 							o.id = 'weather.' + encodeURIComponent(location) + '.' + when;	
@@ -48,9 +60,17 @@ exports.plugin = function($N) {
 							o.expiresAt = when + 1000*60*60*6; //6hours
 							o.name = title;
 							o.earthPoint(where[0], where[1]);
-							o.addDescription(JSON.stringify([temp, cloudiness, rainMM]));
 
 							o.addTag('Goal');
+							o.addTag('Weather');
+
+							if (rainMM > 0) {
+								o.add('rainVolumePerHour', rainMM);
+							}
+							if (cloudiness > 0) {
+								o.add('cloudCover', cloudiness);
+							}
+							o.add('physicalTemperature', temp); //unit: celsius
 
 							$N.pub(o);
 						});
