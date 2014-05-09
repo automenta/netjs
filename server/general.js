@@ -346,11 +346,19 @@ var generalTags = [
     {uri: 'Animal', name: 'Animal', tag: ['Resource']},
     {uri: 'Infrastructure', name: 'Infrastructure', tag: ['Resource']},
     {uri: 'Nature', name: 'Nature', tag: ['Resource']},
-    {uri: 'Danger', name: 'Danger', tag: ['Resource']},
+    {uri: 'Danger', name: 'Danger', description: 'Danger, emergency, or disaster situation / event', tag: ['Resource']},
     {uri: 'Plugin', name: 'Plugin', tag: ['Resource'], properties: {
             'Plugin.enable': {name: 'Enable', type: 'boolean', max: 1},
             'Plugin.updateEvery': {name: 'Update Every (sec)', type: 'real', max: 1}
         }},
+
+    {uri: 'Medical_emergency', name: 'Medical Emergency', description: 'Medical problem, injury, or illness', tag: ['Danger'], properties: {
+        'medicalEmergencyBodyPart': { name:'Body Part', type:'object' }
+    }},
+    {uri: 'Fire', name: 'Fire', tag: ['Danger']},
+    {uri: 'Theft', name: 'Theft', description: 'Theft or abduction', tag: ['Danger']},
+    {uri: 'Physical_security', name: 'Invasion', description: 'Security intrusion',  tag: ['Danger']},
+    
     /*    
      {uri: 'PDF', name: 'PDF Slide', properties: {
      'pdfURL': {name: 'PDF URL', type: 'text'},
