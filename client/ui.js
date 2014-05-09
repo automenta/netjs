@@ -207,8 +207,10 @@ function updateViewControls() {
 }
 
 
-function _updateView(force) {
+var _firstView = true;
 
+function _updateView(force) {
+    
 
     updateBrand();
 
@@ -252,7 +254,6 @@ function _updateView(force) {
     $('#ViewMenu a').removeClass('ViewActive');
     $('#' + view).addClass('ViewActive');
 
-    var prevView = currentView;
     if (currentView)
         if (currentView.destroy)
             currentView.destroy();
@@ -326,8 +327,10 @@ function _updateView(force) {
 
     if (configuration.device == configuration.MOBILE) {
         //auto-hide the menu
-        if (prevView)
+        if (!_firstView)
             showAvatarMenu(false);
+        else
+            _firstView = false;
     }
 
 
@@ -517,8 +520,6 @@ $(document).ready(function() {
     if (configuration.enableAnonymous)
         $('#AnonymousLoginButton').show();
 
-    if (configuration.focusEnable)
-        $('#AvatarFocus').show();
 
     $('title').html(configuration.siteName);
     $('#loginLogo').attr('src', configuration.loginLogo);
@@ -658,8 +659,7 @@ $(document).ready(function() {
                     later(function() {
                         _updateView();
                         if (firstView) {
-                            updateView = _.debounce(throttledUpdateView, viewDebounceMS);
-                            firstView = false;
+                            updateView = _.debounce(throttledUpdateView, viewDebounceMS);                                 firstView = false;
                         }                        
                     });
                 }, configuration.viewUpdateMS);

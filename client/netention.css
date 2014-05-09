@@ -777,10 +777,19 @@ word-wrap: break-word;
 .ChatViewContentLine { border-left: 3px solid transparent; border-bottom: 1px solid gray; display: inline-block; width: 95%; }
 .ChatViewContentLine p { margin: 0; }
 .ChatViewContentLineHover { border-left: 3px solid gray; }
-        .ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }
-.ChatViewInput { position: fixed; right: 2em; text-align: right; bottom: 0; }
 
-.InlineSelfButton { cursor: crosshair; border: 1px solid rgba(0,0,0,0.1); font-weight: bold; }
+/*.ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }*/
+
+.ChatViewRoster { 
+    position: fixed; text-align: left; bottom: 0;  max-width: 40%; 
+    max-height: 9%;
+    overflow: auto;
+}
+.ChatViewRoster img { height: 2em; margin-right: 3px; cursor: move; }
+
+.ChatViewInput { position: fixed; right: 2em; text-align: right; bottom: 0;  max-width: 40%; }
+
+.InlineSelfButton { cursor: move; border: 1px solid rgba(0,0,0,0.1); font-weight: bold; }
 .chatViewLineContent {
     float: left;
 }
@@ -790,7 +799,7 @@ word-wrap: break-word;
 
 .chatViewLineAuthor {
     clear: both;
-    width: 200px;    
+    width: 100px;
     float: left;
     text-align: right;    
     padding-right: 15px;

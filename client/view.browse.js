@@ -341,22 +341,21 @@ function newListView(v) {
         modeSelect.append(gridOption, listOption);
     }
                 
-
     modeSelect.append('<option value="slides">Slides</option>');
     modeSelect.change(function() {
         var v = $(this).val();
-        if (v == 'list')
+        if (v === 'list')
             listRenderer = renderBrowseList;
-        else if (v == 'grid')
+        else if (v === 'grid')
             listRenderer = renderBrowseGrid;
-        else if (v == 'slides')
+        else if (v === 'slides')
             listRenderer = renderBrowseSlides;
         update();
     });
 
 
     function updateFont(s) {
-        var vp = parseInt((0.15 + (s / 16.0)) * 100)
+        var vp = parseInt((0.15 + (s / 16.0)) * 100);
         v.css('font-size', vp + '%');
     }
 

@@ -4,8 +4,8 @@ exports.options = {
     "host": "localhost",
     "port": "8080",
     "databaseURL": "localhost/netention_0",
-    "memoryUpdatePeriodMS": 5000,
-	"httpCompress": true,
+    "memoryUpdateIntervalMS": 10*60*1000 /* 10 minutes */,
+	"httpCompress": false /* enable this on production servers, but disable if local */,
 	"password": "",
     "plugins": {
         "_rss.js": {},
@@ -38,9 +38,13 @@ exports.options = {
         "defaultMapMode2D": true,
 		"mapDefaultLocation": [ 40.44, -80.0  ],
         "enableTogetherJS": false,
-		"viewUpdateMS": 850,
-		"knowLevels": 3,
-		"focusEnable": true,
+        "viewUpdateTime": [
+            /* mobile: [ min update interval (ms), debounce time (ms), 1st view debounce time (ms) ]  */ 
+            [ 850, 100, 450 ], 
+            /* desktop: [ min update interval (ms), debounce time (ms) ], 1st view debounce time (ms) */ 
+            [ 250, 50, 150 ]
+        ],
+        "knowLevels": 3,
 		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki", "templates" ],
 		"newUserProperties": [ ],
 		"shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],

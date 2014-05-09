@@ -15,14 +15,50 @@ function onChatSend(name, desc, tag) {
 
 }
 
+function newRosterWidget() {
+    if (!$N.get('roster')) {
+        $N.updateRoster();
+    }
+    
+    var d = newDiv();
+    
+    var updateRosterDisplay = function() {
+        var r = $N.get('roster');
+        d.empty();
+        if (!r) return;
+        
+        _.keys(r).forEach(function(uid) {
+            var U = $N.getObject(uid);
+            if (U) {
+                var a = newAvatarImage(U).appendTo(d);
+                a.click(function() {
+                    newPopupObjectView(U);
+                });
+            }
+        });
+    };
+    
+    $N.on("change:roster", updateRosterDisplay);
+    
+    d.destroy = function() {
+        $N.off("change:roster", updateRosterDisplay);
+    };
+    
+    updateRosterDisplay();
+    
+    return d;
+}
+
 function newChatView(v) {
     //var roster = newRoster().attr('class', 'ChatViewRoster');    
     var content = newDiv().addClass('ChatViewContent');
     var input = newChatInput(onChatSend).addClass('ChatViewInput');
-
+    var roster = newRosterWidget().addClass('ChatViewRoster');
+    
     //frame.append(roster);
     v.append(content);
     v.append(input);
+    v.append(roster);
 
 
     var scrollbottom = _.debounce(function() {
@@ -56,7 +92,10 @@ function newChatView(v) {
     content.onChange = function() {
         updateContent();
     };
-
+    content.destroy = function() {
+        roster.destroy();
+    };
+    
     content.onChange();
 
 

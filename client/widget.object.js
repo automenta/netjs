@@ -79,7 +79,7 @@ function newPopupObjectViews(objectIDs) {
 
 
 function newAvatarImage(s) {
-    return $(newEle('img')).attr("src", getAvatarURL(s));
+    return $(newEle('img')).attr("src", getAvatarURL(s)).attr('title', s.name);
 }
 
 function getAvatarURL(s) {

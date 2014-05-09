@@ -43,20 +43,20 @@ exports.start = function(options, init) {
 
     var focusHistory = [];
     var focusHistoryMaxAge = 24 * 60 * 60; //in seconds
-    var expiresRemovalIntervalMS = 10 * 60 * 1000; //in ms
 
     var tags = {};
     var properties = {};
+    var connectedUsers = {};	//current state of all clients, indexed by their clientID 
 
     var attention = memory.Attention(0.95);
 
     var logMemory = util.createRingBuffer(256);
     $N.server.interestTime = {};	//accumualted time per interest, indexed by tag URI
-    $N.server.clientState = {};	//current state of all clients, indexed by their clientID DEPRECATED
+    
 
     function getDatabaseURL() {
         //"mydb"; // "username:password@example.com/mydb"
-        return $N.server.databaseURL || process.env['MongoURL'];
+        return $N.server.databaseURL || process.env.MongoURL;
     }
     var collections = ["obj"];
 
@@ -161,42 +161,48 @@ exports.start = function(options, init) {
     function loadState(f) {
         var db = mongo.connect(getDatabaseURL(), collections);
 
-        db.obj.find({tag: {$in: ['ServerState']}}).limit(1).sort({when: -1}, function(err, objs) {
-            db.close();
+        db.obj.ensureIndex({_tag: 1}, function(err, res) {
+            if (err) {
+                console.error('ENSURE INDEX _tag', err); 
+                db.close();
+            }
+        
+            db.obj.find({_tag: {$in: ['ServerState']}}).limit(1).sort({when: -1}, function(err, objs) {
+                db.close();
+                
+                if (err || !objs)
+                    nlog("No state found");
+                else
+                    objs.forEach(function(x) {
+                        var now = Date.now();
+                        //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds downtime'); //TODO fix this, reporting incorrect?
+                        $N.server.interestTime = x.interestTime;
+                        $N.server.clientState = x.clientState;
+                        $N.server.users = x.users || {};
+                        //$N.server.currentClientID = x.currentClientID || {};
+                        //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
 
-            if (err || !objs)
-                nlog("No state found");
-            else
-                objs.forEach(function(x) {
-                    var now = Date.now();
-                    //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds downtime'); //TODO fix this, reporting incorrect?
-                    $N.server.interestTime = x.interestTime;
-                    $N.server.clientState = x.clientState;
-                    $N.server.users = x.users || {};
-                    //$N.server.currentClientID = x.currentClientID || {};
-                    //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
+                        /*if (x.plugins) {
+                         for (var pl in x.plugins) {
+                         if (!$N.server.plugins[pl])
+                         $N.server.plugins[pl] = {};
+                         if (x.plugins[pl].enabled)
+                         $N.server.plugins[pl].enabled = x.plugins[pl].enabled;
+                         }
+                         }*/
 
-                    /*if (x.plugins) {
-                     for (var pl in x.plugins) {
-                     if (!$N.server.plugins[pl])
-                     $N.server.plugins[pl] = {};
-                     if (x.plugins[pl].enabled)
-                     $N.server.plugins[pl].enabled = x.plugins[pl].enabled;
-                     }
-                     }*/
-
-                    /* logMemory = util.createRingBuffer(256);
-                     logMemory.buffer = x.logMemoryBuffer;
-                     logMemory.pointer = x.logMemoryPointer;*/
+                        /* logMemory = util.createRingBuffer(256);
+                         logMemory.buffer = x.logMemoryBuffer;
+                         logMemory.pointer = x.logMemoryPointer;*/
 
 
-                });
+                    });
 
-            if (f)
-                f();
+                if (f)
+                    f();
 
+            });
         });
-
 
     }
 
@@ -608,16 +614,15 @@ exports.start = function(options, init) {
 
 
     function saveState(onSaved, onError) {
-        var t = Date.now()
+        var t = Date.now();
 
         /*
          logMemoryBuffer = logMemory.buffer;
          logMemoryPointer = logMemory.pointer;*/
 
         delete $N.server._id;
-        $N.server.tag = ['ServerState'];
+        $N.server._tag = $N.server.tag = ['ServerState'];
         $N.server.when = t;
-
 
         var db = mongo.connect(getDatabaseURL(), collections);
 
@@ -726,7 +731,7 @@ exports.start = function(options, init) {
 
     httpServer.listen($N.server.port);
 
-    nlog('Web server on port ' + $N.server.port);
+    nlog('Web server: http://' + $N.server.host + ':' + $N.server.port);
 
     var io = socketio.listen(httpServer);
 
@@ -1311,6 +1316,9 @@ exports.start = function(options, init) {
     }
     $N.broadcast = broadcast;
 
+    express.get('/users/connected/json', function(req, res) {
+        sendJSON(res, getUserConnections());
+    });
     /*
      express.get('/object/users/json', function(req, res) {
      var userObjects = [];
@@ -1802,6 +1810,43 @@ exports.start = function(options, init) {
         returnWikiPage("http://en.wikipedia.org/wiki/" + t, rres);
     });
 
+    function getUserConnections() {
+        var u = { };
+        _.keys(connectedUsers).forEach(function(uid) {
+            u[uid] = 1;
+        });
+        return u;
+    }
+    
+    var rosterBroadcastIntervalMS = 1000;
+    var broadcastRoster = _.throttle(function() {
+        var uc = getUserConnections();
+        if (_.keys(uc).length > 0)
+            io.sockets.in('*').emit('roster', uc);
+    }, rosterBroadcastIntervalMS);
+    
+    function updateUserConnection(oldID, nextID, socket) {
+        //oldID = leaving user
+        //nextID = joining user
+                
+        if (oldID) {
+            if (connectedUsers[oldID]) {
+                delete connectedUsers[oldID].sockets[socket.id];                
+            }
+            if (_.keys(connectedUsers[oldID].sockets) == 0)
+                delete connectedUsers[oldID];
+        }
+        if (nextID) {
+            if (!connectedUsers[nextID])
+                connectedUsers[nextID] = { sockets: {} };
+            
+            connectedUsers[nextID].sockets[socket.id] = socket;
+            
+            socket.clientID = nextID;
+        }
+                        
+        broadcastRoster();
+    }
 
 
     function pub(message, whenFinished) {
@@ -1909,6 +1954,7 @@ exports.start = function(options, init) {
              callback('Unable to set activity of plugin ' + pid + ' to ' + enabled);
              
              });*/
+            
 
             socket.on('become', function(target, _onResult) {
                 var targetObjectID = target;
@@ -1924,10 +1970,9 @@ exports.start = function(options, init) {
 
                 onResult = function(nextID) {
                     var oldID = socket.clientID;
-                    socket.clientID = nextID;
-
+                    
                     if (oldID != nextID) {
-                        //nlog('became: ' + oldID + ' -> ' + nextID + ' @ ' + socket.id);
+                        updateUserConnection(oldID, nextID, socket);
                         plugins("onConnect", {id: nextID, prevID: oldID});
                     }
 
@@ -1999,7 +2044,8 @@ exports.start = function(options, init) {
                 }
 
                 var selves = getClientSelves(key);
-                //nlog('connect: ' + cid + ', ' + key + ', ' + selves + ' @ ' + socket.id);
+                
+                updateUserConnection(null, cid, socket);
                 plugins("onConnect", {id: cid});
 
                 var tagsAndTemplates = [];
@@ -2023,7 +2069,11 @@ exports.start = function(options, init) {
                 callback(cid, key, selves);
 
             });
-
+            
+            socket.on('disconnect', function() {
+                updateUserConnection(socket.clientID, null, socket);
+            });
+            
             /*socket.on('updateSelf', function(s, getObjects) {
              socket.get('clientID', function(err, c) {
              if (c == null) {
@@ -2218,7 +2268,6 @@ exports.start = function(options, init) {
     $N.permissions = options.permissions || {};
     $N.enablePlugins = options.plugins || {};
 
-    //setInterval(attention.update, Server.memoryUpdatePeriodMS);
 
     require('./general.js').plugin($N).start();
 
@@ -2255,8 +2304,6 @@ exports.start = function(options, init) {
         });
     }
 
-    nlog('Ready');
-
     if (init)
         init($N);
 
@@ -2271,7 +2318,7 @@ exports.start = function(options, init) {
             deleteObjects(ids);
         });
     }    
-    setInterval(removeExpired, expiresRemovalIntervalMS);
+    setInterval(removeExpired, $N.server.memoryUpdateIntervalMS);
     removeExpired();
 
     return $N;

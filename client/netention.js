@@ -313,9 +313,14 @@ function netention(f) {
                         $N.addProperties(p);
                         $N.addTags(t);
                     });
+                    
+                    socket.on('roster', function(r) {
+                        $N.set('roster', r);
+                    });
 
                     $.pnotify({
-                        title: 'Connected.'
+                        title: 'Connected.',
+                        stack: stack_bottomleft
                     });
 
                     reconnect();
@@ -324,6 +329,11 @@ function netention(f) {
             }
 
             return socket;
+        },
+        updateRoster: function() {
+            $.getJSON('/users/connected/json', function(r) {
+                $N.set('roster', r);
+            });
         },
         loadOntology: function (url, f) {
             var that = this;
