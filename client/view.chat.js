@@ -103,10 +103,9 @@ function newChatView(v) {
 }
 
 function newInlineSelfButton(s, x) {
-    var x = newEle('a').attr('class', 'InlineSelfButton').attr('aid', s.id).attr('xid', x.id);
-    x.prepend(newAvatarImage(s));
-    x.append(s.name);
-    return x;
+    return newEle('a').attr({
+        'aid': s.id, 'xid': x.id, 'class': 'InlineSelfButton'
+    }).append('<span>' + s.name + '</span>', newAvatarImage(s));
 }
 
 function newObjectLogLineOnHover() {   $(this).addClass('ChatViewContentLineHover'); }
@@ -115,20 +114,67 @@ function newObjectLogLineClick() {
     var author = $(this).attr('aid');
     var xid = $(this).attr('xid');
 
-    if (author === $N.id())
-        newPopupObjectEdit($N.getObject(xid));
-    else
-        newPopupObjectView(xid);
+    newPopupObjectView(author);
+}
+
+function lineClickFunction() {
+    var line = $(this);
+    
+    var e = $(line.children()[1]);
+        
+    var x = $N.getObject( line.attr('xid') );
+    
+    var showingMini = (e.children().length > 0) && (!e.children().first().hasClass('objectView'));
+    
+    function showMini() {
+        if (x.name.length > 0)
+            e.append('<p>' + x.name + '</p>');
+
+        var desc = objDescription(x);
+        if (desc.length > 0) {
+            e.append('<p>' + desc + '</p>');
+        }
+        var firstMedia = objFirstValue(x, 'media');
+        if (firstMedia) {
+            e.append('<p><img src="' + firstMedia + '"/></p>');
+        }        
+
+    }
+    function showFull() {
+        var s = newObjectSummary(x, {
+            showActionPopupButton: false,
+            showSelectionCheck: false
+        });
+        s.hide();
+        
+        e.append(s);
+        
+        s.fadeIn();
+    }
+    
+    e.empty();
+    if (showingMini) {
+        showFull();
+    }
+    else {
+        showMini();
+    }
+    
 }
 
 function newObjectLogLine(x) {
-    var line = newEle('div')
-                .addClass('ChatViewContentLine')
-                .hover(newObjectLogLineOnHover, newObjectLogLineOffHover);
+    var line = newEle('div').addClass('ChatViewContentLine').attr('xid', x.id);
+    
+    if (configuration.device == configuration.DESKTOP)
+        line.hover(newObjectLogLineOnHover, newObjectLogLineOffHover);
     
     var d = newDiv().addClass('chatViewLineAuthor').appendTo(line);
     var e = newDiv().addClass('chatViewLineContent').appendTo(line);
 
+    
+    line.click(lineClickFunction);
+    (lineClickFunction.bind(line))();    
+    
     if (x.author) {
         var a = $N.getObject(x.author);
         var b;
@@ -142,19 +188,7 @@ function newObjectLogLine(x) {
         d.append(newEle('p').append(b));
     }
     else {
-        d.append('(System)');
-    }
-
-    if (x.name.length > 0)
-        e.append('<p>' + x.name + '</p>');
-    
-    var desc = objDescription(x);
-    if (desc.length > 0) {
-        e.append('<p>' + desc + '</p>');
-    }
-    var firstMedia = objFirstValue(x, 'media');
-    if (firstMedia) {
-        e.append('<p><img src="' + firstMedia + '"/></p>');
+        d.append('&nbsp;');
     }
 
     return line;

@@ -77,6 +77,12 @@ var generalTags = [
      Exclusivity and Rivalry?
      
      */
+    
+    { uri: 'Similar', name: 'Similar',
+      properties: {
+        'similarTo': { name: 'to', type: 'object' }
+      }
+    },
 
     {uri: 'Item', name: 'Item',
         properties: {

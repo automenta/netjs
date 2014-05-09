@@ -264,7 +264,6 @@ div.olMapViewport {
 
 .TagButtonIcon {
     height: 1em;
-    margin-right: 0.25em;    
 }
 
 .tag0 { opacity: 0.5; }
@@ -315,7 +314,6 @@ div.olMapViewport {
 }
 .MetadataLine img {
     height: 1em;
-    padding-right: 0.2em;
 }
 /*
 .MetadataLine img:hover {
@@ -774,7 +772,15 @@ word-wrap: break-word;
     
 /* Chat */
 .ChatViewContent { position: fixed; height: 100%; margin-left: 1em; height: 90%; overflow: auto;  }
-.ChatViewContentLine { border-left: 3px solid transparent; border-bottom: 1px solid gray; display: inline-block; width: 95%; }
+
+.ChatViewContentLine { 
+    border-left: 3px solid transparent; 
+    border-bottom: 1px solid gray;   
+    display: inline-block; 
+    width: 95%;     
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+}
 .ChatViewContentLine p { margin: 0; }
 .ChatViewContentLineHover { border-left: 3px solid gray; }
 
@@ -785,11 +791,12 @@ word-wrap: break-word;
     max-height: 9%;
     overflow: auto;
 }
-.ChatViewRoster img { height: 2em; margin-right: 3px; cursor: move; }
+.ChatViewRoster img { height: 2em; margin-right: 3px; cursor: pointer; border: 1px solid gray; }
 
 .ChatViewInput { position: fixed; right: 2em; text-align: right; bottom: 0;  max-width: 40%; }
 
-.InlineSelfButton { cursor: move; border: 1px solid rgba(0,0,0,0.1); font-weight: bold; }
+.InlineSelfButton { cursor: pointer; text-decoration: underline; font-size: 70%; }
+.InlineSelfButton span { vertical-align: top; }
 .chatViewLineContent {
     float: left;
 }
@@ -803,14 +810,14 @@ word-wrap: break-word;
     float: left;
     text-align: right;    
     padding-right: 15px;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.1em;
 }
 .chatViewLineContent ul {
     font-size: 75%;    
 }
 .chatViewLineAuthor img {
-    height: 1em;
-    margin-right: 4px;
+    height: 2em;
+    margin-left: 4px;
 }
 
         

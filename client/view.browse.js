@@ -156,7 +156,6 @@ function renderBrowse(v, cssClass, afterCreated) {
         if (afterCreated)
             afterCreated(v, xxrr.length);
 
-        $('body').timeago('refresh');
     });
 }
 

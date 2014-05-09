@@ -1,11 +1,30 @@
-/*!
- * index.js
- */
-
 "use strict";
 
-var updateView;
+jQuery.timeago.settings.allowFuture = true;
+jQuery.timeago.settings.strings = {
+    prefixAgo: null,
+    prefixFromNow: null,
+    suffixAgo: "ago",
+    suffixFromNow: "from now",
+    inPast: 'any moment now',
+    seconds: "<1 minute",
+    minute: "~1 minute",
+    minutes: "%d minutes",
+    hour: "~1 hour",
+    hours: "~%d hours",
+    day: "1 day",
+    days: "%d days",
+    month: "~1 month",
+    months: "%d months",
+    year: "~1 year",
+    years: "%d years",
+    wordSeparator: " ",
+    numbers: []
+};
 
+
+
+var updateView;
 
 var lastView = null;
 var currentView = null;
@@ -648,7 +667,7 @@ $(document).ready(function() {
 
                 updateViewControls();
 
-                $('body').timeago();
+                $('body.timeago').timeago();
 
                 var viewUpdateMS = configuration.viewUpdateTime[configuration.device][0];
                 var viewDebounceMS = configuration.viewUpdateTime[configuration.device][1];

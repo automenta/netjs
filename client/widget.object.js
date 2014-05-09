@@ -111,6 +111,13 @@ function tagObject(tag) {
     return o;
 }
 
+function _onTagButtonClicked() {
+    var ti = $(this).attr('taguri');
+    var t = $N.getTag(ti);
+    if (t)
+        newPopupObjectView(tagObject(t));
+}
+
 function newTagButton(t, onClicked, isButton) {
     var ti = null;
 
@@ -122,10 +129,12 @@ function newTagButton(t, onClicked, isButton) {
     if (t.uri) {
         ti = getTagIcon(t.uri);
     }
-
+    if (!ti)
+        ti = getTagIcon(null);
+    
     var i = null;
-    if (ti !== null) {
-        i = $(document.createElement('img')).attr({
+    if (ti) {
+        i = newEle('img').attr({
             'src': ti,
             'class': 'TagButtonIcon'
         });
@@ -143,10 +152,14 @@ function newTagButton(t, onClicked, isButton) {
 
 
     if (!onClicked)
-        onClicked = function () {
+        onClicked = _onTagButtonClicked;
+        /*onClicked = function () {
             newPopupObjectView(tagObject(t));
-        };
-
+        };*/
+    
+    b.t = t;
+    if (t)
+        b.attr('taguri', t.uri || (t+'') );
     b.click(onClicked);
 
     return b;
@@ -1558,6 +1571,13 @@ function newSimilaritySummary(x) {
     return g;
 }
 
+
+//as a static global function for optimization
+function _refreshActionContext() {
+    refreshActionContext();
+    return true;
+}
+
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
  */
@@ -1735,10 +1755,10 @@ function newObjectSummary(x, options) {
         var authorClient = $N.getObject(authorID);
         if (authorClient) {
             if (authorID) {
-                var av = newAvatarImage(authorClient).attr('align', 'left');
-
-                d.append(av);
-                av.wrap('<div class="AvatarIcon"/>');
+                var av = newAvatarImage(authorClient)
+                            //.attr('align', 'left')
+                            .appendTo(d)
+                            .wrap('<div class="AvatarIcon"/>');
             }
         }
     }
@@ -1746,12 +1766,10 @@ function newObjectSummary(x, options) {
     //Selection Checkbox
     var selectioncheck = null;
     if (showSelectionCheck) {
-        selectioncheck = $('<input type="checkbox"/>');
-        selectioncheck.addClass('ObjectSelection');
-        selectioncheck.attr('oid', x.id);
-        selectioncheck.click(function () {
-            refreshActionContext();
-        });
+        selectioncheck = $('<input type="checkbox"/>')
+            .addClass('ObjectSelection')
+            .attr('oid', x.id)
+            .click(_refreshActionContext);
     }
 
     var haxn = null;
@@ -1767,38 +1785,35 @@ function newObjectSummary(x, options) {
                         windowParent.dialog('close');
                     }
                     newPopupObjectEdit(x, true);
+                    return false;
                 });
             }
 
-        var popupmenuButton = $('<button title="Actions...">&gt;</button>').addClass('ObjectViewPopupButton');
-        popupmenuButton.click(function () {
+        var popupmenu = null;
+        var popupmenuButton = $('<button title="Actions...">&gt;</button>')
+            .addClass('ObjectViewPopupButton')
+            .click(function () {
 
-            if (popupmenuButton.children().length > 0) {
-                //click the popup menu button again to disappear an existing menu
-                closeMenu();
-                return;
-            }
-            
-            var d;
-            function closeMenu() {
-                d.remove();
-            }
+                if (popupmenu) {
+                    //click the popup menu button again to disappear an existing menu
+                    return closeMenu();
+                }
 
-            d = newContextMenu([x], true, function () {
-                //callback function when an item is clicked
-                closeMenu();
-            }).addClass('ActionMenuPopup');
+                function closeMenu() {
+                    popupmenu.remove();
+                    popupmenu = null;
+                    return false;
+                }
 
-            
-            var closeButton = $('<button>Close</button>');
-            closeButton.click(function () {
-                closeMenu();
+                popupmenu = newContextMenu([x], true, closeMenu).addClass('ActionMenuPopup');
+
+                var closeButton = $('<button>Close</button>')
+                                    .click(closeMenu)
+                                    .appendTo(popupmenu);
+
+                popupmenuButton.after(popupmenu);
+                return false;            
             });
-
-            d.append(closeButton);
-            //popupmenuButton.parent().append(d);
-            popupmenuButton.after(d);
-        });
 
         if (haxn) {
             haxn.append(editButton, popupmenuButton);
@@ -1823,6 +1838,7 @@ function newObjectSummary(x, options) {
                 } else {
                     newPopupObjectView(x.id, true);
                 }
+                return false;                
             });
             haxn.append(axn, '&nbsp;');
         }
@@ -1954,27 +1970,24 @@ function ISODateString(d) {
 }
 
 function newMetadataLine(x, showTime) {
-    var mdline = $('<h2></h2>').addClass('MetadataLine');
+    var mdline = newEle('h2').addClass('MetadataLine');
 
     var ot = objTags(x);
     var ots = objTagStrength(x, false);
 
-    for (var i = 0; i < ot.length; i++) {
-        var t = ot[i];
-
+    ot.forEach(function(t) {
         if ($N.isProperty(t))
-            continue;
+            return;
 
         var tt = $N.getTag(t);
         if (tt) {
-            var ttt = newTagButton(tt);
+            var ttt = newTagButton(tt).appendTo(mdline);
             applyTagStrengthClass(ttt, ots[t]);
-            mdline.append(ttt);
         } else {
             mdline.append('<a href="#">' + t + '</a>');
         }
         mdline.append('&nbsp;');
-    }
+    });
 
     var spacepoint = objSpacePoint(x);
     if (spacepoint) {
@@ -1989,27 +2002,19 @@ function newMetadataLine(x, showTime) {
                 dist = geoDist(sx, mll);
 
             if (dist === 0)
-                mdline.append('&nbsp;<span>(here)</span>');
+                mdline.append('&nbsp;<a>[here]</a>');
             else
-                mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
+                mdline.append('&nbsp;<a>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</a>');
         } else {
-            mdline.append('&nbsp;', '<span>[' + lat + ',' + lon + ']</span>');
+            mdline.append('&nbsp;<a>[' + lat + ',' + lon + ']</a>');
         }
     }
 
     if (showTime !== false) {
-        var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
-        var now = Date.now();
+        var ww = objWhen(x);
         if (ww) {
-            if (ww < now) {
-                mdline.append('&nbsp;',
-                    $('<time class="timeago"/>').
-                        attr('datetime', ISODateString(new Date(ww)))
-                );
-            } else {
-                mdline.append('&nbsp;<span>' + new Date(ww) + '</span>');
-            }
-
+            mdline.append(spacepoint ? '&nbsp;|&nbsp;' : '&nbsp;', 
+                          newEle('a').append($.timeago(new Date(ww))) );
         }
     }
     return mdline;

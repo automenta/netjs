@@ -87,15 +87,7 @@ exports.plugin = function($N) {
             
             options.maxResults = options.maxResults || 5;
             this.options = options;
-            
-            
-            $N.addTags([ {
-                    uri: 'Similar', name: 'Similar',
-                    properties: {
-                        'similarTo': { name: 'to', type: 'object' }
-                    }
-            } ]);
-
+                        
         },
         /*matches: function(a, b) {
             if (a.uri == b.uri)

@@ -269,7 +269,7 @@ function objSetWhen(x, time) {
 exports.objSetWhen = objSetWhen;
 
 function objWhen(x) {
-    return objFirstValue(x, 'timepoint', null) || objFirstValue(x, 'timerange', null) || x.when || x.modifiedAt || x.createdAt || undefined;
+    return x.when /*|| objFirstValue(x, 'timepoint', null) || objFirstValue(x, 'timerange', null)*/ || x.modifiedAt || x.createdAt || undefined;
 }
 exports.objWhen = objWhen;
 
