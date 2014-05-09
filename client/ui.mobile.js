@@ -142,6 +142,7 @@ $('#FocusWhereButton').click(function() {
     }
 });
 
+/*
 var periodMS = FOCUS_KEYWORD_UPDATE_PERIOD;
 var ty = _.throttle(function() {
     var t = $('#FocusKeywords').val();
@@ -155,6 +156,7 @@ $('#FocusKeywords').keyup(
             ty();
         }
 );
+*/
 
 
 $('#FocusClearButton').click(function() {

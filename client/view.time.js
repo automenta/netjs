@@ -1,77 +1,86 @@
 function newTimeView(v) {
-    // Instantiate our timeline object.
     timeline = new links.Timeline(v[0]);
-
+    
     //http://visjs.org/docs/timeline.html
     var data = [    ];
     var options = {
          'width':  '100%',
-         //'height': '300px',
+         'height': '100%',
          'editable': true,   // enable dragging and editing events
          'style': 'box',
+         'eventMargin': 0,
          'cluster': true,
-        groupsChangeable : false,
+         'autoResize': true,
+         'start': Date.now() - 1*60*60*1000 /* -1 hour */,
+         'end': Date.now() + 2*24*60*60*1000, /* 2 days */
+         'zoomMin': 60*1000, /* 1 min */
+         'groupsChangeable' : false,
+         'animate': 0,
     };
 
 
-    /*function updateGoal(g, when, duration) {
-        var G = $N.getObject(g);
-        if (when)
-            G.when = when;
-        if (duration)
-            G.duration = duration;
-        $N.pub(G);
-    }*/
     var times = { };
 
     var numTimeSegments = 128;
     var timeUnitLengthMS = 30 * 60 * 1000; //30min
-    foreachTimedObject(null, function(goals, centroids) {
-        function addGoal(g) {
-            var duration = g.duration || timeUnitLengthMS;
-            var gs = newObjectSummary(g, {
-                depthRemaining: 0,
-                nameClickable: false,
-                showActionPopupButton: false,
-                showSelectionCheck: false,
-                showTime: false,
-                showAuthorName: false,
-            });
-            
-            var G = {
-                    'id': g.id,
-                    'start': g.when,
-                    'end': g.when + duration,
-                    'content': '<div class="timelineLabel" uid="' + g.id + '">' + gs.html() + '</span>'
-            };
-            if (g.author == $N.id()) {
-                G.group = 'me';
-            }
-            else if (g.author) {
-                G.group = 'others';
-            }
-            else {
-                G.group = 'system';
-            }
-            G.editable = (g.author === $N.id());
-            if (G.editable) {
-                times[g.id] = [ G.start, G.end ];
-            }
-            
-            data.push(G);            
-        }
-
-        _.each(goals, addGoal);
-        _.each(centroids, addGoal);
-
-    });
-
-    timeline.draw(data, options);
     
-    v.find('.timelineLabel').click(function() {
-        var uid = $(this).attr('uid');
-        newPopupObjectView($N.getObject(uid));
-    });
+    var currentViewRange = null;
+    function redraw() {
+        if (currentViewRange) {
+            options.start = currentViewRange.start;
+            options.end = currentViewRange.end;
+        }
+        
+        timeline.clearItems();
+        data = [];
+        
+        foreachTimedObject(null, function(goals, centroids) {
+            function addGoal(g) {
+                var duration = g.duration || timeUnitLengthMS;
+                var gs = newObjectSummary(g, {
+                    depthRemaining: 0,
+                    nameClickable: false,
+                    showActionPopupButton: false,
+                    showSelectionCheck: false,
+                    showTime: false,
+                    showAuthorName: false,
+                });
+
+                var G = {
+                        'id': g.id,
+                        'start': g.when,
+                        'end': g.when + duration,
+                        'content': '<div class="timelineLabel" uid="' + g.id + '">' + gs.html() + '</span>'
+                };
+                if (g.author == $N.id()) {
+                    G.group = 'me';
+                }
+                else if (g.author) {
+                    G.group = 'others';
+                }
+                else {
+                    G.group = 'system';
+                }
+                G.editable = (g.author === $N.id());
+                if (G.editable) {
+                    times[g.id] = [ G.start, G.end ];
+                }
+
+                data.push(G);            
+            }
+
+            _.each(goals, addGoal);
+            _.each(centroids, addGoal);
+
+        });
+
+        timeline.draw(data, options);
+    
+        v.find('.timelineLabel').click(function() {
+            var uid = $(this).attr('uid');
+            newPopupObjectView($N.getObject(uid));
+        });
+    }
     
     function changed(x) {
        var d = timeline.getData();
@@ -100,6 +109,8 @@ function newTimeView(v) {
        }
     }
     
+    redraw();
+    
     //links.events.addListener(timeline, 'rangechanged', changed);
     links.events.addListener(timeline, 'edit', changed);
     links.events.addListener(timeline, 'change', changed);
@@ -118,7 +129,11 @@ function newTimeView(v) {
         
         timeline.draw(dd, options);
     });
+    links.events.addListener(timeline, 'rangechanged', function(p) {
+        currentViewRange = p;
+    });
 
+    timeline.onChange = redraw;
 
     return timeline;
 }

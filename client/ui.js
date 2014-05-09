@@ -4,9 +4,6 @@
 
 "use strict";
 
-var FOCUS_KEYWORD_UPDATE_PERIOD = 1500; //milliseconds
-var viewDebounceMS = 100;
-
 var updateView;
 
 
@@ -435,7 +432,7 @@ function setTheme(t) {
     if (!_.contains(_.keys(themes), t))
         t = configuration.defaultTheme;
 
-    var oldTheme = window.$N.get('theme');
+    var oldTheme = $N.get('theme');
     if (oldTheme !== t) {
         $N.save('theme', t);
     }
@@ -652,11 +649,22 @@ $(document).ready(function() {
 
                 $('body').timeago();
 
-                updateView = _.debounce(_.throttle(function() {
+                var viewUpdateMS = configuration.viewUpdateTime[configuration.device][0];
+                var viewDebounceMS = configuration.viewUpdateTime[configuration.device][1];
+                var firstViewDebounceMS = configuration.viewUpdateTime[configuration.device][2];
+                var firstView = true;
+                
+                var throttledUpdateView = _.throttle(function() {
                     later(function() {
                         _updateView();
+                        if (firstView) {
+                            updateView = _.debounce(throttledUpdateView, viewDebounceMS);
+                            firstView = false;
+                        }                        
                     });
-                }, configuration.viewUpdateMS), viewDebounceMS);
+                }, configuration.viewUpdateMS);
+                
+                updateView = _.debounce(throttledUpdateView, firstViewDebounceMS);
 
 
                 var msgs = ['I think', 'I feel', 'I wonder', 'I know', 'I want'];
@@ -689,11 +697,6 @@ $(document).ready(function() {
                     $('#View').show();
                     $('#LoadingSplash2').hide();
 
-                    $N.on('change:attention', updateView);
-                    $N.on('change:currentView', updateView);
-                    $N.on('change:tags', updateView);
-                    $N.on('change:focus', updateView);
-
 
                     var alreadyLoggedIn = false;
                     if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'local')) {
@@ -725,6 +728,12 @@ $(document).ready(function() {
                     $('#NotificationArea').html('Ready...');
                     $('#NotificationArea').fadeOut();
 
+                    $N.on('change:attention', updateView);
+                    $N.on('change:currentView', updateView);
+                    $N.on('change:tags', updateView);
+                    $N.on('change:focus', updateView);
+
+                    
                     initKeyboard();
 
                     var w = new Workspace();

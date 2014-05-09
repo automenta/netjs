@@ -1734,7 +1734,7 @@ function newObjectSummary(x, options) {
     }
 
     //Selection Checkbox
-    var selectionCheck = null;
+    var selectioncheck = null;
     if (showSelectionCheck) {
         selectioncheck = $('<input type="checkbox"/>');
         selectioncheck.addClass('ObjectSelection');
@@ -1816,7 +1816,8 @@ function newObjectSummary(x, options) {
             });
             haxn.append(axn, '&nbsp;');
         }
-        haxn.prepend(selectioncheck);
+        if (selectioncheck)
+            haxn.prepend(selectioncheck);
         d.append(haxn);
     } else {
         if (selectionCheck)

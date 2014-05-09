@@ -830,7 +830,10 @@ function netention(f) {
             });
         },
         startURLRouter: function () {
-            Backbone.history.start();
+            if (!this.backboneStarted) {
+                this.backboneStarted = true;
+                Backbone.history.start();
+            }
         }
 
 
