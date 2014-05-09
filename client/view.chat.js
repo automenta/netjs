@@ -63,38 +63,43 @@ function newChatView(v) {
     return content;
 }
 
-function newInlineSelfButton(s) {
-    var x = newEle('a').attr('class', 'InlineSelfButton');
+function newInlineSelfButton(s, x) {
+    var x = newEle('a').attr('class', 'InlineSelfButton').attr('aid', s.id).attr('xid', x.id);
     x.prepend(newAvatarImage(s));
     x.append(s.name);
     return x;
 }
 
+function newObjectLogLineOnHover() {   $(this).addClass('ChatViewContentLineHover'); }
+function newObjectLogLineOffHover() {   $(this).removeClass('ChatViewContentLineHover'); }
+function newObjectLogLineClick() {
+    var author = $(this).attr('aid');
+    var xid = $(this).attr('xid');
+
+    if (author === $N.id())
+        newPopupObjectEdit($N.getObject(xid));
+    else
+        newPopupObjectView(xid);
+}
+
 function newObjectLogLine(x) {
-    var line = newEle('div').addClass('ChatViewContentLine');
-    line.hover(function() {
-       line.addClass('ChatViewContentLineHover');
-    }, function() {
-       line.removeClass('ChatViewContentLineHover');        
-    });
+    var line = newEle('div')
+                .addClass('ChatViewContentLine')
+                .hover(newObjectLogLineOnHover, newObjectLogLineOffHover);
     
     var d = newDiv().addClass('chatViewLineAuthor').appendTo(line);
     var e = newDiv().addClass('chatViewLineContent').appendTo(line);
 
     if (x.author) {
         var a = $N.getObject(x.author);
+        var b;
         if (a) {
             b = newInlineSelfButton(a, x);
         }
         else {
-            b = $('<a href="#">' + x.author + '</a>');
+            b = $('<a href="#">' + x.author + '</a>').attr('xid', x.id).attr('aid', x.author);
         }
-        b.click(function() {
-            if (x.author === $N.id())
-                newPopupObjectEdit(x);
-            else
-                newPopupObjectView(x.id);
-        });
+        b.click(newObjectLogLineClick);
         d.append(newEle('p').append(b));
     }
     else {
@@ -103,6 +108,7 @@ function newObjectLogLine(x) {
 
     if (x.name.length > 0)
         e.append('<p>' + x.name + '</p>');
+    
     var desc = objDescription(x);
     if (desc.length > 0) {
         e.append('<p>' + desc + '</p>');

@@ -622,8 +622,10 @@ function getDefaultTemplates($N) {
         x.push(n);
     }
 
-    for (var i = 0; i < x.length; i++)
+    for (var i = 0; i < x.length; i++) {
+        x[i].hidden = true;
         x[i].addTag('Template');
+    }
 
     return x;
 }

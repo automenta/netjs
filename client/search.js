@@ -148,16 +148,14 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
     }
 
     var ii = _.keys($N.layer().include);
-    var ee = _.union(_.keys($N.layer().exclude), ['Template']);
+    var ee = _.keys($N.layer().exclude);
 
-    for (var k in $N.objects()) {
-
-        var x = $N.getObject(k);
+    _.each($N.objects(), function(x, k) {
 
         if (x.replyTo)
-            continue;
+            return;
         if (x.hidden)
-            continue;
+            return;
 
         //TAG filter
         var allowed = true;
@@ -185,62 +183,62 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
         }
 
         if (!allowed)
-            continue;
+            return;
 
         //scope prefilter
         if (scope == 'Mine') {
             if (x.author != s.id())
-                continue;
+                return;
         }
         else if (scope == 'Others') {
             if (x.author == s.id())
-                continue;
+                return;
         }
 
         if (focus) {
             if (focus.who)
                 if (x.author != focus.who)
-                    continue;
+                    return;
 
             if (focus.userRelation) {
                 if (x.author) {
                     if (focus.userRelation.itrust) {
                         //do I trust the author of the object?
                         if ($N.userRelations[$N.id()]['trusts'][x.author] == undefined)
-                            continue;
+                            return;
                     }
                     if (focus.userRelation.trustme) {
                         //do I trust the author of the object?
                         if ($N.userRelations[$N.id()]['trustedBy'][x.author] == undefined)
-                            continue;
+                            return;
                     }
                 }
 				else {
-					continue;
+					return;
 				}
             }
         }
 
         //sort
         var r = 1.0;
-        if (sort == 'Recent') {
+        if (sort === 'Recent') {
             var w = objTime(x);
-            ;
+            
             if (w == null)
-                continue;
+                return;
             var ageSeconds = Math.abs(now - w) / 1000.0;
             //r = Math.exp(-ageSeconds/10000.0);
             r = 1.0 / (1.0 + ageSeconds / 60.0);
         }
-        else if (sort == 'Near') {
+        else if (sort === 'Near') {
 
             if (!location) {
-                continue;
+                return;
             }
 
             var llx = objSpacePointLatLng(x);
             if (!llx) {
-                continue;
+                return;
             }
 
             var distance = geoDist(location, llx); //kilometers
@@ -248,10 +246,10 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
             r = 1.0 / (1.0 + distance);
         }
         //DEPRECATED
-        else if (sort == 'Spacetime') {
+        else if (sort === 'Spacetime') {
             var llx = objSpacePointLatLng(x);
             if ((!location) || (!llx) || (!x.when)) {
-                continue;
+                return;
             }
             var timeDistance = Math.abs(now - x.when) / 1000.0; //seconds
             var spaceDistance = geoDist(location, llx) * 1000.0; //meters
@@ -259,7 +257,7 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
             r = 1.0 / (1.0 + ((timeDistance / 60.0) + spaceDistance));
         }
 
-        if (semantic == 'Relevant') {
+        if (semantic === 'Relevant') {
             if (focus) {
                 if (focus.name) {
                     var fn = focus.name.toLowerCase();
@@ -300,7 +298,7 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
         if (r > 0) {
             relevance[k] = r;
         }
-    }
+    });
 
     var relevant = _.keys(relevance);
     relevant.sort(function(a, b) {
