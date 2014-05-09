@@ -79,7 +79,7 @@ function newLayersWidget() {
     //var isGeographic = $('#GeographicToggle').is(':checked');
     //updateLayers();
     
-    var l = self.layer();
+    var l = $N.layer();
     if (!l.include) 
         l.include = { };
     if (!l.exclude)
@@ -146,7 +146,7 @@ function newLayersWidget() {
     newTagTree(p);
     
     function commitLayer() {
-        self.save('layer', l);
+        $N.save('layer', l);
         updateLayers();
     }
     
@@ -244,15 +244,15 @@ function newLayersWidget() {
 /*
     //KML
     {        
-        if (self.layer)
-            delete self.layer().kml;
+        if ($N.layer)
+            delete $N.layer().kml;
         
         $("#KMLLayers input").change(function() {
            var t = $(this);
            var url = t.attr('url');
            var checked = t.is(':checked');
            
-           var l = self.layer();
+           var l = $N.layer();
            
            if (!l.kml) l.kml = [];
            
@@ -264,8 +264,8 @@ function newLayersWidget() {
                l.kml = _.without( l.kml, url);
            }                      
            
-           self.save('layer', l);
-           self.trigger('change:layer');
+           $N.save('layer', l);
+           $N.trigger('change:layer');
         });
     }
 */

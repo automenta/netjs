@@ -165,38 +165,168 @@ function newNeedsBrowser() {
 }
 
 function newTreeBrowser(selected, onTagAdded) {
-    var e = newDiv();
-    e.addClass('SelfTimeTagTree');
+    var e = newDiv().addClass('SelfTimeTagTree');
 
     $('.TagChoice').remove();
 
-    var prefix = 'STT_';
+    var prefix = 'S_';
 
+    var onTagAddedFunc = function() {
+        onTagAdded($(this).attr('id').substring(prefix.length));
+    };
+    
     newTagTree({
         target: e,
         newTagDiv: function(id, content) {
-            var ti = getTagIcon(id);
-            if (!ti)
-                ti = defaultIcons['unknown'];
-
-            content = '<img style="height: 1em" src="' + ti + '"/>&nbsp;' + content;
+            var ti = getTagIcon(id) || defaultIcons.unknown;
 
             return {
-                label: ('<button id="' + prefix + id + '" class="TagChoice")>' + content + '</button>')
+                label: '<button id="' + prefix + id + '" class="TagChoice")>' + 
+                       '<img style="height: 1em" src="' + ti + '"/>&nbsp;' + 
+                       content + '</button>'
             };
         },
         onCreated: function() {
             e.find('.TagChoice').each(function(x) {
-                var t = $(this);
-                t.click(function() {
-                    onTagAdded(t.attr('id').substring(prefix.length));
-                });
+                $(this).click(onTagAddedFunc);
             });
         }
     });
 
     return e;
 }
+
+function newTagTree(param) {
+    var a = param.target;
+    var onSelectionChange = param.onSelectionChange;
+    var addToTree = param.addtoTree;
+    var newTagLayerDiv = param.newTagDiv;
+
+    a.empty();
+
+    var tree = newDiv();
+
+    var isGeographic = $('#GeographicToggle').is(':checked');
+
+    var stc;
+    if (isGeographic) {
+        stc = $N.getTagCount(false, objGeographic);
+    } else {
+        stc = $N.getTagCount();
+    }
+
+    var T = [
+        /*        {
+         label: 'node1',
+         children: [
+         { label: '<button>child1</button>' },
+         { label: 'child2' }
+         ]
+         },
+         {
+         label: 'node2',
+         children: [
+         { label: 'child3' }
+         ]
+         } */
+    ];
+
+
+    function subtree(root, i) {
+        var name, xi;
+
+        if (i.name) {
+            name = i.name;
+            xi = i.uri;
+        } else
+            name = xi = i;
+
+        var children = $N.getSubTags(xi);
+
+        var label = name;
+        if (stc[xi]) {
+            if (stc[xi] > 0)
+                label += ' (' + _n(stc[xi]) + ')';
+        } else {
+            /*if (children.length==0)
+             return;*/
+        }
+
+        var b = newTagLayerDiv(xi, label);
+
+        if (children.length > 0) {
+            b.children = [];
+            children.forEach(function(c) {
+                subtree(b.children, $N.tag(c));
+            });
+        }
+        b.id = xi;
+
+        root.push(b);
+    }
+
+    function othersubtree(root) {
+        var otherFolder = {
+            label: 'Other',
+            children: []
+        };
+
+        var others = [];
+        for (var c in stc) {
+            if (!$N.tag(c))
+                others.push(c);
+        }
+
+        if (others.length === 0)
+            return;
+
+        others.forEach(function(c) {
+            subtree(otherFolder.children, c);
+        });
+        root.push(otherFolder);
+    }
+
+    var roots = $N.tagRoots();
+    roots.forEach(function (t) {
+        subtree(T, $N.tag(t));
+    });
+    othersubtree(T);
+
+    if (addToTree)
+        addToTree(T);
+
+    tree.appendTo(a);
+
+    later(function () {
+        //a.hide();
+        a.tree({
+            data: T,
+            useContextMenu: false,
+            autoEscape: false,
+            selectable: false,
+            slide: false,
+            autoOpen: false
+        });
+
+        //autoOpen seems broken in jqtree, so manually open the first level:
+
+        a.find('.jqtree-toggler').click();
+        a.find('.jqtree-toggler').click();
+
+        //all should be closed now.  now open the first row:
+
+        a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
+        //a.show();
+
+        if (param.onCreated)
+            param.onCreated(a);
+    });
+
+    return tree;
+
+}
+
+
 
 
 function newObjectSelector(T) {

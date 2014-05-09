@@ -78,6 +78,15 @@ addAction({
 });
 addAction({
     menu: 'Object',
+    name: 'Reply...',
+    accepts: acceptsSelectionOfOne,
+    run: function(selection) {
+        var x = selection[0];
+        newReplyPopup(x);
+    }
+});
+addAction({
+    menu: 'Object',
     name: 'Clone',
     accepts: acceptsSelectionOfOne,
     run: function(selection) {
@@ -86,7 +95,7 @@ addAction({
         var y = _.clone(x);
         y.id = uuid();
         y.when = Date.now();
-        y.author = self.id();
+        y.author = $N.id();
 
         $N.pub(y);
 
@@ -184,14 +193,14 @@ addAction({menu: 'Tag', name: 'Favorite (toggle)', accepts: acceptsSelectionOfOn
             x = objRemoveValue(x, n);
         }
 
-        self.pub(x, function(err) {
+        $N.pub(x, function(err) {
             $.pnotify({
                 title: 'Error updating Favorite',
                 text: err,
                 type: 'Error'
             })
         }, function() {
-            self.notice(x);
+            $N.notice(x);
         });
     }
 });

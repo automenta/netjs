@@ -72,7 +72,7 @@ function objectify(x) {
         //CLIENT-ONLY
         own: function () {
             if (self)
-                x.author = self.id();
+                x.author = $N.id();
             return x;
         },
         addTag: function (t, strength) {
@@ -350,7 +350,7 @@ function objProperties(x) {
     if (!x.value)
         return [];
     return _.uniq(_.pluck(x.value, 'id').filter(function (t) {
-        return (window.self.getProperty(t) !== null);
+        return (window.$N.getProperty(t) !== null);
     }));
 }
 exports.objProperties = objProperties;
@@ -370,7 +370,7 @@ function objTagStrength(x, normalize, noProperties) {
         if (isPrimitive(ii))
             return;
         if (noProperties) {
-            if (window.self.getProperty(ii) !== null)
+            if (window.$N.getProperty(ii) !== null)
                 return;
         }
         var s = vv.strength || 1.0;
@@ -653,7 +653,7 @@ exports.acceptsAnotherProperty = acceptsAnotherProperty;
  function addTagWithRequiredProperties(self, x, t, value) {
  var y = addTag(x, t, value);
  
- var tt = self.getTag(t);
+ var tt = $N.getTag(t);
  for (var i in tt.properties) {
  var pp = tt.properties[i];
  if (pp.min) {
@@ -871,7 +871,7 @@ function propGetType(t) {
     if (isPrimitive(t))
         return t;
     else {
-        var p = window.self.getProperty(t);
+        var p = window.$N.getProperty(t);
         if (!p)
             return null;
         return p.type;

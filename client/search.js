@@ -27,7 +27,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus, ontocache) {
             if (objHasTag(e, m))
                 return;
 
-            var mx = self.getTag(m);
+            var mx = $N.getTag(m);
             if (!mx)
                 return;
 
@@ -60,7 +60,7 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
 
     var matched = {};
     _.each(keywords, function(keyword) {
-        var types = self.tags;
+        var types = $N.tags;
 
         function keywordMatchesTag(k, t) {
             var name = types[t].name;
@@ -89,7 +89,7 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
             if (objHasTag(e, m))
                 return;
 
-            var mx = self.getTag(m);
+            var mx = $N.getTag(m);
             var mn = mx.name;
 
             //var bb = $('<button>' + mn + '?</button>');

@@ -46,7 +46,7 @@ function renderOptions(s, o, v) {
 }
 
             function updatePlugins(p) {                
-                self.getPlugins(function(pl) {
+                $N.getPlugins(function(pl) {
 
                     p.empty();
                     for (var kk in pl) {
@@ -67,7 +67,7 @@ function renderOptions(s, o, v) {
 
                                     var b = $('<button>Disable</button>');
                                     b.click(function() {
-                                       self.setPlugin(k, false, function(err) {
+                                       $N.setPlugin(k, false, function(err) {
                                             if (!err)  {
                                                 updatePlugins(p);
                                                 //notify
@@ -88,7 +88,7 @@ function renderOptions(s, o, v) {
 
                                     var b = $('<button>Enable</button>');
                                     b.click(function() {
-                                       self.setPlugin(k, true, function(err) {
+                                       $N.setPlugin(k, true, function(err) {
                                             if (!err)  {
                                                 updatePlugins(p);
                                                 //notify
@@ -130,8 +130,8 @@ function renderOptions(s, o, v) {
                 netention(function(self) {
                     
                     $('#PluginList').html('Loading...');
-                    self.on('change:plugins', updatePlugins);
-                    self.getPlugins();
+                    $N.on('change:plugins', updatePlugins);
+                    $N.getPlugins();
                     
                     
                 });

@@ -746,24 +746,24 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 word-wrap: break-word;
 }
 
-	.objectGridItem3, .objectGridItem2 { width: 30%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 5px; z-index:2; }
+	.objectGridItem3, .objectGridItem2 { width: 30%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 5px; }
         .objectGridItem2 { width: 47%; }
         
-	.objectListItem { width: 98%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 0px; margin-bottom: 5px; z-index:2; }
+	.objectListItem { width: 98%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 0px; margin-bottom: 5px;  }
         
-	.ObjectViewHideButton { height:30px;   position:absolute;  top:-4px; right:-4px; z-index:2; opacity:0; display:inline-block; }
+	.ObjectViewHideButton { height:30px;   position:absolute;  top:-4px; right:-4px;  opacity:0; display:inline-block; }
 	.ObjectViewHideButton:hover { opacity:1; }
 	.ObjectViewHideButton button { position:relative; padding:5px; margin:0px; }
-	.objectView h1 { font-size: 140%; font-weight: bold;  margin: 2px 0px; z-index:2; }
-	.objectView h2 { font-size: 105%; font-weight: bold; margin: 0; z-index:2; }
-	.objectView h3 { font-weight: normal; color: #333; margin: 0;  z-index:2; }
-	.objectView ul { list-style-type: none; margin-bottom: 0.2em; padding-left: 0; margin-left: 0; z-index:2; }
-	.objectView ul li { padding: 0.3em;  font-weight: bold; z-index:2; }
-	.objectView h3, .objectView p, .objectView time { padding-left: 10px; padding-top: 5px; z-index:2; }
-	.objectView img { max-height: 12em;	z-index:2; }
-	.MessageSubject { width: 100%; font-size: 125%;	z-index:2; }
-	.MessageDescription { width: 98%; z-index:2; }
-	.ObjectReply { margin:0.1em 0.2em 0.1em 0.2em; font-size: 80%;	z-index:2;}
+	.objectView h1 { font-size: 140%; font-weight: bold;  margin: 2px 0px;  }
+	.objectView h2 { font-size: 105%; font-weight: bold; margin: 0;  }
+	.objectView h3 { font-weight: normal; color: #333; margin: 0;  }
+	.objectView ul { list-style-type: none; margin-bottom: 0.2em; padding-left: 0; margin-left: 0;  }
+	.objectView ul li { padding: 0.3em;  font-weight: bold;  }
+	.objectView h3, .objectView p, .objectView time { padding-left: 10px; padding-top: 5px;  }
+	.objectView img { max-height: 12em;	 }
+	.MessageSubject { width: 100%; font-size: 125%;	 }
+	.MessageDescription { width: 98%;  }
+	.ObjectReply { margin:0.1em 0.2em 0.1em 0.2em; font-size: 80%;	}
 	.reply-section { text-align:left; }
 	.object-reply-button { padding:1px 4px !important; }
     .ObjectEditDiv button img { height: 1em; }
@@ -1312,7 +1312,7 @@ a.openModal:focus {
 	width: 30%;
 }
 .ActionMenuPopup {
-	position: absolute;
+	position: fixed;
 	z-index: 5000 !important;
 	overflow: visible !important;
 	text-align: left;

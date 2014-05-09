@@ -9,7 +9,7 @@ function newProfileWidget() {
     }
 
     function become(u) {
-        self.become(u);
+        $N.become(u);
     }
 
     var selector = $('<select/>');
@@ -24,11 +24,11 @@ function newProfileWidget() {
         d.empty();
     }
 
-    var otherSelves = self.get('otherSelves');
+    var otherSelves = $N.get('otherSelves');
 
     /*if (!otherSelves) {
-     if (self.myself())
-     selector.append('<option>' + self.myself().name + '</option>');
+     if ($N.myself())
+     selector.append('<option>' + $N.myself().name + '</option>');
      disableBecome();
      }
      else*/
@@ -36,10 +36,10 @@ function newProfileWidget() {
     if (otherSelves) {
         for (var i = 0; i < otherSelves.length; i++) {
             var s = otherSelves[i];
-            var o = self.getObject(s);
+            var o = $N.getObject(s);
             if (o) {
                 var n = o.name;
-                var selString = (o.id === self.id()) ? 'selected' : '';
+                var selString = (o.id === $N.id()) ? 'selected' : '';
                 selector.append('<option value="' + s + '" ' + selString + '>' + n + '</option>');
                 c++;
             }
@@ -60,14 +60,14 @@ function newProfileWidget() {
         okButton.click(function() {
             var id = selector.val();
             if (id) {
-                become(self.getObject(id));
+                become($N.getObject(id));
                 closeDialog();
             }
         });
 
         deleteButton.click(function() {
             if (confirm('Permanently delete?')) {
-                self.deleteSelf(selector.val());
+                $N.deleteSelf(selector.val());
                 closeDialog();
             }
         });

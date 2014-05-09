@@ -144,7 +144,7 @@ var refreshActionContext = _.throttle(function() {
             var x = $(this);
             var aoid = x.attr('oid');
             if (aoid) {
-                var o = self.getObject(aoid);
+                var o = $N.getObject(aoid);
                 if (o)
                     s.push(o);
             }
@@ -191,12 +191,12 @@ var refreshActionContext = _.throttle(function() {
 
 
 function updateBrand() {
-    if (!self.myself())
+    if (!$N.myself())
         return;
 
-    $('.brand').html(self.myself().name);
+    $('.brand').html($N.myself().name);
 
-    var avatarURL = getAvatarURL(self.myself());
+    var avatarURL = getAvatarURL($N.myself());
     $('#avatar-img').attr('src', avatarURL);
     $('#toggle-img').attr('src', avatarURL);
 }
@@ -212,13 +212,12 @@ function updateViewControls() {
 
 function _updateView(force) {
 
-    var s = window.self;
 
     updateBrand();
 
     //s.saveLocal();
 
-    var view = s.get('currentView');
+    var view = $N.get('currentView');
     var param = null;
 
     if (view.view) {
@@ -346,7 +345,7 @@ function initKeyboard() {
         var f = function(I) {
             jwerty.key('ctrl+' + (1 + I), function() {
                 later(function() {
-                    self.set('currentView', views[I]);
+                    $N.set('currentView', views[I]);
                     updateViewControls();
                 });
                 return false;
@@ -356,7 +355,7 @@ function initKeyboard() {
     }
 
     var viewDelta = function(delta) {
-        var currentIndex = _.indexOf(views, self.get('currentView'));
+        var currentIndex = _.indexOf(views, $N.get('currentView'));
         var nextIndex = currentIndex + delta;
 
         if (nextIndex < 0)
@@ -365,7 +364,7 @@ function initKeyboard() {
             nextIndex = 0;
 
         later(function() {
-            self.set('currentView', views[nextIndex]);
+            $N.set('currentView', views[nextIndex]);
             updateViewControls();
         });
     };
@@ -434,9 +433,9 @@ function setTheme(t) {
     if (!_.contains(_.keys(themes), t))
         t = configuration.defaultTheme;
 
-    var oldTheme = window.self.get('theme');
+    var oldTheme = window.$N.get('theme');
     if (oldTheme !== t) {
-        self.save('theme', t);
+        $N.save('theme', t);
     }
 
     $('.themecss').remove();
@@ -578,7 +577,6 @@ $(document).ready(function() {
     netention(function(schemaURL, $N) {
         $('#NotificationArea').html('System loaded.');
 
-        window.self = $N; //DEPRECATED
         window.$N = $N;
 
         setTheme($N.get('theme'));
@@ -628,10 +626,10 @@ $(document).ready(function() {
                         }
                     },
                     view: function(view) {
-                        self.set('currentView', view);
+                        $N.set('currentView', view);
                     },
                     user: function(userid) {
-                        self.set('currentView', {view: 'user', userid: userid});
+                        $N.set('currentView', {view: 'user', userid: userid});
                     },
                     read: function(url) {
                         later(function(){
@@ -766,7 +764,7 @@ $(document).ready(function() {
         var v = $(this);
         var vi = v.attr('id');
         $N.router.navigate(vi, {trigger: false});
-        self.set('currentView', vi);
+        $N.set('currentView', vi);
     });
 
     $('#about-toggle').click(function() {

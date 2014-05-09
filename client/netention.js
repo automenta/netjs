@@ -604,7 +604,7 @@ function netention(f) {
 
             if (this.socket) {
                 this.pub(f, function (err) {
-                    console.log('setFocus: ', err);
+                    console.log('setFocus err: ', err);
                 }, function () {
                     //$.pnotify({title: 'Focus noticed.'});
                 });
@@ -709,24 +709,6 @@ function netention(f) {
                 this.socket.emit('unsubscribe', channel);
             }
         },
-        /*publish: function(obj) {
-         if (configuration.connection == 'local') {
-         $N.notice(obj);
-         }
-         else {
-         self.pub(obj, function(err) {
-         $.pnotify({
-         title: 'Unable to save ' + obj.id,
-         type: 'Error'
-         });
-         }, function() {
-         $.pnotify({
-         title: 'Saved (' + obj.id.substring(0, 6) + ')'
-         });
-         $N.notice(obj);
-         });
-         }
-         },*/
         pub: function (object, onErr, onSuccess) {
             if (configuration.connection == 'local') {
                 $N.notice(object);

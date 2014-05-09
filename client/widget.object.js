@@ -363,8 +363,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 clearInterval(ontoSearcher);
                 return;
             }
-
+            
             var v = nameInput.val();
+
+            if (v.length === 0)
+                return;
+            
             if (lastValue != v) {
                 updateTagSuggestions(v, ts, onAdd, getEditedFocus, ontocache);
                 lastValue = v;
@@ -1376,7 +1380,6 @@ function newReplyPopup(x) {
                 })
             }, function () {
                 $N.notice(rr);
-                refreshReplies();
                 $.pnotify({
                     title: 'Replied (' + x.id.substring(0, 6) + ')'
                 })
@@ -1647,28 +1650,28 @@ function newObjectSummary(x, options) {
 
     var replies = newDiv();
 
-    function refreshReplies() {
+    var refreshReplies = function() {
         var r = $N.getReplies(x.id);
         if (r.length > 0) {
             replies.show();
             //TODO sort the replies by age, oldest first
-            for (var i = 0; i < r.length; i++) {
-                var p = r[i];
+            r.forEach(function(p) {
                 replies.append(newObjectSummary($N.getObject(p), {
                     'depthRemaining': depthRemaining - 1
                 }));
-            }
+            });
         } else {
             replies.hide();
         }
     }
 
     //var hb = newDiv().addClass('ObjectViewHideButton ui-widget-header ui-corner-tl');
-    var hb = newDiv().addClass('ObjectViewHideButton ui-corner-tl'); //without ui-widget-header, it is faster CSS according to Chrome profiler
+    //var hb = newDiv().addClass('ObjectViewHideButton ui-corner-tl'); //without ui-widget-header, it is faster CSS according to Chrome profiler
 
 
-    var replyButton;
+    //var replyButton;
 
+    /*
     if (!mini) {
         replyButton = $('<button title="Reply" class="ui-widget-content ui-button">r</button>');
         replyButton.click(function () {
@@ -1693,7 +1696,7 @@ function newObjectSummary(x, options) {
                 $(this).removeClass('ui-state-hover');
             }
         );
-
+        */
 
 
     /*
@@ -1703,8 +1706,9 @@ function newObjectSummary(x, options) {
      hb.append(varyButton);
      */
 
-    d.append(hb);
+    //d.append(hb);
 
+    /*
     (function () {
         //d.hover(function(){ hb.fadeIn(200);}, function() { hb.fadeOut(200);});
         d.hover(function () {
@@ -1714,8 +1718,8 @@ function newObjectSummary(x, options) {
         });
     })();
     hb.hide();
-
-
+    */
+    
     if (showAuthorIcon) {
         var authorClient = $N.getObject(authorID);
         if (authorClient) {
@@ -1927,136 +1931,6 @@ function withObject(uri, success, failure) {
     });
 }
 
-
-function newTagTree(param) {
-    var a = param.target;
-    var onSelectionChange = param.onSelectionChange;
-    var addToTree = param.addtoTree;
-    var newTagLayerDiv = param.newTagDiv;
-
-    a.empty();
-
-    var tree = newDiv();
-
-    var isGeographic = $('#GeographicToggle').is(':checked');
-
-    var stc;
-    if (isGeographic) {
-        stc = $N.getTagCount(false, objGeographic);
-    } else {
-        stc = $N.getTagCount();
-    }
-
-    var T = [
-        /*        {
-         label: 'node1',
-         children: [
-         { label: '<button>child1</button>' },
-         { label: 'child2' }
-         ]
-         },
-         {
-         label: 'node2',
-         children: [
-         { label: 'child3' }
-         ]
-         } */
-    ];
-
-
-    function subtree(root, i) {
-        var name, xi;
-
-        if (i.name) {
-            name = i.name;
-            xi = i.uri;
-        } else
-            name = xi = i;
-
-        var children = $N.getSubTags(xi);
-
-        var label = name;
-        if (stc[xi]) {
-            if (stc[xi] > 0)
-                label += ' (' + _n(stc[xi]) + ')';
-        } else {
-            /*if (children.length==0)
-             return;*/
-        }
-
-        var b = newTagLayerDiv(xi, label);
-
-        if (children.length > 0) {
-            b.children = [];
-            _.each(children, function (c) {
-                subtree(b.children, $N.tag(c));
-            });
-        }
-        b.id = xi;
-
-        root.push(b);
-    }
-
-    function othersubtree(root) {
-        var otherFolder = {
-            label: 'Other',
-            children: []
-        };
-
-        var others = [];
-        for (var c in stc) {
-            if (!$N.tag(c))
-                others.push(c);
-        }
-
-        if (others.length === 0)
-            return;
-
-        _.each(others, function (c) {
-            subtree(otherFolder.children, c);
-        });
-        root.push(otherFolder);
-    }
-
-    var roots = $N.tagRoots();
-    _.each(roots, function (t) {
-        subtree(T, $N.tag(t));
-    });
-    othersubtree(T);
-
-    if (addToTree)
-        addToTree(T);
-
-    tree.appendTo(a);
-
-    later(function () {
-        a.hide();
-        a.tree({
-            data: T,
-            useContextMenu: false,
-            autoEscape: false,
-            selectable: false,
-            slide: false,
-            autoOpen: false
-        });
-
-        //autoOpen seems broken in jqtree, so manually open the first level:
-
-        a.find('.jqtree-toggler').click();
-        a.find('.jqtree-toggler').click();
-
-        //all should be closed now.  now open the first row:
-
-        a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
-        a.show();
-
-        if (param.onCreated)
-            param.onCreated(a);
-    });
-
-    return tree;
-
-}
 
 function ISODateString(d) {
     function pad(n) {

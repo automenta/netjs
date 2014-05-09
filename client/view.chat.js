@@ -46,7 +46,7 @@ function newChatView(v) {
             return;
         }
         for (var i = rr.length - 1; i >= 0; i--) {
-            var x = self.object(rr[i]);
+            var x = $N.getObject(rr[i]);
             content.append(newObjectLogLine(x));
         }
 
@@ -82,7 +82,7 @@ function newObjectLogLine(x) {
     var e = newDiv().addClass('chatViewLineContent').appendTo(line);
 
     if (x.author) {
-        var a = self.getObject(x.author);
+        var a = $N.getObject(x.author);
         if (a) {
             b = newInlineSelfButton(a, x);
         }
