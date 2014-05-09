@@ -474,6 +474,18 @@ function popupAboutDialog() {
 var TogetherJS;
 
 
+
+function freetileView() {
+    if (window.$N)
+        if ($N.get('currentView') == 'browse') {
+            $('#View').freetile({
+                callback: function() {
+                    $('#View').css('height', '100%');
+                }
+            });
+        }
+}
+
 function whenResized() {
     var isMobile = window.matchMedia("only screen and (max-width: 700px)");
 
@@ -488,7 +500,7 @@ function whenResized() {
     }
 
     freetileView();
-
+    return true;
 }
 
 $(document).ready(function() {

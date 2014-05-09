@@ -21,6 +21,7 @@ exports.options = {
         "anyone_to_enable_or_disable_plugin": true
     },
     "client": {
+        "connection": "websocket",
         "ui": "ui.mobile.js",
         "initialView": "us",
         "avatarMenuDisplayInitially": false,
@@ -38,7 +39,7 @@ exports.options = {
 		"mapDefaultLocation": [ 40.44, -80.0  ],
         "enableTogetherJS": false,
 		"viewUpdateMS": 850,
-		"knowLevels": 5,
+		"knowLevels": 3,
 		"focusEnable": true,
 		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki", "templates" ],
 		"newUserProperties": [ ],

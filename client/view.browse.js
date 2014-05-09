@@ -160,14 +160,6 @@ function renderBrowse(v, cssClass, afterCreated) {
     });
 }
 
-function freetileView() {
-    $('#View').freetile({
-        callback: function() {
-            $('#View').css('height', 'auto');
-        }
-    });
-}
-
 function renderBrowseList(v) {
     renderBrowse(v, function(numitems) {
         return 'objectListItem';
