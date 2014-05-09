@@ -82,11 +82,23 @@ function newAvatarImage(s) {
     return $(newEle('img')).attr("src", getAvatarURL(s)).attr('title', s.name);
 }
 
-function getAvatarURL(s) {
+function getAvatarURL(s, style) {
+    if (!style) style = 'retro';
+    /*
+    Gravatar Styles
+        404: do not load any image if none is associated with the email hash, instead return an HTTP 404 (File Not Found) response
+        mm: (mystery-man) a simple, cartoon-style silhouetted outline of a person (does not vary by email hash)
+        identicon: a geometric pattern based on an email hash
+        monsterid: a generated 'monster' with different colors, faces, etc
+        wavatar: generated faces with differing features and backgrounds
+        retro: awesome generated, 8-bit arcade-style pixelated faces
+        blank: a transparent PNG image (border added to HTML below for demonstration purposes)    
+    */
+    
     if (s) {
         var e = objFirstValue(s, 'email');
         var emailHash = e ? MD5(e) : MD5(s.id);
-        return "http://www.gravatar.com/avatar/" + emailHash + '?d=retro';
+        return "http://www.gravatar.com/avatar/" + emailHash + '?d=' + style;
     }
     return configuration.defaultAvatarIcon;
 }
