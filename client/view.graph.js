@@ -334,12 +334,12 @@ function newGraphView(v) {
 
                         if (nodeIndex[tj] == undefined) {
                             var tag;
-                            var ttj = s.tag(tj);
+                            var ttj = $N.tag(tj);
                             if (ttj) {
                                 tag = true;
                             }
                             else {
-                                ttj = s.object(tj) || null; // || { name: '<' + tj + '>' };
+                                ttj = $N.getObject(tj) || null; // || { name: '<' + tj + '>' };
                                 tag = false;
                             }
                             if (!ttj)
