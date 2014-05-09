@@ -921,28 +921,28 @@ function newPopup(title, p, isModal) {
         //p.buttons = [ { text: "OK", click: function() { $( this ).dialog( "close" ); } } ];
     }
 
+    if (configuration.device == configuration.MOBILE) {
+        p.focus = function() {
+            var backbuttonhandler = function (e) {
+                if (d && d.is(':visible')) {
+                    $(window).off('popstate', arguments.callee);
+                    later(function () {
+                        d.dialog('close');
+                    });
+                    return false;
+                }
+            };
+            later(function() {
+                $(window).on('popstate', backbuttonhandler);
+            });
+        };
+    }
+
     d.dialog(p);
 
     if (configuration.device == configuration.MOBILE) {
         d.parent().css('padding', 2);
         d.parent().css('border', 0);
-
-        var backbuttonhandler = function (e) {
-            if (e)
-                if (e.originalEvent)
-                    if (e.originalEvent.state)
-                        if (e.originalEvent.state.dialog) {
-                            $(window).off('popstate', arguments.callee);
-                            later(function () {
-                                d.dialog('close');
-                            });
-                            return false;
-                        }
-        };
-        window.history.pushState({
-            dialog: 1
-        });
-        $(window).on('popstate', backbuttonhandler);
     }
 
     return d;
