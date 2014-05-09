@@ -269,11 +269,15 @@ function objSetWhen(x, time) {
 exports.objSetWhen = objSetWhen;
 
 function objWhen(x) {
-    if (x === null)
-        return null;
-    return objFirstValue(x, 'timepoint', null) || objFirstValue(x, 'timerange', null) || x.when || x.modifiedAt || x.createdAt;
+    return objFirstValue(x, 'timepoint', null) || objFirstValue(x, 'timerange', null) || x.when || x.modifiedAt || x.createdAt || undefined;
 }
 exports.objWhen = objWhen;
+
+function objTime(x) {
+    return x.when || x.modifiedAt || x.createdAt || undefined;
+}
+exports.objTime = objTime;
+
 
 function objDescription(x) {
     /* concatenates all 'description' tag values */
@@ -638,10 +642,6 @@ exports.isSelfObject = isSelfObject;
  exports.addProperty = addProperty;
  */
 
-function objTime(x) {
-    return x.when || x.modifiedAt || x.createdAt || null;
-}
-exports.objTime = objTime;
 
 function acceptsAnotherProperty(x, p) {
     //TODO determine this by Property arity constraints

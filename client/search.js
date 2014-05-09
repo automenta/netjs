@@ -116,7 +116,7 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
 
     var relevance = {};
     var focus = $N.focus();
-    var focusWhen = objWhen(focus);
+    var focusWhen = focus ? objWhen(focus) : undefined;
 
     var ft;
     if (focus) {
@@ -150,6 +150,13 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
     var ii = _.keys($N.layer().include);
     var ee = _.keys($N.layer().exclude);
 
+    var SCOPE_MINE = (scope === 'Mine');
+    var SCOPE_OTHERS = (scope === 'Others');
+    var SEMANTIC_RELEVANT = (semantic === 'Relevant');
+    var SORT_SPACETIME = (sort === 'Spacetime');
+    var SORT_NEAR = (sort === 'Near');
+    var SORT_RECENT = (sort === 'Recent');
+    
     _.each($N.objects(), function(x, k) {
 
         if (x.replyTo)
@@ -157,10 +164,10 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
         if (x.hidden)
             return;
 
-        //TAG filter
-        var allowed = true;
         var tags = objTags(x);
+        
         {
+            var allowed = true;
             if (ii.length > 0) {
                 allowed = false;
                 for (var i = 0; i < ii.length; i++) {
@@ -180,36 +187,36 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
                     }
                 }
             }
-        }
-
-        if (!allowed)
-            return;
-
-        //scope prefilter
-        if (scope == 'Mine') {
-            if (x.author != s.id())
+            if (!allowed)
                 return;
         }
-        else if (scope == 'Others') {
-            if (x.author == s.id())
+
+
+        //scope prefilter
+        if (SCOPE_MINE) {
+            if (x.author !== s.id())
+                return;
+        }
+        else if (SCOPE_OTHERS) {
+            if (x.author === s.id())
                 return;
         }
 
         if (focus) {
             if (focus.who)
-                if (x.author != focus.who)
+                if (x.author !== focus.who)
                     return;
 
             if (focus.userRelation) {
                 if (x.author) {
                     if (focus.userRelation.itrust) {
                         //do I trust the author of the object?
-                        if ($N.userRelations[$N.id()]['trusts'][x.author] == undefined)
+                        if ($N.userRelations[$N.id()]['trusts'][x.author] === undefined)
                             return;
                     }
                     if (focus.userRelation.trustme) {
                         //do I trust the author of the object?
-                        if ($N.userRelations[$N.id()]['trustedBy'][x.author] == undefined)
+                        if ($N.userRelations[$N.id()]['trustedBy'][x.author] === undefined)
                             return;
                     }
                 }
@@ -221,16 +228,16 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
 
         //sort
         var r = 1.0;
-        if (sort === 'Recent') {
+        if (SORT_RECENT) {
             var w = objTime(x);
             
-            if (w == null)
+            if (w === null)
                 return;
             var ageSeconds = Math.abs(now - w) / 1000.0;
             //r = Math.exp(-ageSeconds/10000.0);
             r = 1.0 / (1.0 + ageSeconds / 60.0);
         }
-        else if (sort === 'Near') {
+        else if (SORT_NEAR) {
 
             if (!location) {
                 return;
@@ -246,7 +253,7 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
             r = 1.0 / (1.0 + distance);
         }
         //DEPRECATED
-        else if (sort === 'Spacetime') {
+        else if (SORT_SPACETIME) {
             var llx = objSpacePointLatLng(x);
             if ((!location) || (!llx) || (!x.when)) {
                 return;
@@ -257,7 +264,7 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
             r = 1.0 / (1.0 + ((timeDistance / 60.0) + spaceDistance));
         }
 
-        if (semantic === 'Relevant') {
+        if (SEMANTIC_RELEVANT)  {
             if (focus) {
                 if (focus.name) {
                     var fn = focus.name.toLowerCase();
@@ -266,8 +273,9 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
                     if (xn.toLowerCase)
                         xn = xn.toLowerCase();
 
-                    if (xn.indexOf(fn) == -1)
-                        r = 0;
+                    if (xn.indexOf(fn) === -1) {
+                        return;
+                    }
                 }
 
                 if (r > 0) {
@@ -281,12 +289,11 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
                         var f = focusWhen.from;
                         var t = focusWhen.to;
                         var wx = objWhen(x);
-                        if (typeof wx === 'number') {
+                        if (wx!==undefined) {
                             if (wx < f)
                                 r = 0;
                             if (wx > t)
                                 r = 0;
-                            //console.log(wx, focusWhen);							
                         }
                     }
                 }
