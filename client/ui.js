@@ -36,7 +36,7 @@ function loadJS(url) {
                 type: "text/javascript",
                 src: url
             })
-            );
+   );
 }
 
 function later(f) {
@@ -255,6 +255,7 @@ function _updateView(force) {
     $('#ViewMenu a').removeClass('ViewActive');
     $('#' + view).addClass('ViewActive');
 
+    var prevView = currentView;
     if (currentView)
         if (currentView.destroy)
             currentView.destroy();
@@ -328,7 +329,8 @@ function _updateView(force) {
 
     if (configuration.device == configuration.MOBILE) {
         //auto-hide the menu
-        showAvatarMenu(false);
+        if (prevView)
+            showAvatarMenu(false);
     }
 
 
@@ -476,7 +478,7 @@ var TogetherJS;
 
 function freetileView() {
     if (window.$N)
-        if ($N.get('currentView') == 'browse') {
+        if ($('.tiled').length > 0) {
             $('#View').freetile({
                 callback: function() {
                     $('#View').css('height', '100%');

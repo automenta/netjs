@@ -898,9 +898,15 @@ word-wrap: break-word;
 	
 	#welcome { margin:0px auto; clear:both; display:block; text-align:right; }
     #ViewMenu, #View { 
-        width:100% !important; 
         height:auto;
     }
+    #ViewMenu {
+        width:100% !important; 
+    }
+    #View {
+        width:auto !important;
+    }
+    
     #AvatarFocus {
         position: initial;
     }
@@ -918,6 +924,10 @@ word-wrap: break-word;
         max-width: 270px;
     }
 
+    .view-indented-more {
+        left: 0 !important;
+    }
+    
 	#FocusMainMenu button { display:block; width:100%; margin:0; }
 				.FocusButtonLabel { display:inline-block !important; }
 				.FocusButtonIcon  { display:none !important; }

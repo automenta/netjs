@@ -44,7 +44,6 @@ function showAvatarMenu(b) {
         vm.fadeIn();
         $('#close-menu').show();
         $('#AvatarButton').show();
-        vm.show();
         updateIndent(true);
     }
 }

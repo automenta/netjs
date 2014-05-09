@@ -454,24 +454,25 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             var addButtons = newEle('span').appendTo(addButtonWrap);
 
-            var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
-            addDisplay.hover(function () {
-                if (!addButtons.is(':visible')) {
-                    addButtons.fadeIn();
-                    addDisplay.text('-');
-                }
-            });
-            addDisplay.click(function () {
-                if (addButtons.is(':visible')) {
-                    addButtons.fadeOut();
-                    addDisplay.text('+');
-                } else {
-                    addButtons.fadeIn();
-                    addDisplay.text('-');
-                }
-            });
-
-            addButtons.hide();
+            if (configuration.device == configuration.DESKTOP) {
+                var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
+                addDisplay.hover(function () {
+                    if (!addButtons.is(':visible')) {
+                        addButtons.fadeIn();
+                        addDisplay.text('-');
+                    }
+                });
+                addDisplay.click(function () {
+                    if (addButtons.is(':visible')) {
+                        addButtons.fadeOut();
+                        addDisplay.text('+');
+                    } else {
+                        addButtons.fadeIn();
+                        addDisplay.text('-');
+                    }
+                });
+                addButtons.hide();
+            }
 
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
             whatButton.click(function () {
