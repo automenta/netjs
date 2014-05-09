@@ -85,10 +85,8 @@ function newAvatarImage(s) {
 function getAvatarURL(s) {
     if (s) {
         var e = objFirstValue(s, 'email');
-        if (e) {
-            var emailHash = MD5(e);
-            return "http://www.gravatar.com/avatar/" + emailHash;
-        }
+        var emailHash = e ? MD5(e) : MD5(s.id);
+        return "http://www.gravatar.com/avatar/" + emailHash + '?d=retro';
     }
     return configuration.defaultAvatarIcon;
 }
