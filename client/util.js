@@ -401,19 +401,14 @@ function objTagStrength(x, normalize, noProperties) {
 }
 exports.objTagStrength = objTagStrength;
 
-function objTagRelevance(x, y, noProperties) {
-    /* dot product of the normalized tag vectors */
-
-    var xx = objTagStrength(x, false, noProperties);
-    var yy = objTagStrength(y, false, noProperties);
-
+function objTagStrengthRelevance(xx, yy, noProperties) {
     var xxk = _.keys(xx);
     var yyk = _.keys(yy);
 
-    var den = parseFloat(Math.max(xxk.length, yyk.length));
-
     if ((xxk.length === 0) && (yyk.length === 0))
         return 0;
+
+    var den = parseFloat(Math.max(xxk.length, yyk.length));
 
     var r = 0;
 
@@ -425,8 +420,17 @@ function objTagRelevance(x, y, noProperties) {
 
     var result = r / den;
 
-    return result;
+    return result;    
+}
+exports.objTagStrengthRelevance = objTagStrengthRelevance;
 
+function objTagRelevance(x, y, noProperties) {
+    /* dot product of the normalized tag vectors */
+
+    var xx = objTagStrength(x, false, noProperties);
+    var yy = objTagStrength(y, false, noProperties);
+
+    return objTagStrengthRelevance(xx, yy, noProperties);
 }
 exports.objTagRelevance = objTagRelevance;
 

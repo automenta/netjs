@@ -61,9 +61,10 @@ function getPropertySimilarity(a, b, commonTags) {
 */
 
 exports.plugin = function($N) {
-    function match(a, b) {       
+    function match(a, b, aa) {       
+        var bb = $N.objTagStrength(b);
         var m = {
-            'tagSimilarity': $N.objTagRelevance(a, b)
+            'tagSimilarity': $N.objTagStrengthRelevance(aa, bb)
         };
 		m.totalSimilarity = m.tagSimilarity;
 
@@ -76,7 +77,7 @@ exports.plugin = function($N) {
     }
     
     return {
-        name: 'Semantic Property Matching',
+        name: 'Similarity Matching',
         description: 'Generates matches (as replies) to similar objects',
         version: '1.0',
         author: 'http://netention.org',
@@ -156,6 +157,8 @@ exports.plugin = function($N) {
             
             var matches = { };
             var numMatches = 0;
+            var xx = $N.objTagStrength(x);
+            
             $N.getObjectsByTag($N.objTags(x), function(o) {
                 if (!o.author)
                     return;
@@ -165,7 +168,7 @@ exports.plugin = function($N) {
                 /*if (o.author === x.author)
                     return;*/
 
-                matches[o.id] = match(x, o);
+                matches[o.id] = match(x, o, xx);
                 numMatches++;
             }, function() {
                 if (numMatches > 0) {                   
@@ -182,19 +185,17 @@ exports.plugin = function($N) {
                     matchids = matchids.splice(0, Math.min(that.options.maxResults, matchids.length));
                     
                     var maxSimilarity = 0;
-                    for (var j = 0; j < matchids.length; j++) {
-                        var m = matchids[j];
+                    matchids.forEach(function(m) {
                         var s = matches[m].totalSimilarity;
                         if (s > maxSimilarity) maxSimilarity = s;
-                    }
+                    });
                                                                                 
-                    for (var j = 0; j < matchids.length; j++) {
-                        var m = matchids[j];
+                    matchids.forEach(function(m) {
                         var s = matches[m].totalSimilarity;
                         if (maxSimilarity > 0)
                             s/=maxSimilarity;
                         n.add('similarTo', m, s);
-                    }
+                    });
                     
                     $N.pub(n);
                 }
