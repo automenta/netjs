@@ -70,8 +70,8 @@ exports.plugin = function($N) {
 							if (cloudiness > 0) {
 								o.add('cloudCover', cloudiness);
 							}
-							o.add('physicalTemperature', temp); //unit: celsius
-
+							o.add('physicalTemperature', { "number": temp, "unit": "celsius"});
+                            
 							$N.pub(o);
 						});
 

@@ -1761,30 +1761,32 @@ function newObjectSummary(x, options) {
 
         var popupmenuButton = $('<button title="Actions...">&gt;</button>').addClass('ObjectViewPopupButton');
         popupmenuButton.click(function () {
-            function closeMenu() {
-                popupmenuButton.remove();
-                addPopupMenu();
-            }
 
             if (popupmenuButton.children().length > 0) {
                 //click the popup menu button again to disappear an existing menu
                 closeMenu();
                 return;
             }
+            
+            var d;
+            function closeMenu() {
+                d.remove();
+            }
 
-            var d = newContextMenu([x], true, function () {
+            d = newContextMenu([x], true, function () {
                 //callback function when an item is clicked
                 closeMenu();
-            });
+            }).addClass('ActionMenuPopup');
 
-            d.addClass('ActionMenuPopup');
+            
             var closeButton = $('<button>Close</button>');
             closeButton.click(function () {
                 closeMenu();
             });
 
             d.append(closeButton);
-            popupmenuButton.append(d);
+            //popupmenuButton.parent().append(d);
+            popupmenuButton.after(d);
         });
 
         if (haxn) {
