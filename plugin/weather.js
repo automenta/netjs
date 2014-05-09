@@ -50,7 +50,7 @@ exports.plugin = function($N) {
 							var when = parseInt(d.dt+'000');
 							var temp = d.main.temp;
 							var cloudiness = d.clouds.all;
-							var rainMM = d.rain['3h'];
+							var rainMM = d.rain ? d.rain['3h'] : 0;
 							//TODO snow
 
 							var o = $N.objNew();
@@ -65,7 +65,7 @@ exports.plugin = function($N) {
 							o.addTag('Weather');
 
 							if (rainMM > 0) {
-								o.add('rainVolumePerHour', rainMM);
+								o.add('rainVolumePerHour', (rainMM/3.0) );
 							}
 							if (cloudiness > 0) {
 								o.add('cloudCover', cloudiness);

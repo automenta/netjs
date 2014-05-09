@@ -1,7 +1,7 @@
 var GOAL_EXPIRATION_INTERVAL = 2 * 60 * 60 * 1000; //2 hours, in MS
 
 function getOperatorTags() {
-    return _.filter(_.keys($N.tags), function(t) {
+    return _.filter(_.keys($N.tags), function (t) {
         return $N.tag(t).operator;
     });
 }
@@ -13,7 +13,7 @@ function newGoalWidget(g) {
 
 
     var aa = $('<a href="#"><h2>' + g.name + '</h2></a>').appendto(d);
-    aa.click(function() {
+    aa.click(function () {
         newPopupObjectView(g);
     });
 
@@ -29,7 +29,7 @@ function newGoalWidget(g) {
 }
 
 function saveAddedTags(gt, tag, when) {
-    _.each(gt, function(g) {
+    _.each(gt, function (g) {
         var G = $N.tag(g);
         var ng = objNew();
 
@@ -40,7 +40,7 @@ function saveAddedTags(gt, tag, when) {
             if (location)
                 objAddValue(ng, 'spacepoint', location);
         }
-        
+
         ng.own();
         if (G)
             ng = objName(ng, G.name);
@@ -51,12 +51,12 @@ function saveAddedTags(gt, tag, when) {
         ng = objAddTag(ng, g);
         ng.subject = $N.myself().id;
 
-        $N.pub(ng, function(err) {
+        $N.pub(ng, function (err) {
             $.pnotify({
                 title: 'Unable to save Goal.',
                 type: 'Error'
             });
-        }, function() {
+        }, function () {
             $.pnotify({
                 title: 'Goal saved (' + ng.id.substring(0, 6) + ')'
             });
@@ -88,7 +88,7 @@ function newAuthorCombo(currentUser, includeAll) {
     //userSelect.append('<option>Everyone\'s</option>');
 
     var users = $N.objectsWithTag('User');
-    _.each(users, function(uid) {
+    _.each(users, function (uid) {
         if ($N.myself())
             if (uid == $N.myself().id)
                 return; //skip self
@@ -129,7 +129,7 @@ function newUsView(v) {
 
     function updateUsView(currentUser) {
         v.empty();
-		var container = newDiv().addClass('usContainer').appendTo(v);
+        var container = newDiv().addClass('usContainer').appendTo(v);
 
         var currentGoalHeader = $('#AvatarViewMenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
 
@@ -147,11 +147,11 @@ function newUsView(v) {
             avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
 
             var exportButton = $('<button>Summarize</button>');
-            exportButton.click(function() {
-				$N.saveAll();
+            exportButton.click(function () {
+                $N.saveAll();
                 //window.open('/#user/' + currentUser);
-				//$N.router.navigate('/#user/' + currentUser, {trigger: true});
-				newPopupObjectEdit( newSelfSummary(currentUser), true );
+                //$N.router.navigate('/#user/' + currentUser, {trigger: true});
+                newPopupObjectEdit(newSelfSummary(currentUser), true);
             });
 
             currentGoalHeader.append(avatarButton, exportButton);
@@ -160,9 +160,14 @@ function newUsView(v) {
 
                 if (currentUser == $N.myself().id) {
                     var editButton = $('<button>Edit Self</button>').appendTo(currentGoalHeader);
-                    editButton.click(function() {
-                        newPopup("Profile", {width: 375, height: 450, modal: true, position: 'center'}).
-                                append(newObjectEdit($N.getObject(currentUser), true));
+                    editButton.click(function () {
+                        newPopup("Profile", {
+                            width: 375,
+                            height: 450,
+                            modal: true,
+                            position: 'center'
+                        }).
+                        append(newObjectEdit($N.getObject(currentUser), true));
                     });
 
 
@@ -173,7 +178,7 @@ function newUsView(v) {
             //.append('<button disabled title="Clear">[x]</button>');
 
             var userSelect = newAuthorCombo(currentUser);
-            userSelect.change(function(v) {
+            userSelect.change(function (v) {
                 updateUsView(userSelect.val());
             });
 
@@ -181,45 +186,48 @@ function newUsView(v) {
 
             var operators = getOperatorTags();
 
-            var currentUserFilter = function(o) {
+            var currentUserFilter = function (o) {
                 o = $N.getObject(o);
-				if (o.subject)
-					if (o.subject!=currentUser) return false;
+                if (o.subject)
+                    if (o.subject != currentUser) return false;
 
                 return (o.author == currentUser);
             };
 
             function addTheTag(T) {
-				if ((T.uri == 'Trust') || (T.uri == 'Distrust') || (T.uri == 'Value')) {
-		            return function() {
-						var x = objNew();
-						x.name = T.name;
-						x.author = x.subject = $N.id();
-						x.addTag(T.uri);
-						newPopupObjectEdit(x);		
-		            }
-				}
-				else {
-		            return function() {
-		                var d = newPopup("Add " + T.name, {width: 800, height: 600, modal: true});
-		                d.append(newTagger([], function(results) {
-		                    saveAddedTags(results, T.uri);
+                if ((T.uri == 'Trust') || (T.uri == 'Distrust') || (T.uri == 'Value')) {
+                    return function () {
+                        var x = objNew();
+                        x.name = T.name;
+                        x.author = x.subject = $N.id();
+                        x.addTag(T.uri);
+                        newPopupObjectEdit(x);
+                    }
+                } else {
+                    return function () {
+                        var d = newPopup("Add " + T.name, {
+                            width: 800,
+                            height: 600,
+                            modal: true
+                        });
+                        d.append(newTagger([], function (results) {
+                            saveAddedTags(results, T.uri);
 
-		                    later(function() {
-		                        d.dialog('close');
-		                        updateNowDiv();
-		                    });
-		                }));
-		            }
-				}
+                            later(function () {
+                                d.dialog('close');
+                                updateNowDiv();
+                            });
+                        }));
+                    }
+                }
             }
 
-            _.each(operators, function(o) {
+            _.each(operators, function (o) {
                 var O = $N.tag(o);
 
 
                 if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))) {
-	                var sdd = newDiv().addClass('ui-widget-content').addClass('goalviewColumn').addClass	('operatorDiv');
+                    var sdd = newDiv().addClass('ui-widget-content').addClass('goalviewColumn').addClass('operatorDiv');
                     //not a 3-vector system
                     var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
 
@@ -227,30 +235,29 @@ function newUsView(v) {
 
                     if (nn.length > 0) {
                         var uu = $('<ul></ul>');
-                        _.each(nn, function(g) {
-							var G = $N.getObject(g);
-							var ss = newObjectSummary(G, {
+                        _.each(nn, function (g) {
+                            var G = $N.getObject(g);
+                            var ss = newObjectSummary(G, {
                                 showAuthorIcon: false,
                                 showAuthorName: false,
                                 showMetadataLine: false,
                                 showActionPopupButton: false,
-								titleClickMode: 'edit'
+                                titleClickMode: 'edit'
                             }).removeClass("ui-widget-content ui-corner-all").addClass('objectViewBorderless');
-							if (G.name == O.name) {
-								ss.find('h1 a').html('&gt;&gt;');
-								ss.find('h1').replaceTag($('<div style="float: left">'), true);
-								ss.find('ul').replaceTag($('<div style="float: left">'), true);
-								ss.find('li').replaceTag($('<div>'), true);
-							}
+                            if (G.name == O.name) {
+                                ss.find('h1 a').html('&gt;&gt;');
+                                ss.find('h1').replaceTag($('<div style="float: left">'), true);
+                                ss.find('ul').replaceTag($('<div style="float: left">'), true);
+                                ss.find('li').replaceTag($('<div>'), true);
+                            }
                             uu.append(ss);
                         });
                         sdd.append(uu);
-                    }
-                    else {
+                    } else {
                         //header.attr('style', 'font-size: 75%');
                         sdd.append('<br/>');
                     }
-	                container.append(sdd);
+                    container.append(sdd);
                 }
 
 
@@ -268,13 +275,11 @@ function newUsView(v) {
 
                     if (newValue == 0) {
                         objAddTag(x, 'Do');
-                    }
-                    else if (newValue > 0) {
+                    } else if (newValue > 0) {
                         if (newValue < 1.0)
                             objAddTag(x, 'Do', (1.0 - newValue));
                         objAddTag(x, 'Teach', (newValue));
-                    }
-                    else if (newValue < 0) {
+                    } else if (newValue < 0) {
                         if (newValue > -1.0)
                             objAddTag(x, 'Do', (1.0 + newValue));
                         objAddTag(x, 'Learn', (-newValue));
@@ -285,6 +290,7 @@ function newUsView(v) {
                 function newLeftColDiv() {
                     return $('<div style="width: 48%; float: left; clear: both"/>');
                 }
+
                 function newRightColDiv() {
                     return $('<div style="width: 48%; float: right"/>');
                 }
@@ -303,16 +309,16 @@ function newUsView(v) {
 
                 newRightColDiv().appendTo(d).append(kb);
 
-                _.each(nn, function(x) {
+                _.each(nn, function (x) {
                     var X = $N.getObject(x);
                     var lc = newLeftColDiv().appendTo(d);
                     var rc = newRightColDiv().appendTo(d);
 
                     var nameLink = $('<a href="#">' + X.name + '</a>');
-                    nameLink.click(function() {
+                    nameLink.click(function () {
                         newPopupObjectView(x);
                     });
-					var colorSquare = $('<span>&nbsp;&nbsp;&nbsp;</span>&nbsp;');
+                    var colorSquare = $('<span>&nbsp;&nbsp;&nbsp;</span>&nbsp;');
                     lc.append(colorSquare, nameLink);
 
                     var slider = $('<input type="range" min="-1" max="1" step="0.05"/>').addClass('SkillSlider');
@@ -324,7 +330,7 @@ function newUsView(v) {
 
                     var SLIDER_CHANGE_MS = 500;
 
-                    var updateTags = _.throttle(function() {
+                    var updateTags = _.throttle(function () {
                         rangeToTags(X, parseFloat(slider.val()));
                         $N.pub(X);
                     }, SLIDER_CHANGE_MS);
@@ -338,9 +344,9 @@ function newUsView(v) {
                     }
                     updateColor();
 
-                    slider.change(function() {
+                    slider.change(function () {
                         updateColor();
-                        later(function() {
+                        later(function () {
                             updateTags();
                         });
                     });
@@ -372,7 +378,7 @@ function newUsView(v) {
 
         {
             //TODO find more robust way of displaying these
-            
+
             /*var iu = $N.objectsWithTag('involvesUser');
             _.each(iu, function(x) {
                 var X = $N.getObject(x);
@@ -381,17 +387,17 @@ function newUsView(v) {
 
         }
 
-		sidebar.addClass('ui-widget-content');
-		goalList.addClass('ui-widget-content');
+        sidebar.addClass('ui-widget-content');
+        goalList.addClass('ui-widget-content');
 
-        container.prepend(sidebar, goalList/*, involvesList*/);
+        container.prepend(sidebar, goalList /*, involvesList*/ );
     }
 
     if ($N.myself())
         updateUsView($N.myself().id);
     else {
         var users = $N.objectsWithTag('User');
-        updateUsView(users[0]);  //start with first user
+        updateUsView(users[0]); //start with first user
     }
 
 }
@@ -413,7 +419,7 @@ function getPlan() {
 function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
     var saveButton = $('<button>Save</button>');
     saveButton.addClass('WikiTagSave');
-    saveButton.click(function() {
+    saveButton.click(function () {
         if (currentTag == null) {
             alert('Choose a wikitag.');
             return;
@@ -421,7 +427,7 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
 
         var selTags = [];
 
-        tagBar.find('div input').each(function() {
+        tagBar.find('div input').each(function () {
             var x = $(this);
             var c = x[0].checked;
             if (c) {
@@ -445,18 +451,14 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
 
                     if (T == 'Learn') {
                         objAddTag(o, 'Learn');
-                    }
-                    else if (T == 'Teach') {
+                    } else if (T == 'Teach') {
                         objAddTag(o, 'Teach');
-                    }
-                    else if (T == 'Do') {
+                    } else if (T == 'Do') {
                         objAddTag(o, 'Do');
-                    }
-                    else if (T == 'DoLearn') {
+                    } else if (T == 'DoLearn') {
                         objAddTag(o, 'Learn', 0.5);
                         objAddTag(o, 'Do', 0.5);
-                    }
-                    else if (T == 'DoTeach') {
+                    } else if (T == 'DoTeach') {
                         objAddTag(o, 'Teach', 0.5);
                         objAddTag(o, 'Do', 0.5);
                     }
@@ -468,17 +470,23 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
             }
             objAddTag(o, currentTag);
 
-            $N.pub(o, function(err) {
-                $.pnotify({title: 'Error saving:', text: err, type: 'error'});
-            }, function() {
+            $N.pub(o, function (err) {
+                $.pnotify({
+                    title: 'Error saving:',
+                    text: err,
+                    type: 'error'
+                });
+            }, function () {
                 $N.notice(o);
-                $.pnotify({title: 'Saved', text: currentTag});
+                $.pnotify({
+                    title: 'Saved',
+                    text: currentTag
+                });
             });
 
             if (onSave)
                 onSave();
-        }
-        else {
+        } else {
             alert('Choose 1 or more tags to combine with the wikitag.');
         }
 
@@ -502,10 +510,10 @@ function newTagBar(s, currentTag) {
         b.attr('type', 'checkbox');
 
         b.html(tag);
-        b.click(function(event) {
+        b.click(function (event) {
             var t = event.target;
             if (t.checked) {
-                target.children('input').each(function() {
+                target.children('input').each(function () {
                     var x = $(this);
                     if (x.attr('id') != t.id) {
                         x.attr('checked', false);
@@ -524,8 +532,7 @@ function newTagBar(s, currentTag) {
             tagname = tagAlias[tag];
             if (tt)
                 tooltip = tt.name;
-        }
-        else
+        } else
             tagname = tt ? tt.name : tag;
 
         var icon = getTagIcon(tag);
@@ -549,15 +556,13 @@ function newTagBar(s, currentTag) {
             tbutton('DoTeach', skillSet);
             tbutton('TeachDo', skillSet);
             tbutton('Teach', skillSet);
-        }
-        else if (configuration.knowLevels == 5) {
+        } else if (configuration.knowLevels == 5) {
             tbutton('Learn', skillSet);
             tbutton('DoLearn', skillSet);
             tbutton('Do', skillSet);
             tbutton('DoTeach', skillSet);
             tbutton('Teach', skillSet);
-        }
-        else if (configuration.knowLevels == 3) {
+        } else if (configuration.knowLevels == 3) {
             tbutton('Learn', skillSet);
             tbutton('Do', skillSet);
             tbutton('Teach', skillSet);
@@ -604,9 +609,9 @@ function newSelfTagList(s, user, c) {
             var tags = objTags(o);
             var otherTags = _.without(tags, x);
             var theTag = otherTags[0];
-            var b = $('<div>' + +'</div>');
+            var b = $('<div>' + '</div>');
             var a = $('<a href="#" title="Tag Instance">' + theTag + '</a>');
-            a.click(function() {
+            a.click(function () {
                 newPopupObjectView(i);
             });
             a.appendTo(b);
@@ -654,21 +659,19 @@ function newSelfTagList(s, user, c) {
         for (var i = 0; i < k.length; i++) {
             addTagSection(k[i]);
         }
-    }
-    else {
+    } else {
         if ((user) && ($N.myself())) {
             var own = (user.id === $N.myself().id);
             b.append('Click ');
 
             var addLink = $('<button><b>+ Tag</b></button>');
             if (own) {
-                addLink.click(function() {
+                addLink.click(function () {
                     //TODO make tag browser
                     c.html(newWikiBrowser([], onWikiTagAdded));
                 });
-            }
-            else {
-                addLink.click(function() {
+            } else {
+                addLink.click(function () {
                     alert('Feature not available yet.');
                 });
             }
@@ -687,13 +690,13 @@ function saveSelf(editFunction) {
         m = editFunction(m);
     objTouch(m);
 
-    $N.pub(m, function(err) {
+    $N.pub(m, function (err) {
         $.pnotify({
             title: 'Unable to save Self.',
             type: 'Error',
             text: err
         });
-    }, function() {
+    }, function () {
         $N.notice(m);
         $.pnotify({
             title: 'Self Saved.'
@@ -712,7 +715,7 @@ function newSelfSummary(s, user, content) {
 
 
     var c = $('<div/>');
-    $.get('/$N.header.html', function(d) {
+    $.get('/$N.header.html', function (d) {
         c.prepend(d);
     });
 
@@ -737,12 +740,15 @@ function newSelfSummary(s, user, content) {
     np.append('<br/><br/>');
 
     var exportButton = $('<button>Export..</button>');
-    exportButton.click(function() {
-        var p = newPopup('Code @ ' + new Date(), {width: 550, height: 400});
+    exportButton.click(function () {
+        var p = newPopup('Code @ ' + new Date(), {
+            width: 550,
+            height: 400
+        });
         p.html('<textarea class="SelfCode" readonly="true">' + getKnowledgeCode(s, user.id) + '</textarea>');
 
         var htmlButton = $('<button>HTML Version</button>');
-        htmlButton.click(function() {
+        htmlButton.click(function () {
             p.html('<div class="SelfCode">' + getKnowledgeCodeHTML(s, user.id) + '</div>');
         });
         p.prepend(htmlButton);
@@ -751,14 +757,13 @@ function newSelfSummary(s, user, content) {
 
     if (editable) {
         var tagButton = $('<button title="Add tags to describe your self"><b>+ Tag</b></button>');
-        tagButton.click(function() {
+        tagButton.click(function () {
             content.html(newWikiBrowser(s, onWikiTagAdded));
         });
         np.append(tagButton);
-    }
-    else {
+    } else {
         var tagButton = $('<button title="Add tags to describe ' + user.name + '"><b>+ Tag</b></button>');
-        tagButton.click(function() {
+        tagButton.click(function () {
             alert('Feature not available yet.');
         });
         np.append(tagButton);
@@ -779,8 +784,7 @@ function newSelfSummary(s, user, content) {
     var biotext = objDescription(user);
     if (!biotext) {
         objarea.html('<h2>Biography</h2>objective / summary / contact method / experience / achievements / eduction / skills / qualifications / affiliations / publications');
-    }
-    else {
+    } else {
         objarea.html(biotext);
     }
 
@@ -794,9 +798,9 @@ function newSelfSummary(s, user, content) {
         saveButton.addClass('SelfSaveButton');
         bio.append(saveButton);
 
-        saveButton.click(function() {
-            saveSelf(function(m) {
-                _.each(['Human', 'User'], function(t) {
+        saveButton.click(function () {
+            saveSelf(function (m) {
+                _.each(['Human', 'User'], function (t) {
                     if (!objHasTag(m, t)) {
                         m = objAddTag(m, t);
                     }
@@ -819,21 +823,25 @@ function newSelfSummary(s, user, content) {
 
     var location = objSpacePointLatLng(user);
 
-    later(function() {
+    later(function () {
         var lmap = initLocationChooserMap('SelfMap', location, 7, editable ? undefined : false);
         cm.append('<br/>');
         var locAnon = $('<select><option>Exact Location</option><option>Anonymize 1km</option><option>Anonymize 10km</option><option>No Location</option></select>');
-        locAnon.change(function() {
+        locAnon.change(function () {
             //0.1 = ~10km
             //0.01 = ~1km
             alert('Feature not available yet');
         });
         //cm.append(locAnon);
 
-        lmap.onClicked = function(l) {
+        lmap.onClicked = function (l) {
             if (editable) {
                 tags['@'] = [l.lon, l.lat];
-                objSetFirstValue($N.myself(), 'spacepoint', {lat: l.lat, lon: l.lon, planet: 'Earth'});
+                objSetFirstValue($N.myself(), 'spacepoint', {
+                    lat: l.lat,
+                    lon: l.lon,
+                    planet: 'Earth'
+                });
             }
         };
     });
@@ -895,18 +903,16 @@ function newRoster(selectUser) {
             if (x.id === $N.myself().id) {
                 sx.find('h1').append(' (me)');
                 d.prepend(sx);
-            }
-            else {
+            } else {
                 d.append(sx);
             }
-        }
-        else {
+        } else {
             d.append(sx);
         }
 
-        sx.click(function() {
+        sx.click(function () {
             if (selectUser) {
-                later(function() {
+                later(function () {
                     selectUser(x);
                 });
             }
@@ -934,12 +940,15 @@ function hoursFromNow(n) {
 }
 
 function onWikiTagAdded(target) {
-    var d = newPopup(target, {width: 650, modal: true});
+    var d = newPopup(target, {
+        width: 650,
+        modal: true
+    });
     var tagBar = newTagBar(self, target);
-    var saveButton = newTagBarSaveButton(self, target, tagBar, function() {
+    var saveButton = newTagBarSaveButton(self, target, tagBar, function () {
         d.dialog('close');
     });
-    var cancelButton = $('<button>Cancel</button>').click(function() {
+    var cancelButton = $('<button>Cancel</button>').click(function () {
         d.dialog('close');
     });
 
@@ -954,7 +963,7 @@ function newWikiView(v) {
 
     v.append(frame);
 
-    frame.onChange = function() {
+    frame.onChange = function () {
         //update user summary?
     };
 
@@ -1022,15 +1031,19 @@ function newOperatorTagTable(keywords) {
     var rows = [];
 
     for (var i = 0; i < keywords.length; i++) {
-        (function(I) {
+        (function (I) {
             var k = keywords[I];
-            var tag = k.text;		//r = k.relevance
+            var tag = k.text; //r = k.relevance
 
             var tagedit = $('<input type="text" value="' + tag + '"/>');
             var tagsearchbutton = $('<button title="Search Wikipedia">..</button>');
-            tagsearchbutton.click(function() {
-                var d = newPopup("Tag", {width: 800, height: 600, modal: true})
-                d.append(newWikiBrowser([], function(t) {
+            tagsearchbutton.click(function () {
+                var d = newPopup("Tag", {
+                    width: 800,
+                    height: 600,
+                    modal: true
+                })
+                d.append(newWikiBrowser([], function (t) {
                     d.dialog('close');
                     tagedit.val(t);
                 }, {
@@ -1048,10 +1061,10 @@ function newOperatorTagTable(keywords) {
             var rowcheckboxes = [];
 
             for (var j = 0; j < operators.length; j++) {
-                (function(J) {
+                (function (J) {
                     var tdc = $('<td></td>').appendTo(row);
                     var idc = $('<input type="checkbox"/>').appendTo(tdc);
-                    rowcheckboxes.push(function() {
+                    rowcheckboxes.push(function () {
                         if (idc.is(':checked')) {
                             return operators[J];
                         }
@@ -1060,10 +1073,10 @@ function newOperatorTagTable(keywords) {
                 })(j);
             }
 
-            row.data = function() {
+            row.data = function () {
                 var x = {};
                 var count = 0;
-                _.each(rowcheckboxes, function(c) {
+                _.each(rowcheckboxes, function (c) {
                     var cr = c();
                     if (cr != null) {
                         x[cr] = true;
@@ -1081,9 +1094,9 @@ function newOperatorTagTable(keywords) {
         })(i);
     }
 
-    d.getData = function() {
+    d.getData = function () {
         var data = {};
-        _.each(rows, function(r) {
+        _.each(rows, function (r) {
             var rd = r.data();
             data = _.extend(data, rd);
         });
@@ -1099,14 +1112,16 @@ function newTextReader(text, onSave) {
     var n = newDiv().addClass('TextReader');
 
     var input = $('<textarea/>').appendTo(n);
-	input.val(text);
+    input.val(text);
 
     var submit = $('<button>Read</button>').appendTo(n);
     var results = newDiv().appendTo(n);
 
-    submit.click(function() {
+    submit.click(function () {
         var t = input.val();
-        $.post('/read/text', {text: t}, function(r) {
+        $.post('/read/text', {
+            text: t
+        }, function (r) {
 
             //results.html(JSON.stringify(r, null, 4));
 
@@ -1116,7 +1131,7 @@ function newTextReader(text, onSave) {
             $('<br/>').appendTo(results);
 
             var saveButton = $('<button>Save</button>').appendTo(results);
-            saveButton.click(function() {
+            saveButton.click(function () {
                 var data = ott.getData();
                 onSave(data);
             });

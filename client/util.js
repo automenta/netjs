@@ -1,22 +1,20 @@
-
 if (typeof window != 'undefined') {
-    exports = {};  //functions used by both client and server
-}
-else {
+    exports = {}; //functions used by both client and server
+} else {
     _ = require('underscore');
 }
 
 
 var ObjScope = {
-	//level -1: store in local browser temporarily
-	Local: 1, //store in local browser permanently
-	ServerSelf: 2,  //level 2: store on server but only for me (encrypted?)
-	ServerSelfAndCertainOthers: 3, //store on server but only for me and certain people
-	ServerFollowOrFollowed: 4,  //store on server but share with who i follow or follows me
-	ServerFollow: 5, //store on server but share with who i follow
-	ServerAll: 6, //store on server for all server users
-	Global: 7, //store on server for public access (inter-server)
-	GlobalAdvertise: 8 //store on server for public advertisement (push)
+    //level -1: store in local browser temporarily
+    Local: 1, //store in local browser permanently
+    ServerSelf: 2, //level 2: store on server but only for me (encrypted?)
+    ServerSelfAndCertainOthers: 3, //store on server but only for me and certain people
+    ServerFollowOrFollowed: 4, //store on server but share with who i follow or follows me
+    ServerFollow: 5, //store on server but share with who i follow
+    ServerAll: 6, //store on server for all server users
+    Global: 7, //store on server for public access (inter-server)
+    GlobalAdvertise: 8 //store on server for public advertisement (push)
 };
 exports.ObjScope = ObjScope;
 
@@ -30,7 +28,7 @@ function _n(x, places) {
     if (!x.toFixed)
         return x;
     return x.toFixed(places);
-}  //formats numbers to string w/ 2 decimal places
+} //formats numbers to string w/ 2 decimal places
 exports._n = _n;
 
 
@@ -42,29 +40,29 @@ function objectify(x) {
     //TODO is more optimal to use .prototype. methods than _.extend ?
 
     var objectInterface = {
-        setName: function(n) {
+        setName: function (n) {
             objName(x, n);
             return x;
         },
         //.name is already used, so use n()
-        n: function(n) {
+        n: function (n) {
             if (!n)
                 return x.name;
             objName(x, n);
             return x;
         },
-        getDescription: function() {
+        getDescription: function () {
             return objDescription(x);
         },
-        addDescription: function(d) {
+        addDescription: function (d) {
             objAddDescription(x, d);
             return x;
         },
-        touch: function() {
+        touch: function () {
             objTouch(x);
             return x;
         },
-        add: function(k, v, strength) {
+        add: function (k, v, strength) {
             return objAddValue(x, k, v, strength);
         },
         /*x.objSpacePoint = function(latitude, longitude) {
@@ -72,38 +70,41 @@ function objectify(x) {
          }*/
 
         //CLIENT-ONLY
-        own: function() {
+        own: function () {
             if (self)
                 x.author = self.id();
             return x;
         },
-        addTag: function(t, strength) {
+        addTag: function (t, strength) {
             return objAddTag(x, t, strength);
         },
-        removeTag: function(t) {
+        removeTag: function (t) {
             return objRemoveTag(x, t);
         },
-        addTags: function(tagArray) {
+        addTags: function (tagArray) {
             for (var i = 0; i < tagArray.length; i++)
                 x.addTag(tagArray[i]);
             return x;
         },
-        hasTag: function(t) {
+        hasTag: function (t) {
             return objHasTag(x, t);
         },
-        tags: function() {
+        tags: function () {
             return objTags(x);
         },
-        earthPoint: function(lat, lon) {
+        earthPoint: function (lat, lon) {
             if (lat == undefined) {
                 return objSpacePointLatLng(x);
             }
-            return this.add('spacepoint', {'lat': lat, 'lon': lon});
+            return this.add('spacepoint', {
+                'lat': lat,
+                'lon': lon
+            });
         },
-        firstValue: function(id, defaultValue) {
+        firstValue: function (id, defaultValue) {
             return objFirstValue(x, id, defaultValue);
         },
-        getValues: function(id) {
+        getValues: function (id) {
             return objValues(x, id);
         }
 
@@ -122,7 +123,7 @@ function objNew(id, name, initialTags) {
     var x = {
         'id': id,
         'createdAt': Date.now()
-                //scope: 'public'
+        //scope: 'public'
     };
 
     if (name)
@@ -141,12 +142,20 @@ function objNew(id, name, initialTags) {
 exports.objNew = objNew;
 
 function timerange(start, end) {
-    return {id: 'timerange', value: {start: Date.parse(start), end: Date.parse(end)}};
+    return {
+        id: 'timerange',
+        value: {
+            start: Date.parse(start),
+            end: Date.parse(end)
+        }
+    };
 }
 exports.timerange = timerange;
 
 function objAddTag(x, t, strength) {
-    var v = {id: t};
+    var v = {
+        id: t
+    };
     if (strength != undefined)
         v.strength = strength;
     return objAddValue(x, v, undefined);
@@ -183,7 +192,10 @@ function objAddValue(x, a, b, strength) {
     if (b == undefined)
         v = a;
     else {
-        v = {id: a, value: b};
+        v = {
+            id: a,
+            value: b
+        };
         if (strength != undefined)
             v.strength = strength;
     }
@@ -219,8 +231,7 @@ function objName(x, newName) {
 
     if (newName == undefined) {
         return x.name || '';
-    }
-    else {
+    } else {
         x.name = newName;
         return x;
     }
@@ -228,13 +239,17 @@ function objName(x, newName) {
 exports.objName = objName;
 
 var primitiveRegEx = /^(boolean|text|textarea|integer|real|url|object|spacepoint|timepoint|timerange|sketch|media)$/;
+
 function isPrimitive(t) {
     return primitiveRegEx.test(t);
 }
 exports.isPrimitive = isPrimitive;
 
 function objAddDescription(x, desc) {
-    return objAddValue(x, {id: 'textarea', value: desc});
+    return objAddValue(x, {
+        id: 'textarea',
+        value: desc
+    });
 }
 exports.objAddDescription = objAddDescription;
 
@@ -325,10 +340,9 @@ function objTags(x, includePrimitives) {
 
     if (includePrimitives) {
         return _.pluck(newValues, 'id');
-	}
-    else {
-        return _.uniq(_.pluck(newValues, 'id').filter(function(t) {
-            return !isPrimitive(t)
+    } else {
+        return _.uniq(_.pluck(newValues, 'id').filter(function (t) {
+            return !isPrimitive(t);
         }));
     }
 }
@@ -337,7 +351,7 @@ exports.objTags = objTags;
 function objProperties(x) {
     if (!x.value)
         return [];
-    return _.uniq(_.pluck(x.value, 'id').filter(function(t) {
+    return _.uniq(_.pluck(x.value, 'id').filter(function (t) {
         return (window.self.getProperty(t) != null);
     }));
 }
@@ -397,10 +411,10 @@ function objTagRelevance(x, y, noProperties) {
     var xxk = _.keys(xx);
     var yyk = _.keys(yy);
 
-	var den = parseFloat(Math.max(xxk.length, yyk.length));
+    var den = parseFloat(Math.max(xxk.length, yyk.length));
 
-	if ((xxk.length == 0) && (yyk.length == 0))
-		return 0;
+    if ((xxk.length == 0) && (yyk.length == 0))
+        return 0;
 
     var r = 0;
 
@@ -412,9 +426,9 @@ function objTagRelevance(x, y, noProperties) {
         }
     }
 
-    var result = r/den;
+    var result = r / den;
 
-	return result;
+    return result;
 
 }
 exports.objTagRelevance = objTagRelevance;
@@ -468,7 +482,11 @@ function objSpacePointLatLng(x) {
 exports.objSpacePointLatLng = objSpacePointLatLng;
 
 function objAddGeoLocation(x, lat, lon) {
-    return objAddValue(x, 'spacepoint', {'lat': lat, 'lon': lon, planet: 'Earth'});
+    return objAddValue(x, 'spacepoint', {
+        'lat': lat,
+        'lon': lon,
+        planet: 'Earth'
+    });
 }
 exports.objAddGeoLocation = objAddGeoLocation;
 
@@ -500,12 +518,11 @@ function objHasTag(x, t) {
             continue;
 
         if (tIsArray) {
-			if (t.indexOf(vid)!=-1) //may be slightly faster than _.contains
-				return true;
+            if (t.indexOf(vid) != -1) //may be slightly faster than _.contains
+                return true;
             /*if (_.contains(t, vid))
                 return true;*/
-        }
-        else {
+        } else {
             if (vid == t)
                 return true;
         }
@@ -522,8 +539,7 @@ function objHasTagOLD(x, t) {
             if (_.contains(ot, t[i]))
                 return true;
         return false;
-    }
-    else
+    } else
         return _.contains(objTags(x), t);
 }
 exports.objHasTag = objHasTag;
@@ -547,8 +563,7 @@ function objSetFirstValue(object, id, newValue) {
     var existingValue = objFirstValue(object, id, null);
     if (existingValue == null) {
         objAddValue(object, id, newValue);
-    }
-    else {
+    } else {
         if (object.value) {
             for (var k = 0; k < object.value.length; k++) {
                 if (object.value[k].id == id)
@@ -564,9 +579,9 @@ function objValues(object, id) {
     var v = [];
     if (object.value) {
         for (var k = 0; k < object.value.length; k++) {
-			if (object.value[k])
-	            if (object.value[k].id == id)
-    	            v.push(object.value[k].value);
+            if (object.value[k])
+                if (object.value[k].id == id)
+                    v.push(object.value[k].value);
         }
     }
     return v;
@@ -671,38 +686,38 @@ exports.acceptsAnotherProperty = acceptsAnotherProperty;
 
 
 function objUserRelations(trusts) {
-	var userRelations = { };
-	//...
-	var userids = [];
+    var userRelations = {};
+    //...
+    var userids = [];
 
-	function index(uid) {
-		if (userRelations[uid]) return;
+    function index(uid) {
+        if (userRelations[uid]) return;
 
-		userRelations[uid] = { 
-			'trusts': { },
-			'trustedBy': { }
-		};
+        userRelations[uid] = {
+            'trusts': {},
+            'trustedBy': {}
+        };
 
-		userids.push(uid);
-	}
+        userids.push(uid);
+    }
 
-	for (var i = 0; i < trusts.length; i++) {
-		var uid = trusts[i].author;
-		index(uid);
-		for (var j = 0; j < trusts[i].value.length; j++) {
-			var v = trusts[i].value[j];
-			if ((v.id == 'trusts') || (v.id == 'rippleTrusts')) {
-				var target = v.value;
-				if (target) {
-					index(target);
-					userRelations[uid]['trusts'][target] = 1;
-					userRelations[target]['trustedBy'][uid] = 1;
-				}
-			}
-		}
-	}
+    for (var i = 0; i < trusts.length; i++) {
+        var uid = trusts[i].author;
+        index(uid);
+        for (var j = 0; j < trusts[i].value.length; j++) {
+            var v = trusts[i].value[j];
+            if ((v.id == 'trusts') || (v.id == 'rippleTrusts')) {
+                var target = v.value;
+                if (target) {
+                    index(target);
+                    userRelations[uid]['trusts'][target] = 1;
+                    userRelations[target]['trustedBy'][uid] = 1;
+                }
+            }
+        }
+    }
 
-	return userRelations;
+    return userRelations;
 }
 exports.objUserRelations = objUserRelations;
 
@@ -713,21 +728,21 @@ function newAttentionMap(memoryMomentum, maxObjects, adjacency, spreadRate) {
     var that = {
         values: {},
         totals: {},
-        save: function(sorted) {  //provides a sorted, normalized snapshot
+        save: function (sorted) { //provides a sorted, normalized snapshot
             var k = [];
             for (var i in that.values) {
                 k.push([i, that.values[i], that.totals[i]]);
             }
 
             if (sorted) {
-                k = k.sort(function(a, b) {
+                k = k.sort(function (a, b) {
                     return b[1] - a[1];
                 });
             }
 
             return k;
         },
-        remove: function(objectID) {
+        remove: function (objectID) {
             delete that.values[objectID];
             delete that.totals[objectID];
         },
@@ -735,7 +750,7 @@ function newAttentionMap(memoryMomentum, maxObjects, adjacency, spreadRate) {
 
         //multiply
 
-        add: function(i, deltaAttention) {
+        add: function (i, deltaAttention) {
 
             if (!that.values[i]) {
                 that.values[i] = 0;
@@ -744,7 +759,7 @@ function newAttentionMap(memoryMomentum, maxObjects, adjacency, spreadRate) {
 
             that.values[i] += deltaAttention;
         },
-        update: function() {
+        update: function () {
 
 
             //FORGET: decrease and remove lowest
@@ -802,15 +817,16 @@ function newAttentionMap(memoryMomentum, maxObjects, adjacency, spreadRate) {
 var newAttentionMap = newAttentionMap;
 
 
-var createRingBuffer = function(length) {
+var createRingBuffer = function (length) {
 
-    var pointer = 0, buffer = [];
+    var pointer = 0,
+        buffer = [];
 
     var that = {
-        get: function(key) {
+        get: function (key) {
             return buffer[key];
         },
-        push: function(item) {
+        push: function (item) {
             buffer[pointer] = item;
             pointer = (length + pointer + 1) % length;
         }
@@ -827,21 +843,21 @@ exports.createRingBuffer = createRingBuffer;
 
 function RecurringProcess(interval, runnable) {
     var that = {};
-    that.start = function() {
-        that.interval = setInterval(function() {
+    that.start = function () {
+        that.interval = setInterval(function () {
             runnable();
         }, interval);
         runnable(); //run first
     };
-    that.stop = function() {
+    that.stop = function () {
         clearInterval(that.interval);
     };
     return that;
 }
 exports.RecurringProcess = RecurringProcess;
 
-function OutputBuffer(interval, write /* limit */) {
-    var that = RecurringProcess(interval, function() {
+function OutputBuffer(interval, write /* limit */ ) {
+    var that = RecurringProcess(interval, function () {
         var o = that.buffer.pop();
         if (o) {
             write(o);
@@ -849,7 +865,7 @@ function OutputBuffer(interval, write /* limit */) {
     });
     that.buffer = [];
     that.write = write;
-    that.push = function(o) {
+    that.push = function (o) {
         that.buffer.push(o);
     };
     /*that.pushAll = function(a) {
@@ -878,6 +894,7 @@ function isNumberValueIndefinite(v) {
 
 var _IND = 'indefinite';
 var _DEF = 'definite';
+
 function objMode(x) {
     if (objHasTag(x, 'Imaginary'))
         return _IND;
@@ -888,13 +905,10 @@ function objMode(x) {
             var vi = v.id;
             var t = propGetType(vi);
 
-            if (t == null) {
-            }
-            else if ((t == 'integer') || (t == 'real')) {
+            if (t == null) {} else if ((t == 'integer') || (t == 'real')) {
                 if (isNumberValueIndefinite(v.value))
                     return _IND;
-            }
-            else {
+            } else {
                 console.log('objMade', 'Uncompared type', t);
             }
         }
@@ -936,14 +950,12 @@ function objCompare(a, b) {
             if (indefValue[0] == '<') {
                 var n = parseFloat(indefValue.substring(1));
                 return dn < n ? 1.0 : 0.0;
-            }
-            else if (indefValue[0] == '>') {
+            } else if (indefValue[0] == '>') {
                 if (indefValue.indexOf('<') != -1) {
                     //TODO this operator is weird, use a more natural one like: a..b (this will involve not using isNaN in other functions to determine if a number)
                     var mm = indefValue.substring(1).split('<');
                     return (dn >= mm[0]) && (dn <= mm[1]) ? 1.0 : 0.0;
-                }
-                else {
+                } else {
                     var n = parseFloat(indefValue.substring(1));
                     return dn > n ? 1.0 : 0.0;
                 }
@@ -1005,51 +1017,50 @@ function objCompact(o) {
         if (o.modifiedAt == o.createdAt)
             delete o.modifiedAt;
 
-    //console.log(o.name);
-    //console.log(  o);
+        //console.log(o.name);
+        //console.log(  o);
 
     var y = _.clone(o);
 
-	var k = _.keys(y);
-	for (var i = 0; i < k.length; i++) {
-		var K = k[i];
-		if (K[0] == '_') {
-			delete y[K];
-		}
-	}
+    var k = _.keys(y);
+    for (var i = 0; i < k.length; i++) {
+        var K = k[i];
+        if (K[0] == '_') {
+            delete y[K];
+        }
+    }
 
 
     //TODO ---- fix the rest of this
     if (o.value) {
 
-		var newValues = [];
+        var newValues = [];
 
-		//console.log(o.value.length + ' values');
-		for (var i = 0; i < o.value.length; i++) {
-		    var v = o.value[i];
-		    if (!v)
-		        continue;
+        //console.log(o.value.length + ' values');
+        for (var i = 0; i < o.value.length; i++) {
+            var v = o.value[i];
+            if (!v)
+                continue;
 
-		    //console.log(i + '//' + v);
-		    if (((v.value) && (v.value.lat)) || (Array.isArray(v))) {
-		        newValues.push(v);
-		    }
-		    else {
-		        var ia = v.id;
-		        var va = v.value || null;
-		        var s = v.strength || null;
-		        if ((s) && (s!=1.0))
-		            newValues.push([ia, va, s]);
-		        else if (va)
-		            newValues.push([ia, va]);
-		        else if (ia)
-		            newValues.push(ia);
-		        else
-		            newValues.push(v);
-		    }
-		}
-		y.value = newValues;
-	}
+            //console.log(i + '//' + v);
+            if (((v.value) && (v.value.lat)) || (Array.isArray(v))) {
+                newValues.push(v);
+            } else {
+                var ia = v.id;
+                var va = v.value || null;
+                var s = v.strength || null;
+                if ((s) && (s != 1.0))
+                    newValues.push([ia, va, s]);
+                else if (va)
+                    newValues.push([ia, va]);
+                else if (ia)
+                    newValues.push(ia);
+                else
+                    newValues.push(v);
+            }
+        }
+        y.value = newValues;
+    }
 
     //console.log('newValue:: ' + newValues);
     //console.dir(y.value);
@@ -1067,20 +1078,21 @@ function objExpand(o) {
     for (var i = 0; i < o.value.length; i++) {
         var v = o.value[i];
         if (Array.isArray(v)) {
-            var r = {id: v[0]};
+            var r = {
+                id: v[0]
+            };
             if (v[1])
                 r.value = v[1];
             if (v.length > 2)
                 r.strength = v[2];
             newValues.push(r);
-        }
-        else if (typeof v === 'object') {
+        } else if (typeof v === 'object') {
             newValues.push(v);
-        }
-        else if (typeof v === 'string') {
-            newValues.push({id: v});
-        }
-        else {
+        } else if (typeof v === 'string') {
+            newValues.push({
+                id: v
+            });
+        } else {
             newValues.push(v);
         }
     }
@@ -1093,29 +1105,31 @@ exports.objExpand = objExpand;
 //TODO omit HTML tags
 //TODO include HTML/Markdown "media" fields
 function objText(x) {
-	return (objName(x) + ' ' + objDescription(x)).trim();
+    return (objName(x) + ' ' + objDescription(x)).trim();
 }
 exports.objText = objText;
 
 function wordSimilarity(a, b) {
-	var num = 0, denA = 0, denB = 0;
-	var count = 0;
-	_.each(b, function(v, k) {
-		denB += v;
-	});
-	_.each(a, function(v, k) {
-		denA += v;
-		if (b[k]) {
-			num += (1.0+a[k])*(1.0+b[k]);
-			count++;
-		}
-	});
-	if ((denA > 0) && (denB > 0)) {
-		//return count * num / (Math.max(denA, denB));
-		//console.log(a, b, num);
-		return num;
-	}	
-	return 0;
+    var num = 0,
+        denA = 0,
+        denB = 0;
+    var count = 0;
+    _.each(b, function (v, k) {
+        denB += v;
+    });
+    _.each(a, function (v, k) {
+        denA += v;
+        if (b[k]) {
+            num += (1.0 + a[k]) * (1.0 + b[k]);
+            count++;
+        }
+    });
+    if ((denA > 0) && (denB > 0)) {
+        //return count * num / (Math.max(denA, denB));
+        //console.log(a, b, num);
+        return num;
+    }
+    return 0;
 }
 
 exports.wordSimilarity = wordSimilarity;
@@ -1127,7 +1141,7 @@ function goals(time, goalList) {
      m = objAddValue(m, 'synchronous', { every: 60000, delay: 0 } );
      goalList.push(m);*/
 
-    return _.map(goalList, function(g) {
+    return _.map(goalList, function (g) {
         var x = _.clone(g);
         x.strength = 0.1; // Math.random();
 
@@ -1138,7 +1152,7 @@ function goals(time, goalList) {
 
         return x;
     });
-//	return [ { name: 'Be patient', strength: 0.75 },  { name: 'Breathe', strength: 0.3 },  { name: 'Find Shelter', strength: 0.2 } ];
+    //	return [ { name: 'Be patient', strength: 0.75 },  { name: 'Breathe', strength: 0.3 },  { name: 'Find Shelter', strength: 0.2 } ];
 }
 exports.goals = goals;
 
@@ -1146,7 +1160,7 @@ exports.goals = goals;
 
 function subtags(tags, s) {
     //this is suboptimal (use an index), & doesn't yet do multilevel inference
-    return _.select(_.keys(tags), function(tt) {
+    return _.select(_.keys(tags), function (tt) {
         var t = tags[tt];
         if (!t.tag)
             return false;
@@ -1158,13 +1172,13 @@ function subtags(tags, s) {
 exports.subtags = subtags;
 
 function hashpassword(p) {
-	return MD5(p + '$4lT_');
+    return MD5(p + '$4lT_');
 }
 exports.hashpassword = hashpassword;
 
 //Chris Coyier's MD5 Library
 //http://css-tricks.com/snippets/javascript/javascript-md5/
-var MD5 = function(string) {
+var MD5 = function (string) {
 
     function RotateLeft(lValue, iShiftBits) {
         return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
@@ -1194,12 +1208,15 @@ var MD5 = function(string) {
     function F(x, y, z) {
         return (x & y) | ((~x) & z);
     }
+
     function G(x, y, z) {
         return (x & z) | (y & (~z));
     }
+
     function H(x, y, z) {
         return (x ^ y ^ z);
     }
+
     function I(x, y, z) {
         return (y ^ (x | (~z)));
     }
@@ -1207,26 +1224,22 @@ var MD5 = function(string) {
     function FF(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(F(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
-    }
-    ;
+    };
 
     function GG(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(G(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
-    }
-    ;
+    };
 
     function HH(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(H(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
-    }
-    ;
+    };
 
     function II(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(I(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
-    }
-    ;
+    };
 
     function ConvertToWordArray(string) {
         var lWordCount;
@@ -1249,19 +1262,19 @@ var MD5 = function(string) {
         lWordArray[lNumberOfWords - 2] = lMessageLength << 3;
         lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
         return lWordArray;
-    }
-    ;
+    };
 
     function WordToHex(lValue) {
-        var WordToHexValue = "", WordToHexValue_temp = "", lByte, lCount;
+        var WordToHexValue = "",
+            WordToHexValue_temp = "",
+            lByte, lCount;
         for (lCount = 0; lCount <= 3; lCount++) {
             lByte = (lValue >>> (lCount * 8)) & 255;
             WordToHexValue_temp = "0" + lByte.toString(16);
             WordToHexValue = WordToHexValue + WordToHexValue_temp.substr(WordToHexValue_temp.length - 2, 2);
         }
         return WordToHexValue;
-    }
-    ;
+    };
 
     function Utf8Encode(string) {
         string = string.replace(/\r\n/g, "\n");
@@ -1273,12 +1286,10 @@ var MD5 = function(string) {
 
             if (c < 128) {
                 utftext += String.fromCharCode(c);
-            }
-            else if ((c > 127) && (c < 2048)) {
+            } else if ((c > 127) && (c < 2048)) {
                 utftext += String.fromCharCode((c >> 6) | 192);
                 utftext += String.fromCharCode((c & 63) | 128);
-            }
-            else {
+            } else {
                 utftext += String.fromCharCode((c >> 12) | 224);
                 utftext += String.fromCharCode(((c >> 6) & 63) | 128);
                 utftext += String.fromCharCode((c & 63) | 128);
@@ -1287,15 +1298,26 @@ var MD5 = function(string) {
         }
 
         return utftext;
-    }
-    ;
+    };
 
     var x = Array();
     var k, AA, BB, CC, DD, a, b, c, d;
-    var S11 = 7, S12 = 12, S13 = 17, S14 = 22;
-    var S21 = 5, S22 = 9, S23 = 14, S24 = 20;
-    var S31 = 4, S32 = 11, S33 = 16, S34 = 23;
-    var S41 = 6, S42 = 10, S43 = 15, S44 = 21;
+    var S11 = 7,
+        S12 = 12,
+        S13 = 17,
+        S14 = 22;
+    var S21 = 5,
+        S22 = 9,
+        S23 = 14,
+        S24 = 20;
+    var S31 = 4,
+        S32 = 11,
+        S33 = 16,
+        S34 = 23;
+    var S41 = 6,
+        S42 = 10,
+        S43 = 15,
+        S44 = 21;
 
     string = Utf8Encode(string);
 

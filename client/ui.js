@@ -327,6 +327,11 @@ function _updateView(force) {
         currentView = null;
     }
 
+    if (configuration.device == configuration.MOBILE) {
+        //auto-hide the menu
+        showAvatarMenu(false);
+    }
+
 
 }
 
@@ -468,8 +473,28 @@ function popupAboutDialog() {
 
 var TogetherJS;
 
+
+function whenResized() {
+    var isMobile = window.matchMedia("only screen and (max-width: 700px)");
+
+    configuration.MOBILE = 0;
+    configuration.DESKTOP = 1;
+
+    if (isMobile.matches) {
+        configuration.device = configuration.MOBILE;
+    }
+    else {
+        configuration.device = configuration.DESKTOP;
+    }
+
+    freetileView();
+
+}
+
 $(document).ready(function() {
 
+    $(window).resize(whenResized);
+    whenResized();
 
     if (configuration.enableTogetherJS) {
         loadJS('https://togetherjs.com/togetherjs-min.js');

@@ -44,34 +44,39 @@ function netention(f) {
 
 
     var $NClient = Backbone.Model.extend({
-        clear: function() {
+        clear: function () {
             this.clearObjects();
             this.set('clientID', 'undefined');
             this.attention = {};
             this.tags = {};
             this.properties = {};
-            this.ontoIndex = lunr(function() {
-                this.field('name', {boost: 4});
+            this.ontoIndex = lunr(function () {
+                this.field('name', {
+                    boost: 4
+                });
                 this.field('description');
                 this.field('properties');
                 this.ref('id');
             });
         },
-        clearObjects: function() {
+        clearObjects: function () {
             this.attention = {};
             this.set('deleted', {});
             this.set('replies', {});
-            this.set('layer', {include: [], exclude: []});
+            this.set('layer', {
+                include: [],
+                exclude: []
+            });
             this.set('focus', null);
             this.userRelations = null;
         },
-        tag: function(t) {
+        tag: function (t) {
             return this.tags[t];
         },
-        tagRoots: function() {
+        tagRoots: function () {
             var that = this;
             //this might be suboptimal
-            return _.select(_.keys(this.tags), function(tt) {
+            return _.select(_.keys(this.tags), function (tt) {
                 var t = that.tag(tt);
                 if (!t.tag)
                     return true;
@@ -79,18 +84,18 @@ function netention(f) {
                     return (t.tag.length == 0);
             });
         },
-        getSubTags: function(s) {
+        getSubTags: function (s) {
             return subtags(this.tags, s);
         },
-        isProperty: function(p) {
+        isProperty: function (p) {
             return this.properties[p] != undefined;
         },
-        objects: function() {
+        objects: function () {
             return this.attention;
         }, //DEPRECATED
 
         /* returns a list of object id's */
-        objectsWithTag: function(t, fullObject, includeSubTags) {
+        objectsWithTag: function (t, fullObject, includeSubTags) {
             //TODO support subtags
             var r = [];
 
@@ -105,13 +110,13 @@ function netention(f) {
             }
             return r;
         },
-        getObject: function(id) {
+        getObject: function (id) {
             return this.attention[id];
         }, //deprecated
-        object: function(id) {
+        object: function (id) {
             return this.attention[id];
         },
-        deleteSelf: function(clientID) {
+        deleteSelf: function (clientID) {
             var os = this.get('otherSelves');
             if (os.length < 2) {
                 $.pnotify({
@@ -130,30 +135,30 @@ function netention(f) {
 
         },
         //->tag
-        getTag: function(t) {
+        getTag: function (t) {
             return this.tags[t];
         },
-        getProperty: function(p) {
+        getProperty: function (p) {
             return this.properties[p];
         },
-        getIncidentTags: function(userid, oneOfTags) {
+        getIncidentTags: function (userid, oneOfTags) {
             return objIncidentTags(this.objects(), oneOfTags, userid);
         },
-        setObject: function(o) {
+        setObject: function (o) {
             var i = o.id;
             this.objects()[i] = o;
             return o;
         },
-        layer: function() {
+        layer: function () {
             return this.get('layer');
         },
-        id: function() {
+        id: function () {
             return this.get('clientID');
         },
-        myself: function() {
+        myself: function () {
             return this.getObject(this.id());
         },
-        become: function(target) {
+        become: function (target) {
 
             if (!target)
                 return;
@@ -173,11 +178,10 @@ function netention(f) {
 
                 $N.trigger('change:attention');
                 updateBrand(); //TODO use backbone Model instead of global fucntion            
-                
+
                 $N.startURLRouter();
-            }
-            else {
-                this.socket.emit('become', target, function(nextID) {
+            } else {
+                this.socket.emit('become', target, function (nextID) {
                     if (nextID) {
                         /*$.pnotify( {
                          title: 'Switched profile',
@@ -188,7 +192,7 @@ function netention(f) {
                         //return;
 
 
-                        later(function() {
+                        later(function () {
 
                             $N.set('clientID', nextID);
                             setCookie('clientID', nextID);
@@ -200,11 +204,11 @@ function netention(f) {
 
                             $N.clearObjects();
 
-                            $N.getAuthorObjects(nextID, function() {
-                                $N.getLatestObjects(1000, function() {
+                            $N.getAuthorObjects(nextID, function () {
+                                $N.getLatestObjects(1000, function () {
                                     //$N.trigger('change:attention');
                                     updateBrand(); //TODO use backbone Model instead of global function
-                                    
+
                                     $N.startURLRouter();
                                 });
                             });
@@ -212,8 +216,7 @@ function netention(f) {
 
                             //});
                         });
-                    }
-                    else {
+                    } else {
                         $.pnotify({
                             title: 'Unable to switch profile',
                             text: err + ' ' + (typeof (target) === "string" ? target : target.id),
@@ -224,7 +227,7 @@ function netention(f) {
                 });
             }
         },
-        connect: function(targetID, whenConnected) {
+        connect: function (targetID, whenConnected) {
             var originalTargetID = targetID;
             var suppliedObject = null;
             if (targetID) {
@@ -245,13 +248,12 @@ function netention(f) {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 $N.save('clientID', targetID);
             }
 
             function reconnect() {
-                socket.emit('connectID', targetID, function(_cid, _key, _selves) {
+                socket.emit('connectID', targetID, function (_cid, _key, _selves) {
                     setClientID($N, _cid, _key, _selves);
                     setCookie('clientID', _cid);
 
@@ -280,8 +282,8 @@ function netention(f) {
                     'reconnectionDelayMax': 25,
                     'try multiple transports': true
                 });
-                socket.on('connect', function() {
-                    socket.on('disconnect', function() {
+                socket.on('connect', function () {
+                    socket.on('disconnect', function () {
                         $.pnotify({
                             title: 'Disconnected.'
                         });
@@ -303,11 +305,11 @@ function netention(f) {
                      socket.socket.reconnect();
                      });*/
 
-                    socket.on('notice', function(n) {
+                    socket.on('notice', function (n) {
                         $N.notice(n);
                     });
 
-                    socket.on('addTags', function(t, p) {
+                    socket.on('addTags', function (t, p) {
                         $N.addProperties(p);
                         $N.addTags(t);
                     });
@@ -323,29 +325,29 @@ function netention(f) {
 
             return socket;
         },
-        loadOntology: function(url, f) {
+        loadOntology: function (url, f) {
             var that = this;
 
-            $.getJSON(url, function(schema) {
+            $.getJSON(url, function (schema) {
                 that.addProperties(schema['properties']);
                 that.addTags(schema['tags']);
                 f();
             });
 
         },
-        searchOntology: function(query, ontocache) {
+        searchOntology: function (query, ontocache) {
             var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
             var results = {};
             for (var i = 0; i < terms.length; i++) {
                 var T = terms[i];
-                
+
                 var r = ontocache[T];
-                
+
                 if (!r)
                     r = this.ontoIndex.search(T);
-                
+
                 ontocache[T] = r;
-                
+
                 for (var j = 0; j < r.length; j++) {
                     var R = r[j];
                     var id = R.ref;
@@ -356,19 +358,19 @@ function netention(f) {
                         results[id] += score;
                 }
             }
-                        
-            results = _.map(_.keys(results), function(r) {
+
+            results = _.map(_.keys(results), function (r) {
                 return [r, results[r]];
             });
-            results = results.sort(function(a, b) {
+            results = results.sort(function (a, b) {
                 return b[1] - a[1];
             });
             return results;
         },
-        addProperty: function(p) {
+        addProperty: function (p) {
             this.properties[p.uri] = p;
         },
-        addTag: function(t) {
+        addTag: function (t) {
             var ty = this.tags;
             var p = this.properties;
 
@@ -424,12 +426,12 @@ function netention(f) {
          });    
          },*/
 
-        addProperties: function(ap) {
+        addProperties: function (ap) {
             for (var k in ap) {
                 this.addProperty(ap[k]);
             }
         },
-        addTags: function(at) {
+        addTags: function (at) {
 
             for (var k in at) {
                 this.addTag(at[k]);
@@ -437,7 +439,7 @@ function netention(f) {
             this.trigger('change:tags');
 
         },
-        deleteObject: function(x, localOnly) {
+        deleteObject: function (x, localOnly) {
             var id;
             if (typeof x == "string")
                 id = x;
@@ -447,7 +449,7 @@ function netention(f) {
 
             if (x.author == undefined)
                 localOnly = true;
-            
+
             if (configuration.connection != 'local') {
                 if ((!this.socket) && (!localOnly)) {
                     $.pnotify({
@@ -455,16 +457,15 @@ function netention(f) {
                     });
                     return false;
                 }
-            }
-            else
+            } else
                 localOnly = true;
 
             function removeLocal() {
                 if (!$N.getObject(id))
                     return false;
-                
+
                 that.get('deleted')[id] = Date.now();
-                delete (that.objects())[id];
+                delete(that.objects())[id];
 
                 //remove from replies
                 for (var k in that.get('replies')) {
@@ -475,13 +476,12 @@ function netention(f) {
                 if (replies)
                     for (var k = 0; k < replies.length; k++)
                         that.deleteObject(k, true);
-                
+
                 return true;
             }
 
             if (!localOnly) {
-                var that = this;
-                this.socket.emit('delete', id, function(err) {
+                this.socket.emit('delete', id, function (err) {
                     if (!err) {
                         that.trigger('change:deleted');
                         that.trigger('change:attention');
@@ -494,8 +494,7 @@ function netention(f) {
                         });
 
                         removeLocal();
-                    }
-                    else {
+                    } else {
                         //console.dir(err);
                         $.pnotify({
                             title: 'Unable to delete: ' + err,
@@ -503,8 +502,7 @@ function netention(f) {
                         });
                     }
                 });
-            }
-            else {
+            } else {
                 if (removeLocal()) {
                     if (x.author) {
                         $.pnotify({
@@ -520,16 +518,16 @@ function netention(f) {
             return true;
 
         },
-        getPlugins: function(withPlugins) {
+        getPlugins: function (withPlugins) {
             var that = this;
-            this.socket.emit('getPlugins', function(p) {
+            this.socket.emit('getPlugins', function (p) {
                 that.unset('plugins');
                 that.set('plugins', p);
                 if (withPlugins)
                     withPlugins(p);
             });
         },
-        setPlugin: function(pid, enabled, callback) {
+        setPlugin: function (pid, enabled, callback) {
             this.socket.emit('setPlugin', pid, enabled, callback);
         },
         /*getGoals: function(from, to, mineOnly ) {
@@ -546,9 +544,9 @@ function netention(f) {
          } );
          },*/
 
-        getObjects: function(query, onObject, onFinished) {
+        getObjects: function (query, onObject, onFinished) {
             var that = this;
-            this.socket.emit('getObjects', query, function(objs) {
+            this.socket.emit('getObjects', query, function (objs) {
                 for (var k in objs) {
                     var x = objs[k];
                     that.notice(x);
@@ -558,20 +556,19 @@ function netention(f) {
                 onFinished();
             });
         },
-        getReplies: function(id) {
-            return  this.get('replies')[id] || [];
+        getReplies: function (id) {
+            return this.get('replies')[id] || [];
         },
-        listenAll: function(b) {
+        listenAll: function (b) {
             if (b) {
-                this.subscribe('*', function(f) {
+                this.subscribe('*', function (f) {
                     this.notice(f);
                 });
-            }
-            else {
+            } else {
                 this.unsubscribe('*');
             }
         },
-        setFocus: function(f) {
+        setFocus: function (f) {
             //TODO avoid sending duplicate focuses
             /*
              var oldFocus = this.get('focus');
@@ -605,9 +602,9 @@ function netention(f) {
             this.set('focus', f);
 
             if (this.socket) {
-                this.pub(f, function(err) {
+                this.pub(f, function (err) {
                     console.log('setFocus: ', err);
-                }, function() {
+                }, function () {
                     //$.pnotify({title: 'Focus noticed.'});
                 });
             }
@@ -615,10 +612,10 @@ function netention(f) {
             $N.trigger('change:focus');
 
         },
-        focus: function() {
+        focus: function () {
             return this.get('focus');
         },
-        notice: function(x) {
+        notice: function (x) {
 
             if (!Array.isArray(x)) {
                 return this.notice([x]);
@@ -643,20 +640,19 @@ function netention(f) {
                 if (y.replyTo) {
                     var rt = y.replyTo;
                     if (!Array.isArray(rt)) {
-                        rt = [ rt ];
+                        rt = [rt];
                     }
                     for (var n = 0; n < rt.length; n++) {
                         var rtt = rt[n];
-                        
+
                         var p = replies[rtt];
                         if (p) {
                             if (!_.contains(p, y.id))
                                 p.push(y.id);
-                        }
-                        else {
+                        } else {
                             replies[rtt] = [y.id];
                         }
-                        
+
                     }
                 }
 
@@ -666,9 +662,12 @@ function netention(f) {
 
                 function objTagObjectToTag(x) {
                     var p = {};
-                    _.each(objValues(x, 'tagValueType'), function(v) {
+                    _.each(objValues(x, 'tagValueType'), function (v) {
                         var vv = v.split(':');
-                        p[vv[0]] = {name: vv[0], type: vv[1]};
+                        p[vv[0]] = {
+                            name: vv[0],
+                            type: vv[1]
+                        };
                     });
 
                     return {
@@ -698,13 +697,13 @@ function netention(f) {
             if (includesNonFocused)
                 this.trigger('change:attention');
         },
-        subscribe: function(channel, f) {
+        subscribe: function (channel, f) {
             if (this.socket) {
                 this.socket.emit('subscribe', channel);
                 this.socket.on('receive-' + channel, f);
             }
         },
-        unsubscribe: function(channel) {
+        unsubscribe: function (channel) {
             if (this.socket) {
                 this.socket.emit('unsubscribe', channel);
             }
@@ -727,25 +726,27 @@ function netention(f) {
          });
          }
          },*/
-        pub: function(object, onErr, onSuccess) {
+        pub: function (object, onErr, onSuccess) {
             if (configuration.connection == 'local') {
                 $N.notice(object);
                 if (onSuccess)
                     onSuccess();
-            }
-            else {
+            } else {
                 if (this.socket) {
-                    this.socket.emit('pub', objCompact(object), function(err) {
+                    this.socket.emit('pub', objCompact(object), function (err) {
                         if (onErr)
                             onErr(object);
-                        $.pnotify({title: 'Error saving:', text: err, type: 'error'});
-                    }, function() {
+                        $.pnotify({
+                            title: 'Error saving:',
+                            text: err,
+                            type: 'error'
+                        });
+                    }, function () {
                         $N.notice(object);
                         if (onSuccess)
                             onSuccess();
                     });
-                }
-                else {
+                } else {
                     if (onErr)
                         onErr('Not connected.');
                     else
@@ -754,10 +755,10 @@ function netention(f) {
             }
         },
         //THIS NEEDS UPDATED
-        getClientInterests: function(f) {
+        getClientInterests: function (f) {
             this.socket.emit('getClientInterests', f);
         },
-        getTagCount: function(onlySelf, predicate) {
+        getTagCount: function (onlySelf, predicate) {
 
             var tagCount = {};
             var aa = this.attention;
@@ -774,7 +775,7 @@ function netention(f) {
                     if (oi.author != myID)
                         continue;
 
-                //var t = objTags(oi);
+                    //var t = objTags(oi);
                 var ts = objTagStrength(oi);
                 for (var i in ts) {
                     if (!tagCount[i])
@@ -784,34 +785,32 @@ function netention(f) {
             }
             return tagCount;
         },
-        getServerAttention: function(withResults) {
-            $.getJSON('/attention', function(attention) {
+        getServerAttention: function (withResults) {
+            $.getJSON('/attention', function (attention) {
                 withResults(attention);
             });
         },
-        save: function(key, value) {
+        save: function (key, value) {
             $N.set(key, value);
             localStorage[key] = JSON.stringify(value);
         },
-        loadAll: function() {
+        loadAll: function () {
             var loadedSelf = localStorage['self'] || "{ }";
             var loadedAttention = localStorage['obj'] || "{ }";
             if (loadedSelf) {
                 _.extend($N.attributes, JSON.parse(loadedSelf));
                 $N.attention = JSON.parse(loadedAttention);
-            }
-            else {
-            }
+            } else {}
 
         },
-        saveAll: function() {
+        saveAll: function () {
             if (configuration.connection == 'local') {
                 localStorage.self = JSON.stringify($N.attributes);
                 localStorage.obj = JSON.stringify($N.attention);
             }
         },
         //TODO rename to 'load initial objects' or something
-        getLatestObjects: function(num, onFinished) {
+        getLatestObjects: function (num, onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
             if (configuration.connection == 'local') {
                 $N.loadAll();
@@ -819,12 +818,12 @@ function netention(f) {
                 return;
             }
 
-            $.getJSON('/object/latest/' + num + '/json', function(objs) {
+            $.getJSON('/object/latest/' + num + '/json', function (objs) {
                 $N.notice(objs);
                 onFinished();
             });
         },
-        getUserObjects: function(onFinished) {
+        getUserObjects: function (onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
             if (configuration.connection == 'local') {
                 $N.loadAll();
@@ -832,25 +831,25 @@ function netention(f) {
                 return;
             }
 
-            $.getJSON('/object/tag/User/json', function(objs) {
+            $.getJSON('/object/tag/User/json', function (objs) {
                 $N.notice(objs);
                 onFinished();
             });
         },
-        getAuthorObjects: function(userID, onFinished) {
+        getAuthorObjects: function (userID, onFinished) {
             if (configuration.connection == 'local') {
                 onFinished();
                 return;
             }
-            $.getJSON('/object/author/' + userID + '/json', function(j) {
+            $.getJSON('/object/author/' + userID + '/json', function (j) {
                 $N.notice(j);
                 onFinished();
             });
         },
-        startURLRouter: function() {
-            Backbone.history.start();            
+        startURLRouter: function () {
+            Backbone.history.start();
         }
-        
+
 
     });
 
@@ -865,12 +864,11 @@ function netention(f) {
     setClientID($N, cid, keys, otherSelves);
 
     if (configuration.connection == 'websocket') {
-        $N.connect(null, function() {
+        $N.connect(null, function () {
             f("/ontology/json", $N);
         });
-    }
-    else {
-        window.addEventListener("beforeunload", function(e) {
+    } else {
+        window.addEventListener("beforeunload", function (e) {
             $N.saveAll();
             /*var confirmationMessage = "Saved everything";
              
@@ -899,6 +897,9 @@ function newEle(e) {
 }
 
 function newPopup(title, p, isModal) {
+    if (configuration.device == configuration.MOBILE) {
+        p = isModal = true;
+    }
 
     var d = newDiv();
     d.attr('title', title);
@@ -909,6 +910,11 @@ function newPopup(title, p, isModal) {
         var clientWidth = $(document).width();
         var margin = 24;
         var leftMargin = 64;
+        if (configuration.device == configuration.MOBILE) {
+            margin = leftMargin = 0;
+            clientWidth -= 4;
+        }
+
         p = {
             width: clientWidth - leftMargin - margin,
             height: clientHeight - margin * 2,
@@ -917,7 +923,7 @@ function newPopup(title, p, isModal) {
     }
 
     p = _.extend(p || {}, {
-        close: function() {
+        close: function () {
             d.remove();
         },
         show: 'fade',
@@ -926,7 +932,34 @@ function newPopup(title, p, isModal) {
     if (isModal)
         p.modal = true;
 
+    if (configuration.device == configuration.MOBILE) {
+        p.resizable = false;
+        p.draggable = false;
+        //p.buttons = [ { text: "OK", click: function() { $( this ).dialog( "close" ); } } ];
+    }
+
     d.dialog(p);
+
+    if (configuration.device == configuration.MOBILE) {
+        d.parent().css('padding', 2);
+        d.parent().css('border', 0);
+
+        var backbuttonhandler = function(e) {
+            if (e)
+                if (e.originalEvent)
+                    if (e.originalEvent.state)
+                        if (e.originalEvent.state.dialog) {
+                            $(window).off('popstate', arguments.callee);
+                            later(function() {
+                                d.dialog('close');
+                            });
+                            return false;
+                        }
+        };
+        window.history.pushState({dialog:1});
+        $(window).on('popstate', backbuttonhandler);
+    }
+
     return d;
 }
 
@@ -946,10 +979,10 @@ function getCookie(name) {
     }
     return null;
 }
+
 function setCookie(key, value) {
     document.cookie = key + '=' + value;
 }
-
 
 
 /**

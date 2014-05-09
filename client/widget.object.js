@@ -4,7 +4,7 @@ var ONTO_SEARCH_PERIOD_MS = 1500; //TODO move this to client.js
 //t is either a tag ID, or an object with zero or more tags
 function getTagIcon(t) {
     if (!t)
-        return defaultIcons['unknown'];
+        return defaultIcons.unknown;
 
     if (t.id) {
         //try all the tags, return the first
@@ -18,8 +18,7 @@ function getTagIcon(t) {
             }
         }
         return null;
-    }
-    else {
+    } else {
         return defaultIcons[t];
     }
 }
@@ -59,7 +58,7 @@ function newPopupObjectViews(objectIDs) {
     if (objectIDs.length == 1)
         return newPopupObjectView(objectIDs[0]);
 
-    var objects = objectIDs.map(function(i) {
+    var objects = objectIDs.map(function (i) {
         if (typeof i == "string")
             return $N.getObject(i);
         else
@@ -67,7 +66,7 @@ function newPopupObjectViews(objectIDs) {
     });
 
     var d = newPopup(objects.length + " Objects");
-    _.each(objects, function(o) {
+    _.each(objects, function (o) {
         if (o) {
             d.append(newObjectSummary(o, {
                 depthRemaining: 0
@@ -84,7 +83,6 @@ function newAvatarImage(s) {
 }
 
 function getAvatarURL(s) {
-    var e = '';
     if (s) {
         var e = objFirstValue(s, 'email');
         if (e) {
@@ -135,7 +133,7 @@ function newTagButton(t, onClicked, isButton) {
 
 
     if (!onClicked)
-        onClicked = function() {
+        onClicked = function () {
             newPopupObjectView(tagObject(t));
         };
 
@@ -155,12 +153,11 @@ function newReplyWidget(onReply, onCancel) {
     w.append(bw);
 
     var c = $('<button>Cancel</button>');
-    c.click(function() {
+    c.click(function () {
         var ok;
         if (ta.val() != "") {
             ok = confirm('Cancel this reply?');
-        }
-        else {
+        } else {
             ok = true;
         }
 
@@ -170,7 +167,7 @@ function newReplyWidget(onReply, onCancel) {
     bw.append(c);
 
     var b = $('<button>Reply</button>');
-    b.click(function() {
+    b.click(function () {
         if (ta.val() != "") {
             onReply(ta.val());
         }
@@ -217,16 +214,16 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             return n;
         }
 
-        var onAdd = function(tag, value) {
+        var onAdd = function (tag, value) {
             update(objAddValue(getEditedFocus(), tag, value));
         };
-        var onRemove = function(i) {
+        var onRemove = function (i) {
             var rr = objRemoveValue(getEditedFocus(), i);
             if (onTagRemove)
                 onTagRemove(rr);
             update(rr);
         };
-        var onStrengthChange = function(i, newStrength) {
+        var onStrengthChange = function (i, newStrength) {
             if (x.readonly)
                 return;
             var y = getEditedFocus();
@@ -240,7 +237,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 whenSliderChange(y);
             update(y);
         };
-        var onOrderChange = function(fromIndex, toIndex) {
+        var onOrderChange = function (fromIndex, toIndex) {
             if (x.readonly)
                 return;
             //http://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another
@@ -260,24 +257,22 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 nameInput.val(objName(x));
                 d.append(nameInput);
 
-                whenSaved.push(function(y) {
+                whenSaved.push(function (y) {
                     objName(y, nameInput.val());
                 });
             }
-        }
-        else {
+        } else {
             d.append('<h1>' + objName(x) + '</h1>');
         }
         //d.append($('<span>' + x.id + '</span>').addClass('idLabel'));
 
         var header = newDiv().appendTo(d);
-        ;
-        _.each(headerTagButtons, function(T) {
+
+        _.each(headerTagButtons, function (T) {
             if (T == '\n') {
                 header.append('<br/>');
-            }
-            else {
-                newTagButton(T, function() {
+            } else {
+                newTagButton(T, function () {
                     var y = d.getEditedFocus();
                     objAddTag(y, T);
                     update(y);
@@ -307,6 +302,11 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             var missingProp = [];
             //Add missing required properties, min: >=1 (with their default values) of known objects:
+
+            var pidToProperty = function (pid) {
+                return $N.getProperty(pid);
+            }
+
             for (var i = 0; i < tags.length; i++) {
                 var t = tags[i];
                 t = $N.getTag(t);
@@ -316,9 +316,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 var prop = t.properties;
                 if (!prop)
                     continue;
-                var propVal = _.map(prop, function(pid) {
-                    return $N.getProperty(pid);
-                });
+                var propVal = _.map(prop, pidToProperty);
 
                 if (!x.readonly) {
                     for (var j = 0; j < prop.length; j++) {
@@ -332,7 +330,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             for (var i = 0; i < missingProp.length; i++) {
                 var p = missingProp[i];
-                d.append(newTagSection(x, i + x.value.length, {id: p}, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange));
+                d.append(newTagSection(x, i + x.value.length, {
+                    id: p
+                }, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange));
             }
         }
 
@@ -341,6 +341,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         var lastValue = null;
         var ontocache = {};
+
         function search() {
             if (!tsw.is(':visible')) {
                 //clearInterval(ontoSearcher);
@@ -361,8 +362,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         if (objHasTag(getEditedFocus(), 'Tag')) {
             //skip suggestions when editing a Tag
             ts.empty();
-        }
-        else {
+        } else {
             if (!x.readonly) {
                 if (hideWidgets != true) {
                     if (editable)
@@ -439,18 +439,17 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var addButtons = newEle('span').appendTo(addButtonWrap);
 
             var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
-            addDisplay.hover(function() {
+            addDisplay.hover(function () {
                 if (!addButtons.is(':visible')) {
                     addButtons.fadeIn();
                     addDisplay.text('-');
                 }
             });
-            addDisplay.click(function() {
+            addDisplay.click(function () {
                 if (addButtons.is(':visible')) {
                     addButtons.fadeOut();
                     addDisplay.text('+');
-                }
-                else {
+                } else {
                     addButtons.fadeIn();
                     addDisplay.text('-');
                 }
@@ -459,16 +458,15 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             addButtons.hide();
 
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
-            whatButton.click(function() {
+            whatButton.click(function () {
                 var p = newPopup('Select Tags for ' + nameInput.val(), true, true);
-                p.append(newTagger([], function(t) {
+                p.append(newTagger([], function (t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
                         var T = $N.getTag(t[i]);
                         if ((T) && (T.reserved)) {
                             $.pnotify('Tag "' + T.name + '" can not be added to objects.');
-                        }
-                        else
+                        } else
                             objAddTag(y, t[i]);
                     }
                     update(y);
@@ -478,7 +476,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             addButtons.append(whatButton);
 
             var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/actions/quote.png"></button>');
-            howButton.click(function() {
+            howButton.click(function () {
                 update(objAddValue(getEditedFocus(), 'textarea', ''));
             });
             addButtons.append(howButton);
@@ -487,7 +485,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             addButtons.append(whenButton);
 
             var whereButton = $('<button title="Where?"><img src="/icon/rrze/emblems/globe.png"></button>');
-            whereButton.click(function() {
+            whereButton.click(function () {
                 update(objAddValue(getEditedFocus(), 'spacepoint', ''));
             });
             addButtons.append(whereButton);
@@ -496,22 +494,22 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             addButtons.append(whoButton);
 
             var drawButton = $('<button title="Draw"><img src="/icon/rrze/emblems/pen.png"/></button>');
-            drawButton.click(function() {
+            drawButton.click(function () {
                 update(objAddValue(getEditedFocus(), 'sketch', ''));
             });
             addButtons.append(drawButton);
 
 
             var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>');
-            webcamButton.click(function() {
-                newWebcamWindow(function(imgURL) {
+            webcamButton.click(function () {
+                newWebcamWindow(function (imgURL) {
                     update(objAddValue(getEditedFocus(), 'media', imgURL));
                 });
             });
             addButtons.append(webcamButton);
 
             var uploadButton = $('<button title="Upload"><img src="/icon/rrze/actions/dial-in.png"/></button>');
-            uploadButton.click(function() {
+            uploadButton.click(function () {
 
                 var y = newDiv();
                 var fuf = y.append('<form id="FocusUploadForm" action="/upload" method="post" enctype="multipart/form-data"><div>File:<input type="file" name="uploadfile" /><input type="submit" value="Upload" /></div></form>');
@@ -521,10 +519,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 y.append(okButton);
 
 
-                var x = newPopup('Upload', {modal: true});
+                var x = newPopup('Upload', {
+                    modal: true
+                });
                 x.append(y);
 
-                okButton.click(function() {
+                okButton.click(function () {
                     x.dialog('close');
                 });
 
@@ -533,25 +533,25 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 var status = $('#FocusUploadStatus');
 
                 $('#FocusUploadForm').ajaxForm({
-                    beforeSend: function() {
+                    beforeSend: function () {
                         status.empty();
                         var percentVal = '0%';
-                        bar.width(percentVal)
+                        bar.width(percentVal);
                         percent.html(percentVal);
                     },
-                    uploadProgress: function(event, position, total, percentComplete) {
+                    uploadProgress: function (event, position, total, percentComplete) {
                         var percentVal = percentComplete + '%';
-                        bar.width(percentVal)
+                        bar.width(percentVal);
                         percent.html(percentVal);
                     },
-                    complete: function(xhr) {
+                    complete: function (xhr) {
                         var url = xhr.responseText;
                         if ((url) && (url.length > 0)) {
                             status.html($('<a>File uploaded</a>').attr('href', url));
                             var absURL = url.substring(1);
 
                             update(objAddValue(getEditedFocus(), 'media', absURL));
-                            later(function() {
+                            later(function () {
                                 x.dialog('close');
                             });
                         }
@@ -564,8 +564,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             d.append(addButtonWrap);
 
+            var scopeSelect = null;
             if (!objHasTag(getEditedFocus(), 'User')) {
-                var scopeSelect = $('<select style="float:right"/>');
+                scopeSelect = $('<select style="float:right"/>');
                 scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
                 scopeSelect.append('<option value="5">Trusted</option>'); //store on server but share with who i follow
                 scopeSelect.append('<option value="7">Public</option>'); //store on server for public access (inter-server)
@@ -573,7 +574,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 if (configuration.connection == 'local')
                     scopeSelect.attr('disabled', 'disabled');
                 else {
-                    scopeSelect.change(function() {
+                    scopeSelect.change(function () {
                         var e = getEditedFocus();
                         e.scope = parseInt(scopeSelect.val());
                         update(e);
@@ -582,25 +583,27 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
 
             var saveButton = $('<button style="float:right"><b>Save</b></button>');
-            saveButton.click(function() {
+            saveButton.click(function () {
                 var e = getEditedFocus();
                 e.author = $N.id();
                 objTouch(e);
-                $N.pub(e, function(err) {
+                $N.pub(e, function (err) {
                     $.pnotify({
                         title: 'Unable to save.',
                         text: x.name,
                         type: 'Error'
                     });
-                }, function() {
+                }, function () {
                     $.pnotify({
                         title: 'Saved (' + x.id.substring(0, 6) + ')'
-                                //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object           
+                        //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object
                     });
                 });
                 d.parent().dialog('close');
             });
-            addButtonWrap.append(saveButton, scopeSelect);
+            addButtonWrap.append(saveButton);
+            if (scopeSelect)
+                addButtonWrap.append(scopeSelect);
 
 
             /*var exportButton = $('<button>Export</button>');
@@ -668,11 +671,10 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
          //tagButtons.fadeOut();
          });*/
 
-        d.click(function() {
+        d.click(function () {
             if (!tagButtons.is(':visible')) {
                 tagButtons.fadeIn();
-            }
-            else {
+            } else {
                 tagButtons.fadeOut();
             }
         });
@@ -682,15 +684,14 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         if (index > 0) {
             var upButton = $('<a href="#" title="Move Up">^</a>');
             upButton.addClass('tagButton');
-            upButton.click(function() {
+            upButton.click(function () {
                 onOrderChange(index, index - 1);
             });
             tagButtons.append(upButton);
-        }
-        else {
+        } else {
             var downButton = $('<a href="#" title="Move Down">v</a>');
             downButton.addClass('tagButton');
-            downButton.click(function() {
+            downButton.click(function () {
                 onOrderChange(index, index + 1);
             });
             tagButtons.append(downButton);
@@ -719,19 +720,19 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if (currentButton)
                 currentButton.addClass('tagButtonSelected');
 
-            disableButton.click(function() {
+            disableButton.click(function () {
                 onStrengthChange(index, 0);
             });
-            p25Button.click(function() {
+            p25Button.click(function () {
                 onStrengthChange(index, 0.25);
             });
-            p50Button.click(function() {
+            p50Button.click(function () {
                 onStrengthChange(index, 0.5);
             });
-            p75Button.click(function() {
+            p75Button.click(function () {
                 onStrengthChange(index, 0.75);
             });
-            p100Button.click(function() {
+            p100Button.click(function () {
                 onStrengthChange(index, 1.0);
             });
         }
@@ -766,7 +767,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
         var removeButton = $('<a href="#" title="Remove">X</a>');
         removeButton.addClass('tagButton');
-        removeButton.click(function() {
+        removeButton.click(function () {
             if (confirm("Remove " + tag + "?"))
                 onRemove(index);
         });
@@ -818,21 +819,18 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             d.append(dd);
 
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 objAddValue(y, tag, dd.val(), strength);
             });
-        }
-        else {
+        } else {
             var dd = newDiv();
             if (t.value)
                 dd.html(t.value);
             d.append(dd);
         }
-    }
-    else if (type == 'cortexit') {
+    } else if (type == 'cortexit') {
         //...
-    }
-    else if ((type == 'text') || (type == 'url') || (type == 'integer') || (type == 'real')) {
+    } else if ((type == 'text') || (type == 'url') || (type == 'integer') || (type == 'real')) {
 
         if (editable) {
             var dd = $('<input type="text" placeholder="' + type + '"/>').appendTo(d);
@@ -844,7 +842,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if (prop) {
                 if (prop.units) {
                     sx = $('<select></select>');
-                    _.each(prop.units, function(u) {
+                    _.each(prop.units, function (u) {
                         sx.append('<option id="u">' + u + '</option>');
                     });
                     d.append(sx);
@@ -856,43 +854,41 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     //number and unit were both stored in a JSON object
                     dd.val(t.value.number);
                     sx.val(t.value.unit);
-                }
-                else {
+                } else {
                     //only the number was present
                     dd.val(t.value);
                 }
-            }
-            else if (defaultValue != null) {
+            } else if (defaultValue != null) {
                 dd.val(defaultValue);
             }
 
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 if ((type == 'text') || (type == 'url')) {
                     objAddValue(y, tag, dd.val(), strength);
-                }
-                else if ((type == 'real') || (type == 'integer')) {
+                } else if ((type == 'real') || (type == 'integer')) {
                     var ddv = (type == 'real') ? parseFloat(dd.val()) : parseInt(dd.val());
 
                     if (isNaN(ddv))
-                        ddv = dd.val();    //store as string
+                        ddv = dd.val(); //store as string
 
                     if (!sx)
                         objAddValue(y, tag, ddv, strength);
                     else
-                        objAddValue(y, tag, {number: ddv, unit: sx.val()}, strength);
+                        objAddValue(y, tag, {
+                            number: ddv,
+                            unit: sx.val()
+                        }, strength);
                 }
             });
 
-        }
-        else {
+        } else {
             var dd = newDiv();
             if (t.value)
                 dd.html(t.value);
             d.append(dd);
         }
 
-    }
-    else if (type == 'boolean') {
+    } else if (type == 'boolean') {
         var ii = $('<input type="checkbox">');
 
         var value = t.value;
@@ -906,15 +902,13 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         ii.prop('checked', value).appendTo(d);
 
         if (editable) {
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 objAddValue(y, tag, ii.is(':checked'), strength);
             });
-        }
-        else {
+        } else {
             ii.attr("disabled", "disabled");
         }
-    }
-    else if (type == 'spacepoint') {
+    } else if (type == 'spacepoint') {
         var ee = newDiv();
         var dd = newDiv();
 
@@ -931,7 +925,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             cr.append('<option value="moon">Moon</option>');
             cr.append('<option value="mars">Mars</option>');
             cr.append('<option value="venus">Venus</option>');
-            cr.change(function() {
+            cr.change(function () {
                 alert('Currently only Earth is supported.');
                 cr.val('earth');
             });
@@ -941,7 +935,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             ar.css('width', '15%');
             ee.append(ar);
 
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 if (!m)
                     return;
                 if (!m.location)
@@ -961,15 +955,14 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         d.append(ee);
 
 
-        later(function() {
+        later(function () {
             var lat = t.value.lat || configuration.mapDefaultLocation[0];
             var lon = t.value.lon || configuration.mapDefaultLocation[1];
             var zoom = t.value.zoom;
             m = initLocationChooserMap(de, [lat, lon], zoom);
 
         });
-    }
-    else if (type == 'timepoint') {
+    } else if (type == 'timepoint') {
         if (editable) {
             var lr = $('<input type="text" placeholder="Time" />');
             lr.val(new Date(t.at));
@@ -979,21 +972,18 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             //TODO add 'Now' button
 
             //TODO add save function
-        }
-        else {
+        } else {
             d.append(new Date(t.at));
         }
-    }
-    else if (type == 'media') {
+    } else if (type == 'media') {
         if (editable) {
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 objAddValue(y, 'media', t.value, strength);
             });
         }
         var url = t.value;
         d.append('<img src="' + url + '"/>');
-    }
-    else if (type == 'sketch') {
+    } else if (type == 'sketch') {
         var eu = uuid();
 
         var ee = newDiv(eu);
@@ -1008,20 +998,19 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         if (t.value) {
             options.strokes = JSON.parse(t.value);
         }
-        later(function() {
+        later(function () {
             var sketchpad = Raphael.sketchpad(eu, options);
 
             var value = "";
             // When the sketchpad changes, update the input field.
-            sketchpad.change(function() {
+            sketchpad.change(function () {
                 value = sketchpad.json();
             });
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 objAddValue(y, "sketch", value, strength);
             });
         });
-    }
-    else if (type == 'timerange') {
+    } else if (type == 'timerange') {
         var nn = Date.now();
         var oldest = nn - 5 * 24 * 60 * 60 * 1000; //TODO make this configurable
 
@@ -1056,14 +1045,15 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
 
 
-            var start = -1, end = -1;
+            var start = -1,
+                end = -1;
 
             d.append('<br/>');
 
             var output = $('<span/>');
             d.append(output);
 
-            var update = _.throttle(function() {
+            var update = _.throttle(function () {
                 var rangeSec = 0;
 
                 var range = s.val();
@@ -1089,8 +1079,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     start = new Date(nn - rangeSec * 1000);
                     end = new Date(nn);
                     j.hide();
-                }
-                else {
+                } else {
                     j.show();
                     var iv = i.val();
                     var p = parseFloat(i.val()) / 10000.0;
@@ -1107,8 +1096,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     whenSliderChange(x);
             }, 500);
 
-            var uup = function() {
-                later(function() {
+            var uup = function () {
+                later(function () {
                     update();
                 });
             };
@@ -1121,19 +1110,17 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             //TODO add calendar buttons
 
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 objAddValue(y, tag, {
                     'from': end,
                     'to': start
                 }, strength);
             });
-        }
-        else {
+        } else {
             d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
         }
 
-    }
-    else if (type == 'object') {
+    } else if (type == 'object') {
         if (editable) {
             var tt = $('<span></span>');
             var ts = $('<input></input>').attr('readonly', 'readonly');
@@ -1141,7 +1128,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             var value = t.value;
 
             function updateTS(x) {
-                var X = $N.getObject(x) || $N.getTag(x) || {name: x};
+                var X = $N.getObject(x) || $N.getTag(x) || {
+                    name: x
+                };
                 if (X.name != x)
                     ts.val(X.name + ' (' + x + ')');
                 else
@@ -1154,35 +1143,35 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             //http://jqueryui.com/autocomplete/#default
             //http://jqueryui.com/autocomplete/#categories
 
-//            //TODO filter by tag specified by ontology property metadata
-//            var data = [];
-//            for (var k in $N.objects()) {
-//                var v = $N.object(k);
-//                if (value == k) {
-//                    ts.val(v.name);
-//                    ts.result = value;
-//                }
-//
-//                data.push({
-//                    value: k,
-//                    label: v.name
-//                });
-//            }
-//            ts.autocomplete({
-//                source: data,
-//                select: function(event, ui) {
-//                    ts.result = ui.item.value;
-//                    ts.val(ui.item.label);
-//                    /*
-//                     $( "#project" ).val( ui.item.label );
-//                     $( "#project-id" ).val( ui.item.value );
-//                     $( "#project-description" ).html( ui.item.desc );
-//                     $( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
-//                     */
-//
-//                    return false;
-//                }
-//            });
+            //            //TODO filter by tag specified by ontology property metadata
+            //            var data = [];
+            //            for (var k in $N.objects()) {
+            //                var v = $N.object(k);
+            //                if (value == k) {
+            //                    ts.val(v.name);
+            //                    ts.result = value;
+            //                }
+            //
+            //                data.push({
+            //                    value: k,
+            //                    label: v.name
+            //                });
+            //            }
+            //            ts.autocomplete({
+            //                source: data,
+            //                select: function(event, ui) {
+            //                    ts.result = ui.item.value;
+            //                    ts.val(ui.item.label);
+            //                    /*
+            //                     $( "#project" ).val( ui.item.label );
+            //                     $( "#project-id" ).val( ui.item.value );
+            //                     $( "#project-description" ).html( ui.item.desc );
+            //                     $( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
+            //                     */
+            //
+            //                    return false;
+            //                }
+            //            });
 
             tt.append(ts);
 
@@ -1191,10 +1180,10 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
                 ts.attr('placeholder', prop.tag ? JSON.stringify(prop.tag) : 'Object');
 
-                mb.click(function() {
+                mb.click(function () {
                     var tagRestrictions = prop.tag;
                     var pp = newPopup("Select Object", true, true);
-                    var tagger = newTagger(null, function(tags) {
+                    var tagger = newTagger(null, function (tags) {
                         ts.result = tags = tags[0];
 
                         updateTS(tags);
@@ -1203,7 +1192,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     }, tagRestrictions, 1);
                     pp.append(tagger);
                 });
-                ts.click(function() {
+                ts.click(function () {
                     if (ts.val() == '')
                         mb.click();
                 });
@@ -1212,20 +1201,18 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             d.append(tt);
 
-            whenSaved.push(function(y) {
+            whenSaved.push(function (y) {
                 objAddValue(y, tag, ts.result || ts.val(), strength);
             });
         }
-    }
-    else if (tag) {
+    } else if (tag) {
         var TAG = $N.tags[tag];
-        whenSaved.push(function(y) {
+        whenSaved.push(function (y) {
             objAddTag(y, tag, strength);
         });
         if (!TAG) {
             //d.append('Unknown tag: ' + tag);            
-        }
-        else {
+        } else {
             var ti = getTagIcon(tag);
             if ($N.tags[tag] != undefined) {
                 tagLabel.html(TAG.name);
@@ -1250,29 +1237,26 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
 
                 var pp = getTagProperties(tag);
-                for (var i = 0; i < pp.length; i++) {
-                    (function(I) {
-                        var ppv = pp[I];
-                        var PP = $N.getProperty(ppv);
+                _.each(pp, function (ppv) {
+                    var PP = $N.getProperty(ppv);
 
-                        //TODO dont include if max present reached
-                        if (PP.max)
-                            if (PP.max > 0) {
-                                var existing = objValues(x, ppv).length;
-                                if (PP.max <= existing)
-                                    return;
-                            }
+                    //TODO dont include if max present reached
+                    if (PP.max)
+                        if (PP.max > 0) {
+                            var existing = objValues(x, ppv).length;
+                            if (PP.max <= existing)
+                                return;
+                        }
 
-                        var ppn = PP.name;
-                        var appv = $('<a href="#" title="' + PP.type + '">+' + ppn + '</a>');
-                        var defaultValue = '';
-                        appv.click(function() {
-                            onAdd(ppv, defaultValue);
-                        });
+                    var ppn = PP.name;
+                    var appv = $('<a href="#" title="' + PP.type + '">+' + ppn + '</a>');
+                    var defaultValue = '';
+                    appv.click(function () {
+                        onAdd(ppv, defaultValue);
+                    });
 
-                        pd.append(appv, '&nbsp;');
-                    })(i);
-                }
+                    pd.append(appv, '&nbsp;');
+                });
 
             }
 
@@ -1305,24 +1289,24 @@ function newPropertyView(x, vv) {
         return ('<li>' + vv.id + ': ' + vv.value + '</li>');
 
     if (p.type == 'object') {
-        var o = $N.getObject(vv.value) || {name: vv.value};
+        var o = $N.getObject(vv.value) || {
+            name: vv.value
+        };
 
         return ('<li>' + p.name + ': <a href="javascript:newPopupObjectView(\'' + vv.value + '\')">' + o.name + '</a></li>');
-    }
-    else if (p.type == 'url') {
+    } else if (p.type == 'url') {
         var u = vv.value;
         return ('<li>' + p.name + ': <a target="_blank" href="' + u + '">' + u + '</a></li>');
-    }
-    else if (p.type == 'timeseries') {
+    } else if (p.type == 'timeseries') {
         var u = vv.value;
         return ('<li>' + p.name + '<br/><textarea>' + JSON.stringify(u) + '</textarea></li');
-    }
-    else if ((p.type == 'integer') && (p.incremental)) {
+    } else if ((p.type == 'integer') && (p.incremental)) {
         function goprev() {
             objSetFirstValue(x, vv.id, ii - 1);
             $N.notice(x);
             $N.pub(x);
         }
+
         function gonext() {
             objSetFirstValue(x, vv.id, ii + 1);
             $N.notice(x);
@@ -1334,27 +1318,25 @@ function newPropertyView(x, vv) {
         if (p.min < vv.value) {
             var prev = $('<button>&lt;</button>');
             v.prepend(prev);
-            prev.click(function() {
+            prev.click(function () {
                 later(goprev);
             });
         }
         //TODO allow for max
         var next = $('<button>&gt;</button>');
-        next.click(function() {
+        next.click(function () {
             later(gonext);
         });
         v.append(next);
         return v;
 
-    }
-    else if ((p.type == 'integer') || (p.type == 'real')) {
+    } else if ((p.type == 'integer') || (p.type == 'real')) {
         if (vv.value)
             if (vv.value.unit) {
                 return $('<li>' + p.name + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
             }
         return $('<li>' + p.name + ': ' + vv.value + '</li>');
-    }
-    else {
+    } else {
         var v = $('<li>' + p.name + ': ' + vv.value + '</li>');
         return v;
     }
@@ -1362,180 +1344,200 @@ function newPropertyView(x, vv) {
 
 function newReplyPopup(x) {
     var pp = newPopup("Reply to: " + x.name);
+
     function closeReplyDialog() {
         pp.dialog('close');
     }
 
     pp.append(newReplyWidget(
-            //on reply
-            function(text) {
+        //on reply
+        function (text) {
 
-                closeReplyDialog();
+            closeReplyDialog();
 
-                var rr = {
-                    name: text,
-                    id: uuid(),
-                    value: [],
-                    author: $N.id(),
-                    replyTo: [x.id],
-                    createdAt: Date.now()
-                };
+            var rr = {
+                name: text,
+                id: uuid(),
+                value: [],
+                author: $N.id(),
+                replyTo: [x.id],
+                createdAt: Date.now()
+            };
 
-                $N.pub(rr, function(err) {
-                    $.pnotify({
-                        title: 'Error replying (' + x.id.substring(0, 6) + ')',
-                        text: err,
-                        type: 'Error'
-                    })
-                }, function() {
-                    $N.notice(rr);
-                    refreshReplies();
-                    $.pnotify({
-                        title: 'Replied (' + x.id.substring(0, 6) + ')'
-                    })
-                });
+            $N.pub(rr, function (err) {
+                $.pnotify({
+                    title: 'Error replying (' + x.id.substring(0, 6) + ')',
+                    text: err,
+                    type: 'Error'
+                })
+            }, function () {
+                $N.notice(rr);
+                refreshReplies();
+                $.pnotify({
+                    title: 'Replied (' + x.id.substring(0, 6) + ')'
+                })
+            });
 
-            },
-            //on cancel
-            function() {
-                closeReplyDialog();
-            }
+        },
+        //on cancel
+        function () {
+            closeReplyDialog();
+        }
     ));
-    
+
 }
 
 function newSimilaritySummary(x) {
-	var s = { };
-	var count = 0;
-	for (var i = 0; i < x.value.length; i++) {
-		var v = x.value[i];
-		if (v.id == 'similarTo') {
-			s[v.value] = v.strength || 1.0;	
-			count++;
-		}
-	}
-	if (count == 0) return newDiv();
+    var s = {};
+    var count = 0;
+    for (var i = 0; i < x.value.length; i++) {
+        var v = x.value[i];
+        if (v.id == 'similarTo') {
+            s[v.value] = v.strength || 1.0;
+            count++;
+        }
+    }
+    if (count == 0) return newDiv();
 
 
-	function newSimilarityList(X) {
-		var d = newEle('ul');
-		_.each(X.value, function(v) {
-			if (v.id == 'similarTo') {
-				var stf =  v.strength || 1.0;
-				var st = parseFloat(stf*100.0).toFixed(1);
-				var o = $N.getObject(v.value);				
-				var name = o ? o.name : "?";
-				var li = $('<li></li>').appendTo(d);
-				var lia = $('<a href="#">' + name /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
-				li.append('&nbsp;');
-				lia.click(function() {
-					newPopupObjectView(v.value);
-				});
-				lia.css('opacity', 0.5 + (0.5 * stf));
-			}
-		});
-		return d;
-	}
+    function newSimilarityList(X) {
+        var d = newEle('ul');
+        _.each(X.value, function (v) {
+            if (v.id == 'similarTo') {
+                var stf = v.strength || 1.0;
+                var st = parseFloat(stf * 100.0).toFixed(1);
+                var o = $N.getObject(v.value);
+                var name = o ? o.name : "?";
+                var li = $('<li></li>').appendTo(d);
+                var lia = $('<a href="#">' + name /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
+                li.append('&nbsp;');
+                lia.click(function () {
+                    newPopupObjectView(v.value);
+                });
+                lia.css('opacity', 0.5 + (0.5 * stf));
+            }
+        });
+        return d;
+    }
 
-	function newSimilarityAreaMap(s) {
-		var d = newDiv().css("clear", "both");
+    function newSimilarityAreaMap(s) {
+        var d = newDiv().css("clear", "both");
 
-		var width = 100;
-		var height = 100;
+        var width = 100;
+        var height = 100;
 
-		var treemap = d3.layout.treemap()
-			.size([width, height])
-			//.sticky(true)
-			.value(function(d) { return d.size; });
+        var treemap = d3.layout.treemap()
+            .size([width, height])
+            //.sticky(true)
+            .value(function (d) {
+                return d.size;
+            });
 
-		var div = d3.selectAll(d.toArray() )
-			.style("position", "relative")
-			.style("width", (width ) + "%")
-			.style("height", "10em")
-			.style("left", 0 + "px")
-			.style("top", 0 + "px");
+        var div = d3.selectAll(d.toArray())
+            .style("position", "relative")
+            .style("width", (width) + "%")
+            .style("height", "10em")
+            .style("left", 0 + "px")
+            .style("top", 0 + "px");
 
-		var data = {
-			name: '',
-			children: [
-			]
-		};
-		_.each(s, function(v, k) {
-			var o = $N.getObject(k);
-			if (o)
-				data.children.push( { id: o.id, name: o.name, size: v });
-		});
+        var data = {
+            name: '',
+            children: [
+   ]
+        };
+        _.each(s, function (v, k) {
+            var o = $N.getObject(k);
+            if (o)
+                data.children.push({
+                    id: o.id,
+                    name: o.name,
+                    size: v
+                });
+        });
 
-		var color = d3.scale.category20c();
+        var color = d3.scale.category20c();
 
-		  var node = div.datum(data).selectAll(".node")
-			  .data(treemap.nodes)
-			  .enter().append("div")
-			  .attr("class", "node")
-			  .style("position", "absolute")
-			  .style("border", "1px solid gray")
-			  .style("overflow", "hidden")
-			  .style("cursor", "crosshair")
-			  .style("text-align", "center")
-			  .call(position)
-			  .on('click', function(d) {
-				newPopupObjectView(d.id);
-			   })
-			  .style("background", function(d) { return color(d.name); })
-			  .text(function(d) { return d.children ? null : d.name; });
+        var node = div.datum(data).selectAll(".node")
+            .data(treemap.nodes)
+            .enter().append("div")
+            .attr("class", "node")
+            .style("position", "absolute")
+            .style("border", "1px solid gray")
+            .style("overflow", "hidden")
+            .style("cursor", "crosshair")
+            .style("text-align", "center")
+            .call(position)
+            .on('click', function (d) {
+                newPopupObjectView(d.id);
+            })
+            .style("background", function (d) {
+                return color(d.name);
+            })
+            .text(function (d) {
+                return d.children ? null : d.name;
+            });
 
-		  d3.selectAll("input").on("change", function change() {
-			var value = this.value === "count"
-				? function() { return 1; }
-				: function(d) { return d.size; };
+        d3.selectAll("input").on("change", function change() {
+            var value = this.value === "count" ? function () {
+                return 1;
+            } : function (d) {
+                return d.size;
+            };
 
-			node
-				.data(treemap.value(value).nodes).call(position);
-		/*		  	.transition()
+            node
+                .data(treemap.value(value).nodes).call(position);
+            /*		  	.transition()
 				.duration(1500)
 				.call(position);*/
-		  });
+        });
 
-		function position() {
-		  this.style("left", function(d) { return (d.x) + "%"; })
-			  .style("top", function(d) { return (d.y) + "%"; })
-			  .style("width", function(d) { return d.dx + "%"; })
-			  .style("height", function(d) { return d.dy + "%"; });
-		}
-		return d;
-	}
-
-
-	var g = newDiv().addClass('SimilaritySection');
-
-	var e = newDiv().css('float','left');
-	var eb = $('<button title="Similarity"></button>').appendTo(e);
-	eb.append(newTagButton('Similar').find('img'));
-
-
-	g.append(e);
-
-	var h = newSimilarityList(x);
-
-	g.append(h);
+        function position() {
+            this.style("left", function (d) {
+                return (d.x) + "%";
+            })
+                .style("top", function (d) {
+                    return (d.y) + "%";
+                })
+                .style("width", function (d) {
+                    return d.dx + "%";
+                })
+                .style("height", function (d) {
+                    return d.dy + "%";
+                });
+        }
+        return d;
+    }
 
 
-	var areaMap = null;	
-	eb.click(function() {
-		if ((!areaMap) || (!areaMap.is(':visible'))) {
-			if (!areaMap) {
-				areaMap = newSimilarityAreaMap(s);
-				h.append(areaMap);			
-			}
-			areaMap.show();
-		}
-		else {
-			areaMap.hide();
-		}
-		freetileView();
-	});
+    var g = newDiv().addClass('SimilaritySection');
 
-	return g;
+    var e = newDiv().css('float', 'left');
+    var eb = $('<button title="Similarity"></button>').appendTo(e);
+    eb.append(newTagButton('Similar').find('img'));
+
+
+    g.append(e);
+
+    var h = newSimilarityList(x);
+
+    g.append(h);
+
+
+    var areaMap = null;
+    eb.click(function () {
+        if ((!areaMap) || (!areaMap.is(':visible'))) {
+            if (!areaMap) {
+                areaMap = newSimilarityAreaMap(s);
+                h.append(areaMap);
+            }
+            areaMap.show();
+        } else {
+            areaMap.hide();
+        }
+        freetileView();
+    });
+
+    return g;
 }
 
 /**
@@ -1553,26 +1555,26 @@ function newObjectSummary(x, options) {
     var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
     var showMetadataLine = (options.showMetadataLine != undefined) ? options.showMetadataLine : true;
     var showActionPopupButton = (options.showActionPopupButton != undefined) ? options.showActionPopupButton : true;
-    var showSelectionCheck = (options.showSelectionCheck!=undefined) ? options.showSelectionCheck : true;
+    var showSelectionCheck = (options.showSelectionCheck != undefined) ? options.showSelectionCheck : true;
     var titleClickMode = (options.titleClickMode != undefined) ? options.titleClickMode : 'view';
-    var showTime = (options.showTime!=undefined) ? options.showTime : true;
+    var showTime = (options.showTime != undefined) ? options.showTime : true;
 
     if (!x) {
         return newDiv().html('Object Missing');
     }
 
-	//check for Similarity
-	var ot = objTags(x);
-	if ((ot[0] == 'Similar') && (ot[1] == 'similarTo')) {
-		/*showMetadataLine = false;
+    //check for Similarity
+    var ot = objTags(x);
+    if ((ot[0] == 'Similar') && (ot[1] == 'similarTo')) {
+        /*showMetadataLine = false;
 		showActionPopupButton = false;
 		showSelectionCheck = false;
 		showTime = false;
 		nameClickable = false;*/
-		return newSimilaritySummary(x);
-	}
+        return newSimilaritySummary(x);
+    }
 
-	//check for PDF
+    //check for PDF
     if (objHasTag(x, 'PDF')) {
         var ee = uuid();
         var cd = $('<canvas/>')
@@ -1582,9 +1584,9 @@ function newObjectSummary(x, options) {
         var pdfPath = objFirstValue(x, 'pdfURL');
         if (pdfPage && pdfPath) {
 
-            PDFJS.getDocument(pdfPath).then(function(pdf) {
+            PDFJS.getDocument(pdfPath).then(function (pdf) {
                 // Using promise to fetch the page
-                pdf.getPage(pdfPage).then(function(page) {
+                pdf.getPage(pdfPage).then(function (page) {
                     var scale = 1.0;
                     var viewport = page.getViewport(scale);
 
@@ -1606,8 +1608,7 @@ function newObjectSummary(x, options) {
                     page.render(renderContext);
                 });
             });
-        }
-        else {
+        } else {
             cd.prepend('Unable to find PDF source.');
         }
     }
@@ -1653,8 +1654,7 @@ function newObjectSummary(x, options) {
                     'depthRemaining': depthRemaining - 1
                 }));
             }
-        }
-        else {
+        } else {
             replies.hide();
         }
     }
@@ -1667,11 +1667,11 @@ function newObjectSummary(x, options) {
 
     if (!mini) {
         replyButton = $('<button title="Reply" class="ui-widget-content ui-button">r</button>');
-        replyButton.click(function() {
+        replyButton.click(function () {
 
             newReplyPopup(x);
-            
-                    
+
+
             replyButton.enabled = false;
         });
         hb.append(replyButton);
@@ -1682,12 +1682,12 @@ function newObjectSummary(x, options) {
 
     if (replyButton)
         replyButton.hover(
-                function() {
-                    $(this).addClass('ui-state-hover');
-                },
-                function() {
-                    $(this).removeClass('ui-state-hover');
-                }
+            function () {
+                $(this).addClass('ui-state-hover');
+            },
+            function () {
+                $(this).removeClass('ui-state-hover');
+            }
         );
 
 
@@ -1700,11 +1700,11 @@ function newObjectSummary(x, options) {
 
     d.append(hb);
 
-    (function() {
+    (function () {
         //d.hover(function(){ hb.fadeIn(200);}, function() { hb.fadeOut(200);});
-        d.hover(function() {
+        d.hover(function () {
             hb.show();
-        }, function() {
+        }, function () {
             hb.hide();
         });
     })();
@@ -1724,15 +1724,16 @@ function newObjectSummary(x, options) {
     }
 
     //Selection Checkbox
+    var selectionCheck = null;
     if (showSelectionCheck) {
-        var selectioncheck = $('<input type="checkbox"/>');
+        selectioncheck = $('<input type="checkbox"/>');
         selectioncheck.addClass('ObjectSelection');
         selectioncheck.attr('oid', x.id);
-        selectioncheck.click(function() {
+        selectioncheck.click(function () {
             refreshActionContext();
         });
     }
-    
+
     var haxn = null;
 
     function addPopupMenu() {
@@ -1740,17 +1741,17 @@ function newObjectSummary(x, options) {
         if (ms)
             if (ms.id === x.author) {
                 var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton');
-                editButton.click(function() {
-					var windowParent = editButton.parent().parent().parent();
-					if (windowParent.hasClass('ui-dialog-content')) {
-						windowParent.dialog('close');
-					}
+                editButton.click(function () {
+                    var windowParent = editButton.parent().parent().parent();
+                    if (windowParent.hasClass('ui-dialog-content')) {
+                        windowParent.dialog('close');
+                    }
                     newPopupObjectEdit(x, true);
                 });
             }
 
         var popupmenuButton = $('<button title="Actions...">&gt;</button>').addClass('ObjectViewPopupButton');
-        popupmenuButton.click(function() {
+        popupmenuButton.click(function () {
             function closeMenu() {
                 popupmenuButton.remove();
                 addPopupMenu();
@@ -1762,14 +1763,14 @@ function newObjectSummary(x, options) {
                 return;
             }
 
-            var d = newContextMenu([x], true, function() {
+            var d = newContextMenu([x], true, function () {
                 //callback function when an item is clicked
                 closeMenu();
             });
 
             d.addClass('ActionMenuPopup');
             var closeButton = $('<button>Close</button>');
-            closeButton.click(function() {
+            closeButton.click(function () {
                 closeMenu();
             });
 
@@ -1779,8 +1780,7 @@ function newObjectSummary(x, options) {
 
         if (haxn) {
             haxn.append(editButton, popupmenuButton);
-        }
-        else
+        } else
             d.append(editButton, popupmenuButton);
     }
 
@@ -1789,18 +1789,16 @@ function newObjectSummary(x, options) {
         haxn = $('<h1>');
         if (!nameClickable) {
             haxn.html(xn);
-        }
-        else {
+        } else {
             var xxn = xn.length > 0 ? xn : '?';
             var axn = $('<a href="#">' + xxn + '</a>');
             axn.attr('title', x.id);
-            axn.click(function() {
+            axn.click(function () {
                 if ((x.author === $N.id()) && (titleClickMode === 'edit'))
                     newPopupObjectEdit(x, true);
                 else if (typeof (titleClickMode) === 'function') {
                     titleClickMode(x);
-                }
-                else {
+                } else {
                     newPopupObjectView(x.id, true);
                 }
             });
@@ -1808,9 +1806,9 @@ function newObjectSummary(x, options) {
         }
         haxn.prepend(selectioncheck);
         d.append(haxn);
-    }
-    else {
-        d.append(selectioncheck);
+    } else {
+        if (selectionCheck)
+            d.append(selectioncheck);
     }
 
     if (showActionPopupButton)
@@ -1865,33 +1863,29 @@ function newObjectDetails(x) {
                 if (vv.value) {
                     options.strokes = JSON.parse(vv.value);
                 }
-                later(function() {
+                later(function () {
                     var sketchpad = Raphael.sketchpad(eu, options);
                 });
                 continue;
-            }
-            else if (vv.id == 'timerange') {
+            } else if (vv.id == 'timerange') {
                 /*if (ISODateString) {
                  ud.append(ISODateString(new Date(vv.value.start)) + ' '
                  + ISODateString(new Date(vv.value.start)));
                  }
-                 else*/ {
+                 else*/
+                {
                     //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
-                    ud.append(new Date(vv.value.start).toISOString() + ' '
-                            + new Date(vv.value.start).toISOString());
+                    ud.append(new Date(vv.value.start).toISOString() + ' ' + new Date(vv.value.start).toISOString());
                 }
-            }
-            else if (vv.id == 'media') {
+            } else if (vv.id == 'media') {
                 if (typeof vv.value == 'string') {
                     var url = vv.value;
                     ud.append('<img src="' + url + '"/>');
-                }
-                else {
+                } else {
                     var V = vv.value;
                     if (V.type == 'html') {
                         ud.append(V.content);
-                    }
-                    else if (V.type == 'markdown') {
+                    } else if (V.type == 'markdown') {
                         ud.append(newDiv().addClass('markdown').html(markdown.toHTML(V.content)));
                     }
                 }
@@ -1899,12 +1893,12 @@ function newObjectDetails(x) {
 
             if ($N.isProperty(vv.id)) {
                 var strength = vv.strength || 1.0;
-                
-                var pv = newPropertyView(x, vv);                
+
+                var pv = newPropertyView(x, vv);
                 if (pv) {
                     if (typeof pv == "string")
                         pv = $(pv);
-                    pv.css('opacity', 0.5 + (strength/2.0));
+                    pv.css('opacity', 0.5 + (strength / 2.0));
                     ud.append(pv);
                 }
             }
@@ -1915,13 +1909,12 @@ function newObjectDetails(x) {
 
 
 function withObject(uri, success, failure) {
-    $.getJSON('/object/' + uri + '/json', function(s) {
+    $.getJSON('/object/' + uri + '/json', function (s) {
 
         if (s.length == 0) {
             if (failure)
                 failure();
-        }
-        else {
+        } else {
             if (success) {
                 success(s);
             }
@@ -1945,8 +1938,7 @@ function newTagTree(param) {
     var stc;
     if (isGeographic) {
         stc = $N.getTagCount(false, objGeographic);
-    }
-    else {
+    } else {
         stc = $N.getTagCount();
     }
 
@@ -1973,8 +1965,7 @@ function newTagTree(param) {
         if (i.name) {
             name = i.name;
             xi = i.uri;
-        }
-        else
+        } else
             name = xi = i;
 
         var children = $N.getSubTags(xi);
@@ -1983,8 +1974,7 @@ function newTagTree(param) {
         if (stc[xi]) {
             if (stc[xi] > 0)
                 label += ' (' + _n(stc[xi]) + ')';
-        }
-        else {
+        } else {
             /*if (children.length==0)
              return;*/
         }
@@ -1993,7 +1983,7 @@ function newTagTree(param) {
 
         if (children.length > 0) {
             b.children = [];
-            _.each(children, function(c) {
+            _.each(children, function (c) {
                 subtree(b.children, $N.tag(c));
             });
         }
@@ -2017,14 +2007,14 @@ function newTagTree(param) {
         if (others.length == 0)
             return;
 
-        _.each(others, function(c) {
+        _.each(others, function (c) {
             subtree(otherFolder.children, c);
         });
         root.push(otherFolder);
     }
 
     var roots = $N.tagRoots();
-    _.each(roots, function(t) {
+    _.each(roots, function (t) {
         subtree(T, $N.tag(t));
     });
     othersubtree(T);
@@ -2034,7 +2024,7 @@ function newTagTree(param) {
 
     tree.appendTo(a);
 
-    later(function() {
+    later(function () {
         a.hide();
         a.tree({
             data: T,
@@ -2067,12 +2057,7 @@ function ISODateString(d) {
     function pad(n) {
         return n < 10 ? '0' + n : n
     }
-    return d.getUTCFullYear() + '-'
-            + pad(d.getUTCMonth() + 1) + '-'
-            + pad(d.getUTCDate()) + 'T'
-            + pad(d.getUTCHours()) + ':'
-            + pad(d.getUTCMinutes()) + ':'
-            + pad(d.getUTCSeconds()) + 'Z'
+    return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z'
 }
 
 function newMetadataLine(x, showTime) {
@@ -2092,8 +2077,7 @@ function newMetadataLine(x, showTime) {
             var ttt = newTagButton(tt);
             applyTagStrengthClass(ttt, ots[t]);
             mdline.append(ttt);
-        }
-        else {
+        } else {
             mdline.append('<a href="#">' + t + '</a>');
         }
         mdline.append('&nbsp;');
@@ -2115,13 +2099,12 @@ function newMetadataLine(x, showTime) {
                 mdline.append('&nbsp;<span>(here)</span>');
             else
                 mdline.append('&nbsp;<span>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</span>');
-        }
-        else {
+        } else {
             mdline.append('&nbsp;', '<span>[' + lat + ',' + lon + ']</span>');
         }
     }
 
-    if (showTime!=false) {
+    if (showTime != false) {
         var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
         var now = Date.now();
         if (ww) {
@@ -2130,8 +2113,7 @@ function newMetadataLine(x, showTime) {
 
                 tt.attr('datetime', ISODateString(new Date(ww)));
                 mdline.append('&nbsp;', tt);
-            }
-            else {
+            } else {
                 mdline.append('&nbsp;<span>' + new Date(ww) + '</span>');
             }
 

@@ -169,7 +169,7 @@ exports.start = function(options, init) {
             else
                 objs.forEach(function(x) {
                     var now = Date.now();
-                    nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds downtime');
+                    //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds downtime'); //TODO fix this, reporting incorrect?
                     $N.server.interestTime = x.interestTime;
                     $N.server.clientState = x.clientState;
                     $N.server.users = x.users || {};
@@ -743,7 +743,7 @@ exports.start = function(options, init) {
                 , 'xhr-polling'
                 , 'jsonp-polling'
     ]);
-    io.set("polling duration", 5);
+    //io.set("polling duration", 5);
 
     /*var sessionStore = require('express-session').MemoryStore();
      var SessionSockets = require('session.socket.io')
