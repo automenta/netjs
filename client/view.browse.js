@@ -8,7 +8,7 @@ function newTagCloud(target, onChanged) {
     function updateTagCloud() {
         var tagcount = $N.getTagCount();
 
-        tagcloud.html('');
+        tagcloud.empty();
 
         for (var k in tagcount) {
             var ti = tagcount[k];
@@ -359,7 +359,7 @@ function newListView(v) {
     //submenu.append(actionMenu);
 
     function update() {
-        v.html('');
+        v.empty();
 
         listRenderer(v, slideControls);
 

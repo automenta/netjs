@@ -137,7 +137,7 @@ function newUsView(v) {
         var goalList = newDiv('goalviewList').addClass('goalviewColumn');
         //var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');
 
-        currentGoalHeader.html('');
+        currentGoalHeader.empty();
 
         function updateNowDiv() {
             sidebar.empty();
@@ -369,7 +369,7 @@ function newUsView(v) {
 
 
         function updateGoalList() {
-            goalList.html('');
+            goalList.empty();
 
             newGoalList(goalList, currentUser, centroids);
         }
@@ -773,7 +773,7 @@ function newSelfSummary(s, user, content) {
     c.append(np);
 
     var bio = $('<div id="Bio"/>');
-    bio.html('');
+    bio.empty();
 
     //http://en.wikipedia.org/wiki/HResume
 
@@ -984,7 +984,7 @@ function newWikiView(v) {
      
      function summaryUser(x) {
      currentUser = x;
-     content.html('');
+     content.empty();
      content.append(newSelfSummary(s, x, content));
      content.append(contentTags);       
      content.append(contentTime);       

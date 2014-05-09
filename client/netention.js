@@ -81,14 +81,14 @@ function netention(f) {
                 if (!t.tag)
                     return true;
                 else
-                    return (t.tag.length == 0);
+                    return (t.tag.length === 0);
             });
         },
         getSubTags: function (s) {
             return subtags(this.tags, s);
         },
         isProperty: function (p) {
-            return this.properties[p] != undefined;
+            return this.properties[p] !== undefined;
         },
         objects: function () {
             return this.attention;
@@ -328,9 +328,9 @@ function netention(f) {
         loadOntology: function (url, f) {
             var that = this;
 
-            $.getJSON(url, function (schema) {
-                that.addProperties(schema['properties']);
-                that.addTags(schema['tags']);
+            $.getJSON(url, function (o) {
+                that.addProperties(o.properties);
+                that.addTags(o.tags);
                 f();
             });
 
@@ -441,13 +441,13 @@ function netention(f) {
         },
         deleteObject: function (x, localOnly) {
             var id;
-            if (typeof x == "string")
+            if (typeof x === "string")
                 id = x;
             else
                 id = x.id;
             var that = this;
 
-            if (x.author == undefined)
+            if (x.author === undefined)
                 localOnly = true;
 
             if (configuration.connection != 'local') {
@@ -546,11 +546,12 @@ function netention(f) {
 
         getObjects: function (query, onObject, onFinished) {
             var that = this;
+            //TODO possible security hole, make sure query isnt destructive
             this.socket.emit('getObjects', query, function (objs) {
                 for (var k in objs) {
                     var x = objs[k];
                     that.notice(x);
-                    if (onObject != null)
+                    if (onObject !== null)
                         onObject(x);
                 }
                 onFinished();
@@ -591,9 +592,9 @@ function netention(f) {
             if (!f.author)
                 f.author = this.id();
 
-            if (f.when == null)
+            if (f.when === null)
                 delete f.when;
-            if (f.where == null)
+            if (f.where === null)
                 delete f.where;
             /*if (f.tags)
              if (f.tags.length == 0)
@@ -944,19 +945,21 @@ function newPopup(title, p, isModal) {
         d.parent().css('padding', 2);
         d.parent().css('border', 0);
 
-        var backbuttonhandler = function(e) {
+        var backbuttonhandler = function (e) {
             if (e)
                 if (e.originalEvent)
                     if (e.originalEvent.state)
                         if (e.originalEvent.state.dialog) {
                             $(window).off('popstate', arguments.callee);
-                            later(function() {
+                            later(function () {
                                 d.dialog('close');
                             });
                             return false;
                         }
         };
-        window.history.pushState({dialog:1});
+        window.history.pushState({
+            dialog: 1
+        });
         $(window).on('popstate', backbuttonhandler);
     }
 
@@ -972,9 +975,9 @@ function getCookie(name) {
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ')
+        while (c.charAt(0) === ' ')
             c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0)
+        if (c.indexOf(nameEQ) === 0)
             return c.substring(nameEQ.length, c.length);
     }
     return null;

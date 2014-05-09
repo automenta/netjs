@@ -30,7 +30,7 @@ function newChatView(v) {
     }, 150);
 
     function updateContent() {
-        content.html('');
+        content.empty();
 
         var sort = 'Recent';
         var scope = 'Public';

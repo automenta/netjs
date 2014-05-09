@@ -181,7 +181,7 @@ function newWikiView(v) {
      
      function summaryUser(x) {
      currentUser = x;
-     content.html('');
+     content.empty();
      content.append(newSelfSummary(s, x, content));
      content.append(contentTags);       
      content.append(contentTime);       

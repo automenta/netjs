@@ -21,7 +21,7 @@ function newProfileWidget() {
          selector.attr('disabled', 'disabled');
          okButton.attr('disabled', 'disabled');
          deleteButton.attr('disabled', 'disabled');*/
-        d.html('');
+        d.empty();
     }
 
     var otherSelves = self.get('otherSelves');
@@ -50,7 +50,7 @@ function newProfileWidget() {
     }
 
     if (c === 0) {
-        d.html('').append(newNewProfileWidget(function(user) {
+        d.empty().append(newNewProfileWidget(function(user) {
             become(user);
             closeDialog();
         }));

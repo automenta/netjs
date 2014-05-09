@@ -16,7 +16,7 @@ function getKeywords(s) {
 function updateTagSuggestions(t, mt, onAdd, getEditedFocus, ontocache) {
     var matched = $N.searchOntology(t, ontocache);
 
-    mt.html('');
+    mt.empty();
 
     _.each(matched, function(mm) {
         (function() {
@@ -56,7 +56,7 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
 
     var keywords = _.filter(t, isValidKeyword);
 
-    mt.html('');
+    mt.empty();
 
     var matched = {};
     _.each(keywords, function(keyword) {

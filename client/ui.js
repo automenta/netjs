@@ -160,7 +160,7 @@ var refreshActionContext = _.throttle(function() {
             return;
         }
 
-        $('#ActionMenuWrapper').html('');
+        $('#ActionMenuWrapper').empty();
 
         if (s.length == 0)
             return;

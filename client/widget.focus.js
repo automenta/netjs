@@ -218,7 +218,7 @@ function newLayersWidget() {
 //            return false;
 //        } else {
 //            var embedLocation = (this).href;
-//            $('#View').html('');
+//            $('#View').empty();
 //            $('#View').html('<iframe src="' + embedLocation + '" frameBorder="0" id="embed-frame"></iframe>');
 //            $("#View").removeClass("ui-widget-content");
 //            var vm = $('#ViewMenu');
@@ -281,7 +281,7 @@ function newLayersWidget() {
         } else {
 
             var embedLocation = (this).href;
-            $('#View').html('');
+            $('#View').empty();
             $('#View').html('<iframe src="' + embedLocation + '" frameBorder="0" id="embed-frame"></iframe>');
             $("#View").removeClass("ui-widget-content");
             $('#View').addClass('view-indented');

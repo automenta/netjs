@@ -23,7 +23,7 @@ exports.ObjScope = ObjScope;
 function _n(x, places) {
     if (!places)
         places = 2;
-    if (x == undefined)
+    if (x === undefined)
         return '0';
     if (!x.toFixed)
         return x;
@@ -93,7 +93,7 @@ function objectify(x) {
             return objTags(x);
         },
         earthPoint: function (lat, lon) {
-            if (lat == undefined) {
+            if (lat === undefined) {
                 return objSpacePointLatLng(x);
             }
             return this.add('spacepoint', {
@@ -156,7 +156,7 @@ function objAddTag(x, t, strength) {
     var v = {
         id: t
     };
-    if (strength != undefined)
+    if (strength !== undefined)
         v.strength = strength;
     return objAddValue(x, v, undefined);
 }
@@ -189,18 +189,18 @@ exports.objRemoveTag = objRemoveTag;
  */
 function objAddValue(x, a, b, strength) {
     var v;
-    if (b == undefined)
+    if (b === undefined)
         v = a;
     else {
         v = {
             id: a,
             value: b
         };
-        if (strength != undefined)
+        if (strength !== undefined)
             v.strength = strength;
     }
 
-    if (x.value == undefined)
+    if (x.value === undefined)
         x.value = [];
 
     x.value.push(v);
@@ -229,7 +229,7 @@ function objName(x, newName) {
     /*  if newName is undefined, gets the name
      otherwise, sets the name to newName */
 
-    if (newName == undefined) {
+    if (newName === undefined) {
         return x.name || '';
     } else {
         x.name = newName;
@@ -327,16 +327,14 @@ function objTags(x, includePrimitives) {
 
     //HACK to handlle when values are null, which they shouldnt bve
     var newValues = [];
-    for (var i = 0; i < x.value.length; i++) {
-        var vv = x.value[i];
-        if (vv)
+    x.value.forEach(function(vv) {
+        //if (vv)
             if (vv.id) {
-                if (vv.strength == 0)
-                    continue;
+                if (vv.strength === 0) return;
 
                 newValues.push(vv);
             }
-    }
+    });
 
     if (includePrimitives) {
         return _.pluck(newValues, 'id');
@@ -352,7 +350,7 @@ function objProperties(x) {
     if (!x.value)
         return [];
     return _.uniq(_.pluck(x.value, 'id').filter(function (t) {
-        return (window.self.getProperty(t) != null);
+        return (window.self.getProperty(t) !== null);
     }));
 }
 exports.objProperties = objProperties;
@@ -364,26 +362,23 @@ function objTagStrength(x, normalize, noProperties) {
     if (!x.value)
         return t;
 
-    if (normalize == undefined)
+    if (normalize === undefined)
         normalize = true;
 
-    for (var i = 0; i < x.value.length; i++) {
-        var vv = x.value[i];
-        if (!vv)
-            continue;
+    x.value.forEach(function(vv) {
         var ii = vv.id;
         if (isPrimitive(ii))
-            continue;
+            return;
         if (noProperties) {
-            if (window.self.getProperty(ii) != null)
-                continue;
+            if (window.self.getProperty(ii) !== null)
+                return;
         }
         var s = vv.strength || 1.0;
         if (!t[ii])
             t[ii] = s;
         else
             t[ii] = Math.max(s, t[ii]);
-    }
+    });
 
     if (normalize) {
         var total = 0.0;
@@ -413,18 +408,16 @@ function objTagRelevance(x, y, noProperties) {
 
     var den = parseFloat(Math.max(xxk.length, yyk.length));
 
-    if ((xxk.length == 0) && (yyk.length == 0))
+    if ((xxk.length === 0) && (yyk.length === 0))
         return 0;
 
     var r = 0;
 
-    for (var i = 0; i < xxk.length; i++) {
-        var c = xxk[i];
-        var contained = _.contains(yyk, c);
-        if (contained) {
+    xxk.forEach(function(c) {
+        if (_.contains(yyk, c)) {
             r += xx[c] * yy[c];
         }
-    }
+    });
 
     var result = r / den;
 
@@ -457,7 +450,7 @@ exports.objTagRelevance = objTagRelevance;
 
 function objSpacePoint(x) {
     var s = objFirstValue(x, 'spacepoint', null);
-    if (s != null)
+    if (s !== null)
         return s;
 
     //TODO iterate through all values for a primitive with type spacepoint?
@@ -468,7 +461,7 @@ exports.objSpacePoint = objSpacePoint;
 function objGeographic(x) {
     //TODO check for planet
     var sp = objSpacePoint(x);
-    return sp != null;
+    return sp !== null;
 }
 exports.objGeographic = objGeographic;
 
@@ -512,7 +505,7 @@ function objHasTag(x, t) {
         if (!vid)
             continue;
 
-        if (vv.strength == 0)
+        if (vv.strength === 0)
             continue;
         if (isPrimitive(vid))
             continue;
@@ -561,14 +554,14 @@ exports.objFirstValue = objFirstValue;
 
 function objSetFirstValue(object, id, newValue) {
     var existingValue = objFirstValue(object, id, null);
-    if (existingValue == null) {
+    if (existingValue === null) {
         objAddValue(object, id, newValue);
     } else {
         if (object.value) {
-            for (var k = 0; k < object.value.length; k++) {
-                if (object.value[k].id == id)
-                    object.value[k].value = newValue;
-            }
+            object.value.forEach(function(vk) {
+                if (vk.id === id)
+                    vk.value = newValue;
+            });
         }
     }
 }
@@ -578,11 +571,10 @@ exports.objSetFirstValue = objSetFirstValue;
 function objValues(object, id) {
     var v = [];
     if (object.value) {
-        for (var k = 0; k < object.value.length; k++) {
-            if (object.value[k])
-                if (object.value[k].id == id)
-                    v.push(object.value[k].value);
-        }
+        object.value.forEach(function(vk) {
+            if (vk.id === id)
+                v.push(vk.value);
+        });
     }
     return v;
 }
@@ -609,7 +601,7 @@ function uuid() {
     var randomstring = '';
     for (var i = 0; i < string_length; i++) {
         var rnum = Math.floor(Math.random() * chars.length);
-        randomstring += chars.substring(rnum, rnum + 1);
+        randomstring += chars[rnum];
     }
     return randomstring;
 }
@@ -631,9 +623,7 @@ exports.uuid = uuid;
  exports.setTheProperty = setTheProperty;*/
 
 function isSelfObject(u) {
-    if (!u)
-        return false;
-    return (u.self == true);
+    return (u.self === true);
 }
 exports.isSelfObject = isSelfObject;
 
@@ -649,7 +639,7 @@ exports.isSelfObject = isSelfObject;
  */
 
 function objTime(x) {
-    return x.when || x.modifiedAt || x.createdAt || null
+    return x.when || x.modifiedAt || x.createdAt || null;
 }
 exports.objTime = objTime;
 
@@ -905,7 +895,7 @@ function objMode(x) {
             var vi = v.id;
             var t = propGetType(vi);
 
-            if (t == null) {} else if ((t == 'integer') || (t == 'real')) {
+            if (t === null) {} else if ((t == 'integer') || (t == 'real')) {
                 if (isNumberValueIndefinite(v.value))
                     return _IND;
             } else {
@@ -964,7 +954,7 @@ function objCompare(a, b) {
              var mm = indefValue.split('..');
              return (dn >= mm[0]) && (dn <= mm[1]) ? 1.0 : 0.0;
              }*/
-            else if ((indefValue == '') || (isNaN(indefValue)))
+            else if ((indefValue === '') || (isNaN(indefValue)))
                 return 1.0;
             else
                 return dn == parseFloat(indefValue) ? 1.0 : 0.0;

@@ -221,7 +221,7 @@ function newObjectSelector(T) {
         var d = newDiv().appendTo(e);
         
         function _update() {
-            d.html('');
+            d.empty();
             
             var tl = T ? $N.objectsWithTag(T.uri, false) : _.keys($N.objects());
             if (keywordFilter) {

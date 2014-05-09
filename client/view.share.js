@@ -147,7 +147,7 @@ function newShareView(v) {
     var content = newDiv().addClass('ShareContent').appendTo(frame);
 
     function updateContent() {
-        selfmenu.html('');
+        selfmenu.empty();
 
         var me = $N.myself();
         if (me) {
@@ -172,7 +172,7 @@ function newShareView(v) {
             });
         }
 
-        content.html('');
+        content.empty();
         renderItems(content, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
             var elements = [];
 

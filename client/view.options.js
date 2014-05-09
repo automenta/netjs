@@ -48,7 +48,7 @@ function renderOptions(s, o, v) {
             function updatePlugins(p) {                
                 self.getPlugins(function(pl) {
 
-                    p.html('');
+                    p.empty();
                     for (var kk in pl) {
                         (function() {
                             var k = kk;

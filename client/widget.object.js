@@ -53,9 +53,9 @@ function newPopupObjectView(_x, p) {
 }
 
 function newPopupObjectViews(objectIDs) {
-    if (objectIDs.length == 0)
+    if (objectIDs.length === 0)
         return;
-    if (objectIDs.length == 1)
+    if (objectIDs.length === 1)
         return newPopupObjectView(objectIDs[0]);
 
     var objects = objectIDs.map(function (i) {
@@ -114,7 +114,7 @@ function newTagButton(t, onClicked, isButton) {
     }
 
     var i = null;
-    if (ti != null) {
+    if (ti !== null) {
         i = $(document.createElement('img')).attr({
             'src': ti,
             'class': 'TagButtonIcon'
@@ -155,7 +155,7 @@ function newReplyWidget(onReply, onCancel) {
     var c = $('<button>Cancel</button>');
     c.click(function () {
         var ok;
-        if (ta.val() != "") {
+        if (ta.val().length > 0) {
             ok = confirm('Cancel this reply?');
         } else {
             ok = true;
@@ -168,7 +168,7 @@ function newReplyWidget(onReply, onCancel) {
 
     var b = $('<button>Reply</button>');
     b.click(function () {
-        if (ta.val() != "") {
+        if (ta.val().length > 0) {
             onReply(ta.val());
         }
     });
@@ -176,6 +176,20 @@ function newReplyWidget(onReply, onCancel) {
 
     return w;
 }
+
+function pidToProperty (pid) {
+    return $N.getProperty(pid);
+}
+
+function getTagProperties(t) {
+    var TT = $N.tags[t];
+    if (!TT)
+        return [];
+    if (!TT.properties)
+        return [];
+    return TT.properties;
+}
+
 
 /**
  *  focus - a function that returns the current focus
@@ -252,7 +266,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
 
         if (editable) {
-            if (hideWidgets != true) {
+            if (hideWidgets !== true) {
                 nameInput = $('<input/>').attr('type', 'text').attr('x-webkit-speech', 'x-webkit-speech').addClass('nameInput').addClass('nameInputWide');
                 nameInput.val(objName(x));
                 d.append(nameInput);
@@ -303,9 +317,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var missingProp = [];
             //Add missing required properties, min: >=1 (with their default values) of known objects:
 
-            var pidToProperty = function (pid) {
-                return $N.getProperty(pid);
-            }
+
 
             for (var i = 0; i < tags.length; i++) {
                 var t = tags[i];
@@ -364,7 +376,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             ts.empty();
         } else {
             if (!x.readonly) {
-                if (hideWidgets != true) {
+                if (hideWidgets !== true) {
                     if (editable)
                         ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
                 }
@@ -433,7 +445,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         d.addClass('ObjectEditDiv');
 
-        if ((hideWidgets != true) && (!x.readonly)) {
+        if ((hideWidgets !== true) && (!x.readonly)) {
             var addButtonWrap = newDiv().addClass('tagSection').css('text-align', 'right');
 
             var addButtons = newEle('span').appendTo(addButtonWrap);
@@ -649,7 +661,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
      d.removeClass('tagSectionHovered');
      } );*/
 
-    if (strength == undefined)
+    if (strength === undefined)
         strength = 1.0;
 
     var tagLabel = $('<span>' + tag + '</span>').addClass('tagLabel');
@@ -707,15 +719,15 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             tagButtons.append(disableButton, p25Button, p50Button, p75Button, p100Button);
 
             var currentButton = null;
-            if (strength == 0)
+            if (strength === 0)
                 currentButton = disableButton;
-            if (strength == 1.0)
+            if (strength === 1.0)
                 currentButton = p100Button;
-            if (strength == 0.75)
+            if (strength === 0.75)
                 currentButton = p75Button;
-            if (strength == 0.5)
+            if (strength === 0.5)
                 currentButton = p50Button;
-            if (strength == 0.25)
+            if (strength === 0.25)
                 currentButton = p25Button;
             if (currentButton)
                 currentButton.addClass('tagButtonSelected');
@@ -800,7 +812,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         d.addClass('propertySection');
     }
 
-    if (type == 'textarea') {
+    if (type === 'textarea') {
 
         if (editable) {
             var dd = $('<textarea/>').addClass('tagDescription');
@@ -828,9 +840,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 dd.html(t.value);
             d.append(dd);
         }
-    } else if (type == 'cortexit') {
+    } else if (type === 'cortexit') {
         //...
-    } else if ((type == 'text') || (type == 'url') || (type == 'integer') || (type == 'real')) {
+    } else if ((type === 'text') || (type === 'url') || (type === 'integer') || (type === 'real')) {
 
         if (editable) {
             var dd = $('<input type="text" placeholder="' + type + '"/>').appendTo(d);
@@ -858,7 +870,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     //only the number was present
                     dd.val(t.value);
                 }
-            } else if (defaultValue != null) {
+            } else if (defaultValue !== null) {
                 dd.val(defaultValue);
             }
 
@@ -888,11 +900,11 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             d.append(dd);
         }
 
-    } else if (type == 'boolean') {
+    } else if (type === 'boolean') {
         var ii = $('<input type="checkbox">');
 
         var value = t.value;
-        if (value == undefined) {
+        if (value === undefined) {
             if (defaultValue)
                 value = defaultValue;
             else
@@ -908,7 +920,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         } else {
             ii.attr("disabled", "disabled");
         }
-    } else if (type == 'spacepoint') {
+    } else if (type === 'spacepoint') {
         var ee = newDiv();
         var dd = newDiv();
 
@@ -1224,14 +1236,6 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 /*var pb = $('<button>...</button>');
                  tagLabel.append(pb);*/
 
-                function getTagProperties(t) {
-                    var TT = $N.tags[t];
-                    if (!TT)
-                        return [];
-                    if (!TT.properties)
-                        return [];
-                    return TT.properties;
-                }
 
                 var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
                 var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
@@ -1691,6 +1695,7 @@ function newObjectSummary(x, options) {
         );
 
 
+
     /*
      var cloneButton = $('<button title="Clone" class="ui-widget-content ui-button" style="padding-right:8px;">c</button>');
      var varyButton = $('<button title="Vary" class="ui-widget-content ui-button" style="padding-right:8px;">v</button>');
@@ -2004,7 +2009,7 @@ function newTagTree(param) {
                 others.push(c);
         }
 
-        if (others.length == 0)
+        if (others.length === 0)
             return;
 
         _.each(others, function (c) {
@@ -2055,9 +2060,9 @@ function newTagTree(param) {
 
 function ISODateString(d) {
     function pad(n) {
-        return n < 10 ? '0' + n : n
+        return n < 10 ? '0' + n : n;
     }
-    return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z'
+    return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z';
 }
 
 function newMetadataLine(x, showTime) {
@@ -2104,15 +2109,15 @@ function newMetadataLine(x, showTime) {
         }
     }
 
-    if (showTime != false) {
+    if (showTime !== false) {
         var ww = objWhen(x) || x.modifiedAt || x.createdAt || null;
         var now = Date.now();
         if (ww) {
             if (ww < now) {
-                var tt = $('<time class="timeago"/>');
-
-                tt.attr('datetime', ISODateString(new Date(ww)));
-                mdline.append('&nbsp;', tt);
+                mdline.append('&nbsp;',
+                    $('<time class="timeago"/>').
+                        attr('datetime', ISODateString(new Date(ww)))
+                );
             } else {
                 mdline.append('&nbsp;<span>' + new Date(ww) + '</span>');
             }
