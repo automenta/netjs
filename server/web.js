@@ -58,7 +58,7 @@ exports.start = function(options, init) {
         //"mydb"; // "username:password@example.com/mydb"
         return $N.server.databaseURL || process.env.MongoURL;
     }
-    var collections = ["obj"];
+    var collections = ["obj", "sys"];
 
     function startPlugin(kv, options) {
         var v = kv;
@@ -160,24 +160,15 @@ exports.start = function(options, init) {
 
 
     function saveState(onSaved, onError) {
-        var t = Date.now();
-
-        /*
-         logMemoryBuffer = logMemory.buffer;
-         logMemoryPointer = logMemory.pointer;*/
-
-        delete $N.server._id;
-        $N.server.tag = ['ServerState'];
-        $N.server.when = t;
-        
-        var ss = _.clone($N.server);
-        delete ss.plugins;
-        delete ss.client;
-        delete ss.permissions;
-
+        var state = {
+            id: 'state',
+            interestTime: $N.server.interestTime,
+            clientState: $N.server.clientState,
+            users: $N.server.users,
+            modifiedAt: Date.now()
+        };
         var db = mongo.connect(getDatabaseURL(), collections);
-
-        db.obj.save($N.server, function(err, saved) {
+        db.sys.update({id: "state"}, state, {upsert: true}, function(err, saved) {
             db.close();
 
             if (err || !saved) {
@@ -192,54 +183,47 @@ exports.start = function(options, init) {
             }
 
         });
-
     }
+    $N.saveState = saveState;
+
     
     function loadState(f) {
         var db = mongo.connect(getDatabaseURL(), collections);
 
-        /*db.obj.ensureIndex({_tag: 1}, function(err, res) {
-            if (err) {
-                console.error('ENSURE INDEX _tag', err); 
-                db.close();
-            }*/
-        
-            db.obj.find({tag: {$in: ['ServerState']}}).limit(1).sort({when: -1}, function(err, objs) {
-                db.close();
-                
-                if (err || !objs || (objs.length===0))
-                    nlog("No previous system state found");
-                else {
-                    var now = Date.now();
-                    objs.forEach(function(x) {
-                        //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds downtime'); //TODO fix this, reporting incorrect?
-                        $N.server.interestTime = x.interestTime;
-                        $N.server.clientState = x.clientState;
-                        $N.server.users = x.users || {};
-                        //$N.server.currentClientID = x.currentClientID || {};
-                        //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
+        db.sys.find({id: "state"}, function(err, state) {
+            db.close();
 
-                        /*if (x.plugins) {
-                         for (var pl in x.plugins) {
-                         if (!$N.server.plugins[pl])
-                         $N.server.plugins[pl] = {};
-                         if (x.plugins[pl].enabled)
-                         $N.server.plugins[pl].enabled = x.plugins[pl].enabled;
-                         }
-                         }*/
+            if (err || !state || (state.length===0)) {
+                nlog("No previous system state found");
+            }
+            else {
+                var now = Date.now();
+                var x = state[0];
+                //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds since last system update'); 
+                $N.server.interestTime = x.interestTime;
+                $N.server.clientState = x.clientState;
+                $N.server.users = x.users || {};
+                //$N.server.currentClientID = x.currentClientID || {};
+                //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
 
-                        /* logMemory = util.createRingBuffer(256);
-                         logMemory.buffer = x.logMemoryBuffer;
-                         logMemory.pointer = x.logMemoryPointer;*/
+                /*if (x.plugins) {
+                 for (var pl in x.plugins) {
+                 if (!$N.server.plugins[pl])
+                 $N.server.plugins[pl] = {};
+                 if (x.plugins[pl].enabled)
+                 $N.server.plugins[pl].enabled = x.plugins[pl].enabled;
+                 }
+                 }*/
 
-                    });
-                }
+                /* logMemory = util.createRingBuffer(256);
+                 logMemory.buffer = x.logMemoryBuffer;
+                 logMemory.pointer = x.logMemoryPointer;*/
+            }
 
-                if (f)
-                    f();
+            if (f)
+                f();
 
-            });
-        //});
+        });
 
     }
 
@@ -1389,7 +1373,7 @@ exports.start = function(options, init) {
             }
 
             //TODO scope >= PUBLIC
-            db.obj.find({tag: {$not: {$in: ['ServerState']}}}).limit(n).sort({modifiedAt: -1}, function(err, objs) {
+            db.obj.find().limit(n).sort({modifiedAt: -1}, function(err, objs) {
                 db.close();
                 withObjects(objs);
             });
@@ -1693,7 +1677,7 @@ exports.start = function(options, init) {
     });
 
     express.get('/state', function(req, res) {
-        sendJSON(res, _.omit($N.server, ['users', 'currentClientID']));
+        sendJSON(res, _.omit($N.server, ['plugins', 'users', 'currentClientID']));
     });
     express.get('/attention', function(req, res) {
         getTagCounts(function(x) {
@@ -1713,14 +1697,13 @@ exports.start = function(options, init) {
         sendJSON(res, result, false);
     });
     express.get('/save', function(req, res) {
-        sendJSON(res, 'Saving');
         saveState(
-                function() {
-                    nlog('State Saved');
-                },
-                function(err) {
-                    nlog('State Save unccessful: ' + err)
-                }
+            function() {
+                sendJSON(res, 'Saved');
+            },
+            function(err) {
+                sendJSON(res, 'Not saved');
+            }
         );
     });
     express.get('/team/interestTime', function(req, res) {
@@ -2282,7 +2265,6 @@ exports.start = function(options, init) {
     /*$N.plugin = function(pluginfile, forceEnable) {
      plugin(pluginfile, forceEnable);
      };*/
-    $N.saveState = saveState;
 
     function loadPlugins() {
 
