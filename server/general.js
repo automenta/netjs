@@ -43,6 +43,7 @@ var generalTags = [
     },
     //Being superclass of Human..
     //TODO "Contact Schema": http://portablecontacts.net/draft-spec.html#schema   
+    
     {uri: 'Human', name: 'Human',
         properties: {
             'currentRole': {name: 'Current Role', type: 'text'},

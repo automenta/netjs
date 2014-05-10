@@ -1333,7 +1333,6 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
 	border: 1px solid gray;
 }
 
-
 .cesiumContainer {
       position: absolute;
       top: 0;
@@ -1346,6 +1345,14 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
       font-family: sans-serif;
 }
 
+
+.ReconnectDialog {
+    text-align: center;
+}
+.ReconnectDialog button {
+    width: 75%;
+    margin-top: 3em;
+}
 
 
 

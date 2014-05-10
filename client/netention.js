@@ -284,13 +284,18 @@ function netention(f) {
                     'try multiple transports': true
                 });
                 
+                
                 socket.on('connect', function () {
                     socket.on('disconnect', function () {
-                        $.pnotify({
+                        /*$.pnotify({
                             title: 'Disconnected.'
+                        });*/
+                        
+                        var p = newPopup("Disconnected", true, true).addClass('ReconnectDialog');
+                        var disconnectButton = $('<button><h1>&duarr;<br/>Reconnect</h1></button>').appendTo(p).click(function() {
+                            location.reload();
                         });
-                        var p = newPopup("Disconnected", true, true);
-                        p.append('<h1>Reconnect?</h1>');
+                        console.log('disconnected');
                     });
                     
                     /*socket.on('reconnecting', function() {
