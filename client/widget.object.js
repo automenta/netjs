@@ -1734,7 +1734,7 @@ function newObjectSummary(x, options) {
             haxn.prepend(selectioncheck);
         d.append(haxn);
     } else {
-        if (selectionCheck)
+        if (selectioncheck)
             d.append(selectioncheck);
     }
 

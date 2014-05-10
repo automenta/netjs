@@ -158,6 +158,43 @@ exports.start = function(options, init) {
     $N.plugins = plugins;
 
 
+
+    function saveState(onSaved, onError) {
+        var t = Date.now();
+
+        /*
+         logMemoryBuffer = logMemory.buffer;
+         logMemoryPointer = logMemory.pointer;*/
+
+        delete $N.server._id;
+        $N.server.tag = ['ServerState'];
+        $N.server.when = t;
+        
+        var ss = _.clone($N.server);
+        delete ss.plugins;
+        delete ss.client;
+        delete ss.permissions;
+
+        var db = mongo.connect(getDatabaseURL(), collections);
+
+        db.obj.save($N.server, function(err, saved) {
+            db.close();
+
+            if (err || !saved) {
+                if (onError) {
+                    nlog('saveState: ' + err);
+                    onError(err);
+                }
+            }
+            else {
+                if (onSaved)
+                    onSaved();
+            }
+
+        });
+
+    }
+    
     function loadState(f) {
         var db = mongo.connect(getDatabaseURL(), collections);
 
@@ -170,11 +207,11 @@ exports.start = function(options, init) {
             db.obj.find({tag: {$in: ['ServerState']}}).limit(1).sort({when: -1}, function(err, objs) {
                 db.close();
                 
-                if (err || !objs)
-                    nlog("No state found");
-                else
+                if (err || !objs || (objs.length===0))
+                    nlog("No previous system state found");
+                else {
+                    var now = Date.now();
                     objs.forEach(function(x) {
-                        var now = Date.now();
                         //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds downtime'); //TODO fix this, reporting incorrect?
                         $N.server.interestTime = x.interestTime;
                         $N.server.clientState = x.clientState;
@@ -195,8 +232,8 @@ exports.start = function(options, init) {
                          logMemory.buffer = x.logMemoryBuffer;
                          logMemory.pointer = x.logMemoryPointer;*/
 
-
                     });
+                }
 
                 if (f)
                     f();
@@ -612,37 +649,6 @@ exports.start = function(options, init) {
         });
     }
 
-
-    function saveState(onSaved, onError) {
-        var t = Date.now();
-
-        /*
-         logMemoryBuffer = logMemory.buffer;
-         logMemoryPointer = logMemory.pointer;*/
-
-        delete $N.server._id;
-        $N.server.tag = ['ServerState'];
-        $N.server.when = t;
-
-        var db = mongo.connect(getDatabaseURL(), collections);
-
-        db.obj.save($N.server, function(err, saved) {
-            db.close();
-
-            if (err || !saved) {
-                if (onError) {
-                    nlog('saveState: ' + err);
-                    onError(err);
-                }
-            }
-            else {
-                if (onSaved)
-                    onSaved();
-            }
-
-        });
-
-    }
 
 
 
