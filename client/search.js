@@ -38,7 +38,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus, ontocache) {
             if (ti)
                 mn = '<img src="' + ti + '"/>' + mn;
 
-            var bb = $('<a href="#">+' + mn + '?</a>');
+            var bb = $('<a>+' + mn + '?</a>');
             bb.click(function() {
                 onAdd({id: mx.uri});
             });
@@ -97,7 +97,7 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
             if (ti)
                 mn = '<img src="' + ti + '"/>"' + mn;
 
-            var bb = $('<a href="#">' + mn + '?</a>');
+            var bb = $('<a>' + mn + '?</a>');
             bb.click(function() {
                 onAdd({id: mx.uri});
             });

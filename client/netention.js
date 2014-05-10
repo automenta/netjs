@@ -951,7 +951,7 @@ function newPopup(title, p, isModal) {
 
     if (configuration.device == configuration.MOBILE) {
         p.focus = function() {
-            var backbuttonhandler = function (e) {
+            var backbuttonhandler = function (e) {                
                 if (d && d.is(':visible')) {
                     $(window).off('popstate', arguments.callee);
                     later(function () {

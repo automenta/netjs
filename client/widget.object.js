@@ -647,14 +647,14 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         tagButtons.hide();
 
         if (index > 0) {
-            var upButton = $('<a href="#" title="Move Up">^</a>');
+            var upButton = $('<a title="Move Up">^</a>');
             upButton.addClass('tagButton');
             upButton.click(function () {
                 onOrderChange(index, index - 1);
             });
             tagButtons.append(upButton);
         } else {
-            var downButton = $('<a href="#" title="Move Down">v</a>');
+            var downButton = $('<a title="Move Down">v</a>');
             downButton.addClass('tagButton');
             downButton.click(function () {
                 onOrderChange(index, index + 1);
@@ -1206,7 +1206,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                         }
 
                     var ppn = PP.name;
-                    var appv = $('<a href="#" title="' + PP.type + '">+' + ppn + '</a>');
+                    var appv = $('<a title="' + PP.type + '">+' + ppn + '</a>');
                     var defaultValue = '';
                     appv.click(function () {
                         onAdd(ppv, defaultValue);

@@ -5,7 +5,9 @@
 
 .ui-autocomplete {  z-index: 5000 !important; }
 
-
+a {
+    cursor: pointer;
+}
 
 .focusMap {
     width: 98%;
