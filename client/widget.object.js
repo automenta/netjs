@@ -663,11 +663,11 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
 
         {
-            var disableButton = $('<button title="Disable">&nbsp;</button>');
-            var p25Button = $('<button title="25%">&nbsp;</button>');
-            var p50Button = $('<button title="50%">&nbsp;</button>');
-            var p75Button = $('<button title="75%">&nbsp;</button>');
-            var p100Button = $('<button title="100%">&nbsp;</button>');
+            var disableButton = $('<button value="0" title="Disable">&nbsp;</button>');
+            var p25Button = $('<button value="0.25"  title="25%">&nbsp;</button>');
+            var p50Button = $('<button value="0.5" title="50%">&nbsp;</button>');
+            var p75Button = $('<button value="0.75" title="75%">&nbsp;</button>');
+            var p100Button = $('<button value="1.0" title="100%">&nbsp;</button>');
 
             tagButtons.append(disableButton, p25Button, p50Button, p75Button, p100Button);
 
@@ -685,50 +685,16 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             if (currentButton)
                 currentButton.addClass('tagButtonSelected');
 
-            disableButton.click(function () {
-                onStrengthChange(index, 0);
-            });
-            p25Button.click(function () {
-                onStrengthChange(index, 0.25);
-            });
-            p50Button.click(function () {
-                onStrengthChange(index, 0.5);
-            });
-            p75Button.click(function () {
-                onStrengthChange(index, 0.75);
-            });
-            p100Button.click(function () {
-                onStrengthChange(index, 1.0);
-            });
+            function _onStrengthChange() {
+                onStrengthChange(index, parseFloat($(this).attr('value')));
+            }
+            
+            disableButton.click(_onStrengthChange);
+            p25Button.click(_onStrengthChange);
+            p50Button.click(_onStrengthChange);
+            p75Button.click(_onStrengthChange);
+            p100Button.click(_onStrengthChange);
         }
-        /*
-         if (strength > 0.25) {
-         var weakenButton = $('<a href="#" title="Decrease">-</a>');
-         weakenButton.addClass('tagButton');
-         weakenButton.click(function() {
-         onStrengthChange(index, strength - 0.25);
-         });
-         tagButtons.append(weakenButton);
-         }
-         if (strength < 1.0) {
-         var strengthButton = $('<a href="#" title="Increase">+</a>');
-         strengthButton.addClass('tagButton');
-         strengthButton.click(function() {
-         onStrengthChange(index, strength + 0.25);
-         });
-         tagButtons.append(strengthButton);
-         }
-         
-         if (strength > 0) {
-         var disableButton = $('<a href="#" title="Disable">x</a>');
-         disableButton.addClass('tagButton');
-         disableButton.click(function() {
-         onStrengthChange(index, 0);
-         });
-         tagButtons.append(disableButton);
-         }
-         else {
-         }*/
 
         var removeButton = $('<a href="#" title="Remove">X</a>');
         removeButton.addClass('tagButton');
@@ -884,21 +850,19 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         var m;
 
         if (editable) {
-            var cr = $('<select/>');
-            cr.css('width', 'auto');
-            cr.append('<option value="earth" selected>Earth</option>');
-            cr.append('<option value="moon">Moon</option>');
-            cr.append('<option value="mars">Mars</option>');
-            cr.append('<option value="venus">Venus</option>');
-            cr.change(function () {
-                alert('Currently only Earth is supported.');
-                cr.val('earth');
-            });
-            ee.append(cr);
+            var cr = $('<select/>')
+                .css('width', 'auto')
+                .append('<option value="earth" selected>Earth</option>',
+                      '<option value="moon">Moon</option>',
+                      '<option value="mars">Mars</option>',
+                      '<option value="venus">Venus</option>')
+                .change(function () {
+                    alert('Currently only Earth is supported.');
+                    cr.val('earth');
+                }).appendTo(ee);
 
-            var ar = $('<input type="text" disabled="disabled" placeholder="Altitude" />');
-            ar.css('width', '15%');
-            ee.append(ar);
+            var ar = $('<input type="text" disabled="disabled" placeholder="Altitude" />').
+                        css('width', '15%').appendTo(ee);
 
             whenSaved.push(function (y) {
                 if (!m)
@@ -1364,7 +1328,7 @@ function newSimilaritySummary(x) {
                 var o = $N.getObject(v.value);
                 var name = o ? o.name : "?";
                 var li = $('<li></li>').appendTo(d);
-                var lia = $('<a href="#">' + name /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
+                var lia = $('<a>' + name /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
                 li.append('&nbsp;');
                 lia.click(function () {
                     newPopupObjectView(v.value);
@@ -1752,7 +1716,7 @@ function newObjectSummary(x, options) {
             haxn.html(xn);
         } else {
             var xxn = xn.length > 0 ? xn : '?';
-            var axn = $('<a href="#">' + xxn + '</a>');
+            var axn = $('<a>' + xxn + '</a>');
             axn.attr('title', x.id);
             axn.click(function () {
                 if ((x.author === $N.id()) && (titleClickMode === 'edit'))
@@ -1906,7 +1870,7 @@ function newMetadataLine(x, showTime) {
             var ttt = newTagButton(tt).appendTo(mdline);
             applyTagStrengthClass(ttt, ots[t]);
         } else {
-            mdline.append('<a href="#">' + t + '</a>');
+            mdline.append('<a>' + t + '</a>');
         }
         mdline.append('&nbsp;');
     });

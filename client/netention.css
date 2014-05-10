@@ -3,269 +3,176 @@
  * Discombobulated by @rezn8d
  */
 
-.ui-autocomplete {  z-index: 5000 !important; }
-
+.ui-autocomplete {
+    z-index: 5000 !important;
+}
 a {
     cursor: pointer;
 }
-
+a:hover {
+    color: blue !important;
+}
 .focusMap {
     width: 98%;
     height: 250px;
 }
-
 .TypePropertyButtons {
-	padding-left: 0.25em;	
-	padding-top: 0.15em;
-	padding-bottom: 0.25em;
+    padding-left: 0.25em;
+    padding-top: 0.15em;
+    padding-bottom: 0.25em;
 }
 .TypePropertyButtons button {
-	font-size: 60%;
-	padding: 0.25em;
+    font-size: 60%;
+    padding: 0.25em;
 }
-
-
-
 .TypesMenuButtons {
-	height: 35px;
-	background: black;
+    height: 35px;
+    background: black;
 }
 .PropertyEdit {
-	margin-bottom: 0.25em;
+    margin-bottom: 0.25em;
 }
 .PropertyEdit textarea {
-	width: 100%;
+    width: 100%;
 }
 .AvatarIcon {
-	padding: 5px;	
-	float: left;
+    padding: 5px;
+    float: left;
 }
 .AvatarIcon img {
-	height: 2em;
+    height: 2em;
 }
 .DataSubViewMenu {
-	margin-left: 2em;
-	float: right;
-	color: white;
+    margin-left: 2em;
+    float: right;
+    color: white;
 }
 .ContentScroll {
-	overflow: auto;	
+    overflow: auto;
 }
 #teamContent {
     width: 100%;
     overflow: none;
     height: 95%;
 }
-
 .DataViewFilter {
-	background: transparent;
-	color: white;	
+    background: transparent;
+    color: white;
 }
 div.olMapViewport {
-     z-index: 1;
+    z-index: 1;
 }
-
-#uitheme, #uilanguage {
-	font-size: 75%;
+#uitheme,
+#uilanguage {
+    font-size: 75%;
 }
-
-#CurrentInterests {
-    clear: both;
-}
-#InterestsBar {
-    clear: both;
-}
-
-.InterestItem {
-    margin-bottom: 0.3em;
-    
-    padding: 0.2em;
-    border-right: 5px solid rgba(125,25,0,0.5);
-	padding-bottom: 1.0em;	
-
-/*
-   -webkit-transition:border-color 2.618s ease-in;  
-   -moz-transition:border-color 2.618s ease-in;  
-   -o-transition:border-color 2.618s ease-in;*/  
-
-	-webkit-transition:background-color 0.618s ease-in;  
-   -moz-transition:background-color 0.618s ease-in;  
-   -o-transition:background-color 0.618s ease-in;  
-
-}
-.interestSelected {
-	border-color: rgba(255, 0, 0, 0.75);	
-   -webkit-transition:border-color 0.618s ease-in;  
-   -moz-transition:border-color 0.618s ease-in;  
-   -o-transition:border-color 0.618s ease-in;  
-}
-
-/* http://www.quackit.com/css/css_color_codes.cfm */
-.interestItem25 {
-    background-color: rgba(235,235,235,0.8);
-    background-image: -webkit-linear-gradient(bottom left, rgba(255,255,255,0.8) 0%, rgba(235,235,235,0.8) 100%);
-    border-right: 5px solid #000;
-    font-size: 96%;
-    vertical-align: top;
-   -webkit-transition:border-color 2.618s linear;  
-   -moz-transition:border-color 1.618s linear;  
-   -o-transition:border-color 1.618s linear; 
-   color: #333;  
-
-}
-.interestItem50 {
-    background-color: rgba(235,235,235,0.8);
-    background-image: -webkit-linear-gradient(bottom left, rgba(255,255,255,0.8) 0%, rgba(235,235,235,0.8) 100%);
-    border-right: 5px solid #463544;
-    font-size: 110%;
-    vertical-align: top;
-   -webkit-transition:border-color 2.618s linear;  
-   -moz-transition:border-color 1.618s linear;  
-   -o-transition:border-color 1.618s linear;  
-   color: #222;  
-}
-.interestItem75 {
-    background-color: rgba(235,235,235,0.8);
-    background-image: -webkit-linear-gradient(bottom left, rgba(255,255,255,0.8) 0%, rgba(235,235,235,0.8) 100%);
-    border-right: 5px solid #5B468D;
-    font-size: 140%;
-    vertical-align: top;
-   -webkit-transition:border-color 2.618s linear;  
-   -moz-transition:border-color 1.618s linear;  
-   -o-transition:border-color 1.618s linear;  
-   color: #111;  
-}
-.interestItem100 {
-    background-color: rgba(235,235,235,0.8);
-    background-image: -webkit-linear-gradient(bottom left, rgba(255,255,255,0.8) 0%, rgba(235,235,235,0.8) 100%);
-    border-right: 5px solid #358DD4;
-    font-size: 180%;
-    vertical-align: top;
-   -webkit-transition:border-color 2.618s linear;  
-   -moz-transition:border-color 2.618s linear;  
-   -o-transition:border-color 2.618s linear;
-   color: #000;  
-}
-
 .SelfBarSection {
-	padding: 0.5em;
+    padding: 0.5em;
 }
-
 #Profile {
-    clear:both;
+    clear: both;
 }
-
 .ImportanceButtons {
-	float: right;
-	position: relative;
-	top:0;
+    float: right;
+    position: relative;
+    top: 0;
 }
-
 .ImportanceButtons button {
-	padding: 2px;
-	margin: 0;
-	border-left: 0;
-	border-top: 0;
-	border-bottom: 0;
-	border-width: 2px;
-	height: 20px;
+    padding: 2px;
+    margin: 0;
+    border-left: 0;
+    border-top: 0;
+    border-bottom: 0;
+    border-width: 2px;
+    height: 20px;
 }
-
-
-
 .idLabel {
     font-size: 70%;
     opacity: 0.7;
     line-height: 70%;
 }
-
-		.valueInput {
-			width: 95%;
-			font-size: 125%;
-			margin-bottom: 0.4em;
-		}
-		
-		.updateButton {
-			font-weight: bold;
-		}
-		
-		.eBottom {
-			border-top: 1px solid gray;
-			clear: both;
-			float: right;
-			width: 100%;
-			text-align: right;
-		}
-		.typeCollapsible {
-			margin-left: 1em;
-		}
-		.typeMenu {
-			float: left;
-			width: 32%;
-		}
-		.valueArea {
-			overflow: auto;
-			width: 63%;
-			float: right;
-			margin-top: 0.5em;
-		}
-
-.PropertyEdit input[type="checkbox"] {
+.valueInput {
+    width: 95%;
+    font-size: 125%;
+    margin-bottom: 0.4em;
 }
-
-.ReplyWidget textarea {
+.updateButton {
+    font-weight: bold;
+}
+.eBottom {
+    border-top: 1px solid gray;
+    clear: both;
+    float: right;
+    width: 100%;
+    text-align: right;
+}
+.typeCollapsible {
+    margin-left: 1em;
+}
+.typeMenu {
+    float: left;
+    width: 32%;
+}
+.valueArea {
+    overflow: auto;
+    width: 63%;
+    float: right;
+    margin-top: 0.5em;
+}
+.PropertyEdit input[type="checkbox"] {} .ReplyWidget textarea {
     width: 98%;
     height: 5em;
 }
-
 .tagSection {
     width: 100%;
     padding-top: 0.75em;
     margin-top: 0.75em;
     margin-bottom: 0.75em;
-	border-top: 1px solid gray;
+    border-top: 1px solid gray;
     clear: both;
 }
-
 .tagSectionEditable {
-	cursor: crosshair;
+    cursor: crosshair;
 }
-
 .propertySection .tagLabel img {
-	margin-left: 1.5em;
+    margin-left: 1.5em;
 }
-
 .tagDescription {
     width: 100%;
     height: 5em;
 }
-
 .tagLabel {
     font-weight: bold;
     font-size: 125%;
 }
-.tagLabel img { /* may not be necessary anymore since adding .TagButtonIcon */
+.tagLabel img {
+    /* may not be necessary anymore since adding .TagButtonIcon */
     height: 1em;
     margin-right: 0.25em;
 }
-
 .tagLabelProperties {
-	margin-left: 2em;
-	font-size: 90%;
+    margin-left: 2em;
+    font-size: 90%;
 }
-
 .TagButtonIcon {
     height: 1em;
 }
-
-.tag0 { opacity: 0.5; }
-.tag25 { opacity: 0.7; }
-.tag50 { opacity: 0.8; }
-.tag75 { opacity: 0.9; }
-.tag100 { opacity: 1.0; }*
-
-
-.tagButtons {
+.tag0 {
+    opacity: 0.5;
+}
+.tag25 {
+    opacity: 0.7;
+}
+.tag50 {
+    opacity: 0.8;
+}
+.tag75 {
+    opacity: 0.9;
+}
+.tag100 {
+    opacity: 1.0;
+}
+* .tagButtons {
     font-weight: bold;
     position: relative;
     right: 0;
@@ -273,8 +180,8 @@ div.olMapViewport {
     opacity: 0.5;
 }
 .tagButtonsLeft {
-	float: left !important;
-	left: 0 !important;
+    float: left !important;
+    left: 0 !important;
 }
 .tagButton {
     margin-left: 0.1em;
@@ -286,20 +193,31 @@ div.olMapViewport {
     margin: 0;
     height: 1em;
     width: 0.618em;
-	border: none;
-	opacity: 0.9;
+    border: none;
+    opacity: 0.9;
 }
-.tagButtons button:nth-child(2) {    background-color: #f00;  }
-.tagButtons button:nth-child(3) {    background-color: #080;  }
-.tagButtons button:nth-child(4) {    background-color: #0a0;  }
-.tagButtons button:nth-child(5) {    background-color: #0c0;  }
-.tagButtons button:nth-child(6) {    background-color: #1f1;  }
-.tagButtonSelected { border-bottom: 4px solid white !important; opacity: 1.0 !important; }
-
+.tagButtons button:nth-child(2) {
+    background-color: #f00;
+}
+.tagButtons button:nth-child(3) {
+    background-color: #080;
+}
+.tagButtons button:nth-child(4) {
+    background-color: #0a0;
+}
+.tagButtons button:nth-child(5) {
+    background-color: #0c0;
+}
+.tagButtons button:nth-child(6) {
+    background-color: #1f1;
+}
+.tagButtonSelected {
+    border-bottom: 4px solid white !important;
+    opacity: 1.0 !important;
+}
 .tagSectionHovered {
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255, 255, 255, 0.8);
 }
-
 .MetadataLine {
     opacity: 0.8;
     word-wrap: break-word;
@@ -317,7 +235,6 @@ div.olMapViewport {
     height: 1em;
     margin-right: 0.2em;
 }
-
 .tagSlider {
     float: right;
     width: 70%;
@@ -328,15 +245,12 @@ div.olMapViewport {
     width: 25%;
     font-weight: bold;
 }
-
- .ui-autocomplete {
+.ui-autocomplete {
     max-height: 200px;
     overflow-y: auto;
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
-  }
-  
-  
+}
 .trendTagLabel {
     float: left;
     width: 24em;
@@ -349,11 +263,20 @@ div.olMapViewport {
     float: left;
     width: 6em;
 }
-.Trends_TimeSegmentBox { padding: 0.25em; margin-bottom: 0.25em; border: 1px solid gray; min-height: 1em; }
-
-.Trends_FocusArea { 	width: 30%; float: left;  }
-.Trends_TagCountArea { 	width: 64%; float: right;  }
-
+.Trends_TimeSegmentBox {
+    padding: 0.25em;
+    margin-bottom: 0.25em;
+    border: 1px solid gray;
+    min-height: 1em;
+}
+.Trends_FocusArea {
+    width: 30%;
+    float: left;
+}
+.Trends_TagCountArea {
+    width: 64%;
+    float: right;
+}
 #LoadingSplash {
     position: absolute;
     width: 100%;
@@ -361,36 +284,23 @@ div.olMapViewport {
     left: 0px;
     top: 0px;
     background-color: white;
-	z-index:1000000;
+    z-index: 1000000;
 }
-
 #LoadingSplash h1 {
     text-align: center;
 }
-
-
 .ui-pnotify.stack-bottomleft {
-    		bottom: 25px;
-			left: 25px;
-			top: auto;
-			right: auto;
-		}
-        
-
-
+    bottom: 25px;
+    left: 25px;
+    top: auto;
+    right: auto;
+}
 #Menu {
-	display: none;
+    display: none;
 }
-
-#ViewSelect {
-}
-.ViewSelectNormal {
-}
-.ViewSelectIndented {
+#ViewSelect {} .ViewSelectNormal {} .ViewSelectIndented {
     padding-left: 50px;
 }
-
-
 #ViewSelect {
     float: left;
 }
@@ -400,18 +310,15 @@ div.olMapViewport {
     padding-top: 0.5em;
     width: 60%;
 }
-
 .FocusSection {
     padding: 0.2em;
-    border-right: 5px solid rgba(125,25,0,0.5);
-
-	-webkit-transition:background-color 0.618s ease-in;  
-   -moz-transition:background-color 0.618s ease-in;  
-   -o-transition:background-color 0.618s ease-in;  
-
+    border-right: 5px solid rgba(125, 25, 0, 0.5);
+    -webkit-transition: background-color 0.618s ease-in;
+    -moz-transition: background-color 0.618s ease-in;
+    -o-transition: background-color 0.618s ease-in;
 }
-
-#focusName, #focusDescription {
+#focusName,
+#focusDescription {
     width: 100%;
 }
 #SaveButtonWrapper {
@@ -419,434 +326,943 @@ div.olMapViewport {
     float: right;
     margin-top: 1em;
 }
-
 .map {
     width: 100%;
     height: 200px;
 }
-
-#FocusName, #FocusDescription {
+#FocusName,
+#FocusDescription {
     width: 97%;
 }
-#FocusDescriptionSection, #FocusMapSection {
-    
-    
-}
-#FocusMapSection, #FocusUploadSection, .FocusSection {
+#FocusDescriptionSection,
+#FocusMapSection {} #FocusMapSection,
+#FocusUploadSection,
+.FocusSection {
     margin-top: 1.0em;
 }
-
-
 #ViewOptions select {
     width: auto;
 }
 .PropertyRemoveButton {
     float: right;
 }
-
 #FocusModeSelect {
     width: auto;
     margin-top: 4px;
     padding: 1px;
 }
-#ui-dialog { 
-	z-index:2000 !important;
+#ui-dialog {
+    z-index: 2000 !important;
 }
-
-
 .TagTree {
     font-size: 160%;
     padding-top: 0.3em;
     padding-bottom: 0.3em;
 }
-
 .nameInput {
-	padding:3px; text-indent:15px;
-	font-size: 150%;
+    padding: 3px;
+    text-indent: 15px;
+    font-size: 150%;
 }
 .nameInputWide {
-	width: 98%;    
+    width: 98%;
 }
-
 .tagSuggestionsWrap {
-	overflow: auto;
-	max-width: 100%;
-	margin-left: 1em;
+    overflow: auto;
+    max-width: 100%;
+    margin-left: 1em;
 }
-
 .tagSuggestions {
     margin: 0em;
-	margin-top: 0.25em;
-	margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
     overflow: auto;
     display: table;
     table-layout: fixed;
 }
 .tagSuggestions a {
-	text-decoration:none;
-	font-size: 75%;
+    text-decoration: none;
+    font-size: 75%;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
-	min-width: 4em;
+    min-width: 4em;
 }
 .tagSuggestions a:hover {
-	color: #33b;
+    color: #33b;
 }
-
 .tagSuggestions img {
-	height: 1em;
+    height: 1em;
 }
-
 #MatchedTypes button {
     margin: 0.2em;
     opacity: 0.5;
     font-size: 80%;
     font-variant: italic;
 }
-
-#footer-span {position:absolute; bottom:5px; right:5px; float:right; }
-#footer-brand { height:32px; width:32px; margin:5px 10px; }
-#ViewSelect { float:left; margin-right:10px; }
-
-
-
-
+#footer-span {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    float: right;
+}
+#footer-brand {
+    height: 32px;
+    width: 32px;
+    margin: 5px 10px;
+}
+#ViewSelect {
+    float: left;
+    margin-right: 10px;
+}
 /*!
  * Properly formatted CSS section
  * everything above this line needs cleaning and moved below ~ @rezn8d
  */
- 
- /* Global Rules */
- /* * { outline:none; } */ /* removed because it was taking ~8% of CSS processing accorindg to Chrome profiler */
-body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-family: Arial, sans; }
-		.nobg { background: #000000 !important; background-image: none !important; }
-		.shadow { moz-box-shadow: 0px 0px 24px #000000; -webkit-box-shadow: 0px 0px 24px #000000; box-shadow:0px 0px 24px #000000; -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')"; filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444'); }
-		.left { float:left; }
-		.right { float:right; }
-	    /* Overthrow CSS:  Enable overflow: auto on elements with overthrow class when html element has overthrow-enabled class */
-	    .overthrow-enabled .overthrow { overflow: auto; -webkit-overflow-scrolling: touch; }
-		.overthrow-enabled #content.overthrow { height: 100%; }
-		.overflow-hidden { overflow:hidden !important; }
-		
 
- /* jQuery UI overrides */
-.ui-widget-header a {color:inherit !important;}
- 
- /* Loading Login Screen */
-#LoadingSplash { background: url('/theme/cybernetic/p2p_banner.jpg') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-attachment:fixed; z-index:100; width: 100%; height: 100%; position: fixed; }
-	#LoadingSplash ul { margin:0;padding:0;width:100%; list-style-type:none; height:100px; } 
-	#LoadingSplash ul li { float:left; outline:none; border:none; margin:0;padding:0;width:16%; list-style-type:none; text-align:center; } 
-	#LoadingSplash ul li span { clear:both; font-size:.7em; display:none; width:100%; margin-bottom:10px; padding:0; } 
-	#LoadingSplash ul li span:hover { display:block;clear:both; font-size:.7em; display:none; width:100%; margin-bottom:10px; padding:0; } 
-	#LoadingSplash ul li img { margin:5px 0 0 0;padding:0;width:90%;height:auto; filter: gray; _filter: url(filters.svg#grayscale); -webkit-filter: grayscale(1); } 
-	#LoadingSplash ul li img:hover { margin:0;padding:0;width:100%;height:auto; filter: none !important; -webkit-filter: none !important; } 
-	#openid-img { width:80%;height:auto;clear:both;display:block; margin:10px auto; }
-	#loginLogo { width:80%; height:auto; margin:10px auto; display:block; clear:both; }
-	
-#LoadingSplash2 { background-color: white; z-index:99; position: fixed; width: 100%; height: 100%; display: none; }
+/* Global Rules */
 
+/* * { outline:none; } */
+
+/* removed because it was taking ~8% of CSS processing accorindg to Chrome profiler */
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    font-family: Arial, sans;
+}
+.nobg {
+    background: #000000 !important;
+    background-image: none !important;
+}
+.shadow {
+    moz-box-shadow: 0px 0px 24px #000000;
+    -webkit-box-shadow: 0px 0px 24px #000000;
+    box-shadow: 0px 0px 24px #000000;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')";
+    filter: progid: DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+/* Overthrow CSS:  Enable overflow: auto on elements with overthrow class when html element has overthrow-enabled class */
+
+.overthrow-enabled .overthrow {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.overthrow-enabled #content.overthrow {
+    height: 100%;
+}
+.overflow-hidden {
+    overflow: hidden !important;
+}
+/* jQuery UI overrides */
+
+.ui-widget-header a {
+    color: inherit !important;
+}
+/* Loading Login Screen */
+
+#LoadingSplash {
+    background: url('/theme/cybernetic/p2p_banner.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-attachment: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+#LoadingSplash ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style-type: none;
+    height: 100px;
+}
+#LoadingSplash ul li {
+    float: left;
+    outline: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 16%;
+    list-style-type: none;
+    text-align: center;
+}
+#LoadingSplash ul li span {
+    clear: both;
+    font-size: .7em;
+    display: none;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 0;
+}
+#LoadingSplash ul li span:hover {
+    display: block;
+    clear: both;
+    font-size: .7em;
+    display: none;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 0;
+}
+#LoadingSplash ul li img {
+    margin: 5px 0 0 0;
+    padding: 0;
+    width: 90%;
+    height: auto;
+    filter: gray;
+    _filter: url(filters.svg#grayscale);
+    -webkit-filter: grayscale(1);
+}
+#LoadingSplash ul li img:hover {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+#openid-img {
+    width: 80%;
+    height: auto;
+    clear: both;
+    display: block;
+    margin: 10px auto;
+}
+#loginLogo {
+    width: 80%;
+    height: auto;
+    margin: 10px auto;
+    display: block;
+    clear: both;
+}
+#LoadingSplash2 {
+    background-color: white;
+    z-index: 99;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
 /* View Screen */
-#View { border: none; position: fixed; top:0; right:0; bottom:0; left:0; height: 100%; width:100%; clear:both; }
-#embed-frame {  position:relative; width:100%; height:100%; min-height:100%; max-height:100%; margin:0; outline:none; border:none; overflow:auto; background:#000; padding:0; display:block;}
 
+#View {
+    border: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    clear: both;
+}
+#embed-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    margin: 0;
+    outline: none;
+    border: none;
+    overflow: auto;
+    background: #000;
+    padding: 0;
+    display: block;
+}
 /*div.olMapViewport { z-index: 1 !important;; }
 div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
-.ViewControl { 
-	padding: 0; margin: 0;
-	display: block; 
-	float: left;
-	border: 0; 
-	background-color: #333;
-	opacity: 0.6;
+.ViewControl {
+    padding: 0;
+    margin: 0;
+    display: block;
+    float: left;
+    border: 0;
+    background-color: #333;
+    opacity: 0.6;
 }
-.ViewControl:hover, .ViewActive { 
-	opacity: 1.0;
-	background-color: #111;
+.ViewControl:hover,
+.ViewActive {
+    opacity: 1.0;
+    background-color: #111;
 }
-.ViewControl img { width: 45px;  }
-
-.view-indented { left: 55px !important;  border-left: none !important; width: auto !important;}
-.view-indented-more { left: 160px !important; }
-
+.ViewControl img {
+    width: 45px;
+}
+.view-indented {
+    left: 55px !important;
+    border-left: none !important;
+    width: auto !important;
+}
+.view-indented-more {
+    left: 160px !important;
+}
 /* User Control Panel */
+
 #toggle-menu {
-	position:absolute; top:5px; left:5px; z-index:25; width: 45px; height: 45px; 
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 25;
+    width: 45px;
+    height: 45px;
     max-width: 45px;
     cursor: crosshair;
-} 
-#toggle-menu img { width: 45px; height: 45px; margin:0; } 
-
-#AvatarViewMenu {
 }
+#toggle-menu img {
+    width: 45px;
+    height: 45px;
+    margin: 0;
+}
+#AvatarViewMenu {}
 /*.toggle-submenu-absolute {
 	position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
 }*/
-#AvatarViewMenu button { padding: 1px; }
-#AvatarViewMenu input { width: 43px; }
 
-#NotificationArea { z-index: 5000; position: fixed; bottom: 0; right: 0; font-size: 200%; }
-
-#ViewMenu { 
-	position: fixed; z-index:15; top:0; left:0; 
-	width:150px; 
-	margin:0; padding:0; 
-	overflow: hidden !important;
-	height: 100%;
-
+#AvatarViewMenu button {
+    padding: 1px;
 }
-	.viewmenu-container { position: relative; display:block; padding: 10px;	overflow: visible; text-align:center; }
-	#AvatarButton, #AvatarButton img { width: 70px; height: 70px; margin:0; padding:0; z-index:25;} 
-		#AvatarButton { position:absolute; top:0px; left:0px; margin:0px; padding:0px; }
-		#AvatarButton img { border: none; cursor: crosshair; }
-
+#AvatarViewMenu input {
+    width: 43px;
+}
+#NotificationArea {
+    z-index: 5000;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: 200%;
+}
+#ViewMenu {
+    position: fixed;
+    z-index: 15;
+    top: 0;
+    left: 0;
+    width: 150px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important;
+    height: 100%;
+}
+.viewmenu-container {
+    position: relative;
+    display: block;
+    padding: 10px;
+    overflow: visible;
+    text-align: center;
+}
+#AvatarButton,
+#AvatarButton img {
+    width: 70px;
+    height: 70px;
+    margin: 0;
+    padding: 0;
+    z-index: 25;
+}
+#AvatarButton {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+#AvatarButton img {
+    border: none;
+    cursor: crosshair;
+}
 #ViewMenu .section {
-	clear: both;
-	padding-top: 0.5em;
+    clear: both;
+    padding-top: 0.5em;
 }
-
 #AvatarFocus {
-	position: absolute;
-	bottom: 0;
-	padding-bottom: 0.5em;
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 0.5em;
 }
-
 #identity {
-	width: 75px;
-	height: 65px;
-	margin-left: 75px;
-	text-align: right;
+    width: 75px;
+    height: 65px;
+    margin-left: 75px;
+    text-align: right;
 }
-
-.TagBar { font-size: 85%; }
+.TagBar {
+    font-size: 85%;
+}
 .TagBar .ui-buttonset label span {
-	padding-right: 0.5em;
-	padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
 }
-
-#FocusEdit { height:auto;  margin:0; display:block; clear:both; padding: 0; }
-#FocusEdit button { font-size:.8em; }
-#FocusEdit .ObjectEditDiv .tagSection { float: none !important; }
+#FocusEdit {
+    height: auto;
+    margin: 0;
+    display: block;
+    clear: both;
+    padding: 0;
+}
+#FocusEdit button {
+    font-size: .8em;
+}
+#FocusEdit .ObjectEditDiv .tagSection {
+    float: none !important;
+}
 #FocusEdit .tagSection {
-	padding: 0;
-	margin: 0;
-	clear: both;
+    padding: 0;
+    margin: 0;
+    clear: both;
 }
-
-#FocusMainMenu { clear:both; width:100%; margin:0px 0px 20px 0px; padding:0;  }
-#Focus { width: 98%; border:none; margin:20px 0px; }
-
+#FocusMainMenu {
+    clear: both;
+    width: 100%;
+    margin: 0px 0px 20px 0px;
+    padding: 0;
+}
+#Focus {
+    width: 98%;
+    border: none;
+    margin: 20px 0px;
+}
 #FocusTagTree {
-	text-align: left !important;
-	overflow: auto !important;
-	margin-bottom: 0.25em;
+    text-align: left !important;
+    overflow: auto !important;
+    margin-bottom: 0.25em;
 }
-
-.jstree {  height:auto;margin:0px 0px 10px 0px;padding:10px 20px;position:relative;overflow:visible;display:block;clear:both;border:1px solid #1d1d1d; text-align:left;}
-.jstree-header {  margin:0;padding:0;position:relative;overflow:visible;display:block;clear:both;text-align:center;border:1px solid #1d1d1d;font-size:14px !important;height:22px}
-.jstree, .jstree input, .jstree-dnd-helper, #vakata-contextmenu { font-size:16px;  }
-
-#expandor {position:absolute;top:1px;right:1px;}
-#close-url-tree {position:relative;float:right;margin:1px 5px 1px 0px;}
-#expand-url-tree {position:relative;float:right;margin:1px;}
-
-#close-layer-tree {position:relative;float:right;margin:1px 5px 1px 0px;}
-#expand-layer-tree {position:relative;float:right;margin:1px;}
-
-.tree {  height:auto; overflow:visible; }
-.jstree ul, .jstree li {  border: 0px !important; outline: 0px !important; }
-
-#AnonymousLoginButton { display: none; }
-
-#themeSelect {width: 250px; clear:both; font-size:1.2em; padding:3px; }
-
+.jstree {
+    height: auto;
+    margin: 0px 0px 10px 0px;
+    padding: 10px 20px;
+    position: relative;
+    overflow: visible;
+    display: block;
+    clear: both;
+    border: 1px solid #1d1d1d;
+    text-align: left;
+}
+.jstree-header {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: visible;
+    display: block;
+    clear: both;
+    text-align: center;
+    border: 1px solid #1d1d1d;
+    font-size: 14px !important;
+    height: 22px
+}
+.jstree,
+.jstree input,
+.jstree-dnd-helper,
+#vakata-contextmenu {
+    font-size: 16px;
+}
+#expandor {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+}
+#close-url-tree {
+    position: relative;
+    float: right;
+    margin: 1px 5px 1px 0px;
+}
+#expand-url-tree {
+    position: relative;
+    float: right;
+    margin: 1px;
+}
+#close-layer-tree {
+    position: relative;
+    float: right;
+    margin: 1px 5px 1px 0px;
+}
+#expand-layer-tree {
+    position: relative;
+    float: right;
+    margin: 1px;
+}
+.tree {
+    height: auto;
+    overflow: visible;
+}
+.jstree ul,
+.jstree li {
+    border: 0px !important;
+    outline: 0px !important;
+}
+#AnonymousLoginButton {
+    display: none;
+}
+#themeSelect {
+    width: 250px;
+    clear: both;
+    font-size: 1.2em;
+    padding: 3px;
+}
 /* Grid, List View */
-.objectView { position: relative; padding: 0.25em; margin-bottom: 5px; display: block; clear: both; font-size:12px; }
-.objectView ul li {
-word-wrap: break-word;
+
+.objectView {
+    position: relative;
+    padding: 0.25em;
+    margin-bottom: 5px;
+    display: block;
+    clear: both;
+    font-size: 12px;
 }
-
-	.objectGridItem3, .objectGridItem2 { width: 30%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 5px; }
-        .objectGridItem2 { width: 47%; }
-        
-	.objectListItem { width: 98%;	padding: 0 !important; height: auto; clear: none;  float: left; margin: 0px; margin-bottom: 5px;  }
-        
-	.ObjectViewHideButton { height:30px;   position:absolute;  top:-4px; right:-4px;  opacity:0; display:inline-block; }
-	.ObjectViewHideButton:hover { opacity:1; }
-	.ObjectViewHideButton button { position:relative; padding:5px; margin:0px; }
-	.objectView h1 { font-size: 140%; font-weight: bold;  margin: 2px 0px;  }
-	.objectView h2 { font-size: 105%;  margin: 0;  }
-	.objectView h3 { font-weight: normal; color: #333; margin: 0;  }
-	.objectView ul { list-style-type: none; margin-bottom: 0.2em; padding-left: 0; margin-left: 0;  }
-	.objectView ul li { padding: 0.3em;   }
-	.objectView h3, .objectView p, .objectView time { padding-left: 10px; padding-top: 5px;  }
-	.objectView img { max-height: 12em;	 }
-	.MessageSubject { width: 100%; font-size: 125%;	 }
-	.MessageDescription { width: 98%;  }
-	.ObjectReply { margin:0.1em 0.2em 0.1em 0.2em; font-size: 80%;	}
-	.reply-section { text-align:left; }
-	.object-reply-button { padding:1px 4px !important; }
-    .ObjectEditDiv button img { height: 1em; }
-
-    .ObjectSelection, .ObjectViewPopupButton { vertical-align: middle; }
-
-    .markdown { padding: 0.25em; }
-    
+.objectView ul li {
+    word-wrap: break-word;
+}
+.objectGridItem3,
+.objectGridItem2 {
+    width: 30%;
+    padding: 0 !important;
+    height: auto;
+    clear: none;
+    float: left;
+    margin: 5px;
+}
+.objectGridItem2 {
+    width: 47%;
+}
+.objectListItem {
+    width: 98%;
+    padding: 0 !important;
+    height: auto;
+    clear: none;
+    float: left;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+.ObjectViewHideButton {
+    height: 30px;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    opacity: 0;
+    display: inline-block;
+}
+.ObjectViewHideButton:hover {
+    opacity: 1;
+}
+.ObjectViewHideButton button {
+    position: relative;
+    padding: 5px;
+    margin: 0px;
+}
+.objectView h1 {
+    font-size: 140%;
+    font-weight: bold;
+    margin: 2px 0px;
+}
+.objectView h2 {
+    font-size: 105%;
+    margin: 0;
+}
+.objectView h3 {
+    font-weight: normal;
+    color: #333;
+    margin: 0;
+}
+.objectView ul {
+    list-style-type: none;
+    margin-bottom: 0.2em;
+    padding-left: 0;
+    margin-left: 0;
+}
+.objectView ul li {
+    padding: 0.3em;
+}
+.objectView h3,
+.objectView p,
+.objectView time {
+    padding-left: 10px;
+    padding-top: 5px;
+}
+.objectView img {
+    max-height: 12em;
+}
+.MessageSubject {
+    width: 100%;
+    font-size: 125%;
+}
+.MessageDescription {
+    width: 98%;
+}
+.ObjectReply {
+    margin: 0.1em 0.2em 0.1em 0.2em;
+    font-size: 80%;
+}
+.reply-section {
+    text-align: left;
+}
+.object-reply-button {
+    padding: 1px 4px !important;
+}
+.ObjectEditDiv button img {
+    height: 1em;
+}
+.ObjectSelection,
+.ObjectViewPopupButton {
+    vertical-align: middle;
+}
+.markdown {
+    padding: 0.25em;
+}
 /* Chat */
-.ChatViewContent { position: fixed; height: 100%; margin-left: 1em; height: 90%; overflow: auto;  }
 
-.ChatViewContentLine { 
-    border-left: 3px solid transparent; 
-    border-bottom: 1px solid gray;   
-    display: inline-block; 
-    width: 95%;     
+.ChatViewContent {
+    position: fixed;
+    height: 100%;
+    margin-left: 1em;
+    height: 90%;
+    overflow: auto;
+}
+.ChatViewContentLine {
+    border-left: 3px solid transparent;
+    border-bottom: 1px solid gray;
+    display: inline-block;
+    width: 95%;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
 }
-.ChatViewContentLine p { margin: 0; }
-.ChatViewContentLineHover { border-left: 3px solid gray; }
-
+.ChatViewContentLine p {
+    margin: 0;
+}
+.ChatViewContentLineHover {
+    border-left: 3px solid gray;
+}
 /*.ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }*/
 
-.ChatViewRoster { 
-    position: fixed; text-align: left; bottom: 0;  max-width: 40%; 
+.ChatViewRoster {
+    position: fixed;
+    text-align: left;
+    bottom: 0;
+    max-width: 40%;
     max-height: 9%;
     overflow: auto;
 }
-.ChatViewRoster img { height: 2em; margin-right: 3px; cursor: pointer; border: 1px solid gray; }
-
-.ChatViewInput { position: fixed; right: 2em; text-align: right; bottom: 0;  max-width: 40%; }
-
-.InlineSelfButton { cursor: pointer; text-decoration: underline; font-size: 70%; }
-.InlineSelfButton span { vertical-align: top; }
+.ChatViewRoster img {
+    height: 2em;
+    margin-right: 3px;
+    cursor: pointer;
+    border: 1px solid gray;
+}
+.ChatViewInput {
+    position: fixed;
+    right: 2em;
+    text-align: right;
+    bottom: 0;
+    max-width: 40%;
+}
+.InlineSelfButton {
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 70%;
+}
+.InlineSelfButton span {
+    vertical-align: top;
+}
 .chatViewLineContent {
     float: left;
 }
 .chatViewLineContent img {
     max-height: 4em;
 }
-
 .chatViewLineAuthor {
     clear: both;
     width: 100px;
     float: left;
-    text-align: right;    
+    text-align: right;
     padding-right: 15px;
     margin-bottom: 0.1em;
 }
 .chatViewLineContent ul {
-    font-size: 75%;    
+    font-size: 75%;
 }
 .chatViewLineAuthor img {
     height: 2em;
     margin-left: 4px;
 }
-
-        
-        
 /* Team/Self Browser */
-        .SelfView { width: 100%; }
-	.SelfRoster { float: left; width: 25%; padding-right: 1em; max-height: 95%; position: fixed; overflow: auto; margin-top: 1em; }
-	.SelfRoster .objectView { cursor: crosshair; }
-	.SelfViewTags { width: 50%; float: left}
-        .SelfViewTime { width: 50%; float: left; max-height: 400px; overflow-y: scroll; }
-	.SelfViewContent { width: 68%; float: right; margin-right: 1em; }
-	.SelfViewSide button { float: left; margin: 0.3em; }
-	#Bio { width: 100%; float: left; margin-bottom: 1em; }
-	#Bio button { font-size: 150%; }
-	#SelfMap  { width: 40%; height: 250px; }
-	.SelfCode { width: 95%; height: 90%; }
-	.SelfMeta { float: left; }
-	.SelfMeta input, .SelfMeta button { font-size: 150%; }
 
-        .ui-dialog-content .WikiBrowser-REMOVED {
-            max-height: 400px;
-        }
-
-	.WikiBrowser { clear: both; overflow:auto; background-color: white; color: black; width: 98%;  }
-	.WikiBrowser h1 { margin-top: 0; }
-	.WikiBrowser a, .WikiBrowser a:visited { border: 1px solid gray; padding: 1px; cursor: crosshair; color: black !important;}
-        .WikiBrowser .hlist li {
-            margin: 0;
-            display: inline;
-            white-space: nowrap;
-        }
-        .WikiBrowser .hlist {
-            margin-bottom: 2em !important;
-        }
-        .WikiBrowser td {
-            background: none !important;
-        }
-	.WikiTagSave { margin-top: 5px; font-size: 150%; }
-
-	.WikiBrowserHeader {
-		float: center;
-		text-align: center;
-		padding: 0.5em;
-	}
-
-        
-	#BioText { border: 1px solid gray; width: 100%; height: 12em; margin-top: 1em; margin-bottom: 1em; text-align: left; overflow: scroll }
-	#Bio { text-align: right; }
-
-        
-        .SelfAddTagButton { float: right; width: auto; }
-	.SelfViewButtonPanel { clear: both; padding-bottom: 2.5em; border-bottom: 1px solid gray; margin-bottom: 1.0em; }
-	.SelfView textarea { width: 100%; height: 5em; }
-        .SelfTimeRowHeader { width: 25%; float: left; clear: both; text-align: right; vertical-align: top; }
-        .SelfTimeWantToPeriod { width: 25%; float: left; border: 1px solid gray; margin: 1px; cursor:crosshair; vertical-align: top; }
-        .SelfTimeCouldDoPeriod { width: 25%; float: left;  margin: 1px; vertical-align: top; }
-        .SelfTimeFilled { background-color: rgba(125,125,125,0.2); }
-        .SelfTimeTagTree { } 
-
+.SelfView {
+    width: 100%;
+}
+.SelfRoster {
+    float: left;
+    width: 25%;
+    padding-right: 1em;
+    max-height: 95%;
+    position: fixed;
+    overflow: auto;
+    margin-top: 1em;
+}
+.SelfRoster .objectView {
+    cursor: crosshair;
+}
+.SelfViewTags {
+    width: 50%;
+    float: left
+}
+.SelfViewTime {
+    width: 50%;
+    float: left;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+.SelfViewContent {
+    width: 68%;
+    float: right;
+    margin-right: 1em;
+}
+.SelfViewSide button {
+    float: left;
+    margin: 0.3em;
+}
+#Bio {
+    width: 100%;
+    float: left;
+    margin-bottom: 1em;
+}
+#Bio button {
+    font-size: 150%;
+}
+#SelfMap {
+    width: 40%;
+    height: 250px;
+}
+.SelfCode {
+    width: 95%;
+    height: 90%;
+}
+.SelfMeta {
+    float: left;
+}
+.SelfMeta input,
+.SelfMeta button {
+    font-size: 150%;
+}
+.ui-dialog-content .WikiBrowser-REMOVED {
+    max-height: 400px;
+}
+.WikiBrowser {
+    clear: both;
+    overflow: auto;
+    background-color: white;
+    color: black;
+    width: 98%;
+}
+.WikiBrowser h1 {
+    margin-top: 0;
+}
+.WikiBrowser a,
+.WikiBrowser a:visited {
+    border: 1px solid gray;
+    padding: 1px;
+    cursor: crosshair;
+    color: black !important;
+}
+.WikiBrowser .hlist li {
+    margin: 0;
+    display: inline;
+    white-space: nowrap;
+}
+.WikiBrowser .hlist {
+    margin-bottom: 2em !important;
+}
+.WikiBrowser td {
+    background: none !important;
+}
+.WikiTagSave {
+    margin-top: 5px;
+    font-size: 150%;
+}
+.WikiBrowserHeader {
+    float: center;
+    text-align: center;
+    padding: 0.5em;
+}
+#BioText {
+    border: 1px solid gray;
+    width: 100%;
+    height: 12em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+    overflow: scroll
+}
+#Bio {
+    text-align: right;
+}
+.SelfAddTagButton {
+    float: right;
+    width: auto;
+}
+.SelfViewButtonPanel {
+    clear: both;
+    padding-bottom: 2.5em;
+    border-bottom: 1px solid gray;
+    margin-bottom: 1.0em;
+}
+.SelfView textarea {
+    width: 100%;
+    height: 5em;
+}
+.SelfTimeRowHeader {
+    width: 25%;
+    float: left;
+    clear: both;
+    text-align: right;
+    vertical-align: top;
+}
+.SelfTimeWantToPeriod {
+    width: 25%;
+    float: left;
+    border: 1px solid gray;
+    margin: 1px;
+    cursor: crosshair;
+    vertical-align: top;
+}
+.SelfTimeCouldDoPeriod {
+    width: 25%;
+    float: left;
+    margin: 1px;
+    vertical-align: top;
+}
+.SelfTimeFilled {
+    background-color: rgba(125, 125, 125, 0.2);
+}
+.SelfTimeTagTree {}
 /*
 *   pNotify: jquery.pnotify.default.css
 * 	Version: 1.2.0. Link: http://pinesframework.org/pnotify/   
 */
-.well { position: absolute; top:0px !important; right:0px !important; width:200px !important; max-width:200px !important; }
-.ui-pnotify { background:#F00; position: relative; height: auto; z-index: 20000; }
-.ui-pnotify.stack-bottomleft { bottom: 25px; Left: 25px; top: auto; right: auto; }
-	html > body .ui-pnotify { position: fixed; /* Hides position: fixed from IE6 */ }
-	.ui-pnotify .ui-pnotify-shadow { -webkit-box-shadow: 0px 2px 10px rgba(50, 50, 50, 0.5); -moz-box-shadow: 0px 2px 10px rgba(50, 50, 50, 0.5); box-shadow: 0px 2px 10px rgba(50, 50, 50, 0.5); }
-	.ui-pnotify-container { background-position: 0 0; padding: .8em; height: 100%; margin: 0; }
-	.ui-pnotify-sharp { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; }
-	.ui-pnotify-closer, .ui-pnotify-sticker { float: right; margin-left: .2em; }
-	.ui-pnotify-title { display: block; margin: 0px; }
-	.ui-pnotify-text { display: block; overflow:visible; text-wrap:normal; }
-	.ui-pnotify-icon, .ui-pnotify-icon span { display: block; float: left; margin-right: .2em; }
-	/* -- History Pulldown */
-	.ui-pnotify-history-container { position: relative; background:#F00 !important; width: 70px; border-top: none; padding: 0; -webkit-border-top-left-radius: 0; -moz-border-top-left-radius: 0; border-top-left-radius: 0; -webkit-border-top-right-radius: 0; -moz-border-top-right-radius: 0; border-top-right-radius: 0; /* Ensures history container is above notices. */ z-index: 9; }
-	.ui-pnotify-history-container .ui-pnotify-history-header { padding: 2px; }
-	.ui-pnotify-history-container button { cursor: pointer; display: block; width: 100%; }
-	.ui-pnotify-history-container .ui-pnotify-history-pulldown { display: block; margin: 0 auto; }
 
+.well {
+    position: absolute;
+    top: 0px !important;
+    right: 0px !important;
+    width: 200px !important;
+    max-width: 200px !important;
+}
+.ui-pnotify {
+    background: #F00;
+    position: relative;
+    height: auto;
+    z-index: 20000;
+}
+.ui-pnotify.stack-bottomleft {
+    bottom: 25px;
+    Left: 25px;
+    top: auto;
+    right: auto;
+}
+html > body .ui-pnotify {
+    position: fixed;
+    /* Hides position: fixed from IE6 */
+}
+.ui-pnotify .ui-pnotify-shadow {
+    -webkit-box-shadow: 0px 2px 10px rgba(50, 50, 50, 0.5);
+    -moz-box-shadow: 0px 2px 10px rgba(50, 50, 50, 0.5);
+    box-shadow: 0px 2px 10px rgba(50, 50, 50, 0.5);
+}
+.ui-pnotify-container {
+    background-position: 0 0;
+    padding: .8em;
+    height: 100%;
+    margin: 0;
+}
+.ui-pnotify-sharp {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.ui-pnotify-closer,
+.ui-pnotify-sticker {
+    float: right;
+    margin-left: .2em;
+}
+.ui-pnotify-title {
+    display: block;
+    margin: 0px;
+}
+.ui-pnotify-text {
+    display: block;
+    overflow: visible;
+    text-wrap: normal;
+}
+.ui-pnotify-icon,
+.ui-pnotify-icon span {
+    display: block;
+    float: left;
+    margin-right: .2em;
+}
+/* -- History Pulldown */
 
-
+.ui-pnotify-history-container {
+    position: relative;
+    background: #F00 !important;
+    width: 70px;
+    border-top: none;
+    padding: 0;
+    -webkit-border-top-left-radius: 0;
+    -moz-border-top-left-radius: 0;
+    border-top-left-radius: 0;
+    -webkit-border-top-right-radius: 0;
+    -moz-border-top-right-radius: 0;
+    border-top-right-radius: 0;
+    /* Ensures history container is above notices. */
+    z-index: 9;
+}
+.ui-pnotify-history-container .ui-pnotify-history-header {
+    padding: 2px;
+}
+.ui-pnotify-history-container button {
+    cursor: pointer;
+    display: block;
+    width: 100%;
+}
+.ui-pnotify-history-container .ui-pnotify-history-pulldown {
+    display: block;
+    margin: 0 auto;
+}
 /*!
  * less than 320 = small mobile mode 
  */
 
-@media (max-width : 320px) {
-}
-
+@media (max-width: 320px) {}
 /*!
  * less than 700 = mobile mode 
  */
 
-@media (max-width : 699px) {
-	
-	#welcome { margin:0px auto; clear:both; display:block; text-align:right; }
-    #ViewMenu, #View { 
-        height:auto;
+@media (max-width: 699px) {
+    #welcome {
+        margin: 0px auto;
+        clear: both;
+        display: block;
+        text-align: right;
+    }
+    #ViewMenu,
+    #View {
+        height: auto;
     }
     #ViewMenu {
-        width:100% !important; 
+        width: 100% !important;
     }
     #View {
-        width:auto !important;
+        width: auto !important;
     }
-    
     #AvatarFocus {
         position: initial;
     }
@@ -863,38 +1279,46 @@ word-wrap: break-word;
     #ViewSelect {
         max-width: 270px;
     }
-
     .view-indented-more {
         left: 0 !important;
     }
-    
-	#FocusMainMenu button { display:block; width:100%; margin:0; }
-				.FocusButtonLabel { display:inline-block !important; }
-				.FocusButtonIcon  { display:none !important; }
-	.logon > div, .modal > div { width: 280px; }
+    #FocusMainMenu button {
+        display: block;
+        width: 100%;
+        margin: 0;
+    }
+    .FocusButtonLabel {
+        display: inline-block !important;
+    }
+    .FocusButtonIcon {
+        display: none !important;
+    }
+    .logon > div,
+    .modal > div {
+        width: 280px;
+    }
 }
-
-@media (min-width : 700px) {
-	#welcome { text-align:center; }
-#ViewMenu { width:150px; }
-.logon > div, .modal > div { width: 500px; }
+@media (min-width: 700px) {
+    #welcome {
+        text-align: center;
+    }
+    #ViewMenu {
+        width: 150px;
+    }
+    .logon > div,
+    .modal > div {
+        width: 500px;
+    }
 }
-
-
-
-div.olControlZoom { top:auto !important; bottom:8px !important; }
-
-#TagSelectWidget {
+div.olControlZoom {
+    top: auto !important;
+    bottom: 8px !important;
 }
-#FocusEdit .ObjectEditDiv div {
+#TagSelectWidget {} #FocusEdit .ObjectEditDiv div {
     width: auto;
     float: left;
 }
-
-#welcomeoptions {
-}
-
-.PluginID {
+#welcomeoptions {} .PluginID {
     width: 14%;
     left: auto;
     float: left;
@@ -910,22 +1334,19 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     font-size: 17px;
     line-height: 15px;
 }
-.PluginID span {
-}
-.PluginEnabled {
-    background-color: rgba(128,255,128,0.4);
+.PluginID span {} .PluginEnabled {
+    background-color: rgba(128, 255, 128, 0.4);
     border: 5px solid gray;
 }
 .PluginDisabled {
-    background-color: rgba(255,128,128,0.4);
+    background-color: rgba(255, 128, 128, 0.4);
     border: 5px solid gray;
 }
 .PluginInvalid {
     color: gray;
     border: 5px solid #ddd;
 }
-
-#FocusMainMenu button span  {
+#FocusMainMenu button span {
     padding: 3px;
     margin: 0;
 }
@@ -938,16 +1359,14 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     padding-left: 0.7em;
     padding-right: 0.7em;
 }
-
 #SwitchPersonaButton img {
     margin-bottom: -5px;
 }
-
 .olControlAttribution {
-    display:none !important;
+    display: none !important;
 }
-
-#View, #ViewMenu {
+#View,
+#ViewMenu {
     display: none;
 }
 .ui-pnotify {
@@ -961,44 +1380,38 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     overflow-y: scroll;
     text-align: left;
 }
-.TagLayer, .KMLLayer, .ExtLayer {
+.TagLayer,
+.KMLLayer,
+.ExtLayer {
     cursor: crosshair;
 }
 .TagLayerInclude {
     color: #44ff44;
-    opacity:1.0;
+    opacity: 1.0;
 }
 .TagLayerExclude {
     color: #ff4444;
-    opacity:1.0;
+    opacity: 1.0;
 }
 .TagLayerFaded {
     opacity: 0.7;
 }
-
 .focusButton {
     width: 15px;
     height: 15px;
     cursor: crosshair;
     float: left;
 }
-
 .focusIncludeButtonActive {
     background-color: #86b226;
 }
 .focusExcludeButtonActive {
     background-color: #f66;
 }
-.focusLabel {
-    
-}
-.focusClear {
+.focusLabel {} .focusClear {
     clear: both;
 }
-
-
 .logon {
-
     /* Overlay page content */
     position: fixed;
     top: 0;
@@ -1007,199 +1420,183 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     bottom: 0;
     background: none;
     z-index: 10000;
-
     /* Transition opacity on open */
     -webkit-transition: opacity 500ms ease-in;
     -moz-transition: opacity 500ms ease-in;
     transition: opacity 500ms ease-in;
-
     /* Hide for now */
     opacity: 100;
 }
-
 /* Show modal */
 
-.logon > div > div { z-index:200000;
+.logon > div > div {
+    z-index: 200000;
 }
-	
 /* Content */
+
 .logon > div {
     background: #fff;
     position: relative;
     margin: 10% auto;
-	z-index:200000;
-	/* Default minimise animation */
+    z-index: 200000;
+    /* Default minimise animation */
     -webkit-animation: maximise 500ms linear;
     -moz-animation: maximise 500ms linear;
-
     /* Prettify */
     padding: 30px;
     border-radius: 7px;
-    box-shadow: 0 3px 20px rgba(0,0,0,0.9);
+    box-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
     background: #fff;
     background: -moz-linear-gradient(#fff, #ccc);
     background: -webkit-linear-gradient(#fff, #ccc);
     background: -o-linear-gradient(#fff, #ccc);
     text-shadow: 0 1px 0 #fff;
 }
-
-
 .ui-widget-overlay {
-	background: black !important;
-	opacity: 0.7 !important;
+    background: black !important;
+    opacity: 0.7 !important;
 }
-
-
 /*
 * Perfect Modal
 * http://www.paulrhayes.com/2011-03/css-modal/
 */
 
-
 /* Container */
-.modal {
 
+.modal {
     /* Overlay page content */
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 10000;
-
     /* Transition opacity on open */
     -webkit-transition: opacity 500ms ease-in;
     -moz-transition: opacity 500ms ease-in;
     transition: opacity 500ms ease-in;
-
     /* Hide for now */
     opacity: 0;
     pointer-events: none;
 }
-
 /* Show modal */
+
 .modal:target {
     opacity: 1;
     pointer-events: auto;
     /* at time of writing (Feb 2012), pointer-events not supported by Opera or IE */
 }
-
 /* Content */
+
 .modal > div {
     width: 500px;
     background: #fff;
     position: relative;
     margin: 10% auto;
-
     /* Default minimise animation */
     -webkit-animation: minimise 500ms linear;
     -moz-animation: minimise 500ms linear;
-
     /* Prettify */
     padding: 30px;
     border-radius: 7px;
-    box-shadow: 0 3px 20px rgba(0,0,0,0.9);
+    box-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
     background: #fff;
     background: -moz-linear-gradient(#fff, #ccc);
     background: -webkit-linear-gradient(#fff, #ccc);
     background: -o-linear-gradient(#fff, #ccc);
     text-shadow: 0 1px 0 #fff;
 }
-
 /* Override animation on modal open */
+
 .modal:target > div {
     -webkit-animation-name: bounce;
     -moz-animation-name: bounce;
 }
-
 .modal h2 {
     font-size: 36px;
     padding: 0 0 20px;
 }
-
 @-webkit-keyframes bounce {
-  0% {
-    -webkit-transform: scale3d(0.1,0.1,1);
-    box-shadow: 0 3px 20px rgba(0,0,0,0.9);
-  }
-  55% {
-    -webkit-transform: scale3d(1.08,1.08,1);
-    box-shadow: 0 10px 20px rgba(0,0,0,0);
-  }
-  75% {
-    -webkit-transform: scale3d(0.95,0.95,1);
-    box-shadow: 0 0 20px rgba(0,0,0,0.9);
-  }
-  100% {
-    -webkit-transform: scale3d(1,1,1);
-    box-shadow: 0 3px 20px rgba(0,0,0,0.9);
-  }
+    0% {
+        -webkit-transform: scale3d(0.1, 0.1, 1);
+        box-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
+    }
+    55% {
+        -webkit-transform: scale3d(1.08, 1.08, 1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0);
+    }
+    75% {
+        -webkit-transform: scale3d(0.95, 0.95, 1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        box-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
+    }
 }
-
 @-webkit-keyframes minimise {
-  0% {
-    -webkit-transform: scale3d(1,1,1);
-  }
-  100% {
-    -webkit-transform: scale3d(0.1,0.1,1);
-  }
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+    }
+    100% {
+        -webkit-transform: scale3d(0.1, 0.1, 1);
+    }
 }
-
 @-moz-keyframes bounce {
-  0% {
-    -moz-transform: scale3d(0.1,0.1,1);
-    box-shadow: 0 3px 20px rgba(0,0,0,0.9);
-  }
-  55% {
-    -moz-transform: scale3d(1.08,1.08,1);
-    box-shadow: 0 10px 20px rgba(0,0,0,0);
-  }
-  75% {
-    -moz-transform: scale3d(0.95,0.95,1);
-    box-shadow: 0 0 20px rgba(0,0,0,0.9);
-  }
-  100% {
-    -moz-transform: scale3d(1,1,1);
-    box-shadow: 0 3px 20px rgba(0,0,0,0.9);
-  }
+    0% {
+        -moz-transform: scale3d(0.1, 0.1, 1);
+        box-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
+    }
+    55% {
+        -moz-transform: scale3d(1.08, 1.08, 1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0);
+    }
+    75% {
+        -moz-transform: scale3d(0.95, 0.95, 1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+    }
+    100% {
+        -moz-transform: scale3d(1, 1, 1);
+        box-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
+    }
 }
-
 @-moz-keyframes minimise {
-  0% {
-    -moz-transform: scale3d(1,1,1);
-  }
-  100% {
-    -moz-transform: scale3d(0.1,0.1,1);
-  }
+    0% {
+        -moz-transform: scale3d(1, 1, 1);
+    }
+    100% {
+        -moz-transform: scale3d(0.1, 0.1, 1);
+    }
 }
-
 /* Modal close link */
+
+/*
 .modal a[href="#close"] {
     position: absolute;
     right: 0;
     top: 0;
     color: transparent;
 }
-
+*/
 /* Reset native styles */
+/*
 .modal a[href="#close"]:focus {
     outline: none;
 }
-
+*/
 /* Create close button */
+/*
 .modal a[href="#close"]:after {
     content: 'X';
     display: block;
-
-    /* Position */
+    //
     position: absolute;
     right: -10px;
     top: -10px;
     width: 1.5em;
     padding: 1px 1px 1px 2px;
-
-    /* Style */
+    //
     text-decoration: none;
     text-shadow: none;
     text-align: center;
@@ -1208,9 +1605,9 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     color: #fff;
     border: 3px solid #fff;
     border-radius: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    }
-
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+*/
 /*
 .modal a[href="#close"]:focus:after,
 .modal a[href="#close"]:hover:after {
@@ -1223,17 +1620,16 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
 }
 */
 
-
 .MapControl {
     position: fixed;
     right: 5px;
     bottom: 5px;
     z-index: 5000;
 }
-
-
 /* HORIZONTAL jquery-ui MENU - http://stackoverflow.com/questions/12944364/how-to-make-jquery-ui-nav-menu-horizontal */
+
 /* Clearfix for the menu */
+
 .ui-menu:after {
     content: ".";
     display: block;
@@ -1250,104 +1646,105 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     width: auto;
 }
 .ActionMenuGlobal {
-	position: fixed;
-	z-index: 3000;
-	bottom: 0;
-	right: 0;
-	width: 30%;
+    position: fixed;
+    z-index: 3000;
+    bottom: 0;
+    right: 0;
+    width: 30%;
 }
 .ActionMenuPopup {
-	position: fixed;
-	z-index: 5000 !important;
-	overflow: visible !important;
-	text-align: left;
-	width: 150px;
+    position: fixed;
+    z-index: 5000 !important;
+    overflow: visible !important;
+    text-align: left;
+    width: 150px;
     font-size: 70% !important;
     font-weight: normal;
 }
-
 /* ------------------------------- */
 
-
 .reveal {
-	font-size: 150% !important;
-	overflow: hidden;
+    font-size: 150% !important;
+    overflow: hidden;
 }
 .reveal section img {
-	margin: 0 !important;
-	border: none !important;
-	box-shadow: none !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
 }
-
-
 .usContainer {
     overflow: auto;
     display: table;
     table-layout: fixed;
 }
-
-.goalviewColumn, .goalviewColumnNarrow {
-	width: 30%;
-	min-width: 275px;
-	height: 100%;
-	overflow: auto;
-	padding-left: 0.3em;
-	padding-right: 0.3em;
+.goalviewColumn,
+.goalviewColumnNarrow {
+    width: 30%;
+    min-width: 275px;
+    height: 100%;
+    overflow: auto;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
     display: table-cell;
 }
-
-
-.goalviewColumnNarrow { width: 20%; }
-
-.goalRowHeading { font-size: 150%; font-weight: bold; margin-bottom: 0.5em; }
-
-.alternatingDiv { clear: both; }
-.alternatingDiv:nth-child(even) {	background-color: rgba(255,255,255,0.3); }
-.alternatingDiv:nth-child(odd) {	background-color: rgba(240,240,240,0.5); }
-.operatorDiv ul, .alternatingDiv ul { margin: 0; }
-
+.goalviewColumnNarrow {
+    width: 20%;
+}
+.goalRowHeading {
+    font-size: 150%;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+.alternatingDiv {
+    clear: both;
+}
+.alternatingDiv:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+.alternatingDiv:nth-child(odd) {
+    background-color: rgba(240, 240, 240, 0.5);
+}
+.operatorDiv ul,
+.alternatingDiv ul {
+    margin: 0;
+}
 .operatorDiv {
     margin-bottom: 1em;
 }
-
-#goalviewList div {	margin-bottom: 1em; } 
-
-
+#goalviewList div {
+    margin-bottom: 1em;
+}
 /*#goalviewList div:nth-child(odd) {	background: #ddd; } 
 #goalviewList div:nth-child(even) {	background: #eee; } */
 
 .GoalSummary {
-	border: 2px solid gray;
-	margin: 5px;
+    border: 2px solid gray;
+    margin: 5px;
 }
 .centroidSummary {
-	text-align: right;
+    text-align: right;
 }
 .miniGoalSummary {
-	margin-left: 2em;
-	width: auto;
+    margin-left: 2em;
+    width: auto;
 }
-
 .timecell {
-	cursor: crosshair;
-	padding: 2px;
-	margin: 2px;
-	border: 1px solid gray;
+    cursor: crosshair;
+    padding: 2px;
+    margin: 2px;
+    border: 1px solid gray;
 }
-
 .cesiumContainer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      overflow: hidden;
-      padding: 0;
-      font-family: sans-serif;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    font-family: sans-serif;
 }
-
-
 .ReconnectDialog {
     text-align: center;
 }
@@ -1355,139 +1752,127 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     width: 75%;
     margin-top: 3em;
 }
-
-
-
 .fractaldom_surface {
-	background-image: url('lib/slateboxjs/cursors/grid_transparent.png');
+    background-image: url('lib/slateboxjs/cursors/grid_transparent.png');
 }
 .link {
-	pointer-events: none;
+    pointer-events: none;
 }
-
 .node text {
-  pointer-events: none;
-  font: 10px sans-serif;
+    pointer-events: none;
+    font: 10px sans-serif;
 }
 svg {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-
 .TextReader textarea {
-	width: 100%;
-	min-height: 5em;
+    width: 100%;
+    min-height: 5em;
 }
-
 .Share {
-	padding: 1em;
+    padding: 1em;
 }
-
 .Share .Logo {
-	float: left;
-	font-size: 150%;
+    float: left;
+    font-size: 150%;
 }
 .Share .SelfMenu {
-	float: right;
-	font-size: 150%;
+    float: right;
+    font-size: 150%;
 }
 .Share .SelfMenu button {
-	font-size: 120%;
+    font-size: 120%;
 }
 .Share .SearchMenu {
-	clear: both;
-	width: 100%;
-	text-align: center;
-	margin-top: 4em;
-	margin-bottom: 1em;
-	padding-top: 1em;
-	padding-bottom: 1em;
-	background-color: #eee;
+    clear: both;
+    width: 100%;
+    text-align: center;
+    margin-top: 4em;
+    margin-bottom: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background-color: #eee;
 }
-.Share .SearchMenu input, .Share .SearchMenu button {
-	font-size: 150%;
+.Share .SearchMenu input,
+.Share .SearchMenu button {
+    font-size: 150%;
 }
 .Share .ShareSidebar {
-	width: 20%;
-	float: left;
+    width: 20%;
+    float: left;
 }
 .Share .ShareContent {
-	width: 75%;
-	float: right;
+    width: 75%;
+    float: right;
 }
 .ShareSummary {
-	padding-bottom: 1em;
-	margin-bottom: 1em;
-	border-bottom: 1px solid gray;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid gray;
 }
 .ShareSummary .ShareSummaryImage {
-	width: 20%;
-	float: left;
+    width: 20%;
+    float: left;
 }
 .ShareSummary .ShareSummaryImage img {
-	max-width: 100%;
-	max-height: 8em;
+    max-width: 100%;
+    max-height: 8em;
 }
 .ShareSummary .ShareSummaryContent {
-	width: 75%;
-	float: right;
+    width: 75%;
+    float: right;
 }
-.ShareSummaryAction  {
-	width: 40%;
-	float: left;
+.ShareSummaryAction {
+    width: 40%;
+    float: left;
 }
 .ShareSummaryAuthor {
-	width: 40%;
-	float: right;
+    width: 40%;
+    float: right;
 }
-.SkillSlider { width: 98%; }
-
-
+.SkillSlider {
+    width: 98%;
+}
 .mainViewButton {
     list-style: none;
     cursor: pointer;
     padding: 0.25em;
 }
-
 .preview-holder {
     list-style: none !important;
     border: 2px solid gray !important;
 }
-
-
 .UserTagCode {
-	max-height: 300px;
-	overflow: scroll;
+    max-height: 300px;
+    overflow: scroll;
 }
-
-.timeline-navigation-delete { display: none }
+.timeline-navigation-delete {
+    display: none
+}
 .timelineLabel {
     cursor: crosshair;
     font-size: 60%;
 }
-
 .SimilaritySection {
-	margin-top: 1em;
-	margin-bottom: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 .objectViewBorderless .SimilaritySection {
-	margin-left: 1em;
+    margin-left: 1em;
 }
-
-.SimilaritySection button { padding: 0; }
-
+.SimilaritySection button {
+    padding: 0;
+}
 .SimilaritySection ul {
-	margin-left: 2em;
-	margin-right: 1.5em;
+    margin-left: 2em;
+    margin-right: 1.5em;
 }
 .SimilaritySection li {
-	display: inline;
-	padding-left: 0 !important;
-}
-a:hover {
-	color: blue !important;
+    display: inline;
+    padding-left: 0 !important;
 }
