@@ -886,11 +886,13 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .objectView h3,
 .objectView p,
 .objectView time {
-    padding-left: 10px;
+    padding-left: 0.1em;
+    padding-right: 0.1em;
     padding-top: 5px;
 }
-.objectView img {
+.objectView img, .tagSection img {
     max-height: 12em;
+    max-width: 100%;
 }
 .MessageSubject {
     width: 100%;

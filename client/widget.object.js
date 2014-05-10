@@ -479,18 +479,45 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 });
             });
 
-            var uploadButton = $('<button title="Upload"><img src="/icon/rrze/actions/dial-in.png"/></button>').click(function () {
+            var uploadButton = $('<button title="Add Media (Upload or Link)"><img src="/icon/rrze/actions/dial-in.png"/></button>').click(function () {
 
+                
+                function attachURL(url) {
+                    update(objAddValue(getEditedFocus(), 'media', url));
+                    later(function () {
+                        x.dialog('close');
+                    });                    
+                }
+                
                 var y = newDiv();
-                var fuf = y.append('<form id="FocusUploadForm" action="/upload" method="post" enctype="multipart/form-data"><div>File:<input type="file" name="uploadfile" /><input type="submit" value="Upload" /></div></form>');
-                y.append('<div class="FocusUploadProgress"><div class="FocusUploadBar"></div><div class="FocusUploadPercent">0%</div></div>');
-                y.append('<div id="FocusUploadStatus"></div>');
-                var okButton = $('<button class="btn">OK</button>');
-                y.append(okButton);
+                
+                var fuf = $('<form id="FocusUploadForm" action="/upload" method="post" enctype="multipart/form-data">File:</form>').appendTo(y);
+                var fileInput = $('<input type="file" name="uploadfile" />').appendTo(fuf);
+                fuf.append('<br/>');
+                var fileSubmit = $('<input type="submit" value="Upload" />').hide().appendTo(fuf);
+                
+                fileInput.change(function() {
+                    if (fileInput.val().length > 0)
+                        fileSubmit.show();
+                });
+                
+                var stat = $('<div class="FocusUploadProgress"><div class="FocusUploadBar"></div><div class="FocusUploadPercent">0%</div></div><br/><div id="FocusUploadStatus"></div>').appendTo(y).hide();
+
+                y.append('<hr/>');
+                
+                var mediaInput = $('<input type="text" placeholder="Image or Video URL"/>').appendTo(y);
+                var mediaButton = $('<button>Attach</button>').appendTo(y).click(function() {
+                    attachURL(mediaInput.val());
+                });
+                    
+                
+                y.append('<hr/>');
+                var okButton = $('<button class="btn">Cancel</button>').appendTo(y);
 
 
-                var x = newPopup('Upload', {
-                    modal: true
+                var x = newPopup('Add Media', {
+                    modal: true,
+                    width: "50%"
                 });
                 x.append(y);
 
@@ -508,6 +535,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         var percentVal = '0%';
                         bar.width(percentVal);
                         percent.html(percentVal);
+                        stat.show();
                     },
                     uploadProgress: function (event, position, total, percentComplete) {
                         var percentVal = percentComplete + '%';
@@ -520,10 +548,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                             status.html($('<a>File uploaded</a>').attr('href', url));
                             var absURL = url.substring(1);
 
-                            update(objAddValue(getEditedFocus(), 'media', absURL));
-                            later(function () {
-                                x.dialog('close');
-                            });
+                            attachURL(absURL);
                         }
                     }
                 });

@@ -1677,7 +1677,7 @@ exports.start = function(options, init) {
     });
 
     express.get('/state', function(req, res) {
-        sendJSON(res, _.omit($N.server, ['plugins', 'users', 'currentClientID']));
+        sendJSON(res, _.omit($N.server, ['plugins', 'users', 'currentClientID', 'permissions']));
     });
     express.get('/attention', function(req, res) {
         getTagCounts(function(x) {
