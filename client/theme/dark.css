@@ -11,6 +11,7 @@ h1, .objectView h1, h3, .objectView h3 {
     color: #ddd;
 }
 
+
 .objectView, #focus {
     padding: 0.25em;
     margin-bottom: 0.5em;
@@ -34,12 +35,18 @@ a:hover {
     background: none !important;
 }
 #ViewMenu {
-    background-color: #555;
-    opacity: 0.92;
+    background-color: #222;
+    opacity: 1.0;
 }
 #LoadingSplash2 { 
     background-color: black; 
 }
 .tagSectionHovered {
     background-color: rgba(255,255,255,0.2);
+}
+
+.ChatViewInput .nameInput {
+    color: white;
+    background-color: black;
+    border: 1px solid gray;
 }

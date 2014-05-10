@@ -53,12 +53,20 @@ var acceptsSelectionOfOne = function(s) {
     return (s.length == 1);
 };
 var acceptsSelectionOfOneAndOwnedByMe = function(s) {
-
     if (s.length == 1) {
         if (s[0].author == $N.id())
             return true;
     }
     return false;
+};
+var acceptsSelectionOfManyOwnedByMe = function(s) {
+    var myid = $N.id();
+    for (var i = 0; i < s.length; i++) {
+        var S = s[i];
+        if (S.author!=myid)
+            return false;
+    }
+    return true;
 };
 var acceptsAll = function(s) {
     return true;
@@ -113,10 +121,23 @@ addAction({
     }
 });
 addAction({menu: 'Object', name: 'Anonymize'});
-addAction({menu: 'Object', name: 'Refresh', accepts: acceptsAll, 
+addAction({menu: 'Object', name: 'Refresh', 
+    description: 'Publishes existing objects into the network for re-analysis.',
+    accepts: acceptsSelectionOfManyOwnedByMe, 
     run: function(selection) {
         _.each(selection, function(x) {
-            if (x.author == $N.id()) {
+            if (x.author === $N.id()) {
+				$N.pub(x);
+			}
+		});
+	}	
+});
+addAction({menu: 'Object', name: 'Touch', 
+    description: 'Sets the modification date of objects to now.',
+    accepts: acceptsSelectionOfManyOwnedByMe, 
+    run: function(selection) {
+        _.each(selection, function(x) {
+            if (x.author === $N.id()) {
 				objTouch(x);
 				$N.pub(x);
 			}
