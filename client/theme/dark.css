@@ -4,9 +4,6 @@ body {
     color: white;
 	background-color: black;
 }
-h1, .objectView h1, h3, .objectView h3 {
-    color: white;
-}
 .MetadataLine, .ui-widget-content {
     color: #ddd;
 }

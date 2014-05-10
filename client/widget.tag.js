@@ -12,12 +12,23 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
 
     var currentBrowser = null;
 
+    var clearButton = $('<button title="Clear the selected tags">Clear</button>').addClass('halfTransparent');
+    
+    var b = $('<button><b>OK</b></button>');
 
-    var tagsCombo = $('<span></span>');
+    var tagsCombo = $('<span></span>').attr('id', 'tagsCombo');
     tagsCombo.update = function() {
         tagsCombo.empty();
-        for (var i = 0; i < tags.length; i++)
-            tagsCombo.append('<b>' + tags[i] + '</b>&nbsp;');
+        if (tags.length === 0) {
+            clearButton.hide();
+            b.text('Cancel');
+        }
+        else {
+            clearButton.show();
+            b.html('<b>Select</b>');
+            for (var i = 0; i < tags.length; i++)
+                tagsCombo.append(newTagButton(tags[i]));
+        }
     };
     tagsCombo.update();
 
@@ -36,11 +47,12 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
         t.append(currentBrowser);
     }
 
-    var selectBar = $('<div/>');
-    {
-        var modeSelect = $('<select/>').appendTo(selectBar);
-        var modeFunctions = {};
-        modeSelect.change(function() {
+    var selectBar = $('<div/>').attr('id', 'tagSelectHeader');
+    
+    var modeFunctions = {};
+    var modeSelect = $('<select autofocus/>')
+        .appendTo(selectBar)
+        .change(function() {
             var k = modeSelect.val();
             var f = modeFunctions[k];
             if (f) {
@@ -49,73 +61,68 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
                 });
             }
         });
-        var optionCount = 0;
-        function addOption(label, browserFunction) {
-            /*var b = $('<button>' + label + '</button>');
-             b.click(function() {
-             loadBrowser(browserFunction);
-             });
-             selectBar.append(b);*/
-            $('<option value="' + optionCount + '">' + label + '</option>').appendTo(modeSelect);
-            modeFunctions[optionCount] = browserFunction;
-            optionCount++;
-        }
-        if (!tagRestrictions) {
-            addOption('Index', newTreeBrowser);
-            addOption('Wiki', newWikiBrowser);
-            addOption('Object', newObjectSelector(null));
-            addOption('Who', newObjectSelector($N.getTag('User')));
-            addOption('Emotion', newEmotionBrowser);
-            addOption('Body', newBodyBrowser);
-            addOption('Needs', newNeedsBrowser);
-            addOption('&#9733;', newNeedsBrowser); //favorites
-        }
-        else {
-            if (!Array.isArray(tagRestrictions))
-                tagRestrictions = [tagRestrictions];
-            
-            _.each(tagRestrictions, function(t) {
-                var T = $N.getTag(t);
-                if (T)
-                    addOption(T.name, newObjectSelector(T));
-            });
-        }
+    var optionCount = 0;
+    function addOption(label, browserFunction) {
+        /*var b = $('<button>' + label + '</button>');
+         b.click(function() {
+         loadBrowser(browserFunction);
+         });
+         selectBar.append(b);*/
+        $('<option value="' + optionCount + '">' + label + '</option>').appendTo(modeSelect);
+        modeFunctions[optionCount] = browserFunction;
+        optionCount++;
     }
-    //d.append(selectBar);
+    if (!tagRestrictions) {
+        addOption('Index', newTreeBrowser);
+        addOption('Wiki', newWikiBrowser);
+        addOption('Object', newObjectSelector(null));
+        addOption('Who', newObjectSelector($N.getTag('User')));
+        addOption('Emotion', newEmotionBrowser);
+        addOption('Body', newBodyBrowser);
+        addOption('Needs', newNeedsBrowser);
+        addOption('&#9733;', newNeedsBrowser); //favorites
+    }
+    else {
+        if (!Array.isArray(tagRestrictions))
+            tagRestrictions = [tagRestrictions];
+
+        _.each(tagRestrictions, function(t) {
+            var T = $N.getTag(t);
+            if (T)
+                addOption(T.name, newObjectSelector(T));
+        });
+    }
 
     var saveBar = $('<span/>');
-    {
-        tagsCombo.update();
-        saveBar.append(tagsCombo);
+    tagsCombo.update();
+    saveBar.append(tagsCombo);
 
-        var clearButton = $('<button>x</button>');
-        clearButton.click(function() {
-			if (tags.length)
-		        if (confirm('Clear selected tags?')) {
-		            tags = [];
-		            tagsCombo.update();
-		        }
-        });
-        saveBar.append(clearButton);
+    clearButton.click(function() {
+        if (tags.length)
+            if (confirm('Clear selected tags?')) {
+                tags = [];
+                tagsCombo.update();
+            }
+    });
+    saveBar.append(clearButton);
 
 
-        var b = $('<button><b>OK</b></button>');
-        b.click(function() {
-            onFinished(tags);
-            /*
-             var newTags = [];
-             $('.TagChoice').each(function(x) {
-             var t = $(this);
-             var tag = t.attr('id');
-             if (t.is(':checked'))
-             newTags.push(tag);
-             });
-             onFinished(newTags);*/
+    b.click(function() {
+        onFinished(tags);
+        /*
+         var newTags = [];
+         $('.TagChoice').each(function(x) {
+         var t = $(this);
+         var tag = t.attr('id');
+         if (t.is(':checked'))
+         newTags.push(tag);
+         });
+         onFinished(newTags);*/
 
-        });
-        saveBar.append(b);
-    }
-    later(function() {
+    });
+    saveBar.append(b);
+    
+    later(function() {        
         selectBar.append(saveBar);
         //d.parent().parent().children(".ui-dialog-titlebar").append(selectBar);
         d.parent().before(selectBar);

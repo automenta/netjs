@@ -138,6 +138,10 @@ function lineClickFunction() {
         if (firstMedia) {
             e.append('<p><img src="' + firstMedia + '"/></p>');
         }        
+        var numReplies = $N.getReplies(x.id).length;
+        if (numReplies > 0) {
+            e.append('<div style="opacity: 0.5">(+' + numReplies + ' replies)</div>');
+        }
 
     }
     function showFull() {

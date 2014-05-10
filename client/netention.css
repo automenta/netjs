@@ -1064,6 +1064,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     background-color: white;
     color: black;
     width: 98%;
+    padding: 0.75em;
 }
 .WikiBrowser h1 {
     margin-top: 0;
@@ -1458,6 +1459,24 @@ div.olControlZoom {
     background: black !important;
     opacity: 0.7 !important;
 }
+
+.halfTransparent {
+    opacity: 0.5;
+}
+
+#tagSelectHeader {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid gray;
+}
+#tagsCombo {
+    margin-left: 2em;
+    margin-right: 0.5em;
+}
+#tagsCombo a {
+    margin-left: 0.25em;
+}
+
 /*
 * Perfect Modal
 * http://www.paulrhayes.com/2011-03/css-modal/
