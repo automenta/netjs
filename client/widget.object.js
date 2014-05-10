@@ -1328,7 +1328,7 @@ function newSimilaritySummary(x) {
                 var o = $N.getObject(v.value);
                 var name = o ? o.name : "?";
                 var li = $('<li></li>').appendTo(d);
-                var lia = $('<a>' + name /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
+                var lia = $('<a>' + _s(name,32,true) /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
                 li.append('&nbsp;');
                 lia.click(function () {
                     newPopupObjectView(v.value);
@@ -1454,6 +1454,7 @@ function newSimilaritySummary(x) {
             areaMap.hide();
         }
         freetileView();
+        return false;
     });
 
     return g;

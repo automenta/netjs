@@ -32,7 +32,12 @@ function _n(x, places) {
 exports._n = _n;
 
 
-
+function _s(s, maxLength, unicode) {
+    if (s.length > maxLength) {
+        return s.substring(0, maxLength-2) + (unicode ? '&#8230;' : '..');
+    }
+    return s;    
+}
 
 /** adds the objectInterface to an object */
 function objectify(x) {
@@ -374,7 +379,7 @@ function objTagStrength(x, normalize, noProperties) {
         if (isPrimitive(ii))
             return;
         if (noProperties) {
-            if (window.$N.getProperty(ii) !== null)
+            if (window.$N.getProperty(ii))
                 return;
         }
         var s = vv.strength || 1.0;
