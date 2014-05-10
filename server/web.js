@@ -161,13 +161,13 @@ exports.start = function(options, init) {
     function loadState(f) {
         var db = mongo.connect(getDatabaseURL(), collections);
 
-        db.obj.ensureIndex({_tag: 1}, function(err, res) {
+        /*db.obj.ensureIndex({_tag: 1}, function(err, res) {
             if (err) {
                 console.error('ENSURE INDEX _tag', err); 
                 db.close();
-            }
+            }*/
         
-            db.obj.find({_tag: {$in: ['ServerState']}}).limit(1).sort({when: -1}, function(err, objs) {
+            db.obj.find({tag: {$in: ['ServerState']}}).limit(1).sort({when: -1}, function(err, objs) {
                 db.close();
                 
                 if (err || !objs)
@@ -202,7 +202,7 @@ exports.start = function(options, init) {
                     f();
 
             });
-        });
+        //});
 
     }
 
@@ -621,7 +621,7 @@ exports.start = function(options, init) {
          logMemoryPointer = logMemory.pointer;*/
 
         delete $N.server._id;
-        $N.server._tag = $N.server.tag = ['ServerState'];
+        $N.server.tag = ['ServerState'];
         $N.server.when = t;
 
         var db = mongo.connect(getDatabaseURL(), collections);
