@@ -22,18 +22,8 @@
 	padding: 0.25em;
 }
 
-.PropertyArea {
-	margin-left: 2em;
-	font-size: 75%;	
-	z-index:2;
-}
 
-.DataViewMenu {
-	background-color: black;
-	margin-bottom: 0.25em;
-	height: 35px;
-	z-index:2;
-}
+
 .TypesMenuButtons {
 	height: 35px;
 	background: black;
@@ -311,6 +301,7 @@ div.olMapViewport {
 .MetadataLine {
     opacity: 0.8;
     word-wrap: break-word;
+    font-weight: normal;
 }
 .MetadataLine img {
     height: 1em;
@@ -444,22 +435,11 @@ div.olMapViewport {
 }
 
 
-#MenuWrapper {
-    margin-bottom: 1.5em;
-    z-index: 500;
-}
-#MenuWrapper img {
-    padding-right: 1.0em;
-}
 #ViewOptions select {
     width: auto;
 }
 .PropertyRemoveButton {
     float: right;
-}
-#MenuWrapper {
-    position: fixed;
-	width:100px;
 }
 
 #FocusModeSelect {
@@ -471,23 +451,6 @@ div.olMapViewport {
 	z-index:2000 !important;
 }
 
-#TypeSelectModal {
-    width: 75%;
-    height: 75%;
-    left: auto;
-    top: auto;
-    padding: 1em;
-    margin-left: auto;
-	z-index:2000;
-}
-            
-#TypeSelectModalTree {
-    max-height: 80%;
-    overflow: auto;
-}
-#TypeSelectModalTree button {
-    margin: 1em;
-}
 
 .TagTree {
     font-size: 160%;
@@ -539,54 +502,11 @@ div.olMapViewport {
     font-size: 80%;
     font-variant: italic;
 }
-#main-menu {
-	position: absolute;
-	top:0;
-	left:0;
-	margin:0;
-	padding:0;
-	width:100%;
-	height:32px;
-	z-index:50000;
-	background:#FFF;
-}
-.main-menu-open {
-	margin:0;
-	padding:0;
-	display:block;
-	z-index:50000;
-	width:100%;
-	height:40px;
-	background:#FFF;
-}
-.main-menu-close {
-	width:0px;
-	height:0px;
-}
 
 #footer-span {position:absolute; bottom:5px; right:5px; float:right; }
 #footer-brand { height:32px; width:32px; margin:5px 10px; }
 #ViewSelect { float:left; margin-right:10px; }
 
-#ontop {z-index:50000 !important; }
-
-
-#DataTarget {
-position: relative;
-height: 100%;
-width:100%;
-z-index:1;
-padding:0;
-margin:0;
-overflow: hidden;
-}
-
-#SelfTarget h1 {
-font-size:20px;
-margin: 5px auto;
-display:block;
-clear:both;
-}
 
 
 
@@ -597,7 +517,7 @@ clear:both;
  
  /* Global Rules */
  /* * { outline:none; } */ /* removed because it was taking ~8% of CSS processing accorindg to Chrome profiler */
-body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-family: Arial, sans; z-index:1; }
+body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-family: Arial, sans; }
 		.nobg { background: #000000 !important; background-image: none !important; }
 		.shadow { moz-box-shadow: 0px 0px 24px #000000; -webkit-box-shadow: 0px 0px 24px #000000; box-shadow:0px 0px 24px #000000; -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')"; filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444'); }
 		.left { float:left; }
@@ -625,10 +545,11 @@ body { width:100%; height:100%; margin:0px; padding:0px; overflow:hidden; font-f
 #LoadingSplash2 { background-color: white; z-index:99; position: fixed; width: 100%; height: 100%; display: none; }
 
 /* View Screen */
-#View { border: none; position: fixed; top:0; right:0; bottom:0; left:0; height: 100%; width:100%; z-index: 1; clear:both; }
-	#embed-frame { z-index: 1; position:relative; width:100%; height:100%; min-height:100%; max-height:100%; margin:0; outline:none; border:none; overflow:auto; background:#000; padding:0; display:block;}
-	div.olMapViewport { z-index: 1 !important;; }
-	div.olControlZoom { top:auto !important; bottom:8px !important; }
+#View { border: none; position: fixed; top:0; right:0; bottom:0; left:0; height: 100%; width:100%; clear:both; }
+#embed-frame {  position:relative; width:100%; height:100%; min-height:100%; max-height:100%; margin:0; outline:none; border:none; overflow:auto; background:#000; padding:0; display:block;}
+
+/*div.olMapViewport { z-index: 1 !important;; }
+div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
 .ViewControl { 
 	padding: 0; margin: 0;
@@ -753,10 +674,10 @@ word-wrap: break-word;
 	.ObjectViewHideButton:hover { opacity:1; }
 	.ObjectViewHideButton button { position:relative; padding:5px; margin:0px; }
 	.objectView h1 { font-size: 140%; font-weight: bold;  margin: 2px 0px;  }
-	.objectView h2 { font-size: 105%; font-weight: bold; margin: 0;  }
+	.objectView h2 { font-size: 105%;  margin: 0;  }
 	.objectView h3 { font-weight: normal; color: #333; margin: 0;  }
 	.objectView ul { list-style-type: none; margin-bottom: 0.2em; padding-left: 0; margin-left: 0;  }
-	.objectView ul li { padding: 0.3em;  font-weight: bold;  }
+	.objectView ul li { padding: 0.3em;   }
 	.objectView h3, .objectView p, .objectView time { padding-left: 10px; padding-top: 5px;  }
 	.objectView img { max-height: 12em;	 }
 	.MessageSubject { width: 100%; font-size: 125%;	 }
@@ -1288,6 +1209,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
     box-shadow: 0 1px 3px rgba(0,0,0,0.5);
     }
 
+/*
 .modal a[href="#close"]:focus:after,
 .modal a[href="#close"]:hover:after {
     -webkit-transform: scale(1.1,1.1);
@@ -1297,14 +1219,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }
 .modal a[href="#close"]:focus:after {
     outline: 1px solid #000;
 }
+*/
 
-/* Open modal */
-a.openModal {
-}
-
-a.openModal:hover,
-a.openModal:focus {
-}
 
 .MapControl {
     position: fixed;
@@ -1333,7 +1249,7 @@ a.openModal:focus {
 }
 .ActionMenuGlobal {
 	position: fixed;
-	z-index: 10;
+	z-index: 3000;
 	bottom: 0;
 	right: 0;
 	width: 30%;
@@ -1344,6 +1260,8 @@ a.openModal:focus {
 	overflow: visible !important;
 	text-align: left;
 	width: 150px;
+    font-size: 70% !important;
+    font-weight: normal;
 }
 
 /* ------------------------------- */
@@ -1359,15 +1277,7 @@ a.openModal:focus {
 	box-shadow: none !important;
 }
 
-#GoalHeader {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	z-index: 5000;
-}
-#GoalHeader button {
-	float: right;
-}
+
 .usContainer {
     overflow: auto;
     display: table;
@@ -1437,12 +1347,6 @@ a.openModal:focus {
 }
 
 
-.graphControlPanel {
-	position: fixed;
-	left: 54px;
-	top: 8px;
-	z-index: 5000;
-}
 
 
 .fractaldom_surface {

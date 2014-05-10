@@ -277,17 +277,22 @@ function netention(f) {
                  });*/
                 this.socket = socket = io.connect('/', {
                     'transports': ['websocket', /*'flashsocket',*/ 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
-                    'reconnection': true,
-                    'reconnectionDelay': 750,
-                    'reconnectionDelayMax': 25,
+                    'reconnect': false,
+                    'reconnection': false,
+                    /*'reconnectionDelay': 750,
+                    'reconnectionDelayMax': 25,*/
                     'try multiple transports': true
                 });
+                
                 socket.on('connect', function () {
                     socket.on('disconnect', function () {
                         $.pnotify({
                             title: 'Disconnected.'
                         });
+                        var p = newPopup("Disconnected", true, true);
+                        p.append('<h1>Reconnect?</h1>');
                     });
+                    
                     /*socket.on('reconnecting', function() {
                      $.pnotify({
                      title: 'Reconnecting..'
@@ -320,8 +325,11 @@ function netention(f) {
 
                     $.pnotify({
                         title: 'Connected.',
-                        stack: stack_bottomleft
-                    });
+                        stack: stack_bottomright,
+                        addclass: "stack-bottomright",
+                        type: 'success',
+                        delay: 2000
+                    }).click(function() { $(this).remove(); });
 
                     reconnect();
 
@@ -913,10 +921,12 @@ function newPopup(title, p, isModal) {
 
         p = {
             width: clientWidth - leftMargin - margin,
-            height: clientHeight - margin * 2,
-            position: [leftMargin, margin]
+            height: clientHeight - margin * 3,
+            //position: [leftMargin, margin]
+            position: { my: "center", at: "center", of: window }
         };
     }
+    
 
     p = _.extend(p || {}, {
         close: function () {

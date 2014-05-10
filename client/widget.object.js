@@ -413,63 +413,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         d.getEditedFocus = getEditedFocus;
 
 
-        //$('#FocusEdit button').button();       
-        /*
-         
-         <button title="What?" id="AddWhatButton"><img src="/icon/rrze/emblems/information.png"></button>
-         <button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/actions/quote.png"></button>
-         <button title="When?" id="AddWhenButton" ><img src="/icon/clock.png"></button>
-         <button title="Where?" id="AddLocationButton"><img src="/icon/rrze/emblems/globe.png"></button>
-         <button title="Who?" id="AddWhoButton"><img src="/icon/rrze/categories/user-group.png"></button>
-         
-         
-         <button title="Upload"><img src="/icon/rrze/actions/dial-in.png"/></button>                
-         <!--<button>Save Privately...</button>-->
-         <!-- <button onclick="javascript:cloneFocus();" title="Clone"><span class="FocusButtonIcon ui-icon ui-icon-newwin"></span><span class="FocusButtonLabel">Clone</span></button> -->
-         <!-- <button onclick="javascript:deleteFocus();" title="Delete"><span class="FocusButtonIcon ui-icon ui-icon-trash"></span><span class="FocusButtonLabel">Delete</span></button> -->
-         
-         <div id="UploadModal" data-backdrop="" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
-         <form id="FocusUploadForm" action="/upload" method="post" enctype="multipart/form-data">
-         <div>File:
-         <input type="file" name="uploadfile" />
-         <input type="submit" value="Upload" />
-         </div>
-         </form>
-         <div class="FocusUploadProgress">
-         <div class="FocusUploadBar"></div>
-         <div class="FocusUploadPercent">0%</div>
-         </div>
-         <div id="FocusUploadStatus"></div>        
-         
-         <button class="btn" data-dismiss="modal" aria-hidden="true">OK</button>
-         </div>
-         
-         //function cloneFocus() {
-         //    var y = getEditedFocus();
-         //    var oldURI = y.id;
-         //    y.id = uuid();
-         //    y.author = window.$N.id();
-         //    commitFocus(y);
-         //    saveObject(y);
-         //
-         //    $.pnotify({
-         //        title: 'Cloning...',
-         //        text: oldURI + ' -> ' + y.id
-         //    });
-         //    return y;
-         //}
-         //
-         //function deleteFocus() {
-         //    var f = window.$N.focus();
-         //
-         //    $.pnotify({
-         //        title: 'Delete coming soon',
-         //        text: f.uri
-         //    });
-         //
-         //}
-         */
-
         d.addClass('ObjectEditDiv');
 
         if ((hideWidgets !== true) && (!x.readonly)) {
@@ -497,8 +440,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 addButtons.hide();
             }
 
-            var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>');
-            whatButton.click(function () {
+            var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>').click(function () {
                 var p = newPopup('Select Tags for ' + nameInput.val(), true, true);
                 p.append(newTagger([], function (t) {
                     var y = getEditedFocus();
@@ -513,43 +455,31 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     p.dialog('close');
                 }));
             });
-            addButtons.append(whatButton);
 
-            var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/actions/quote.png"></button>');
-            howButton.click(function () {
+            var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/actions/quote.png"></button>').click(function () {
                 update(objAddValue(getEditedFocus(), 'textarea', ''));
             });
-            addButtons.append(howButton);
 
             var whenButton = $('<button disabled title="When?" id="AddWhenButton" ><img src="/icon/clock.png"></button>');
-            addButtons.append(whenButton);
 
-            var whereButton = $('<button title="Where?"><img src="/icon/rrze/emblems/globe.png"></button>');
-            whereButton.click(function () {
+            var whereButton = $('<button title="Where?"><img src="/icon/rrze/emblems/globe.png"></button>').click(function () {
                 update(objAddValue(getEditedFocus(), 'spacepoint', ''));
             });
-            addButtons.append(whereButton);
 
             var whoButton = $('<button disabled title="Who?" id="AddWhoButton"><img src="/icon/rrze/categories/user-group.png"></button>');
-            addButtons.append(whoButton);
 
-            var drawButton = $('<button title="Draw"><img src="/icon/rrze/emblems/pen.png"/></button>');
-            drawButton.click(function () {
+            var drawButton = $('<button title="Draw"><img src="/icon/rrze/emblems/pen.png"/></button>').click(function () {
                 update(objAddValue(getEditedFocus(), 'sketch', ''));
             });
-            addButtons.append(drawButton);
 
 
-            var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>');
-            webcamButton.click(function () {
+            var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>').click(function () {
                 newWebcamWindow(function (imgURL) {
                     update(objAddValue(getEditedFocus(), 'media', imgURL));
                 });
             });
-            addButtons.append(webcamButton);
 
-            var uploadButton = $('<button title="Upload"><img src="/icon/rrze/actions/dial-in.png"/></button>');
-            uploadButton.click(function () {
+            var uploadButton = $('<button title="Upload"><img src="/icon/rrze/actions/dial-in.png"/></button>').click(function () {
 
                 var y = newDiv();
                 var fuf = y.append('<form id="FocusUploadForm" action="/upload" method="post" enctype="multipart/form-data"><div>File:<input type="file" name="uploadfile" /><input type="submit" value="Upload" /></div></form>');
@@ -599,18 +529,22 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 });
 
             });
-            addButtons.append(uploadButton);
-
+            
+            addButtons.append(whatButton, howButton, whenButton, whereButton, whoButton, drawButton, webcamButton, uploadButton);
 
             d.append(addButtonWrap);
 
             var scopeSelect = null;
             if (!objHasTag(getEditedFocus(), 'User')) {
-                scopeSelect = $('<select style="float:right"/>');
-                scopeSelect.append('<option value="2">Private</option>'); //store on server but only for me
-                scopeSelect.append('<option value="5">Trusted</option>'); //store on server but share with who i follow
-                scopeSelect.append('<option value="7">Public</option>'); //store on server for public access (inter-server)
-                scopeSelect.val(getEditedFocus().scope);
+                scopeSelect = $('<select style="float:right"/>').append(
+                    //store on server but only for me
+                    '<option value="2">Private</option>', 
+                    //store on server but share with who i follow
+                    '<option value="5">Trusted</option>', 
+                    //store on server for public access (inter-server)
+                    '<option value="7">Public</option>').
+                    val(getEditedFocus().scope);
+                
                 if (configuration.connection == 'local')
                     scopeSelect.attr('disabled', 'disabled');
                 else {
@@ -622,8 +556,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 }
             }
 
-            var saveButton = $('<button style="float:right"><b>Save</b></button>');
-            saveButton.click(function () {
+            var saveButton = $('<button style="float:right"><b>Save</b></button>').click(function () {
                 var e = getEditedFocus();
                 e.author = $N.id();
                 objTouch(e);
@@ -641,19 +574,11 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 });
                 d.parent().dialog('close');
             });
+            
             addButtonWrap.append(saveButton);
             if (scopeSelect)
                 addButtonWrap.append(scopeSelect);
 
-
-            /*var exportButton = $('<button>Export</button>');
-             exportButton.click(function() {
-             $.pnotify({
-             title: x.id,
-             text: JSON.stringify(x, null, 4)
-             });
-             });
-             d.append(exportButton);*/
         }
 
     }
@@ -1318,21 +1243,24 @@ function newPropertyView(x, vv) {
 
     var p = $N.getProperty(vv.id);
     if (!p)
-        return ('<li>' + vv.id + ': ' + vv.value + '</li>');
+        return ('<li><b>' + vv.id + '</b>: ' + vv.value + '</li>');
 
-    if (p.type == 'object') {
+    var nameLabel = '<a><b>' + p.name + '</b></a>';
+    
+    if (p.type === 'object') {
         var o = $N.getObject(vv.value) || {
             name: vv.value
         };
 
-        return ('<li>' + p.name + ': <a href="javascript:newPopupObjectView(\'' + vv.value + '\')">' + o.name + '</a></li>');
-    } else if (p.type == 'url') {
-        var u = vv.value;
-        return ('<li>' + p.name + ': <a target="_blank" href="' + u + '">' + u + '</a></li>');
-    } else if (p.type == 'timeseries') {
-        var u = vv.value;
-        return ('<li>' + p.name + '<br/><textarea>' + JSON.stringify(u) + '</textarea></li');
-    } else if ((p.type == 'integer') && (p.incremental)) {
+        return '<li>' + nameLabel + ': <a href="javascript:newPopupObjectView(\'' +
+               vv.value + '\')">' + o.name + '</a></li>';
+    } else if (p.type === 'url') {
+        return '<li>' + nameLabel + 
+               ': <a target="_blank" href="' + vv.value + '">' +
+               vv.value + '</a></li>';
+    } else if (p.type === 'timeseries') {
+        return ('<li>' + nameLabel + '<br/><textarea>' + JSON.stringify(vv.value) + '</textarea></li');
+    } else if ((p.type === 'integer') && (p.incremental)) {
         function goprev() {
             objSetFirstValue(x, vv.id, ii - 1);
             $N.notice(x);
@@ -1345,32 +1273,28 @@ function newPropertyView(x, vv) {
             $N.pub(x);
         }
 
-        var v = $('<li>' + p.name + ': ' + vv.value + '</li>');
-        var ii = vv.value;
+        var v = $('<li>' + nameLabel + ': ' + vv.value + '</li>');
         if (p.min < vv.value) {
-            var prev = $('<button>&lt;</button>');
-            v.prepend(prev);
-            prev.click(function () {
-                later(goprev);
-            });
+            $('<button>&lt;</button>')
+                .click(function () {
+                    later(goprev);
+                }).prependTo(v);
         }
         //TODO allow for max
-        var next = $('<button>&gt;</button>');
-        next.click(function () {
-            later(gonext);
-        });
-        v.append(next);
+        $('<button>&gt;</button>').
+            click(function () {
+                later(gonext);
+            }).appendTo(v);
         return v;
 
-    } else if ((p.type == 'integer') || (p.type == 'real')) {
+    } else if ((p.type === 'integer') || (p.type === 'real')) {
         if (vv.value)
             if (vv.value.unit) {
-                return $('<li>' + p.name + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
+                return $('<li>' + nameLabel + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
             }
-        return $('<li>' + p.name + ': ' + vv.value + '</li>');
+        return $('<li>' + nameLabel + ': ' + vv.value + '</li>');
     } else {
-        var v = $('<li>' + p.name + ': ' + vv.value + '</li>');
-        return v;
+        return $('<li>' + nameLabel + ': ' + vv.value + '</li>');
     }
 }
 
@@ -1884,8 +1808,7 @@ function newObjectDetails(x) {
     if (x.value) {
         var ud = $('<ul>');
         d.append(ud);
-        for (var vi = 0; vi < x.value.length; vi++) {
-            var vv = x.value[vi];
+        x.value.forEach(function(vv) {
 
             if (vv.id == 'sketch') {
                 var eu = uuid();
@@ -1903,9 +1826,9 @@ function newObjectDetails(x) {
                     options.strokes = JSON.parse(vv.value);
                 }
                 later(function () {
-                    var sketchpad = Raphael.sketchpad(eu, options);
+                    /*var sketchpad =*/ Raphael.sketchpad(eu, options);
                 });
-                continue;
+                return;
             } else if (vv.id == 'timerange') {
                 /*if (ISODateString) {
                  ud.append(ISODateString(new Date(vv.value.start)) + ' '
@@ -1935,13 +1858,12 @@ function newObjectDetails(x) {
 
                 var pv = newPropertyView(x, vv);
                 if (pv) {
-                    if (typeof pv == "string")
+                    if (typeof pv === "string")
                         pv = $(pv);
-                    pv.css('opacity', 0.5 + (strength / 2.0));
-                    ud.append(pv);
+                    pv.css('opacity', 0.5 + (strength / 2.0)).appendTo(ud);
                 }
             }
-        }
+        });
     }
     return d;
 }
@@ -2004,7 +1926,7 @@ function newMetadataLine(x, showTime) {
             if (dist === 0)
                 mdline.append('&nbsp;<a>[here]</a>');
             else
-                mdline.append('&nbsp;<a>[' + lat + ',' + lon + '] ' + _n(dist) + ' km away</a>');
+                mdline.append('&nbsp;<a>[' + lat + ',' + lon + ':  ' + _n(dist) + ' km away]</a>');
         } else {
             mdline.append('&nbsp;<a>[' + lat + ',' + lon + ']</a>');
         }
@@ -2013,7 +1935,7 @@ function newMetadataLine(x, showTime) {
     if (showTime !== false) {
         var ww = objWhen(x);
         if (ww) {
-            mdline.append(spacepoint ? '&nbsp;|&nbsp;' : '&nbsp;', 
+            mdline.append('&nbsp;&nbsp;', 
                           newEle('a').append($.timeago(new Date(ww))) );
         }
     }

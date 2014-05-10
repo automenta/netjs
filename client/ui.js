@@ -23,6 +23,10 @@ jQuery.timeago.settings.strings = {
 };
 
 
+//$.pnotify
+var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
+var stack_bottomright = {"dir1": "left", "dir2": "up", "push": "top"};
+
 
 var updateView;
 
@@ -60,7 +64,6 @@ function later(f) {
     setImmediate(f);
 }
 
-var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
 
 
 
