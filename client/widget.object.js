@@ -252,10 +252,17 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             n.createdAt = x.createdAt;
             n.author = x.author;
 
+			//copy all metadata
+
             if (x.subject)
                 n.subject = x.subject;
             if (x.when)
                 n.when = x.when;
+			if (x.expiresAt)
+				n.expiresAt = x.expiresAt;
+			if (x.replyTo)
+				n.replyTo = x.replyTo;
+
             n.scope = x.scope || configuration.defaultScope;
 
             //TODO copy any other metadata
@@ -728,6 +735,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             function _onStrengthChange() {
                 onStrengthChange(index, parseFloat($(this).attr('value')));
+				return false;
             }
             
             disableButton.click(_onStrengthChange);
@@ -1527,11 +1535,14 @@ function newObjectSummary(x, options) {
     var onRemoved = options.onRemoved;
     var scale = options.scale;
     var depthRemaining = options.depthRemaining;
+	var depth = options.depth || depthRemaining;
     var nameClickable = (options.nameClickable != undefined) ? options.nameClickable : true;
     var showAuthorIcon = (options.showAuthorIcon != undefined) ? options.showAuthorIcon : true;
     var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
+	var hideAuthorNameAndIconIfZeroDepth = (options.hideAuthorNameAndIconIfZeroDepth != undefined) ? options.hideAuthorNameAndIconIfZeroDepth : false;
     var showMetadataLine = (options.showMetadataLine != undefined) ? options.showMetadataLine : true;
     var showActionPopupButton = (options.showActionPopupButton != undefined) ? options.showActionPopupButton : true;
+    var showReplyButton = (options.showReplyButton != undefined) ? options.showReplyButton : true;
     var showSelectionCheck = (options.showSelectionCheck != undefined) ? options.showSelectionCheck : true;
     var titleClickMode = (options.titleClickMode != undefined) ? options.titleClickMode : 'view';
     var showTime = (options.showTime != undefined) ? options.showTime : true;
@@ -1609,6 +1620,10 @@ function newObjectSummary(x, options) {
 
     d.append(cd);
 
+
+	if ((depth == depthRemaining) && (hideAuthorNameAndIconIfZeroDepth))
+		showAuthorName = showAuthorIcon = false;
+
     if (showAuthorName) {
         if (!isSelfObject(x.id)) { //exclude self objects
             if (x.author) {
@@ -1624,6 +1639,33 @@ function newObjectSummary(x, options) {
     }
 
     var replies;
+
+
+	var dd = newDiv();
+    
+    if (showAuthorIcon) {
+        var authorClient = $N.getObject(authorID);
+        if (authorClient) {
+            if (authorID) {
+                var av = newAvatarImage(authorClient)
+                            //.attr('align', 'left')
+                            .appendTo(d)
+                            .wrap('<div class="AvatarIcon"/>');
+            }
+        }
+    }
+	dd.appendTo(d);
+
+    //Selection Checkbox
+    var selectioncheck = null;
+    if (showSelectionCheck) {
+        selectioncheck = $('<input type="checkbox"/>')
+            .addClass('ObjectSelection')
+            .attr('oid', x.id)
+            .click(_refreshActionContext);
+    }
+
+    var haxn = newEle('h1').appendTo(dd);
 
     var refreshReplies = function() {
         var r = $N.getReplies(x.id);
@@ -1652,92 +1694,16 @@ function newObjectSummary(x, options) {
         }
     }
 
-    //var hb = newDiv().addClass('ObjectViewHideButton ui-widget-header ui-corner-tl');
-    //var hb = newDiv().addClass('ObjectViewHideButton ui-corner-tl'); //without ui-widget-header, it is faster CSS according to Chrome profiler
-
-
-    //var replyButton;
-
-    /*
-    if (!mini) {
-        replyButton = $('<button title="Reply" class="ui-widget-content ui-button">r</button>');
-        replyButton.click(function () {
-
-            newReplyPopup(x);
-
-
-            replyButton.enabled = false;
-        });
-        hb.append(replyButton);
-
-
-    }
-
-
-    if (replyButton)
-        replyButton.hover(
-            function () {
-                $(this).addClass('ui-state-hover');
-            },
-            function () {
-                $(this).removeClass('ui-state-hover');
-            }
-        );
-        */
-
-
-    /*
-     var cloneButton = $('<button title="Clone" class="ui-widget-content ui-button" style="padding-right:8px;">c</button>');
-     var varyButton = $('<button title="Vary" class="ui-widget-content ui-button" style="padding-right:8px;">v</button>');
-     hb.append(cloneButton);
-     hb.append(varyButton);
-     */
-
-    //d.append(hb);
-
-    /*
-    (function () {
-        //d.hover(function(){ hb.fadeIn(200);}, function() { hb.fadeOut(200);});
-        d.hover(function () {
-            hb.show();
-        }, function () {
-            hb.hide();
-        });
-    })();
-    hb.hide();
-    */
-    
-    if (showAuthorIcon) {
-        var authorClient = $N.getObject(authorID);
-        if (authorClient) {
-            if (authorID) {
-                var av = newAvatarImage(authorClient)
-                            //.attr('align', 'left')
-                            .appendTo(d)
-                            .wrap('<div class="AvatarIcon"/>');
-            }
-        }
-    }
-
-    //Selection Checkbox
-    var selectioncheck = null;
-    if (showSelectionCheck) {
-        selectioncheck = $('<input type="checkbox"/>')
-            .addClass('ObjectSelection')
-            .attr('oid', x.id)
-            .click(_refreshActionContext);
-    }
-
-    var haxn = newEle('h1').appendTo(d);
-
     function addPopupMenu() {
         var ms = $N.myself();
         if (ms)
             if (ms.id === x.author) {
-                var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton');
+                var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton').appendTo(haxn);
                 editButton.click(function () {
-                    var windowParent = editButton.parent().parent().parent();
+                    var windowParent = $(this).parent().parent().parent().parent();
+					console.log(windowParent);
                     if (windowParent.hasClass('ui-dialog-content')) {
+						console.log(windowParent, 'dialog');
                         windowParent.dialog('close');
                     }
                     newPopupObjectEdit(x, true);
@@ -1747,6 +1713,7 @@ function newObjectSummary(x, options) {
 
         var popupmenu = null;
         var popupmenuButton = $('<button title="Actions...">&gt;</button>')
+			.appendTo(haxn)
             .addClass('ObjectViewPopupButton')
             .click(function () {
 
@@ -1771,7 +1738,6 @@ function newObjectSummary(x, options) {
                 return false;            
             });
 
-        haxn.append(editButton, popupmenuButton);
     }
 
     if (showActionPopupButton)
@@ -1798,7 +1764,12 @@ function newObjectSummary(x, options) {
 
 
     if (showMetadataLine) {
-        newMetadataLine(x, showTime).appendTo(d);
+        var mdl = newMetadataLine(x, showTime).appendTo(dd);
+		if (showReplyButton) {
+			$('<button>Reply</button>').addClass('metadataReplyButton').appendTo(mdl).click(function() {
+				newReplyPopup(x);
+			});
+		}
     }
 
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
@@ -1819,7 +1790,7 @@ function newObjectDetails(x) {
 
     var desc = objDescription(x);
     if (desc) {
-        ud.append('<p>' + desc + '</p>');
+        ud.append('<div>' + desc + '</div>');
     }
 
 
@@ -1856,7 +1827,7 @@ function newObjectDetails(x) {
             } else if (vv.id == 'media') {
                 if (typeof vv.value == 'string') {
                     var url = vv.value;
-                    ud.append('<p><img class="objectViewImg" src="' + url + '"/></p>');
+                    ud.append('<img class="objectViewImg" src="' + url + '"/><br/>');
                 } else {
                     var V = vv.value;
                     if (V.type == 'html') {
@@ -1923,7 +1894,7 @@ function newMetadataLine(x, showTime) {
             var ttt = newTagButton(tt).appendTo(mdline);
             applyTagStrengthClass(ttt, s);
         } else {
-            mdline.append('<a>' + t + '</a>');
+            mdline.append('<a><img src="' + getTagIcon(null) + '"/>' + t + '</a>');
         }
         mdline.append('&nbsp;');
     });

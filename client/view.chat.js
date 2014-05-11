@@ -123,9 +123,9 @@ function lineClickFunction() {
         
     var x = $N.getObject( line.attr('xid') );
     
-    var showingMini = (e.children().length > 0) && (!e.children().first().hasClass('objectView'));
+    //var showingMini = (e.children().length > 0) && (!e.children().first().hasClass('objectView'));
     
-    function showMini() {
+    /*function showMini() {
 		var name = x.name;
 
         var numReplies = $N.getReplies(x.id).length;
@@ -147,7 +147,8 @@ function lineClickFunction() {
         }        
 
 
-    }
+    }*/
+
     function showFull() {
         var s = newObjectSummary(x, {
             showActionPopupButton: false,
@@ -158,7 +159,6 @@ function lineClickFunction() {
         
         e.append(s);
         
-        s.fadeIn();
     }
     
     e.empty();
@@ -181,8 +181,13 @@ function newObjectLogLine(x) {
     var e = newDiv().addClass('chatViewLineContent').appendTo(line);
 
     
-    line.click(lineClickFunction);
-    (lineClickFunction.bind(line))();    
+    var s = newObjectSummary(x, {
+        showActionPopupButton: false,
+        showSelectionCheck: false,
+		transparent: true,
+		hideAuthorNameAndIconIfZeroDepth: true
+    }).appendTo(e);
+
     
     if (x.author) {
         var a = $N.getObject(x.author);

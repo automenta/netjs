@@ -116,9 +116,10 @@ var generalTags = [
     },
     {uri: 'Geometry', name: 'Geometry',
         properties: {
-            'length': {name: 'Length', type: 'real', units: lengthUnits},
-            'width': {name: 'Width', type: 'real', units: lengthUnits},
-            'height': {name: 'Height', type: 'real', units: lengthUnits},
+			//can not use 'length' as a key in JS objects
+            'gLength': {name: 'Length', type: 'real', units: lengthUnits},
+            'gWidth': {name: 'Width', type: 'real', units: lengthUnits},
+            'gHeight': {name: 'Height', type: 'real', units: lengthUnits},
             'mass': {name: 'Mass', type: 'real', units: massUnits}
         },
         tag: ['Concept']

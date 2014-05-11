@@ -818,7 +818,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
 .objectView {
     position: relative;
-    padding: 0;
+    padding: 0.2em;
     margin-bottom: 0;
     display: block;
     clear: both;
@@ -874,6 +874,11 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 	padding-right: 2px;
 	margin: 0;
 }
+.objectView .metadataReplyButton {
+	padding:0;
+	margin-left: 0.2em;
+	font-size: 90%;
+}
 .objectView h1 a {
 	margin-left: 4px;
 }
@@ -889,9 +894,11 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }
 .objectView ul {
     list-style-type: none;
-    margin-bottom: 0.2em;
+    margin-bottom: 0.15em;
     padding-left: 0;
-    margin-left: 0;
+    margin-left: 1em;
+    margin-right: 1em;
+	margin-top: 0.5em;
 }
 .objectView ul li {
     padding: 0.3em;
@@ -915,8 +922,9 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     width: 98%;
 }
 .ObjectReply {
-    margin: 0.1em 0.1em 0.1em 2em;
+    margin: 0.8em 0.1em 0.0em 3em !important;
     font-size: 90%;
+	opacity: 0.95;
 }
 .reply-section {
     text-align: left;
@@ -1702,6 +1710,14 @@ div.olControlZoom {
 .reveal {
     font-size: 150% !important;
     overflow: hidden;
+}
+.reveal .slides {
+	text-align: left !important;
+}
+.reveal section {
+	max-height: 100%;
+	max-width: 100%;
+	overflow: auto;
 }
 .reveal section img {
     margin: 0 !important;
