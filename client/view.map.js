@@ -504,7 +504,7 @@ function renderLeafletMap(v) {
 					if (objHasTag(x, 'Earthquake')) {
 						var mag = parseFloat(objFirstValue(x, 'eqMagnitude'));
 						if (mag) {
-							var rad = 100000 + (mag - 4.0) * 400000;
+							var rad = 100000 + Math.log(mag) * 100000;
 							var ww = x.modifiedAt || x.createdAt || null;
 							var op = 1.0;
 							if (ww) {

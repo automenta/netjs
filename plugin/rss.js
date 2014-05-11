@@ -1,60 +1,88 @@
-var feedparser = require('feedparser');     //https://github.com/danmactough/node-feedparser
+var feedparser = require('feedparser'); //https://github.com/danmactough/node-feedparser
 var request = require('request');
 var _ = require('underscore');
 
-var minUrlFetchPeriod = 60 * 10;
-var rssCyclePeriod = 15 * 1000;
+var addRSSTags = function($N) {
+    $N.addTags([
+        {
+            uri: 'RSSFeed',
+            name: 'RSS Feed',
+            properties: {
+                'url': {
+                    name: 'URL',
+                    type: 'text' /* url */ ,
+                    min: 1,
+                    default: 'http://'
+                },
+                'urlFetchPeriod': {
+                    name: 'Fetch Period (seconds)',
+                    type: 'real' /* number */ ,
+                    default: "3600",
+                    min: 1,
+                    max: 1
+                },
+                'addArticleTag': {
+                    name: 'Add Tag to Articles',
+                    type: 'text'
+                },
+                'lastRSSUpdate': {
+                    name: 'Last RSS Update',
+                    type: 'timepoint'
+                }
+            }
+        },
+        {
+            uri: 'RSSItem',
+            name: 'RSS Item',
+            properties: {
+                'rssItemURL': {
+                    name: 'RSS Item URL',
+                    type: 'url'
+                }
+            }
+        }
+    ], ['Internet']);    
+};
+exports.addRSSTags = addRSSTags;
 
-exports.plugin = function($N) {
+
+exports.plugin = function ($N) {
+    
+    var minUrlFetchPeriod = 60 * 10;
+    var rssCyclePeriod = 5 * 60 * 1000;
+
     return {
         name: 'RSS Feeds (Really Simple Syndication)',
         description: 'Periodically monitors RSS Feeds for new content',
         options: {},
         version: '1.0',
         author: 'http://netention.org',
-        start: function() {
+        start: function () {
 
-            $N.addTags([
-                {
-                    uri: 'RSSFeed', name: 'RSS Feed',
-                    properties: {
-                        'url': {name: 'URL', type: 'text' /* url */, min: 1, default: 'http://'},
-                        'urlFetchPeriod': {name: 'Fetch Period (seconds)', type: 'real' /* number */, default: "3600", min: 1, max: 1},
-                        'addArticleTag': {name: 'Add Tag to Articles', type: 'text'},
-                        'lastRSSUpdate': {name: 'Last RSS Update', type: 'timepoint'}
-                    }
-                },
-                {
-                    uri: 'RSSItem', name: 'RSS Item',
-                    properties: {
-                        'rssItemURL': {name: 'RSS Item URL', type: 'url'}
-                    }
-                }
-            ], ['Internet']);
-
+            addRSSTags($N);
 
             this.feeds = {};
 
             var that = this;
 
-            this.update = _.throttle(function(f) {
+            this.update = _.throttle(function (f) {
 
                 that.feeds = {};
 
-                $N.getObjectsByTag('RSSFeed', function(x) {
+                $N.getObjectsByTag('RSSFeed', function (x) {
                     that.feeds[x.id] = x;
 
                     if (f)
                         f();
                 });
 
-            }, 5000 /* Increase longer */);
+            }, 60*1000  );
 
             this.update();
 
-            var ux = function() {
+            var ux = function () {
 
-                that.update(function() {
+                that.update(function () {
 
                     for (var k in that.feeds) {
                         var f = that.feeds[k];
@@ -67,8 +95,7 @@ exports.plugin = function($N) {
 
                         if (!$N.objFirstValue(f, 'lastRSSUpdate')) {
                             needsFetch = true;
-                        }
-                        else {
+                        } else {
                             var age = (Date.now() - $N.objFirstValue(f, 'lastRSSUpdate')) / 1000.0;
 
                             var fp = $N.objFirstValue(f, 'urlFetchPeriod');
@@ -76,8 +103,7 @@ exports.plugin = function($N) {
 
                             if (fp < age) {
                                 needsFetch = true;
-                            }
-                            else {
+                            } else {
                                 //console.log(fp - age, 'seconds to go');
                             }
                         }
@@ -88,14 +114,13 @@ exports.plugin = function($N) {
 
                             if (furi) {
                                 for (var ff = 0; ff < furi.length; ff++) {
-                                    RSSFeed($N, furi[ff], function(a) {
+                                    RSSFeed($N, furi[ff], function (a) {
                                         //TODO add extra tags from 'f'
                                         $N.pub(a);
                                         return a;
                                     });
                                 }
-                            }
-                            else {
+                            } else {
                                 //set error message as f property
                             }
 
@@ -111,11 +136,11 @@ exports.plugin = function($N) {
             this.loop = setInterval(ux, rssCyclePeriod);
             ux();
         },
-        onPub: function(x) {
+        onPub: function (x) {
             if (x.hasTag('web.RSSFeed'))
                 this.update();
         },
-        stop: function() {
+        stop: function () {
             if (this.loop) {
                 clearInterval(this.loop);
                 this.loop = null;
@@ -124,10 +149,10 @@ exports.plugin = function($N) {
     };
 };
 
-var RSSFeed = function($N, url, perArticle) {
+var RSSFeed = function ($N, url, perArticle, whenFinished /*, onlyItemsAfter*/ ) {
 
     if (!process)
-        process = function(x) {
+        process = function (x) {
             return x;
         };
 
@@ -173,33 +198,26 @@ var RSSFeed = function($N, url, perArticle) {
     var fp = new feedparser();
 
     request(url).pipe(fp)
-            .on('error', function(error) {
-                // always handle errors
-                console.log('RSS request error: ' + url + ' :' + error);
-            }).on('meta', function(data) {
-        // always handle errors
-        //onArticle(data);
-        //console.log(data, 'META');
-    }).on('readable', function() {
-        var stream = this, item;
-        while (item = stream.read()) {
-            //console.log('Got article: %s', item.title || item.description);
-            onArticle(item);
-        }
-    }).resume();
-    /*
-     }).on('end', function() {
-     console.log('got feed', fp.articles);
-     
-     var articles = fp.articles;
-     for (var i = 0; i < articles.length; i++) {
-     onArticle(articles[i]);
-     }
-     }).resume();
-     */
+        .on('error', function (error) {
+            // always handle errors
+            console.log('RSS request error: ' + url + ' :' + error);
+        }).on('meta', function (data) {
+            // always handle errors
+            //onArticle(data);
+            //console.log(data, 'META');
+        }).on('readable', function () {
+            var stream = this,
+                item;
+            while (item = stream.read()) {
+                //console.log('Got article: %s', item.title || item.description);
+                onArticle(item);
+            }
+        }).on('end', function () {
+            if (whenFinished) {
+                whenFinished();
+            }
+        }).resume();
 
-
-}
+};
 
 exports.RSSFeed = RSSFeed;
-

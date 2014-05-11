@@ -59,21 +59,33 @@ function newPopupObjectViews(objectIDs) {
         return newPopupObjectView(objectIDs[0]);
 
     var objects = objectIDs.map(function (i) {
-        if (typeof i == "string")
+        if (typeof i === "string")
             return $N.getObject(i);
         else
             return i;
     });
+    
+    var maxDisplayableObjects = 64;
 
-    var d = newPopup(objects.length + " Objects");
+    var e = newDiv();
+    var displayedObjects = 0;
     _.each(objects, function (o) {
+        if (displayedObjects === maxDisplayableObjects) {
+            return;
+        }
+
         if (o) {
-            d.append(newObjectSummary(o, {
+            e.append(newObjectSummary(o, {
                 depthRemaining: 0
             }));
+            displayedObjects++;
+        }
+        
+        if (displayedObjects === maxDisplayableObjects) {
+            e.prepend('WARNING: Too many objects selected.  Only showing the first ' + maxDisplayableObjects + '.<br/>');
         }
     });
-    return d;
+    return newPopup(displayedObjects + " Object" + ((displayedObjects > 1) ? 's' : ''), true).append(e);
 
 }
 
@@ -111,11 +123,14 @@ function tagObject(tag) {
     return o;
 }
 
+
+//(function is globalalized for optimization purposes)
 function _onTagButtonClicked() {
     var ti = $(this).attr('taguri');
     var t = $N.getTag(ti);
     if (t)
         newPopupObjectView(tagObject(t));
+    return false;
 }
 
 function newTagButton(t, onClicked, isButton) {

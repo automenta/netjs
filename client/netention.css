@@ -935,8 +935,9 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     border-bottom: 1px solid gray;
     display: inline-block;
     width: 95%;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
+    padding-bottom: 0.12em;
+    padding-top: 0.12em;
+    cursor: pointer;
 }
 .ChatViewContentLine p {
     margin: 0;
@@ -977,13 +978,14 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }
 .chatViewLineContent {
     float: left;
+    width: 86%;
 }
 .chatViewLineContent img {
     max-height: 4em;
 }
 .chatViewLineAuthor {
     clear: both;
-    width: 100px;
+    width: 10%;
     float: left;
     text-align: right;
     padding-right: 15px;

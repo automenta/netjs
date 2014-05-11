@@ -39,7 +39,8 @@ function _s(s, maxLength, unicode) {
     return s;    
 }
 
-/** adds the objectInterface to an object */
+/** Object constructor, adds the objectInterface to an object */
+//TODO use .prototype like real javascript
 function objectify(x) {
     //TODO build convenient & friendly object API here
     //TODO is more optimal to use .prototype. methods than _.extend ?

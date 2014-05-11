@@ -52,13 +52,11 @@ exports.start = function(options, init) {
 
     var logMemory = util.createRingBuffer(256);
     $N.server.interestTime = {};	//accumualted time per interest, indexed by tag URI
-    
 
-    function getDatabaseURL() {
-        //"mydb"; // "username:password@example.com/mydb"
-        return $N.server.databaseURL || process.env.MongoURL;
-    }
-    var collections = ["obj", "sys"];
+    //"mydb"; // "username:password@example.com/mydb"
+    var dbURL = $N.server.databaseURL || process.env.MongoURL;     
+    var db = mongo.connect(dbURL, ["obj", "sys"]);
+
 
     function startPlugin(kv, options) {
         var v = kv;
@@ -167,10 +165,7 @@ exports.start = function(options, init) {
             users: $N.server.users,
             modifiedAt: Date.now()
         };
-        var db = mongo.connect(getDatabaseURL(), collections);
         db.sys.update({id: "state"}, state, {upsert: true}, function(err, saved) {
-            db.close();
-
             if (err || !saved) {
                 if (onError) {
                     nlog('saveState: ' + err);
@@ -188,10 +183,8 @@ exports.start = function(options, init) {
 
     
     function loadState(f) {
-        var db = mongo.connect(getDatabaseURL(), collections);
 
         db.sys.find({id: "state"}, function(err, state) {
-            db.close();
 
             if (err || !state || (state.length===0)) {
                 nlog("No previous system state found");
@@ -260,9 +253,7 @@ exports.start = function(options, init) {
 
         //TODO move to 'removed' db collection
 
-        var db = mongo.connect(getDatabaseURL(), collections);
         db.obj.remove({id: objectID}, function(err, docs) {
-            db.close();
 
             if (err) {
                 nlog('error deleting ' + objectID + ':' + err);
@@ -274,9 +265,7 @@ exports.start = function(options, init) {
                 pub(objectRemoved(objectID));
 
                 //remove replies                
-                var db2 = mongo.connect(getDatabaseURL(), collections);
-                db2.obj.remove({$or: [{replyTo: objectID}, {author: objectID}]}, function(err, docs) {
-                    db2.close();
+                db.obj.remove({$or: [{replyTo: objectID}, {author: objectID}]}, function(err, docs) {
 
                     //nlog('deleted ' + objectID);
 
@@ -300,7 +289,7 @@ exports.start = function(options, init) {
     $N.deleteObject = deleteObject;
 
     function deleteObjects(objs, whenFinished) {
-        if (objs.length == 0) {
+        if (objs.length === 0) {
             if (whenFinished)
                 whenFinished();
             return;
@@ -358,9 +347,7 @@ exports.start = function(options, init) {
 
         attention.notice(o, 0.1);
 
-        var db = mongo.connect(getDatabaseURL(), collections);
         db.obj.update({id: o.id}, o, {upsert: true}, function(err) {
-            db.close();
             if (err) {
                 nlog('notice: ' + err);
                 return;
@@ -420,15 +407,12 @@ exports.start = function(options, init) {
             whenFinished(tags[uri]);
         }
         else {
-            var db = mongo.connect(getDatabaseURL(), collections);
             db.obj.ensureIndex({id: "hashed"}, function(err, res) {
                 if (err) {
                     console.error('ENSURE INDEX id', err);
-                    db.close();
                 }
 
                 db.obj.find({'id': uri}, function(err, docs) {
-                    db.close();
                     if (err) {
                         nlog('getObjectByID: ' + err);
                         whenFinished(err, null);
@@ -450,12 +434,10 @@ exports.start = function(options, init) {
     $N.getObjectSnapshot = getObjectByID; //DEPRECATED
 
     function getObjectsByAuthor(a, withObjects) {
-        var db = mongo.connect(getDatabaseURL(), collections);
 
         db.obj.ensureIndex({author: "hashed"}, function(err, res) {
             if (err) {
                 console.error('ENSURE INDEX author', err);
-                db.close();
                 return;
             }
 
@@ -468,7 +450,6 @@ exports.start = function(options, init) {
                     removeMongoID(docs);
                     withObjects(docs);
                 }
-                db.close();
             });
         });
     }
@@ -481,12 +462,9 @@ exports.start = function(options, init) {
         if (!Array.isArray(t))
             t = [t];
 
-        var db = mongo.connect(getDatabaseURL(), collections);
-
         db.obj.ensureIndex({_tag: 1}, function(err, res) {
             if (err) {
                 console.error('ENSURE INDEX _tag', err);
-                db.close();
             }
 
             db.obj.find({_tag: {$in: t}}, function(err, docs) {
@@ -501,7 +479,6 @@ exports.start = function(options, init) {
                     if (whenFinished)
                         whenFinished();
                 }
-                db.close();
             });
 
         });
@@ -512,10 +489,8 @@ exports.start = function(options, init) {
 
     /*
      function getObjectsByTags(tags, withObjects) {
-     var db = mongo.connect(getDatabaseURL(), collections);
      db.obj.find({ tag: { $in: tags } }, function(err, docs) {
      
-     db.close();
      
      if (!err) {						
      withObjects(docs);
@@ -529,7 +504,6 @@ exports.start = function(options, init) {
      */
 
     function getReport(lat, lon, whenStart, whenStop, withReport) {
-        var db = mongo.connect(getDatabaseURL(), collections);
 
         var histogram = {};
         var numBins = 38;
@@ -579,7 +553,6 @@ exports.start = function(options, init) {
                 };
                 withReport(x);
             }
-            db.close();
         });
 
     }
@@ -609,7 +582,6 @@ exports.start = function(options, init) {
 
     function getTagCounts(whenFinished) {
 
-        var db = mongo.connect(getDatabaseURL(), collections);
         db.obj.find(function(err, docs) {
             if (err) {
                 nlog('getTagCounts: ' + err);
@@ -626,8 +598,6 @@ exports.start = function(options, init) {
                     }
                 });
             }
-
-            db.close();
 
             whenFinished(totals);
         });
@@ -1271,10 +1241,10 @@ exports.start = function(options, init) {
         function sendToSocket(i) {
             if (socket) {
                 if (allsockets[i] !== socket)
-                    allsockets[i].emit('notice', o);
+                    allsockets[i].emit('notice', co);
             }
             else {
-                allsockets[i].emit('notice', o);
+                allsockets[i].emit('notice', co);
             }
         }
 
@@ -1364,26 +1334,21 @@ exports.start = function(options, init) {
     });
 
     function getLatestObjects(n, withObjects, withError) {
-        var db = mongo.connect(getDatabaseURL(), collections);
         db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
             if (err) {
-                db.close();
                 withError('ENSURE INDEX modifiedAt ' + err);
                 return;
             }
 
             //TODO scope >= PUBLIC
             db.obj.find().limit(n).sort({modifiedAt: -1}, function(err, objs) {
-                db.close();
                 withObjects(objs);
             });
         });
     }
     function getExpiredObjects(withObjects) {
-        var db = mongo.connect(getDatabaseURL(), collections);
         db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
             if (err) {
-                db.close();
                 withError('ENSURE INDEX modifiedAt ' + err);
                 return;
             }
@@ -1391,7 +1356,6 @@ exports.start = function(options, init) {
             var now = Date.now();
             
             db.obj.find({expiresAt: {$lte: now}}, function(err, objs) {                
-                db.close();
                 if (!err)
                     withObjects(objs);
             });
@@ -1838,10 +1802,29 @@ exports.start = function(options, init) {
     }
 
 
-    function pub(message, whenFinished) {
-        broadcast(null, message, whenFinished);
+    function pub(object, whenFinished) {
+        broadcast(null, object, whenFinished);
     }
     $N.pub = pub;
+    
+    function pubAll(objects, objectIntervalMS /*, whenFinished*/) {
+        if (objectIntervalMS) {
+            var published = 0;
+            objects.forEach(function(o) {
+                _.delay(function(O) {
+                    _.defer(function(OO) {
+                        $N.pub(OO);
+                    }, O);
+                }, (published++)*objectIntervalMS, o);
+            });        
+        }
+        else {
+            objects.forEach(function(o) {
+                $N.pub(o);
+            });
+        }
+    }
+    $N.pubAll = pubAll;
 
 
     //    sessionSockets.on('connection', function(err, socket, session) {
@@ -2088,13 +2071,14 @@ exports.start = function(options, init) {
              });
              */
 
+            
             socket.on('getObjects', function(query, withObjects) {
-                var db = mongo.connect(getDatabaseURL(), collections);
+                //TODO safely handle query
+                
                 db.obj.find(function(err, docs) {
                     objAccessFilter(request, docs, function(dd) {
                         removeMongoID(dd);
                         withObjects(dd);
-                        db.close();
                     });
                 });
             });

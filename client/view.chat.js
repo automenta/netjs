@@ -8,10 +8,9 @@ function onChatSend(name, desc, tag) {
     if (tag)
         o = o.add(tag);
 
-    $N.pub(o, function() {
+    $N.pub(o/*, function() {
     }, function() {
-        console.log('sent');
-    });
+    }*/);
 
 }
 
