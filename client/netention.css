@@ -929,6 +929,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     margin-left: 1em;
     height: 90%;
     overflow: auto;
+	min-width: 50%;
 }
 .ChatViewContentLine {
     border-left: 3px solid transparent;
