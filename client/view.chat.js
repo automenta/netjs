@@ -2,7 +2,7 @@ function onChatSend(name, desc, tag) {
     var o = objNew();
     o = o.own();
     o = objName(o, name);
-    o = objAddTag(o, 'Message');
+    //o = objAddTag(o, 'Message');
     if (desc)
         o = objAddDescription(o, desc);
     if (tag)

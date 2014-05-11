@@ -8,10 +8,13 @@ exports.plugin = function($N) { return {
         author: 'http://schema.org',
 
 		start: function() { 
+			var propPrefix = 's_'; //for schema.org
+
             var schemaorg = require('./schema.org.json');
             var types = schemaorg.types;
             var properties = schemaorg.properties;
             
+			//http://schema.org/docs/full.html
             $N.addProperties(_.map(properties, function(prop) {
                 function propType(ranges) {
                     if (_.contains(ranges, 'URL')) {
@@ -23,37 +26,63 @@ exports.plugin = function($N) { return {
                     else if (_.contains(ranges, 'Number')) {
                         return 'real';
                     }
-                    else if (_.contains(ranges, 'Real')) {
+                    else if (_.contains(ranges, 'Boolean')) {
+                        return 'boolean';
+                    }
+                    else if (_.contains(ranges, 'Date')) {
+                        return 'timerange';
+                    }
+                    else if (_.contains(ranges, 'DateTime')) {
+                        return 'timepoint';
+                    }
+                    else if (_.contains(ranges, 'Time')) {
+                        return 'timerange';
+                    }
+                    else if (_.contains(ranges, 'Float')) {
                         return 'real';
                     }
                     else if (_.contains(ranges, 'Integer')) {
                         return 'integer';
                     }
                     else {
-                        return 'text'; //ranges;
-                    }
-                    
+                        return 'object'; //ranges;
+                    }                    
                 }
                 
-                var p = {
-                    uri: prop.id,
+				var pt = propType(prop.ranges);
+				var p = {
+                    uri: propPrefix + prop.id,
                     name: prop.label,
                     description: prop.comment,
-                    type: propType(prop.ranges)
+                    type: pt
                 };
-                return p;
+				if (pt === 'object') {
+					p.tag = prop.ranges;
+				}
+
+ 				return p;
             }));
             
-            var unnecessaryProperties = [ 'description', 'image', 'name', 'url', 'about'];            
-            
+            var excludeProperties = [ 'description', 'image', 'name', 'url', 'about', 'sameAs', 'additionalType', 'alternateName'];            
+            var excludeTypes = [ 'Class', 'Property' ];            
+			var rootTypes = ['Action'];            
+
             $N.addTags(_.map(types, function(type) {
-                return {
+				if (_.contains(excludeTypes, type.id))
+					return;
+                var t = {
                     uri: type.id,
                     name: type.label,
                     description: type.comment,
-                    properties: _.difference(type.properties, unnecessaryProperties),
+                    properties: _.map(_.difference(type.properties, excludeProperties), function(p) {
+						return propPrefix + p;
+					}),
                     tag: type.supertypes
                 };
+				if (_.contains(rootTypes, type.id)) {
+					delete t.tag;
+				}
+				return t;
             }));
             
         },

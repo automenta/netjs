@@ -6,7 +6,7 @@ var currencyUnits = ['Bitcoin', 'USDollar', 'Euro', 'Gold(g)', 'Silver(g)'];
 //http://www.therichest.org/business/most-traded-currencies/
 
 var generalTags = [
-    {uri: 'Resource', name: 'Resource', description: 'Something that may be used or applied'},
+    {uri: 'Thing', name: 'Thing', description: 'Something that may be used or applied'},
     {uri: 'Concept', name: 'Concept', description: 'An abstract concept'},
     {uri: 'Action', name: 'Action', //combined Event into this one..
         description: 'An action or event that may be accomplished or attended',
@@ -36,7 +36,7 @@ var generalTags = [
 
         }
     },
-    {uri: 'Imaginary', name: 'Imaginary', description: 'Something imaginary, indefinite values.',
+    {uri: 'Imaginary', name: 'Imaginary', description: 'Something imaginary, indefinite values', tag: 'Concept',
         properties: {
             'involvesUser': {name: 'Involves', type: 'object'}
         }
@@ -44,7 +44,7 @@ var generalTags = [
     //Being superclass of Human..
     //TODO "Contact Schema": http://portablecontacts.net/draft-spec.html#schema   
     
-    {uri: 'Human', name: 'Human',
+    {uri: 'Human', name: 'Human', tag: 'Thing', 
         properties: {
             'currentRole': {name: 'Current Role', type: 'text'},
             'biography': {name: 'Biography', type: 'textarea'},
@@ -79,7 +79,7 @@ var generalTags = [
      
      */
     
-    { uri: 'Similar', name: 'Similar',
+    { uri: 'Similar', name: 'Similar', tag: 'Concept',
       properties: {
         'similarTo': { name: 'to', type: 'object' }
       }
@@ -105,7 +105,7 @@ var generalTags = [
             'payWalletRTN': {name: 'Pay Bank Account (RTN)', type: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
 
         },
-        tag: ['Resource']
+        tag: ['Thing']
     },
     {uri: 'Link', name: 'Link', description: 'A link or edge in a graph between vertices, nodes, URL\'s, or URI\'s',
         properties: {
@@ -213,10 +213,10 @@ var generalTags = [
         },
         tag: ['Concept']
     },
-    {uri: 'Media', name: 'Media', description: 'A multimedia object', tag: ['Resource']}, //params: contentType
+    {uri: 'Media', name: 'Media', description: 'A multimedia object', tag: ['Thing']}, //params: contentType
     //goodPartStartsAt: (time)
 
-    {uri: 'Report', name: 'Report', tag: ['Resource']}, //Report=Incident
+    {uri: 'Report', name: 'Report', tag: ['Thing']}, //Report=Incident
     //NewsSourceLink (url)
     //see: Ushahidi.com
 
@@ -236,7 +236,7 @@ var generalTags = [
 
     {uri: 'Cause', name: 'Cause', tag: ['Concept']},
     {uri: 'Effect', name: 'Effect', tag: ['Concept']},
-    {uri: 'Internet', name: 'Internet', tag: ['Resource']},
+    {uri: 'Internet', name: 'Internet', tag: ['Thing']},
     /*
      {uri: 'Role', name: 'Role', description: 'A position, job, occupation, or role',
      properties: {
@@ -279,10 +279,10 @@ var generalTags = [
     //state = considered|desired|active|completed
 
     {uri: 'Favorite', name: 'Favorite', tag: ['Concept']},
-    {uri: 'User', name: 'User', tag: ['Resource'], reserved: true},
+    {uri: 'User', name: 'User', tag: ['Thing'], reserved: true},
     //{ uri: 'Netention', name: 'Netention'}, //Netention itself, meta 
 
-    {uri: 'Message', name: 'Message', tag: ['Resource']},
+    {uri: 'Message', name: 'Message', tag: ['Thing']},
     /*
      At the first gate, ask yourself, ‘Is it true?
      At the second ask, ‘Is it necessary?
@@ -330,12 +330,19 @@ var generalTags = [
             'values': {name: 'in', type: 'object', min: 1}
         },
         tag: ['Action'], operator: true},
+
     {uri: 'Access', name: 'Access', tag: ['Concept']},
-    {uri: 'Can', name: 'Can', tag: ['Access'], operator: true, icon: '/icon/can.png'},
-    {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, icon: '/icon/need.png', properties: {
+    {uri: 'Can', name: 'Can', tag: ['Access'], operator: true, icon: '/icon/can.png', 
+		description: 'Something offer, offered, offering, share, shared, sharing, provide, providing, able'
+	},
+    {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, icon: '/icon/need.png', 
+		description: 'Something want, wanted, wanting, need, needed, needing, seek, seeking, request, requested, requesting',
+		properties: {
             //'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
-        }},
+        }
+	},
     {uri: 'Not', name: 'Not', tag: ['Concept'], icon: '/icon/not.png', operator: true},
+
     {uri: 'Offer', name: 'Offer', tag: ['Can'], icon: '/icon/can.png'},
     {uri: 'Sell', name: 'Sell', tag: ['Can'], icon: '/icon/can.png'},
     {uri: 'Lend', name: 'Lend', tag: ['Can'], icon: '/icon/can.png'},
@@ -343,18 +350,18 @@ var generalTags = [
     {uri: 'Swap', name: 'Swap', tag: ['Can'], icon: '/icon/can.png'},
     {uri: 'GiveAway', name: 'Share', tag: ['Can'], icon: '/icon/can.png'},
     //NEEDS from SparkRelief
-    {uri: 'Volunteer', name: 'Volunteer', tag: ['Resource']},
-    {uri: 'Shelter', name: 'Shelter', tag: ['Resource']},
-    {uri: 'Food', name: 'Food', tag: ['Resource']},
-    {uri: 'Tools', name: 'Tools', tag: ['Resource']},
-    {uri: 'Health', name: 'Health', tag: ['Resource']},
-    {uri: 'Transport', name: 'Transport', tag: ['Resource']},
-    {uri: 'Service', name: 'Service', tag: ['Resource']},
-    {uri: 'Animal', name: 'Animal', tag: ['Resource']},
-    {uri: 'Infrastructure', name: 'Infrastructure', tag: ['Resource']},
-    {uri: 'Nature', name: 'Nature', tag: ['Resource']},
-    {uri: 'Danger', name: 'Danger', description: 'Danger, emergency, or disaster situation / event', tag: ['Resource']},
-    {uri: 'Plugin', name: 'Plugin', tag: ['Resource'], properties: {
+    {uri: 'Volunteer', name: 'Volunteer', tag: ['Thing']},
+    {uri: 'Shelter', name: 'Shelter', tag: ['Thing']},
+    {uri: 'Food', name: 'Food', tag: ['Thing']},
+    {uri: 'Tools', name: 'Tools', tag: ['Thing']},
+    {uri: 'Health', name: 'Health', tag: ['Thing']},
+    {uri: 'Transport', name: 'Transport', tag: ['Thing']},
+    {uri: 'Service', name: 'Service', tag: ['Thing']},
+    {uri: 'Animal', name: 'Animal', tag: ['Thing']},
+    {uri: 'Infrastructure', name: 'Infrastructure', tag: ['Thing']},
+    {uri: 'Nature', name: 'Nature', tag: ['Thing']},
+    {uri: 'Danger', name: 'Danger', description: 'Danger, emergency, or disaster situation / event', tag: ['Thing']},
+    {uri: 'Plugin', name: 'Plugin', tag: ['Thing'], properties: {
             'Plugin.enable': {name: 'Enable', type: 'boolean', max: 1},
             'Plugin.updateEvery': {name: 'Update Every (sec)', type: 'real', max: 1}
         }},
@@ -391,7 +398,7 @@ var generalTags = [
         properties: {},
         tag: ['Concept']
     },
-    {uri: 'Earth', name: 'Earth', description: '', icon: 'icon/earth.png'},
+    {uri: 'Earth', name: 'Earth', description: '', icon: 'icon/earth.png', tag: 'Thing'},
     //http://gis.stackexchange.com/questions/6345/list-of-available-online-wms-services-weather-land-data-place-names
     {
         "uri": "Points of Interest",

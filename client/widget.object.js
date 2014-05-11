@@ -1145,12 +1145,12 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             tt.append(ts);
 
             if (!prop.readonly) {
-                var mb = $('<button title="Find Object">...</button>');
+                var mb = $('<button title="Find Object">...</button>').appendTo(tt);
 
                 ts.attr('placeholder', prop.tag ? JSON.stringify(prop.tag) : 'Object');
 
+                var tagRestrictions = prop.tag;
                 mb.click(function () {
-                    var tagRestrictions = prop.tag;
                     var pp = newPopup("Select Object", true, true);
                     var tagger = newTagger(null, function (tags) {
                         ts.result = tags = tags[0];
@@ -1165,7 +1165,16 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                     if (ts.val() == '')
                         mb.click();
                 });
-                tt.append(mb);
+
+				if (tagRestrictions) {
+					if (typeof tagRestrictions === "string")
+						tagRestrictions = [tagRestrictions];
+					tagRestrictions.forEach(function(tr) {
+						var T = $N.getTag(tr);
+						if (!T) return;
+						var mn = $('<button disabled>new ' + T.name + '</button>').appendTo(tt);
+					});
+				}
             }
 
             d.append(tt);

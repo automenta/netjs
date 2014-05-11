@@ -371,12 +371,14 @@ exports.start = function(options, init) {
     $N.addProperties = addProperties;
 
     function addTags(at, defaultTag) {
-        for (var i = 0; i < at.length; i++) {
-            if (defaultTag)
-                at[i].tag = defaultTag;
+		at.forEach(function(t) {
+			if (!t) return;
 
-            tags[at[i].uri] = at[i];
-        }
+            if (defaultTag)
+                t.tag = defaultTag;
+
+            tags[t.uri] = t;
+        });
 
         //TODO broadcast change in tags?
     }
