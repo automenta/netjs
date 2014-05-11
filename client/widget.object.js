@@ -133,6 +133,7 @@ function _onTagButtonClicked() {
     return false;
 }
 
+
 function newTagButton(t, onClicked, isButton) {
     var ti = null;
 
@@ -155,7 +156,7 @@ function newTagButton(t, onClicked, isButton) {
         });
     }
 
-    var b = isButton ? $(newEle('button')) : $(newEle('a')).attr('href', '#');
+    var b = isButton ? newEle('button') : newEle('a').attr('href', '#');
 
     if (i)
         b.append(i);
@@ -1564,8 +1565,7 @@ function newObjectSummary(x, options) {
             PDFJS.getDocument(pdfPath).then(function (pdf) {
                 // Using promise to fetch the page
                 pdf.getPage(pdfPage).then(function (page) {
-                    var scale = 1.0;
-                    var viewport = page.getViewport(scale);
+                    var viewport = page.getViewport(1.0);
 
                     //
                     // Prepare canvas using PDF page dimensions
@@ -1601,9 +1601,10 @@ function newObjectSummary(x, options) {
 		d.addClass("ui-widget-content ui-corner-all");
 
     var oStyle = x.style;
-    d.attr('style', "font-size:" + ((scale) ? ((0.5 + scale) * 100.0 + '%') : ("100%")) + (oStyle ? '; ' + oStyle : ''));
+	if (scale!==undefined)
+	    d.attr('style', "font-size:" + ((scale) ? ((0.5 + scale) * 100.0 + '%') : ("100%")) + (oStyle ? '; ' + oStyle : ''));
 
-    var xn = x.name;
+    var xn = x.name || '';
     var authorID = x.author;
 
     d.append(cd);
@@ -1617,7 +1618,7 @@ function newObjectSummary(x, options) {
                     a = as.name;
                 //else display UID?
 
-                xn = a + ': ' + xn;
+                xn = a + ': ' + (xn.length > 0 ? xn : '?');
             }
         }
     }
@@ -1628,19 +1629,20 @@ function newObjectSummary(x, options) {
         var r = $N.getReplies(x.id);
         if (r.length > 0) {
 			if (!replies) {
-				replies = newDiv();
-				replies.addClass('ObjectReply');
-				d.append(replies);
+				replies = newDiv().addClass('ObjectReply').appendTo(d);
 			}
 			else {
 				replies.empty();
 			}
 
-            //TODO sort the replies by age, oldest first
-            r.forEach(function(p) {
-                replies.append(newObjectSummary($N.getObject(p), {
-                    'depthRemaining': depthRemaining - 1
-                }));
+			var childOptions = _.clone(options);
+			childOptions.depthRemaining = depthRemaining - 1;
+			childOptions.transparent = true;
+			delete childOptions.scale;
+
+            //TODO sort the replies by age, oldest first?
+            r.forEach(function(p) {				
+                replies.append(newObjectSummary($N.getObject(p), childOptions));
             });
         } else {
 			if (replies) {
@@ -1726,7 +1728,7 @@ function newObjectSummary(x, options) {
             .click(_refreshActionContext);
     }
 
-    var haxn = null;
+    var haxn = newEle('h1').appendTo(d);
 
     function addPopupMenu() {
         var ms = $N.myself();
@@ -1769,43 +1771,31 @@ function newObjectSummary(x, options) {
                 return false;            
             });
 
-        if (haxn) {
-            haxn.append(editButton, popupmenuButton);
-        } else
-            d.append(editButton, popupmenuButton);
-    }
-
-    //Name
-    if (x.name) {
-        haxn = $('<h1>');
-        if (!nameClickable) {
-            haxn.html(xn);
-        } else {
-            var xxn = xn.length > 0 ? xn : '?';
-            var axn = $('<a>' + xxn + '</a>');
-            axn.attr('title', x.id);
-            axn.click(function () {
-                if ((x.author === $N.id()) && (titleClickMode === 'edit'))
-                    newPopupObjectEdit(x, true);
-                else if (typeof (titleClickMode) === 'function') {
-                    titleClickMode(x);
-                } else {
-                    newPopupObjectView(x.id, true);
-                }
-                return false;                
-            });
-            haxn.append(axn, '&nbsp;');
-        }
-        if (selectioncheck)
-            haxn.prepend(selectioncheck);
-        d.append(haxn);
-    } else {
-        if (selectioncheck)
-            d.append(selectioncheck);
+        haxn.append(editButton, popupmenuButton);
     }
 
     if (showActionPopupButton)
         addPopupMenu();
+
+    //Name
+    if (!nameClickable) {
+        haxn.html(xn);
+    } else {
+        var xxn = xn.length > 0 ? xn : '?';
+        haxn.append( $('<a>' + xxn + '</a>').attr('title', x.id).click(function () {
+            if ((x.author === $N.id()) && (titleClickMode === 'edit'))
+                newPopupObjectEdit(x, true);
+            else if (typeof (titleClickMode) === 'function') {
+                titleClickMode(x);
+            } else {
+                newPopupObjectView(x.id, true);
+            }
+            return false;                
+        }), '&nbsp;');
+    }
+    if (selectioncheck)
+        haxn.prepend(selectioncheck);
+
 
     if (showMetadataLine) {
         newMetadataLine(x, showTime).appendTo(d);
@@ -1817,7 +1807,6 @@ function newObjectSummary(x, options) {
     d.append(newObjectDetails(x));
 
     if (!mini) {
-
         refreshReplies();
     }
 
@@ -1826,7 +1815,7 @@ function newObjectSummary(x, options) {
 
 function newObjectDetails(x) {
     var d = newDiv();
-    var ud = $('<ul>').appendTo(d);
+    var ud = newEle('ul').appendTo(d);
 
     var desc = objDescription(x);
     if (desc) {
@@ -1840,9 +1829,7 @@ function newObjectDetails(x) {
             if (vv.id == 'sketch') {
                 var eu = uuid();
 
-                var ee = newDiv(eu);
-
-                ud.append(ee);
+                var ee = newDiv(eu).appendTo(ud);
 
                 var options = {
                     width: 250,
@@ -1892,6 +1879,10 @@ function newObjectDetails(x) {
             }
         });
     }
+
+	if (ud.children().length == 0)
+		ud.remove();
+
     return d;
 }
 

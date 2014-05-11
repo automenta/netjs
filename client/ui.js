@@ -247,11 +247,12 @@ function _updateView(force) {
         delete param.view;
     }
 
+    var vw = $('#ViewWrapper');
+
     var o = $('#ViewOptions');
-    var v = $('#View');
     var submenu = $('#AvatarViewMenu');
 
-    if (v.is(':visible')) {
+    if (vw.is(':visible')) {
     }
     else
         return;
@@ -265,8 +266,11 @@ function _updateView(force) {
         }
     }
 
-    v.empty();
+	$('#View').remove();
+    var v = newDiv().attr('id', 'View').appendTo(vw);
+
     o.empty();
+
     $('#AvatarViewMenu').empty();
     submenu.empty();
 
@@ -284,7 +288,7 @@ function _updateView(force) {
 
     function indent() {
         submenu.show();
-        v.addClass('overthrow ui-widget-content view-indented');
+        vw.addClass('overthrow view-indented');
         updateIndent($('#ViewMenu').is(":visible"));
     }
 
@@ -716,7 +720,7 @@ $(document).ready(function() {
                          });*/
                     }
 
-                    $('#View').show();
+                    $('#ViewWrapper').show();
                     $('#LoadingSplash2').hide();
 
 
@@ -761,12 +765,13 @@ $(document).ready(function() {
                     var w = new Workspace();
                     $N.router = w;
 
-                    /*
+                    
                      //USEFUL FOR DEBUGGING EVENTS:
+					 /*
                      $N.on('change:attention', function() { console.log('change:attention'); });
                      $N.on('change:currentView', function() { console.log('change:currentView'); });
                      $N.on('change:tags', function() { console.log('change:tags'); });
-                     $N.on('change:focus', function() { console.log('change:focus'); });
+                     $N.on('change:focus', function() { console.log('change:focus', $N.focus() ); });
                      */
 
                 });

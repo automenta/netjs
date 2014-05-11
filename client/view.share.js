@@ -197,7 +197,8 @@ function newShareView(v) {
         updateContent();
     };
 
-    frame.onChange();
+	//Not needed because when this function clearFocus(), it will trigger the onChange later.
+    	//frame.onChange();
 
 
     return frame;

@@ -6,9 +6,11 @@
 .ui-autocomplete {
     z-index: 5000 !important;
 }
-a {
+a, a:visited {
     cursor: pointer;
+	color: black;
 }
+
 a:hover {
     color: blue !important;
 }
@@ -36,7 +38,7 @@ a:hover {
     width: 100%;
 }
 .AvatarIcon {
-    padding: 5px;
+    padding: 3px;
     float: left;
 }
 .AvatarIcon img {
@@ -557,7 +559,7 @@ body {
 }
 /* View Screen */
 
-#View {
+#ViewWrapper {
     border: none;
     position: fixed;
     top: 0;
@@ -566,8 +568,10 @@ body {
     left: 0;
     height: 100%;
     width: 100%;
-    clear: both;
 }
+
+#View { height: 100%; }
+
 #embed-frame {
     position: relative;
     width: 100%;
@@ -758,8 +762,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     clear: both;
     text-align: center;
     border: 1px solid #1d1d1d;
-    font-size: 14px !important;
-    height: 22px
+    /*font-size: 14px !important;
+    height: 22px*/
 }
 .jstree,
 .jstree input,
@@ -814,11 +818,10 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
 .objectView {
     position: relative;
-    padding: 0.25em;
-    margin-bottom: 5px;
+    padding: 0;
+    margin-bottom: 0;
     display: block;
     clear: both;
-    font-size: 12px;
 }
 .objectView ul li {
     word-wrap: break-word;
@@ -826,7 +829,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .objectGridItem3,
 .objectGridItem2 {
     width: 30%;
-    padding: 0 !important;
+    padding: 0.3em !important;
     height: auto;
     clear: none;
     float: left;
@@ -865,6 +868,16 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     font-weight: bold;
     margin: 2px 0px;
 }
+.objectView h1 button, .objectView h1 input {
+	padding: 0;
+	padding-left: 2px;
+	padding-right: 2px;
+	margin: 0;
+}
+.objectView h1 a {
+	margin-left: 4px;
+}
+
 .objectView h2 {
     font-size: 105%;
     margin: 0;
@@ -902,8 +915,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     width: 98%;
 }
 .ObjectReply {
-    margin: 0.1em 0.2em 0.1em 0.2em;
-    font-size: 80%;
+    margin: 0.1em 0.1em 0.1em 2em;
+    font-size: 90%;
 }
 .reply-section {
     text-align: left;
@@ -1260,13 +1273,13 @@ html > body .ui-pnotify {
         text-align: right;
     }
     #ViewMenu,
-    #View {
+    #ViewWrapper {
         height: auto;
     }
     #ViewMenu {
         width: 100% !important;
     }
-    #View {
+    #ViewWrapper {
         width: auto !important;
     }
     #AvatarFocus {
@@ -1337,7 +1350,6 @@ div.olControlZoom {
     float: right;
 }
 .PluginID h3 {
-    font-size: 17px;
     line-height: 15px;
 }
 .PluginID span {} .PluginEnabled {
@@ -1371,7 +1383,7 @@ div.olControlZoom {
 .olControlAttribution {
     display: none !important;
 }
-#View,
+#ViewWrapper,
 #ViewMenu {
     display: none;
 }

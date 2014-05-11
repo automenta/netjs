@@ -150,6 +150,8 @@ function lineClickFunction() {
     }
     function showFull() {
         var s = newObjectSummary(x, {
+            showActionPopupButton: false,
+            showSelectionCheck: false,
 			transparent: true
         });
         s.hide();
