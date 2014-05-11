@@ -118,6 +118,8 @@ exports.plugin = function($N) {
                     
                     eq.removeTag('textarea'); //remove description
 
+					eq.removeTag('RSSItem');
+					eq.removeTag('rssItemURL');
 
                     /*
                      if (a['dc:subject']) {

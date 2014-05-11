@@ -1622,12 +1622,20 @@ function newObjectSummary(x, options) {
         }
     }
 
-    var replies = newDiv();
+    var replies;
 
     var refreshReplies = function() {
         var r = $N.getReplies(x.id);
         if (r.length > 0) {
-            replies.show();
+			if (!replies) {
+				replies = newDiv();
+				replies.addClass('ObjectReply');
+				d.append(replies);
+			}
+			else {
+				replies.empty();
+			}
+
             //TODO sort the replies by age, oldest first
             r.forEach(function(p) {
                 replies.append(newObjectSummary($N.getObject(p), {
@@ -1635,7 +1643,10 @@ function newObjectSummary(x, options) {
                 }));
             });
         } else {
-            replies.hide();
+			if (replies) {
+				replies.remove();
+				replies = null;
+			}
         }
     }
 
@@ -1806,9 +1817,6 @@ function newObjectSummary(x, options) {
     d.append(newObjectDetails(x));
 
     if (!mini) {
-        replies.addClass('ObjectReply');
-        replies.hide();
-        d.append(replies);
 
         refreshReplies();
     }
@@ -1913,17 +1921,16 @@ function ISODateString(d) {
 function newMetadataLine(x, showTime) {
     var mdline = newEle('h2').addClass('MetadataLine');
 
-    var ot = objTags(x);
+    //var ot = objTags(x);
     var ots = objTagStrength(x, false);
-
-    ot.forEach(function(t) {
+	_.each(ots, function(s, t) {
         if ($N.isProperty(t))
             return;
 
         var tt = $N.getTag(t);
         if (tt) {
             var ttt = newTagButton(tt).appendTo(mdline);
-            applyTagStrengthClass(ttt, ots[t]);
+            applyTagStrengthClass(ttt, s);
         } else {
             mdline.append('<a>' + t + '</a>');
         }

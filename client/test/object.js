@@ -70,14 +70,18 @@ test("Tag calclulations", function() {
     objAddValue(x, { id: 'Earthquake', strength: 0.75, value: [ ] });  //should not be counted twice, uses max of strengths of the same type
     objAddValue(x, { id: 'Happy', strength: 0.25, value: [ ] });  //should not be counted twice    
     
-    deepEqual( objTags(x), [ 'Earthquake', 'Happy' ], 'list of unique tags' );
+    deepEqual( objTags(x, false), [ 'Earthquake', 'Happy' ], 'list of unique tags' );
+
     deepEqual( objTagStrength(x), { 'Earthquake': 0.8, 'Happy': 0.2 }, 'normalized strengths of tags' );
+
+	objAddValue(x, { id: 'textarea', value: 'nothing' });
+    deepEqual( objTags(x), [ 'Earthquake', 'Happy' ], 'objTags without primitives, when primitives present' );
+    deepEqual( objTags(x, true).length, 4, 'objTags with primitives, when primitives present' );
     
     var y = objNew();
     objAddValue(y, { id: 'Earthquake', strength: 1.0, value: [ ] }); 
         
-    var z = objNew();
-    
+    var z = objNew();    
     deepEqual( objTagRelevance(x, z), 0.0, 'tag relevancy: when no tags present' );
     //deepEqual( objTagRelevance(x, y), 0.8, 'tag relevancy: when some tags present' );
     

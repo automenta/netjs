@@ -246,7 +246,7 @@ function newObjectSummary2(x) {
         imgurl = firstMedia;
     }
 	else {
-		imgurl = getTagIcon(x) || 'icon/placeholder.png';
+		imgurl = getTagIcon(x) || getTagIcon(null);// 'icon/placeholder.png';
 	}
 
     img.append('<img src="' + imgurl + '"/>');

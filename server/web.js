@@ -29,6 +29,7 @@ var http = require('http')
 var mongo = require("mongojs");
 var request = require('request');
 var _ = require('underscore');
+var jsonpack = require('jsonpack');
 //var cortexit = require('./cortexit.js');
 
 
@@ -660,11 +661,17 @@ exports.start = function(options, init) {
         res.end(t);
     }
 
-    function sendJSON(res, x, pretty) {
+    function sendJSON(res, x, pretty, format) {
         res.writeHead(200, {'content-type': 'text/json'});
         var p;
-        if (!pretty)
-            p = JSON.stringify(x);
+        if (!pretty) {
+			if (format == 'jsonpack') {
+				p = jsonpack.pack(x);
+			}
+			else {
+	            p = JSON.stringify(x);
+			}
+		}
         else
             p = JSON.stringify(x, null, 4);
         res.end(p);
@@ -1365,24 +1372,31 @@ exports.start = function(options, init) {
         
     }
 
-    express.get('/object/latest/:num/json', function(req, res) {
+    express.get('/object/latest/:num/:format', function(req, res) {
         var n = parseInt(req.params.num);
-        var MAX_LATEST_OBJECTS = 8192;
-        if (n > MAX_LATEST_OBJECTS)
-            n = MAX_LATEST_OBJECTS;
+		var format = req.params.format;
 
-        getLatestObjects(n,
-                function(objs) {
-                    objAccessFilter(objs, req, function(sharedObjects) {
-                        removeMongoID(sharedObjects);
-                        sendJSON(res, compactObjects(sharedObjects));
-                    });
-                },
-                function(error) {
-                    console.error('object/latest/:num/json', error);
-                }
-        );
+		if ((format === 'json') || (format === 'jsonpack')) {
+		    var MAX_LATEST_OBJECTS = 8192;
+		    if (n > MAX_LATEST_OBJECTS)
+		        n = MAX_LATEST_OBJECTS;
+
+		    getLatestObjects(n,
+		            function(objs) {
+		                objAccessFilter(objs, req, function(sharedObjects) {
+		                    removeMongoID(sharedObjects);
+		                    sendJSON(res, compactObjects(sharedObjects), null, format);
+		                });
+		            },
+		            function(error) {
+		                console.error('object/latest/:num/json', error);
+		            }
+		    );
+		}
+		else
+			sendJSON(res, 'unknown format: ' + format);
     });
+
     express.get('/object/latest/rss', function(req, res) {
         var NUM_OBJECTS = 64;
 
@@ -1638,8 +1652,12 @@ exports.start = function(options, init) {
         });
     });
 
-    express.get('/ontology/json', function(req, res) {
-        sendJSON(res, {'tags': tags, 'properties': properties});
+    express.get('/ontology/:format', function(req, res) {
+		var format = req.params.format;	
+		if ((format === 'json') || (format == 'jsonpack'))
+	        sendJSON(res, {'tags': tags, 'properties': properties}, null, format);
+		else
+			sendJSON(res, 'unknown format: ' + format);
     });
 
     express.get('/state', function(req, res) {

@@ -1820,7 +1820,7 @@ svg {
     border-bottom: 1px solid gray;
 }
 .ShareSummary .ShareSummaryImage {
-    width: 20%;
+    width: 15%;
     float: left;
 }
 .ShareSummary .ShareSummaryImage img {
@@ -1828,7 +1828,7 @@ svg {
     max-width: 100%;
 }
 .ShareSummary .ShareSummaryContent {
-    width: 75%;
+    width: 82%;
     float: right;
 }
 .ShareSummaryContent h1, .ShareSummaryContent h2 {

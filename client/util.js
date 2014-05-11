@@ -335,24 +335,21 @@ function objTags(x, includePrimitives) {
     if (!x.value)
         return [];
 
-    //HACK to handlle when values are null, which they shouldnt bve
-    var newValues = [];
+    var newValues = { };
     x.value.forEach(function(vv) {
-        //if (vv)
-            if (vv.id) {
-                if (vv.strength === 0) return;
+		var t = vv.id;
+        if (t) {
+            if (vv.strength === 0) return;
 
-                newValues.push(vv);
-            }
+			if (!includePrimitives)
+				if (isPrimitive(t))
+					return;
+
+            newValues[t] = true;
+        }
     });
 
-    if (includePrimitives) {
-        return _.pluck(newValues, 'id');
-    } else {
-        return _.uniq(_.pluck(newValues, 'id').filter(function (t) {
-            return !isPrimitive(t);
-        }));
-    }
+	return _.keys(newValues);
 }
 exports.objTags = objTags;
 
@@ -1027,7 +1024,12 @@ function objCompact(o) {
         var K = k[i];
         if (K[0] == '_') {
             delete y[K];
+			continue;
         }
+		var V = y[K];
+		if (typeof V === 'function') {
+            delete y[K];
+		}
     }
 
 

@@ -40,6 +40,7 @@
 		"rivescript":"",
 		"geolib":"",
 		"natural":"",
-		"stopwords":""
+		"stopwords":"",
+		"jsonpack":""
     }
 }
