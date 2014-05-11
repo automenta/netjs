@@ -11,13 +11,15 @@ function newShareView(v) {
 
     var frame = newDiv().addClass('Share').appendTo(v);
 
-    var header = newDiv().addClass('Header').appendTo(frame);
-    header.append('<span class="Logo">' + configuration.siteName + '</span>');
+    //var header = newDiv().addClass('Header').appendTo(frame);
+    //header.append('<span class="Logo">' + configuration.siteName + '</span>');
 
-    var selfmenu = newDiv().addClass('SelfMenu').appendTo(frame);
+    var selfmenu = newDiv();
 
 
-    var searchMenu = newDiv().addClass('SearchMenu').appendTo(frame);
+	var searchMenu = newDiv();
+
+    //var searchMenu = newDiv().addClass('SearchMenu').appendTo(frame);
     var searchInput = $('<input type="text" placeholder="What are you looking for?"/>').appendTo(searchMenu);
 
     var updateSearchFocus = function() {
@@ -36,12 +38,16 @@ function newShareView(v) {
 
     var sidebar = newDiv().addClass('ShareSidebar').appendTo(frame);
     {
+
         var listButton = $('<button>List</button>');
         var gridButton = $('<button>Grid</button>');
         var mapButton = $('<button>Map</button>');
-        sidebar.append(listButton, gridButton, mapButton, '<br/>');
 
-        sidebar.append('<hr/>');
+		sidebar.append(selfmenu, '<hr/>');
+
+        sidebar.append(listButton, gridButton, mapButton, '<br/><hr/>');
+
+		sidebar.append(searchMenu, '<hr/>');
 
         var modeCombo = $('<select>').appendTo(sidebar);
 
@@ -234,10 +240,15 @@ function newObjectSummary2(x) {
     var img = newDiv().addClass('ShareSummaryImage').appendTo(d);
 
     var firstMedia = objFirstValue(x, 'media');
-    var imgurl = 'icon/placeholder.png';
+
+    var imgurl;
     if ((firstMedia) && (typeof firstMedia == "string")) {
         imgurl = firstMedia;
     }
+	else {
+		imgurl = getTagIcon(x) || 'icon/placeholder.png';
+	}
+
     img.append('<img src="' + imgurl + '"/>');
 
     var e = newDiv().addClass('ShareSummaryContent').appendTo(d);
@@ -249,7 +260,6 @@ function newObjectSummary2(x) {
     e.append(titleLink);
     e.append(newMetadataLine(x));
 
-	e.append(newObjectDetails(x));
 
     var actionLine = newDiv().addClass('ShareSummaryAction').appendTo(e);
     if ($N.id() == x.author) {
@@ -266,13 +276,20 @@ function newObjectSummary2(x) {
             });
         }
     }
-    var replyButton = $('<button disabled>Reply</button>').appendTo(actionLine);
+    var replyButton = $('<button>Reply</button>').appendTo(actionLine);
     replyButton.click(function() {
+		newReplyPopup(x);
     });
+	var numReplies = $N.getReplies(x).length;
+	if (numReplies) {
+		actionLine.append('<span style="opacity: 0.5">&nbsp;(Replies: ' + numReplies + ')</span>');
+	}
 
+
+	e.append(newObjectDetails(x).css('clear', 'both'));
 
     if (x.author) {
-        var authorline = newDiv().addClass('ShareSummaryAuthor');
+        var authorline = newEle('span').addClass('ShareSummaryAuthor');
 
         var A = $N.getObject(x.author);
 		if (A) {
@@ -287,7 +304,7 @@ function newObjectSummary2(x) {
 			//missing author?
 		}
 
-        e.append(authorline);
+        actionLine.append(authorline);
     }
 
 

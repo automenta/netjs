@@ -890,7 +890,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     padding-right: 0.1em;
     padding-top: 5px;
 }
-.objectView img, .tagSection img {
+.objectViewImg {
     max-height: 12em;
     max-width: 100%;
 }
@@ -1797,37 +1797,17 @@ svg {
     width: 100%;
     min-height: 5em;
 }
-.Share {
-    padding: 1em;
-}
-.Share .Logo {
-    float: left;
-    font-size: 150%;
-}
-.Share .SelfMenu {
-    float: right;
-    font-size: 150%;
-}
-.Share .SelfMenu button {
-    font-size: 120%;
-}
-.Share .SearchMenu {
+
+.Share  {
     clear: both;
-    width: 100%;
-    text-align: center;
-    margin-top: 4em;
-    margin-bottom: 1em;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    background-color: #eee;
-}
-.Share .SearchMenu input,
-.Share .SearchMenu button {
-    font-size: 150%;
+    width: 98%;
+	margin-top: 1em;
+	margin-left: 1em;
 }
 .Share .ShareSidebar {
     width: 20%;
     float: left;
+	position: fixed;
 }
 .Share .ShareContent {
     width: 75%;
@@ -1843,20 +1823,32 @@ svg {
     float: left;
 }
 .ShareSummary .ShareSummaryImage img {
+	width: 100%;
     max-width: 100%;
-    max-height: 8em;
 }
 .ShareSummary .ShareSummaryContent {
     width: 75%;
     float: right;
 }
+.ShareSummaryContent h1, .ShareSummaryContent h2 {
+	margin:0;
+	margin-bottom: 0.2em;
+}
+.ShareSummaryContent ul {
+	margin-bottom: 0.2em;
+	padding-top: 0.5em;
+}
+
+.ShareSummaryContent img {
+	max-height: 5em;
+	max-width: 100%;
+}
 .ShareSummaryAction {
-    width: 40%;
     float: left;
 }
 .ShareSummaryAuthor {
-    width: 40%;
     float: right;
+	margin-left: 0.5em;
 }
 .SkillSlider {
     width: 98%;

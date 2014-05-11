@@ -233,15 +233,17 @@ function renderLeafletMap(v) {
 	});
 
 	var icons = { };
-	function getIcon(i) {
+	function getIcon(i, pxsize) {
+		if (!pxsize) pxsize = 32;
+
 		if (!i) return testIcon;
 		if (icons[i])
 			return icons[i];
 		else {
 			icons[i] = L.icon({
 					iconUrl: i,
-					iconSize: [32, 32],
-					iconAnchor: [16, 16],
+					iconSize: [pxsize, pxsize],
+					iconAnchor: [pxsize/2, pxsize/2],
 					popupAnchor: [0, -28]
 			});
 			return icons[i];
@@ -492,35 +494,55 @@ function renderLeafletMap(v) {
                 var r = xxrr[i][1];
                 //renderMapFeature(x, r);
     			var s = objSpacePoint(x);
-				if ((s) && (s.lat!=undefined) && (s.lon!=undefined)) {
+				if ((s) && (s.lat!==undefined) && (s.lon!==undefined)) {
 					var m = L.marker([s.lat, s.lon], {
-						icon: getIcon(getTagIcon(x)),
 						clickable: false
 					});
 					m.object = x;
 					markerHover(m, objName(m));
-					nobjectLayer.addLayer(m);
 
 					if (objHasTag(x, 'Earthquake')) {
+                        m.setOpacity(0.25);
 						var mag = parseFloat(objFirstValue(x, 'eqMagnitude'));
+						var depthKM = parseFloat(objFirstValue(x, 'eqDepth'))/1000.0;
+						var ipx = undefined;
 						if (mag) {
-							var rad = 100000 + Math.log(mag) * 100000;
+							var rad = 500 + Math.exp(mag) * 1000;
 							var ww = x.modifiedAt || x.createdAt || null;
 							var op = 1.0;
 							if (ww) {
-								op = 0.25 + 0.5 * Math.exp( -((currentMapNow - ww) / 1000.0 / 48.0 / 60.0 / 60.0) );
+								var daysAgo = (currentMapNow - ww) / 1000.0 / 60.0 / 60.0 / 24.0;
+								op = Math.pow((daysAgo+1)/7.0,-1);
 							}
-							op *= 0.3;
+							op *= 0.75;
+
+							var r = Math.pow(depthKM/10.0,-1); //redness: more red = closer to surface
+							var g = 1-r;
+							var b = 0;
+							var a = 1.0;
+
 
 							var eqCircle = L.circle([s.lat, s.lon], rad, {
-								stroke: false,
-								fillColor: 'yellow',
+								stroke: true,
+								color: 'black',
+								weight: 1,
+								fillColor: _rgba(r, g, b, a),
+								opacity: Math.min((op*2.0), 1.0),
 								fillOpacity: op
 							});
 
 							nobjectLayer.addLayer( eqCircle );
+
+							ipx = parseInt(10 + mag*6.0);
 						}
+						m.setIcon( getIcon(getTagIcon(x, ipx)) );
 					}
+					else {
+						m.setIcon( getIcon(getTagIcon(x)) );
+					}
+
+					nobjectLayer.addLayer(m);
+
 				}
             }        
         });		

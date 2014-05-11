@@ -175,15 +175,20 @@ var RSSFeed = function ($N, url, perArticle, whenFinished /*, onlyItemsAfter*/ )
 
         if (a['georss:point']) {
             var pp = a['georss:point'];
-            if (pp.length == 2)
+            if (pp.length == 2) {
                 $N.objAddGeoLocation(x, pp[0], pp[1]);
+            }
             else {
                 pp = pp['#'].split(' ');
                 $N.objAddGeoLocation(x, pp[0], pp[1]);
             }
+            a.geolocation = [ pp[0], pp[1] ];
         }
         if (a['geo:lat']) {
-            $N.objAddGeoLocation(x, parseFloat(a['geo:lat']['#']), parseFloat(a['geo:long']['#']));
+            var lat = parseFloat(a['geo:lat']['#']);
+            var lon = parseFloat(a['geo:long']['#']);
+            $N.objAddGeoLocation(x, lat, lon);
+            a.geolocation = [ lat, lon ];
         }
         $N.objAddTag(x, 'RSSItem');
         $N.objAddValue(x, 'rssItemURL', a['link']);

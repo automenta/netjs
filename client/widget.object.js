@@ -951,7 +951,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             });
         }
         var url = t.value;
-        d.append('<img src="' + url + '"/>');
+        d.append('<img class="objectViewImg" src="' + url + '"/>');
     } else if (type == 'sketch') {
         var eu = uuid();
 
@@ -1525,6 +1525,7 @@ function newObjectSummary(x, options) {
     var showSelectionCheck = (options.showSelectionCheck != undefined) ? options.showSelectionCheck : true;
     var titleClickMode = (options.titleClickMode != undefined) ? options.titleClickMode : 'view';
     var showTime = (options.showTime != undefined) ? options.showTime : true;
+	var transparent = (options.transparent != undefined) ? options.transparent : false;
 
     if (!x) {
         return newDiv().html('Object Missing');
@@ -1585,7 +1586,11 @@ function newObjectSummary(x, options) {
     var mini = (depthRemaining == 0);
 
 
-    var d = $('<div class="objectView ui-widget-content ui-corner-all">');
+	var d = newDiv().addClass('objectView');
+
+	if (!transparent)
+		d.addClass("ui-widget-content ui-corner-all");
+
     var oStyle = x.style;
     d.attr('style', "font-size:" + ((scale) ? ((0.5 + scale) * 100.0 + '%') : ("100%")) + (oStyle ? '; ' + oStyle : ''));
 
@@ -1804,15 +1809,15 @@ function newObjectSummary(x, options) {
 
 function newObjectDetails(x) {
     var d = newDiv();
+    var ud = $('<ul>').appendTo(d);
+
     var desc = objDescription(x);
     if (desc) {
-        d.append('<p>' + desc + '</p>');
+        ud.append('<p>' + desc + '</p>');
     }
 
 
     if (x.value) {
-        var ud = $('<ul>');
-        d.append(ud);
         x.value.forEach(function(vv) {
 
             if (vv.id == 'sketch') {
@@ -1847,7 +1852,7 @@ function newObjectDetails(x) {
             } else if (vv.id == 'media') {
                 if (typeof vv.value == 'string') {
                     var url = vv.value;
-                    ud.append('<img src="' + url + '"/>');
+                    ud.append('<p><img class="objectViewImg" src="' + url + '"/></p>');
                 } else {
                     var V = vv.value;
                     if (V.type == 'html') {

@@ -38,6 +38,7 @@
 		"jsdom": "",
 		"togeojson":"",
 		"rivescript":"",
+		"geolib":"",
 		"natural":"",
 		"stopwords":""
     }

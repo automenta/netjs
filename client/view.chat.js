@@ -126,27 +126,33 @@ function lineClickFunction() {
     var showingMini = (e.children().length > 0) && (!e.children().first().hasClass('objectView'));
     
     function showMini() {
-        if (x.name.length > 0)
-            e.append('<p>' + x.name + '</p>');
+		var name = x.name;
+
+        var numReplies = $N.getReplies(x.id).length;
+        if (numReplies > 0) {
+            name += '<span style="opacity: 0.5">(...)</span>';
+        }
+
+
+        if (name.length > 0)
+            e.append(name + '<br/>');
 
         var desc = objDescription(x);
         if (desc.length > 0) {
-            e.append('<p>' + desc + '</p>');
+            e.append(desc + '<br/>');
         }
         var firstMedia = objFirstValue(x, 'media');
         if (firstMedia) {
-            e.append('<p><img src="' + firstMedia + '"/></p>');
+            e.append('<img src="' + firstMedia + '"/><br/>');
         }        
-        var numReplies = $N.getReplies(x.id).length;
-        if (numReplies > 0) {
-            e.append('<div style="opacity: 0.5">(+' + numReplies + ' replies)</div>');
-        }
+
 
     }
     function showFull() {
         var s = newObjectSummary(x, {
             showActionPopupButton: false,
-            showSelectionCheck: false
+            showSelectionCheck: false,
+			transparent: true
         });
         s.hide();
         

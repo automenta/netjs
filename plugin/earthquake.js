@@ -10,6 +10,7 @@
 exports.plugin = function($N) {
     var _ = require('underscore');
     var rss = require('./rss.js');
+    var geo = require('geolib');
 
     return {
         name: 'USGS Earthquakes',
@@ -55,6 +56,7 @@ exports.plugin = function($N) {
             
             
             var feedURL = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/' + mm + '_' + historySize + '.atom';
+
             /*
             http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_day.atom
             http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom
@@ -73,10 +75,30 @@ exports.plugin = function($N) {
                         if (eq.expiresAt <= now)
                             return;
                     }
+                    if ((filter) && (a.geolocation)) {
+                        var included = true;
+                        filter.forEach(function(f) {
+                            if (!included) return;
+                            var distMeters = geo.getDistance(
+                                {latitude: f.lat, longitude: f.lon}, 
+                                {latitude: a.geolocation[0], longitude: a.geolocation[1] }
+                            );
+                            included = (f.radius*1000 >= distMeters);
+                            //console.log(eq.name, 'dist', distMeters, included);
+                        });
+                        if (!included)
+                            return;
+                    }
+                    
 
                     eq.name = eq.name + ' Earthquake';
                     
-                    var mag = parseFloat(eq.name.substring(1, eq.name.indexOf(',')));
+                    var mag = parseFloat(eq.name.substring(1, eq.name.indexOf(' ', 2)));
+					if (mag == undefined) {
+						//??
+						return;
+					}
+
                     eq.addTag('Earthquake');
                     eq.add('eqMagnitude', mag);
 

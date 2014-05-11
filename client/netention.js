@@ -581,6 +581,7 @@ function netention(f) {
             });
         },
         getReplies: function (id) {
+			if (id.id) id = id.id;
             return this.get('replies')[id] || [];
         },
         listenAll: function (b) {
@@ -995,6 +996,10 @@ function getCookie(name) {
 
 function setCookie(key, value) {
     document.cookie = key + '=' + value;
+}
+
+function _rgba(r,g,b,a) {
+	return 'rgba(' + parseInt(256.0*r) + ',' + parseInt(256.0*g) + ',' + parseInt(256.0*b) + ',' + a + ')';
 }
 
 

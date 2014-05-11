@@ -1,6 +1,8 @@
 /*
 	http://www.spaceweather.com/
 	http://www.swpc.noaa.gov/SWN/index.html
+        https://github.com/vodolaz095/geomagnetic
+        
 	http://sohowww.nascom.nasa.gov/spaceweather/
 	http://sdo.gsfc.nasa.gov/
 	http://www.esa-spaceweather.net/
