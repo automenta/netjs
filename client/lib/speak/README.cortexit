@@ -1,4 +1,0 @@
-Some of the .JS files were slightly modified to work with Cortexit's path structure, for example
-in speakClient.js:
-
-    speakWorker = new Worker('/speak/speakWorker.js');
