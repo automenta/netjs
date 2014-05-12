@@ -1323,7 +1323,7 @@ function newPropertyView(x, vv) {
     }
 }
 
-function newReplyPopup(x) {
+function newReplyPopup(x, onReplied) {
     var pp = newPopup("Reply to: " + x.name);
 
     function closeReplyDialog() {
@@ -1357,6 +1357,9 @@ function newReplyPopup(x) {
                     title: 'Replied (' + x.id.substring(0, 6) + ')'
                 })
             });
+
+			if (onReplied)
+				onReplied(rr);
 
         },
         //on cancel
@@ -1770,7 +1773,10 @@ function newObjectSummary(x, options) {
         var mdl = newMetadataLine(x, showTime).appendTo(dd);
 		if (showReplyButton) {
 			$('<button>Reply</button>').addClass('metadataReplyButton').appendTo(mdl).click(function() {
-				newReplyPopup(x);
+				newReplyPopup(x, function(rx) {
+					if (options.replyCallback)
+						options.replyCallback(rx);
+				});
 			});
 		}
     }

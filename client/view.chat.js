@@ -1,3 +1,5 @@
+var _myNewObject = null;
+
 function onChatSend(name, desc, tag) {
     var o = objNew();
     o = o.own();
@@ -11,7 +13,7 @@ function onChatSend(name, desc, tag) {
     $N.pub(o/*, function() {
     }, function() {
     }*/);
-
+	_myNewObject = o;
 }
 
 function newRosterWidget() {
@@ -53,49 +55,116 @@ function newChatView(v) {
     var content = newDiv().addClass('ChatViewContent');
     var input = newChatInput(onChatSend).addClass('ChatViewInput');
     var roster = newRosterWidget().addClass('ChatViewRoster');
+    var updates = newDiv().addClass('ChatViewUpdates').addClass('ui-widget-content');
     
     //frame.append(roster);
     v.append(content);
     v.append(input);
     v.append(roster);
+    v.append(updates);
 
+	var nearBottom = false;
+	var displayedObjects = [];
+	var updatesAvailable = false;
+
+	$(content).scroll(function() {
+		var height = content.prop('scrollHeight');
+		var position = content.scrollTop();
+		var visible = content.height();
+
+		if (position+visible > height-25) {
+			if (!nearBottom)
+				if (updatesAvailable)
+					updateContent(true);
+
+			updates.html('Streaming...');
+			nearBottom = true;
+	   	}
+		else {
+			if (nearBottom)
+				updates.html('');
+			nearBottom = false;
+		}
+	});
 
     var scrollbottom = _.debounce(function() {
         content.scrollTop(content.height() * 20);
     }, 150);
 
-    function updateContent() {
-        content.empty();
+	function forceUpdate() {
+		updateContent(true);
+		scrollbottom();
+	}
+	var updateButton = $('<button>Update</button>').click(forceUpdate);
 
+    function updateContent(force) {
         var sort = 'Recent';
         var scope = 'Public';
         var semantic = 'Any';
         var maxItems = 75;
-        var s = self;
         var o = newDiv();
 
-        var rel = getRelevant(sort, scope, semantic, s, maxItems);
-        var rr = rel[0];
-        if (rr.length === 0) {
+        var rel = getRelevant(sort, scope, semantic, $N, maxItems);
+		var toDisplay = rel[0];
+		var difference = _.difference(toDisplay, displayedObjects);
+
+
+
+		if (!force) {
+			if (difference.length == 0) {
+				updatesAvailable = false;
+				return;
+			}
+			else if (!nearBottom) {
+				//buffer changes
+				updatesAvailable = true;
+
+				//TODO indicate which threads have changed
+			
+				updates.html(difference.length + ' Updates available.');			
+				updates.append(updateButton);
+				updates.fadeIn();
+
+				return;
+			}
+		}
+
+		updates.hide();
+
+        content.empty();
+
+        if (toDisplay.length === 0) {
             content.html('No messages.');
             return;
         }
-        for (var i = rr.length - 1; i >= 0; i--) {
-            var x = $N.getObject(rr[i]);
+		
+		displayedObjects = [];
+        for (var i = toDisplay.length - 1; i >= 0; i--) {
+            var x = $N.getObject(toDisplay[i]);
+			displayedObjects.push(x.id);
             content.append(newObjectLogLine(x));
         }
 
+
+		if (typeof force != "boolean") {			
+			var scrollToObject = force;
+			//existing scroll position should be good if it's a reply
+			if (scrollToObject.replyTo)
+				return;
+		}
+		
         later(scrollbottom);
     }
 
     content.onChange = function() {
-        updateContent();
+        updateContent(_myNewObject);
+		_myNewObject = null;
     };
     content.destroy = function() {
         roster.destroy();
     };
     
-    content.onChange();
+    updateContent(true);
 
 
     return content;
@@ -185,7 +254,10 @@ function newObjectLogLine(x) {
         showActionPopupButton: false,
         showSelectionCheck: false,
 		transparent: true,
-		hideAuthorNameAndIconIfZeroDepth: true
+		hideAuthorNameAndIconIfZeroDepth: true,
+		replyCallback: function(r) {
+			_myNewObject = r;
+		}
     }).appendTo(e);
 
     

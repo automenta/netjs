@@ -104,7 +104,9 @@ exports.plugin = function($N) {
                     }
                     
                     messageObject[t].addDescription(from + ': ' + text + '<br/>');
+					messageObject[t].touch();
                     $N.pub(messageObject[t]);
+
                     bufferedMessages++;
                     
                     if (bufferedMessages >= options.maxMessagesPerObject) {
