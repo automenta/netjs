@@ -227,7 +227,7 @@ function newChatInput(onSend) {
         newWebcamWindow(function(imgURL) {
             //var description = '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>';
             if (onSend)
-                onSend(inputBar.val(), null, {'media': imgURL});
+                onSend(inputBar.val(), null, {id: 'media', value: imgURL});
             inputBar.val('');
         });
     });
