@@ -995,9 +995,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     text-decoration: underline;
     font-size: 70%;
 }
-.InlineSelfButton span {
-    vertical-align: top;
-}
+
 .chatViewLineContent {
     float: left;
     width: 86%;

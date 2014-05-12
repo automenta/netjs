@@ -145,7 +145,7 @@ function renderBrowse(v, cssClass, afterCreated) {
             var o = newObjectSummary(x, {
                 onRemoved: function() {        },
                 scale: xxrr[i][1],
-                depthRemaining: 1,
+                depthRemaining: 2,
             });
             if (cssClass)
                 o.addClass(cssClass(xxrr.length));

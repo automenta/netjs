@@ -13,6 +13,21 @@ exports.plugin = function($N) { return {
             var schemaorg = require('./schema.org.json');
             var types = schemaorg.types;
             var properties = schemaorg.properties;
+
+			function mapURI(u) {
+				if (u === 'Person')
+					return 'Human';
+				return u;
+			}
+			function mapTagName(u, n) {
+				if (u === 'Person')
+					return 'Human';
+				return n;
+			}
+
+            var excludeProperties = [ 'description', 'image', 'name', 'url', 'about', 'sameAs', 'additionalType', 'alternateName'];            
+            var excludeTypes = [ 'Class', 'Property' ];            
+			var rootTypes = ['Action'];            
             
 			//http://schema.org/docs/full.html
             $N.addProperties(_.map(properties, function(prop) {
@@ -57,28 +72,30 @@ exports.plugin = function($N) { return {
                     type: pt
                 };
 				if (pt === 'object') {
-					p.tag = prop.ranges;
+					p.tag = _.map(prop.ranges, function(r) {
+						return mapURI(r);
+					});
 				}
 
  				return p;
             }));
             
-            var excludeProperties = [ 'description', 'image', 'name', 'url', 'about', 'sameAs', 'additionalType', 'alternateName'];            
-            var excludeTypes = [ 'Class', 'Property' ];            
-			var rootTypes = ['Action'];            
-
             $N.addTags(_.map(types, function(type) {
 				if (_.contains(excludeTypes, type.id))
 					return;
                 var t = {
-                    uri: type.id,
-                    name: type.label,
+                    uri: mapURI(type.id),
+                    name: mapTagName(type.id, type.label),
                     description: type.comment,
                     properties: _.map(_.difference(type.properties, excludeProperties), function(p) {
 						return propPrefix + p;
 					}),
                     tag: type.supertypes
                 };
+
+				if (t.uri!=type.id)
+					t.suri = type.id; //the original schema.org URI
+
 				if (_.contains(rootTypes, type.id)) {
 					delete t.tag;
 				}

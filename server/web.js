@@ -378,6 +378,22 @@ exports.start = function(options, init) {
             if (defaultTag)
                 t.tag = defaultTag;
 
+			if (!Array.isArray(t.properties)) {
+				var propertyArray = [];
+				_.each(t.properties, function(prop, uri) {
+					propertyArray.push( _.extend(prop, { uri: uri } ));
+				});
+				
+				addProperties(propertyArray);
+				t.properties = _.keys(t.properties);
+			}
+
+			if (tags[t.uri]) {
+				if (tags[t.uri].properties) {
+					t.properties = _.union(tags[t.uri].properties, t.properties);
+				}
+			}
+
             tags[t.uri] = t;
         });
 

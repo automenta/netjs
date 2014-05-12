@@ -103,7 +103,7 @@ $('#AddContentButton').click(function() {
     if (focus)
         if (focus.value)
             o.value = focus.value;
-    newPopupObjectEdit(o, {title: 'New...'});
+    newPopupObjectEdit(o, {title: 'New...', width: '50%'});
 });
 
 $('#FocusButton').click(function() {
