@@ -9,7 +9,7 @@
 
 exports.plugin = function($N) {
     var _ = require('underscore');
-    var rss = require('./rss.js');
+    var rss = require('./web.in.js');
     var geo = require('geolib');
 
     return {
@@ -30,7 +30,7 @@ exports.plugin = function($N) {
             //possible values: 'hour', 'day', 'week', 'month'
             var historySize = options.historySize || 'week';
             
-            rss.addRSSTags($N);
+            rss.addWebTags($N);
             
             $N.addTags([
                 {

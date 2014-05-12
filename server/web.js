@@ -33,7 +33,6 @@ var jsonpack = require('jsonpack');
 //var cortexit = require('./cortexit.js');
 
 
-
 /** 
  init - callback function that is invoked after the server is created but before it runs 
  */
@@ -381,7 +380,8 @@ exports.start = function(options, init) {
 			if (!Array.isArray(t.properties)) {
 				var propertyArray = [];
 				_.each(t.properties, function(prop, uri) {
-					propertyArray.push( _.extend(prop, { uri: uri } ));
+					if (prop != null)
+						propertyArray.push( _.extend(prop, { uri: uri } ));
 				});
 				
 				addProperties(propertyArray);
@@ -714,11 +714,24 @@ exports.start = function(options, init) {
 
     var httpServer = http.createServer(express);
 
+
+	//SHAREJS -----------------------------
+	/*var sharejs = require('share').server;
+
+	sharejs.attach(httpServer, { 
+		db: {type: 'none'}
+    	//browserChannel: { cors: "*"}
+	});*/
+
+	//----------------------------- SHAREJS
+
     httpServer.listen($N.server.port);
+
 
     nlog('Web server: http://' + $N.server.host + ':' + $N.server.port);
 
     var io = socketio.listen(httpServer);
+
 
     if (io.enable) {
         io.enable('browser client minification');  // send minified client
@@ -1024,6 +1037,11 @@ exports.start = function(options, init) {
     //Gzip compression
     if ($N.server.httpCompress)
         express.use(connect.compress());
+
+
+
+
+
 
     //express.use(expressm.staticCache());
     express.use("/plugin", expressm.static('./plugin', staticContentConfig));

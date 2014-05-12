@@ -1,6 +1,8 @@
 {
-    "name":"netention_js",
+    "name":"netention",
     "version":"0.0.1",
+	"repository" :  { "type" : "git", "url" : "http://github.com/automenta/netjs.git" },
+	"main": "netention.js",
     "dependencies":{
 		"express":"",
 		"http-auth":"",

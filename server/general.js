@@ -107,10 +107,9 @@ var generalTags = [
         },
         tag: ['Thing']
     },
-    {uri: 'Link', name: 'Link', description: 'A link or edge in a graph between vertices, nodes, URL\'s, or URI\'s',
+    {uri: 'Link', name: 'Link', description: 'A link or edge in a graph or network',
         properties: {
             'incidentObject': {name: 'Linking', type: 'object'}
-            //'visitURL': {name: 'Visit', type: 'url' }
         },
         tag: ['Concept']
     },

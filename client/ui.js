@@ -934,6 +934,9 @@ function renderFocus(skipSet) {
 }
 
 
+
+//Global Prototype Modifications
+
 $.fn.extend({
     replaceTag: function(newTagObj, keepProps) {
         this.each(function() {
@@ -942,4 +945,6 @@ $.fn.extend({
     }
 });
 
-
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};

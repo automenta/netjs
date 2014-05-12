@@ -951,7 +951,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             //TODO add save function
         } else {
-            d.append(new Date(t.at));
+            d.append(newEle('a').append($.timeago(new Date(t.at))));
         }
     } else if (type == 'media') {
         if (editable) {
@@ -1274,14 +1274,17 @@ function newPropertyView(x, vv) {
             name: vv.value
         };
 
-        return '<li>' + nameLabel + ': <a href="javascript:newPopupObjectView(\'' +
-               vv.value + '\')">' + o.name + '</a></li>';
+        return newEle('li').append(nameLabel, ': ', 
+				'<a href="javascript:newPopupObjectView(\'' + vv.value + '\')">' + o.name + '</a>');
     } else if (p.type === 'url') {
         return '<li>' + nameLabel + 
                ': <a target="_blank" href="' + vv.value + '">' +
                vv.value + '</a></li>';
     } else if (p.type === 'timeseries') {
-        return ('<li>' + nameLabel + '<br/><textarea>' + JSON.stringify(vv.value) + '</textarea></li');
+        return ('<li>' + nameLabel + '<br/><textarea>' + JSON.stringify(vv.value) + '</textarea></li>');
+	} else if (p.type === 'timepoint') {
+		var when = parseInt(vv.value);
+        return newEle('li').append(nameLabel, ': ', newEle('a').append($.timeago(new Date(when))));
     } else if ((p.type === 'integer') && (p.incremental)) {
         function goprev() {
             objSetFirstValue(x, vv.id, ii - 1);
@@ -1316,7 +1319,7 @@ function newPropertyView(x, vv) {
             }
         return $('<li>' + nameLabel + ': ' + vv.value + '</li>');
     } else {
-        return $('<li>' + nameLabel + ': ' + vv.value + '</li>');
+        return newEle('li').append(nameLabel, ': ', vv.value);
     }
 }
 
@@ -1797,7 +1800,7 @@ function newObjectDetails(x) {
     if (x.value) {
         x.value.forEach(function(vv) {
 
-            if (vv.id == 'sketch') {
+            if (vv.id === 'sketch') {
                 var eu = uuid();
 
                 var ee = newDiv(eu).appendTo(ud);
@@ -1814,7 +1817,7 @@ function newObjectDetails(x) {
                     /*var sketchpad =*/ Raphael.sketchpad(eu, options);
                 });
                 return;
-            } else if (vv.id == 'timerange') {
+            } else if (vv.id === 'timerange') {
                 /*if (ISODateString) {
                  ud.append(ISODateString(new Date(vv.value.start)) + ' '
                  + ISODateString(new Date(vv.value.start)));
@@ -1824,14 +1827,19 @@ function newObjectDetails(x) {
                     //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                     ud.append(new Date(vv.value.start).toISOString() + ' ' + new Date(vv.value.start).toISOString());
                 }
-            } else if (vv.id == 'media') {
+            } else if (vv.id === 'media') {
                 if (typeof vv.value == 'string') {
                     var url = vv.value;
-                    ud.append('<img class="objectViewImg" src="' + url + '"/><br/>');
+					if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg") || url.endsWith(".gif")) {
+	           	         ud.append('<img class="objectViewImg" src="' + url + '"/><br/>');
+					}
+					else {
+						ud.append('<a href="' + url + '">' + url + '</a><br/>');
+					}
                 } else {
                     var V = vv.value;
                     if (V.type == 'html') {
-                        ud.append(V.content);
+                        ud.append(newDiv().addClass('embeddedHTML').html(V.content));
                     } else if (V.type == 'markdown') {
                         ud.append(newDiv().addClass('markdown').html(markdown.toHTML(V.content)));
                     }

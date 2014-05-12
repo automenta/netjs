@@ -942,6 +942,12 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .markdown {
     padding: 0.25em;
 }
+.embeddedHTML {
+	border: 1px solid gray;
+	height: 12em;
+	overflow: auto;
+	resize: vertical;
+}
 /* Chat */
 
 .ChatViewContent {
