@@ -1035,8 +1035,17 @@ exports.start = function(options, init) {
     };
 
     //Gzip compression
-    if ($N.server.httpCompress)
-        express.use(connect.compress());
+    if ($N.server.httpCompress) {
+        if (connect.compress)
+            express.use(connect.compress());
+        else {
+            //connect 3.0:
+            var compress = require('compression');
+            express.use(compress({
+              threshhold: 512
+            }));
+        }
+    }
 
 
 

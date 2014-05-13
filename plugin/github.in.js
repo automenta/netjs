@@ -19,13 +19,14 @@ exports.plugin = function($N) {
             
             //https://developer.github.com/webhooks/
             //https://github.com/coreh/hookshot/blob/master/lib/index.js
-            $N.httpserver.post('/githubhook', function(req, res, next) {
+            $N.httpserver.route('/githubhook').post(function(req, res, next) {
                 var g = JSON.parse(req.body.payload);
                 
                 $N.pub(new $N.nobject().setName("GitHub")
                                 .addDescription(JSON.stringify(g,null,4)));
 
                 res.send(202, 'Accepted\n');         
+                res.end();
             });
 
         }

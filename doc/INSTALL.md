@@ -81,8 +81,14 @@ git pull ; npm update
 ####Use proxy.js to serve multiple instances on one server
 TODO
 
-####Create a start.sh script that can be run on system startup
-TODO
+####Open a port in iptables firewall
+Example:
+```
+iptables -A INPUT -p tcp --dport 9001 -j ACCEPT
+```
+
+####Create an upstart.sh script that automatically runs Netention on system startup:
+See: http://howtonode.org/deploying-node-upstart-monit
 
 
 Install Netention for Node.JS on Windows
