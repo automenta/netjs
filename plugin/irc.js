@@ -68,9 +68,8 @@ exports.plugin = function($N) {
                 var t = to.toLowerCase();
                 if (!_.contains(options.readChannels, t))
                     return;
-                
-                var prevMsg = that.prevMsg;
-
+                                
+                var processed = false;
                 try {
                     var m = JSON.parse(text);
                     if (m.id) {
@@ -89,22 +88,28 @@ exports.plugin = function($N) {
                                     $N.deleteObject(m.id, null, "externalRemovalIRC");
                             }
                         });
+                        processed = true;
                     }
                 }
-                catch (e) {
+                catch (e) { }
+                
+                if (!processed) {
                     if (!messageObject[t]) {
                         var name = to + ', ' + from + ': ' + text;
                         var m = $N.objNew();
                         messageObject[t] = m;
                         m.setName(to);
                         m.fromIRC = true; //avoid rebroadcast                        
+                        
                     }
                     else {
                         messageObject[t].modifiedAt = Date.now();
                     }
-                    
+                                        
                     messageObject[t].addDescription(from + ': ' + text + '<br/>');
 					messageObject[t].touch();
+                    
+                    
                     $N.pub(messageObject[t]);
 
                     bufferedMessages++;

@@ -1271,10 +1271,10 @@ exports.start = function(options, init) {
         co = util.objCompact(o);
 
         var allsockets = io.sockets.in('*').sockets;
-
+ 
 
         var scope = o.scope || options.client.defaultScope;
-
+ 
         function sendToSocket(i) {
             if (socket) {
                 if (allsockets[i] !== socket)
@@ -2074,6 +2074,8 @@ exports.start = function(options, init) {
                         socket.emit('notice', tagsAndTemplates);
                 });
 
+                sub(socket, '*');
+                
                 /*getObjectsByTag('User', function(to) {
                  socket.emit('notice', to);
                  });*/

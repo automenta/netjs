@@ -83,12 +83,9 @@ function newChatView(v) {
                 if (updatesAvailable)
                     updateContent(true);
 
-            updates.html('');
             nearBottom = true;
         }
         else {
-            if (nearBottom)
-                updates.html('');
             nearBottom = false;
         }
     });
@@ -96,6 +93,11 @@ function newChatView(v) {
     var scrollbottom = _.debounce(function() {
         content.scrollTop(content.height() * 20);
     }, 150);
+
+    var viewMenu = $('#AvatarViewMenu');
+    $('<button>Scroll to Bottom</button>').appendTo(viewMenu).click(scrollbottom);
+    //TODO toggle replies
+    //TODO adjust highlight history period
 
     function forceUpdate() {
         updateContent(true);
@@ -145,6 +147,7 @@ function newChatView(v) {
         if (!force) {
             if ((added.length == 0) && (removed.length == 0) && (changed.length == 0)) {
                 updatesAvailable = false;
+                updates.hide();
                 return;
             }
             else if (!nearBottom) {
@@ -396,10 +399,13 @@ function newObjectLogLine(x) {
             b = newInlineSelfButton(a, x);
         }
         else {
-            b = newEle('a').text(a.author).attr({'xid': x.id, 'aid': x.author});
+            if (a.author)
+                b = newEle('a').text(a.author).attr({'xid': x.id, 'aid': x.author});
         }
-        b.click(newObjectLogLineClick);
-        d.append(b);
+        if (b) {
+            b.click(newObjectLogLineClick);
+            d.append(b);
+        }
     }
     else {
         d.append('&nbsp;');
