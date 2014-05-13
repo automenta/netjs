@@ -48,6 +48,7 @@ exports.plugin = function($N) {
             this.irc = new irc.Client(options.server, username, {
                 channels: ch
             });
+            var myorigin = 'irc://' + options.server + '/' + username;
 
 
             /*var RiveScript = require("rivescript");
@@ -68,26 +69,35 @@ exports.plugin = function($N) {
                 var t = to.toLowerCase();
                 if (!_.contains(options.readChannels, t))
                     return;
-                                
+                             
                 var processed = false;
                 try {
                     var m = JSON.parse(text);
                     if (m.id) {
-                        //TODO make this into a .pub(id, func, false /* avoid overwrite */)
-                        $N.getObjectSnapshot(m.id, function(err, d) {
-                            var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
-                            if ((err) || (newer)) {
-                                m.fromIRC = true;
-                                $N.pub(m);
-                                that.prevMsg = m.id;
-                            }
-                            else {
-                                //remove only objects from outside when told so, TODO use more thorough tracking of authors to allow only an author to delete one's own'
-                                if (m.removed)
-                                    //if (d[0].fromIRC) 
-                                    $N.deleteObject(m.id, null, "externalRemovalIRC");
-                            }
-                        });
+                        m.origin = 'irc://' + options.server + '/' + from;
+                        
+                        if (m.origin != myOrigin) {
+                            $N.getObjectSnapshot(m.id, function(err, d) {
+                                var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
+                                if (err) {
+                                    $N.pub(m);
+                                    that.prevMsg = m.id;
+                                }
+                                else {
+                                    //only replace if existing object's origin matches
+                                    if (m.origin == d[0].origin) {
+                                    
+                                        if (m.removed) {
+                                            //if (d[0].fromIRC) 
+                                            $N.deleteObject(m.id, null, "irc://");
+                                        }
+                                        else {
+                                            $N.pub(m);
+                                        }
+                                    }                                        
+                                }
+                            });
+                        }
                         processed = true;
                     }
                 }
@@ -99,8 +109,7 @@ exports.plugin = function($N) {
                         var m = $N.objNew();
                         messageObject[t] = m;
                         m.setName(to);
-                        m.fromIRC = true; //avoid rebroadcast                        
-                        
+                        m.origin = 'irc://' + options.server + '/' + to;                        
                     }
                     else {
                         messageObject[t].modifiedAt = Date.now();
@@ -144,18 +153,17 @@ exports.plugin = function($N) {
 
         },
         onPub: function(x) {
-            /*if (_.contains(x.tag, 'irc.Channel')) {
-             this.update();
-             }*/            
+            //avoid rebroadcast to origin
+            if (x.origin)
+                if (x.origin.indexOf('irc://' + this.options.server)==0)
+                    return;
+
             x = $N.objCompact(x);
 
             var that = this;
-
-
-            if (x.fromIRC)
-                return;
+            
             if (x.removed)
-                if (x.content === 'externalRemovalIRC')
+                if (x.content === 'irc://')
                     return;
 
             var toChannels = that.options.writeChannels;

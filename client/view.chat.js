@@ -91,7 +91,7 @@ function newChatView(v) {
     });
 
     var scrollbottom = _.debounce(function() {
-        content.scrollTop(content.height() * 20);
+        content.scrollTop(content.prop('scrollHeight'));
     }, 150);
 
     var viewMenu = $('#AvatarViewMenu');
