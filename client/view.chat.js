@@ -101,6 +101,7 @@ function newChatView(v) {
 		scrollbottom();
 	}
 
+	var changed = [];
 
     function updateContent(force) {
 		var numPreviousDisplayed = displayedObjects.length;
@@ -122,7 +123,7 @@ function newChatView(v) {
 
 		var added = _.difference(toDisplayWithReplies, displayedObjects);
 		var removed = _.difference(displayedObjects, toDisplayWithReplies);
-		var changed = _.filter(toDisplayWithReplies, function(d) {
+		var newlyChanged = _.filter(toDisplayWithReplies, function(d) {
 			var D = toDisplayObj[d] || $N.getObject(d);
 			var dd = D.modifiedAt || D.createdAt;
 			var changed = false;
@@ -138,6 +139,7 @@ function newChatView(v) {
 			return changed;
 		});
 
+		changed = _.union(changed, newlyChanged);
 
 		if (!force) {
 			if ((added.length == 0) && (removed.length == 0) && (changed.length == 0)) {
@@ -250,6 +252,8 @@ function newChatView(v) {
 				}
 			}
 		});
+
+		changed = [];
 
 		if (force)
 			if (typeof force != "boolean") {			

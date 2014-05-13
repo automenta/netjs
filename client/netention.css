@@ -992,10 +992,11 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
 .ChatViewUpdates {
     position: fixed;
-    right: auto;
+    left: 40%;
     top: auto;
     width: 20%;
 	padding:1em;
+	text-align: center;
 }
 .ChatViewInput {
     position: fixed;
