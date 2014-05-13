@@ -40,6 +40,7 @@ exports.start = function(options, init) {
 
     var $N = _.clone(util);
     $N.server = options;
+    $N.httpserver = express;
 
     var focusHistory = [];
     var focusHistoryMaxAge = 24 * 60 * 60 * 1000; //in ms
