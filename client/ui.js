@@ -88,21 +88,18 @@ function addAction(a) {
 function newContextMenu(s, excludeEmptyMenus, clickCallback) {
     //s = list of objects
 
-    var u = $('<ul class="ActionMenu"></ul>');
-
-    /*u.append('<li><a href="#">Action1</a></li>');
-     u.append('<li><a href="#">SubMenu</a><ul><li><a href="#">Action2</a></li></ul></li>');*/
+    var u = newEle('ul').addClass('ActionMenu');
 
     _.each(ActionMenu, function(v, k) {
         var menu = k;
-        var submenu = $('<li><a href="#">' + menu + '</a></li>');
-        var subcontents = $('<ul style="width: 80%"></ul>');
+        var submenu = newEle('li').append( newEle('a').html(menu) );
+        var subcontents = newEle('ul').addClass('ActonMenuSubContents');
         submenu.append(subcontents);
 
         var added = 0;
 
         _.each(v, function(vv) {
-            var a = $('<a href="#">' + vv.name + '</a>');
+            var a = newEle('a').html(vv.name);
 
             if (vv.description)
                 a.attr('title', vv.description);
@@ -125,21 +122,20 @@ function newContextMenu(s, excludeEmptyMenus, clickCallback) {
                     if (clickCallback)
                         clickCallback(vv.name);
                 }
+	            a.click(clickFunction);
                 added++;
             }
             else {
                 if (excludeEmptyMenus)
                     return;
 
-                a.attr('style', 'opacity: 0.4');
-                a.attr('disabled', 'true');
+				a.attr({
+					style: 'opacity: 0.4',
+					disabled: 'true'
+				});
             }
 
-            a.click(clickFunction);
-
-            var la = $('<li></li>');
-            la.append(a);
-            subcontents.append(la);
+            newEle('li').append(a).appendTo(subcontents);
         });
 
         if ((added == 0) && (excludeEmptyMenus))
@@ -160,8 +156,7 @@ var refreshActionContext = _.throttle(function() {
 
         //get selected items from .ObjectSelection
         $('.ObjectSelection:checked').each(function(index) {
-            var x = $(this);
-            var aoid = x.attr('oid');
+            var aoid = $(this).attr('oid');
             if (aoid) {
                 var o = $N.getObject(aoid);
                 if (o)
@@ -184,8 +179,7 @@ var refreshActionContext = _.throttle(function() {
         if (s.length == 0)
             return;
 
-        var u = newContextMenu(s);
-        u.addClass('ActionMenuGlobal');
+        var u = newContextMenu(s).addClass('ActionMenuGlobal');
 
         var selectedLabel = $('<div style="float:right"><i>' + s.length + ' selected. </i></div>');
 
@@ -193,8 +187,7 @@ var refreshActionContext = _.throttle(function() {
         clearButton.click(function() {
             later(function() {
                 $('.ObjectSelection:checked').each(function(index) {
-                    var x = $(this);
-                    x.prop('checked', false);
+                    $(this).prop('checked', false);
                 });
                 refreshActionContext();
             });
@@ -206,7 +199,7 @@ var refreshActionContext = _.throttle(function() {
 
         $('#ActionMenuWrapper').append(u);
     });
-}, 850);
+}, configuration.viewUpdateTime[configuration.device||1][0]);
 
 
 function updateBrand() {

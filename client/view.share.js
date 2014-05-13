@@ -243,47 +243,46 @@ function newObjectSummary2(x) {
     var firstMedia = objFirstValue(x, 'media');
 
     var imgurl;
-    if ((firstMedia) && (typeof firstMedia == "string")) {
+    if ((firstMedia) && (typeof firstMedia === "string")) {
         imgurl = firstMedia;
     }
 	else {
 		imgurl = getTagIcon(x) || getTagIcon(null);// 'icon/placeholder.png';
 	}
 
-    img.append('<img src="' + imgurl + '"/>');
+    img.append( newEle('img').attr('src', imgurl) );
 
     var e = newDiv().addClass('ShareSummaryContent').appendTo(d);
 	var xnn = x.name || '?';
-    var titleLink = $('<a href="#"><h1>' + xnn + '</h1></a>');
-    titleLink.click(function() {
-        newPopupObjectView(x, true);
-    });
-    e.append(titleLink);
-    e.append(newMetadataLine(x));
+    var titleLink = newEle('a').append( newEle('h1').html(xnn) )
+		.click(function() {
+		    newPopupObjectView(x, true);
+		});
+    e.append(titleLink, newMetadataLine(x));
 
 
     var actionLine = newDiv().addClass('ShareSummaryAction').appendTo(e);
     if ($N.id() == x.author) {
-        var editButton = $('<button>Edit</button>').appendTo(actionLine);
-        editButton.click(function() {
-            newPopupObjectEdit(x, true);
-        });
+        var editButton = newEle('button').text('Edit').appendTo(actionLine)
+		    .click(function() {
+		        newPopupObjectEdit(x, true);
+		    });
 
         if (!objHasTag(x, 'User')) {
-            var deleteButton = $('<button>Delete</button>').appendTo(actionLine);
-            deleteButton.click(function() {
-                if (confirm('Permanently delete \"' + x.name + '\"?'))
-                    $N.deleteObject(x);
-            });
+            var deleteButton = newEle('button').text('Delete').appendTo(actionLine)
+		        .click(function() {
+		            if (confirm('Permanently delete \"' + x.name + '\"?'))
+		                $N.deleteObject(x);
+		        });
         }
     }
-    var replyButton = $('<button>Reply</button>').appendTo(actionLine);
-    replyButton.click(function() {
-		newReplyPopup(x);
-    });
+    var replyButton = newEle('button').text('Reply').appendTo(actionLine)
+		.click(function() {
+			newReplyPopup(x);
+		});
 	var numReplies = $N.getReplies(x).length;
 	if (numReplies) {
-		actionLine.append('<span style="opacity: 0.5">&nbsp;(Replies: ' + numReplies + ')</span>');
+		actionLine.append( newEle('span').addClass('ReplyInfo').html('&nbsp;(Replies: ' + numReplies + ')') );
 	}
 
 
@@ -297,11 +296,11 @@ function newObjectSummary2(x) {
         var A = $N.getObject(x.author);
 		if (A) {
 		    authorline.append(newAvatarImage(A).attr('style', 'height: 1.5em; vertical-align: middle'));
-		    var authorLink = $('<a href="#">' + A.name + '</a>');
-		    authorLink.click(function() {
-		        newPopupObjectView(A, true);
-		    });
-		    authorline.append(authorLink);
+		    var authorLink = $( newEle('a').html(A.name) )
+				.appendTo(authorline)
+				.click(function() {
+				    newPopupObjectView(A, true);
+				});
 		}
 		else {
 			//missing author?
@@ -310,8 +309,7 @@ function newObjectSummary2(x) {
         actionLine.append(authorline);
     }
 
-
-    d.append('<div style="clear: both"/>');
+    d.append( newDiv().attr('style', 'clear: both') );
     return d;
 }
 

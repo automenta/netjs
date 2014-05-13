@@ -4,7 +4,7 @@
 body {
     background-image: url('/theme/cybernetic/p2p_banner.jpg'); 
     background-attachment: fixed;
-    background-size: stretch;
+    background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
     margin: 0;
@@ -19,6 +19,6 @@ body {
 }
 .ui-widget-content {
 	background: #eee;
-	border: 3px solid #ccc;
+	border: 2px solid #aaa;
 }
 

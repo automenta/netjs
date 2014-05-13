@@ -91,7 +91,10 @@ function newPopupObjectViews(objectIDs) {
 
 
 function newAvatarImage(s) {
-    return $(newEle('img')).attr("src", getAvatarURL(s)).attr('title', s.name);
+    return $(newEle('img')).attr({
+		"src": getAvatarURL(s),
+		'title': s.name
+	});
 }
 
 function getAvatarURL(s, style) {
@@ -1564,7 +1567,7 @@ function newObjectSummary(x, options) {
 
     //check for Similarity
     var ot = objTags(x);
-    if ((ot[0] == 'Similar') && (ot[1] == 'similarTo')) {
+    if ((ot[0] === 'Similar') && (ot[1] === 'similarTo')) {
         /*showMetadataLine = false;
 		showActionPopupButton = false;
 		showSelectionCheck = false;
@@ -1613,7 +1616,7 @@ function newObjectSummary(x, options) {
 
 
 
-    var mini = (depthRemaining == 0);
+    var mini = (depthRemaining === 0);
 
 
 	var d = newDiv().attr({
@@ -1634,7 +1637,7 @@ function newObjectSummary(x, options) {
     d.append(cd);
 
 
-	if ((depth == depthRemaining) && (hideAuthorNameAndIconIfZeroDepth))
+	if ((depth === depthRemaining) && (hideAuthorNameAndIconIfZeroDepth))
 		showAuthorName = showAuthorIcon = false;
 
     if (showAuthorName) {
@@ -1653,8 +1656,6 @@ function newObjectSummary(x, options) {
 
     var replies;
 
-
-	var dd = newDiv();
     
     if (showAuthorIcon) {
         var authorClient = $N.getObject(authorID);
@@ -1667,7 +1668,6 @@ function newObjectSummary(x, options) {
             }
         }
     }
-	dd.appendTo(d);
 
     //Selection Checkbox
     var selectioncheck = null;
@@ -1678,7 +1678,7 @@ function newObjectSummary(x, options) {
             .click(_refreshActionContext);
     }
 
-    var haxn = newEle('h1').appendTo(dd);
+    var haxn = newEle('h1').appendTo(d);
 
     var refreshReplies = function() {
         var r = $N.getReplies(x.id);
@@ -1709,10 +1709,13 @@ function newObjectSummary(x, options) {
 
     function addPopupMenu() {
         var ms = $N.myself();
-        if (ms)
-            if (ms.id === x.author) {
-                var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton').appendTo(haxn);
-                editButton.click(function () {
+        if (ms && (ms.id === x.author)) {
+	        var editButton = newEle('button').text('..').attr({
+				title: "Edit",
+				'class': 'ObjectViewPopupButton'
+				})			
+				.appendTo(haxn)
+                .click(function () {
                     var windowParent = $(this).parent().parent().parent().parent();
                     if (windowParent.hasClass('ui-dialog-content')) {
                         windowParent.dialog('close');
@@ -1720,32 +1723,34 @@ function newObjectSummary(x, options) {
                     newPopupObjectEdit(x, true);
                     return false;
                 });
-            }
+        }
 
-        var popupmenu = null;
-        var popupmenuButton = $('<button title="Actions...">&gt;</button>')
+        var popupmenuButton = newEle('button').html('&gt;').attr({
+				title: "Actions...",
+				'class': 'ObjectViewPopupButton'
+			})			
 			.appendTo(haxn)
-            .addClass('ObjectViewPopupButton')
             .click(function () {
+				var that = this;
 
-                if (popupmenu) {
+                if (this.popupmenu) {
                     //click the popup menu button again to disappear an existing menu
                     return closeMenu();
                 }
 
                 function closeMenu() {
-                    popupmenu.remove();
-                    popupmenu = null;
+                    that.popupmenu.remove();
+                    that.popupmenu = null;
                     return false;
                 }
 
-                popupmenu = newContextMenu([x], true, closeMenu).addClass('ActionMenuPopup');
+                this.popupmenu = newContextMenu([x], true, closeMenu).addClass('ActionMenuPopup');
 
                 var closeButton = $('<button>Close</button>')
                                     .click(closeMenu)
-                                    .appendTo(popupmenu);
+                                    .appendTo(this.popupmenu);
 
-                popupmenuButton.after(popupmenu);
+                $(this).after(this.popupmenu);
                 return false;            
             });
 
@@ -1759,7 +1764,7 @@ function newObjectSummary(x, options) {
         haxn.html(xn);
     } else {
         var xxn = xn.length > 0 ? xn : '?';
-        haxn.append( $('<a>' + xxn + '</a>').attr('title', x.id).click(function () {
+        haxn.append( newEle('a').html(xxn).attr('title', x.id).click(function () {
             if ((x.author === $N.id()) && (titleClickMode === 'edit'))
                 newPopupObjectEdit(x, true);
             else if (typeof (titleClickMode) === 'function') {
@@ -1775,9 +1780,9 @@ function newObjectSummary(x, options) {
 
 
     if (showMetadataLine) {
-        var mdl = newMetadataLine(x, showTime).appendTo(dd);
+        var mdl = newMetadataLine(x, showTime).appendTo(d);
 		if (showReplyButton) {
-			$('<button>Reply</button>').addClass('metadataReplyButton').appendTo(mdl).click(function() {
+			newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {
 				newReplyPopup(x, function(rx) {
 					if (options.replyCallback)
 						options.replyCallback(rx);
@@ -1805,7 +1810,7 @@ function newObjectDetails(x) {
 
     var desc = objDescription(x);
     if (desc) {
-        ud.append('<div>' + desc + '</div>');
+        ud.append(newDiv().html(desc));
     }
 
 
@@ -1865,7 +1870,12 @@ function newObjectDetails(x) {
                 if (pv) {
                     if (typeof pv === "string")
                         pv = $(pv);
-                    pv.css('opacity', 0.5 + (strength / 2.0)).appendTo(ud);
+
+					pv.appendTo(ud);
+
+					var opa = 0.5 + (strength / 2.0);
+					if (opa!=1.0)
+	                    pv.css('opacity', opa);
                 }
             }
         });
@@ -1917,7 +1927,7 @@ function newMetadataLine(x, showTime) {
         } else {
 			taglink = newEle('a').append(newTagImage(null));
         }
-        mdline.append(taglink, '&nbsp;');
+        mdline.append(taglink, '&nbsp;&nbsp;');
     });
 
     var spacepoint = objSpacePoint(x);
@@ -1940,14 +1950,13 @@ function newMetadataLine(x, showTime) {
         } else {
             spacelink.text('[' + lat + ',' + lon + ']');
         }
-		mdline.append('&nbsp;', spacelink);
+		mdline.append(spacelink, '&nbsp;&nbsp;');
     }
 
     if (showTime !== false) {
         var ww = objWhen(x);
         if (ww) {
-            mdline.append('&nbsp;&nbsp;', 
-                          newEle('a').append($.timeago(new Date(ww))) );
+            mdline.append(newEle('a').append($.timeago(new Date(ww))) );
         }
     }
     return mdline;

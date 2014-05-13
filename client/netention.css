@@ -38,11 +38,11 @@ a:hover {
     width: 100%;
 }
 .AvatarIcon {
-    padding: 3px;
     float: left;
+	margin-right: 4px;
 }
 .AvatarIcon img {
-    height: 2em;
+    height: 1.85em;
 }
 .DataSubViewMenu {
     margin-left: 2em;
@@ -415,7 +415,6 @@ div.olMapViewport {
 }
 #ViewSelect {
     float: left;
-    margin-right: 10px;
 }
 /*!
  * Properly formatted CSS section
@@ -693,13 +692,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 #AvatarFocus {
     position: absolute;
     bottom: 0;
-    padding-bottom: 0.5em;
-}
-#identity {
-    width: 75px;
-    height: 65px;
-    margin-left: 75px;
-    text-align: right;
+    padding-bottom: 5px;
 }
 .TagBar {
     font-size: 85%;
@@ -951,7 +944,6 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 /* Chat */
 
 .ChatViewContent {
-    position: fixed;
     height: 100%;
     margin-left: 1em;
     height: 90%;
@@ -975,12 +967,20 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }
 /*.ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }*/
 
+.ChatViewInput {
+    position: fixed;
+    text-align: right;
+    bottom: 0;
+    width: 47%;
+	right: 0;
+}
+
 .ChatViewRoster {
     position: fixed;
     text-align: left;
     bottom: 0;
-    max-width: 40%;
-    max-height: 9%;
+	width: 47%;
+	height: 2.5em;	
     overflow: auto;
 }
 .ChatViewRoster img {
@@ -998,19 +998,51 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 	padding:1em;
 	text-align: center;
 }
-.ChatViewInput {
-    position: fixed;
-    right: 2em;
-    text-align: right;
-    bottom: 0;
-    max-width: 40%;
+
+@media (max-width: 699px) {
+	.ChatViewContent {
+		margin-left: 0;
+	}
+	.ChatViewInput {
+		right: 0;
+	}
+	.ChatViewInput input {
+		width: 52%;
+	}
+	.ChatViewContentLine {
+		border-left: 0;
+	}
+	#welcome button {
+		margin: 0 !important;
+	}
+	#AvatarFocus {
+		text-align: right;
+		float: right;
+	}
+	#AvatarFocus .ViewControl:nth-child(2) {
+		clear:both !important;
+	}
+	#AvatarFocus .tagSection {
+		float: right  !important;
+		clear: none !important;
+	}
+
+}
+@media (min-width: 700px) {
+	.ChatViewInput input {
+		width: 80%;
+	}
 }
 .InlineSelfButton {
     cursor: pointer;
     text-decoration: underline;
     font-size: 70%;
 }
-
+.InlineSelfButton span {
+	position: relative;
+	right: 0;
+	bottom: 0.5em;
+}
 .chatViewLineContent {
     float: left;
     width: 86%;
@@ -1281,7 +1313,12 @@ html > body .ui-pnotify {
  * less than 320 = small mobile mode 
  */
 
-@media (max-width: 320px) {}
+@media (max-width: 400px) {
+	.ViewControl img { width: 30px; }
+	#ViewSelect {
+        max-width: 60% !important;
+	}
+}
 /*!
  * less than 700 = mobile mode 
  */
@@ -1306,18 +1343,28 @@ html > body .ui-pnotify {
     #AvatarFocus {
         position: initial;
     }
+	#AvatarViewMenu select, #AvatarViewMenu div { 
+		clear: none !important; 
+		float: left;
+		margin: 0;
+	}
     #welcome {
         text-align: left;
     }
     #identity {
         float: left;
         text-align: left;
+		position: fixed;
+		top: 69px;
     }
     #ViewMenu .section {
         clear: none;
+		margin: 0;
+		padding: 0;
     }
     #ViewSelect {
-        max-width: 270px;
+        max-width: 66%;
+		margin-left: 75px !important;
     }
     .view-indented-more {
         left: 0 !important;
@@ -1345,6 +1392,23 @@ html > body .ui-pnotify {
     #ViewMenu {
         width: 150px;
     }
+	#ViewSelect {
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+	#identity {
+		width: 75px;
+		height: 75px;
+		margin-left: 75px;
+		text-align: right;
+		margin: 0;
+		padding-top: 0 !important;
+		float: right;
+	}
+	.section {
+		margin-left: 5px !important;
+	}
+
     .logon > div,
     .modal > div {
         width: 500px;
@@ -1718,6 +1782,9 @@ div.olControlZoom {
     font-size: 70% !important;
     font-weight: normal;
 }
+.ActonMenuSubContents {
+	width: 80%;
+}
 /* ------------------------------- */
 
 .reveal {
@@ -1887,6 +1954,10 @@ svg {
 }
 .ShareSummaryAction {
     float: left;
+	width: 95%;
+}
+.ShareSummaryAction .ReplyInfo {
+	opacity: 0.5;
 }
 .ShareSummaryAuthor {
     float: right;

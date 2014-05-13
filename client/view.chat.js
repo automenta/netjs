@@ -382,7 +382,7 @@ function newObjectLogLine(x) {
             b = newEle('a').text(a.author).attr( {	'xid': x.id, 'aid': x.author	});
         }
         b.click(newObjectLogLineClick);
-        d.append(newEle('p').append(b));
+        d.append(b);
     }
     else {
         d.append('&nbsp;');
