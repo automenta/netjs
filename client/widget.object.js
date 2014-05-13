@@ -1789,7 +1789,9 @@ function newObjectSummary(x, options) {
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
 
 
-    d.append(newObjectDetails(x));
+	var nod = newObjectDetails(x);
+	if (nod)
+	    d.append(nod);
 
     if (!mini) {
         refreshReplies();

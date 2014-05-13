@@ -287,7 +287,9 @@ function newObjectSummary2(x) {
 	}
 
 
-	e.append(newObjectDetails(x).css('clear', 'both'));
+	var nod = newObjectDetails(x);
+	if (nod)
+		e.append(nod.css('clear', 'both'));
 
     if (x.author) {
         var authorline = newEle('span').addClass('ShareSummaryAuthor');

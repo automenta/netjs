@@ -239,6 +239,15 @@ function _updateView(force) {
     //s.saveLocal();
 
     var view = $N.get('currentView');
+    if (!view) {
+        if (configuration.initialView) {
+            view = configuration.initialView;
+        }
+		else {
+			return;
+		}
+    }
+
     var param = null;
 
     if (view.view) {
@@ -665,12 +674,6 @@ $(document).ready(function() {
 
                 });
 
-
-                if (!$N.get('currentView')) {
-                    if (configuration.initialView) {
-                        $N.save('currentView', configuration.initialView);
-                    }
-                }
 
                 updateViewControls();
 

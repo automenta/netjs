@@ -215,11 +215,11 @@ function newChatView(v) {
 		
 		displayedObjects = [];
 
+
         for (var i = toDisplay.length - 1; i >= 0; i--) {
 			var td = toDisplay[i];
 			if (rootsUnaffected[td]) {
 				content.append(rootsUnaffected[td]);
-
 			}
 			else {
 		        var x = $N.getObject(td);
