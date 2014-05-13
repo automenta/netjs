@@ -55,7 +55,7 @@ exports.start = function(options, init) {
     $N.server.interestTime = {};	//accumualted time per interest, indexed by tag URI
 
     //"mydb"; // "username:password@example.com/mydb"
-    var dbURL = $N.server.databaseURL || process.env.MongoURL;     
+    var dbURL = $N.server.databaseURL || process.env.MongoURL;
     var db = mongo.connect(dbURL, ["obj", "sys"]);
 
 
@@ -147,12 +147,12 @@ exports.start = function(options, init) {
                     continue;
                 if (pp[operation]) {
                     var result = pp[operation](parameter);
-					if (result)
-						parameter = result;
+                    if (result)
+                        parameter = result;
                 }
             }
         }
-		return parameter;
+        return parameter;
     }
     $N.plugins = plugins;
 
@@ -182,12 +182,12 @@ exports.start = function(options, init) {
     }
     $N.saveState = saveState;
 
-    
+
     function loadState(f) {
 
         db.sys.find({id: "state"}, function(err, state) {
 
-            if (err || !state || (state.length===0)) {
+            if (err || !state || (state.length === 0)) {
                 nlog("No previous system state found");
             }
             else {
@@ -299,10 +299,10 @@ exports.start = function(options, init) {
             var n = objs.pop();
 
             if (n) {
-                
+
                 if (typeof n != "string")
                     n = n.id;
-                
+
                 $N.deleteObject(n, d);
             }
             else {
@@ -372,28 +372,29 @@ exports.start = function(options, init) {
     $N.addProperties = addProperties;
 
     function addTags(at, defaultTag) {
-		at.forEach(function(t) {
-			if (!t) return;
+        at.forEach(function(t) {
+            if (!t)
+                return;
 
             if (defaultTag)
                 t.tag = defaultTag;
 
-			if (!Array.isArray(t.properties)) {
-				var propertyArray = [];
-				_.each(t.properties, function(prop, uri) {
-					if (prop != null)
-						propertyArray.push( _.extend(prop, { uri: uri } ));
-				});
-				
-				addProperties(propertyArray);
-				t.properties = _.keys(t.properties);
-			}
+            if (!Array.isArray(t.properties)) {
+                var propertyArray = [];
+                _.each(t.properties, function(prop, uri) {
+                    if (prop != null)
+                        propertyArray.push(_.extend(prop, {uri: uri}));
+                });
 
-			if (tags[t.uri]) {
-				if (tags[t.uri].properties) {
-					t.properties = _.union(tags[t.uri].properties, t.properties);
-				}
-			}
+                addProperties(propertyArray);
+                t.properties = _.keys(t.properties);
+            }
+
+            if (tags[t.uri]) {
+                if (tags[t.uri].properties) {
+                    t.properties = _.union(tags[t.uri].properties, t.properties);
+                }
+            }
 
             tags[t.uri] = t;
         });
@@ -676,13 +677,13 @@ exports.start = function(options, init) {
         res.writeHead(200, {'content-type': 'text/json'});
         var p;
         if (!pretty) {
-			if (format == 'jsonpack') {
-				p = jsonpack.pack(x);
-			}
-			else {
-	            p = JSON.stringify(x);
-			}
-		}
+            if (format == 'jsonpack') {
+                p = jsonpack.pack(x);
+            }
+            else {
+                p = JSON.stringify(x);
+            }
+        }
         else
             p = JSON.stringify(x, null, 4);
         res.end(p);
@@ -690,7 +691,6 @@ exports.start = function(options, init) {
 
     http.globalAgent.maxSockets = 256;
 
-    var cookieParser = require('cookie-parser')('netention0');
 
     //PASSPORT -------------------------------------------------------------- 
     var passport = require('passport')
@@ -698,11 +698,11 @@ exports.start = function(options, init) {
             , GoogleStrategy = require('passport-google').Strategy;
 
 
+    var cookieParser = require('cookie-parser')('netention0');
     var bodyParser = require('body-parser');
-    
+
     express.use(cookieParser);
     express.use(bodyParser({limit: '1mb'}));
-    express.use(bodyParser.json());
     //express.use(expressm.methodOverride());
     express.use(require('parted')());
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
@@ -713,15 +713,15 @@ exports.start = function(options, init) {
     var httpServer = http.createServer(express);
 
 
-	//SHAREJS -----------------------------
-	/*var sharejs = require('share').server;
+    //SHAREJS -----------------------------
+    /*var sharejs = require('share').server;
+     
+     sharejs.attach(httpServer, { 
+     db: {type: 'none'}
+     //browserChannel: { cors: "*"}
+     });*/
 
-	sharejs.attach(httpServer, { 
-		db: {type: 'none'}
-    	//browserChannel: { cors: "*"}
-	});*/
-
-	//----------------------------- SHAREJS
+    //----------------------------- SHAREJS
 
     httpServer.listen($N.server.port);
 
@@ -1204,7 +1204,7 @@ exports.start = function(options, init) {
         sendJSON(res, logMemory.buffer);
     });
 
-    function compactObjects(list) {		
+    function compactObjects(list) {
         return list.map(function(o) {
             return util.objCompact(o);
         });
@@ -1277,10 +1277,10 @@ exports.start = function(options, init) {
         co = util.objCompact(o);
 
         var allsockets = io.sockets.in('*').sockets;
- 
+
 
         var scope = o.scope || options.client.defaultScope;
- 
+
         function sendToSocket(i) {
             if (socket) {
                 if (allsockets[i] !== socket)
@@ -1395,15 +1395,15 @@ exports.start = function(options, init) {
                 withError('ENSURE INDEX modifiedAt ' + err);
                 return;
             }
-            
+
             var now = Date.now();
-            
-            db.obj.find({expiresAt: {$lte: now}}, function(err, objs) {                
+
+            db.obj.find({expiresAt: {$lte: now}}, function(err, objs) {
                 if (!err)
                     withObjects(objs);
             });
         });
-        
+
     }
 
     express.get('/object/latest/:num/:format', function(req, res) {
@@ -1416,14 +1416,14 @@ exports.start = function(options, init) {
                 n = MAX_LATEST_OBJECTS;
 
             getLatestObjects(n,
-                function(objs) {
-                    objAccessFilter(objs, req, function(sharedObjects) {
-                        sendJSON(res, compactObjects(unpack(sharedObjects, true)), null, format);
-                    });
-                },
-                function(error) {
-                    console.error('object/latest/:num/json', error);
-                }
+                    function(objs) {
+                        objAccessFilter(objs, req, function(sharedObjects) {
+                            sendJSON(res, compactObjects(unpack(sharedObjects, true)), null, format);
+                        });
+                    },
+                    function(error) {
+                        console.error('object/latest/:num/json', error);
+                    }
             );
         }
         else
@@ -1685,11 +1685,11 @@ exports.start = function(options, init) {
     });
 
     express.get('/ontology/:format', function(req, res) {
-		var format = req.params.format;	
-		if ((format === 'json') || (format == 'jsonpack'))
-	        sendJSON(res, {'tags': tags, 'properties': properties}, null, format);
-		else
-			sendJSON(res, 'unknown format: ' + format);
+        var format = req.params.format;
+        if ((format === 'json') || (format == 'jsonpack'))
+            sendJSON(res, {'tags': tags, 'properties': properties}, null, format);
+        else
+            sendJSON(res, 'unknown format: ' + format);
     });
 
     express.get('/state', function(req, res) {
@@ -1714,12 +1714,12 @@ exports.start = function(options, init) {
     });
     express.get('/save', function(req, res) {
         saveState(
-            function() {
-                sendJSON(res, 'Saved');
-            },
-            function(err) {
-                sendJSON(res, 'Not saved');
-            }
+                function() {
+                    sendJSON(res, 'Saved');
+                },
+                function(err) {
+                    sendJSON(res, 'Not saved');
+                }
         );
     });
     express.get('/team/interestTime', function(req, res) {
@@ -1816,40 +1816,40 @@ exports.start = function(options, init) {
     });
 
     function getUserConnections() {
-        var u = { };
+        var u = {};
         _.keys(connectedUsers).forEach(function(uid) {
             u[uid] = 1;
         });
         return u;
     }
-    
+
     var rosterBroadcastIntervalMS = 1000;
     var broadcastRoster = _.throttle(function() {
         var uc = getUserConnections();
         if (_.keys(uc).length > 0)
             io.sockets.in('*').emit('roster', uc);
     }, rosterBroadcastIntervalMS);
-    
+
     function updateUserConnection(oldID, nextID, socket) {
         //oldID = leaving user
         //nextID = joining user
-                
+
         if (oldID) {
             if (connectedUsers[oldID]) {
-                delete connectedUsers[oldID].sockets[socket.id];                
+                delete connectedUsers[oldID].sockets[socket.id];
             }
             if (_.keys(connectedUsers[oldID].sockets) == 0)
                 delete connectedUsers[oldID];
         }
         if (nextID) {
             if (!connectedUsers[nextID])
-                connectedUsers[nextID] = { sockets: {} };
-            
+                connectedUsers[nextID] = {sockets: {}};
+
             connectedUsers[nextID].sockets[socket.id] = socket;
-            
+
             socket.clientID = nextID;
         }
-                        
+
         broadcastRoster();
     }
 
@@ -1858,7 +1858,7 @@ exports.start = function(options, init) {
         broadcast(null, object, whenFinished);
     }
     $N.pub = pub;
-    
+
     function pubAll(objects, objectIntervalMS /*, whenFinished*/) {
         if (objectIntervalMS) {
             var published = 0;
@@ -1867,8 +1867,8 @@ exports.start = function(options, init) {
                     _.defer(function(OO) {
                         $N.pub(OO);
                     }, O);
-                }, (published++)*objectIntervalMS, o);
-            });        
+                }, (published++) * objectIntervalMS, o);
+            });
         }
         else {
             objects.forEach(function(o) {
@@ -1932,8 +1932,8 @@ exports.start = function(options, init) {
             });
 
             /*socket.on('getPlugins', function(f) {
-                f(_.keys($N.server.plugins));
-            });*/
+             f(_.keys($N.server.plugins));
+             });*/
 
             /*socket.on('setPlugin', function(pid, enabled, callback) {
              if ($N.server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
@@ -1978,7 +1978,7 @@ exports.start = function(options, init) {
              callback('Unable to set activity of plugin ' + pid + ' to ' + enabled);
              
              });*/
-            
+
 
             socket.on('become', function(target, _onResult) {
                 var targetObjectID = target;
@@ -1994,7 +1994,7 @@ exports.start = function(options, init) {
 
                 onResult = function(nextID) {
                     var oldID = socket.clientID;
-                    
+
                     if (oldID != nextID) {
                         updateUserConnection(oldID, nextID, socket);
                         plugins("onConnect", {id: nextID, prevID: oldID});
@@ -2068,7 +2068,7 @@ exports.start = function(options, init) {
                 }
 
                 var selves = getClientSelves(key);
-                
+
                 updateUserConnection(null, cid, socket);
                 plugins("onConnect", {id: cid});
 
@@ -2081,7 +2081,7 @@ exports.start = function(options, init) {
                 });
 
                 sub(socket, '*');
-                
+
                 /*getObjectsByTag('User', function(to) {
                  socket.emit('notice', to);
                  });*/
@@ -2095,11 +2095,11 @@ exports.start = function(options, init) {
                 callback(cid, key, selves);
 
             });
-            
+
             socket.on('disconnect', function() {
                 updateUserConnection(socket.clientID, null, socket);
             });
-            
+
             /*socket.on('updateSelf', function(s, getObjects) {
              socket.get('clientID', function(err, c) {
              if (c == null) {
@@ -2125,10 +2125,10 @@ exports.start = function(options, init) {
              });
              */
 
-            
+
             socket.on('getObjects', function(query, withObjects) {
                 //TODO safely handle query
-                
+
                 db.obj.find(function(err, docs) {
                     objAccessFilter(request, docs, function(dd) {
                         withObjects(unpack(dd, true));
@@ -2312,7 +2312,7 @@ exports.start = function(options, init) {
             if (file === 'README')
                 return;
 
-            if (file.indexOf('.js') == -1) {//avoid directories
+            if (file.indexOf('.js') === -1) {//avoid directories
                 file = file + '/netention.js';
             }
 
@@ -2338,11 +2338,14 @@ exports.start = function(options, init) {
 
     function removeExpired() {
         getExpiredObjects(function(objs) {
-            if (objs.length == 0) return;
-            var ids = _.map(objs, function(o) { return o.id; } );
+            if (objs.length == 0)
+                return;
+            var ids = _.map(objs, function(o) {
+                return o.id;
+            });
             deleteObjects(ids);
         });
-    }    
+    }
     setInterval(removeExpired, $N.server.memoryUpdateIntervalMS);
     removeExpired();
 
