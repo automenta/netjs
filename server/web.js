@@ -36,7 +36,7 @@ var jsonpack = require('jsonpack');
 /** 
  init - callback function that is invoked after the server is created but before it runs 
  */
-exports.start = function(options, init) {
+exports.start = function(options) {
 
     var $N = _.clone(util);
     $N.server = options;
@@ -621,9 +621,6 @@ exports.start = function(options, init) {
 
 
 
-    loadState(function() {
-        loadPlugins();
-    });
 
     //process.stdin.on('keypress', function(char, key) {
     //	  if (key && key.ctrl && key.name == 'c') {
@@ -702,7 +699,7 @@ exports.start = function(options, init) {
     var bodyParser = require('body-parser');
 
     express.use(cookieParser);
-    express.use(bodyParser({limit: '1mb'}));
+    express.use(bodyParser({limit: '1mb', strict: false}));
     //express.use(expressm.methodOverride());
     express.use(require('parted')());
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
@@ -723,10 +720,6 @@ exports.start = function(options, init) {
 
     //----------------------------- SHAREJS
 
-    httpServer.listen($N.server.port);
-
-
-    nlog('Web server: http://' + $N.server.host + ':' + $N.server.port);
 
     var io = socketio.listen(httpServer);
 
@@ -1036,20 +1029,10 @@ exports.start = function(options, init) {
 
     //Gzip compression
     if ($N.server.httpCompress) {
-        if (connect.compress)
-            express.use(connect.compress());
-        else {
-            //connect 3.0:
-            var compress = require('compression');
-            express.use(compress({
-              threshhold: 512
-            }));
-        }
+        express.use(require('compression')({
+          threshhold: 512
+        }));
     }
-
-
-
-
 
 
     //express.use(expressm.staticCache());
@@ -2294,23 +2277,27 @@ exports.start = function(options, init) {
         console.error(err.stack);
     });
 
-    getObjectsByTag('User', function(to) {
-        notice(to);
-    });
 
 
     $N.client = options.client || {};
     $N.permissions = options.permissions || {};
     $N.enablePlugins = options.plugins || {};
 
-
     require('./general.js').plugin($N).start();
 
 
     $N.nlog = nlog;
-    /*$N.plugin = function(pluginfile, forceEnable) {
-     plugin(pluginfile, forceEnable);
-     };*/
+
+    function removeExpired() {
+        getExpiredObjects(function(objs) {
+            if (objs.length == 0)
+                return;
+            var ids = _.map(objs, function(o) {
+                return o.id;
+            });
+            deleteObjects(ids);
+        });
+    }
 
     function loadPlugins() {
 
@@ -2338,25 +2325,24 @@ exports.start = function(options, init) {
         });
     }
 
-    if (init)
-        init($N);
+    removeExpired();
+    
+    getObjectsByTag('User', function(to) {
+        notice(to);
+    });
+
+    loadState(function() {
+        loadPlugins();
+    });
+    httpServer.listen($N.server.port);
+
+    nlog('Web server: http://' + $N.server.host + ':' + $N.server.port);
 
     if ($N.server.start)
         $N.server.start($N);
 
 
-    function removeExpired() {
-        getExpiredObjects(function(objs) {
-            if (objs.length == 0)
-                return;
-            var ids = _.map(objs, function(o) {
-                return o.id;
-            });
-            deleteObjects(ids);
-        });
-    }
     setInterval(removeExpired, $N.server.memoryUpdateIntervalMS);
-    removeExpired();
 
     return $N;
 

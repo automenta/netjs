@@ -16,6 +16,7 @@
 		"util":"",
 		"socket.io": "",
 		"node-static":"",
+                "compression":"",
 		"always":"",
 		"mongojs":"",
 		"ya-csv":"",
