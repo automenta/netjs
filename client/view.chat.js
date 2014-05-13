@@ -246,13 +246,17 @@ function newChatView(v) {
             var xid = $(this).attr('xid');
             displayedObjects.push(xid);
 
-            if (numPreviousDisplayed != 0) {
-                if (newObjects[xid]) {
-                    var age = (now - newObjects[xid]) / oldestNewObjectMS;
-                    var c = 'rgba(0,255,0,' + 0.25 * (1.0 - age) + ');';
-                    var highlightStyle = 'background-color: ' + c + '; border-right: 4px solid ' + c;
-                    $(this).attr('style', highlightStyle);
-                }
+            var when = newObjects[xid];
+            if (!when) {
+                when = toDisplayObj[xid].modifiedAt || toDisplayObj[xid].createdAt;
+            }
+
+            var age = now - when;
+            if (age < oldestNewObjectMS) {
+                age /= oldestNewObjectMS;
+                var c = 'rgba(0,255,0,' + 0.2 * (1.0 - age) + ');';
+                var highlightStyle = 'background-color: ' + c + '; border-right: 4px solid ' + c;
+                $(this).attr('style', highlightStyle);
             }
         });
 

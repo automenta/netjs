@@ -444,7 +444,7 @@ body {
     -webkit-box-shadow: 0px 0px 24px #000000;
     box-shadow: 0px 0px 24px #000000;
     -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')";
-    filter: progid: DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
+    //filter: progid: DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
 }
 .left {
     float: left;
