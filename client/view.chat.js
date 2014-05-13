@@ -83,7 +83,7 @@ function newChatView(v) {
                 if (updatesAvailable)
                     updateContent(true);
 
-            updates.html('Streaming...');
+            updates.html('');
             nearBottom = true;
         }
         else {
@@ -256,6 +256,7 @@ function newChatView(v) {
             }
         });
 
+        updatesAvailable = false;
         changed = [];
 
         if (force)
