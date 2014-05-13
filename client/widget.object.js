@@ -1920,13 +1920,9 @@ function newMetadataLine(x, showTime) {
             return;
 
         var tt = $N.getTag(t);
-		var taglink;
-        if (tt) {
-            taglink = newTagButton(tt);
-            applyTagStrengthClass(taglink, s);
-        } else {
-			taglink = newEle('a').append(newTagImage(null));
-        }
+		var taglink = newTagButton(tt || t);
+        applyTagStrengthClass(taglink, s);
+        
         mdline.append(taglink, '&nbsp;&nbsp;');
     });
 

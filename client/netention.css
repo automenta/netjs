@@ -8,7 +8,7 @@
 }
 a, a:visited {
     cursor: pointer;
-	color: black;
+    color: black;
 }
 
 a:hover {
@@ -39,7 +39,7 @@ a:hover {
 }
 .AvatarIcon {
     float: left;
-	margin-right: 4px;
+    margin-right: 4px;
 }
 .AvatarIcon img {
     height: 1.85em;
@@ -632,7 +632,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }
 #AvatarViewMenu {}
 /*.toggle-submenu-absolute {
-	position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
+        position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
 }*/
 
 #AvatarViewMenu button {
@@ -862,18 +862,18 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     margin: 2px 0px;
 }
 .objectView h1 button, .objectView h1 input {
-	padding: 0;
-	padding-left: 2px;
-	padding-right: 2px;
-	margin: 0;
+    padding: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 0;
 }
 .objectView .metadataReplyButton {
-	padding:0;
-	margin-left: 0.2em;
-	font-size: 90%;
+    padding:0;
+    margin-left: 0.2em;
+    font-size: 90%;
 }
 .objectView h1 a {
-	margin-left: 4px;
+    margin-left: 4px;
 }
 
 .objectView h2 {
@@ -891,7 +891,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     padding-left: 0;
     margin-left: 1em;
     margin-right: 1em;
-	margin-top: 0.5em;
+    margin-top: 0.5em;
 }
 .objectView ul li {
     padding: 0.3em;
@@ -917,7 +917,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .ObjectReply {
     margin: 0.8em 0.1em 0.0em 3em !important;
     font-size: 90%;
-	opacity: 0.95;
+    opacity: 0.95;
 }
 .reply-section {
     text-align: left;
@@ -936,10 +936,10 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     padding: 0.25em;
 }
 .embeddedHTML {
-	border: 1px solid gray;
-	height: 12em;
-	overflow: auto;
-	resize: vertical;
+    border: 1px solid gray;
+    height: 12em;
+    overflow: auto;
+    resize: vertical;
 }
 /* Chat */
 
@@ -948,7 +948,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     margin-left: 1em;
     height: 90%;
     overflow: auto;
-	min-width: 50%;
+    min-width: 50%;
 }
 .ChatViewContentLine {
     border-left: 3px solid transparent;
@@ -972,15 +972,15 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     text-align: right;
     bottom: 0;
     width: 47%;
-	right: 0;
+    right: 0;
 }
 
 .ChatViewRoster {
     position: fixed;
     text-align: left;
     bottom: 0;
-	width: 47%;
-	height: 2.5em;	
+    width: 47%;
+    height: 2.5em;	
     overflow: auto;
 }
 .ChatViewRoster img {
@@ -993,45 +993,45 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .ChatViewUpdates {
     position: fixed;
     left: 40%;
-    top: auto;
+    top: 0;
     width: 20%;
-	padding:1em;
-	text-align: center;
+    padding:1em;
+    text-align: center;
 }
 
 @media (max-width: 699px) {
-	.ChatViewContent {
-		margin-left: 0;
-	}
-	.ChatViewInput {
-		right: 0;
-	}
-	.ChatViewInput input {
-		width: 52%;
-	}
-	.ChatViewContentLine {
-		border-left: 0;
-	}
-	#welcome button {
-		margin: 0 !important;
-	}
-	#AvatarFocus {
-		text-align: right;
-		float: right;
-	}
-	#AvatarFocus .ViewControl:nth-child(2) {
-		clear:both !important;
-	}
-	#AvatarFocus .tagSection {
-		float: right  !important;
-		clear: none !important;
-	}
+    .ChatViewContent {
+        margin-left: 0;
+    }
+    .ChatViewInput {
+        right: 0;
+    }
+    .ChatViewInput input {
+        width: 52%;
+    }
+    .ChatViewContentLine {
+        border-left: 0;
+    }
+    #welcome button {
+        margin: 0 !important;
+    }
+    #AvatarFocus {
+        text-align: right;
+        float: right;
+    }
+    #AvatarFocus .ViewControl:nth-child(2) {
+        clear:both !important;
+    }
+    #AvatarFocus .tagSection {
+        float: right  !important;
+        clear: none !important;
+    }
 
 }
 @media (min-width: 700px) {
-	.ChatViewInput input {
-		width: 80%;
-	}
+    .ChatViewInput input {
+        width: 80%;
+    }
 }
 .InlineSelfButton {
     cursor: pointer;
@@ -1039,9 +1039,9 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     font-size: 70%;
 }
 .InlineSelfButton span {
-	position: relative;
-	right: 0;
-	bottom: 0.5em;
+    position: relative;
+    right: 0;
+    bottom: 0.5em;
 }
 .chatViewLineContent {
     float: left;
@@ -1314,10 +1314,10 @@ html > body .ui-pnotify {
  */
 
 @media (max-width: 400px) {
-	.ViewControl img { width: 30px; }
-	#ViewSelect {
+    .ViewControl img { width: 30px; }
+    #ViewSelect {
         max-width: 60% !important;
-	}
+    }
 }
 /*!
  * less than 700 = mobile mode 
@@ -1343,28 +1343,28 @@ html > body .ui-pnotify {
     #AvatarFocus {
         position: initial;
     }
-	#AvatarViewMenu select, #AvatarViewMenu div { 
-		clear: none !important; 
-		float: left;
-		margin: 0;
-	}
+    #AvatarViewMenu select, #AvatarViewMenu div { 
+        clear: none !important; 
+        float: left;
+        margin: 0;
+    }
     #welcome {
         text-align: left;
     }
     #identity {
         float: left;
         text-align: left;
-		position: fixed;
-		top: 69px;
+        position: fixed;
+        top: 69px;
     }
     #ViewMenu .section {
         clear: none;
-		margin: 0;
-		padding: 0;
+        margin: 0;
+        padding: 0;
     }
     #ViewSelect {
         max-width: 66%;
-		margin-left: 75px !important;
+        margin-left: 75px !important;
     }
     .view-indented-more {
         left: 0 !important;
@@ -1392,22 +1392,22 @@ html > body .ui-pnotify {
     #ViewMenu {
         width: 150px;
     }
-	#ViewSelect {
-		margin-right: 5px;
-		margin-left: 5px;
-	}
-	#identity {
-		width: 75px;
-		height: 75px;
-		margin-left: 75px;
-		text-align: right;
-		margin: 0;
-		padding-top: 0 !important;
-		float: right;
-	}
-	.section {
-		margin-left: 5px !important;
-	}
+    #ViewSelect {
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    #identity {
+        width: 75px;
+        height: 75px;
+        margin-left: 75px;
+        text-align: right;
+        margin: 0;
+        padding-top: 0 !important;
+        float: right;
+    }
+    .section {
+        margin-left: 5px !important;
+    }
 
     .logon > div,
     .modal > div {
@@ -1783,7 +1783,7 @@ div.olControlZoom {
     font-weight: normal;
 }
 .ActonMenuSubContents {
-	width: 80%;
+    width: 80%;
 }
 /* ------------------------------- */
 
@@ -1792,12 +1792,12 @@ div.olControlZoom {
     overflow: hidden;
 }
 .reveal .slides {
-	text-align: left !important;
+    text-align: left !important;
 }
 .reveal section {
-	max-height: 100%;
-	max-width: 100%;
-	overflow: auto;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: auto;
 }
 .reveal section img {
     margin: 0 !important;
@@ -1910,13 +1910,13 @@ svg {
 .Share  {
     clear: both;
     width: 98%;
-	margin-top: 1em;
-	margin-left: 1em;
+    margin-top: 1em;
+    margin-left: 1em;
 }
 .Share .ShareSidebar {
     width: 20%;
     float: left;
-	position: fixed;
+    position: fixed;
 }
 .Share .ShareContent {
     width: 75%;
@@ -1932,7 +1932,7 @@ svg {
     float: left;
 }
 .ShareSummary .ShareSummaryImage img {
-	width: 100%;
+    width: 100%;
     max-width: 100%;
 }
 .ShareSummary .ShareSummaryContent {
@@ -1940,28 +1940,28 @@ svg {
     float: right;
 }
 .ShareSummaryContent h1, .ShareSummaryContent h2 {
-	margin:0;
-	margin-bottom: 0.2em;
+    margin:0;
+    margin-bottom: 0.2em;
 }
 .ShareSummaryContent ul {
-	margin-bottom: 0.2em;
-	padding-top: 0.5em;
+    margin-bottom: 0.2em;
+    padding-top: 0.5em;
 }
 
 .ShareSummaryContent img {
-	max-height: 5em;
-	max-width: 100%;
+    max-height: 5em;
+    max-width: 100%;
 }
 .ShareSummaryAction {
     float: left;
-	width: 95%;
+    width: 95%;
 }
 .ShareSummaryAction .ReplyInfo {
-	opacity: 0.5;
+    opacity: 0.5;
 }
 .ShareSummaryAuthor {
     float: right;
-	margin-left: 0.5em;
+    margin-left: 0.5em;
 }
 .SkillSlider {
     width: 98%;
