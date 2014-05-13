@@ -698,8 +698,11 @@ exports.start = function(options, init) {
             , GoogleStrategy = require('passport-google').Strategy;
 
 
+    var bodyParser = require('body-parser');
+    
     express.use(cookieParser);
-    express.use(require('body-parser')({limit: '1mb'}));
+    express.use(bodyParser({limit: '1mb'}));
+    express.use(bodyParser.json());
     //express.use(expressm.methodOverride());
     express.use(require('parted')());
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
