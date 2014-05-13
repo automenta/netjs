@@ -399,8 +399,7 @@ function newObjectLogLine(x) {
             b = newInlineSelfButton(a, x);
         }
         else {
-            if (a.author)
-                b = newEle('a').text(a.author).attr({'xid': x.id, 'aid': x.author});
+            b = newEle('a').text(x.author).attr({'xid': x.id, 'aid': x.author});
         }
         if (b) {
             b.click(newObjectLogLineClick);
