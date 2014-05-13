@@ -42,7 +42,7 @@ exports.start = function(options, init) {
     $N.server = options;
 
     var focusHistory = [];
-    var focusHistoryMaxAge = 24 * 60 * 60; //in seconds
+    var focusHistoryMaxAge = 24 * 60 * 60 * 1000; //in ms
 
     var tags = {};
     var properties = {};
@@ -406,18 +406,15 @@ exports.start = function(options, init) {
     }
     $N.subtags = subtags;
 
-    //TODO rename: unMongoize
-    function removeMongoID(x) {
-        if (Array.isArray(x)) {
-            for (var i = 0; i < x.length; i++) {
-                delete x[i]._id;
-                delete x[i]._tag;
-                util.objectify(x[i]);
-            }
-        }
-        else {
-            removeMongoID([x]);
-        }
+    //unpacks an array of objects, returning a new array of the unpacked objects, optionally as nobjects
+    function unpack(x, notNobject) {
+        return x.map(function(y) {
+            delete y._id;
+            delete y._tag;
+            if (notNobject)
+                return y;
+            return new $N.nobject(y);
+        });
     }
 
     function getObjectByID(uri, whenFinished) {
@@ -437,8 +434,7 @@ exports.start = function(options, init) {
                         whenFinished(err, null);
                     }
                     else if (docs.length == 1) {
-                        removeMongoID(docs);
-                        whenFinished(null, docs[0]);
+                        whenFinished(null, unpack(docs)[0]);
                     }
                     else {
                         //none found
@@ -466,8 +462,7 @@ exports.start = function(options, init) {
                     withObjects([]);
                 }
                 else {
-                    removeMongoID(docs);
-                    withObjects(docs);
+                    withObjects(unpack(docs));
                 }
             });
         });
@@ -491,8 +486,7 @@ exports.start = function(options, init) {
                     nlog('getObjectsByTag: ' + err);
                 }
                 else {
-                    docs.forEach(function(d) {
-                        removeMongoID(d);
+                    unpack(docs).forEach(function(d) {
                         withObject(d);
                     });
                     if (whenFinished)
@@ -1309,7 +1303,7 @@ exports.start = function(options, init) {
         }
 
 
-        o = util.objectify(util.objExpand(o));
+        o = new $N.nobject($N.objExpand(o));
 
         if (!o.removed)
             plugins("onPub", o);
@@ -1408,27 +1402,26 @@ exports.start = function(options, init) {
 
     express.get('/object/latest/:num/:format', function(req, res) {
         var n = parseInt(req.params.num);
-		var format = req.params.format;
+        var format = req.params.format;
 
-		if ((format === 'json') || (format === 'jsonpack')) {
-		    var MAX_LATEST_OBJECTS = 8192;
-		    if (n > MAX_LATEST_OBJECTS)
-		        n = MAX_LATEST_OBJECTS;
+        if ((format === 'json') || (format === 'jsonpack')) {
+            var MAX_LATEST_OBJECTS = 8192;
+            if (n > MAX_LATEST_OBJECTS)
+                n = MAX_LATEST_OBJECTS;
 
-		    getLatestObjects(n,
-		            function(objs) {
-		                objAccessFilter(objs, req, function(sharedObjects) {
-		                    removeMongoID(sharedObjects);
-		                    sendJSON(res, compactObjects(sharedObjects), null, format);
-		                });
-		            },
-		            function(error) {
-		                console.error('object/latest/:num/json', error);
-		            }
-		    );
-		}
-		else
-			sendJSON(res, 'unknown format: ' + format);
+            getLatestObjects(n,
+                function(objs) {
+                    objAccessFilter(objs, req, function(sharedObjects) {
+                        sendJSON(res, compactObjects(unpack(sharedObjects, true)), null, format);
+                    });
+                },
+                function(error) {
+                    console.error('object/latest/:num/json', error);
+                }
+            );
+        }
+        else
+            sendJSON(res, 'unknown format: ' + format);
     });
 
     express.get('/object/latest/rss', function(req, res) {
@@ -1454,8 +1447,7 @@ exports.start = function(options, init) {
 
         getLatestObjects(NUM_OBJECTS, function(objs) {
             objAccessFilter(objs, req, function(sharedObjects) {
-                removeMongoID(sharedObjects);
-                var compacted = compactObjects(sharedObjects);
+                var compacted = compactObjects(unpack(sharedObjects, true));
 
                 var RSS = require('rss'); //https://github.com/dylang/node-rss
                 var feed = new RSS(feedOptions);
@@ -1914,7 +1906,7 @@ exports.start = function(options, init) {
                 //TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
 
                 if ((message.focus) && (message.author)) {
-                    var m = util.objExpand(message);
+                    message = util.objExpand(message);
                     focusHistory.push(m);
 
                     plugins('onFocus', m);
@@ -1922,7 +1914,7 @@ exports.start = function(options, init) {
                     //remove elements in focusHistory that are older than focusHistoryMaxAge (seconds)
                     var now = Date.now();
                     focusHistory = _.filter(focusHistory, function(f) {
-                        return f.whenCreated > (now - focusHistoryMaxAge * 1000);
+                        return f.whenCreated > (now - focusHistoryMaxAge);
                     });
 
                 }
@@ -1933,9 +1925,9 @@ exports.start = function(options, init) {
                     success();
             });
 
-            socket.on('getPlugins', function(f) {
+            /*socket.on('getPlugins', function(f) {
                 f(_.keys($N.server.plugins));
-            });
+            });*/
 
             /*socket.on('setPlugin', function(pid, enabled, callback) {
              if ($N.server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
@@ -2131,8 +2123,7 @@ exports.start = function(options, init) {
                 
                 db.obj.find(function(err, docs) {
                     objAccessFilter(request, docs, function(dd) {
-                        removeMongoID(dd);
-                        withObjects(dd);
+                        withObjects(unpack(dd, true));
                     });
                 });
             });

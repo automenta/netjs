@@ -8,7 +8,7 @@ function newUserView(v, userid) {
 			d.append('User ' + userid + ' not found.');
 			return;
 		}
-		user = objectify(user);
+		user = new nobject(user);
 
 		var operatorTags = getOperatorTags();
 
@@ -171,7 +171,7 @@ function newSelfSummary(userid) {
 	var U = $N.getObject(userid);
 	if (!U) return x;
 
-	U = objectify(U);
+	U = new nobject(U);
 
 	x.name = U.name
 	if (U.id == $N.id()) {

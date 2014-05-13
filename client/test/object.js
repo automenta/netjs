@@ -11,6 +11,9 @@ test("New objects", function() {
 
 
     ok( objNew().createdAt, "Has createdAt metadata");
+    
+    strictEqual( objNew("id").id, "id", "New Object with supplied ID" );
+    strictEqual( objNew("id", "name").name, "name", "New Object with supplied name" );
 });
 
 test("Object compact & expand", function() {
