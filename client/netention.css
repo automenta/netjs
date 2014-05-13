@@ -2018,7 +2018,7 @@ svg {
     cursor: text;
 }
 .terminal-output, .cmd {
-    font-size: 180%;
+    font-size: 130%;
     line-height: normal;
 }
 .terminal {

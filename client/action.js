@@ -132,6 +132,7 @@ addAction({menu: 'Object', name: 'Refresh',
 		});
 	}	
 });
+addAction({menu: 'Object', name: 'Focus', description: 'Sets focus on these objects'});
 addAction({menu: 'Object', name: 'Touch', 
     description: 'Sets the modification date of objects to now.',
     accepts: acceptsSelectionOfManyOwnedByMe, 
