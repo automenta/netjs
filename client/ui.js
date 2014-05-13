@@ -24,6 +24,8 @@ jQuery.timeago.settings.strings = {
 
 
 //$.pnotify
+
+$.pnotify.defaults.animation = 'none';
 var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
 var stack_bottomright = {"dir1": "left", "dir2": "up", "push": "top"};
 
@@ -56,7 +58,7 @@ function loadJS(url) {
                 type: "text/javascript",
                 src: url
             })
-   );
+            );
 }
 
 function later(f) {
@@ -92,7 +94,7 @@ function newContextMenu(s, excludeEmptyMenus, clickCallback) {
 
     _.each(ActionMenu, function(v, k) {
         var menu = k;
-        var submenu = newEle('li').append( newEle('a').html(menu) );
+        var submenu = newEle('li').append(newEle('a').html(menu));
         var subcontents = newEle('ul').addClass('ActonMenuSubContents');
         submenu.append(subcontents);
 
@@ -122,17 +124,17 @@ function newContextMenu(s, excludeEmptyMenus, clickCallback) {
                     if (clickCallback)
                         clickCallback(vv.name);
                 }
-	            a.click(clickFunction);
+                a.click(clickFunction);
                 added++;
             }
             else {
                 if (excludeEmptyMenus)
                     return;
 
-				a.attr({
-					style: 'opacity: 0.4',
-					disabled: 'true'
-				});
+                a.attr({
+                    style: 'opacity: 0.4',
+                    disabled: 'true'
+                });
             }
 
             newEle('li').append(a).appendTo(subcontents);
@@ -199,7 +201,7 @@ var refreshActionContext = _.throttle(function() {
 
         $('#ActionMenuWrapper').append(u);
     });
-}, configuration.viewUpdateTime[configuration.device||1][0]);
+}, configuration.viewUpdateTime[configuration.device || 1][0]);
 
 
 function updateBrand() {
@@ -225,7 +227,7 @@ function updateViewControls() {
 var _firstView = true;
 
 function _updateView(force) {
-    
+
 
     updateBrand();
 
@@ -236,9 +238,9 @@ function _updateView(force) {
         if (configuration.initialView) {
             view = configuration.initialView;
         }
-		else {
-			return;
-		}
+        else {
+            return;
+        }
     }
 
     var param = null;
@@ -268,7 +270,7 @@ function _updateView(force) {
         }
     }
 
-	$('#View').remove();
+    $('#View').remove();
     var v = newDiv().attr('id', 'View').appendTo(vw);
 
     o.empty();
@@ -418,40 +420,40 @@ function viewRead(urlstring) {
     var urls = urlstring.split('+');
 
     var f = objNew();
-    
-    _.each(urls, function(u) {        
+
+    _.each(urls, function(u) {
         var x = objNew();
         x.id = 'read:' + u;
         x.name = u;
         x.addTag(x.id);
         f.addTag(x.id);
-        
-        $.get(u, function(h) {           
+
+        $.get(u, function(h) {
             var ext = u.split('.');
             var type = 'html';
             if (ext.length > 1) {
-                ext = ext[ext.length-1];
+                ext = ext[ext.length - 1];
                 if (ext === 'md')
                     type = 'markdown';
                 else if (ext === 'html')
                     type = 'html';
             }
-            
-            x.add('media', { content: h, type: type }  );
-            $N.notice(x);    
+
+            x.add('media', {content: h, type: type});
+            $N.notice(x);
         }).error(function(e) {
             x.addDescription('Error Loading', JSON.stringify(e));
             $N.notice(x);
         });
     });
 
-    
+
     f.author = $N.id();
     f.focus = 'change';
 
     $N.set('currentView', 'browse');
-    
-    focusValue = f;    
+
+    focusValue = f;
     renderFocus(false);
 
 }
@@ -616,8 +618,6 @@ $(document).ready(function() {
 
             $N.getUserObjects(function() {
 
-                $N.listenAll(true);
-
                 //SETUP ROUTER
                 var Workspace = Backbone.Router.extend({
                     routes: {
@@ -660,8 +660,8 @@ $(document).ready(function() {
                         $N.set('currentView', {view: 'user', userid: userid});
                     },
                     read: function(url) {
-                        later(function(){
-                            viewRead(url);                            
+                        later(function() {
+                            viewRead(url);
                         });
                     }
 
@@ -676,16 +676,17 @@ $(document).ready(function() {
                 var viewDebounceMS = configuration.viewUpdateTime[configuration.device][1];
                 var firstViewDebounceMS = configuration.viewUpdateTime[configuration.device][2];
                 var firstView = true;
-                
+
                 var throttledUpdateView = _.throttle(function() {
                     later(function() {
                         _updateView();
                         if (firstView) {
-                            updateView = _.debounce(throttledUpdateView, viewDebounceMS);                                 firstView = false;
-                        }                        
+                            updateView = _.debounce(throttledUpdateView, viewDebounceMS);
+                            firstView = false;
+                        }
                     });
                 }, configuration.viewUpdateMS);
-                
+
                 updateView = _.debounce(throttledUpdateView, firstViewDebounceMS);
 
 
@@ -750,20 +751,15 @@ $(document).ready(function() {
                     $('#NotificationArea').html('Ready...');
                     $('#NotificationArea').fadeOut();
 
-                    $N.on('change:attention', updateView);
-                    $N.on('change:currentView', updateView);
-                    $N.on('change:tags', updateView);
-                    $N.on('change:focus', updateView);
 
-                    
                     initKeyboard();
 
                     var w = new Workspace();
                     $N.router = w;
 
-                    
-                     //USEFUL FOR DEBUGGING EVENTS:
-					 /*
+
+                    //USEFUL FOR DEBUGGING EVENTS:
+                    /*
                      $N.on('change:attention', function() { console.log('change:attention'); });
                      $N.on('change:currentView', function() { console.log('change:currentView'); });
                      $N.on('change:tags', function() { console.log('change:tags'); });

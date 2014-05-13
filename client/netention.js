@@ -41,16 +41,15 @@ function identity() {
 
 
 function netention(f) {
-
-
+    
     var $NClient = Backbone.Model.extend({
-        clear: function () {
+        clear: function() {
             this.clearObjects();
             this.set('clientID', 'undefined');
             this.attention = {};
             this.tags = {};
             this.properties = {};
-            this.ontoIndex = lunr(function () {
+            this.ontoIndex = lunr(function() {
                 this.field('name', {
                     boost: 4
                 });
@@ -59,7 +58,7 @@ function netention(f) {
                 this.ref('id');
             });
         },
-        clearObjects: function () {
+        clearObjects: function() {
             this.attention = {};
             this.set('deleted', {});
             this.set('replies', {});
@@ -70,13 +69,13 @@ function netention(f) {
             this.set('focus', null);
             this.userRelations = null;
         },
-        tag: function (t) {
+        tag: function(t) {
             return this.tags[t];
         },
-        tagRoots: function () {
+        tagRoots: function() {
             var that = this;
             //this might be suboptimal
-            return _.select(_.keys(this.tags), function (tt) {
+            return _.select(_.keys(this.tags), function(tt) {
                 var t = that.tag(tt);
                 if (!t.tag)
                     return true;
@@ -84,18 +83,18 @@ function netention(f) {
                     return (t.tag.length === 0);
             });
         },
-        getSubTags: function (s) {
+        getSubTags: function(s) {
             return subtags(this.tags, s);
         },
-        isProperty: function (p) {
+        isProperty: function(p) {
             return this.properties[p] !== undefined;
         },
-        objects: function () {
+        objects: function() {
             return this.attention;
         }, //DEPRECATED
 
         /* returns a list of object id's */
-        objectsWithTag: function (t, fullObject, includeSubTags) {
+        objectsWithTag: function(t, fullObject, includeSubTags) {
             //TODO support subtags
             var r = [];
 
@@ -110,13 +109,13 @@ function netention(f) {
             }
             return r;
         },
-        getObject: function (id) {
+        getObject: function(id) {
             return this.attention[id];
         }, //deprecated
-        object: function (id) {
+        object: function(id) {
             return this.attention[id];
         },
-        deleteSelf: function (clientID) {
+        deleteSelf: function(clientID) {
             var os = this.get('otherSelves');
             if (os.length < 2) {
                 $.pnotify({
@@ -135,30 +134,30 @@ function netention(f) {
 
         },
         //->tag
-        getTag: function (t) {
+        getTag: function(t) {
             return this.tags[t];
         },
-        getProperty: function (p) {
+        getProperty: function(p) {
             return this.properties[p];
         },
-        getIncidentTags: function (userid, oneOfTags) {
+        getIncidentTags: function(userid, oneOfTags) {
             return objIncidentTags(this.objects(), oneOfTags, userid);
         },
-        setObject: function (o) {
+        setObject: function(o) {
             var i = o.id;
             this.objects()[i] = o;
             return o;
         },
-        layer: function () {
+        layer: function() {
             return this.get('layer');
         },
-        id: function () {
+        id: function() {
             return this.get('clientID');
         },
-        myself: function () {
+        myself: function() {
             return this.getObject(this.id());
         },
-        become: function (target) {
+        become: function(target) {
 
             if (!target)
                 return;
@@ -181,7 +180,7 @@ function netention(f) {
 
                 $N.startURLRouter();
             } else {
-                this.socket.emit('become', target, function (nextID) {
+                this.socket.emit('become', target, function(nextID) {
                     if (nextID) {
                         /*$.pnotify( {
                          title: 'Switched profile',
@@ -192,30 +191,28 @@ function netention(f) {
                         //return;
 
 
-                        later(function () {
+                        //later(function () {
 
-                            $N.set('clientID', nextID);
-                            setCookie('clientID', nextID);
-                            //$N.connect(target, function() {
-                            var os = $N.get('otherSelves');
-                            os.push(nextID);
+                        $N.set('clientID', nextID);
+                        setCookie('clientID', nextID);
+                        var os = $N.get('otherSelves');
+                        os.push(nextID);
 
-                            $N.save('otherSelves', _.unique(os));
+                        $N.save('otherSelves', _.unique(os));
 
-                            $N.clearObjects();
+                        $N.clearObjects();
 
-                            $N.getAuthorObjects(nextID, function () {
-                                $N.getLatestObjects(1000, function () {
-                                    //$N.trigger('change:attention');
-                                    updateBrand(); //TODO use backbone Model instead of global function
+                        $N.getAuthorObjects(nextID, function() {
+                            $N.getLatestObjects(1000, function() {
+                                updateBrand(); //TODO use backbone Model instead of global function
 
-                                    $N.startURLRouter();
-                                });
+                                $N.startURLRouter();
                             });
-
-
-                            //});
                         });
+
+
+                        //});
+                        //});
                     } else {
                         $.pnotify({
                             title: 'Unable to switch profile',
@@ -227,7 +224,7 @@ function netention(f) {
                 });
             }
         },
-        connect: function (targetID, whenConnected) {
+        connect: function(targetID, whenConnected) {
             var originalTargetID = targetID;
             var suppliedObject = null;
             if (targetID) {
@@ -253,7 +250,7 @@ function netention(f) {
             }
 
             function reconnect() {
-                socket.emit('connectID', targetID, function (_cid, _key, _selves) {
+                socket.emit('connectID', targetID, function(_cid, _key, _selves) {
                     setClientID($N, _cid, _key, _selves);
                     setCookie('clientID', _cid);
 
@@ -280,24 +277,24 @@ function netention(f) {
                     'reconnect': false,
                     'reconnection': false,
                     /*'reconnectionDelay': 750,
-                    'reconnectionDelayMax': 25,*/
+                     'reconnectionDelayMax': 25,*/
                     'try multiple transports': true
                 });
-                
-                
-                socket.on('connect', function () {
-                    socket.on('disconnect', function () {
+
+
+                socket.on('connect', function() {
+                    socket.on('disconnect', function() {
                         /*$.pnotify({
-                            title: 'Disconnected.'
-                        });*/
-                        
+                         title: 'Disconnected.'
+                         });*/
+
                         var p = newPopup("Disconnected", true, true).addClass('ReconnectDialog');
                         var disconnectButton = $('<button><h1>&duarr;<br/>Reconnect</h1></button>').appendTo(p).click(function() {
                             location.reload();
                         });
                         console.log('disconnected');
                     });
-                    
+
                     /*socket.on('reconnecting', function() {
                      $.pnotify({
                      title: 'Reconnecting..'
@@ -315,15 +312,15 @@ function netention(f) {
                      socket.socket.reconnect();
                      });*/
 
-                    socket.on('notice', function (n) {
+                    socket.on('notice', function(n) {
                         $N.notice(n);
                     });
 
-                    socket.on('addTags', function (t, p) {
+                    socket.on('addTags', function(t, p) {
                         $N.addProperties(p);
                         $N.addTags(t);
                     });
-                    
+
                     socket.on('roster', function(r) {
                         $N.set('roster', r);
                     });
@@ -334,7 +331,9 @@ function netention(f) {
                         addclass: "stack-bottomright",
                         type: 'success',
                         delay: 2000
-                    }).click(function() { $(this).remove(); });
+                    }).click(function() {
+                        $(this).remove();
+                    });
 
                     reconnect();
 
@@ -348,17 +347,17 @@ function netention(f) {
                 $N.set('roster', r);
             });
         },
-        loadOntology: function (url, f) {
+        loadOntology: function(url, f) {
             var that = this;
 
-            $.getJSON(url, function (o) {
+            $.getJSON(url, function(o) {
                 that.addProperties(o.properties);
                 that.addTags(o.tags);
                 f();
             });
 
         },
-        searchOntology: function (query, ontocache) {
+        searchOntology: function(query, ontocache) {
             var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
             var results = {};
             for (var i = 0; i < terms.length; i++) {
@@ -382,18 +381,18 @@ function netention(f) {
                 }
             }
 
-            results = _.map(_.keys(results), function (r) {
+            results = _.map(_.keys(results), function(r) {
                 return [r, results[r]];
             });
-            results = results.sort(function (a, b) {
+            results = results.sort(function(a, b) {
                 return b[1] - a[1];
             });
             return results;
         },
-        addProperty: function (p) {
+        addProperty: function(p) {
             this.properties[p.uri] = p;
         },
-        addTag: function (t) {
+        addTag: function(t) {
             var ty = this.tags;
             var p = this.properties;
 
@@ -449,12 +448,12 @@ function netention(f) {
          });    
          },*/
 
-        addProperties: function (ap) {
+        addProperties: function(ap) {
             for (var k in ap) {
                 this.addProperty(ap[k]);
             }
         },
-        addTags: function (at) {
+        addTags: function(at) {
 
             for (var k in at) {
                 this.addTag(at[k]);
@@ -462,7 +461,7 @@ function netention(f) {
             this.trigger('change:tags');
 
         },
-        deleteObject: function (x, localOnly) {
+        deleteObject: function(x, localOnly) {
             var id;
             if (typeof x === "string")
                 id = x;
@@ -504,7 +503,7 @@ function netention(f) {
             }
 
             if (!localOnly) {
-                this.socket.emit('delete', id, function (err) {
+                this.socket.emit('delete', id, function(err) {
                     if (!err) {
                         that.trigger('change:deleted');
                         that.trigger('change:attention');
@@ -541,16 +540,16 @@ function netention(f) {
             return true;
 
         },
-        getPlugins: function (withPlugins) {
+        getPlugins: function(withPlugins) {
             var that = this;
-            this.socket.emit('getPlugins', function (p) {
+            this.socket.emit('getPlugins', function(p) {
                 that.unset('plugins');
                 that.set('plugins', p);
                 if (withPlugins)
                     withPlugins(p);
             });
         },
-        setPlugin: function (pid, enabled, callback) {
+        setPlugin: function(pid, enabled, callback) {
             this.socket.emit('setPlugin', pid, enabled, callback);
         },
         /*getGoals: function(from, to, mineOnly ) {
@@ -567,10 +566,10 @@ function netention(f) {
          } );
          },*/
 
-        getObjects: function (query, onObject, onFinished) {
+        getObjects: function(query, onObject, onFinished) {
             var that = this;
             //TODO possible security hole, make sure query isnt destructive
-            this.socket.emit('getObjects', query, function (objs) {
+            this.socket.emit('getObjects', query, function(objs) {
                 for (var k in objs) {
                     var x = objs[k];
                     that.notice(x);
@@ -580,56 +579,60 @@ function netention(f) {
                 onFinished();
             });
         },
-        getReplies: function (id) {
-			if (id.id) id = id.id;
+        getReplies: function(id) {
+            if (id.id)
+                id = id.id;
             return this.get('replies')[id] || [];
         },
-		getReplyRoots: function (r) {
-			//trace up the reply chain until an object with no replyTo
-			var t = { };
+        getReplyRoots: function(r) {
+            //trace up the reply chain until an object with no replyTo
+            var t = {};
 
-			var R = $N.getObject(r);
-			if (!R) return [];
-			var rr = R.replyTo;
-			if (!rr) return [r];
-			if (!Array.isArray(rr))
-				rr = [rr];
+            var R = $N.getObject(r);
+            if (!R)
+                return [];
+            var rr = R.replyTo;
+            if (!rr)
+                return [r];
+            if (!Array.isArray(rr))
+                rr = [rr];
 
-			rr.forEach(function(s) {
-				var sr = $N.getReplyRoots(s);
-				sr.forEach(function(srr) {
-					t[srr] = true;
-				});
-			});
-
-			return _.keys(t);			
-		},
-		getAllReplies: function(objectIDList) {
-			var r = { };
-
-			function addReplies(ii) {
-				ii.forEach(function(i) {
-					if (r[i]) return;
-
-					r[i] = true;
-
-					addReplies($N.getReplies(i));
-				});
-			}
-
-			addReplies(objectIDList);
-			return _.keys(r);
-		},
-        listenAll: function (b) {
-            if (b) {
-                this.subscribe('*', function (f) {
-                    this.notice(f);
+            rr.forEach(function(s) {
+                var sr = $N.getReplyRoots(s);
+                sr.forEach(function(srr) {
+                    t[srr] = true;
                 });
-            } else {
-                this.unsubscribe('*');
-            }
+            });
+
+            return _.keys(t);
         },
-        setFocus: function (f) {
+        getAllReplies: function(objectIDList) {
+            var r = {};
+
+            function addReplies(ii) {
+                ii.forEach(function(i) {
+                    if (r[i])
+                        return;
+
+                    r[i] = true;
+
+                    addReplies($N.getReplies(i));
+                });
+            }
+
+            addReplies(objectIDList);
+            return _.keys(r);
+        },
+        /*listenAll: function (b) {
+         if (b) {
+         this.subscribe('*', function (f) {
+         this.notice(f);
+         });
+         } else {
+         this.unsubscribe('*');
+         }
+         },*/
+        setFocus: function(f) {
             //TODO avoid sending duplicate focuses
             /*
              var oldFocus = this.get('focus');
@@ -663,9 +666,9 @@ function netention(f) {
             this.set('focus', f);
 
             if (this.socket) {
-                this.pub(f, function (err) {
+                this.pub(f, function(err) {
                     console.log('setFocus err: ', err);
-                }, function () {
+                }, function() {
                     //$.pnotify({title: 'Focus noticed.'});
                 });
             }
@@ -673,10 +676,10 @@ function netention(f) {
             $N.trigger('change:focus');
 
         },
-        focus: function () {
+        focus: function() {
             return this.get('focus');
         },
-        notice: function (x) {
+        notice: function(x) {
 
             if (!Array.isArray(x)) {
                 return this.notice([x]);
@@ -723,7 +726,7 @@ function netention(f) {
 
                 function objTagObjectToTag(x) {
                     var p = {};
-                    _.each(objValues(x, 'tagValueType'), function (v) {
+                    _.each(objValues(x, 'tagValueType'), function(v) {
                         var vv = v.split(':');
                         p[vv[0]] = {
                             name: vv[0],
@@ -758,25 +761,25 @@ function netention(f) {
             if (includesNonFocused)
                 this.trigger('change:attention');
         },
-        subscribe: function (channel, f) {
+        subscribe: function(channel, f) {
             if (this.socket) {
                 this.socket.emit('subscribe', channel);
                 this.socket.on('receive-' + channel, f);
             }
         },
-        unsubscribe: function (channel) {
+        unsubscribe: function(channel) {
             if (this.socket) {
                 this.socket.emit('unsubscribe', channel);
             }
         },
-        pub: function (object, onErr, onSuccess) {
+        pub: function(object, onErr, onSuccess) {
             if (configuration.connection == 'local') {
                 $N.notice(object);
                 if (onSuccess)
                     onSuccess();
             } else {
                 if (this.socket) {
-                    this.socket.emit('pub', objCompact(object), function (err) {
+                    this.socket.emit('pub', objCompact(object), function(err) {
                         if (onErr)
                             onErr(object);
                         $.pnotify({
@@ -784,7 +787,7 @@ function netention(f) {
                             text: err,
                             type: 'error'
                         });
-                    }, function () {
+                    }, function() {
                         $N.notice(object);
                         if (onSuccess)
                             onSuccess();
@@ -798,10 +801,10 @@ function netention(f) {
             }
         },
         //THIS NEEDS UPDATED
-        getClientInterests: function (f) {
+        getClientInterests: function(f) {
             this.socket.emit('getClientInterests', f);
         },
-        getTagCount: function (onlySelf, predicate) {
+        getTagCount: function(onlySelf, predicate) {
 
             var tagCount = {};
             var aa = this.attention;
@@ -818,7 +821,7 @@ function netention(f) {
                     if (oi.author != myID)
                         continue;
 
-                    //var t = objTags(oi);
+                //var t = objTags(oi);
                 var ts = objTagStrength(oi);
                 for (var i in ts) {
                     if (!tagCount[i])
@@ -828,32 +831,33 @@ function netention(f) {
             }
             return tagCount;
         },
-        getServerAttention: function (withResults) {
-            $.getJSON('/attention', function (attention) {
+        getServerAttention: function(withResults) {
+            $.getJSON('/attention', function(attention) {
                 withResults(attention);
             });
         },
-        save: function (key, value) {
+        save: function(key, value) {
             $N.set(key, value);
             localStorage[key] = JSON.stringify(value);
         },
-        loadAll: function () {
+        loadAll: function() {
             var loadedSelf = localStorage['self'] || "{ }";
             var loadedAttention = localStorage['obj'] || "{ }";
             if (loadedSelf) {
                 _.extend($N.attributes, JSON.parse(loadedSelf));
                 $N.attention = JSON.parse(loadedAttention);
-            } else {}
+            } else {
+            }
 
         },
-        saveAll: function () {
+        saveAll: function() {
             if (configuration.connection == 'local') {
                 localStorage.self = JSON.stringify($N.attributes);
                 localStorage.obj = JSON.stringify($N.attention);
             }
         },
         //TODO rename to 'load initial objects' or something
-        getLatestObjects: function (num, onFinished) {
+        getLatestObjects: function(num, onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
             if (configuration.connection == 'local') {
                 $N.loadAll();
@@ -861,12 +865,12 @@ function netention(f) {
                 return;
             }
 
-            $.getJSON('/object/latest/' + num + '/json', function (objs) {
+            $.getJSON('/object/latest/' + num + '/json', function(objs) {
                 $N.notice(objs);
                 onFinished();
             });
         },
-        getUserObjects: function (onFinished) {
+        getUserObjects: function(onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
             if (configuration.connection == 'local') {
                 $N.loadAll();
@@ -874,25 +878,33 @@ function netention(f) {
                 return;
             }
 
-            $.getJSON('/object/tag/User/json', function (objs) {
+            $.getJSON('/object/tag/User/json', function(objs) {
                 $N.notice(objs);
                 onFinished();
             });
         },
-        getAuthorObjects: function (userID, onFinished) {
+        getAuthorObjects: function(userID, onFinished) {
             if (configuration.connection == 'local') {
                 onFinished();
                 return;
             }
-            $.getJSON('/object/author/' + userID + '/json', function (j) {
+            $.getJSON('/object/author/' + userID + '/json', function(j) {
                 $N.notice(j);
                 onFinished();
             });
         },
-        startURLRouter: function () {
+        startURLRouter: function() {
             if (!this.backboneStarted) {
                 this.backboneStarted = true;
                 Backbone.history.start();
+
+                $N.on('change:attention', updateView);
+                $N.on('change:currentView', updateView);
+                $N.on('change:tags', updateView);
+                $N.on('change:focus', updateView);
+
+                updateView();
+
             }
         }
 
@@ -910,11 +922,11 @@ function netention(f) {
     setClientID($N, cid, keys, otherSelves);
 
     if (configuration.connection == 'websocket') {
-        $N.connect(null, function () {
+        $N.connect(null, function() {
             f("/ontology/json", $N);
         });
     } else {
-        window.addEventListener("beforeunload", function (e) {
+        window.addEventListener("beforeunload", function(e) {
             $N.saveAll();
             /*var confirmationMessage = "Saved everything";
              
@@ -965,13 +977,13 @@ function newPopup(title, p, isModal) {
             width: clientWidth - leftMargin - margin,
             height: clientHeight - margin * 3,
             //position: [leftMargin, margin]
-            position: { my: "center", at: "center", of: window }
+            position: {my: "center", at: "center", of: window}
         };
     }
-    
+
 
     p = _.extend(p || {}, {
-        close: function () {
+        close: function() {
             d.remove();
         },
         show: 'fade',
@@ -988,10 +1000,10 @@ function newPopup(title, p, isModal) {
 
     if (configuration.device == configuration.MOBILE) {
         p.focus = function() {
-            var backbuttonhandler = function (e) {                
+            var backbuttonhandler = function(e) {
                 if (d && d.is(':visible')) {
                     $(window).off('popstate', arguments.callee);
-                    later(function () {
+                    later(function() {
                         d.dialog('close');
                     });
                     return false;
@@ -1034,8 +1046,8 @@ function setCookie(key, value) {
     document.cookie = key + '=' + value;
 }
 
-function _rgba(r,g,b,a) {
-	return 'rgba(' + parseInt(256.0*r) + ',' + parseInt(256.0*g) + ',' + parseInt(256.0*b) + ',' + a + ')';
+function _rgba(r, g, b, a) {
+    return 'rgba(' + parseInt(256.0 * r) + ',' + parseInt(256.0 * g) + ',' + parseInt(256.0 * b) + ',' + a + ')';
 }
 
 
