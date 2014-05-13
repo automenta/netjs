@@ -12,7 +12,6 @@
             @import url("lib/reveal.js/css/reveal.min.css");
             @import url("lib/reveal.js/css/theme/simple2.css");
             @import url("lib/fractaldom/fractaldom.css");
-            @import url("netention.css");
 
             @import url("lib/leaflet/leaflet.css");
             @import url("lib/leaflet/Control.OSMGeocoder.css");
@@ -20,7 +19,9 @@
 
             @import url("lib/gridster/jquery.gridster.min.css");
             @import url("lib/timeline/timeline.css");
+            @import url("lib/jquery.terminal/jquery.terminal.css");
 
+            @import url("netention.css");
         </style>
         <style id="customcss"></style>
 
@@ -61,9 +62,9 @@
                         </form>
                     </div>
                     <div id="password-login" style="display:none">
-                            <label>E-Mail:</label><input type="email" id="login_email"/><br/>
-                            <label>Password:</label><input type="password" id="login_password"/><br/>
-							<button id="password-login-login">Login</button>
+                        <label>E-Mail:</label><input type="email" id="login_email"/><br/>
+                        <label>Password:</label><input type="password" id="login_password"/><br/>
+                        <button id="password-login-login">Login</button>
                     </div>
                     <div id="ProfileSelect">
                     </div>
@@ -96,34 +97,35 @@
                 </span>
             </div>
 
-			<div id="ViewSelect" class="section">
-		        <button id="TogetherJSTalk" onclick="startTalk();
-		                            return false;" title="Toggle Communicator" style="display: none">Talk</button>
+            <div id="ViewSelect" class="section">
+                <button id="TogetherJSTalk" onclick="startTalk(); return false;" 
+                        title="Toggle Communicator" style="display: none">Talk</button>
 
-		        <a _href="#" id="main" class="ViewControl" title="Main"><img src="icon/view.main.svg"></a>
-		        <a _href="#" id="us" class="ViewControl" title="Us"><img src="icon/view.us.svg"></a>
-		        <a _href="#" id="map" class="ViewControl" title="Map"><img src="icon/view.map.svg"></a>
-		        <a _href="#" id="time" class="ViewControl" title="Time"><img src="icon/view.time.svg"></a>
-		        <a _href="#" id="browse" class="ViewControl" title="Browse"><img src="icon/view.browse.svg"></a>
-		        <a _href="#" id="chat" class="ViewControl" title="Chat"><img src="icon/view.chat.svg"></a>
-		        <a _href="#" id="graph" class="ViewControl" title="Network"><img src="icon/view.graph.svg"></a>
-		        <a _href="#" id="share" class="ViewControl" title="Share"><img src="icon/view.share.svg"></a>
-		        <a _href="#" id="trends" class="ViewControl" title="Trends"><img src="icon/view.trends.svg"></a>
-		        <a _href="#" id="wiki" class="ViewControl" title="Wiki"><img src="icon/view.wiki.svg"></a>
-		        <a _href="#" id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></a>
-			</div>
+                <a _href="#" id="main" class="ViewControl" title="Main"><img src="icon/view.main.svg"></a>
+                <a _href="#" id="us" class="ViewControl" title="Us"><img src="icon/view.us.svg"></a>
+                <a _href="#" id="map" class="ViewControl" title="Map"><img src="icon/view.map.svg"></a>
+                <a _href="#" id="time" class="ViewControl" title="Time"><img src="icon/view.time.svg"></a>
+                <a _href="#" id="browse" class="ViewControl" title="Browse"><img src="icon/view.browse.svg"></a>
+                <a _href="#" id="chat" class="ViewControl" title="Chat"><img src="icon/view.chat.svg"></a>
+                <a _href="#" id="graph" class="ViewControl" title="Network"><img src="icon/view.graph.svg"></a>
+                <a _href="#" id="share" class="ViewControl" title="Share"><img src="icon/view.share.svg"></a>
+                <a _href="#" id="trends" class="ViewControl" title="Trends"><img src="icon/view.trends.svg"></a>
+                <a _href="#" id="wiki" class="ViewControl" title="Wiki"><img src="icon/view.wiki.svg"></a>
+                <a _href="#" id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></a>
+                <a _href="#" id="notebook" class="ViewControl" title="Notebook"><img src="icon/view.browse.svg"></a>
+            </div>
 
             <div id="AvatarFocus" class="section">
-				<a id="AddContentButton" href="#" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
-				<a id="FocusNeedButton" href="#" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
-				<a id="FocusClearButton" href="#" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
+                <a id="AddContentButton" href="#" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
+                <a id="FocusNeedButton" href="#" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
+                <a id="FocusClearButton" href="#" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
                 <!--
-				<button id="FocusWhatButton">What?</button>
-				<button id="FocusWhereButton">Where?</button>
-				<button id="FocusWhenButton">When?</button>
-				<input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
+                                <button id="FocusWhatButton">What?</button>
+                                <button id="FocusWhereButton">Where?</button>
+                                <button id="FocusWhenButton">When?</button>
+                                <input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
 
-				<button id="FocusClearButton" title="Clear">[x]</button>
+                                <button id="FocusClearButton" title="Clear">[x]</button>
                 -->
 
                 <div id="FocusEdit"></div>
@@ -198,7 +200,7 @@
         <script src="lib/animated_gif/Animated_GIF.min.js"></script>
         <script src="webcam.js"></script>
 
-
+        <script src="lib/jquery.terminal/jquery.terminal-0.9.0.min.js"></script>
 
         <script src="util.js" type="text/javascript"></script> 
         <script src="widget.object.js" type="text/javascript"></script> 
@@ -225,11 +227,13 @@
         <script src="view.options.js" type="text/javascript"></script> 
         <script src="view.templates.js" type="text/javascript"></script> 
         <script src="view.user.js" type="text/javascript"></script> 
+        <script src="view.notebook.js" type="text/javascript"></script> 
+
 
         <script src="netention.js" type="text/javascript"></script> 
         <script src="ui.js" type="text/javascript"></script>
         <script src="action.js" type="text/javascript"></script> 
 
-        
+
     </body>
 </html>

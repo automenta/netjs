@@ -4,12 +4,12 @@ exports.options = {
     "host": "localhost",
     "port": "8080",
     "databaseURL": "localhost/netention_0",
-    "memoryUpdateIntervalMS": 10*60*1000 /* 10 minutes */,
-	"httpCompress": false /* enable this on production servers, but disable if local */,
-	"password": "",
+    "memoryUpdateIntervalMS": 10 * 60 * 1000 /* 10 minutes */,
+    "httpCompress": false /* enable this on production servers, but disable if local */,
+    "password": "",
     "plugins": {
         "_rss.js": {},
-		"_irc.js": {}
+        "_irc.js": {}
     },
     "permissions": {
         "enableAnonymous": true,
@@ -25,33 +25,33 @@ exports.options = {
         "ui": "ui.mobile.js",
         "initialView": "us",
         "avatarMenuDisplayInitially": false,
-		"avatarMenuTagTreeAlways": false,
+        "avatarMenuTagTreeAlways": false,
         "defaultAvatarIcon": "/theme/default-avatar.jpg",
-		"favicon": null,
-		"loginLogo": "/theme/login-logo.png",
+        "favicon": null,
+        "loginLogo": "/theme/login-logo.png",
         "wikiStartPage": "Life",
         "showPlanOnSelfPage": true,
         "defaultTheme": "_cybernetic",
-		"autoLoginDefaultProfile": true,
+        "autoLoginDefaultProfile": true,
         "requireIdentity": true,
         "maxStartupObjects": 8192,
         "defaultMapMode2D": true,
-		"mapDefaultLocation": [ 40.44, -80.0  ],
+        "mapDefaultLocation": [40.44, -80.0],
         "enableTogetherJS": false,
         "viewUpdateTime": [
-            /* mobile: [ min update interval (ms), debounce time (ms), 1st view debounce time (ms) ]  */ 
-            [ 850, 100, 450 ], 
-            /* desktop: [ min update interval (ms), debounce time (ms) ], 1st view debounce time (ms) */ 
-            [ 250, 50, 150 ]
+            /* mobile: [ min update interval (ms), debounce time (ms), 1st view debounce time (ms) ]  */
+            [850, 100, 450],
+            /* desktop: [ min update interval (ms), debounce time (ms) ], 1st view debounce time (ms) */
+            [250, 50, 150]
         ],
         "knowLevels": 3,
-		"views": [ "us", "map", "browse", "chat", "graph", "trends", "wiki", "templates" ],
-		"newUserProperties": [ ],
-		"shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
-		"shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'],
-		"defaultScope": 7
+        "views": ["us", "map", "browse", "chat", "graph", "trends", "wiki", "templates"],
+        "newUserProperties": [],
+        "shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
+        "shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'],
+        "defaultScope": 7
     },
-	start: function($N) {
-	}
+    start: function($N) {
+    }
 }
 

@@ -2004,3 +2004,28 @@ svg {
     display: inline;
     padding-left: 0 !important;
 }
+
+
+.clipboard {
+    display: none
+}
+.terminal .cursor {
+    background-color: gray;
+}
+.terminal, .cmd {
+    color: black;
+    background-color: transparent;
+    cursor: text;
+}
+.terminal-output, .cmd {
+    font-size: 180%;
+    line-height: normal;
+}
+.terminal {
+    margin: 0;
+    padding:0;
+    overflow: auto;
+}
+.terminal .terminal-output div div, .cmd .prompt {
+    line-height: normal;
+}

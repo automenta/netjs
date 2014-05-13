@@ -288,7 +288,8 @@ function _updateView(force) {
         if (currentView.destroy)
             currentView.destroy();
 
-    v.css('font-size', '100%').removeClass('ui-widget-content view-indented overthrow overflow-hidden nobg');
+    v.css('font-size', '100%').removeClass('ui-widget-content overflow-hidden nobg');
+    vw.removeClass('view-indented overthrow');
 
     function indent() {
         submenu.show();
@@ -349,6 +350,10 @@ function _updateView(force) {
     else if (view === 'time') {
         indent();
         currentView = newTimeView(v);
+    }
+    else if (view === 'notebook') {
+        indent();
+        currentView = newNotebookView(v);
     }
     else {
         v.html('Unknown view: ' + view);

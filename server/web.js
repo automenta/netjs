@@ -1907,9 +1907,9 @@ exports.start = function(options, init) {
 
                 if ((message.focus) && (message.author)) {
                     message = util.objExpand(message);
-                    focusHistory.push(m);
+                    focusHistory.push(message);
 
-                    plugins('onFocus', m);
+                    plugins('onFocus', message);
 
                     //remove elements in focusHistory that are older than focusHistoryMaxAge (seconds)
                     var now = Date.now();

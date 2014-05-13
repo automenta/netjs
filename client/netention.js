@@ -155,7 +155,7 @@ function netention(f) {
             return this.get('clientID');
         },
         myself: function() {
-            return this.getObject(this.id());
+            return new nobject(this.getObject(this.id()));
         },
         become: function(target) {
 
@@ -913,6 +913,10 @@ function netention(f) {
 
     //exports = the variable from util.js which is also used by node.js require()        		
     var $N = _.extend(new $NClient(), exports);
+    
+    $N.toString = function() {
+        return JSON.stringify(this);
+    };
 
     $N.clear();
 
