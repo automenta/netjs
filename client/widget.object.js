@@ -134,6 +134,13 @@ function _onTagButtonClicked() {
 }
 
 
+function newTagImage(ti) {
+	return newEle('img').attr({
+		'src': ti,
+    	'class': 'TagButtonIcon'
+    });
+}
+
 function newTagButton(t, onClicked, isButton) {
     var ti = null;
 
@@ -150,10 +157,7 @@ function newTagButton(t, onClicked, isButton) {
     
     var i = null;
     if (ti) {
-        i = newEle('img').attr({
-            'src': ti,
-            'class': 'TagButtonIcon'
-        });
+		i = newTagImage(ti);
     }
 
     var b = isButton ? newEle('button') : newEle('a').attr('href', '#');
@@ -1612,7 +1616,10 @@ function newObjectSummary(x, options) {
     var mini = (depthRemaining == 0);
 
 
-	var d = newDiv().addClass('objectView');
+	var d = newDiv().attr({
+		'xid': x.id,
+		'class': 'objectView'
+	});
 
 	if (!transparent)
 		d.addClass("ui-widget-content ui-corner-all");
@@ -1707,9 +1714,7 @@ function newObjectSummary(x, options) {
                 var editButton = $('<button title="Edit">..</button>').addClass('ObjectViewPopupButton').appendTo(haxn);
                 editButton.click(function () {
                     var windowParent = $(this).parent().parent().parent().parent();
-					console.log(windowParent);
                     if (windowParent.hasClass('ui-dialog-content')) {
-						console.log(windowParent, 'dialog');
                         windowParent.dialog('close');
                     }
                     newPopupObjectEdit(x, true);
@@ -1794,8 +1799,7 @@ function newObjectSummary(x, options) {
 }
 
 function newObjectDetails(x) {
-    var d = newDiv();
-    var ud = newEle('ul').appendTo(d);
+    var ud = newEle('ul');
 
     var desc = objDescription(x);
     if (desc) {
@@ -1866,9 +1870,9 @@ function newObjectDetails(x) {
     }
 
 	if (ud.children().length == 0)
-		ud.remove();
+		return null;
 
-    return d;
+    return ud;
 }
 
 
@@ -1904,13 +1908,14 @@ function newMetadataLine(x, showTime) {
             return;
 
         var tt = $N.getTag(t);
+		var taglink;
         if (tt) {
-            var ttt = newTagButton(tt).appendTo(mdline);
-            applyTagStrengthClass(ttt, s);
+            taglink = newTagButton(tt);
+            applyTagStrengthClass(taglink, s);
         } else {
-            mdline.append('<a><img src="' + getTagIcon(null) + '"/>' + t + '</a>');
+			taglink = newEle('a').append(newTagImage(null));
         }
-        mdline.append('&nbsp;');
+        mdline.append(taglink, '&nbsp;');
     });
 
     var spacepoint = objSpacePoint(x);
@@ -1918,6 +1923,7 @@ function newMetadataLine(x, showTime) {
         var lat = _n(spacepoint.lat);
         var lon = _n(spacepoint.lon);
         var mll = objSpacePointLatLng($N.myself());
+		var spacelink = newEle('a');
         if (mll) {
             var dist = '?';
             //TODO check planet
@@ -1926,12 +1932,13 @@ function newMetadataLine(x, showTime) {
                 dist = geoDist(sx, mll);
 
             if (dist === 0)
-                mdline.append('&nbsp;<a>[here]</a>');
+				spacelink.text('[here]');
             else
-                mdline.append('&nbsp;<a>[' + lat + ',' + lon + ':  ' + _n(dist) + ' km away]</a>');
+				spacelink.text('[' + lat + ',' + lon + ':  ' + _n(dist) + ' km away]');
         } else {
-            mdline.append('&nbsp;<a>[' + lat + ',' + lon + ']</a>');
+            spacelink.text('[' + lat + ',' + lon + ']');
         }
+		mdline.append('&nbsp;', spacelink);
     }
 
     if (showTime !== false) {

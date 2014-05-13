@@ -51,6 +51,8 @@ function newRosterWidget() {
 }
 
 function newChatView(v) {
+	var oldestNewObjectMS = 10 * 60 * 1000; //10 min
+
     //var roster = newRoster().attr('class', 'ChatViewRoster');    
     var content = newDiv().addClass('ChatViewContent');
     var input = newChatInput(onChatSend).addClass('ChatViewInput');
@@ -66,6 +68,9 @@ function newChatView(v) {
 	var nearBottom = false;
 	var displayedObjects = [];
 	var updatesAvailable = false;
+	var newObjects = { };
+	var rootsUnaffected = { };
+	var modifiedDate = { };
 
 	$(content).scroll(function() {
 		var height = content.prop('scrollHeight');
@@ -95,9 +100,11 @@ function newChatView(v) {
 		updateContent(true);
 		scrollbottom();
 	}
-	var updateButton = $('<button>Update</button>').click(forceUpdate);
+
 
     function updateContent(force) {
+		var numPreviousDisplayed = displayedObjects.length;
+
         var sort = 'Recent';
         var scope = 'Public';
         var semantic = 'Any';
@@ -106,31 +113,97 @@ function newChatView(v) {
 
         var rel = getRelevant(sort, scope, semantic, $N, maxItems);
 		var toDisplay = rel[0];
-		var difference = _.difference(toDisplay, displayedObjects);
+		var toDisplayObj = { };
+		toDisplay.forEach(function(d) {
+			toDisplayObj[d] = $N.getObject(d);
+		});
 
+		var toDisplayWithReplies = $N.getAllReplies(toDisplay)
+
+		var added = _.difference(toDisplayWithReplies, displayedObjects);
+		var removed = _.difference(displayedObjects, toDisplayWithReplies);
+		var changed = _.filter(toDisplayWithReplies, function(d) {
+			var D = toDisplayObj[d] || $N.getObject(d);
+			var dd = D.modifiedAt || D.createdAt;
+			var changed = false;
+			if (modifiedDate[d]) {
+				if (modifiedDate[d] == dd) {
+					changed = false;
+				}
+				else {
+					changed = true;
+				}
+			}
+			modifiedDate[d] = dd;
+			return changed;
+		});
 
 
 		if (!force) {
-			if (difference.length == 0) {
+			if ((added.length == 0) && (removed.length == 0) && (changed.length == 0)) {
 				updatesAvailable = false;
 				return;
 			}
 			else if (!nearBottom) {
 				//buffer changes
 				updatesAvailable = true;
-
-				//TODO indicate which threads have changed
 			
-				updates.html(difference.length + ' Updates available.');			
-				updates.append(updateButton);
+				updates.html('Updates available.<br/>');
+				var updateButton = $('<button>Update</button>').click(forceUpdate).appendTo(updates);
 				updates.fadeIn();
 
 				return;
+			}
+			else if (nearBottom) {
+				var addedContainsReplies = false;
+				for (var i = 0; i < added.length; i++) {
+					var A = $N.getObject(added[i]);
+					if (A.replyTo) {
+						addedContainsReplies = true;
+						break;
+					}
+				}
+				if (addedContainsReplies) {
+					updates.html('Replies available.<br/>');
+					var updateButton = $('<button>Update</button>').click(forceUpdate).appendTo(updates);
+					updates.fadeIn();
+					return;
+				}
 			}
 		}
 
 		updates.hide();
 
+		var rootsAffected = null;
+
+
+		if (numPreviousDisplayed!=0) {
+			rootsAffected = { };
+			_.union(added, removed, changed).forEach(function(c) {
+				var roots = $N.getReplyRoots(c);
+				roots.forEach(function(r) {
+					rootsAffected[r] = true;
+
+					//affected, so remove from cache
+					if (rootsUnaffected[r]) {
+						rootsUnaffected[r].remove();
+						delete rootsUnaffected[r];
+					}
+				});
+			});
+			content.find('.objectView').each(function() {
+				var xid = $(this).attr('xid');
+				var X = toDisplayObj[xid];
+
+				if (!X) return;
+				if (X.replyTo) return;
+
+				if (!rootsAffected[xid])
+					rootsUnaffected[xid] = $(this).parent().parent().detach();
+			});
+		}
+
+		
         content.empty();
 
         if (toDisplay.length === 0) {
@@ -139,19 +212,52 @@ function newChatView(v) {
         }
 		
 		displayedObjects = [];
+
         for (var i = toDisplay.length - 1; i >= 0; i--) {
-            var x = $N.getObject(toDisplay[i]);
-			displayedObjects.push(x.id);
-            content.append(newObjectLogLine(x));
+			var td = toDisplay[i];
+			if (rootsUnaffected[td]) {
+				content.append(rootsUnaffected[td]);
+
+			}
+			else {
+		        var x = $N.getObject(td);
+		        content.append(newObjectLogLine(x));
+			}
         }
 
 
-		if (typeof force != "boolean") {			
-			var scrollToObject = force;
-			//existing scroll position should be good if it's a reply
-			if (scrollToObject.replyTo)
-				return;
+		var now = Date.now();
+		if (numPreviousDisplayed!=0) {
+			_.each(newObjects, function(v, k) {
+				if (now - v > oldestNewObjectMS)
+					delete newObjects[k];
+			});
+			_.union(added, changed).forEach(function(a) {
+				newObjects[a] = now;
+			});
 		}
+
+		content.find('.objectView').each(function() {
+			var xid = $(this).attr('xid');
+			displayedObjects.push(xid);
+
+			if (numPreviousDisplayed!=0) {
+				if (newObjects[xid]) {
+					var age = (now - newObjects[xid]) / oldestNewObjectMS;
+					var c = 'rgba(0,255,0,' + 0.25*(1.0-age) + ');';
+					var highlightStyle = 'background-color: ' + c + '; border-right: 4px solid ' + c;
+					$(this).attr('style', highlightStyle);
+				}
+			}
+		});
+
+		if (force)
+			if (typeof force != "boolean") {			
+				var scrollToObject = force;
+				//existing scroll position should be good if it's a reply
+				if (scrollToObject.replyTo)
+					return;
+			}
 		
         later(scrollbottom);
     }
@@ -162,6 +268,7 @@ function newChatView(v) {
     };
     content.destroy = function() {
         roster.destroy();
+		_.values(rootsUnaffected).forEach(function(x) { x.remove(); }); //destroy the DOM cache
     };
     
     updateContent(true);
@@ -173,7 +280,7 @@ function newChatView(v) {
 function newInlineSelfButton(s, x) {
     return newEle('a').attr({
         'aid': s.id, 'xid': x.id, 'class': 'InlineSelfButton'
-    }).append('<span>' + s.name + '</span>', newAvatarImage(s));
+    }).append(newEle('span').text(s.name), newAvatarImage(s));
 }
 
 function newObjectLogLineOnHover() {   $(this).addClass('ChatViewContentLineHover'); }
@@ -268,7 +375,7 @@ function newObjectLogLine(x) {
             b = newInlineSelfButton(a, x);
         }
         else {
-            b = $('<a href="#">' + x.author + '</a>').attr('xid', x.id).attr('aid', x.author);
+            b = newEle('a').text(a.author).attr( {	'xid': x.id, 'aid': x.author	});
         }
         b.click(newObjectLogLineClick);
         d.append(newEle('p').append(b));

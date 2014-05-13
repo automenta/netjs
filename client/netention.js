@@ -584,6 +584,42 @@ function netention(f) {
 			if (id.id) id = id.id;
             return this.get('replies')[id] || [];
         },
+		getReplyRoots: function (r) {
+			//trace up the reply chain until an object with no replyTo
+			var t = { };
+
+			var R = $N.getObject(r);
+			if (!R) return [];
+			var rr = R.replyTo;
+			if (!rr) return [r];
+			if (!Array.isArray(rr))
+				rr = [rr];
+
+			rr.forEach(function(s) {
+				var sr = $N.getReplyRoots(s);
+				sr.forEach(function(srr) {
+					t[srr] = true;
+				});
+			});
+
+			return _.keys(t);			
+		},
+		getAllReplies: function(objectIDList) {
+			var r = { };
+
+			function addReplies(ii) {
+				ii.forEach(function(i) {
+					if (r[i]) return;
+
+					r[i] = true;
+
+					addReplies($N.getReplies(i));
+				});
+			}
+
+			addReplies(objectIDList);
+			return _.keys(r);
+		},
         listenAll: function (b) {
             if (b) {
                 this.subscribe('*', function (f) {
