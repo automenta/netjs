@@ -885,8 +885,10 @@ exports.start = function(options, init) {
             if (request.headers)
                 if (request.headers.cookie) {
                     request.headers && request.headers.cookie.split(';').forEach(function(cookie) {
-                        var parts = cookie.match(/(.*?)=(.*)$/)
-                        cookies[ parts[1].trim() ] = (parts[2] || '').trim();
+                        var parts = cookie.match(/(.*?)=(.*)$/);
+                        if (parts)
+                            if (parts.length == 3)
+                                cookies[ parts[1].trim() ] = (parts[2] || '').trim();
                     });
                 }
         return cookies;

@@ -18,7 +18,7 @@ exports.plugin = function($N) {
         start: function(options) {
             
             //https://developer.github.com/webhooks/
-            h = $N.httpserver.post('/githubhook', function(req, res) {
+            $N.httpserver.post('/githubhook', function(req, res) {
                 var g = req.body;
                 
                 $N.pub(new $N.nobject().setName("GitHub")
