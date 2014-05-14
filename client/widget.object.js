@@ -506,7 +506,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>').click(function() {
                 newWebcamWindow(function(imgURL) {
-                    update(objAddValue(getEditedFocus(), 'gif', imgURL));
+                    update(objAddValue(getEditedFocus(), 'image', imgURL));
                 });
             });
 
@@ -514,17 +514,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
 
                 function attachURL(url) {
-                    if (url.endsWith('.png')) {
-                        update(objAddValue(getEditedFocus(), 'png', url));
-                    }
-                    else if (url.endsWith('.jpg') || url.endsWith('.jpeg')) {
-                        update(objAddValue(getEditedFocus(), 'jpg', url));
-                    }
-                    else if (url.endsWith('.gif')) {
-                        update(objAddValue(getEditedFocus(), 'gif', url));
-                    }
-                    else if (url.endsWith('.svg')) {
-                        update(objAddValue(getEditedFocus(), 'svg', url));
+                    if (url.endsWith('.png') || url.endsWith('.jpeg') || url.endsWith('.jpg') || url.endsWith('.svg') || url.endsWith('.gif')) {
+                        update(objAddValue(getEditedFocus(), 'image', url));
                     }
                     else {
                         update(objAddValue(getEditedFocus(), 'url', url));
@@ -975,7 +966,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         } else {
             d.append(newEle('a').append($.timeago(new Date(t.at))));
         }
-    } else if (isPrimitiveImage(type)) {
+    } else if (type == 'image') {
         if (editable) {
             whenSaved.push(function(y) {
                 objAddValue(y, t.id, t.value, strength);
@@ -1855,12 +1846,12 @@ function newObjectDetails(x) {
                     //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                     ud.append(new Date(vv.value.start).toISOString() + ' ' + new Date(vv.value.start).toISOString());
                 }
-            } else if (isPrimitiveImage(vv.id)) {
+            } else if (vv.id === 'image') {
                 var url = vv.value;
                 ud.append(newEle('img').attr( { class: "objectViewImg", src: url}), '<br/>');
-            } else if (vv.id == 'html') {
+            } else if (vv.id === 'html') {
                 ud.append(newDiv().html(vv.value));            
-            } else if (vv.id == 'markdown') {
+            } else if (vv.id === 'markdown') {
                 ud.append(newDiv().addClass('markdown').html(markdown.toHTML(vv.value)));
             }
             else if ($N.isProperty(vv.id)) {

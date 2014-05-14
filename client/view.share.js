@@ -237,7 +237,7 @@ function newObjectSummary2(x) {
 
     var img = newDiv().addClass('ShareSummaryImage').appendTo(d);
 
-    var firstMedia = objFirstImage(x);
+    var firstMedia = objFirstValue(x, 'image');
 
     var imgurl;
     if ((firstMedia) && (typeof firstMedia === "string")) {

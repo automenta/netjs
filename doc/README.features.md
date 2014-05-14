@@ -103,8 +103,7 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
             * _TODO:_ iframe (boolean, width, height)
         * **text** (string)
         * **html** (multiline HTML string)
-            * _TODO:_ html (optional: boolean, default=true; if true, activates rich-text editor)
-        * **jpg**, **gif**, **png**, **svg** (images)
+        * **image** (images)
         * **markdown** (markdown content, renderable to HTML)
         * **spacepoint** (point in space)
             * latitude

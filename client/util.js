@@ -254,7 +254,7 @@ function objName(x, newName) {
 }
 exports.objName = objName;
 
-var primitiveRegEx = /^(boolean|text|html|integer|real|url|object|spacepoint|timepoint|timerange|sketch|markdown|jpg|png|svg|gif)$/;
+var primitiveRegEx = /^(boolean|text|html|integer|real|url|object|spacepoint|timepoint|timerange|sketch|markdown|image)$/;
 
 function isPrimitive(t) {
     return primitiveRegEx.test(t);
@@ -584,16 +584,7 @@ function objFirstValue(object, id, defaultValue) {
 }
 exports.objFirstValue = objFirstValue;
 
-function isPrimitiveImage(id) {
-    //TODO replace with regexp
-    return (id === 'jpg') || (id == 'png') || (id == 'gif') || (id == 'svg');
-}
-exports.isPrimitiveImage = isPrimitiveImage;
 
-function objFirstImage(object) {
-    objFirstValue(object, ['jpg', 'png', 'svg', 'gif']);
-}
-exports.objFirstImage = objFirstImage;
 
 function objSetFirstValue(object, id, newValue) {
     var existingValue = objFirstValue(object, id, null);
