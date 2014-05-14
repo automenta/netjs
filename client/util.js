@@ -1040,10 +1040,10 @@ function objCompact(o) {
         else if (y.createdAt!==y.modifiedAt) {
             y.at = [ y.createdAt, y.modifiedAt - y.createdAt ];
         }
-        delete y.modifiedAt;
-        delete y.createdAt;
     }
     
+    delete y.modifiedAt;
+    delete y.createdAt;
         
 
     var k = _.keys(y);
