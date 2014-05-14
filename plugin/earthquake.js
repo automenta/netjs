@@ -21,17 +21,17 @@ exports.plugin = function($N) {
         //depends on: 'climate'
 
         start: function(options) {
-            
+
             var filter = options.filter || undefined;
             var minMagnitude = options.minMagnitude || 4.5;
             var expireAfter = options.expireAfter || undefined;
-            var updateIntervalMS = options.updateIntervalMS || 15*60*1000 /*15 min */;
-            
+            var updateIntervalMS = options.updateIntervalMS || 15 * 60 * 1000 /*15 min */;
+
             //possible values: 'hour', 'day', 'week', 'month'
             var historySize = options.historySize || 'week';
-            
+
             rss.addWebTags($N);
-            
+
             $N.addTags([
                 {
                     uri: 'Earthquake', name: 'Earthquake',
@@ -53,22 +53,22 @@ exports.plugin = function($N) {
                 mm = 'all';
             else //if (minMagnitude === 'significant')
                 mm = 'significant';
-            
-            
+
+
             var feedURL = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/' + mm + '_' + historySize + '.atom';
 
             /*
-            http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_day.atom
-            http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom
-            http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_week.atom
-            http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom
-            */
-            
-            
-            function update() {                
+             http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_day.atom
+             http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom
+             http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_week.atom
+             http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom
+             */
+
+
+            function update() {
                 //OLD URL: 'http://earthquake.usgs.gov/earthquakes/catalogs/eqs7day-M5.xml'
                 rss.RSSFeed($N, feedURL, function(eq, a) {
-                    
+
                     if (expireAfter) {
                         var now = Date.now();
                         eq.expiresAt = eq.createdAt + expireAfter;
@@ -78,26 +78,27 @@ exports.plugin = function($N) {
                     if ((filter) && (a.geolocation)) {
                         var included = true;
                         filter.forEach(function(f) {
-                            if (!included) return;
+                            if (!included)
+                                return;
                             var distMeters = geo.getDistance(
-                                {latitude: f.lat, longitude: f.lon}, 
-                                {latitude: a.geolocation[0], longitude: a.geolocation[1] }
+                                    {latitude: f.lat, longitude: f.lon},
+                            {latitude: a.geolocation[0], longitude: a.geolocation[1]}
                             );
-                            included = (f.radius*1000 >= distMeters);
+                            included = (f.radius * 1000 >= distMeters);
                             //console.log(eq.name, 'dist', distMeters, included);
                         });
                         if (!included)
                             return;
                     }
-                    
+
 
                     eq.name = eq.name + ' Earthquake';
-                    
+
                     var mag = parseFloat(eq.name.substring(1, eq.name.indexOf(' ', 2)));
-					if (mag == undefined) {
-						//??
-						return;
-					}
+                    if (mag == undefined) {
+                        //??
+                        return;
+                    }
 
                     eq.addTag('Earthquake');
                     eq.add('eqMagnitude', mag);
@@ -115,20 +116,12 @@ exports.plugin = function($N) {
                             eq.add('eqDepth', depth);
                         }
                     }
-                    
-                    eq.removeTag('textarea'); //remove description
 
-					eq.removeTag('RSSItem');
-					eq.removeTag('rssItemURL');
+                    eq.removeTag('html'); //remove description
 
-                    /*
-                     if (a['dc:subject']) {
-                     if (a['dc:subject'].length >= 2) {
-                     var depth = a['dc:subject'][2]['#'];
-                     depth = parseFloat(depth.substring(0, depth.indexOf(' ')).trim())*1000.0;
-                     util.objAddValue(eq, 'eqDepth', depth );
-                     }
-                     }*/
+                    eq.removeTag('RSSItem');
+                    eq.removeTag('rssItemURL');
+                   
                     $N.pub(eq);
                 });
             }
@@ -138,47 +131,8 @@ exports.plugin = function($N) {
             that.interval = setInterval(update, updateIntervalMS);
             update();
 
-            /*
-            function restart() {
-                if (that.interval)
-                    clearInterval(that.interval);
-
-                $N.getObjectSnapshot('USGSEarthquake', function(err, e) {
-                    if (e) {
-                        var enabled = e.firstValue('Plugin.enable');
-                        var updateEvery = e.firstValue('Plugin.updateEvery');
-
-                        if (enabled) {
-                            if (updateEvery > 0)
-                                that.interval = setInterval(update, updateEvery * 1000);
-                            update();
-                        }
-                    }
-                });
-            }
-            this.restart = restart;
-            */
-
-            /*
-            $N.getObjectSnapshot('USGSEarthquake', function(err, doc) {
-                if (err) {
-                    var options = $N.objNew('USGSEarthquake', 'USGS Earthquake Plugin').addTag('Plugin');
-                    options.add('Plugin.enable', true);
-                    options.add('Plugin.updateEvery', 1000);
-                    $N.pub(options);
-                }
-                else {
-                    restart();
-                }
-            });
-            */
 
         },
-        /*onPub: function(x) {
-            if (x.id == 'USGSEarthquake') {
-                this.restart();
-            }
-        },*/
         stop: function(netention) {
         }
 

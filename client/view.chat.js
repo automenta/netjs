@@ -323,31 +323,6 @@ function lineClickFunction() {
 
     var x = $N.getObject(line.attr('xid'));
 
-    //var showingMini = (e.children().length > 0) && (!e.children().first().hasClass('objectView'));
-
-    /*function showMini() {
-     var name = x.name;
-     
-     var numReplies = $N.getReplies(x.id).length;
-     if (numReplies > 0) {
-     name += '<span style="opacity: 0.5">(...)</span>';
-     }
-     
-     
-     if (name.length > 0)
-     e.append(name + '<br/>');
-     
-     var desc = objDescription(x);
-     if (desc.length > 0) {
-     e.append(desc + '<br/>');
-     }
-     var firstMedia = objFirstValue(x, 'media');
-     if (firstMedia) {
-     e.append('<img src="' + firstMedia + '"/><br/>');
-     }        
-     
-     
-     }*/
 
     function showFull() {
         var s = newObjectSummary(x, {
@@ -430,9 +405,8 @@ function newChatInput(onSend) {
     var webcamButton = $('<button title="Add Webcam..."><img style="height: 1em" src="icon/play.png"></button>');
     webcamButton.click(function() {
         newWebcamWindow(function(imgURL) {
-            //var description = '<a href="' + imgURL + '"><img src="' + imgURL + '"></img></a>';
             if (onSend)
-                onSend(inputBar.val(), null, {id: 'media', value: imgURL});
+                onSend(inputBar.val(), null, {id: 'gif', value: imgURL});
             inputBar.val('');
         });
     });
@@ -447,8 +421,6 @@ function newChatInput(onSend) {
     });
     d.append(moreButton);
 
-    /*var whatButton = $('<button>What</button>');
-     d.append(whatButton);*/
 
     return d;
 }

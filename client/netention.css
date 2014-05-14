@@ -936,8 +936,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     padding: 0.25em;
 }
 .embeddedHTML {
-    border: 1px solid gray;
-    height: 12em;
+    border: 1px solid rgba(127,127,127,0.5);
+    max-height: 12em;
     overflow: auto;
     resize: vertical;
 }

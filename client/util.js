@@ -254,7 +254,7 @@ function objName(x, newName) {
 }
 exports.objName = objName;
 
-var primitiveRegEx = /^(boolean|text|textarea|integer|real|url|object|spacepoint|timepoint|timerange|sketch|media)$/;
+var primitiveRegEx = /^(boolean|text|html|integer|real|url|object|spacepoint|timepoint|timerange|sketch|markdown|jpg|png|svg|gif)$/;
 
 function isPrimitive(t) {
     return primitiveRegEx.test(t);
@@ -263,7 +263,7 @@ exports.isPrimitive = isPrimitive;
 
 function objAddDescription(x, desc) {
     return objAddValue(x, {
-        id: 'textarea',
+        id: 'html',
         value: desc
     });
 }
@@ -271,7 +271,7 @@ exports.objAddDescription = objAddDescription;
 
 function objRemoveDescription(x) {
     for (var i = 0; i < x.value.length; i++) {
-        if (x.value[i].id == 'textarea')
+        if (x.value[i].id == 'html')
             return objRemoveDescription(objRemoveValue(x, i));
     }
 }
@@ -301,7 +301,7 @@ function objDescription(x) {
     if (x.value) {
         for (var i = 0; i < x.value.length; i++) {
             var ii = x.value[i];
-            if ((ii.id == 'textarea') && (ii.value)) {
+            if ((ii.id === 'html') && (ii.value)) {
                 c = c + ii.value + ' ';
             }
         }
@@ -565,14 +565,35 @@ function objFirstValue(object, id, defaultValue) {
         return defaultValue;
 
     if (object.value) {
-        for (var k = 0; k < object.value.length; k++) {
-            if (object.value[k].id == id)
-                return object.value[k].value;
+        if (Array.isArray(id)) {
+            for (var i = 0; i < object.value.length; i++) {
+                var v = object.value[i];
+                if (id.indexOf(v.id)!==-1)
+                    return v.value;            
+            }
+        }
+        else {
+            for (var i = 0; i < object.value.length; i++) {
+                var v = object.value[i];
+                if (v.id === id)
+                    return v.value;            
+            }
         }
     }
     return defaultValue;
 }
 exports.objFirstValue = objFirstValue;
+
+function isPrimitiveImage(id) {
+    //TODO replace with regexp
+    return (id === 'jpg') || (id == 'png') || (id == 'gif') || (id == 'svg');
+}
+exports.isPrimitiveImage = isPrimitiveImage;
+
+function objFirstImage(object) {
+    objFirstValue(object, ['jpg', 'png', 'svg', 'gif']);
+}
+exports.objFirstImage = objFirstImage;
 
 function objSetFirstValue(object, id, newValue) {
     var existingValue = objFirstValue(object, id, null);
@@ -1157,7 +1178,7 @@ exports.objExpand = objExpand;
 
 //returns full-text representation of an objectID
 //TODO omit HTML tags
-//TODO include HTML/Markdown "media" fields
+//TODO include HTML/Markdown fields
 function objText(x) {
     return (objName(x) + ' ' + objDescription(x)).trim();
 }

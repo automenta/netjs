@@ -1032,7 +1032,7 @@ exports.start = function(options) {
 
     var staticContentConfig = {
         //PRODUCTION: oneYear
-        maxAge: 86400000
+        maxAge: 0
     };
 
 

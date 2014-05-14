@@ -48,7 +48,7 @@ function loadCSS(url, med) {
                 href: url,
                 media: (med !== undefined) ? med : ""
             })
-            );
+    );
 }
 
 function loadJS(url) {
@@ -444,7 +444,7 @@ function viewRead(urlstring) {
                     type = 'html';
             }
 
-            x.add('media', {content: h, type: type});
+            x.add(type, h);
             $N.notice(x);
         }).error(function(e) {
             x.addDescription('Error Loading', JSON.stringify(e));

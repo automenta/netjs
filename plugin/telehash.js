@@ -31,7 +31,7 @@ exports.plugin = function($N) { return {
                 properties: {
                     'telehashname': {name: 'Hashname', type: 'text', min: 1, max: 1, readonly: true},
                     'telehashAddress': {name: 'IP:port', type: 'text', min: 1, max: 1, default: ('0.0.0.0:' + DEFAULT_TELEHASH_PORT)},
-                    'telehashPublicKey': {name: 'Public key', type: 'textarea', min: 1, max: 1},
+                    'telehashPublicKey': {name: 'Public key', type: 'text', min: 1, max: 1},
                     'connected': {name: 'Connected', type: 'boolean'},
                     'lastReceived': {name: 'Last received', type: 'timepoint'},
 //                    'thSeedsURL': { name: 'seeds.json URL', type: 'url' }                    

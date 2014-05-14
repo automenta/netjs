@@ -17,7 +17,7 @@ var addWebTags = function($N) {
                 },
                 'urlFetchPeriod': {
                     name: 'Update Interval (minutes)',
-                    type: 'real' /* number */ ,
+                    type: 'real' /* number */,
                     default: "10",
                     max: 1
                 },
@@ -28,10 +28,10 @@ var addWebTags = function($N) {
                 'lastURLFetch': {
                     name: 'Last Update',
                     type: 'timepoint',
-					readonly: true
+                    readonly: true
                 }
-				//indexLinks
-				//newObjectForEachArticle
+                //indexLinks
+                //newObjectForEachArticle
             }
         },
         {
@@ -48,31 +48,30 @@ var addWebTags = function($N) {
             uri: 'WebURL',
             name: 'Web URL',
             properties: {
-				'urlAddress': null,
+                'urlAddress': null,
                 'urlFetchPeriod': null,
                 'lastURLFetch': null
-				//filters
-				//scrapers
+                        //filters
+                        //scrapers
             }
         },
-
-    ], ['Internet']);    
+    ], ['Internet']);
 };
 exports.addWebTags = addWebTags;
 
 
-exports.plugin = function ($N) {
-    
+exports.plugin = function($N) {
+
 
     return {
         name: 'Web Input',
         description: 'Periodically monitors web content (HTML, RSS, etc..) for new content and saves it',
         version: '1.0',
         author: 'http://netention.org',
-        start: function (options) {
+        start: function(options) {
 
-			var minUrlFetchPeriod = options.minUrlFetchPeriod || 1; //minutes
-			var updatePeriod = options.updatePeriod || 5; //minutes
+            var minUrlFetchPeriod = options.minUrlFetchPeriod || 1; //minutes
+            var updatePeriod = options.updatePeriod || 5; //minutes
 
             addWebTags($N);
 
@@ -84,16 +83,17 @@ exports.plugin = function ($N) {
 
                 that.feeds = {};
 
-                $N.getObjectsByTag(['RSSFeed','WebURL'], function (x) {
+                $N.getObjectsByTag(['RSSFeed', 'WebURL'], function(x) {
                     that.feeds[x.id] = x;
                 }, function() {
-					if (f) f();
-				});
+                    if (f)
+                        f();
+                });
 
             }
 
 
-			function updateFeed(f) {
+            function updateFeed(f) {
                 var needsFetch = false;
 
                 if (!$N.objFirstValue(f, 'lastURLFetch')) {
@@ -104,7 +104,7 @@ exports.plugin = function ($N) {
                     var fp = $N.objFirstValue(f, 'urlFetchPeriod'); //in minutes
                     fp = Math.max(fp, minUrlFetchPeriod);
 
-                    if (fp*60.0 < age) {
+                    if (fp * 60.0 < age) {
                         needsFetch = true;
                     } else {
                         //console.log(fp - age, 'seconds to go');
@@ -117,56 +117,56 @@ exports.plugin = function ($N) {
                     var furi = $N.objValues(f, 'urlAddress');
 
                     if (furi) {
-						if (f.hasTag('WebURL')) {
-							f.removeTag('media');
-						}
+                        if (f.hasTag('WebURL')) {
+                            f.removeTag('html');
+                        }
 
                         for (var ff = 0; ff < furi.length; ff++) {
-							if (f.hasTag('RSSFeed')) {
-		                        RSSFeed($N, furi[ff], function (a) {
-		                            //TODO add extra tags from 'f'
-		                            $N.pub(a);
-		                            return a;
-		                        });
-							}
-							if (f.hasTag('WebURL')) {
-								fetchURL($N, f, furi[ff]);
-							}
+                            if (f.hasTag('RSSFeed')) {
+                                RSSFeed($N, furi[ff], function(a) {
+                                    //TODO add extra tags from 'f'
+                                    $N.pub(a);
+                                    return a;
+                                });
+                            }
+                            if (f.hasTag('WebURL')) {
+                                fetchURL($N, f, furi[ff]);
+                            }
                         }
                     } else {
                         //set error message as f property
-						//console.log(f.name, ' missing url');
+                        //console.log(f.name, ' missing url');
                     }
 
                     $N.objSetFirstValue(f, 'lastURLFetch', Date.now());
                     $N.pub(f);
                 }
-			}
-			this.updateFeed = updateFeed;
+            }
+            this.updateFeed = updateFeed;
 
-            var ux = function () {
-                updateAll(function () {
+            var ux = function() {
+                updateAll(function() {
                     for (var k in that.feeds) {
-						updateFeed(that.feeds[k]);
+                        updateFeed(that.feeds[k]);
                     }
                 });
             };
 
-            this.loop = setInterval(ux, updatePeriod*60*1000);
+            this.loop = setInterval(ux, updatePeriod * 60 * 1000);
             ux();
 
         },
-        onPub: function (x) {
-            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL') ) {
-				this.updateFeed(x);
-				this.feeds[x.id] = x;
-			}
+        onPub: function(x) {
+            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL')) {
+                this.updateFeed(x);
+                this.feeds[x.id] = x;
+            }
         },
-		onDelete: function(x) { 
-            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL') )
-				delete feeds[x.id];
-		},
-        stop: function () {
+        onDelete: function(x) {
+            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL'))
+                delete feeds[x.id];
+        },
+        stop: function() {
             if (this.loop) {
                 clearInterval(this.loop);
                 this.loop = null;
@@ -176,33 +176,33 @@ exports.plugin = function ($N) {
 };
 
 function fetchURL($N, x, url) {
-	request.get({
-		url: url,
-		jar:true
-	}, function(error, response, body) {
-		var content;
-		if (error)
-			content = '<b>Error:</b> ' + error;
-		else {
-	    	var $ = cheerio.load(body);
-			$('script').remove();
-			$('style').remove();	
-			content = $('body').html();
-			if (!content || content.length == 0)
-				content = body;
-			content = content.trim();
-		}
+    request.get({
+        url: url,
+        jar: true
+    }, function(error, response, body) {
+        var content;
+        if (error)
+            content = '<b>Error:</b> ' + error;
+        else {
+            var $ = cheerio.load(body);
+            $('script').remove();
+            $('style').remove();
+            content = $('body').html();
+            if (!content || content.length == 0)
+                content = body;
+            content = content.trim();
+        }
 
-		x.add({id: 'media', value: { type: 'html', content: content } });
+        x.add({id: 'html', value: content});
 
-		$N.pub(x);
-	});
+        $N.pub(x);
+    });
 }
 
-var RSSFeed = function ($N, url, perArticle, whenFinished /*, onlyItemsAfter*/ ) {
+var RSSFeed = function($N, url, perArticle, whenFinished /*, onlyItemsAfter*/) {
 
     if (!process)
-        process = function (x) {
+        process = function(x) {
             return x;
         };
 
@@ -232,13 +232,13 @@ var RSSFeed = function ($N, url, perArticle, whenFinished /*, onlyItemsAfter*/ )
                 pp = pp['#'].split(' ');
                 $N.objAddGeoLocation(x, pp[0], pp[1]);
             }
-            a.geolocation = [ pp[0], pp[1] ];
+            a.geolocation = [pp[0], pp[1]];
         }
         if (a['geo:lat']) {
             var lat = parseFloat(a['geo:lat']['#']);
             var lon = parseFloat(a['geo:long']['#']);
             $N.objAddGeoLocation(x, lat, lon);
-            a.geolocation = [ lat, lon ];
+            a.geolocation = [lat, lon];
         }
         $N.objAddTag(x, 'RSSItem');
         $N.objAddValue(x, 'rssItemURL', a['link']);
@@ -253,25 +253,25 @@ var RSSFeed = function ($N, url, perArticle, whenFinished /*, onlyItemsAfter*/ )
     var fp = new feedparser();
 
     request(url).pipe(fp)
-        .on('error', function (error) {
-            // always handle errors
-            console.log('RSS request error: ' + url + ' :' + error);
-        }).on('meta', function (data) {
-            // always handle errors
-            //onArticle(data);
-            //console.log(data, 'META');
-        }).on('readable', function () {
-            var stream = this,
+            .on('error', function(error) {
+                // always handle errors
+                console.log('RSS request error: ' + url + ' :' + error);
+            }).on('meta', function(data) {
+        // always handle errors
+        //onArticle(data);
+        //console.log(data, 'META');
+    }).on('readable', function() {
+        var stream = this,
                 item;
-            while (item = stream.read()) {
-                //console.log('Got article: %s', item.title || item.description);
-                onArticle(item);
-            }
-        }).on('end', function () {
-            if (whenFinished) {
-                whenFinished();
-            }
-        }).resume();
+        while (item = stream.read()) {
+            //console.log('Got article: %s', item.title || item.description);
+            onArticle(item);
+        }
+    }).on('end', function() {
+        if (whenFinished) {
+            whenFinished();
+        }
+    }).resume();
 
 };
 

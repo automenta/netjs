@@ -3,7 +3,7 @@ var supressCheckboxTagFilter = false;
 
 /* Sharetribe.com inspired view */
 function newShareView(v) {
-    var shareTags = configuration.shareTags; 
+    var shareTags = configuration.shareTags;
     var shareCategories = configuration.shareCategories;
 
     clearFocus();
@@ -11,13 +11,9 @@ function newShareView(v) {
 
     var frame = newDiv().addClass('Share').appendTo(v);
 
-    //var header = newDiv().addClass('Header').appendTo(frame);
-    //header.append('<span class="Logo">' + configuration.siteName + '</span>');
 
     var selfmenu = newDiv();
-
-
-	var searchMenu = newDiv();
+    var searchMenu = newDiv();
 
     //var searchMenu = newDiv().addClass('SearchMenu').appendTo(frame);
     var searchInput = $('<input type="text" placeholder="What are you looking for?"/>').appendTo(searchMenu);
@@ -43,15 +39,15 @@ function newShareView(v) {
         var gridButton = $('<button>Grid</button>');
         var mapButton = $('<button>Map</button>');
 
-		sidebar.append(selfmenu, '<hr/>');
+        sidebar.append(selfmenu, '<hr/>');
 
         sidebar.append(listButton, gridButton, mapButton, '<br/><hr/>');
 
-		sidebar.append(searchMenu, '<hr/>');
+        sidebar.append(searchMenu, '<hr/>');
 
         var modeCombo = $('<select>').appendTo(sidebar);
 
-		var sb = newDiv().appendTo(sidebar);
+        var sb = newDiv().appendTo(sidebar);
 
         var typeFilter = newCheckboxTagFilter(shareTags);
         typeFilter.appendTo(sb);
@@ -65,38 +61,38 @@ function newShareView(v) {
         modeCombo.append('<option value="all">All</option>');
         //modeCombo.append('<option value="posts">Posts</option>');
         modeCombo.append('<option value="users">Users</option>');
-		modeCombo.change(function() {
-        	var v = modeCombo.val();
+        modeCombo.change(function() {
+            var v = modeCombo.val();
 
-	        var f = $N.focus();
+            var f = $N.focus();
 
-			supressCheckboxTagFilter = true;
-			typeFilter.find('input').removeAttr('checked');
-			catFilter.find('input').removeAttr('checked');
-			supressCheckboxTagFilter = false;
+            supressCheckboxTagFilter = true;
+            typeFilter.find('input').removeAttr('checked');
+            catFilter.find('input').removeAttr('checked');
+            supressCheckboxTagFilter = false;
 
-			if (v == 'all') {
-				sb.show();
-				f.value = [];
-			}
-			else if (v == 'users') {
-				sb.hide();
+            if (v == 'all') {
+                sb.show();
+                f.value = [];
+            }
+            else if (v == 'users') {
+                sb.hide();
 
-				f.value = [];
-				objAddTag(f, 'User');
-			}
-			else if (v == 'posts') {
-				sb.show();
-				f.value = [];
-			}
+                f.value = [];
+                objAddTag(f, 'User');
+            }
+            else if (v == 'posts') {
+                sb.show();
+                f.value = [];
+            }
 
-	        $N.setFocus(f);
-	        renderFocus(true);
- 		});
+            $N.setFocus(f);
+            renderFocus(true);
+        });
 
         sidebar.append('<hr/>');
 
-		//distance filter
+        //distance filter
         var distCombo = $('<select>').appendTo(sidebar);
         distCombo.append('<option>Anywhere</option>');
         distCombo.append('<option>&lt; 1 km</option>');
@@ -108,7 +104,7 @@ function newShareView(v) {
         sidebar.append('<hr/>');
 
 
-		//user filter
+        //user filter
         var userSelect = newAuthorCombo($N.focus().who, true).appendTo(sidebar);
         userSelect.change(function(n) {
             var v = userSelect.val();
@@ -123,24 +119,24 @@ function newShareView(v) {
             renderFocus(true);
         });
 
-		//trust filter
+        //trust filter
         var itrust = $('<input type="checkbox"/>');
         var trustme = $('<input type="checkbox"/>');
 
-		function updateTrustFilter() {
+        function updateTrustFilter() {
             var itrusting = itrust.is(':checked');
             var trustingme = trustme.is(':checked');
 
-			var f = $N.focus();
-			if (itrusting || trustingme) {
-				f.userRelation = { itrust: itrusting, trustme: trustingme };
-			}
-			else
-				delete f.userRelation;
+            var f = $N.focus();
+            if (itrusting || trustingme) {
+                f.userRelation = {itrust: itrusting, trustme: trustingme};
+            }
+            else
+                delete f.userRelation;
 
-			$N.setFocus(f);
-			renderFocus(true);
-		}
+            $N.setFocus(f);
+            renderFocus(true);
+        }
 
         itrust.click(updateTrustFilter);
         sidebar.append('<br/>', itrust, 'Sources I Trust', '<br/>');
@@ -197,8 +193,8 @@ function newShareView(v) {
         updateContent();
     };
 
-	//Not needed because when this function clearFocus(), it will trigger the onChange later.
-    	//frame.onChange();
+    //Not needed because when this function clearFocus(), it will trigger the onChange later.
+    //frame.onChange();
 
 
     return frame;
@@ -209,7 +205,8 @@ function newCheckboxTagFilter(tags) {
     _.each(tags, function(t) {
         var i = $('<input type="checkbox"/>');
         i.click(function() {
-			if (supressCheckboxTagFilter) return;
+            if (supressCheckboxTagFilter)
+                return;
 
             var checked = i.is(':checked');
             var f = $N.focus();
@@ -240,76 +237,76 @@ function newObjectSummary2(x) {
 
     var img = newDiv().addClass('ShareSummaryImage').appendTo(d);
 
-    var firstMedia = objFirstValue(x, 'media');
+    var firstMedia = objFirstImage(x);
 
     var imgurl;
     if ((firstMedia) && (typeof firstMedia === "string")) {
         imgurl = firstMedia;
     }
-	else {
-		imgurl = getTagIcon(x) || getTagIcon(null);// 'icon/placeholder.png';
-	}
+    else {
+        imgurl = getTagIcon(x) || getTagIcon(null);// 'icon/placeholder.png';
+    }
 
-    img.append( newEle('img').attr('src', imgurl) );
+    img.append(newEle('img').attr('src', imgurl));
 
     var e = newDiv().addClass('ShareSummaryContent').appendTo(d);
-	var xnn = x.name || '?';
-    var titleLink = newEle('a').append( newEle('h1').html(xnn) )
-		.click(function() {
-		    newPopupObjectView(x, true);
-		});
+    var xnn = x.name || '?';
+    var titleLink = newEle('a').append(newEle('h1').html(xnn))
+            .click(function() {
+                newPopupObjectView(x, true);
+            });
     e.append(titleLink, newMetadataLine(x));
 
 
     var actionLine = newDiv().addClass('ShareSummaryAction').appendTo(e);
     if ($N.id() == x.author) {
         var editButton = newEle('button').text('Edit').appendTo(actionLine)
-		    .click(function() {
-		        newPopupObjectEdit(x, true);
-		    });
+                .click(function() {
+                    newPopupObjectEdit(x, true);
+                });
 
         if (!objHasTag(x, 'User')) {
             var deleteButton = newEle('button').text('Delete').appendTo(actionLine)
-		        .click(function() {
-		            if (confirm('Permanently delete \"' + x.name + '\"?'))
-		                $N.deleteObject(x);
-		        });
+                    .click(function() {
+                        if (confirm('Permanently delete \"' + x.name + '\"?'))
+                            $N.deleteObject(x);
+                    });
         }
     }
     var replyButton = newEle('button').text('Reply').appendTo(actionLine)
-		.click(function() {
-			newReplyPopup(x);
-		});
-	var numReplies = $N.getReplies(x).length;
-	if (numReplies) {
-		actionLine.append( newEle('span').addClass('ReplyInfo').html('&nbsp;(Replies: ' + numReplies + ')') );
-	}
+            .click(function() {
+                newReplyPopup(x);
+            });
+    var numReplies = $N.getReplies(x).length;
+    if (numReplies) {
+        actionLine.append(newEle('span').addClass('ReplyInfo').html('&nbsp;(Replies: ' + numReplies + ')'));
+    }
 
 
-	var nod = newObjectDetails(x);
-	if (nod)
-		e.append(nod.css('clear', 'both'));
+    var nod = newObjectDetails(x);
+    if (nod)
+        e.append(nod.css('clear', 'both'));
 
     if (x.author) {
         var authorline = newEle('span').addClass('ShareSummaryAuthor');
 
         var A = $N.getObject(x.author);
-		if (A) {
-		    authorline.append(newAvatarImage(A).attr('style', 'height: 1.5em; vertical-align: middle'));
-		    var authorLink = $( newEle('a').html(A.name) )
-				.appendTo(authorline)
-				.click(function() {
-				    newPopupObjectView(A, true);
-				});
-		}
-		else {
-			//missing author?
-		}
+        if (A) {
+            authorline.append(newAvatarImage(A).attr('style', 'height: 1.5em; vertical-align: middle'));
+            var authorLink = $(newEle('a').html(A.name))
+                    .appendTo(authorline)
+                    .click(function() {
+                        newPopupObjectView(A, true);
+                    });
+        }
+        else {
+            //missing author?
+        }
 
         actionLine.append(authorline);
     }
 
-    d.append( newDiv().attr('style', 'clear: both') );
+    d.append(newDiv().attr('style', 'clear: both'));
     return d;
 }
 

@@ -47,7 +47,7 @@ var generalTags = [
     {uri: 'Human', name: 'Human', tag: 'Thing', 
         properties: {
             'currentRole': {name: 'Current Role', type: 'text'},
-            'biography': {name: 'Biography', type: 'textarea'},
+            'biography': {name: 'Biography', type: 'html'},
             'birthdate': {name: 'Birthdate', type: 'timepoint'},
             //age: { name: 'Age', type: 'function', value: function(x) { return = now - getProperty(x, 'birthdate').val() ... } }
 
@@ -87,7 +87,7 @@ var generalTags = [
 
     {uri: 'Item', name: 'Item',
         properties: {
-            'purpose': {name: 'Purpose', type: 'textarea'},
+            'purpose': {name: 'Purpose', type: 'html'},
             'quantity': {name: 'Quantity', type: 'integer'},
             //'stockCount': {name: 'Stock Count', type: 'integer'},
             'individualWeight': {name: 'Weight (individual)', type: 'real'},
@@ -269,7 +269,7 @@ var generalTags = [
             'goalDeadline': {name: 'Deadline', type: 'timepoint', max: 1},
             'goalCost': {name: 'Cost', type: 'real', default: 0, units: currencyUnits},
             'goalBudgeted': {name: 'Budgeted', description: 'How much funding currently budgeted toward this', type: 'real', default: 0, units: currencyUnits},
-            'goalObjective': {name: 'Objective', type: 'textarea', description: 'What to accomplish and how to measure progress'}
+            'goalObjective': {name: 'Objective', type: 'html', description: 'What to accomplish and how to measure progress'}
 
             //status: not started, planning, in progress, completed
         },
@@ -581,15 +581,15 @@ var generalTags = [
 var emotionTags = [
     {uri: 'Emotion', name: 'Emotion', tag: ['Concept'], description: 'How something feels or seems',
         properties: {
-			'emotionWhatDoing': {name: 'What I am Doing', type: 'textarea'},
+			'emotionWhatDoing': {name: 'What I am Doing', type: 'html'},
 			'emotionWhoWith': {name: 'Who I am With', type: 'object', tag: 'Human' },
-            'undulyExtremeMeaning': {name: 'Is the meaning I’m assigning to this event unduly extreme?', type: 'textarea'},
-            'harshConclusions': {name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', type: 'textarea'},
-            'drawingGlobalConclusions': {name: 'Am I drawing global conclusions from this isolated event?', type: 'textarea'},
-            'decidingTotalDefinition': {name: 'Am I deciding that this specific event totally defines who it affects?', type: 'textarea'},
-            'decidingAffectedFuture': {name: 'Am I deciding that this specific event affects the future of who it affects?', type: 'textarea'},
-            'feelBetterOrWorse': {name: 'Does this meaning lead me to feel better or worse about myself?', type: 'textarea'},
-            'furtherGoalAction': {name: 'Is it encouraging further goal-directed action or discouraging me to give up?', type: 'textarea'}
+            'undulyExtremeMeaning': {name: 'Is the meaning I’m assigning to this event unduly extreme?', type: 'html'},
+            'harshConclusions': {name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', type: 'html'},
+            'drawingGlobalConclusions': {name: 'Am I drawing global conclusions from this isolated event?', type: 'html'},
+            'decidingTotalDefinition': {name: 'Am I deciding that this specific event totally defines who it affects?', type: 'html'},
+            'decidingAffectedFuture': {name: 'Am I deciding that this specific event affects the future of who it affects?', type: 'html'},
+            'feelBetterOrWorse': {name: 'Does this meaning lead me to feel better or worse about myself?', type: 'html'},
+            'furtherGoalAction': {name: 'Is it encouraging further goal-directed action or discouraging me to give up?', type: 'html'}
         }
     },
     {uri: 'Emotion.calm', name: 'Calm', tag: ['Emotion']}, //neutral

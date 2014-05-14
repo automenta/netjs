@@ -90,7 +90,7 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
    * **uri**
    * **name**
    * **description** (optional)
-   * **type** - data type
+   * **type** - data type; analogous to MIME Content-type
         * **boolean**
         * **integer**
         * **real** (floating point number)
@@ -99,11 +99,13 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
             * _TODO:_ minValue, maxValue (optional: float)
             * _TODO:_ mode (optional: "numeric"|"slider"|"spinner"; slider available if minValue and maxValue specified)
             * _TODO:_ increment (optional: float)
-        * **text** (string)
-        * **textarea** (multiline HTML string)
-            * _TODO:_ html (optional: boolean, default=true; if true, activates rich-text editor)
         * **url** (URL string)
             * _TODO:_ iframe (boolean, width, height)
+        * **text** (string)
+        * **html** (multiline HTML string)
+            * _TODO:_ html (optional: boolean, default=true; if true, activates rich-text editor)
+        * **jpg**, **gif**, **png**, **svg** (images)
+        * **markdown** (markdown content, renderable to HTML)
         * **spacepoint** (point in space)
             * latitude
             * longitude
@@ -119,10 +121,6 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
         * **sketch** (vector drawing)
         * **object** (reference to another object)
             * _TODO_: tag restrictions (optional)
-        * **media** (URL to a file, image, video, or other embeddable content)
-            * type: image
-            * type: markdown
-            * type: html
         * **timeseries** (timeseries data, multiple keyed values per time index)
         * _TODO:_ **select**
             * options (string array)
