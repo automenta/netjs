@@ -22,7 +22,7 @@ exports.plugin = function($N) {
             $N.httpserver.post('/githubhook', function(req, res, next) {
 
                 try {
-                    var g = JSON.parse(_.keys(req.body)[0]); //JSON.parse(req.body.payload);                
+                    var g = JSON.parse(req.body); //JSON.parse(req.body.payload);                
 
                     $N.pub(new $N.nobject().setName("GitHub")
                                     .addDescription(JSON.stringify(g,null,4)));
