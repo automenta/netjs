@@ -125,22 +125,12 @@ div.olMapViewport {
     width: 98%;
     height: 5em;
 }
-.tagSection {
-    width: 100%;
-    padding-top: 0.75em;
-    margin-top: 0.75em;
-    margin-bottom: 0.75em;
-    border-top: 1px solid gray;
-    clear: both;
-}
-.tagSectionEditable {
-    cursor: crosshair;
-}
+
 .propertySection .tagLabel img {
     margin-left: 1.5em;
 }
 .tagDescription {
-    width: 100%;
+    width: 98.5%;
     height: 5em;
 }
 .tagLabel {
@@ -159,64 +149,92 @@ div.olMapViewport {
 .TagButtonIcon {
     height: 1em;
 }
-.tag0 {
-    opacity: 0.5;
-}
-.tag25 {
-    opacity: 0.7;
-}
-.tag50 {
-    opacity: 0.8;
-}
-.tag75 {
-    opacity: 0.9;
-}
-.tag100 {
-    opacity: 1.0;
-}
-* .tagButtons {
+
+.tagButtons {
     font-weight: bold;
     position: relative;
     right: 0;
     float: right;
     opacity: 0.5;
+    margin-left: 0.5em;
+    margin-bottom: 15px;
 }
-.tagButtonsLeft {
-    float: left !important;
-    left: 0 !important;
+
+.tagSection {
+    width: 100%;
+    clear: both;
+    padding: 0.5%;
+    margin: 0.5%;
+    margin-left: 0;
+    margin-top: 0;
+    border: 1px solid rgba(127,127,127,0.5);    
 }
-.tagButton {
+
+.tagSectionHover {
+    border: 1px solid blue;
+    background-color: rgba(255,255,255,0.1);
+} 
+
+.ObjectEditDiv .tag0, 
+.ObjectEditDiv .tag25, 
+.ObjectEditDiv .tag50, 
+.ObjectEditDiv .tag75 {
+    float: left; width: auto; clear: none;
+}
+
+.ObjectEditDiv .tag100 .tagButtons {
+    margin-bottom: 0px;
+}
+
+.ObjectEditDiv .tag0 .tagButtons button, 
+.ObjectEditDiv .tag25 .tagButtons button, 
+.ObjectEditDiv .tag50 .tagButtons button, 
+.ObjectEditDiv .tag75 .tagButtons button {
+    padding: 0;
+}
+.ObjectEditDiv .tag50 {    min-width: 23%;    }
+.ObjectEditDiv .tag75 {    min-width: 48%;      }
+.ObjectEditDiv .tag100 {    width: 99%; min-width: 99%; max-width: 99%;      }
+
+.tag0 { opacity: 0.25;  }
+.tag25 { opacity: 0.5; }
+.tag50 { opacity: 0.7;  }
+.tag75 { opacity: 0.95;  }
+.tag100 { opacity: 1.0; }
+
+.objectEditDiv {
+    height: 100%;
+}
+.tagSectionControl {
+    border: 0;
+    border-top: 1px solid rgba(127,127,127,0.25); 
+    margin-top:0.5em;
+    text-align: right;    
+}
+.propertySection .tagLabel {
+    font-size: 90%;
+    font-weight: normal;
+}
+.tagSectionEditable {
+}
+
+.tagButtons button {
+    border: 0;
+    background: transparent;
+    margin: 0;
     margin-left: 0.1em;
     margin-right: 0.1em;
     font-weight: bold;
     font-size: 125%;
 }
-.tagButtons button {
-    margin: 0;
-    height: 1em;
-    width: 0.618em;
-    border: none;
-    opacity: 0.9;
+
+
+
+.tagButtonsLeft {
+    float: left !important;
+    left: 0 !important;
 }
-.tagButtons button:nth-child(2) {
-    background-color: #f00;
-}
-.tagButtons button:nth-child(3) {
-    background-color: #080;
-}
-.tagButtons button:nth-child(4) {
-    background-color: #0a0;
-}
-.tagButtons button:nth-child(5) {
-    background-color: #0c0;
-}
-.tagButtons button:nth-child(6) {
-    background-color: #1f1;
-}
-.tagButtonSelected {
-    border-bottom: 4px solid white !important;
-    opacity: 1.0 !important;
-}
+
 .tagSectionHovered {
     background-color: rgba(255, 255, 255, 0.8);
 }

@@ -356,6 +356,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
 
 
+            var tt = null;
             for (var i = 0; i < x.value.length; i++) {
                 var t = x.value[i];
 
@@ -364,8 +365,11 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         continue;
 
                 tags.push(t.id);
-                var tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
-                d.append(tt);
+                tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange).appendTo(d);
+            }
+            if (tt!=null) {
+                //hide the last tag section's down button
+                tt.find('.moveDown').hide();
             }
 
             var missingProp = [];
@@ -447,7 +451,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         d.addClass('ObjectEditDiv');
 
         if ((hideWidgets !== true) && (!x.readonly)) {
-            var addButtonWrap = newDiv().addClass('tagSection').css('text-align', 'right');
+            var addButtonWrap = newDiv().addClass('tagSection').addClass('tagSectionControl');
+                    
 
             var addButtons = newEle('span').appendTo(addButtonWrap);
 
@@ -669,11 +674,13 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
     var d = newDiv().addClass('tagSection');
 
-    /*d.hover( function() {
-     d.addClass('tagSectionHovered');
-     }, function() {
-     d.removeClass('tagSectionHovered');
-     } );*/
+    if (configuration.device !== configuration.MOBILE) {
+        d.hover( function() {
+            d.addClass('tagSectionHover');
+        }, function() {
+            d.removeClass('tagSectionHover');
+        } );
+     }
 
     if (strength === undefined)
         strength = 1.0;
@@ -697,7 +704,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
          //tagButtons.fadeOut();
          });*/
 
-        d.click(function() {
+        /*d.click(function() {
             if (!tagButtons.is(':visible')) {
                 tagButtons.fadeIn();
             } else {
@@ -705,66 +712,52 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             }
         });
 
-        tagButtons.hide();
+        tagButtons.hide();*/
 
         if (index > 0) {
-            var upButton = $('<a title="Move Up">^</a>');
+            var upButton = $('<button title="Move Up">&utrif;</button>');
             upButton.addClass('tagButton');
-            upButton.click(function() {
+            upButton.mousedown(function() {
                 onOrderChange(index, index - 1);
             });
             tagButtons.append(upButton);
-        } else {
-            var downButton = $('<a title="Move Down">v</a>');
-            downButton.addClass('tagButton');
-            downButton.click(function() {
+        } 
+        /*if (index <*/ {
+            var downButton = $('<button title="Move Down">&dtrif;</button>');
+            downButton.addClass('tagButton').addClass('moveDown');
+            downButton.mousedown(function() {
                 onOrderChange(index, index + 1);
             });
             tagButtons.append(downButton);
+        }      
+
+
+        if (strength > 0) {
+            var minusButton = newEle('button').html('-').appendTo(tagButtons).mousedown(function() {
+                var newstrength = Math.max(0, strength - 0.25);
+                if (newstrength!==strength)
+                    onStrengthChange(index,  newstrength);
+            });
         }
+        
+        if (strength < 1.0) {
+            var plusButton = newEle('button').html('+').appendTo(tagButtons).mousedown(function() {
+                var newstrength = Math.min(1.0, strength + 0.25);
+                if (newstrength!==strength)
+                    onStrengthChange(index,  newstrength);
+            });
+            var strengthAdjust = newDiv().appendTo(tagButtons)
+                    .attr('style','z-index:-1; position:absolute; bottom: -10px; height: 10px; background-color: black; width:100%');
 
-        {
-            var disableButton = $('<button value="0" title="Disable">&nbsp;</button>');
-            var p25Button = $('<button value="0.25"  title="25%">&nbsp;</button>');
-            var p50Button = $('<button value="0.5" title="50%">&nbsp;</button>');
-            var p75Button = $('<button value="0.75" title="75%">&nbsp;</button>');
-            var p100Button = $('<button value="1.0" title="100%">&nbsp;</button>');
-
-            tagButtons.append(disableButton, p25Button, p50Button, p75Button, p100Button);
-
-            var currentButton = null;
-            if (strength === 0)
-                currentButton = disableButton;
-            if (strength === 1.0)
-                currentButton = p100Button;
-            if (strength === 0.75)
-                currentButton = p75Button;
-            if (strength === 0.5)
-                currentButton = p50Button;
-            if (strength === 0.25)
-                currentButton = p25Button;
-            if (currentButton)
-                currentButton.addClass('tagButtonSelected');
-
-            function _onStrengthChange() {
-                onStrengthChange(index, parseFloat($(this).attr('value')));
-                return false;
-            }
-
-            disableButton.click(_onStrengthChange);
-            p25Button.click(_onStrengthChange);
-            p50Button.click(_onStrengthChange);
-            p75Button.click(_onStrengthChange);
-            p100Button.click(_onStrengthChange);
+            var strengthIndicator = newDiv().html('&nbsp;').appendTo(strengthAdjust)
+                    .attr('style','z-index:-1; position:absolute; height: 10px; background-color: white; width:' + (100.0*strength) + '%');                
         }
-
-        var removeButton = $('<a href="#" title="Remove">X</a>');
-        removeButton.addClass('tagButton');
-        removeButton.click(function() {
+        
+        var removeButton = $('<button title="Remove">x</button>').addClass('tagButton').appendTo(tagButtons)
+        .mousedown(function() {
             if (confirm("Remove " + tag + "?"))
                 onRemove(index);
         });
-        tagButtons.append(removeButton);
 
         tagButtons.appendTo(d);
 
