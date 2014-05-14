@@ -1033,6 +1033,19 @@ function objCompact(o) {
 
     var y = _.clone(o);
 
+    if (y.createdAt) {
+        if (!y.modifiedAt) {
+            y.at = y.createdAt;            
+        }
+        else if (y.createdAt!==y.modifiedAt) {
+            y.at = [ y.createdAt, y.modifiedAt - y.createdAt ];
+        }
+        delete y.modifiedAt;
+        delete y.createdAt;
+    }
+    
+        
+
     var k = _.keys(y);
     for (var i = 0; i < k.length; i++) {
         var K = k[i];
@@ -1046,8 +1059,6 @@ function objCompact(o) {
         }
     }
 
-
-    //TODO ---- fix the rest of this
     if (o.value) {
 
         var newValues = [];
@@ -1074,7 +1085,11 @@ function objCompact(o) {
                     newValues.push(v);
             }
         });
+        
         y.value = newValues;
+        if (y.value.length == 0) {
+            delete y.value;
+        }        
     }
 
     //console.log('newValue:: ' + newValues);
@@ -1087,10 +1102,21 @@ exports.objCompact = objCompact;
 
 /** expands an object in-place, and returns it */
 function objExpand(o) {
+
+    if (o.at) {
+        if (Array.isArray(o.at)) {
+            o.createdAt = o.at[0];
+            o.modifiedAt = o.at[1] + o.createdAt;
+        }
+        else {
+            o.createdAt = o.at;
+        }
+        delete o.at;
+    }
+    
     if (!o.value)
         return o;
 
-    //var y = _.clone(o);
     var newValues = [];
     //for (var i = 0; i < o.value.length; i++) {
     //    var v = o.value[i];
