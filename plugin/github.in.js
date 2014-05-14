@@ -5,13 +5,14 @@ Github Webhook Handler
 2. callback functions for received objects
         ex: commit, run git pull
 
+USE application/x-www-form-urlencoded in Github webhooks settings.
 */
 var _ = require('underscore');
 
 exports.plugin = function($N) {
     return {
         name: 'GitHub Input',
-        description: 'Handles GitHub webhook events',
+        description: 'Reacts to GitHub webhook events',
         options: {},
         version: '1.0',
         author: 'http://github.com',
@@ -21,17 +22,17 @@ exports.plugin = function($N) {
             //https://github.com/coreh/hookshot/blob/master/lib/index.js
             $N.httpserver.post('/githubhook', function(req, res, next) {
 
-                try {
-                    var g = JSON.parse(req.body); //JSON.parse(req.body.payload);                
+                var g = req.body;
 
-                    $N.pub(new $N.nobject().setName("GitHub")
-                                    .addDescription(JSON.stringify(g,null,4)));
-                }
-                catch (e) {
-                    console.error('github:', e);
-                }
-                            
-                res.send(202, 'Accepted\n');         
+                res.send(202, 'Accepted\n');
+
+                var p = g.payload;
+                
+                var n = new $N.nobject('github:' + p.ref + ':' + p.after)
+                                .setName("GitHub Event")
+                                .addDescription(JSON.stringify(g,null,4));
+                $N.pub(n);
+                        
             });
             
             //Test with:
