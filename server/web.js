@@ -22,8 +22,7 @@ var http = require('http')
         , url = require('url')
         , fs = require('fs')
         , sys = require('util')
-        , socketio = require('socket.io')
-        , nodestatic = require('node-static')
+//        , nodestatic = require('node-static')
         , server;
 var mongo = require("mongojs");
 var request = require('request');
@@ -705,6 +704,7 @@ exports.start = function(options) {
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
     express.use(passport.initialize());
     express.use(passport.session());
+    express.disable('x-powered-by');
 
 
     var httpServer = http.createServer(express);
@@ -719,23 +719,31 @@ exports.start = function(options) {
      });*/
 
     //----------------------------- SHAREJS
+    //
+    //Gzip compression
+    if ($N.server.httpCompress) {
+        express.use(require('compression')({
+          threshhold: 512
+        }));
+    }
 
 
-    var io = socketio.listen(httpServer);
-
-
+    var io = require('socket.io')(httpServer, {
+    });
+    
     if (io.enable) {
         io.enable('browser client minification');  // send minified client
         io.enable('browser client etag');          // apply etag caching logic based on version number
         io.enable('browser client gzip');          // gzip the file
     }
-    io.set('log level', 1);                    // reduce logging
+    
+    io.set('log level', 0);                    // reduce logging
     io.set('transports', [// enable all transports (optional if you want flashsocket)
         'websocket'
-                , 'flashsocket'
-                , 'htmlfile'
-                , 'xhr-polling'
-                , 'jsonp-polling'
+//        , 'flashsocket'
+        , 'htmlfile'
+        , 'xhr-polling'
+        , 'jsonp-polling'
     ]);
     //io.set("polling duration", 5);
 
@@ -1024,15 +1032,9 @@ exports.start = function(options) {
 
     var staticContentConfig = {
         //PRODUCTION: oneYear
-        maxAge: 0
+        maxAge: 86400000
     };
 
-    //Gzip compression
-    if ($N.server.httpCompress) {
-        express.use(require('compression')({
-          threshhold: 512
-        }));
-    }
 
 
     //express.use(expressm.staticCache());
@@ -2066,7 +2068,7 @@ exports.start = function(options) {
 
                 var tagsAndTemplates = [];
                 getObjectsByTag(['Tag', 'Template'], function(o) {
-                    tagsAndTemplates.push(o);
+                    tagsAndTemplates.push($N.objCompact(o));
                 }, function() {
                     if (tagsAndTemplates.length > 0)
                         socket.emit('notice', tagsAndTemplates);

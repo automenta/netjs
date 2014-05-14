@@ -1847,12 +1847,13 @@ function newObjectDetails(x) {
             } else if (vv.id === 'media') {
                 if (typeof vv.value == 'string') {
                     var url = vv.value;
-					if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg") || url.endsWith(".gif")) {
-	           	         ud.append('<img class="objectViewImg" src="' + url + '"/><br/>');
-					}
-					else {
-						ud.append('<a href="' + url + '">' + url + '</a><br/>');
-					}
+                    //TODO create a regexp for these
+                    if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg") || url.endsWith(".gif") || url.endsWith(".svg")) {
+             ud.append('<img class="objectViewImg" src="' + url + '"/><br/>');
+                    }
+                    else {
+                            ud.append('<a href="' + url + '">' + url + '</a><br/>');
+                    }
                 } else {
                     var V = vv.value;
                     if (V.type == 'html') {

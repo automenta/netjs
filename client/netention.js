@@ -254,7 +254,7 @@ function netention(f) {
                     setClientID($N, _cid, _key, _selves);
                     setCookie('clientID', _cid);
 
-                    socket.emit('subscribe', 'User');
+                    //socket.emit('subscribe', 'User');
 
                     function doWhenConnected() {
                         if (whenConnected) {
@@ -706,9 +706,7 @@ function netention(f) {
                     if (!Array.isArray(rt)) {
                         rt = [rt];
                     }
-                    for (var n = 0; n < rt.length; n++) {
-                        var rtt = rt[n];
-
+                    rt.forEach(function(rtt) {
                         var p = replies[rtt];
                         if (p) {
                             if (!_.contains(p, y.id))
@@ -716,8 +714,7 @@ function netention(f) {
                         } else {
                             replies[rtt] = [y.id];
                         }
-
-                    }
+                    });
                 }
 
                 if (y.id) {
