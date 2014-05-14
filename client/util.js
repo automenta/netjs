@@ -1044,6 +1044,11 @@ function objCompact(o) {
     
     delete y.modifiedAt;
     delete y.createdAt;
+    
+    if (y.removed) {
+        y.removed = y.id;
+        delete y.id;
+    }
         
 
     var k = _.keys(y);
@@ -1102,6 +1107,11 @@ exports.objCompact = objCompact;
 
 /** expands an object in-place, and returns it */
 function objExpand(o) {
+
+    if (o.removed) {
+        o.id = o.removed;
+        o.removed = true;
+    }
 
     if (o.at) {
         if (Array.isArray(o.at)) {
