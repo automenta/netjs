@@ -20,17 +20,19 @@ exports.plugin = function($N) {
             
             //https://developer.github.com/webhooks/
             //https://github.com/coreh/hookshot/blob/master/lib/index.js
+            
             $N.httpserver.post('/githubhook', function(req, res, next) {
 
                 var g = req.body;
 
                 res.send(202, 'Accepted\n');
 
-                var p = g.payload;
-                
+                var p = JSON.parse(g.payload);
+
                 var n = new $N.nobject('github:' + p.ref + ':' + p.after)
                                 .setName("GitHub Event")
-                                .addDescription(JSON.stringify(g,null,4));
+                                .addDescription(JSON.stringify(p));
+
                 $N.pub(n);
                         
             });
