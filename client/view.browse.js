@@ -75,12 +75,12 @@ function newTagCloud(target, onChanged) {
     };
 }
 
-function renderItems(v, maxItems, perItems) {
+function renderItems(v, maxItems, perItems, preFilter) {
     var sort = $N.get('list-sort') || 'Recent';
     var scope = $N.get('list-scope') || 'Public';
     var semantic = $N.get('list-semantic') || 'Any';
 
-    var rr = getRelevant(sort, scope, semantic, self, maxItems);
+    var rr = getRelevant(sort, scope, semantic, self, maxItems, preFilter);
     var relevant = rr[0];
     var relevance = rr[1];
 

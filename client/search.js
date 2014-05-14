@@ -109,7 +109,7 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
 }
 
 
-function getRelevant(sort, scope, semantic, s, maxItems) {
+function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
     var now = Date.now();
     var location = objSpacePointLatLng($N.myself());
@@ -159,12 +159,18 @@ function getRelevant(sort, scope, semantic, s, maxItems) {
     
     _.each($N.objects(), function(x, k) {
 
-        if (x.replyTo)
-            return;
         if (x.hidden)
             return;
 
+        if (x.replyTo)  //TODO make this conditoin optional
+            return;
+
         var tags = objTags(x);
+        
+        if (preFilter) {
+            if (!preFilter(x, tags))
+                return;
+        }
         
         {
             var allowed = true;

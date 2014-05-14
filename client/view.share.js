@@ -5,6 +5,7 @@ var supressCheckboxTagFilter = false;
 function newShareView(v) {
     var shareTags = configuration.shareTags;
     var shareCategories = configuration.shareCategories;
+    var allShareTags = _.union(shareTags, shareCategories);
 
     clearFocus();
     renderFocus();
@@ -186,6 +187,8 @@ function newShareView(v) {
             content.append(elements);
 
             //$('body').timeago('refresh');
+        }, function(x, tags) {
+            return _.intersection(tags, allShareTags).length > 0;
         });
     }
 
