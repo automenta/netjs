@@ -16,7 +16,6 @@ var memory = require('./memory.js');
 var util = require('../client/util.js');
 var feature = require('./feature.js');
 var expressm = require('express');
-var express = expressm();
 var connect = require('connect');
 var cookie = require('cookie');
 var http = require('http')
@@ -37,6 +36,7 @@ var jsonpack = require('jsonpack');
  init - callback function that is invoked after the server is created but before it runs 
  */
 exports.start = function(options) {
+    var express = expressm();
 
     var $N = _.clone(util);
     $N.server = options;
@@ -699,9 +699,9 @@ exports.start = function(options) {
     var bodyParser = require('body-parser');
 
     express.use(cookieParser);
-    express.use(bodyParser({limit: '1mb', strict: false}));
-    //express.use(expressm.methodOverride());
-    express.use(require('parted')());
+    //express.use(bodyParser({limit: '1mb', strict: false}));
+    express.use(bodyParser.json({strict: false}));
+    express.use(require('parted')()); //needed for file uploads
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
     express.use(passport.initialize());
     express.use(passport.session());

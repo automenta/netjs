@@ -19,15 +19,23 @@ exports.plugin = function($N) {
             
             //https://developer.github.com/webhooks/
             //https://github.com/coreh/hookshot/blob/master/lib/index.js
-            $N.httpserver.route('/githubhook').post(function(req, res, next) {
-                var g = JSON.parse(req.body.payload);
-                
-                $N.pub(new $N.nobject().setName("GitHub")
-                                .addDescription(JSON.stringify(g,null,4)));
+            $N.httpserver.post('/githubhook', function(req, res, next) {
 
+                try {
+                    var g = JSON.parse(_.keys(req.body)[0]); //JSON.parse(req.body.payload);                
+
+                    $N.pub(new $N.nobject().setName("GitHub")
+                                    .addDescription(JSON.stringify(g,null,4)));
+                }
+                catch (e) {
+                    console.error('github:', e);
+                }
+                            
                 res.send(202, 'Accepted\n');         
-                res.end();
             });
+            
+            //Test with:
+            //curl -X POST http://localhost:8080/githubhook -d '{"paylot": "abc"}' -H "Content-Type: application/x-www-form-urlencoded"
 
         }
     }
