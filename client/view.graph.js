@@ -304,10 +304,9 @@ function newGraphView(v) {
                 addNodeForObject(x);
 
                 if (includeEdges['Reply']) {
-                    var replies = $N.getReplies(x.id);
+                    var replies = $N.getReplies(x);
                     for (var j = 0; j < replies.length; j++) {
-                        var RO = $N.getObject(replies[j]);
-                        xxrr.push([RO, 1]);
+                        xxrr.push([replies[j], 1]);
                     }
                 }
             }
@@ -354,12 +353,12 @@ function newGraphView(v) {
                         }]);
                 }
                 if (includeEdges['Reply']) {
-                    var replies = $N.getReplies(x.id);
+                    var replies = $N.getReplies(x);
                     if (replies.length > 0) {
                         var str = 1.0 / replies.length;
                         var thi = thickLine * str;
                         for (var j = 0; j < replies.length; j++) {
-                            rtags.push([replies[j], {
+                            rtags.push([replies[j].id, {
                                 stroke: 'rgba(64,128,64,0.5)',
                                 strokeWidth: Math.max(1.0, thi),
                                 strength: str

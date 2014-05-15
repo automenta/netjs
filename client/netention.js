@@ -203,7 +203,7 @@ function netention(f) {
                                 updateBrand(); //TODO use backbone Model instead of global function
 
                                 $N.startURLRouter();
-                            });
+                            }, true);
                         });
 
 
@@ -421,8 +421,6 @@ function netention(f) {
          });    
          },*/
 
-
-
         deleteObject: function(x, localOnly) {
             var id;
             if (typeof x === "string")
@@ -544,13 +542,6 @@ function netention(f) {
                 onFinished();
             });
         },
-        getReplies: function(id) {
-            if (id.id)
-                id = id.id;
-            if (this.instance[id])
-                return this.instance[id].reply;
-            return [];
-        },
         /*listenAll: function (b) {
          if (b) {
          this.subscribe('*', function (f) {
@@ -623,6 +614,19 @@ function netention(f) {
                 if (y.removed) {
                     that.deleteObject(y, true);
                     return;
+                }
+                
+                //skip existing with an older modificatin/creation time
+                var existing = $N.object[y.id];
+                if (existing) {
+                    var lastModified = y.modifiedAt || y.createdAt || null;
+                    if (lastModified!==null) {
+                        var existingLastModified = existing.modifiedAt || existing.createdAt || null;
+                        if (existingLastModified!==null) {
+                            if (lastModified <= existingLastModified)
+                                return;
+                        }
+                    }
                 }
                 
                 $N.add(y);

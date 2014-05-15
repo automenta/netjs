@@ -1,6 +1,3 @@
-/* version 1.1 5-26-2013 */
-var ONTO_SEARCH_PERIOD_MS = 1500; //TODO move this to client.js
-
 //t is either a tag ID, or an object with zero or more tags
 function getTagIcon(t) {
     if (!t)
@@ -251,7 +248,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
     function update(x) {
         var widgetsToAdd = [];
-        
+
         var whenSaved = [];
         var nameInput = null;
 
@@ -320,7 +317,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         };
 
 
-        widgetsToAdd =[];
+        widgetsToAdd = [];
 
         if (editable) {
             if (hideWidgets !== true) {
@@ -354,7 +351,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         var tsw = $('<div class="tagSuggestionsWrap"></div>');
         widgetsToAdd.push(tsw);
-        
+
         var ts = $('<div/>').addClass('tagSuggestions').appendTo(tsw);
 
         if (x.value) {
@@ -374,7 +371,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
                 widgetsToAdd.push(tt);
             }
-            if (tt!=null) {
+            if (tt != null) {
                 //hide the last tag section's down button
                 tt.find('.moveDown').hide();
             }
@@ -438,7 +435,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 lastNameValue = v;
             }
         }
-        
+
         if (nameInput)
             updateTagSuggestions(nameInput.val(), ts, onAdd, getEditedFocus, ontocache);
 
@@ -449,8 +446,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             if (!x.readonly) {
                 if (hideWidgets !== true) {
                     if (editable)
-                        ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
-                        search();
+                        ontoSearcher = setInterval(search, configuration.ontologySearchIntervalMS);
+                    search();
                 }
             }
         }
@@ -462,7 +459,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         if ((hideWidgets !== true) && (!x.readonly)) {
             var addButtonWrap = newDiv().addClass('tagSection').addClass('tagSectionControl');
-                    
+
 
             var addButtons = newEle('span').appendTo(addButtonWrap);
 
@@ -535,7 +532,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     else {
                         update(objAddValue(getEditedFocus(), 'url', url));
                     }
-                    
+
                     later(function() {
                         x.dialog('close');
                     });
@@ -656,7 +653,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 addButtonWrap.append(scopeSelect);
 
         }
-        
+
         D.append(widgetsToAdd);
     }
 
@@ -682,19 +679,20 @@ function applyTagStrengthClass(e, s) {
 function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange) {
     var tag = t.id;
     var strength = t.strength;
-    if (strength === undefined) strength = 1.0; 
+    if (strength === undefined)
+        strength = 1.0;
 
     var e = newDiv().addClass('tagSection');
     var d = newDiv().addClass('tagSectionItem').appendTo(e);
     applyTagStrengthClass(e, strength);
 
     if (configuration.device !== configuration.MOBILE) {
-        d.hover( function() {
+        d.hover(function() {
             d.addClass('tagSectionHover');
         }, function() {
             d.removeClass('tagSectionHover');
-        } );
-     }
+        });
+    }
 
 
     var tagLabel = newEle('span').html(tag).addClass('tagLabel');
@@ -716,14 +714,14 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
          });*/
 
         /*d.click(function() {
-            if (!tagButtons.is(':visible')) {
-                tagButtons.fadeIn();
-            } else {
-                tagButtons.fadeOut();
-            }
-        });
-
-        tagButtons.hide();*/
+         if (!tagButtons.is(':visible')) {
+         tagButtons.fadeIn();
+         } else {
+         tagButtons.fadeOut();
+         }
+         });
+         
+         tagButtons.hide();*/
 
         if (index > 0) {
             var upButton = $('<button title="Move Up">&utrif;</button>');
@@ -732,7 +730,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 onOrderChange(index, index - 1);
             });
             tagButtons.append(upButton);
-        } 
+        }
         /*if (index <*/ {
             var downButton = $('<button title="Move Down">&dtrif;</button>');
             downButton.addClass('tagButton').addClass('moveDown');
@@ -740,35 +738,35 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 onOrderChange(index, index + 1);
             });
             tagButtons.append(downButton);
-        }      
+        }
 
 
         if (strength > 0) {
             var minusButton = newEle('button').html('-').appendTo(tagButtons).mousedown(function() {
                 var newstrength = Math.max(0, strength - 0.25);
-                if (newstrength!==strength) {
-                    onStrengthChange(index,  newstrength);
+                if (newstrength !== strength) {
+                    onStrengthChange(index, newstrength);
                 }
             });
         }
-        
+
         if (strength < 1.0) {
             var plusButton = newEle('button').html('+').appendTo(tagButtons).mousedown(function() {
                 var newstrength = Math.min(1.0, strength + 0.25);
-                if (newstrength!==strength)
-                    onStrengthChange(index,  newstrength);
+                if (newstrength !== strength)
+                    onStrengthChange(index, newstrength);
             });
             /*var strengthAdjust = newDiv().appendTo(tagButtons)
-                    .attr('style','z-index:-1; position:absolute; bottom: -10px; height: 10px; background-color: black; width:100%');
-            var strengthIndicator = newDiv().html('&nbsp;').appendTo(strengthAdjust)
-                    .attr('style','z-index:-1; position:absolute; height: 10px; background-color: white; width:' + (100.0*strength) + '%');                */
+             .attr('style','z-index:-1; position:absolute; bottom: -10px; height: 10px; background-color: black; width:100%');
+             var strengthIndicator = newDiv().html('&nbsp;').appendTo(strengthAdjust)
+             .attr('style','z-index:-1; position:absolute; height: 10px; background-color: white; width:' + (100.0*strength) + '%');                */
         }
-        
+
         var removeButton = $('<button title="Remove">x</button>').addClass('tagButton').appendTo(tagButtons)
-        .mousedown(function() {
-            if (confirm("Remove " + tag + "?"))
-                onRemove(index);
-        });
+                .mousedown(function() {
+                    if (confirm("Remove " + tag + "?"))
+                        onRemove(index);
+                });
 
         d.append(tagButtons);
 
@@ -1179,25 +1177,25 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 ts.attr('placeholder', prop.tag ? prop.tag.join(' or ') : '');
 
                 var mb = $('<button>...</button>').attr('title', "Find Object")
-                            .css('margin-left','0').appendTo(tt)
-                            .click(function() {
-                                var pp = newPopup("Select Object", true, true);
-                                var tagger = newTagger(null, function(tags) {
-                                    ts.result = tags = tags[0];
+                        .css('margin-left', '0').appendTo(tt)
+                        .click(function() {
+                            var pp = newPopup("Select Object", true, true);
+                            var tagger = newTagger(null, function(tags) {
+                                ts.result = tags = tags[0];
 
-                                    updateTS(tags);
+                                updateTS(tags);
 
-                                    pp.dialog('close');
-                                }, tagRestrictions, 1);
-                                pp.append(tagger);
-                            });
-                            
+                                pp.dialog('close');
+                            }, tagRestrictions, 1);
+                            pp.append(tagger);
+                        });
+
                 ts.click(function() {
                     if (ts.val() == '')
                         mb.click();
                 });
 
-                if (tagRestrictions) {                    
+                if (tagRestrictions) {
                     var tnames = [];
                     tagRestrictions.forEach(function(tr) {
                         var T = $N.getTag(tr);
@@ -1217,7 +1215,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
     } else if (tag) {
         var TAG = $N.class[tag];
-        
+
         whenSaved.push(function(y) {
             objAddTag(y, tag, strength);
         });
@@ -1355,42 +1353,42 @@ function newReplyPopup(x, onReplied) {
     }
 
     pp.append(newReplyWidget(
-            //on reply
-                    function(text) {
+        //on reply
+        function(text) {
 
-                        closeReplyDialog();
+            closeReplyDialog();
 
-                        var rr = {
-                            name: text,
-                            id: uuid(),
-                            value: [],
-                            author: $N.id(),
-                            replyTo: [x.id],
-                            createdAt: Date.now()
-                        };
+            var rr = {
+                name: text,
+                id: uuid(),
+                value: [],
+                author: $N.id(),
+                replyTo: [x.id],
+                createdAt: Date.now()
+            };
 
-                        $N.pub(rr, function(err) {
-                            $.pnotify({
-                                title: 'Error replying (' + x.id.substring(0, 6) + ')',
-                                text: err,
-                                type: 'Error'
-                            })
-                        }, function() {
-                            $N.notice(rr);
-                            $.pnotify({
-                                title: 'Replied (' + x.id.substring(0, 6) + ')'
-                            })
-                        });
+            $N.pub(rr, function(err) {
+                $.pnotify({
+                    title: 'Error replying (' + x.id.substring(0, 6) + ')',
+                    text: err,
+                    type: 'Error'
+                })
+            }, function() {
+                //$N.notice(rr);
+                $.pnotify({
+                    title: 'Replied (' + x.id.substring(0, 6) + ')'
+                })
+            });
 
-                        if (onReplied)
-                            onReplied(rr);
+            if (onReplied)
+                onReplied(rr);
 
-                    },
-                    //on cancel
-                            function() {
-                                closeReplyDialog();
-                            }
-                    ));
+        },
+        //on cancel
+        function() {
+            closeReplyDialog();
+        }
+    ));
 
 }
 
@@ -1699,8 +1697,8 @@ function newObjectSummary(x, options) {
     var haxn = newEle('h1').appendTo(d);
 
     var refreshReplies = function() {
-        var r = $N.getReplies(x.id);
-        if (r.length > 0) {
+        var r = x.reply; //$N.getReplies(x);
+        if (r) {
             if (!replies) {
                 replies = newDiv().addClass('ObjectReply').appendTo(d);
             }
@@ -1714,8 +1712,8 @@ function newObjectSummary(x, options) {
             delete childOptions.scale;
 
             //TODO sort the replies by age, oldest first?
-            r.forEach(function(p) {
-                replies.append(newObjectSummary($N.getObject(p), childOptions));
+            _.values(r).forEach(function(p) {
+                replies.append(newObjectSummary(p, childOptions));
             });
         } else {
             if (replies) {
@@ -1858,9 +1856,9 @@ function newObjectDetails(x) {
                 }
             } else if (vv.id === 'image') {
                 var url = vv.value;
-                ud.append(newEle('img').attr( { class: "objectViewImg", src: url}), '<br/>');
+                ud.append(newEle('img').attr({class: "objectViewImg", src: url}), '<br/>');
             } else if (vv.id === 'html') {
-                ud.append(newDiv().html(vv.value));            
+                ud.append(newDiv().html(vv.value));
             } else if (vv.id === 'markdown') {
                 ud.append(newDiv().addClass('markdown').html(markdown.toHTML(vv.value)));
             }

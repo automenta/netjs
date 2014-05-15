@@ -38,11 +38,12 @@ exports.options = {
         "defaultMapMode2D": true,
         "mapDefaultLocation": [40.44, -80.0],
         "enableTogetherJS": false,
+        "ontologySearchIntervalMS": 1500,
         "viewUpdateTime": [
             /* mobile: [ min update interval (ms), debounce time (ms), 1st view debounce time (ms) ]  */
-            [850, 100, 450],
+            [550, 100, 450],
             /* desktop: [ min update interval (ms), debounce time (ms) ], 1st view debounce time (ms) */
-            [250, 50, 150]
+            [150, 10, 100]
         ],
         "knowLevels": 3,
         "views": ["us", "map", "browse", "chat", "graph", "trends", "wiki", "templates"],

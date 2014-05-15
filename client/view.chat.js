@@ -119,26 +119,25 @@ function newChatView(v) {
         var toDisplay = rel[0];
         var toDisplayObj = {};
         toDisplay.forEach(function(d) {
-            toDisplayObj[d] = $N.getObject(d);
+            toDisplayObj[d] = $N.object[d];
         });
 
-        var toDisplayWithReplies = $N.getAllReplies(toDisplay)
+        var toDisplayWithReplies = $N.getAllReplies(toDisplay);
 
         var added = _.difference(toDisplayWithReplies, displayedObjects);
         var removed = _.difference(displayedObjects, toDisplayWithReplies);
-        var newlyChanged = _.filter(toDisplayWithReplies, function(d) {
-            var D = toDisplayObj[d] || $N.getObject(d);
+        var newlyChanged = _.filter(toDisplayWithReplies, function(D) {
             var dd = D.modifiedAt || D.createdAt;
             var changed = false;
-            if (modifiedDate[d]) {
-                if (modifiedDate[d] == dd) {
+            if (modifiedDate[D.id]) {
+                if (modifiedDate[D.id] === dd) {
                     changed = false;
                 }
                 else {
                     changed = true;
                 }
             }
-            modifiedDate[d] = dd;
+            modifiedDate[D.id] = dd;
             return changed;
         });
 

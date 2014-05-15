@@ -35,12 +35,10 @@ test("Ontology", function() {
     
     var class1 = {
         id: 'Class1',
-        description: 'A test class',
+        description: 'A test class, with value in array form',
         extend: [],
-        value: [
-            
-            "testProperty",
-            
+        value: [            
+            "testProperty",            
             {   id: 'embeddedProperty',
                 name: 'Embedded property, which adds to the ontology',
                 extend: 'text'
@@ -52,8 +50,28 @@ test("Ontology", function() {
         strictEqual($N.class[class1.id].id, class1.id, "class present in ontology");  
         ok($N.property['embeddedProperty'], "embedded property present in ontology");
         ok(class1.property['testProperty'], "class linked to previously defined test property");
+        ok(class1.property['embeddedProperty'], "class linked to newly defined embedded property");
         ok($N.classRoot['Class1'], "class identified as a root");
     } 
+
+    var class2 = {
+        id: 'Class2',
+        description: 'A test class, with value in hash form',
+        extend: "Class1",
+        value: {            
+            "testProperty2": {                        
+                name: '2nd Embedded property, which adds to the ontology',
+                extend: 'integer'
+            }
+        }
+    };
+    $N.add(class2);
+    { 
+        ok($N.property['testProperty2'], "embedded property present in ontology");
+        ok(class2.property['testProperty2'], "class linked to previously defined test property");
+        ok(!$N.classRoot['Class2'], "class2 not identified as a root");
+    } 
+    
     
     var subclass1 = {
         id: 'SubClass1',

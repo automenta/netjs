@@ -810,7 +810,7 @@ var Ontology = function() {
     this.add = function(x) {
         //updates all cached fields, indexes
         //can be called repeatedly to update existing object with that ID
-                
+                      
         if (x.removed) {        
             return that.remove(x);
         }
@@ -828,11 +828,12 @@ var Ontology = function() {
             x.subclass = { };
             
             if (x.value) {
-                if (typeof x.value == "object") {
+                if (!Array.isArray(x.value)) {
                     //convert from object form to array
                     var vv = [];
                     _.each(x.value, function(v, k) {
-                       v.id = k;
+                        if (v.id===undefined)
+                            v.id = k;
                        vv.push(v);
                     });
                     x.value = vv;
@@ -843,7 +844,9 @@ var Ontology = function() {
                     
                     if (objIsProperty(v)) {
                         //embedded property
+                        console.log('embedded property', v);
                         that.add(v);
+                        console.log('embedded property', v);
                         v = v.id;
                     }
                     
@@ -908,19 +911,46 @@ var Ontology = function() {
                that.tagged[t] = { };
            that.tagged[t][x.id] = x;
            
-            x.reply = [];
-            //TODO index replyTo by adding to target's .reply[]
             
         });
+        
+        x.reply = { };
+        
+        //replies to this object
+        _.each(x.instance, function(v, k) {
+           if (v.replyTo.indexOf(x.id)!==-1) 
+               x.reply[k] = v;
+        });
+        //this object's replies to other object
+        if (x.replyTo) {            
+            x.replyTo.forEach(function(t) {
+               var T = that.instance[t];
+               if (T) {
+                   T.reply[x.id] = x;
+               }
+            });
+        }
         
         //TODO index author, replyTo
     }
     function unindexInstance(x) {
-        var tags = objTags(x, false);
+        if (x.replyTo) {            
+            x.replyTo.forEach(function(t) {
+               var T = that.instance[t];
+               if (T) {
+                   delete T.reply[x.id];
+               }
+            });
+        }
+        delete x.reply;
+        
+        var tags = objTags(x, false);                
         tags.forEach(function(t) {
            if (that.tagged[t]) 
                delete that.tagged[t][x.id];           
         });        
+        
+        
     }
     this.getReplyRoots = function(r) {
         //trace up the reply chain until an object with no replyTo
@@ -946,7 +976,11 @@ var Ontology = function() {
         return _.keys(t);
     };
     
-    this.getAllReplies = function(objectIDList) {
+    this.getReplies = function(x) {
+        return x.reply || [];
+    };
+    
+    this.getAllReplies = function(objects) {
         var r = {};
 
         function addReplies(ii) {
@@ -962,11 +996,12 @@ var Ontology = function() {
 
                 r[i] = true;
                 
-                addReplies(i.reply);
+                if (i.reply)
+                    addReplies(_.keys(i.reply));
             });
         }
 
-        addReplies(objectIDList);
+        addReplies(objects);
         return _.keys(r);
     };
     

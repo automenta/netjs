@@ -259,7 +259,7 @@ function newTagTree(param) {
 
         var b = newTagLayerDiv(xi, label);
 
-        if (_.keys(children).length > 0) {
+        if (!_.isEmpty(children)) {
             b.children = [];
             _.each(children, function(c, cid) {
                 subtree(b.children, c);
