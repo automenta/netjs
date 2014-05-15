@@ -38,7 +38,11 @@ Instructions
 
 ###The following commands run from the *parent directory in which Netention will be installed*
 
-####Get the latest Netention source code
+####Clone the latest Netention source code
+```
+npm i http://github.com/automenta/netjs/archive/master.tar.gz
+```
+or...
 ```
 git clone https://github.com/automenta/netjs.git ; cd netjs ; npm install
 ```

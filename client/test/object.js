@@ -77,7 +77,7 @@ test("Tag calclulations", function() {
 
     deepEqual( objTagStrength(x), { 'Earthquake': 0.8, 'Happy': 0.2 }, 'normalized strengths of tags' );
 
-	objAddValue(x, { id: 'textarea', value: 'nothing' });
+    objAddValue(x, { id: 'html', value: 'nothing' });
     deepEqual( objTags(x), [ 'Earthquake', 'Happy' ], 'objTags without primitives, when primitives present' );
     deepEqual( objTags(x, true).length, 4, 'objTags with primitives, when primitives present' );
     

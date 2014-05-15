@@ -437,7 +437,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
         }
         
-        updateTagSuggestions(nameInput.val(), ts, onAdd, getEditedFocus, ontocache);
+        if (nameInput)
+            updateTagSuggestions(nameInput.val(), ts, onAdd, getEditedFocus, ontocache);
 
         if (objHasTag(getEditedFocus(), 'Tag')) {
             //skip suggestions when editing a Tag
