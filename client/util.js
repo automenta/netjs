@@ -757,12 +757,12 @@ function objIsProperty(x) {
 exports.objIsProperty = objIsProperty;
 
 /** an interface for interacting with nobjects and ontology */
-var Ontology = function(storeInstances) {
-    var that = this;        
+var Ontology = function(storeInstances, target) {
+    var that = target ? target : this;        
     
     //resets to empty state
-    this.clear = function() {
-        //indexed by id (URI)
+    that.clear = function() {
+        //indexed by id (URI)        
         that.object = { };        
         that.tagged = { };  //index of object tags
 
@@ -787,13 +787,23 @@ var Ontology = function(storeInstances) {
           //...
         };
     };
-    this.clear();
+    /*
+     * //has undiagnosed side effects
+    that.clearInstances = function() {
+        that.instance = { };
+        that.tagged = { };
+        that.object = _.extend( _.extend({ }, that.class), that.property ); //replace object with only classes and properties
+        console.log(_.keys(that.instance),_.keys(that.tagged), _.keys(that.object))
+    };
+    */
     
-    this.addAll = function(a) {
+    that.clear();
+    
+    that.addAll = function(a) {
         a.forEach(that.add);
     };
     
-    this.add = function(x) {
+    that.add = function(x) {
         //updates all cached fields, indexes
         //can be called repeatedly to update existing object with that ID
                       
@@ -909,7 +919,10 @@ var Ontology = function(storeInstances) {
                var T = that.instance[t];
                if (T) {
                    T.reply[x.id] = x;
-               }
+                }
+                else {
+                    console.error('orphan reply object', T);
+                }
             });
         }
         
@@ -934,7 +947,7 @@ var Ontology = function(storeInstances) {
         
         
     }
-    this.getReplyRoots = function(r) {
+    that.getReplyRoots = function(r) {
         //trace up the reply chain until an object with no replyTo
         var t = {};
 
@@ -958,11 +971,11 @@ var Ontology = function(storeInstances) {
         return _.keys(t);
     };
     
-    this.getReplies = function(x) {
+    that.getReplies = function(x) {
         return x.reply || [];
     };
     
-    this.getAllReplies = function(objects) {
+    that.getAllReplies = function(objects) {
         var r = {};
 
         function addReplies(ii) {
@@ -990,7 +1003,7 @@ var Ontology = function(storeInstances) {
     };
     
     //deprecated
-    this.getSubTags = function(s) {
+    that.getSubTags = function(s) {
         if (typeof s === "string")
             s = this.class[s];
         return s.subclass;
@@ -1000,7 +1013,7 @@ var Ontology = function(storeInstances) {
      * TODO: rename to getTagged
      * t = a class ID,or an array of class ID's - returns a list of object id's 
      * */        
-    this.getTagged = this.objectsWithTag =  function(t, fullObject, includeSubTags) {
+    that.getTagged = that.objectsWithTag =  function(t, fullObject, includeSubTags) {
         //TODO use tag index            
         //TODO support subtags recursively
         if ((typeof t === "object") && !Array.isArray(t)) 
@@ -1023,7 +1036,7 @@ var Ontology = function(storeInstances) {
         return r;
     };        
     
-    this.remove = function(x) {
+    that.remove = function(x) {
         if (typeof x == "object") {            
             x = x.id;
         }
@@ -1046,7 +1059,7 @@ var Ontology = function(storeInstances) {
         return that;
     };
     
-    this.getOntologySummary = function() {
+    that.getOntologySummary = function() {
         return {
             numObjects: _.keys(that.object).length,
             numClasses: _.keys(that.class).length,
@@ -1056,8 +1069,8 @@ var Ontology = function(storeInstances) {
         };
     };
     
-    this.serializedPropreties = null; //cache
-    this.propertySerialized = function() {
+    that.serializedPropreties = null; //cache
+    that.propertySerialized = function() {
         if (that.serializedPropreties===null)
             that.serializedPropreties = _.map(that.property, function(p) {
                 return objCompact(p);
@@ -1065,8 +1078,8 @@ var Ontology = function(storeInstances) {
         return that.serializedPropreties;
     };
     
-    this.serializedClasses = null;
-    this.classSerialized = function() {
+    that.serializedClasses = null;
+    that.classSerialized = function() {
         if (that.serializedClasses===null)
             that.serializedClasses = _.map(that.class, function(c) {
                 var d = objCompact(c);
@@ -1082,7 +1095,7 @@ var Ontology = function(storeInstances) {
     //.getGraph(propertyList,options)
         //extracts a graph via the object values of certain types; useful for computing trust and other networks
         
-    return this;
+    return that;
 };
 exports.Ontology = Ontology;
 

@@ -44,8 +44,7 @@ function netention(f) {
     
     var $NClient = Backbone.Model.extend({
         reset: function() {
-            //this.clear();
-            this.clearObjects();
+            this.clearTransients();
             this.set('clientID', 'undefined');
             this.ontoIndex = lunr(function() {
                 this.field('name', {
@@ -56,9 +55,7 @@ function netention(f) {
                 this.ref('id');
             });
         },
-        clearObjects: function() {
-            this.set('deleted', {});
-            this.set('replies', {});
+        clearTransients: function() {
             this.set('layer', {
                 include: [],
                 exclude: []
@@ -113,7 +110,7 @@ function netention(f) {
 
         },
         getIncidentTags: function(userid, oneOfTags) {
-            return objIncidentTags(this.objects(), oneOfTags, userid);
+            return objIncidentTags(this.instance, oneOfTags, userid);
         },
         
         layer: function() {
@@ -132,9 +129,10 @@ function netention(f) {
             return undefined;
         },
         become: function(target) {
-
             if (!target)
                 return;
+            
+            var previousID = $N.id();
 
             var targetID = target;
             if (typeof (target) !== "string") {
@@ -156,16 +154,6 @@ function netention(f) {
             } else {
                 this.socket.emit('become', typeof target === "string" ? target : objCompact(target), function(nextID) {
                     if (nextID) {
-                        /*$.pnotify( {
-                         title: 'Switched profile',
-                         text: nextID
-                         });*/
-
-                        //if (($N.id()) && ($N.id() == nextID)) //already target
-                        //return;
-
-
-                        //later(function () {
 
                         $N.set('clientID', nextID);
                         setCookie('clientID', nextID);
@@ -174,19 +162,19 @@ function netention(f) {
 
                         $N.save('otherSelves', _.unique(os));
 
-                        $N.clearObjects();
+                        $N.clear();
+                        $N.clearTransients();
 
-                        $N.getAuthorObjects(nextID, function() {
-                            $N.getLatestObjects(1000, function() {
-                                updateBrand(); //TODO use backbone Model instead of global function
+                        $N.getUserObjects(function() {
+                            $N.getAuthorObjects(nextID, function() {
+                                $N.getLatestObjects(1000, function() {
+                                    updateBrand(); //TODO use backbone Model instead of global function
 
-                                $N.startURLRouter();
-                            }, true);
+                                    $N.startURLRouter();
+                                }, true);
+                            });
                         });
 
-
-                        //});
-                        //});
                     } else {
                         $.pnotify({
                             title: 'Unable to switch profile',
@@ -405,11 +393,14 @@ function netention(f) {
                 id = x;
             else
                 id = x.id;
+
             var that = this;
 
             if (x.author === undefined)
                 localOnly = true;
 
+            //var X = _.clone($N.object[id]);
+            
             if (configuration.connection !== 'local') {
                 if ((!this.socket) && (!localOnly)) {
                     $.pnotify({
@@ -420,23 +411,20 @@ function netention(f) {
             } else
                 localOnly = true;
 
-            function removeLocal() {
-                if (!$N.getObject(id))
+            function removeLocal() {                
+                if (!$N.object[id])
                     return false;
+                
+                //console.log(X.id, 'deleting replies:', X.reply);
+                /*
+                _.keys(X.reply).forEach(function(r) {                    
+                    //console.log('deleting reply:', X.reply[r], r, X.reply[r].author !== $N.id());
+                    $N.deleteObject(r, X.reply[r].author !== $N.id());
+                });
+                */
 
-                that.get('deleted')[id] = Date.now();
-                delete(that.objects())[id];
-
-                //remove from replies
-                for (var k in that.get('replies')) {
-                    that.get('replies')[k] = _.without(that.get('replies')[k], id);
-                }
-                //remove its replies
-                var replies = that.get('replies')[id];
-                if (replies)
-                    for (var k = 0; k < replies.length; k++)
-                        that.deleteObject(k, true);
-
+                that.remove(id);
+                
                 return true;
             }
 
@@ -804,8 +792,7 @@ function netention(f) {
     });
 
     //exports = the variable from util.js which is also used by node.js require()        		
-    var $N = _.extend(new $NClient(), exports);
-    $N = _.extend($N, new Ontology(true));
+    var $N = new Ontology(true, _.extend(new $NClient(), exports));
     
     $N.toString = function() {
         return JSON.stringify(this);
