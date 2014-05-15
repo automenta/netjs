@@ -40,7 +40,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus, ontocache) {
 
             var bb = $('<a>+' + mn + '?</a>');
             bb.click(function() {
-                onAdd({id: mx.uri});
+                onAdd({id: mx.id});
             });
 
             var opacity = 0.5 + (score / 2.0);
@@ -99,7 +99,7 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
 
             var bb = $('<a>' + mn + '?</a>');
             bb.click(function() {
-                onAdd({id: mx.uri});
+                onAdd({id: mx.id});
             });
             mt.append('+');
             mt.append(bb);

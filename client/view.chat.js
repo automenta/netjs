@@ -113,7 +113,6 @@ function newChatView(v) {
         var scope = 'Public';
         var semantic = 'Any';
         var maxItems = 75;
-        var o = newDiv();
 
         var rel = getRelevant(sort, scope, semantic, $N, maxItems);
         var toDisplay = rel[0];
@@ -124,9 +123,7 @@ function newChatView(v) {
 
         var toDisplayWithReplies = $N.getAllReplies(toDisplay);
 
-        var added = _.difference(toDisplayWithReplies, displayedObjects);
-        console.log('chat added', toDisplay, toDisplayWithReplies);
-        
+        var added = _.difference(toDisplayWithReplies, displayedObjects);        
         var removed = _.difference(displayedObjects, toDisplayWithReplies);
         var newlyChanged = _.filter(toDisplayWithReplies, function(D) {
             var dd = D.modifiedAt || D.createdAt;

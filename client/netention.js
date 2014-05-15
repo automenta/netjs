@@ -70,10 +70,6 @@ function netention(f) {
         tag: function(t) {
             return this.class[t];
         },
-        //deprecated
-        getSubTags: function(s) {
-            return s.subclass;
-        },
         isProperty: function(p) {
             return this.property[p] !== undefined;
         },
@@ -98,24 +94,6 @@ function netention(f) {
             return this.property[p];
         },        
 
-        /* returns a list of object id's */
-        objectsWithTag: function(t, fullObject, includeSubTags) {
-            //TODO use tag index            
-            //TODO support subtags recursively
-            
-            var r = [];
-
-            if (includeSubTags) {
-                t = _.union([t], $N.getSubTags(t));
-            }
-
-            for (var k in this.objects()) {
-                var v = this.getObject(k);
-                if (objHasTag(v, t))
-                    r.push(fullObject ? v : k);
-            }
-            return r;
-        },
         deleteSelf: function(clientID) {
             var os = this.get('otherSelves');
             if (os.length < 2) {

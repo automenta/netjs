@@ -1,9 +1,7 @@
 var GOAL_EXPIRATION_INTERVAL = 2 * 60 * 60 * 1000; //2 hours, in MS
 
 function getOperatorTags() {
-    return _.filter(_.keys($N.tags), function (t) {
-        return $N.tag(t).operator;
-    });
+    return ['Trust','Can', 'Need', 'Not', 'Value'];
 }
 
 
@@ -12,7 +10,7 @@ function newGoalWidget(g) {
     var d = newDiv();
 
 
-    var aa = $('<a href="#"><h2>' + g.name + '</h2></a>').appendto(d);
+    var aa = $('<a><h2>' + g.name + '</h2></a>').appendto(d);
     aa.click(function () {
         newPopupObjectView(g);
     });
@@ -199,12 +197,12 @@ function newUsView(v) {
             };
 
             function addTheTag(T) {
-                if ((T.uri == 'Trust') || (T.uri == 'Distrust') || (T.uri == 'Value')) {
+                if ((T.id === 'Trust') || (T.id === 'Distrust') || (T.id === 'Value')) {
                     return function () {
                         var x = objNew();
                         x.name = T.name;
                         x.author = x.subject = $N.id();
-                        x.addTag(T.uri);
+                        x.addTag(T.id);
                         newPopupObjectEdit(x);
                     }
                 } else {
@@ -215,7 +213,7 @@ function newUsView(v) {
                             modal: true
                         });
                         d.append(newTagger([], function (results) {
-                            saveAddedTags(results, T.uri);
+                            saveAddedTags(results, T.id);
 
                             later(function () {
                                 d.dialog('close');
@@ -227,7 +225,7 @@ function newUsView(v) {
             }
 
             _.each(operators, function (o) {
-                var O = $N.tag(o);
+                var O = $N.class[o];
 
 
                 if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))) {
@@ -235,7 +233,7 @@ function newUsView(v) {
                     //not a 3-vector system
                     var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
 
-                    var nn = _.filter($N.objectsWithTag(o, false, true), currentUserFilter);
+                    var nn = _.filter($N.objectsWithTag(O, false, true), currentUserFilter);
 
                     if (nn.length > 0) {
                         var uu = $('<ul></ul>');
@@ -318,7 +316,7 @@ function newUsView(v) {
                     var lc = newLeftColDiv().appendTo(d);
                     var rc = newRightColDiv().appendTo(d);
 
-                    var nameLink = $('<a href="#">' + X.name + '</a>');
+                    var nameLink = $('<a">' + X.name + '</a>');
                     nameLink.click(function () {
                         newPopupObjectView(x);
                     });
@@ -614,7 +612,7 @@ function newSelfTagList(s, user, c) {
             var otherTags = _.without(tags, x);
             var theTag = otherTags[0];
             var b = $('<div>' + '</div>');
-            var a = $('<a href="#" title="Tag Instance">' + theTag + '</a>');
+            var a = $('<a title="Tag Instance">' + theTag + '</a>');
             a.click(function () {
                 newPopupObjectView(i);
             });

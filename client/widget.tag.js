@@ -84,7 +84,7 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
         addOption('Index', newTreeBrowser);
         addOption('Wiki', newWikiBrowser);
         addOption('Object', newObjectSelector(null));
-        addOption('Who', newObjectSelector($N.getTag('User')));
+        addOption('Who', newObjectSelector($N.class.User));
         addOption('Emotion', newEmotionBrowser);
         addOption('Body', newBodyBrowser);
         addOption('Needs', newNeedsBrowser);
@@ -95,7 +95,7 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
             tagRestrictions = [tagRestrictions];
 
         _.each(tagRestrictions, function(t) {
-            var T = $N.getTag(t);
+            var T = $N.class[t];
             if (T)
                 addOption(T.name, newObjectSelector(T));
         });
@@ -358,12 +358,12 @@ function newObjectSelector(T) {
         function _update() {
             d.empty();
             
-            var tl = T ? $N.objectsWithTag(T.uri, false) : _.keys($N.objects());
+            var tl = T ? $N.objectsWithTag(T, false) : _.keys($N.objects());
             if (keywordFilter) {
                 tl = _.filter(tl, function(x) {
-                    var O = $N.getObject(x);
+                    var O = $N.object[x];
                     if (O.name)
-                        return (O.name.toLowerCase().indexOf(keywordFilter)!=-1);
+                        return (O.name.toLowerCase().indexOf(keywordFilter)!==-1);
                     return false;
                 });
             }

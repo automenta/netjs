@@ -120,7 +120,7 @@ function getAvatarURL(s, style) {
 function tagObject(tag) {
     var o = objNew();
     o.name = tag.name;
-    o = objAddDescription(o, tag.uri + ' [tag]');
+    o = objAddDescription(o, tag.id + ' [tag]');
     return o;
 }
 
@@ -128,7 +128,7 @@ function tagObject(tag) {
 //(function is globalalized for optimization purposes)
 function _onTagButtonClicked() {
     var ti = $(this).attr('taguri');
-    var t = $N.getTag(ti);
+    var t = $N.class[ti];
     if (t)
         newPopupObjectView(tagObject(t));
     return false;
@@ -145,13 +145,13 @@ function newTagImage(ti) {
 function newTagButton(t, onClicked, isButton) {
     var ti = null;
 
-    if (!t.uri) {
-        var to = $N.getTag(t);
+    if (!t.id) {
+        var to = $N.class[t];
         if (to)
             t = to;
     }
-    if (t.uri) {
-        ti = getTagIcon(t.uri);
+    if (t.id) {
+        ti = getTagIcon(t.id);
     }
     if (!ti)
         ti = getTagIcon(null);
@@ -161,7 +161,7 @@ function newTagButton(t, onClicked, isButton) {
         i = newTagImage(ti);
     }
 
-    var b = isButton ? newEle('button') : newEle('a').attr('href', '#');
+    var b = isButton ? newEle('button') : newEle('a');
 
     if (i)
         b.append(i);
@@ -180,7 +180,7 @@ function newTagButton(t, onClicked, isButton) {
 
     b.t = t;
     if (t)
-        b.attr('taguri', t.uri || (t + ''));
+        b.attr('taguri', t.id || (t + ''));
     b.click(onClicked);
 
     return b;
@@ -221,20 +221,6 @@ function newReplyWidget(onReply, onCancel) {
     return w;
 }
 
-//deprecated
-function pidToProperty(pid) {
-    return $N.property[pid];
-}
-
-//deprecated
-function getTagProperties(t) {
-    var TT = $N.class[t];
-    if (!TT)
-        return [];
-    if (!TT.properties)
-        return [];
-    return TT.properties;
-}
 
 
 /**
@@ -379,35 +365,31 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var missingProp = [];
             //Add missing required properties, min: >=1 (with their default values) of known objects:
 
+            if (!x.readonly) {
+                tags.forEach(function(t) {
+                    t = $N.class[t];
+                    if (!t)
+                        return;
 
-
-            for (var i = 0; i < tags.length; i++) {
-                var t = tags[i];
-                t = $N.getTag(t);
-                if (!t)
-                    continue;
-
-                var prop = t.properties;
-                if (!prop)
-                    continue;
-                var propVal = _.map(prop, pidToProperty);
-
-                if (!x.readonly) {
-                    for (var j = 0; j < prop.length; j++) {
-                        if (propVal[j].min)
-                            if (propVal[j].min > 0)
-                                if (!_.contains(tags, prop[j]))
-                                    missingProp.push(prop[j]);
-                    }
-                }
+                    var prop = t.property;
+                    if (!prop)
+                        return;
+                    
+                    _.each(prop, function(P, pid) {
+                        if (P.min)
+                            if (P.min > 0)
+                                if (!_.contains(tags, pid))
+                                    missingProp.push(pid);                        
+                    });
+                    
+                });
             }
 
-            for (var i = 0; i < missingProp.length; i++) {
-                var p = missingProp[i];
+            missingProp.forEach(function(p) {
                 widgetsToAdd.push(newTagSection(x, i + x.value.length, {
                     id: p
                 }, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange));
-            }
+            });
         }
 
 
@@ -786,7 +768,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     var prop = $N.getProperty(tag);
     var defaultValue = null;
     if (prop) {
-        type = prop.type;
+        type = prop.extend;
         tagLabel.html(prop.name);
 
         if (prop['default']) {
@@ -1174,7 +1156,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 if (typeof tagRestrictions === "string")
                     tagRestrictions = [tagRestrictions];
 
-                ts.attr('placeholder', prop.tag ? prop.tag.join(' or ') : '');
+                ts.attr('placeholder', tagRestrictions ? tagRestrictions.join(' or ') : '');
 
                 var mb = $('<button>...</button>').attr('title', "Find Object")
                         .css('margin-left', '0').appendTo(tt)
@@ -1223,7 +1205,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             //d.append('Unknown tag: ' + tag);            
         } else {
             var ti = getTagIcon(tag);
-            if ($N.class[tag] != undefined) {
+            if ($N.class[tag] !== undefined) {
                 tagLabel.html(TAG.name);
             }
             if (ti)
@@ -1237,10 +1219,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
                 var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
 
-                var pp = getTagProperties(tag);
-                _.each(pp, function(ppv) {
-                    var PP = $N.getProperty(ppv);
-
+                var pp = TAG.property;
+                _.each(pp, function(PP, ppv) {
                     //TODO dont include if max present reached
                     if (PP.max)
                         if (PP.max > 0) {
@@ -1250,7 +1230,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                         }
 
                     var ppn = PP.name;
-                    var appv = $('<a title="' + PP.type + '">+' + ppn + '</a>');
+                    var appv = $('<a title="' + PP.extend + '">+' + ppn + '</a>');
                     var defaultValue = '';
                     appv.click(function() {
                         onAdd(ppv, defaultValue);
@@ -1291,23 +1271,24 @@ function newPropertyView(x, vv) {
 
     var nameLabel = '<a><b>' + p.name + '</b></a>';
 
-    if (p.type === 'object') {
+    var ptype = p.extend;
+    if (ptype === 'object') {
         var o = $N.getObject(vv.value) || {
             name: vv.value
         };
 
         return newEle('li').append(nameLabel, ': ',
                 '<a href="javascript:newPopupObjectView(\'' + vv.value + '\')">' + o.name + '</a>');
-    } else if (p.type === 'url') {
+    } else if (ptype === 'url') {
         return '<li>' + nameLabel +
                 ': <a target="_blank" href="' + vv.value + '">' +
                 vv.value + '</a></li>';
-    } else if (p.type === 'timeseries') {
+    } else if (ptype === 'timeseries') {
         return ('<li>' + nameLabel + '<br/><textarea>' + JSON.stringify(vv.value) + '</textarea></li>');
-    } else if (p.type === 'timepoint') {
+    } else if (ptype === 'timepoint') {
         var when = parseInt(vv.value);
         return newEle('li').append(nameLabel, ': ', newEle('a').append($.timeago(new Date(when))));
-    } else if ((p.type === 'integer') && (p.incremental)) {
+    } else if ((ptype === 'integer') && (p.incremental)) {
         function goprev() {
             objSetFirstValue(x, vv.id, ii - 1);
             $N.notice(x);
@@ -1334,7 +1315,7 @@ function newPropertyView(x, vv) {
                 }).appendTo(v);
         return v;
 
-    } else if ((p.type === 'integer') || (p.type === 'real')) {
+    } else if ((ptype === 'integer') || (ptype === 'real')) {
         if (vv.value)
             if (vv.value.unit) {
                 return $('<li>' + nameLabel + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
@@ -1884,21 +1865,6 @@ function newObjectDetails(x) {
         return null;
 
     return ud;
-}
-
-
-function withObject(uri, success, failure) {
-    $.getJSON('/object/' + uri + '/json', function(s) {
-
-        if (s.length == 0) {
-            if (failure)
-                failure();
-        } else {
-            if (success) {
-                success(s);
-            }
-        }
-    });
 }
 
 

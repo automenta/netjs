@@ -353,17 +353,19 @@ function newGraphView(v) {
                         }]);
                 }
                 if (includeEdges['Reply']) {
-                    var replies = $N.getReplies(x);
-                    if (replies.length > 0) {
+                    var replies = x.reply;
+                    console.log('replies', x.reply);
+                    if (replies) {
                         var str = 1.0 / replies.length;
                         var thi = thickLine * str;
-                        for (var j = 0; j < replies.length; j++) {
-                            rtags.push([replies[j].id, {
+                        _.values(replies).forEach(function(rj) {
+                            rtags.push([rj.id, {
                                 stroke: 'rgba(64,128,64,0.5)',
                                 strokeWidth: Math.max(1.0, thi),
                                 strength: str
-                            }]);
-                        }
+                            }])
+                        });
+                        
                     }
                 }
 

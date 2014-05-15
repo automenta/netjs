@@ -642,20 +642,6 @@ function uuid() {
 exports.uuid = uuid;
 
 
-
-/** sets the only instance of the property, or creates if doesn't exist */
-/*function setTheProperty(object, propertyID, newValue) {
- for (var k = 0; k < object.values.length; k++) {
- if (object.values[k].uri == propertyID) {
- object.values[k].value = newValue;
- return object;
- }
- }
- object.values.push( {uri: propertyID, value: newValue } );
- return object;
- }
- exports.setTheProperty = setTheProperty;*/
-
 function isSelfObject(u) {
     return (u.self === true);
 }
@@ -1003,6 +989,40 @@ var Ontology = function(storeInstances) {
         return _.keys(r);
     };
     
+    //deprecated
+    this.getSubTags = function(s) {
+        if (typeof s === "string")
+            s = this.class[s];
+        return s.subclass;
+    };
+    
+    /** 
+     * TODO: rename to getTagged
+     * t = a class ID,or an array of class ID's - returns a list of object id's 
+     * */        
+    this.getTagged = this.objectsWithTag =  function(t, fullObject, includeSubTags) {
+        //TODO use tag index            
+        //TODO support subtags recursively
+        if ((typeof t === "object") && !Array.isArray(t)) 
+            t = [t.id];
+        if (!Array.isArray(t))
+            t = [t];
+
+        var r = [];
+
+        if (includeSubTags) {
+            t = _.union(t, this.getSubTags(t));
+        }
+
+        var that = this;
+        _.each(this.instance, function(v, k) {
+            var v = that.object[k];
+            if (objHasTag(v, t))
+                r.push(fullObject ? v : k);
+        });
+        return r;
+    };        
+    
     this.remove = function(x) {
         if (typeof x == "object") {            
             x = x.id;
@@ -1234,16 +1254,6 @@ function OutputBuffer(interval, write /* limit */) {
 }
 exports.OutputBuffer = OutputBuffer;
 
-function propGetType(t) {
-    if (isPrimitive(t))
-        return t;
-    else {
-        var p = window.$N.getProperty(t);
-        if (!p)
-            return null;
-        return p.type;
-    }
-}
 
 function isNumberValueIndefinite(v) {
     return isNaN(parseInt(v));
