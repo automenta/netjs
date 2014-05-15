@@ -1020,10 +1020,10 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             j.append('Past');
             j.append(i);
             j.append('Now');
-            widgetsToAdd.push(j);
+            d.append(j);
 
             var lb = $('<input type="checkbox">Latest</input>');
-            widgetsToAdd.push(lb);
+            d.append(lb);
 
             var s = $('<select>');
             s.append('<option value="1">5 mins</option>');
@@ -1033,17 +1033,17 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             s.append('<option value="5">1 day</option>');
             s.append('<option value="6">1 week</option>');
             s.append('<option value="7">1 month</option>');
-            widgetsToAdd.push(s);
+            d.append(s);
 
 
 
             var start = -1,
                     end = -1;
 
-            widgetsToAdd.push('<br/>');
+            d.append('<br/>');
 
             var output = $('<span/>');
-            widgetsToAdd.push(output);
+            d.append(output);
 
             var update = _.throttle(function() {
                 var rangeSec = 0;
@@ -1109,7 +1109,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 }, strength);
             });
         } else {
-            widgetsToAdd.push(new Date(t.value.start) + ' ' + new Date(t.value.end));
+            d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
         }
 
     } else if (type == 'object') {
@@ -1206,7 +1206,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 }
             }
 
-            widgetsToAdd.push(tt);
+            d.append(tt);
 
             whenSaved.push(function(y) {
                 objAddValue(y, tag, ts.result || ts.val(), strength);
