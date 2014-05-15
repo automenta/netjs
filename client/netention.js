@@ -156,8 +156,11 @@ function netention(f) {
         },
         myself: function() {
             var id = this.id();
-            if (id)
-                return new nobject(this.getObject(id));
+            if (id) {
+                var o = this.getObject(id);
+                if (o)
+                    return new nobject(o);
+            }
             return null;
         },
         become: function(target) {
