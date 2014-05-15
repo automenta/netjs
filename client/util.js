@@ -1031,18 +1031,9 @@ var Ontology = function(storeInstances, target) {
         }
 
         t.forEach(function(ti) {            
-            //console.log(_.object(fullObject ? _.values(that.tagged[ti]) : _.keys(that.tagged[ti]), true));
-            
             _.extend(r, _.object( _.keys(that.tagged[ti]), true));
         });
-        /*
-        var that = this;
-        _.each(this.instance, function(v, k) {
-            var v = that.object[k];
-            if (objHasTag(v, t))
-                r.push(fullObject ? v : k);
-        });
-        */
+        
         r = _.keys(r);
         if (fullObject)
             return r.map(function(s) { return $N.instance[s] });

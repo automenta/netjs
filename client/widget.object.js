@@ -662,7 +662,16 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     var tag = t.id;
     var strength = t.strength;
     if (strength === undefined)
-        strength = 1.0;
+        t.strength = strength = 1.0;
+
+    var events = {
+        onSave: whenSaved,
+        onAdd: onAdd,
+        onRemove: onRemove,
+        onStrengthChange: onStrengthChange,
+        onOrderChange: onOrderChange,
+        onSliderChange: whenSliderChange
+    };
 
     var e = newDiv().addClass('tagSection');
     var d = newDiv().addClass('tagSectionItem').appendTo(e);
@@ -765,7 +774,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         tagLabel.hide();
     }
 
-    var prop = $N.getProperty(tag);
+    var prop = $N.property[tag];
+    
     var defaultValue = null;
     if (prop) {
         type = prop.extend;
@@ -808,63 +818,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     } else if (type === 'cortexit') {
         //...
     } else if ((type === 'text') || (type === 'url') || (type === 'integer') || (type === 'real')) {
-
-        if (editable) {
-            var dd = $('<input type="text" placeholder="' + type + '"/>').appendTo(d);
-            if (prop.readonly) {
-                dd.attr('readonly', 'readonly');
-            }
-
-            var sx = null;
-            if (prop) {
-                if (prop.units) {
-                    sx = $('<select></select>');
-                    _.each(prop.units, function(u) {
-                        sx.append('<option id="u">' + u + '</option>');
-                    });
-                    d.append(sx);
-                }
-            }
-
-            if (t.value) {
-                if (t.value.unit) {
-                    //number and unit were both stored in a JSON object
-                    dd.val(t.value.number);
-                    sx.val(t.value.unit);
-                } else {
-                    //only the number was present
-                    dd.val(t.value);
-                }
-            } else if (defaultValue !== null) {
-                dd.val(defaultValue);
-            }
-
-            whenSaved.push(function(y) {
-                if ((type == 'text') || (type == 'url')) {
-                    objAddValue(y, tag, dd.val(), strength);
-                } else if ((type == 'real') || (type == 'integer')) {
-                    var ddv = (type == 'real') ? parseFloat(dd.val()) : parseInt(dd.val());
-
-                    if (isNaN(ddv))
-                        ddv = dd.val(); //store as string
-
-                    if (!sx)
-                        objAddValue(y, tag, ddv, strength);
-                    else
-                        objAddValue(y, tag, {
-                            number: ddv,
-                            unit: sx.val()
-                        }, strength);
-                }
-            });
-
-        } else {
-            var dd = newDiv();
-            if (t.value)
-                dd.html(t.value);
-            d.append(dd);
-        }
-
+        newTagSection.integer(x, index, t, prop, editable, d, events);
     } else if (type === 'boolean') {
         var ii = $('<input type="checkbox">');
 
@@ -1262,6 +1216,66 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
     return e;
 }
+newTagSection.real =
+newTagSection.integer = function(x, index, v, prop, editable, d, events) {
+    var type = prop.extend;
+    
+    if (editable) {
+        var dd = $('<input type="text" placeholder="' + type + '"/>').appendTo(d);
+        if (prop.readonly) {
+            dd.attr('readonly', 'readonly');
+        }
+
+        var sx = null;
+        if (prop.units) {
+            sx = $('<select></select>');
+            _.each(prop.units, function(u) {
+                sx.append('<option id="u">' + u + '</option>');
+            });
+            d.append(sx);
+        }
+
+        if (v.value) {
+            if (v.value.unit) {
+                //number and unit were both stored in a JSON object
+                dd.val(v.value.number);
+                sx.val(v.value.unit);
+            } else {
+                //only the number was present
+                dd.val(v.value);
+            }
+        } else if (prop.default !== undefined) {
+            dd.val(prop.default);
+        }
+
+        events.onSave.push(function(y) {
+            if ((type == 'text') || (type == 'url')) {
+                objAddValue(y, v.id, dd.val(), v.strength);
+            } else if ((type == 'real') || (type == 'integer')) {
+                var ddv = (type == 'real') ? parseFloat(dd.val()) : parseInt(dd.val());
+
+                if (isNaN(ddv))
+                    ddv = dd.val(); //store as string
+
+                if (!sx)
+                    objAddValue(y, prop.id, ddv, t.strength);
+                else
+                    objAddValue(y, prop.id, {
+                        number: ddv,
+                        unit: sx.val()
+                    }, v.strength);
+            }
+        });
+
+    } else {
+        var dd = newDiv().appendTo(d);
+        if (v.value)
+            dd.html(v.value);
+    }
+
+};
+
+
 
 function newPropertyView(x, vv) {
 
