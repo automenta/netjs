@@ -175,6 +175,10 @@ div.olMapViewport {
     background-color: rgba(255,255,255,0.1);
 } 
 
+.createSubObjectButton {
+    font-size: 80%;
+}
+
 .ObjectEditDiv .tag0, 
 .ObjectEditDiv .tag25, 
 .ObjectEditDiv .tag50, 
@@ -192,8 +196,8 @@ div.olMapViewport {
 .ObjectEditDiv .tag75 .tagButtons button {
     padding: 0;
 }
-.ObjectEditDiv .tag50 {    min-width: 23%;    }
-.ObjectEditDiv .tag75 {    min-width: 48%;      }
+.ObjectEditDiv .tag50 {    min-width: 23%; max-width: 23%;    }
+.ObjectEditDiv .tag75 {    min-width: 48%; max-width: 48%;      }
 .ObjectEditDiv .tag100 {    width: 99%; min-width: 99%; max-width: 99%;      }
 
 .tag0 { opacity: 0.25;  }

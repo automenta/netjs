@@ -441,6 +441,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 if (hideWidgets !== true) {
                     if (editable)
                         ontoSearcher = setInterval(search, ONTO_SEARCH_PERIOD_MS);
+                        search();
                 }
             }
         }
@@ -1107,7 +1108,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     } else if (type == 'object') {
         if (editable) {
             var tt = $('<span></span>');
-            var ts = $('<input></input>').attr('readonly', 'readonly');
+            var ts = $('<input></input>').css('margin-right', '0').attr('readonly', 'readonly');
 
             var value = t.value;
 
@@ -1160,36 +1161,41 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             tt.append(ts);
 
             if (!prop.readonly) {
-                var mb = $('<button title="Find Object">...</button>').appendTo(tt);
-
-                ts.attr('placeholder', prop.tag ? JSON.stringify(prop.tag) : 'Object');
 
                 var tagRestrictions = prop.tag;
-                mb.click(function() {
-                    var pp = newPopup("Select Object", true, true);
-                    var tagger = newTagger(null, function(tags) {
-                        ts.result = tags = tags[0];
+                if (typeof tagRestrictions === "string")
+                    tagRestrictions = [tagRestrictions];
 
-                        updateTS(tags);
+                ts.attr('placeholder', prop.tag ? prop.tag.join(' or ') : '');
 
-                        pp.dialog('close');
-                    }, tagRestrictions, 1);
-                    pp.append(tagger);
-                });
+                var mb = $('<button>...</button>').attr('title', "Find Object")
+                            .css('margin-left','0').appendTo(tt)
+                            .click(function() {
+                                var pp = newPopup("Select Object", true, true);
+                                var tagger = newTagger(null, function(tags) {
+                                    ts.result = tags = tags[0];
+
+                                    updateTS(tags);
+
+                                    pp.dialog('close');
+                                }, tagRestrictions, 1);
+                                pp.append(tagger);
+                            });
+                            
                 ts.click(function() {
                     if (ts.val() == '')
                         mb.click();
                 });
 
-                if (tagRestrictions) {
-                    if (typeof tagRestrictions === "string")
-                        tagRestrictions = [tagRestrictions];
+                if (tagRestrictions) {                    
+                    var tnames = [];
                     tagRestrictions.forEach(function(tr) {
                         var T = $N.getTag(tr);
+                        tnames.push(T.name);
                         if (!T)
                             return;
-                        var mn = $('<button disabled>new ' + T.name + '</button>').appendTo(tt);
                     });
+                    $('<button title="Create ' + tnames.join(' or ') + '" disabled class="createSubObjectButton">+</button>').appendTo(tt);
                 }
             }
 

@@ -25,7 +25,8 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
         }
         else {
             clearButton.show();
-            b.html('<b>Select</b>');
+            
+            b.html('<b>Select</b>');                
             for (var i = 0; i < tags.length; i++)
                 tagsCombo.append(newTagButton(tags[i]));
         }
@@ -38,6 +39,13 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
                 return;
         
         tags = _.unique([t].concat(tags));
+
+        if (maxTags)
+            if (tags.length === maxTags) {
+                onFinished(tags);
+                return;
+            }
+
         tagsCombo.update();
     }
 
@@ -106,21 +114,11 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
     });
     saveBar.append(clearButton);
 
-
-    b.click(function() {
-        onFinished(tags);
-        /*
-         var newTags = [];
-         $('.TagChoice').each(function(x) {
-         var t = $(this);
-         var tag = t.attr('id');
-         if (t.is(':checked'))
-         newTags.push(tag);
-         });
-         onFinished(newTags);*/
-
-    });
-    saveBar.append(b);
+    if (maxTags!==1) {
+        b.click(function() {
+            onFinished(tags);
+        }).appendTo(saveBar);
+    }
     
     later(function() {        
         selectBar.append(saveBar);
