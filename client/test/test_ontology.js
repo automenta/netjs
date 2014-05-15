@@ -1,5 +1,5 @@
 test("Ontology", function() {
-    var $N = new Ontology();
+    var $N = new Ontology(true);
         
     var data = new nobject();
     ok(data, "new nobject()");

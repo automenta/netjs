@@ -941,7 +941,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     width: 98%;
 }
 .ObjectReply {
-    margin: 0.8em 0.1em 0.0em 3em !important;
+    margin: 0.8em 0.1em 0.0em 2em !important;
     font-size: 90%;
     opacity: 0.95;
 }
@@ -1073,6 +1073,10 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     float: left;
     width: 86%;
 }
+.chatViewLineContent .FirstReply {
+    margin-left: 0 !important;
+}
+
 .chatViewLineContent img {
     max-height: 4em;
 }

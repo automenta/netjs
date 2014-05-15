@@ -771,7 +771,7 @@ function objIsProperty(x) {
 exports.objIsProperty = objIsProperty;
 
 /** an interface for interacting with nobjects and ontology */
-var Ontology = function() {
+var Ontology = function(storeInstances) {
     var that = this;        
     
     //resets to empty state
@@ -844,9 +844,7 @@ var Ontology = function() {
                     
                     if (objIsProperty(v)) {
                         //embedded property
-                        console.log('embedded property', v);
                         that.add(v);
-                        console.log('embedded property', v);
                         v = v.id;
                     }
                     
@@ -889,7 +887,7 @@ var Ontology = function() {
             delete that.instance[x.id]; delete x._instance;
             that.serializedPropreties = null;
         }
-        else {
+        else if (storeInstances) {
             that.instance[x.id] = x;
             x._instance = true;
             delete that.class[x.id];    delete x._class;
@@ -897,8 +895,6 @@ var Ontology = function() {
             
             indexInstance(x);
         }
-        
-//        that.update(x);
         
         return that;        
     };
@@ -984,6 +980,7 @@ var Ontology = function() {
         var r = {};
 
         function addReplies(ii) {
+            
             ii.forEach(function(i) {
                 if (typeof i === "string")
                     i = that.instance[i];
@@ -991,10 +988,11 @@ var Ontology = function() {
                 if (!i)
                     return;
                 
-                if (r[i])
+                if (r[i.id])
                     return;
 
-                r[i] = true;
+
+                r[i.id] = true;
                 
                 if (i.reply)
                     addReplies(_.keys(i.reply));
@@ -1011,7 +1009,7 @@ var Ontology = function() {
         }
         var existingObject = that.object[x];
         if (!existingObject)
-            return;
+            return false;
         
         unindexInstance(existingObject);
         
@@ -1375,7 +1373,7 @@ exports.objCompare = objCompare;
 /* returns a cloned version of the object, compacted */
 function objCompact(o) {
     if (o.modifiedAt)
-        if (o.modifiedAt == o.createdAt)
+        if (o.modifiedAt === o.createdAt)
             delete o.modifiedAt;
 
     //console.log(o.name);
@@ -1464,14 +1462,16 @@ exports.objCompact = objCompact;
 
 /** expands an object in-place, and returns it */
 function objExpand(o) {
-
+    
     if (o.removed) {
-        o.id = o.removed;
-        o.removed = true;
+        if (typeof o.removed != 'boolean') {
+            o.id = o.removed;
+            o.removed = true;
+        }
     }
 
     if (o.at) {
-        if (Array.isArray(o.at)) {
+        if (Array.isArray(o.at) && (o.at.length == 2)) {
             o.createdAt = o.at[0];
             o.modifiedAt = o.at[1] + o.createdAt;
         }
@@ -1480,7 +1480,7 @@ function objExpand(o) {
         }
         delete o.at;
     }
-    
+
     if (!o.value)
         return o;
 

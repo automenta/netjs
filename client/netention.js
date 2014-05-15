@@ -432,7 +432,7 @@ function netention(f) {
             if (x.author === undefined)
                 localOnly = true;
 
-            if (configuration.connection != 'local') {
+            if (configuration.connection !== 'local') {
                 if ((!this.socket) && (!localOnly)) {
                     $.pnotify({
                         title: 'Unable to delete: Not connected, must login.'
@@ -827,7 +827,7 @@ function netention(f) {
 
     //exports = the variable from util.js which is also used by node.js require()        		
     var $N = _.extend(new $NClient(), exports);
-    $N = _.extend($N, new Ontology());
+    $N = _.extend($N, new Ontology(true));
     
     $N.toString = function() {
         return JSON.stringify(this);

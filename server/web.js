@@ -38,7 +38,7 @@ exports.start = function(options) {
     var express = expressm();
 
     var $N = _.clone(util);
-    _.extend($N, new $N.Ontology());
+    _.extend($N, new $N.Ontology(false));
     
     $N.server = options;
     $N.httpserver = express;
@@ -236,8 +236,7 @@ exports.start = function(options) {
             return;
         }
 
-
-        attention.remove(objectID);
+        $N.remove(objectID);
 
         function objectRemoved(uri) {
             var a = {
@@ -413,32 +412,31 @@ exports.start = function(options) {
     }
 
     function getObjectByID(uri, whenFinished) {
-        if (tags[uri] != undefined) {
+        /*if ($N.class[uri] != undefined) {
             //it's a tag
             whenFinished(tags[uri]);
         }
-        else {
-            db.obj.ensureIndex({id: "hashed"}, function(err, res) {
+        else {*/
+        
+        db.obj.ensureIndex({id: "hashed"}, function(err, res) {
+            if (err) {
+                console.error('ENSURE INDEX id', err);
+            }
+
+            db.obj.find({'id': uri}, function(err, docs) {
                 if (err) {
-                    console.error('ENSURE INDEX id', err);
+                    nlog('getObjectByID: ' + err);
+                    whenFinished(err, null);
                 }
-
-                db.obj.find({'id': uri}, function(err, docs) {
-                    if (err) {
-                        nlog('getObjectByID: ' + err);
-                        whenFinished(err, null);
-                    }
-                    else if (docs.length == 1) {
-                        whenFinished(null, unpack(docs)[0]);
-                    }
-                    else {
-                        //none found
-                        whenFinished(true, null);
-                    }
-                });
+                else if (docs.length == 1) {
+                    whenFinished(null, unpack(docs)[0]);
+                }
+                else {
+                    //none found
+                    whenFinished(true, null);
+                }
             });
-
-        }
+        });
     }
     $N.getObjectByID = getObjectByID;
     $N.getObjectSnapshot = getObjectByID; //DEPRECATED
@@ -1288,7 +1286,6 @@ exports.start = function(options) {
                 }
             });
         }
-
 
         o = new $N.nobject($N.objExpand(o));
 

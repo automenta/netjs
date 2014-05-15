@@ -125,6 +125,8 @@ function newChatView(v) {
         var toDisplayWithReplies = $N.getAllReplies(toDisplay);
 
         var added = _.difference(toDisplayWithReplies, displayedObjects);
+        console.log('chat added', toDisplay, toDisplayWithReplies);
+        
         var removed = _.difference(displayedObjects, toDisplayWithReplies);
         var newlyChanged = _.filter(toDisplayWithReplies, function(D) {
             var dd = D.modifiedAt || D.createdAt;
@@ -163,9 +165,11 @@ function newChatView(v) {
                 var addedContainsReplies = false;
                 for (var i = 0; i < added.length; i++) {
                     var A = $N.getObject(added[i]);
-                    if (A.replyTo) {
-                        addedContainsReplies = true;
-                        break;
+                    if (A) {
+                        if (A.replyTo) {
+                            addedContainsReplies = true;
+                            break;
+                        }
                     }
                 }
                 if (addedContainsReplies) {
