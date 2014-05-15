@@ -161,7 +161,7 @@ function netention(f) {
                 if (o)
                     return new nobject(o);
             }
-            return null;
+            return undefined;
         },
         become: function(target) {
 
