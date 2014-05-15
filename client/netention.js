@@ -155,7 +155,10 @@ function netention(f) {
             return this.get('clientID');
         },
         myself: function() {
-            return new nobject(this.getObject(this.id()));
+            var id = this.id();
+            if (id)
+                return new nobject(this.getObject(id));
+            return null;
         },
         become: function(target) {
 
