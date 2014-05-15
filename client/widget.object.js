@@ -680,8 +680,11 @@ function applyTagStrengthClass(e, s) {
 function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange) {
     var tag = t.id;
     var strength = t.strength;
+    if (strength === undefined) strength = 1.0; 
 
-    var d = newDiv().addClass('tagSection');
+    var e = newDiv().addClass('tagSection');
+    var d = newDiv().addClass('tagSectionItem').appendTo(e);
+    applyTagStrengthClass(e, strength);
 
     if (configuration.device !== configuration.MOBILE) {
         d.hover( function() {
@@ -691,14 +694,11 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         } );
      }
 
-    if (strength === undefined)
-        strength = 1.0;
 
-    var tagLabel = $('<span>' + tag + '</span>').addClass('tagLabel');
+    var tagLabel = newEle('span').html(tag).addClass('tagLabel');
 
     var tagIcon = $('<img src="' + getTagIcon(null) + '"/>');
 
-    applyTagStrengthClass(d, strength);
 
 
     d.append(tagLabel, '&nbsp;');
@@ -744,8 +744,9 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         if (strength > 0) {
             var minusButton = newEle('button').html('-').appendTo(tagButtons).mousedown(function() {
                 var newstrength = Math.max(0, strength - 0.25);
-                if (newstrength!==strength)
+                if (newstrength!==strength) {
                     onStrengthChange(index,  newstrength);
+                }
             });
         }
         
@@ -755,11 +756,10 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 if (newstrength!==strength)
                     onStrengthChange(index,  newstrength);
             });
-            var strengthAdjust = newDiv().appendTo(tagButtons)
+            /*var strengthAdjust = newDiv().appendTo(tagButtons)
                     .attr('style','z-index:-1; position:absolute; bottom: -10px; height: 10px; background-color: black; width:100%');
-
             var strengthIndicator = newDiv().html('&nbsp;').appendTo(strengthAdjust)
-                    .attr('style','z-index:-1; position:absolute; height: 10px; background-color: white; width:' + (100.0*strength) + '%');                
+                    .attr('style','z-index:-1; position:absolute; height: 10px; background-color: white; width:' + (100.0*strength) + '%');                */
         }
         
         var removeButton = $('<button title="Remove">x</button>').addClass('tagButton').appendTo(tagButtons)
@@ -1279,7 +1279,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     if (t.description)
         d.append('<ul>' + t.description + '</ul>');
 
-    return d;
+    return e;
 }
 
 function newPropertyView(x, vv) {

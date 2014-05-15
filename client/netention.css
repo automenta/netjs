@@ -157,16 +157,18 @@ div.olMapViewport {
     float: right;
     opacity: 0.5;
     margin-left: 0.5em;
-    margin-bottom: 15px;
+    //margin-bottom: 15px;
 }
 
 .tagSection {
     width: 100%;
     clear: both;
-    padding: 0.5%;
-    margin: 0.5%;
-    margin-left: 0;
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
+}
+.tagSectionItem {
+    padding: 5px;
+    margin: 5px;
     border: 1px solid rgba(127,127,127,0.5);    
 }
 
@@ -183,7 +185,7 @@ div.olMapViewport {
 .ObjectEditDiv .tag25, 
 .ObjectEditDiv .tag50, 
 .ObjectEditDiv .tag75 {
-    float: left; width: auto; clear: none;
+    float: left;  clear: none;
 }
 
 .ObjectEditDiv .tag100 .tagButtons {
@@ -196,9 +198,11 @@ div.olMapViewport {
 .ObjectEditDiv .tag75 .tagButtons button {
     padding: 0;
 }
-.ObjectEditDiv .tag50 {    min-width: 23%; max-width: 23%;    }
-.ObjectEditDiv .tag75 {    min-width: 48%; max-width: 48%;      }
-.ObjectEditDiv .tag100 {    width: 99%; min-width: 99%; max-width: 99%;      }
+.ObjectEditDiv .tag0 {    width: 25%; min-width: 25%; max-width: 25%;    }
+.ObjectEditDiv .tag25 {    width: 25%; min-width: 25%; max-width: 25%;    }
+.ObjectEditDiv .tag50 {    width: 25%; min-width: 25%; max-width: 25%;    }
+.ObjectEditDiv .tag75 {    width: 50%; min-width: 50%; max-width: 50%;      }
+.ObjectEditDiv .tag100 {    width: 100%; min-width: 100%; max-width: 100%;      }
 
 .tag0 { opacity: 0.25;  }
 .tag25 { opacity: 0.5; }
