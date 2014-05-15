@@ -354,7 +354,6 @@ function newGraphView(v) {
                 }
                 if (includeEdges['Reply']) {
                     var replies = x.reply;
-                    console.log('replies', x.reply);
                     if (replies) {
                         var str = 1.0 / replies.length;
                         var thi = thickLine * str;

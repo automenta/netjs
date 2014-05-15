@@ -756,6 +756,11 @@ function objIsProperty(x) {
 }
 exports.objIsProperty = objIsProperty;
 
+
+Array.prototype.pushArray = function(arr) {
+    this.push.apply(this, arr);
+};
+
 /** an interface for interacting with nobjects and ontology */
 var Ontology = function(storeInstances, target) {
     var that = target ? target : this;        
@@ -786,16 +791,14 @@ var Ontology = function(storeInstances, target) {
           'spacepoint': { }
           //...
         };
-    };
-    /*
-     * //has undiagnosed side effects
+    };    
+    
     that.clearInstances = function() {
         that.instance = { };
         that.tagged = { };
         that.object = _.extend( _.extend({ }, that.class), that.property ); //replace object with only classes and properties
-        console.log(_.keys(that.instance),_.keys(that.tagged), _.keys(that.object))
     };
-    */
+    
     
     that.clear();
     
@@ -916,12 +919,12 @@ var Ontology = function(storeInstances, target) {
         //this object's replies to other object
         if (x.replyTo) {            
             x.replyTo.forEach(function(t) {
-               var T = that.instance[t];
-               if (T) {
-                   T.reply[x.id] = x;
+                var T = that.instance[t];
+                if (T) {
+                    T.reply[x.id] = x;
                 }
                 else {
-                    console.error('orphan reply object', T);
+                    //console.error(x, 'orphan reply object to', t);
                 }
             });
         }
@@ -1021,19 +1024,30 @@ var Ontology = function(storeInstances, target) {
         if (!Array.isArray(t))
             t = [t];
 
-        var r = [];
+        var r = { };
 
         if (includeSubTags) {
-            t = _.union(t, this.getSubTags(t));
+            t = _.union(t, that.getSubTags(t));
         }
 
+        t.forEach(function(ti) {            
+            //console.log(_.object(fullObject ? _.values(that.tagged[ti]) : _.keys(that.tagged[ti]), true));
+            
+            _.extend(r, _.object( _.keys(that.tagged[ti]), true));
+        });
+        /*
         var that = this;
         _.each(this.instance, function(v, k) {
             var v = that.object[k];
             if (objHasTag(v, t))
                 r.push(fullObject ? v : k);
         });
-        return r;
+        */
+        r = _.keys(r);
+        if (fullObject)
+            return r.map(function(s) { return $N.instance[s] });
+        else 
+            return r;
     };        
     
     that.remove = function(x) {

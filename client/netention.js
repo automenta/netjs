@@ -162,7 +162,7 @@ function netention(f) {
 
                         $N.save('otherSelves', _.unique(os));
 
-                        $N.clear();
+                        $N.clearInstances();
                         $N.clearTransients();
 
                         $N.getUserObjects(function() {
