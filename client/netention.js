@@ -71,21 +71,6 @@ function netention(f) {
             return this.class[t];
         },
         //deprecated
-        tagRoots: function() {
-            return this.classRoots;
-            /*
-            var that = this;
-            //this might be suboptimal
-            return _.select(_.keys(this.tags), function(tt) {
-                var t = that.tag(tt);
-                if (!t.tag)
-                    return true;
-                else
-                    return (t.tag.length === 0);
-            });
-            */
-        },
-        //deprecated
         getSubTags: function(s) {
             return s.subclass;
         },
@@ -728,9 +713,10 @@ function netention(f) {
             var myID = this.id();
 
             if (!onlySelf) {
+                //fast count
                 _.each(this.tagged, function(v, k) {
                     if (v)
-                        tagCount[k] = v.length; 
+                        tagCount[k] = _.keys(v).length; 
                 });
             }
             else {
@@ -743,6 +729,9 @@ function netention(f) {
                         if (oi.author !== myID)
                             return;
 
+                    //TODO use the simple counting method as above; 
+                    //separate the weighted counting into another function or by an optional parameter
+                    
                     var ts = objTagStrength(oi);
                     for (var i in ts) {
                         if (!tagCount[i])

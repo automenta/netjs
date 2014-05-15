@@ -242,12 +242,12 @@ function newTagTree(param) {
 
         if (i.name) {
             name = i.name;
-            xi = i.uri;
+            xi = i.id;
         } else
             name = xi = i;
 
-        var children = $N.getSubTags(xi);
-
+        var children = i.subclass || [];
+        
         var label = name;
         if (stc[xi]) {
             if (stc[xi] > 0)
@@ -259,10 +259,10 @@ function newTagTree(param) {
 
         var b = newTagLayerDiv(xi, label);
 
-        if (children.length > 0) {
+        if (_.keys(children).length > 0) {
             b.children = [];
-            children.forEach(function(c) {
-                subtree(b.children, $N.tag(c));
+            _.each(children, function(c, cid) {
+                subtree(b.children, c);
             });
         }
         b.id = xi;
@@ -278,7 +278,7 @@ function newTagTree(param) {
 
         var others = [];
         for (var c in stc) {
-            if (!$N.tag(c))
+            if (!$N.class[c])
                 others.push(c);
         }
 
@@ -291,10 +291,10 @@ function newTagTree(param) {
         root.push(otherFolder);
     }
 
-    var roots = $N.tagRoots();
-    roots.forEach(function (t) {
-        subtree(T, $N.tag(t));
+    _.each($N.classRoot, function (c, cid) {
+        subtree(T, c);
     });
+    
     othersubtree(T);
 
     if (addToTree)

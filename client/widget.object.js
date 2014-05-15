@@ -224,12 +224,14 @@ function newReplyWidget(onReply, onCancel) {
     return w;
 }
 
+//deprecated
 function pidToProperty(pid) {
-    return $N.getProperty(pid);
+    return $N.property[pid];
 }
 
+//deprecated
 function getTagProperties(t) {
-    var TT = $N.tags[t];
+    var TT = $N.class[t];
     if (!TT)
         return [];
     if (!TT.properties)
@@ -1214,7 +1216,8 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             });
         }
     } else if (tag) {
-        var TAG = $N.tags[tag];
+        var TAG = $N.class[tag];
+        
         whenSaved.push(function(y) {
             objAddTag(y, tag, strength);
         });
@@ -1222,7 +1225,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             //d.append('Unknown tag: ' + tag);            
         } else {
             var ti = getTagIcon(tag);
-            if ($N.tags[tag] != undefined) {
+            if ($N.class[tag] != undefined) {
                 tagLabel.html(TAG.name);
             }
             if (ti)
