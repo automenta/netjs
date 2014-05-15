@@ -616,8 +616,6 @@ $(document).ready(function() {
 
         setTheme($N.get('theme'));
 
-        $N.clear();
-
         $N.loadOntology(schemaURL, function() {
             $('#NotificationArea').html('Ontology ready. Loading objects...');
 

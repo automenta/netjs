@@ -1,4 +1,4 @@
-test("Object Lifecycle", function() {
+test("Ontology", function() {
     var $N = new Ontology();
         
     var data = new nobject();

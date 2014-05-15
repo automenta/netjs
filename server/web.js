@@ -38,20 +38,21 @@ exports.start = function(options) {
     var express = expressm();
 
     var $N = _.clone(util);
+    _.extend($N, new $N.Ontology());
+    
     $N.server = options;
     $N.httpserver = express;
 
-    var focusHistory = [];
-    var focusHistoryMaxAge = 24 * 60 * 60 * 1000; //in ms
-
-    var tags = {};
-    var properties = {};
+    
     var connectedUsers = {};	//current state of all clients, indexed by their clientID 
 
-    var attention = memory.Attention(0.95);
-
-    var logMemory = util.createRingBuffer(256);
+    var focusHistory = [];
+    var focusHistoryMaxAge = 24 * 60 * 60 * 1000; //in ms
+    //var attention = memory.Attention(0.95);
+    //var logMemory = util.createRingBuffer(256);
     $N.server.interestTime = {};	//accumualted time per interest, indexed by tag URI
+
+
 
     //"mydb"; // "username:password@example.com/mydb"
     var dbURL = $N.server.databaseURL || process.env.MongoURL;
@@ -208,9 +209,6 @@ exports.start = function(options) {
                  }
                  }*/
 
-                /* logMemory = util.createRingBuffer(256);
-                 logMemory.buffer = x.logMemoryBuffer;
-                 logMemory.pointer = x.logMemoryPointer;*/
             }
 
             if (f)
@@ -333,7 +331,7 @@ exports.start = function(options) {
 
         o = util.objExpand(o);
 
-        var _tag = util.objTags(o);	//provides an index for faster DB querying ($in)
+        var _tag = $N.objTags(o);	//provides an index for faster DB querying ($in)
         if (_tag.length > 0)
             o._tag = _tag;
 
@@ -345,7 +343,7 @@ exports.start = function(options) {
         if (o.modifiedAt === undefined)
             o.modifiedAt = o.createdAt;
 
-        attention.notice(o, 0.1);
+        //attention.notice(o, 0.1);
 
         db.obj.update({id: o.id}, o, {upsert: true}, function(err) {
             if (err) {
@@ -370,7 +368,7 @@ exports.start = function(options) {
     }
     $N.addProperties = addProperties;
 
-    function addTags(at, defaultTag) {
+    /*function addTags(at, defaultTag) {
         at.forEach(function(t) {
             if (!t)
                 return;
@@ -400,12 +398,8 @@ exports.start = function(options) {
 
         //TODO broadcast change in tags?
     }
-    $N.addTags = addTags;
+    $N.addTags = addTags;*/
 
-    function subtags(t) {
-        return util.subtags(tags, t);
-    }
-    $N.subtags = subtags;
 
     //unpacks an array of objects, returning a new array of the unpacked objects, optionally as nobjects
     function unpack(x, notNobject) {
@@ -571,12 +565,6 @@ exports.start = function(options) {
 
     }
 
-    function getOperatorTags() {
-        return _.filter(_.keys(tags), function(t) {
-            return tags[t].operator;
-        });
-    }
-    $N.getOperatorTags = getOperatorTags;
 
     function refactorObjectTag(fromTag, toTag) {
         var objects = [];
@@ -584,10 +572,10 @@ exports.start = function(options) {
             objects.push(x);
         }, function() {
             _.each(objects, function(o) {
-                console.log('Refactor from:', o);
+                //console.log('Refactor from:', o);
                 util.objRemoveTag(o, fromTag);
                 util.objAddTag(o, toTag);
-                console.log('  Refactor to:', o);
+                //console.log('  Refactor to:', o);
                 $N.notice(o);
             });
         })
@@ -647,7 +635,6 @@ exports.start = function(options) {
 
 
     function nlog(x) {
-
         var xs = x;
         if (typeof (x) != "string")
             xs = JSON.stringify(x, null, 4);
@@ -655,7 +642,6 @@ exports.start = function(options) {
         var msg = new Date() + ': ' + xs;
 
         console.log(x);
-        logMemory.push(msg);
     }
 
     function sendRDF(res, g) {
@@ -1194,9 +1180,10 @@ exports.start = function(options) {
     }
 
 
+    /*
     express.get('/log', function(req, res) {
         sendJSON(res, logMemory.buffer);
-    });
+    });*/
 
     function compactObjects(list) {
         return list.map(function(o) {
@@ -1681,7 +1668,7 @@ exports.start = function(options) {
     express.get('/ontology/:format', function(req, res) {
         var format = req.params.format;
         if ((format === 'json') || (format == 'jsonpack'))
-            sendJSON(res, {'tags': tags, 'properties': properties}, null, format);
+            sendJSON(res, {'class': $N.classSerialized(), 'property': $N.propertySerialized() }, null, format);
         else
             sendJSON(res, 'unknown format: ' + format);
     });

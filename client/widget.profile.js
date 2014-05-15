@@ -150,18 +150,16 @@ function newNewProfileWidget(whenFinished) {
 
         var u = uuid();
         var uo = u;
-        var o = objNew(uo, name);
+        var o = new nobject(uo, name);
         o.self = true;
         o.author = uo;
         o.scope = ObjScope.Global;
-        objAddTag(o, 'Human');
-        objAddTag(o, 'User');
+        o.addTag('Human');
+        o.addTag('User');
 
         if (extraProperties) {
             for (var i = 0; i < extraProperties.length; i++) {
-                var e = extraProperties[i];
-                var ei = extraPropertyInputs[i];
-                objAddValue(o, e, ei.val());
+                o.add(extraProperties[i], extraPropertyInputs[i].val());
             }
         }
 

@@ -143,8 +143,12 @@ function newUsView(v) {
             sidebar.empty();
 
             var avatarButton = $('<span/>');
-            var avatarImg = newAvatarImage($N.getObject(currentUser));
-            avatarImg.attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
+            
+            var myself = $N.myself();
+            if (myself) {
+                newAvatarImage(myself)
+                        .attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
+            }
 
             var exportButton = $('<button>Summarize</button>');
             exportButton.click(function () {

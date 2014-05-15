@@ -6,15 +6,15 @@ var currencyUnits = ['Bitcoin', 'USDollar', 'Euro', 'Gold(g)', 'Silver(g)'];
 //http://www.therichest.org/business/most-traded-currencies/
 
 var generalTags = [
-    {uri: 'Thing', name: 'Thing', description: 'Something that may be used or applied'},
-    {uri: 'Concept', name: 'Concept', description: 'An abstract concept'},
-    {uri: 'Action', name: 'Action', //combined Event into this one..
+    {id: 'Thing', name: 'Thing', description: 'Something that may be used or applied', extend:null},
+    {id: 'Concept', name: 'Concept', description: 'An abstract concept', extend:null },
+    {id: 'Action', name: 'Action', extend:null, 
         description: 'An action or event that may be accomplished or attended',
-        properties: {
-            'active': {name: 'Active', type: 'boolean'},
-            'startsAt': {name: 'Starts At', type: 'text' /*datetime*/},
-            'stopsAt': {name: 'Stops At', type: 'text' /*datetime*/},
-            'maxAttendance': {name: 'Maximum Attendance', type: 'integer' /*datetime*/}
+        value: {
+            'active': {name: 'Active', extend: 'boolean'},
+            'startsAt': {name: 'Starts At', extend: 'text' /*datetime*/},
+            'stopsAt': {name: 'Stops At', extend: 'text' /*datetime*/},
+            'maxAttendance': {name: 'Maximum Attendance', extend: 'integer' /*datetime*/}
             //Inviting (person)
             //Invitation (text)
             //Completed?
@@ -36,26 +36,26 @@ var generalTags = [
 
         }
     },
-    {uri: 'Imaginary', name: 'Imaginary', description: 'Something imaginary, indefinite values', tag: 'Concept',
-        properties: {
-            'involvesUser': {name: 'Involves', type: 'object'}
+    {id: 'Imaginary', name: 'Imaginary', description: 'Something imaginary, indefinite values', extend: 'Concept',
+        value: {
+            'involvesUser': {name: 'Involves', extend: 'object'}
         }
     },
     //Being superclass of Human..
     //TODO "Contact Schema": http://portablecontacts.net/draft-spec.html#schema   
     
-    {uri: 'Human', name: 'Human', tag: 'Thing', 
-        properties: {
-            'currentRole': {name: 'Current Role', type: 'text'},
-            'biography': {name: 'Biography', type: 'html'},
-            'birthdate': {name: 'Birthdate', type: 'timepoint'},
-            //age: { name: 'Age', type: 'function', value: function(x) { return = now - getProperty(x, 'birthdate').val() ... } }
+    {id: 'Human', name: 'Human', extend: 'Thing', 
+        value: {
+            'currentRole': {name: 'Current Role', extend: 'text'},
+            'biography': {name: 'Biography', extend: 'html'},
+            'birthdate': {name: 'Birthdate', extend: 'timepoint'},
+            //age: { name: 'Age', extend: 'function', value: function(x) { return = now - getProperty(x, 'birthdate').val() ... } }
 
-            'male': {name: 'Male', type: 'boolean'},
-            'female': {name: 'Female', type: 'boolean'},
-            'email': {name: 'E-Mail', type: 'text'},
-            //'friend': {name: 'Friend', type: 'object'},
-            //'parent': {name: 'Parent', type: 'object', tag: ['Human']}
+            'male': {name: 'Male', extend: 'boolean'},
+            'female': {name: 'Female', extend: 'boolean'},
+            'email': {name: 'E-Mail', extend: 'text'},
+            //'friend': {name: 'Friend', extend: 'object'},
+            //'parent': {name: 'Parent', extend: 'object', extend: ['Human']}
 
             /*
              <select name="ext_sel[]" id="ext_sel2">  <option value="" selected="selected">select 3rd filter...</option>  <option value="languages">Spoken languages</option>  <option value="body">Body type</option>  <option value="height">Height</option>  <option value="weight">Weight</option>  <option value="hair">Hair color</option>  <option value="eyes">Eye color</option>  <option value="sexuality">Sexuality</option>  <option value="relationship">Status</option>  <option value="children">Children</option>  <option value="education">Education</option>  <option value="star_sign">Star sign</option>  <option value="drinking">Drinking</option>  <option value="smoking">Smoking</option>  </select>
@@ -79,76 +79,76 @@ var generalTags = [
      
      */
     
-    { uri: 'Similar', name: 'Similar', tag: 'Concept',
-      properties: {
-        'similarTo': { name: 'to', type: 'object' }
+    { id: 'Similar', name: 'Similar', extend: 'Concept',
+      value: {
+        'similarTo': { name: 'to', extend: 'object' }
       }
     },
 
-    {uri: 'Item', name: 'Item',
-        properties: {
-            'purpose': {name: 'Purpose', type: 'html'},
-            'quantity': {name: 'Quantity', type: 'integer'},
-            //'stockCount': {name: 'Stock Count', type: 'integer'},
-            'individualWeight': {name: 'Weight (individual)', type: 'real'},
-            'color': {name: 'Color', type: 'text'},
-            'itemCost': {name: 'Cost', type: 'real', default: 0, units: currencyUnits},
-            'quantityUnit': {name: 'Quantity Unit', type: 'string'},
-            'quantityPerTime': {name: 'Quantity per Day', type: 'real'},
-            'quality': {name: 'Quality', type: 'text'},
-            'offerExpires': {name: 'Offer Expires', type: 'timepoint'},
-            'itemExpires': {name: 'Expires', type: 'timepoint'},
-            'itemPaid': {name: 'Paid', type: 'boolean'},
-            'payWalletBTC': {name: 'Pay Bitcoin Wallet', type: 'text'},
-            'payWalletRipple': {name: 'Pay Ripple Wallet', type: 'text'},
-            'payWalletPayPal': {name: 'Pay PayPal Address', type: 'text'},
-            'payWalletRTN': {name: 'Pay Bank Account (RTN)', type: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
+    {id: 'Item', name: 'Item',
+        value: {
+            'purpose': {name: 'Purpose', extend: 'html'},
+            'quantity': {name: 'Quantity', extend: 'integer'},
+            //'stockCount': {name: 'Stock Count', extend: 'integer'},
+            'individualWeight': {name: 'Weight (individual)', extend: 'real'},
+            'color': {name: 'Color', extend: 'text'},
+            'itemCost': {name: 'Cost', extend: 'real', default: 0, units: currencyUnits},
+            'quantityUnit': {name: 'Quantity Unit', extend: 'text'},
+            'quantityPerTime': {name: 'Quantity per Day', extend: 'real'},
+            'quality': {name: 'Quality', extend: 'text'},
+            'offerExpires': {name: 'Offer Expires', extend: 'timepoint'},
+            'itemExpires': {name: 'Expires', extend: 'timepoint'},
+            'itemPaid': {name: 'Paid', extend: 'boolean'},
+            'payWalletBTC': {name: 'Pay Bitcoin Wallet', extend: 'text'},
+            'payWalletRipple': {name: 'Pay Ripple Wallet', extend: 'text'},
+            'payWalletPayPal': {name: 'Pay PayPal Address', extend: 'text'},
+            'payWalletRTN': {name: 'Pay Bank Account (RTN)', extend: 'text'} //http://en.wikipedia.org/wiki/Routing_transit_number
 
         },
-        tag: ['Thing']
+        extend: ['Thing']
     },
-    {uri: 'Link', name: 'Link', description: 'A link or edge in a graph or network',
-        properties: {
-            'incidentObject': {name: 'Linking', type: 'object'}
+    {id: 'Link', name: 'Link', description: 'A link or edge in a graph or network',
+        value: {
+            'incidentObject': {name: 'Linking', extend: 'object'}
         },
-        tag: ['Concept']
+        extend: ['Concept']
     },
-    {uri: 'Geometry', name: 'Geometry',
-        properties: {
+    {id: 'Geometry', name: 'Geometry',
+        value: {
 			//can not use 'length' as a key in JS objects
-            'gLength': {name: 'Length', type: 'real', units: lengthUnits},
-            'gWidth': {name: 'Width', type: 'real', units: lengthUnits},
-            'gHeight': {name: 'Height', type: 'real', units: lengthUnits},
-            'mass': {name: 'Mass', type: 'real', units: massUnits}
+            'gLength': {name: 'Length', extend: 'real', units: lengthUnits},
+            'gWidth': {name: 'Width', extend: 'real', units: lengthUnits},
+            'gHeight': {name: 'Height', extend: 'real', units: lengthUnits},
+            'mass': {name: 'Mass', extend: 'real', units: massUnits}
         },
-        tag: ['Concept']
+        extend: ['Concept']
     },
-    {uri: 'Physical', name: 'Physical',
+    {id: 'Physical', name: 'Physical',
         //https://en.wikipedia.org/wiki/Physical_quantity
         //https://en.wikipedia.org/wiki/Category:Units_of_measurement
         //https://en.wikipedia.org/wiki/Category:Physical_quantities
         //https://en.wikipedia.org/wiki/Template:Meteorological_variables
         //https://en.wikipedia.org/wiki/Water_pollution#Measurement
         //https://en.wikipedia.org/wiki/Air_pollution  https://en.wikipedia.org/wiki/Air_quality_index  https://en.wikipedia.org/wiki/National_Ambient_Air_Quality_Standards  https://en.wikipedia.org/wiki/Indoor_air_quality  https://en.wikipedia.org/wiki/Particulates
-        properties: {
-            physicalIonizingRadiation: { name: "Ionizing Radiation", type: 'real', units: [
+        value: {
+            physicalIonizingRadiation: { name: "Ionizing Radiation", extend: 'real', units: [
                     //https://en.wikipedia.org/wiki/Category:Units_of_radiation_dose
                     //http://orise.orau.gov/reacts/guide/measure.htm
                     "rem", "sieverts", "rad", "gray", "roentgen", "curie"
             ] },
-            physicalTemperature: { name: "Temperature", type: 'real', units: [
+            physicalTemperature: { name: "Temperature", extend: 'real', units: [
                     "fahrenheit", "celsius", "kelvin"
             ] },
-            physicalLightLevel: { name: "Light Level", type: 'real', units: [ 'candela '] },
-            physicalSoundLevel: { name: "Sound Level", type: 'real', units: [ 'decibel '] },
+            physicalLightLevel: { name: "Light Level", extend: 'real', units: [ 'candela '] },
+            physicalSoundLevel: { name: "Sound Level", extend: 'real', units: [ 'decibel '] },
             physicalAtmosphericPressure: { //https://en.wikipedia.org/wiki/Atmosphere_(unit)
-                name: "Atmospheric Pressure", type: 'real', units: [ 'pascal', 'atmosphere', 'inches of Hg' ]
+                name: "Atmospheric Pressure", extend: 'real', units: [ 'pascal', 'atmosphere', 'inches of Hg' ]
             },
             physicalOxygenConcentration: { 
-                name: "Oxygen Concentration", type: 'real', units: [ 'O2 to N2 Ratio' ]
+                name: "Oxygen Concentration", extend: 'real', units: [ 'O2 to N2 Ratio' ]
             },
             physicalCO2Concentration: { 
-                name: "CO2 Concentration", type: 'real', units: [ 'ppm' ]
+                name: "CO2 Concentration", extend: 'real', units: [ 'ppm' ]
             },
             
             //ozone concentration
@@ -192,14 +192,14 @@ var generalTags = [
              accelerometerReport	Raised every time the device reports its current accelerometer values.
              */
         },
-        tag: ['Concept']
+        extend: ['Concept']
     },
-    {uri: 'Contract', name: 'Contract',
-        properties: {
+    {id: 'Contract', name: 'Contract',
+        value: {
             //http://www.therichest.org/business/most-traded-currencies/
-            'transactionPaid': {name: 'Paid', type: 'boolean'},
-            'transactionDue': {name: 'Due', type: 'boolean'},
-            'transactionGratis': {name: 'Gratis', type: 'boolean'}
+            'transactionPaid': {name: 'Paid', extend: 'boolean'},
+            'transactionDue': {name: 'Due', extend: 'boolean'},
+            'transactionGratis': {name: 'Gratis', extend: 'boolean'}
 
             //http://troco.ourproject.org/
             //'valueGiven'
@@ -211,39 +211,39 @@ var generalTags = [
             //   ISSUER, ISSUER_ID, ISSUER_BTN, ISSUER_IMG, RECPT, RECPT_ID, RECPT_BTN, RECPT_IMG, GIVE_VALUE, OTHER_VALUE, SAME_VALUE, BEFORE_DATE, SIGN_BTN, STATUS, ISSUER_SIGNED, RECPT_SIGNED, REDEEMED, REDEEM_BTN, ISSUER_GPGAUTH, RECPT_GPGAUTH, ISSUER_GPGSIGN, RECPT_GPGSIGN
 
         },
-        tag: ['Concept']
+        extend: ['Concept']
     },
-    {uri: 'Media', name: 'Media', description: 'A multimedia object', tag: ['Thing']}, //params: contentType
+    {id: 'Media', name: 'Media', description: 'A multimedia object', extend: ['Thing']}, //params: contentType
     //goodPartStartsAt: (time)
 
-    {uri: 'Report', name: 'Report', tag: ['Thing']}, //Report=Incident
+    {id: 'Report', name: 'Report', extend: ['Thing']}, //Report=Incident
     //NewsSourceLink (url)
     //see: Ushahidi.com
 
-    {uri: '_Arrive', name: 'Arrive', tag: ['Action'],
-        properties: {'arriveLocation': {name: 'Arrive location', type: 'spacepoint'}}
+    {id: '_Arrive', name: 'Arrive', extend: ['Action'],
+        value: {'arriveLocation': {name: 'Arrive location', extend: 'spacepoint'}}
     },
-    {uri: '_Depart', name: 'Depart', tag: ['Action'],
-        properties: {'departLocation': {name: 'Depart location', type: 'spacepoint'}}
+    {id: '_Depart', name: 'Depart', extend: ['Action'],
+        value: {'departLocation': {name: 'Depart location', extend: 'spacepoint'}}
     },
-    {uri: 'Problem', name: 'Problem', tag: ['Concept'],
-        properties: {
-            'problemBlame': {name: 'Blame', description: 'Who or what is blamed', type: 'object'}
+    {id: 'Problem', name: 'Problem', extend: ['Concept'],
+        value: {
+            'problemBlame': {name: 'Blame', description: 'Who or what is blamed', extend: 'object'}
         }
     }, //=Question     //blame : who
 
-    {uri: 'Solution', name: 'Solution', tag: ['Concept']}, //=Answer
+    {id: 'Solution', name: 'Solution', extend: ['Concept']}, //=Answer
 
-    {uri: 'Cause', name: 'Cause', tag: ['Concept']},
-    {uri: 'Effect', name: 'Effect', tag: ['Concept']},
-    {uri: 'Internet', name: 'Internet', tag: ['Thing']},
+    {id: 'Cause', name: 'Cause', extend: ['Concept']},
+    {id: 'Effect', name: 'Effect', extend: ['Concept']},
+    {id: 'Internet', name: 'Internet', extend: ['Thing']},
     /*
-     {uri: 'Role', name: 'Role', description: 'A position, job, occupation, or role',
-     properties: {
-     'roleSalaryHour': {name: 'Salary (per hour)', type: 'real', units: currencyUnits },
+     {id: 'Role', name: 'Role', description: 'A position, job, occupation, or role',
+     value: {
+     'roleSalaryHour': {name: 'Salary (per hour)', extend: 'real', units: currencyUnits },
      
      },
-     tag: ['Concept']
+     extend: ['Concept']
      },
      */
 
@@ -254,35 +254,35 @@ var generalTags = [
      status: Brainstorming, Pitched, Being Refined, Accepted, Complete
      */
 
-    {uri: 'Goal', name: 'Goal', description: 'A goal, dream, project, program, plan, opportunity, or deliverable',
-        properties: {
-            /*'repeatPeriod': {name: 'Repeat period (sec)', type: 'real', unit: 'time'},
-             'repeatDelay': {name: 'Repeat phase (sec)', type: 'real', unit: 'time'},
-             'repeatStarted': {name: 'Repeat started', type: 'timepoint', readonly: true},*/
-            //'goalAlert': { name: 'Alert', type: 'text', default: 'at [time/date] -or- every X [minutes|hours|days|weeks] at [time/date]'},
-            'requiresAcknowledgement': {name: 'Require Acknowledgement', type: 'boolean'},
-            'lastAcknowledgement': {name: 'Repeat started', type: 'timepoint', readonly: true},
-            'goalEnabled': {name: 'Enabled', type: 'boolean', default: true},
-            'goalDependency': {name: 'Depends On', type: 'object', tag: 'Goal'},
-            'goalWorker': {name: 'Worker', type: 'object', tag: 'Human'},
-            'goalProgress': {name: 'Progress', type: 'real', min: 0, max: 1, mode: 'slider'},
-            'goalDeadline': {name: 'Deadline', type: 'timepoint', max: 1},
-            'goalCost': {name: 'Cost', type: 'real', default: 0, units: currencyUnits},
-            'goalBudgeted': {name: 'Budgeted', description: 'How much funding currently budgeted toward this', type: 'real', default: 0, units: currencyUnits},
-            'goalObjective': {name: 'Objective', type: 'html', description: 'What to accomplish and how to measure progress'}
+    {id: 'Goal', name: 'Goal', description: 'A goal, dream, project, program, plan, opportunity, or deliverable',
+        value: {
+            /*'repeatPeriod': {name: 'Repeat period (sec)', extend: 'real', unit: 'time'},
+             'repeatDelay': {name: 'Repeat phase (sec)', extend: 'real', unit: 'time'},
+             'repeatStarted': {name: 'Repeat started', extend: 'timepoint', readonly: true},*/
+            //'goalAlert': { name: 'Alert', extend: 'text', default: 'at [time/date] -or- every X [minutes|hours|days|weeks] at [time/date]'},
+            'requiresAcknowledgement': {name: 'Require Acknowledgement', extend: 'boolean'},
+            'lastAcknowledgement': {name: 'Repeat started', extend: 'timepoint', readonly: true},
+            'goalEnabled': {name: 'Enabled', extend: 'boolean', default: true},
+            'goalDependency': {name: 'Depends On', extend: 'object', tag: 'Goal'},
+            'goalWorker': {name: 'Worker', extend: 'object', tag: 'Human'},
+            'goalProgress': {name: 'Progress', extend: 'real', min: 0, max: 1, mode: 'slider'},
+            'goalDeadline': {name: 'Deadline', extend: 'timepoint', max: 1},
+            'goalCost': {name: 'Cost', extend: 'real', default: 0, units: currencyUnits},
+            'goalBudgeted': {name: 'Budgeted', description: 'How much funding currently budgeted toward this', extend: 'real', default: 0, units: currencyUnits},
+            'goalObjective': {name: 'Objective', extend: 'html', description: 'What to accomplish and how to measure progress'}
 
             //status: not started, planning, in progress, completed
         },
-        tag: ['Concept']
+        extend: ['Concept']
     },
-    {uri: 'GoalCentroid', name: 'Possible Goal', tag: ['Goal', 'Imaginary']},
+    {id: 'GoalCentroid', name: 'Possible Goal', extend: ['Goal', 'Imaginary']},
     //state = considered|desired|active|completed
 
-    {uri: 'Favorite', name: 'Favorite', tag: ['Concept']},
-    {uri: 'User', name: 'User', tag: ['Thing'], reserved: true},
-    //{ uri: 'Netention', name: 'Netention'}, //Netention itself, meta 
+    {id: 'Favorite', name: 'Favorite', extend: ['Concept']},
+    {id: 'User', name: 'User', extend: ['Thing'], reserved: true},
+    //{ id: 'Netention', name: 'Netention'}, //Netention itself, meta 
 
-    {uri: 'Message', name: 'Message', tag: ['Thing']},
+    {id: 'Message', name: 'Message', extend: ['Thing']},
     /*
      At the first gate, ask yourself, ‘Is it true?
      At the second ask, ‘Is it necessary?
@@ -290,115 +290,115 @@ var generalTags = [
      - Sufi saying -
      */
 
-    {uri: 'Decision', name: 'Decision', tag: ['Concept']},
+    {id: 'Decision', name: 'Decision', extend: ['Concept']},
     //subtag of Action?
 
     //http://en.wikipedia.org/wiki/List_of_biases_in_judgment_and_decision_making
 
     //from LOOMIO:
-    {uri: 'Decision.Agree', name: 'Agree', tag: ['Decision'],
+    {id: 'Decision.Agree', name: 'Agree', extend: ['Decision'],
         description: 'You are happy with the proposal.'
     },
-    {uri: 'Decision.Abstain', name: 'Abstain', tag: ['Decision'],
+    {id: 'Decision.Abstain', name: 'Abstain', extend: ['Decision'],
         description: 'You are unsure, or you’re happy for the group to decide without you.'
     },
-    {uri: 'Decision.Disagree', name: 'Disagree', tag: ['Decision'],
+    {id: 'Decision.Disagree', name: 'Disagree', extend: ['Decision'],
         description: 'You think there might be a better alternative, but you’re willing to go with the group.'
     },
-    {uri: 'Decision.Block', name: 'Block', tag: ['Decision'],
+    {id: 'Decision.Block', name: 'Block', extend: ['Decision'],
         description: 'You have serious objections and you’ll be extremely unhappy if this proposal goes ahead.'
     },
-    //{uri: 'Social', name: 'Social', tag: ['Concept'], properties: {       }},
-    //{uri: 'Friend', name: 'Friend', tag: ['Social'], operator: true},
-    //{uri: 'Enemy', name: 'Enemy', tag: ['Social'], operator: true},
+    //{id: 'Social', name: 'Social', extend: ['Concept'], value: {       }},
+    //{id: 'Friend', name: 'Friend', extend: ['Social'] },
+    //{id: 'Enemy', name: 'Enemy', extend: ['Social']},
 
-    {uri: 'Know', name: 'Know', properties: {
-            'knowledge': {name: 'Knowledge', type: 'object'}
+    {id: 'Know', name: 'Know', value: {
+            'knowledge': {name: 'Knowledge', extend: 'object'}
         },
-        tag: ['Action']
+        extend: ['Action']
     },
-    {uri: 'Trust', name: 'Trust', properties: {
-            'trusts': {name: 'in', type: 'object', tag: 'User', min: 1}
+    {id: 'Trust', name: 'Trust', value: {
+            'trusts': {name: 'in', extend: 'object', tag: 'User', min: 1}
         },
-        tag: ['Action'], operator: true, icon: '/icon/trade.png'},
-    {uri: 'Distrust', name: 'Distrust', properties: {
-            'distrusts': {name: 'in', type: 'object', tag: 'User', min: 1}
+        extend: ['Action'], icon: '/icon/trade.png'},
+    {id: 'Distrust', name: 'Distrust', value: {
+            'distrusts': {name: 'in', extend: 'object', tag: 'User', min: 1}
         },
-        tag: ['Action'], operator: true},
-    {uri: 'Value', name: 'Value', description: 'Represents valuing, preference, or having importance',
-        properties: {
-            'values': {name: 'in', type: 'object', min: 1}
+        extend: ['Action'] },
+    {id: 'Value', name: 'Value', description: 'Represents valuing, preference, or having importance',
+        value: {
+            'values': {name: 'in', extend: 'object', min: 1}
         },
-        tag: ['Action'], operator: true},
+        extend: ['Action'] },
 
-    {uri: 'Access', name: 'Access', tag: ['Concept']},
-    {uri: 'Can', name: 'Can', tag: ['Access'], operator: true, icon: '/icon/can.png', 
+    {id: 'Access', name: 'Access', extend: ['Concept']},
+    {id: 'Can', name: 'Can', extend: ['Access'], icon: '/icon/can.png', 
 		description: 'Something offer, offered, offering, share, shared, sharing, provide, providing, able'
 	},
-    {uri: 'Need', name: 'Need', tag: ['Access'], operator: true, icon: '/icon/need.png', 
+    {id: 'Need', name: 'Need', extend: ['Access'], icon: '/icon/need.png', 
 		description: 'Something want, wanted, wanting, need, needed, needing, seek, seeking, request, requested, requesting',
-		properties: {
-            //'repeatNeed': {name: 'Repeat', type: 'timerepeat' },
+		value: {
+            //'repeatNeed': {name: 'Repeat', extend: 'timerepeat' },
         }
 	},
-    {uri: 'Not', name: 'Not', tag: ['Concept'], icon: '/icon/not.png', operator: true},
+    {id: 'Not', name: 'Not', extend: ['Concept'], icon: '/icon/not.png' },
 
-    {uri: 'Offer', name: 'Offer', tag: ['Can'], icon: '/icon/can.png'},
-    {uri: 'Sell', name: 'Sell', tag: ['Can'], icon: '/icon/can.png'},
-    {uri: 'Lend', name: 'Lend', tag: ['Can'], icon: '/icon/can.png'},
-    {uri: 'Rent', name: 'Rent', tag: ['Can'], icon: '/icon/can.png'},
-    {uri: 'Swap', name: 'Swap', tag: ['Can'], icon: '/icon/can.png'},
-    {uri: 'GiveAway', name: 'Share', tag: ['Can'], icon: '/icon/can.png'},
+    {id: 'Offer', name: 'Offer', extend: ['Can'], icon: '/icon/can.png'},
+    {id: 'Sell', name: 'Sell', extend: ['Can'], icon: '/icon/can.png'},
+    {id: 'Lend', name: 'Lend', extend: ['Can'], icon: '/icon/can.png'},
+    {id: 'Rent', name: 'Rent', extend: ['Can'], icon: '/icon/can.png'},
+    {id: 'Swap', name: 'Swap', extend: ['Can'], icon: '/icon/can.png'},
+    {id: 'GiveAway', name: 'Share', extend: ['Can'], icon: '/icon/can.png'},
     //NEEDS from SparkRelief
-    {uri: 'Volunteer', name: 'Volunteer', tag: ['Thing']},
-    {uri: 'Shelter', name: 'Shelter', tag: ['Thing']},
-    {uri: 'Food', name: 'Food', tag: ['Thing']},
-    {uri: 'Tools', name: 'Tools', tag: ['Thing']},
-    {uri: 'Health', name: 'Health', tag: ['Thing']},
-    {uri: 'Transport', name: 'Transport', tag: ['Thing']},
-    {uri: 'Service', name: 'Service', tag: ['Thing']},
-    {uri: 'Animal', name: 'Animal', tag: ['Thing']},
-    {uri: 'Infrastructure', name: 'Infrastructure', tag: ['Thing']},
-    {uri: 'Nature', name: 'Nature', tag: ['Thing']},
-    {uri: 'Danger', name: 'Danger', description: 'Danger, emergency, or disaster situation / event', tag: ['Thing']},
-    {uri: 'Plugin', name: 'Plugin', tag: ['Thing'], properties: {
-            'Plugin.enable': {name: 'Enable', type: 'boolean', max: 1},
-            'Plugin.updateEvery': {name: 'Update Every (sec)', type: 'real', max: 1}
+    {id: 'Volunteer', name: 'Volunteer', extend: ['Thing']},
+    {id: 'Shelter', name: 'Shelter', extend: ['Thing']},
+    {id: 'Food', name: 'Food', extend: ['Thing']},
+    {id: 'Tools', name: 'Tools', extend: ['Thing']},
+    {id: 'Health', name: 'Health', extend: ['Thing']},
+    {id: 'Transport', name: 'Transport', extend: ['Thing']},
+    {id: 'Service', name: 'Service', extend: ['Thing']},
+    {id: 'Animal', name: 'Animal', extend: ['Thing']},
+    {id: 'Infrastructure', name: 'Infrastructure', extend: ['Thing']},
+    {id: 'Nature', name: 'Nature', extend: ['Thing']},
+    {id: 'Danger', name: 'Danger', description: 'Danger, emergency, or disaster situation / event', extend: ['Thing']},
+    {id: 'Plugin', name: 'Plugin', extend: ['Thing'], value: {
+            'Plugin.enable': {name: 'Enable', extend: 'boolean', max: 1},
+            'Plugin.updateEvery': {name: 'Update Every (sec)', extend: 'real', max: 1}
         }},
 
-    {uri: 'Medical_emergency', name: 'Medical Emergency', description: 'Medical problem, injury, or illness', tag: ['Danger'], properties: {
-        'medicalEmergencyBodyPart': { name:'Body Part', type:'object' }
+    {id: 'Medical_emergency', name: 'Medical Emergency', description: 'Medical problem, injury, or illness', extend: ['Danger'], value: {
+        'medicalEmergencyBodyPart': { name:'Body Part', extend:'object' }
     }},
-    {uri: 'Fire', name: 'Fire', tag: ['Danger']},
-    {uri: 'Theft', name: 'Theft', description: 'Theft or abduction', tag: ['Danger']},
-    {uri: 'Physical_security', name: 'Invasion', description: 'Security intrusion',  tag: ['Danger']},
+    {id: 'Fire', name: 'Fire', extend: ['Danger']},
+    {id: 'Theft', name: 'Theft', description: 'Theft or abduction', extend: ['Danger']},
+    {id: 'Physical_security', name: 'Invasion', description: 'Security intrusion',  extend: ['Danger']},
     
     /*    
-     {uri: 'PDF', name: 'PDF Slide', properties: {
-     'pdfURL': {name: 'PDF URL', type: 'text'},
-     'slideNumber': {name: 'Slide', type: 'integer', min: 1, incremental: true}
-     }, tag: ['Media'] },
+     {id: 'PDF', name: 'PDF Slide', value: {
+     'pdfURL': {name: 'PDF URL', extend: 'text'},
+     'slideNumber': {name: 'Slide', extend: 'integer', min: 1, incremental: true}
+     }, extend: ['Media'] },
      */
 
     //Pledge = Promise
-    {uri: 'Promise', name: 'Promise',
+    {id: 'Promise', name: 'Promise',
         description: "Promise or an Offer. 'I will do it, but only if you will help.'", //PledgeBank.com
-        tag: ['Concept']
+        extend: ['Concept']
     },
-    {uri: 'Tag', name: 'Tag',
+    {id: 'Tag', name: 'Tag',
         description: "Indicates that an object defines a tag",
-        properties: {
-            'tagValueType': {name: 'Value Type', type: 'text'},
-            //'tagDomain': { name: 'Domain', type: 'text' }
+        value: {
+            'tagValueType': {name: 'Value Type', extend: 'text'},
+            //'tagDomain': { name: 'Domain', extend: 'text' }
         },
-        tag: ['Concept']
+        extend: ['Concept']
     },
-    {uri: 'Template', name: 'Template',
+    {id: 'Template', name: 'Template',
         description: "Template object that can create instances of it",
-        properties: {},
-        tag: ['Concept']
+        value: {},
+        extend: ['Concept']
     },
-    {uri: 'Earth', name: 'Earth', description: '', icon: 'icon/earth.png', tag: 'Thing'},
+    {id: 'Earth', name: 'Earth', description: '', icon: 'icon/earth.png', extend: 'Thing'},
     //http://gis.stackexchange.com/questions/6345/list-of-available-online-wms-services-weather-land-data-place-names
     {
         "uri": "Points of Interest",
@@ -406,9 +406,9 @@ var generalTags = [
         "description": "DBPedia.org",
         //"icon": "http:\/\/climateviewer.com\/gallery\/lightning_bolt.png",
         "dbpediaLayer": true,
-        tag: ['Earth']
+        extend: ['Earth']
     },
-    {uri: 'United_States', name: 'United States', description: '', icon: 'icon/earth.png', tag: ['Earth']},
+    {id: 'United_States', name: 'United States', description: '', icon: 'icon/earth.png', extend: ['Earth']},
     {
         "uri": "iem-us-nexrad",
         "name": "United States NEXRAD Weather",
@@ -418,7 +418,7 @@ var generalTags = [
             url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi",
             layer: 'nexrad-n0r-900913'
         },
-        tag: ['United_States']
+        extend: ['United_States']
     },
     //http://mesonet.agron.iastate.edu/GIS/goes.phtml
     //http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_ir.cgi?VER=1.1.1&SERVICE=WMS&REQUEST=GetCapabilities
@@ -432,7 +432,7 @@ var generalTags = [
             url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_ir.cgi",
             layer: 'ir_4km_900913'
         },
-        tag: ['United_States']
+        extend: ['United_States']
     },
     {
         "uri": "conus_vis",
@@ -443,7 +443,7 @@ var generalTags = [
             url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_vis.cgi",
             layer: 'vis_1km_900913'
         },
-        tag: ['United_States']
+        extend: ['United_States']
     },
     {
         "uri": "mrms_q3_24h_precipitation",
@@ -454,7 +454,7 @@ var generalTags = [
             url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/us/mrms.cgi?",
             layer: 'mrms_p24h' //mrms_p1h
         },
-        tag: ['United_States']
+        extend: ['United_States']
     },
     /*{
      "uri": "flood_total_economic_loss_risk",
@@ -468,7 +468,7 @@ var generalTags = [
      layer: 'ndh-flood-total-economic-loss-risk-deciles:default',
      crs: 'EPSG4326'
      },
-     tag: ['Earth']
+     extend: ['Earth']
      },*/
     {
         "uri": "terrain-satellite",
@@ -476,7 +476,7 @@ var generalTags = [
         "description": "Esri \/ DeLorme",
         "defaultStrength": 0.75,
         "tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/World_Imagery\/MapServer\/tile\/{z}\/{y}\/{x}",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "terrain-contour",
@@ -485,7 +485,7 @@ var generalTags = [
         "defaultStrength": 0.75,
         "tileLayer": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?blankTile=false",
         //"tileLayer": "http:\/\/server.arcgisonline.com\/ArcGIS\/rest\/services\/Specialty\/DeLorme_World_Base_Map\/MapServer\/tile\/{z}\/{y}\/{x}",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "cycle-map",
@@ -493,21 +493,21 @@ var generalTags = [
         "description": "OpenCycleMap.org",
         "defaultStrength": 0.75,
         "tileLayer": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     }, {
         "uri": "terrain-ocean",
         "name": "Ocean Floor",
         "description": "Esri \/ GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri",
         "defaultStrength": 0.75,
         "tileLayer": "http:\/\/services.arcgisonline.com\/ArcGIS\/rest\/services\/Ocean_Basemap\/MapServer\/tile\/{z}\/{y}\/{x}",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     /*{
      "uri": "Weather",
      "name": "Weather",
      "description": "",
      "icon": "http:\/\/climateviewer.com\/gallery\/nws_google.gif"
-     tag: ['Map']
+     extend: ['Map']
      },*/
     {
         "uri": "owm-clouds",
@@ -515,7 +515,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/clouds\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "owm-precipitation",
@@ -523,7 +523,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/precipitation\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "owm-rain",
@@ -531,7 +531,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/rain\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "owm-pressure",
@@ -539,7 +539,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "owm-pressure_cntr",
@@ -547,7 +547,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/pressure_cntr\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "owm-wind",
@@ -555,7 +555,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/wind\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "owm-temp",
@@ -563,7 +563,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/temp\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     },
     {
         "uri": "owm-snow",
@@ -571,7 +571,7 @@ var generalTags = [
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
         "tileLayer": "http:\/\/{s}.tile.openweathermap.org\/map\/snow\/{z}\/{x}\/{y}.png",
-        tag: ['Earth']
+        extend: ['Earth']
     }
 
 ];
@@ -579,33 +579,33 @@ var generalTags = [
 //http://bioportal.bioontology.org/ontologies/MFOEM?p=classes
 //https://en.wikipedia.org/wiki/Category:Psychometrics
 var emotionTags = [
-    {uri: 'Emotion', name: 'Emotion', tag: ['Concept'], description: 'How something feels or seems',
-        properties: {
-			'emotionWhatDoing': {name: 'What I am Doing', type: 'html'},
-			'emotionWhoWith': {name: 'Who I am With', type: 'object', tag: 'Human' },
-            'undulyExtremeMeaning': {name: 'Is the meaning I’m assigning to this event unduly extreme?', type: 'html'},
-            'harshConclusions': {name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', type: 'html'},
-            'drawingGlobalConclusions': {name: 'Am I drawing global conclusions from this isolated event?', type: 'html'},
-            'decidingTotalDefinition': {name: 'Am I deciding that this specific event totally defines who it affects?', type: 'html'},
-            'decidingAffectedFuture': {name: 'Am I deciding that this specific event affects the future of who it affects?', type: 'html'},
-            'feelBetterOrWorse': {name: 'Does this meaning lead me to feel better or worse about myself?', type: 'html'},
-            'furtherGoalAction': {name: 'Is it encouraging further goal-directed action or discouraging me to give up?', type: 'html'}
+    {id: 'Emotion', name: 'Emotion', extend: ['Concept'], description: 'How something feels or seems',
+        value: {
+            'emotionWhatDoing': {name: 'What I am Doing', extend: 'html'},
+            'emotionWhoWith': {name: 'Who I am With', extend: 'object', tag: 'Human' },
+            'undulyExtremeMeaning': {name: 'Is the meaning I’m assigning to this event unduly extreme?', extend: 'html'},
+            'harshConclusions': {name: 'Am I exaggerating a simple event to derive harsh conclusions from it?', extend: 'html'},
+            'drawingGlobalConclusions': {name: 'Am I drawing global conclusions from this isolated event?', extend: 'html'},
+            'decidingTotalDefinition': {name: 'Am I deciding that this specific event totally defines who it affects?', extend: 'html'},
+            'decidingAffectedFuture': {name: 'Am I deciding that this specific event affects the future of who it affects?', extend: 'html'},
+            'feelBetterOrWorse': {name: 'Does this meaning lead me to feel better or worse about myself?', extend: 'html'},
+            'furtherGoalAction': {name: 'Is it encouraging further goal-directed action or discouraging me to give up?', extend: 'html'}
         }
     },
-    {uri: 'Emotion.calm', name: 'Calm', tag: ['Emotion']}, //neutral
+    {id: 'Emotion.calm', name: 'Calm', extend: ['Emotion']}, //neutral
 
 
-    {uri: 'Emotion.happy', name: 'Happy', tag: ['Emotion']},
-    {uri: 'Emotion.trusting', name: 'Trusting', tag: ['Emotion']},
-    {uri: 'Emotion.anticipating', name: 'Anticipating', tag: ['Emotion']},
-    {uri: 'Emotion.surprised', name: 'Surprised', tag: ['Emotion']},
-    {uri: 'Emotion.sad', name: 'Sad', properties: {}, tag: ['Emotion']},
-    {uri: 'Emotion.afraid', name: 'Afraid', tag: ['Emotion']},
-    {uri: 'Emotion.angry', name: 'Angry', tag: ['Emotion']},
-    {uri: 'Emotion.disgusted', name: 'Disgusted', tag: ['Emotion']},
-    {uri: 'Emotion.tired', name: 'Tired', tag: ['Emotion']},
-    {uri: 'Emotion.energized', name: 'Energized', tag: ['Emotion']}
-    //{ uri: 'Emotion.creative', name: 'Creative', tag: ['Emotion'] }
+    {id: 'Emotion.happy', name: 'Happy', extend: ['Emotion']},
+    {id: 'Emotion.trusting', name: 'Trusting', extend: ['Emotion']},
+    {id: 'Emotion.anticipating', name: 'Anticipating', extend: ['Emotion']},
+    {id: 'Emotion.surprised', name: 'Surprised', extend: ['Emotion']},
+    {id: 'Emotion.sad', name: 'Sad', value: {}, extend: ['Emotion']},
+    {id: 'Emotion.afraid', name: 'Afraid', extend: ['Emotion']},
+    {id: 'Emotion.angry', name: 'Angry', extend: ['Emotion']},
+    {id: 'Emotion.disgusted', name: 'Disgusted', extend: ['Emotion']},
+    {id: 'Emotion.tired', name: 'Tired', extend: ['Emotion']},
+    {id: 'Emotion.energized', name: 'Energized', extend: ['Emotion']}
+    //{ id: 'Emotion.creative', name: 'Creative', extend: ['Emotion'] }
 
     /*CBT thought record: 
      http://www.psychologytools.org/assets/files/Worksheets/CBT_Thought_Record.pdf
@@ -624,6 +624,7 @@ var emotionTags = [
      */
 ];
 
+/*
 function getDefaultTemplates($N) {
     var x = [];
 
@@ -650,7 +651,7 @@ function getDefaultTemplates($N) {
     }
 
     return x;
-}
+}*/
 
 exports.plugin = function($N) {
     return {
@@ -660,48 +661,50 @@ exports.plugin = function($N) {
         version: '1.0',
         author: 'http://netention.org',
         start: function() {
-            $N.addTags(generalTags);
-            $N.addTags(emotionTags);
+            $N.addAll(generalTags);
+            $N.addAll(emotionTags);
 
             if ($N.client.knowLevels == 3) {
-                $N.addTags([
-                    {uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true, icon: 'icon/know/k1.png'},
-                    {uri: 'Do', name: 'Do', tag: ['Know'], operator: true, icon: 'icon/know/k4.png'},
-                    {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true, icon: 'icon/know/k5.png'}
+                $N.addAll([
+                    {id: 'Learn', name: 'Learn', extend: ['Know'], icon: 'icon/know/k1.png'},
+                    {id: 'Do', name: 'Do', extend: ['Know'], icon: 'icon/know/k4.png'},
+                    {id: 'Teach', name: 'Teach', extend: ['Know'], icon: 'icon/know/k5.png'}
                 ]);
             }
             else if ($N.client.knowLevels == 6) {
-                $N.addTags([
+                $N.addAll([
                     /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
                      3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
-                    {uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true, icon: 'icon/know/k1.png'},
-                    {uri: 'LearnDo', name: 'Learn Do', tag: ['Know'], operator: true, icon: 'icon/know/k2.png'},
-                    {uri: 'DoLearn', name: 'Do Learn', tag: ['Know'], operator: true, icon: 'icon/know/k3.png'},
-                    //{ uri: 'Collaborating', name: 'Collaborating', tag: ['Know'] },
-                    {uri: 'DoTeach', name: 'Do Teach', tag: ['Know'], operator: true, icon: 'icon/know/k4.png'},
-                    {uri: 'TeachDo', name: 'Teach Do', tag: ['Know'], operator: true, icon: 'icon/know/k5.png'},
-                    {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true, icon: 'icon/know/k6.png'},
+                    {id: 'Learn', name: 'Learn', extend: ['Know'], icon: 'icon/know/k1.png'},
+                    {id: 'LearnDo', name: 'Learn Do', extend: ['Know'], icon: 'icon/know/k2.png'},
+                    {id: 'DoLearn', name: 'Do Learn', extend: ['Know'], icon: 'icon/know/k3.png'},
+                    //{ id: 'Collaborating', name: 'Collaborating', extend: ['Know'] },
+                    {id: 'DoTeach', name: 'Do Teach', extend: ['Know'], icon: 'icon/know/k4.png'},
+                    {id: 'TeachDo', name: 'Teach Do', extend: ['Know'], icon: 'icon/know/k5.png'},
+                    {id: 'Teach', name: 'Teach', extend: ['Know'], icon: 'icon/know/k6.png'},
                 ]);
             }
             else /* 5 */ {
-                $N.addTags([
-                    {uri: 'Learn', name: 'Learn', tag: ['Know'], operator: true,
+                $N.addAll([
+                    {id: 'Learn', name: 'Learn', extend: ['Know'],
                         description: 'No knowledge but curious to learn'},
-                    {uri: 'DoLearn', name: 'DoLearn', tag: ['Know'], operator: true,
+                    {id: 'DoLearn', name: 'DoLearn', extend: ['Know'],
                         description: 'Some knowledge and willing to learn more while collaborating'},
-                    {uri: 'Do', name: 'Do', tag: ['Know'], operator: true,
+                    {id: 'Do', name: 'Do', extend: ['Know'],
                         description: 'Can independently work'},
-                    {uri: 'DoTeach', name: 'DoTeach', tag: ['Know'], operator: true,
+                    {id: 'DoTeach', name: 'DoTeach', extend: ['Know'],
                         description: 'Independently able to work and can teach or train'},
-                    {uri: 'Teach', name: 'Teach', tag: ['Know'], operator: true,
+                    {id: 'Teach', name: 'Teach', extend: ['Know'],
                         description: 'Has expert knowledge and is most useful in teaching others'}
                 ]);
             }
-
+            
+            /*
             _.each(getDefaultTemplates($N), function(x) {
 				x.createdAt = null;
                 $N.notice(x);
             });
+            */
 
             /*function indexPDF(name, path) {
              var introPresentation = util.objNew(path, name);
@@ -773,7 +776,7 @@ exports.plugin = function($N) {
  
  | <code>BIRTHPLACE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The location of the individual's birth. || <code>BIRTHPLACE;VALUE=text:Maida Vale\, London\, England</code>
  | <code>DEATHDATE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The individual's time of death. || <code>DEATHDATE:19540607</code>
- | <code>DEATHPLACE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The location of the individual death. || <code>DEATHPLACE;VALUE=uri:geo:53.328,-2.229409</code>
+ | <code>DEATHPLACE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The location of the individual death. || <code>DEATHPLACE;VALUE=id:geo:53.328,-2.229409</code>
  | <code>EXPERTISE</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A professional subject area that the person has knowledge of. || <code>EXPERTISE;LEVEL=expert:Computer Science</code>
  | <code>HOBBY</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A recreational activity that the person actively engages in. || <code>HOBBY;LEVEL=high:knitting</code>
  | <code>IMPP</code> || [http://tools.ietf.org/html/rfc4770 RFC 4770] || Defines an instant messenger handle.  This was added to the official vCard specification in version 4.0. || <code>IMPP:aim:johndoe@aol.com</code>

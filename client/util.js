@@ -743,6 +743,309 @@ function objUserRelations(trusts) {
 exports.objUserRelations = objUserRelations;
 
 
+/** true if its first value is a reference to the Class tag */
+function objIsClass(x) {
+    if (x.extend!==undefined) {
+        
+        if (x.extend === null)
+            return true;
+        
+        if ((typeof x.extend) === "string") {
+            return (!isPrimitive(x.extend))
+        }
+        
+        if (Array.isArray(x.extend))
+           return true;
+    }
+   return false;
+}
+exports.objIsClass = objIsClass;
+
+/** true if its value consists of only one primitive tag (with no datavalue) */
+function objIsProperty(x) {
+    if (x.extend)
+        if (isPrimitive(x.extend))
+           return true;
+   return false;   
+}
+exports.objIsProperty = objIsProperty;
+
+/** an interface for interacting with nobjects and ontology */
+var Ontology = function() {
+    var that = this;        
+    
+    //resets to empty state
+    this.clear = function() {
+        //indexed by id (URI)
+        that.object = { };        
+        that.tagged = { };  //index of object tags
+
+        that.instance = { };
+        that.property = { };
+        that.class = { };
+        that.classRoot = { };   //root classes        
+        
+        that.primitive = {
+          'default': { },
+          
+          'instance': { },
+          'property': { },
+          'class': { },
+          
+          'integer': { },
+          'real': { },
+          'text': { },
+          'html': { },
+          'object': { },
+          'spacepoint': { }
+          //...
+        };
+    };
+    this.clear();
+    
+    this.addAll = function(a) {
+        a.forEach(that.add);
+    };
+    
+    this.add = function(x) {
+        //updates all cached fields, indexes
+        //can be called repeatedly to update existing object with that ID
+                
+        if (x.removed) {        
+            return that.remove(x);
+        }
+        
+        that.object[x.id] = x;
+        
+        if (objIsClass(x)) {
+            that.class[x.id] = x;
+            x._class = true;
+            delete that.property[x.id]; delete x._property;
+            delete that.instance[x.id]; delete x._instance;
+            
+            x.property = { };
+            x.class = { };
+            x.subclass = { };
+            
+            if (x.value) {
+                if (typeof x.value == "object") {
+                    //convert from object form to array
+                    var vv = [];
+                    _.each(x.value, function(v, k) {
+                       v.id = k;
+                       vv.push(v);
+                    });
+                    x.value = vv;
+                }
+                
+                for (var i = 0; i < x.value.length; i++) {
+                    var v = x.value[i];
+                    
+                    if (objIsProperty(v)) {
+                        //embedded property
+                        that.add(v);
+                        v = v.id;
+                    }
+                    
+                    if (typeof v === "string") {
+                        var existingProperty = that.property[v];
+                        if (existingProperty)
+                            x.value[i] = x.property[v] = existingProperty;
+                        else
+                            console.error('Class', x.id, 'missing property', k);
+                    }
+                    
+                }                
+            }
+            if (typeof x.extend === "string")
+                x.extend = [ x.extend ];
+            
+            if ((x.extend===null) || (x.extend.length === 0)) {
+                that.classRoot[x.id] = x;                
+            }
+            else {
+                for (var i = 0; i < x.extend.length; i++) {
+                    var v = x.extend[i];
+                    var c = that.class[v];
+                    if (c) {
+                        x.class[v] = c;
+                        c.subclass[x.id] = x;
+                    }
+                    else {
+                        console.error('Class', x.id, 'extends missing class', v);  
+                    }
+                }
+            }
+            
+            that.serializedClasses = null;
+        }
+        else if (objIsProperty(x)) {
+            that.property[x.id] = x;
+            x._property = true;
+            delete that.class[x.id];    delete x._class;
+            delete that.instance[x.id]; delete x._instance;
+            that.serializedPropreties = null;
+        }
+        else {
+            that.instance[x.id] = x;
+            x._instance = true;
+            delete that.class[x.id];    delete x._class;
+            delete that.property[x.id]; delete x._property;            
+            
+            indexInstance(x);
+        }
+        
+//        that.update(x);
+        
+        return that;        
+    };
+    
+
+    function indexInstance(x) {
+        var tags  = objTags(x, false);
+        tags.forEach(function(t) {
+           if (!that.tagged[t]) 
+               that.tagged[t] = { };
+           that.tagged[t][x.id] = x;
+           
+            x.reply = [];
+            //TODO index replyTo by adding to target's .reply[]
+            
+        });
+        
+        //TODO index author, replyTo
+    }
+    function unindexInstance(x) {
+        var tags = objTags(x, false);
+        tags.forEach(function(t) {
+           if (that.tagged[t]) 
+               delete that.tagged[t][x.id];           
+        });        
+    }
+    this.getReplyRoots = function(r) {
+        //trace up the reply chain until an object with no replyTo
+        var t = {};
+
+        var R = that.instance[r];
+        if (!R)
+            return [];
+        
+        var rr = R.replyTo;
+        if (!rr)
+            return [r];
+        if (!Array.isArray(rr))
+            rr = [rr];
+
+        rr.forEach(function(s) {
+            var sr = that.getReplyRoots(s);
+            sr.forEach(function(srr) {
+                t[srr] = true;
+            });
+        });
+
+        return _.keys(t);
+    };
+    
+    this.getAllReplies = function(objectIDList) {
+        var r = {};
+
+        function addReplies(ii) {
+            ii.forEach(function(i) {
+                if (typeof i === "string")
+                    i = that.instance[i];
+                
+                if (!i)
+                    return;
+                
+                if (r[i])
+                    return;
+
+                r[i] = true;
+                
+                addReplies(i.reply);
+            });
+        }
+
+        addReplies(objectIDList);
+        return _.keys(r);
+    };
+    
+    this.remove = function(x) {
+        if (typeof x == "object") {            
+            x = x.id;
+        }
+        var existingObject = that.object[x];
+        if (!existingObject)
+            return;
+        
+        unindexInstance(existingObject);
+        
+        delete that.object[x];
+        if (that.class[x]) {
+            delete that.class[x];
+            that.serializedClasses = null;                        
+        }
+        if (that.property[x]) {
+            delete that.property[x];
+            that.serializedPropreties = null;            
+        }
+        delete that.instance[x];
+        return that;
+    };
+    
+    this.getOntologySummary = function() {
+        return {
+            numObjects: _.keys(that.object).length,
+            numClasses: _.keys(that.class).length,
+            numClassRoots: _.keys(that.classRoot).length,
+            numProperties: _.keys(that.property).length,
+            numInstances: _.keys(that.instances).length,
+        };
+    };
+    
+    this.serializedPropreties = null; //cache
+    this.propertySerialized = function() {
+        if (that.serializedPropreties===null)
+            that.serializedPropreties = _.map(that.property, function(p) {
+                return objCompact(p);
+            });
+        return that.serializedPropreties;
+    };
+    
+    this.serializedClasses = null;
+    this.classSerialized = function() {
+        if (that.serializedClasses===null)
+            that.serializedClasses = _.map(that.class, function(c) {
+                var d = objCompact(c);
+                delete d.class;
+                delete d.subclass;
+                delete d.property;
+                return d;
+            });
+        return that.serializedClasses;
+    };
+    
+    //.searchOntology(query)
+    //.getGraph(propertyList,options)
+        //extracts a graph via the object values of certain types; useful for computing trust and other networks
+        
+    return this;
+};
+exports.Ontology = Ontology;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function newAttentionMap(memoryMomentum, maxObjects, adjacency, spreadRate) {
@@ -1053,6 +1356,13 @@ function objCompact(o) {
             y.at = [ y.createdAt, y.modifiedAt - y.createdAt ];
         }
     }
+    
+    if ((Array.isArray(y.extend)) && (y.extend.length == 1))
+        y.extend = y.extend[0];
+    
+    delete y.reply;
+    if (y.replyTo && Array.isArray(y.replyTo) && y.replyTo.length===0)
+        delete y.replyTo;
     
     delete y.modifiedAt;
     delete y.createdAt;

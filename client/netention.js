@@ -43,12 +43,10 @@ function identity() {
 function netention(f) {
     
     var $NClient = Backbone.Model.extend({
-        clear: function() {
+        reset: function() {
+            //this.clear();
             this.clearObjects();
             this.set('clientID', 'undefined');
-            this.attention = {};
-            this.tags = {};
-            this.properties = {};
             this.ontoIndex = lunr(function() {
                 this.field('name', {
                     boost: 4
@@ -59,7 +57,6 @@ function netention(f) {
             });
         },
         clearObjects: function() {
-            this.attention = {};
             this.set('deleted', {});
             this.set('replies', {});
             this.set('layer', {
@@ -69,10 +66,14 @@ function netention(f) {
             this.set('focus', null);
             this.userRelations = null;
         },
+        //deprecated
         tag: function(t) {
-            return this.tags[t];
+            return this.class[t];
         },
+        //deprecated
         tagRoots: function() {
+            return this.classRoots;
+            /*
             var that = this;
             //this might be suboptimal
             return _.select(_.keys(this.tags), function(tt) {
@@ -82,20 +83,41 @@ function netention(f) {
                 else
                     return (t.tag.length === 0);
             });
+            */
         },
+        //deprecated
         getSubTags: function(s) {
-            return subtags(this.tags, s);
+            return s.subclass;
         },
         isProperty: function(p) {
-            return this.properties[p] !== undefined;
+            return this.property[p] !== undefined;
         },
+        ////DEPRECATED
         objects: function() {
-            return this.attention;
-        }, //DEPRECATED
+            return this.instance;
+        }, 
+        //deprecated
+        getObject: function(id) {
+            return this.instance[id];
+        }, 
+        //deprecated
+        object: function(id) {
+            return this.instance[id];
+        },
+        //deprecated
+        getTag: function(t) {
+            return this.class[t];
+        },
+        //deprecated
+        getProperty: function(p) {
+            return this.property[p];
+        },        
 
         /* returns a list of object id's */
         objectsWithTag: function(t, fullObject, includeSubTags) {
-            //TODO support subtags
+            //TODO use tag index            
+            //TODO support subtags recursively
+            
             var r = [];
 
             if (includeSubTags) {
@@ -108,12 +130,6 @@ function netention(f) {
                     r.push(fullObject ? v : k);
             }
             return r;
-        },
-        getObject: function(id) {
-            return this.attention[id];
-        }, //deprecated
-        object: function(id) {
-            return this.attention[id];
         },
         deleteSelf: function(clientID) {
             var os = this.get('otherSelves');
@@ -133,21 +149,10 @@ function netention(f) {
             }
 
         },
-        //->tag
-        getTag: function(t) {
-            return this.tags[t];
-        },
-        getProperty: function(p) {
-            return this.properties[p];
-        },
         getIncidentTags: function(userid, oneOfTags) {
             return objIncidentTags(this.objects(), oneOfTags, userid);
         },
-        setObject: function(o) {
-            var i = o.id;
-            this.objects()[i] = o;
-            return o;
-        },
+        
         layer: function() {
             return this.get('layer');
         },
@@ -170,7 +175,7 @@ function netention(f) {
 
             var targetID = target;
             if (typeof (target) !== "string") {
-                this.notice(target);
+                this.add(target);
                 targetID = target.id;
             }
 
@@ -186,7 +191,7 @@ function netention(f) {
 
                 $N.startURLRouter();
             } else {
-                this.socket.emit('become', target, function(nextID) {
+                this.socket.emit('become', typeof target === "string" ? target : objCompact(target), function(nextID) {
                     if (nextID) {
                         /*$.pnotify( {
                          title: 'Switched profile',
@@ -357,8 +362,22 @@ function netention(f) {
             var that = this;
 
             $.getJSON(url, function(o) {
-                that.addProperties(o.properties);
-                that.addTags(o.tags);
+                that.addAll(o.property);
+                that.addAll(o.class);
+                                
+                o.class.forEach(function(c) {
+                    that.ontoIndex.add({
+                        id: c.id,
+                        name: c.name,
+                        description: c.description
+                    });
+
+                    if (c.icon)
+                        defaultIcons[c.id] = c.icon;                    
+                });
+                
+                that.trigger('change:tags');
+            
                 f();
             });
 
@@ -395,44 +414,7 @@ function netention(f) {
             });
             return results;
         },
-        addProperty: function(p) {
-            this.properties[p.uri] = p;
-        },
-        addTag: function(t) {
-            var ty = this.tags;
-            var p = this.properties;
 
-            var tt = t;
-            var xx = t.properties;
-            /*if (ty[t.uri]!=undefined) {
-             tt = _.extend(ty[t.uri], t);
-             }*/
-            ty[t.uri] = tt;
-
-            if (xx) {
-                var propertyIDs = xx;
-                if (!_.isArray(xx)) {
-                    //hash-array mode
-                    propertyIDs = [];
-                    for (var tp in xx) {
-                        var c = ty[t.uri].properties[tp];
-                        p[tp] = c;
-                        propertyIDs.push(tp);
-                    }
-                }
-
-                t.properties = propertyIDs;
-            }
-
-            this.ontoIndex.add({
-                id: t.uri,
-                name: t.name,
-                description: t.description
-            });
-
-            if (t.icon)
-                defaultIcons[t.uri] = t.icon;
-        },
         /*geolocate : function(ex) {
          objSetFirstValue(this.myself(), 'spacepoint', {lat: ex[0], lon: ex[1], planet: 'Earth'} );
          
@@ -454,19 +436,8 @@ function netention(f) {
          });    
          },*/
 
-        addProperties: function(ap) {
-            for (var k in ap) {
-                this.addProperty(ap[k]);
-            }
-        },
-        addTags: function(at) {
 
-            for (var k in at) {
-                this.addTag(at[k]);
-            }
-            this.trigger('change:tags');
 
-        },
         deleteObject: function(x, localOnly) {
             var id;
             if (typeof x === "string")
@@ -546,7 +517,8 @@ function netention(f) {
             return true;
 
         },
-        getPlugins: function(withPlugins) {
+        
+        /*getPlugins: function(withPlugins) {
             var that = this;
             this.socket.emit('getPlugins', function(p) {
                 that.unset('plugins');
@@ -557,7 +529,8 @@ function netention(f) {
         },
         setPlugin: function(pid, enabled, callback) {
             this.socket.emit('setPlugin', pid, enabled, callback);
-        },
+        },*/
+        
         /*getGoals: function(from, to, mineOnly ) {
          var that = this;
          
@@ -571,6 +544,7 @@ function netention(f) {
          return ((w >= from) && (w < to));
          } );
          },*/
+
 
         getObjects: function(query, onObject, onFinished) {
             var that = this;
@@ -588,46 +562,9 @@ function netention(f) {
         getReplies: function(id) {
             if (id.id)
                 id = id.id;
-            return this.get('replies')[id] || [];
-        },
-        getReplyRoots: function(r) {
-            //trace up the reply chain until an object with no replyTo
-            var t = {};
-
-            var R = $N.getObject(r);
-            if (!R)
-                return [];
-            var rr = R.replyTo;
-            if (!rr)
-                return [r];
-            if (!Array.isArray(rr))
-                rr = [rr];
-
-            rr.forEach(function(s) {
-                var sr = $N.getReplyRoots(s);
-                sr.forEach(function(srr) {
-                    t[srr] = true;
-                });
-            });
-
-            return _.keys(t);
-        },
-        getAllReplies: function(objectIDList) {
-            var r = {};
-
-            function addReplies(ii) {
-                ii.forEach(function(i) {
-                    if (r[i])
-                        return;
-
-                    r[i] = true;
-
-                    addReplies($N.getReplies(i));
-                });
-            }
-
-            addReplies(objectIDList);
-            return _.keys(r);
+            if (this.instance[id])
+                return this.instance[id].reply;
+            return [];
         },
         /*listenAll: function (b) {
          if (b) {
@@ -686,14 +623,10 @@ function netention(f) {
             return this.get('focus');
         },
         notice: function(x) {
-
             if (!Array.isArray(x)) {
                 return this.notice([x]);
             }
-
-            var attention = this.attention;
-            var replies = this.get('replies');
-
+            
             var that = this;
 
             function n(y) {
@@ -706,26 +639,8 @@ function netention(f) {
                     that.deleteObject(y, true);
                     return;
                 }
-
-                if (y.replyTo) {
-                    var rt = y.replyTo;
-                    if (!Array.isArray(rt)) {
-                        rt = [rt];
-                    }
-                    rt.forEach(function(rtt) {
-                        var p = replies[rtt];
-                        if (p) {
-                            if (!_.contains(p, y.id))
-                                p.push(y.id);
-                        } else {
-                            replies[rtt] = [y.id];
-                        }
-                    });
-                }
-
-                if (y.id) {
-                    attention[y.id] = y;
-                }
+                
+                $N.add(y);
 
                 function objTagObjectToTag(x) {
                     var p = {};
@@ -775,7 +690,7 @@ function netention(f) {
                 this.socket.emit('unsubscribe', channel);
             }
         },
-        pub: function(object, onErr, onSuccess) {
+        pub: function(object, onErr, onSuccess) {            
             if (configuration.connection == 'local') {
                 $N.notice(object);
                 if (onSuccess)
@@ -810,27 +725,31 @@ function netention(f) {
         getTagCount: function(onlySelf, predicate) {
 
             var tagCount = {};
-            var aa = this.attention;
             var myID = this.id();
 
-            for (var ai in aa) {
-                var oi = aa[ai];
+            if (!onlySelf) {
+                _.each(this.tagged, function(v, k) {
+                    if (v)
+                        tagCount[k] = v.length; 
+                });
+            }
+            else {
+                _.each(this.instance, function(oi, ai) {
+                    if (predicate)
+                        if (!predicate(oi))
+                            return;
 
-                if (predicate)
-                    if (!predicate(oi))
-                        continue;
+                    if (onlySelf)
+                        if (oi.author !== myID)
+                            return;
 
-                if (onlySelf)
-                    if (oi.author != myID)
-                        continue;
-
-                //var t = objTags(oi);
-                var ts = objTagStrength(oi);
-                for (var i in ts) {
-                    if (!tagCount[i])
-                        tagCount[i] = 0;
-                    tagCount[i] = tagCount[i] + ts[i]; //TODO add the normalized tag strength
-                }
+                    var ts = objTagStrength(oi);
+                    for (var i in ts) {
+                        if (!tagCount[i])
+                            tagCount[i] = 0;
+                        tagCount[i] = tagCount[i] + ts[i]; //TODO add the normalized tag strength
+                    }
+                });
             }
             return tagCount;
         },
@@ -911,17 +830,17 @@ function netention(f) {
             }
         }
 
-
     });
 
     //exports = the variable from util.js which is also used by node.js require()        		
     var $N = _.extend(new $NClient(), exports);
+    $N = _.extend($N, new Ontology());
     
     $N.toString = function() {
         return JSON.stringify(this);
     };
 
-    $N.clear();
+    $N.reset();
 
     var cid = getCookie('clientID');
     var keys = getCookie('keys');
