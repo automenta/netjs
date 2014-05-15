@@ -243,10 +243,13 @@ function getTagProperties(t) {
  *  commitFocus - a function that takes as parameter the next focus to save
  */
 function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
-    var d = newDiv();
+    var D = newDiv().addClass('ObjectEditDiv');
     var headerTagButtons = ix.tagSuggestions || [];
+    var ontocache = {};
 
     function update(x) {
+        var widgetsToAdd = [];
+        
         var whenSaved = [];
         var nameInput = null;
 
@@ -315,40 +318,41 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         };
 
 
-        d.empty();
-
-
+        widgetsToAdd =[];
 
         if (editable) {
             if (hideWidgets !== true) {
                 nameInput = $('<input/>').attr('type', 'text').attr('x-webkit-speech', 'x-webkit-speech').addClass('nameInput').addClass('nameInputWide');
                 nameInput.val(objName(x));
-                d.append(nameInput);
+                widgetsToAdd.push(nameInput);
 
                 whenSaved.push(function(y) {
                     objName(y, nameInput.val());
                 });
             }
         } else {
-            d.append('<h1>' + objName(x) + '</h1>');
+            widgetsToAdd.push('<h1>' + objName(x) + '</h1>');
         }
-        //d.append($('<span>' + x.id + '</span>').addClass('idLabel'));
+        //widgetsToAdd.push($('<span>' + x.id + '</span>').addClass('idLabel'));
 
-        var header = newDiv().appendTo(d);
+        var header = newDiv();
+        widgetsToAdd.push(header);
 
         _.each(headerTagButtons, function(T) {
             if (T == '\n') {
                 header.append('<br/>');
             } else {
                 newTagButton(T, function() {
-                    var y = d.getEditedFocus();
+                    var y = D.getEditedFocus();
                     objAddTag(y, T);
                     update(y);
                 }, true).appendTo(header);
             }
         });
 
-        var tsw = $('<div class="tagSuggestionsWrap"></div>').appendTo(d);
+        var tsw = $('<div class="tagSuggestionsWrap"></div>');
+        widgetsToAdd.push(tsw);
+        
         var ts = $('<div/>').addClass('tagSuggestions').appendTo(tsw);
 
         if (x.value) {
@@ -365,7 +369,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         continue;
 
                 tags.push(t.id);
-                tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange).appendTo(d);
+                tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
+                widgetsToAdd.push(tt);
             }
             if (tt!=null) {
                 //hide the last tag section's down button
@@ -400,7 +405,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             for (var i = 0; i < missingProp.length; i++) {
                 var p = missingProp[i];
-                d.append(newTagSection(x, i + x.value.length, {
+                widgetsToAdd.push(newTagSection(x, i + x.value.length, {
                     id: p
                 }, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange));
             }
@@ -409,15 +414,14 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         var ontoSearcher;
 
-        var lastValue = null;
-        var ontocache = {};
+        var lastNameValue = null;
 
         function search() {
             if (!tsw.is(':visible')) {
                 //clearInterval(ontoSearcher);
                 return;
             }
-            if (!d.is(':visible')) {
+            if (!D.is(':visible')) {
                 clearInterval(ontoSearcher);
                 return;
             }
@@ -427,11 +431,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             if (v.length === 0)
                 return;
 
-            if (lastValue != v) {
+            if (lastNameValue !== v) {
                 updateTagSuggestions(v, ts, onAdd, getEditedFocus, ontocache);
-                lastValue = v;
+                lastNameValue = v;
             }
         }
+        
+        updateTagSuggestions(nameInput.val(), ts, onAdd, getEditedFocus, ontocache);
 
         if (objHasTag(getEditedFocus(), 'Tag')) {
             //skip suggestions when editing a Tag
@@ -446,10 +452,10 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
         }
 
-        d.getEditedFocus = getEditedFocus;
+        D.empty();
+        D.getEditedFocus = getEditedFocus;
 
 
-        d.addClass('ObjectEditDiv');
 
         if ((hideWidgets !== true) && (!x.readonly)) {
             var addButtonWrap = newDiv().addClass('tagSection').addClass('tagSectionControl');
@@ -599,7 +605,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             addButtons.append(whatButton, howButton, whenButton, whereButton, whoButton, drawButton, webcamButton, uploadButton);
 
-            d.append(addButtonWrap);
+            widgetsToAdd.push(addButtonWrap);
 
             var scopeSelect = null;
             if (!objHasTag(getEditedFocus(), 'User')) {
@@ -639,7 +645,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                                 //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object
                     });
                 });
-                d.parent().dialog('close');
+                D.parent().dialog('close');
             });
 
             addButtonWrap.append(saveButton);
@@ -647,12 +653,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 addButtonWrap.append(scopeSelect);
 
         }
-
+        
+        D.append(widgetsToAdd);
     }
 
     update(ix);
 
-    return d;
+    return D;
 }
 
 function applyTagStrengthClass(e, s) {
@@ -760,7 +767,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 onRemove(index);
         });
 
-        tagButtons.appendTo(d);
+        d.append(tagButtons);
 
         //d.hover(function(){ tagButtons.fadeIn(200);}, function() { tagButtons.fadeOut(200);});
         //d.hover(function(){ tagButtons.show();}, function() { tagButtons.hide();});                
@@ -1013,10 +1020,10 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             j.append('Past');
             j.append(i);
             j.append('Now');
-            d.append(j);
+            widgetsToAdd.push(j);
 
             var lb = $('<input type="checkbox">Latest</input>');
-            d.append(lb);
+            widgetsToAdd.push(lb);
 
             var s = $('<select>');
             s.append('<option value="1">5 mins</option>');
@@ -1026,17 +1033,17 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
             s.append('<option value="5">1 day</option>');
             s.append('<option value="6">1 week</option>');
             s.append('<option value="7">1 month</option>');
-            d.append(s);
+            widgetsToAdd.push(s);
 
 
 
             var start = -1,
                     end = -1;
 
-            d.append('<br/>');
+            widgetsToAdd.push('<br/>');
 
             var output = $('<span/>');
-            d.append(output);
+            widgetsToAdd.push(output);
 
             var update = _.throttle(function() {
                 var rangeSec = 0;
@@ -1102,7 +1109,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 }, strength);
             });
         } else {
-            d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
+            widgetsToAdd.push(new Date(t.value.start) + ' ' + new Date(t.value.end));
         }
 
     } else if (type == 'object') {
@@ -1199,7 +1206,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
                 }
             }
 
-            d.append(tt);
+            widgetsToAdd.push(tt);
 
             whenSaved.push(function(y) {
                 objAddValue(y, tag, ts.result || ts.val(), strength);
