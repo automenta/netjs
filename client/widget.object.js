@@ -343,8 +343,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         if (x.value) {
             var tags = []; //tags & properties, actually
 
-
-
             var tt = null;
             for (var i = 0; i < x.value.length; i++) {
                 var t = x.value[i];
@@ -354,7 +352,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         continue;
 
                 tags.push(t.id);
-                tt = newTagSection(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
+                tt = newTagValueWidget(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
                 widgetsToAdd.push(tt);
             }
             if (tt != null) {
@@ -386,7 +384,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
 
             missingProp.forEach(function(p) {
-                widgetsToAdd.push(newTagSection(x, i + x.value.length, {
+                widgetsToAdd.push(newTagValueWidget(x, i + x.value.length, {
                     id: p
                 }, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange));
             });
@@ -658,7 +656,7 @@ function applyTagStrengthClass(e, s) {
 }
 
 
-function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange) {
+function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange) {
     var tag = t.id;
     var strength = t.strength;
     if (strength === undefined)
@@ -777,6 +775,7 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
     var prop = $N.property[tag];
     
     var defaultValue = null;
+    
     if (prop) {
         type = prop.extend;
         tagLabel.html(prop.name);
@@ -786,369 +785,15 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
         }
         d.addClass('propertySection');
     }
-
-    if (type === 'html') {
-
-        if (editable) {
-            var dd = $('<textarea/>').addClass('tagDescription');
-            if ((prop) && (prop.readonly)) {
-                dd.attr('readonly', 'readonly');
-            }
-
-            if (prop)
-                if (prop.description)
-                    dd.attr('placeholder', prop.description);
-
-            if (t.value)
-                dd.val(t.value);
-            else if (defaultValue)
-                dd.val(defaultValue);
-
-            d.append(dd);
-
-            whenSaved.push(function(y) {
-                objAddValue(y, tag, dd.val(), strength);
-            });
-        } else {
-            var dd = newDiv();
-            if (t.value)
-                dd.html(t.value);
-            d.append(dd);
-        }
-    } else if (type === 'cortexit') {
-        //...
-    } else if ((type === 'text') || (type === 'url') || (type === 'integer') || (type === 'real')) {
-        newTagSection.integer(x, index, t, prop, editable, d, events);
-    } else if (type === 'boolean') {
-        var ii = $('<input type="checkbox">');
-
-        var value = t.value;
-        if (value === undefined) {
-            if (defaultValue)
-                value = defaultValue;
-            else
-                value = true;
-        }
-
-        ii.prop('checked', value).appendTo(d);
-
-        if (editable) {
-            whenSaved.push(function(y) {
-                objAddValue(y, tag, ii.is(':checked'), strength);
-            });
-        } else {
-            ii.attr("disabled", "disabled");
-        }
-    } else if (type === 'spacepoint') {
-        var ee = newDiv();
-        var dd = newDiv();
-
-        var de = uuid();
-        dd.attr('id', de);
-        dd = dd.addClass('focusMap').appendTo(ee);
-
-        var m;
-
-        if (editable) {
-            var cr = $('<select/>')
-                    .css('width', 'auto')
-                    .append('<option value="earth" selected>Earth</option>',
-                            '<option value="moon">Moon</option>',
-                            '<option value="mars">Mars</option>',
-                            '<option value="venus">Venus</option>')
-                    .change(function() {
-                        alert('Currently only Earth is supported.');
-                        cr.val('earth');
-                    }).appendTo(ee);
-
-            var ar = $('<input type="text" disabled="disabled" placeholder="Altitude" />').
-                    css('width', '15%').appendTo(ee);
-
-            whenSaved.push(function(y) {
-                if (!m)
-                    return;
-                if (!m.location)
-                    return;
-
-                var l = m.location();
-                objAddValue(y, tag, {
-                    lat: l.lat,
-                    lon: l.lon,
-                    zoom: m.zoom,
-                    planet: 'Earth'
-                }, strength);
-            });
-
-        }
-
-        d.append(ee);
-
-
-        later(function() {
-            var lat = t.value.lat || configuration.mapDefaultLocation[0];
-            var lon = t.value.lon || configuration.mapDefaultLocation[1];
-            var zoom = t.value.zoom;
-            m = initLocationChooserMap(de, [lat, lon], zoom);
-
-        });
-    } else if (type == 'timepoint') {
-        if (editable) {
-            var lr = $('<input type="text" placeholder="Time" />');
-            lr.val(new Date(t.at));
-            d.append(lr);
-            var lb = $('<button style="margin-top: -0.5em"><i class="icon-calendar"/></button>');
-            d.append(lb);
-            //TODO add 'Now' button
-
-            //TODO add save function
-        } else {
-            d.append(newEle('a').append($.timeago(new Date(t.at))));
-        }
-    } else if (type == 'image') {
-        if (editable) {
-            whenSaved.push(function(y) {
-                objAddValue(y, t.id, t.value, strength);
-            });
-        }
-        var url = t.value;
-        d.append('<img class="objectViewImg" src="' + url + '"/>');
-    } else if (type == 'sketch') {
-        var eu = uuid();
-
-        var ee = newDiv(eu);
-
-        d.append(ee);
-
-        var options = {
-            width: 250,
-            height: 250,
-            editing: editable
-        };
-        if (t.value) {
-            options.strokes = JSON.parse(t.value);
-        }
-        later(function() {
-            var sketchpad = Raphael.sketchpad(eu, options);
-
-            var value = "";
-            // When the sketchpad changes, update the input field.
-            sketchpad.change(function() {
-                value = sketchpad.json();
-            });
-            whenSaved.push(function(y) {
-                objAddValue(y, "sketch", value, strength);
-            });
-        });
-    } else if (type == 'timerange') {
-        var nn = Date.now();
-        var oldest = nn - 5 * 24 * 60 * 60 * 1000; //TODO make this configurable
-
-        if (editable) {
-
-            var i = $('<input type="range" name="timecenter" min="1" max="10000">');
-
-            if (t.value)
-                if ((t.value.start) && (t.value.end)) {
-                    var tm = ((0.5 * (t.value.start + t.value.end)) - oldest) / (nn - oldest) * 10000;
-                    i.attr('value', parseInt(tm));
-                }
-
-            var j = $('<span id="timecenter"/>');
-            j.append('Past');
-            j.append(i);
-            j.append('Now');
-            d.append(j);
-
-            var lb = $('<input type="checkbox">Latest</input>');
-            d.append(lb);
-
-            var s = $('<select>');
-            s.append('<option value="1">5 mins</option>');
-            s.append('<option value="2">15 mins</option>');
-            s.append('<option value="3" selected>1 hour</option>');
-            s.append('<option value="4">6 hours</option>');
-            s.append('<option value="5">1 day</option>');
-            s.append('<option value="6">1 week</option>');
-            s.append('<option value="7">1 month</option>');
-            d.append(s);
-
-
-
-            var start = -1,
-                    end = -1;
-
-            d.append('<br/>');
-
-            var output = $('<span/>');
-            d.append(output);
-
-            var update = _.throttle(function() {
-                var rangeSec = 0;
-
-                var range = s.val();
-                if (range === '1')
-                    rangeSec = 5 * 60;
-                if (range === '2')
-                    rangeSec = 15 * 60;
-                if (range === '3')
-                    rangeSec = 60 * 60;
-                if (range === '4')
-                    rangeSec = 6 * 60 * 60;
-                if (range === '5')
-                    rangeSec = 24 * 60 * 60;
-                if (range === '6')
-                    rangeSec = 7 * 24 * 60 * 60;
-                if (range === '7')
-                    rangeSec = 30 * 24 * 60 * 60;
-
-                start = end = 0;
-
-
-                if (lb.is(':checked')) {
-                    start = new Date(nn - rangeSec * 1000);
-                    end = new Date(nn);
-                    j.hide();
-                } else {
-                    j.show();
-                    var iv = i.val();
-                    var p = parseFloat(i.val()) / 10000.0;
-                    var current = oldest + p * (nn - oldest);
-                    start = current - (rangeSec * 1000.0) / 2.0;
-                    end = current + (rangeSec * 1000.0) / 2.0;
-                    //console.log(oldest, newest, current, from, to);
-                }
-
-
-                output.html(new Date(start) + '<br/>' + new Date(end));
-                onStrengthChange(tag);
-                if (whenSliderChange)
-                    whenSliderChange(x);
-            }, 500);
-
-            var uup = function() {
-                later(function() {
-                    update();
-                });
-            };
-
-            i.change(uup);
-            lb.change(uup);
-            s.change(uup);
-
-            update();
-
-            //TODO add calendar buttons
-
-            whenSaved.push(function(y) {
-                objAddValue(y, tag, {
-                    'from': end,
-                    'to': start
-                }, strength);
-            });
-        } else {
-            d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
-        }
-
-    } else if (type == 'object') {
-        if (editable) {
-            var tt = $('<span></span>');
-            var ts = $('<input></input>').css('margin-right', '0').attr('readonly', 'readonly');
-
-            var value = t.value;
-
-            function updateTS(x) {
-                var X = $N.getObject(x) || $N.getTag(x) || {
-                    name: x
-                };
-                if (X.name != x)
-                    ts.val(X.name + ' (' + x + ')');
-                else
-                    ts.val(X.name);
-                ts.result = x;
-            }
-            updateTS(value);
-
-
-            //http://jqueryui.com/autocomplete/#default
-            //http://jqueryui.com/autocomplete/#categories
-
-            //            //TODO filter by tag specified by ontology property metadata
-            //            var data = [];
-            //            for (var k in $N.objects()) {
-            //                var v = $N.object(k);
-            //                if (value == k) {
-            //                    ts.val(v.name);
-            //                    ts.result = value;
-            //                }
-            //
-            //                data.push({
-            //                    value: k,
-            //                    label: v.name
-            //                });
-            //            }
-            //            ts.autocomplete({
-            //                source: data,
-            //                select: function(event, ui) {
-            //                    ts.result = ui.item.value;
-            //                    ts.val(ui.item.label);
-            //                    /*
-            //                     $( "#project" ).val( ui.item.label );
-            //                     $( "#project-id" ).val( ui.item.value );
-            //                     $( "#project-description" ).html( ui.item.desc );
-            //                     $( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
-            //                     */
-            //
-            //                    return false;
-            //                }
-            //            });
-
-            tt.append(ts);
-
-            if (!prop.readonly) {
-
-                var tagRestrictions = prop.tag;
-                if (typeof tagRestrictions === "string")
-                    tagRestrictions = [tagRestrictions];
-
-                ts.attr('placeholder', tagRestrictions ? tagRestrictions.join(' or ') : '');
-
-                var mb = $('<button>...</button>').attr('title', "Find Object")
-                        .css('margin-left', '0').appendTo(tt)
-                        .click(function() {
-                            var pp = newPopup("Select Object", true, true);
-                            var tagger = newTagger(null, function(tags) {
-                                ts.result = tags = tags[0];
-
-                                updateTS(tags);
-
-                                pp.dialog('close');
-                            }, tagRestrictions, 1);
-                            pp.append(tagger);
-                        });
-
-                ts.click(function() {
-                    if (ts.val() == '')
-                        mb.click();
-                });
-
-                if (tagRestrictions) {
-                    var tnames = [];
-                    tagRestrictions.forEach(function(tr) {
-                        var T = $N.getTag(tr);
-                        tnames.push(T.name);
-                        if (!T)
-                            return;
-                    });
-                    $('<button title="Create ' + tnames.join(' or ') + '" disabled class="createSubObjectButton">+</button>').appendTo(tt);
-                }
-            }
-
-            d.append(tt);
-
-            whenSaved.push(function(y) {
-                objAddValue(y, tag, ts.result || ts.val(), strength);
-            });
-        }
+    else {
+        //default settings for a primitive
+        prop = { id: tag };
+    }
+
+    //...
+    
+    if (newTagValueWidget[type]) {
+        newTagValueWidget[type](x, index, t, prop, editable, d, events);        
     } else if (tag) {
         var TAG = $N.class[tag];
 
@@ -1195,17 +840,6 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
             }
 
-            /*
-             if (t.value) {
-             for (var v = 0; v < t.value.length; v++) {
-             var vv = t.value[v];
-             var pv = $N.getProperty(vv.id);
-             //var pe = newPropertyEdit(vv, pv);
-             var pe = newTagSection(t, v, vv, editable);
-             //this.propertyEdits.push(pe);
-             d.append(pe);
-             }
-             }*/
         }
     }
 
@@ -1216,8 +850,54 @@ function newTagSection(x, index, t, editable, whenSaved, onAdd, onRemove, onStre
 
     return e;
 }
-newTagSection.real =
-newTagSection.integer = function(x, index, v, prop, editable, d, events) {
+
+newTagValueWidget.boolean = function(x, index, v, prop, editable, d, events) {
+    var value = v.value;
+    if (value === undefined) {
+        value = (prop.default!==undefined) ? prop.default : true;
+    }
+
+    var ii = $('<input type="checkbox">').appendTo(d).prop('checked', value);
+
+    if (editable) {
+        events.onSave.push(function(y) {
+            objAddValue(y, prop.id, ii.is(':checked'), v.strength);
+        });
+    } else {
+        ii.attr("disabled", "disabled");
+    }
+};
+newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
+
+    if (editable) {
+        var dd = $('<textarea/>').addClass('tagDescription').appendTo(d);
+        if (prop.readonly) {
+            dd.attr('readonly', 'readonly');
+        }
+
+        if (prop.description)
+            dd.attr('placeholder', prop.description);
+
+        if (v.value)
+            dd.val(v.value);
+        else if (prop.default)
+            dd.val(prop.default);
+
+        events.onSave.push(function(y) {
+            objAddValue(y, prop.id, dd.val(), v.strength);
+        });
+    } else {
+        var dd = newDiv();
+        if (v.value)
+            dd.html(v.value);
+        d.append(dd);
+    }        
+};
+    
+newTagValueWidget.text =
+newTagValueWidget.url =
+newTagValueWidget.real =
+newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
     var type = prop.extend;
     
     if (editable) {
@@ -1274,6 +954,312 @@ newTagSection.integer = function(x, index, v, prop, editable, d, events) {
     }
 
 };
+newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) {
+
+    var de = uuid();
+
+    var ee = newDiv().appendTo(d);
+    var dd = newDiv().addClass('focusMap').appendTo(ee).attr('id', de);
+
+    var m;
+
+    if (editable) {
+        var cr = $('<select/>')
+                .css('width', 'auto')
+                .append('<option value="earth" selected>Earth</option>',
+                        '<option value="moon">Moon</option>',
+                        '<option value="mars">Mars</option>',
+                        '<option value="venus">Venus</option>')
+                .change(function() {
+                    alert('Currently only Earth is supported.');
+                    cr.val('earth');
+                }).appendTo(ee);
+
+        var ar = $('<input type="text" disabled="disabled" placeholder="Altitude" />')
+                .css('width', '15%').appendTo(ee);
+
+        events.onSave.push(function(y) {
+            if (!m)
+                return;
+            if (!m.location)
+                return;
+
+            var l = m.location();
+            objAddValue(y, prop.id, {
+                lat: l.lat,
+                lon: l.lon,
+                zoom: m.zoom,
+                planet: 'Earth'
+            }, v.strength);
+        });
+
+    }
+
+    later(function() {
+        var lat = v.value.lat || configuration.mapDefaultLocation[0];
+        var lon = v.value.lon || configuration.mapDefaultLocation[1];
+        var zoom = v.value.zoom;
+        m = initLocationChooserMap(de, [lat, lon], zoom);
+    });
+};
+
+newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
+    if (editable) {
+        var lr = $('<input type="text" placeholder="Time" />').appendTo(d)
+                    .val(new Date(v.at));
+        var lb = $('<button style="margin-top: -0.5em"><i class="icon-calendar"/></button>').appendTo(d);
+        
+        //TODO add 'Now' button
+
+        //TODO add save function
+    } else {
+        d.append(newEle('a').append($.timeago(new Date(v.at))));
+    }
+};
+
+newTagValueWidget.image = function(x, index, v, prop, editable, d, events) {
+    if (editable) {
+        events.onSave.push(function(y) {
+            objAddValue(y, v.id, v.value, v.strength);
+        });
+    }
+    var url = v.value;
+    d.append('<img class="objectViewImg" src="' + url + '"/>');
+};
+
+newTagValueWidget.sketch = function(x, index, v, prop, editable, d, events) {
+    var eu = uuid();
+    var ee = newDiv(eu).appendTo(d);
+
+    var options = {
+        width: 250,
+        height: 250,
+        editing: editable
+    };
+    if (v.value) {
+        options.strokes = JSON.parse(v.value);
+    }
+    later(function() {
+        var sketchpad = Raphael.sketchpad(eu, options);
+        
+        events.onSave.push(function(y) {
+            objAddValue(y, "sketch", sketchpad.json(), v.strength);
+        });
+    });
+};
+        
+newTagValueWidget.timerange = function(x, index, t, prop, editable, d, events) {
+    var nn = Date.now();
+    var oldest = nn - 5 * 24 * 60 * 60 * 1000; //TODO make this configurable
+
+    if (editable) {
+
+        var i = $('<input type="range" name="timecenter" min="1" max="10000">').appendTo(d);
+
+        if (t.value)
+            if ((t.value.start) && (t.value.end)) {
+                var tm = ((0.5 * (t.value.start + t.value.end)) - oldest) / (nn - oldest) * 10000;
+                i.attr('value', parseInt(tm));
+            }
+
+        var j = $('<span id="timecenter"/>').appendTo(d)
+                    .append('Past', i, 'Now');
+
+        var lb = $('<input type="checkbox">Latest</input>').appendTo(d);
+
+        var s = $('<select>').appendTo(d)
+                    .append('<option value="1">5 mins</option>',
+                            '<option value="2">15 mins</option>',
+                            '<option value="3" selected>1 hour</option>',
+                            '<option value="4">6 hours</option>',
+                            '<option value="5">1 day</option>',
+                            '<option value="6">1 week</option>',
+                            '<option value="7">1 month</option>');
+
+        var start = -1, end = -1;
+
+        d.append('<br/>');
+
+        var output = $('<span/>').appendTo(d);
+
+        var update = _.throttle(function() {
+            var rangeSec = 0;
+
+            var range = s.val();
+            if (range === '1')
+                rangeSec = 5 * 60;
+            if (range === '2')
+                rangeSec = 15 * 60;
+            if (range === '3')
+                rangeSec = 60 * 60;
+            if (range === '4')
+                rangeSec = 6 * 60 * 60;
+            if (range === '5')
+                rangeSec = 24 * 60 * 60;
+            if (range === '6')
+                rangeSec = 7 * 24 * 60 * 60;
+            if (range === '7')
+                rangeSec = 30 * 24 * 60 * 60;
+
+            start = end = 0;
+
+
+            if (lb.is(':checked')) {
+                start = new Date(nn - rangeSec * 1000);
+                end = new Date(nn);
+                j.hide();
+            } else {
+                j.show();
+                var iv = i.val();
+                var p = parseFloat(i.val()) / 10000.0;
+                var current = oldest + p * (nn - oldest);
+                start = current - (rangeSec * 1000.0) / 2.0;
+                end = current + (rangeSec * 1000.0) / 2.0;
+                //console.log(oldest, newest, current, from, to);
+            }
+
+
+            output.html(new Date(start) + '<br/>' + new Date(end));
+            /*
+            onStrengthChange(tag);
+            if (whenSliderChange)
+                whenSliderChange(x);
+            */
+        }, 500);
+
+        var uup = function() {
+            later(function() {
+                update();
+            });
+        };
+
+        i.change(uup);
+        lb.change(uup);
+        s.change(uup);
+
+        update();
+
+        //TODO add calendar buttons
+
+        events.onSave.push(function(y) {
+            objAddValue(y, prop.id, {
+                'from': end,
+                'to': start
+            }, t.strength);
+        });
+    } else {
+        d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
+    }
+};
+
+newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
+
+    if (editable) {
+        var tt = $('<span></span>');
+        var ts = $('<input></input>').css('margin-right', '0').attr('readonly', 'readonly').appendTo(tt);
+        
+        var value = t.value;
+
+        function updateTS(x) {
+            var X = $N.getObject(x) || $N.getTag(x) || {
+                name: x
+            };
+            if (X.name != x)
+                ts.val(X.name + ' (' + x + ')');
+            else
+                ts.val(X.name);
+            ts.result = x;
+        }
+        updateTS(value);
+
+
+        //http://jqueryui.com/autocomplete/#default
+        //http://jqueryui.com/autocomplete/#categories
+
+        //            //TODO filter by tag specified by ontology property metadata
+        //            var data = [];
+        //            for (var k in $N.objects()) {
+        //                var v = $N.object(k);
+        //                if (value == k) {
+        //                    ts.val(v.name);
+        //                    ts.result = value;
+        //                }
+        //
+        //                data.push({
+        //                    value: k,
+        //                    label: v.name
+        //                });
+        //            }
+        //            ts.autocomplete({
+        //                source: data,
+        //                select: function(event, ui) {
+        //                    ts.result = ui.item.value;
+        //                    ts.val(ui.item.label);
+        //                    /*
+        //                     $( "#project" ).val( ui.item.label );
+        //                     $( "#project-id" ).val( ui.item.value );
+        //                     $( "#project-description" ).html( ui.item.desc );
+        //                     $( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
+        //                     */
+        //
+        //                    return false;
+        //                }
+        //            });
+
+        
+
+        if (!prop.readonly) {
+
+            var tagRestrictions = prop.tag;
+            if (typeof tagRestrictions === "string")
+                tagRestrictions = [tagRestrictions];
+
+            ts.attr('placeholder', tagRestrictions ? tagRestrictions.join(' or ') : '');
+
+            var mb = $('<button>...</button>').attr('title', "Find Object")
+                    .css('margin-left', '0').appendTo(tt)
+                    .click(function() {
+                        var pp = newPopup("Select Object", true, true);
+                        var tagger = newTagger(null, function(tags) {
+                            ts.result = tags = tags[0];
+
+                            updateTS(tags);
+
+                            pp.dialog('close');
+                        }, tagRestrictions, 1);
+                        pp.append(tagger);
+                    });
+
+            ts.click(function() {
+                if (ts.val() === '')
+                    mb.click();
+            });
+
+            if (tagRestrictions) {
+                var tnames = [];
+                tagRestrictions.forEach(function(tr) {
+                    var T = $N.class[tr];
+                    tnames.push(T.name);
+                    if (!T)
+                        return;
+                });
+                $('<button title="Create ' + tnames.join(' or ') + '" disabled class="createSubObjectButton">+</button>').appendTo(tt);
+            }
+        }
+
+        d.append(tt);
+
+        events.onSave.push(function(y) {
+            objAddValue(y, prop.id, ts.result || ts.val(), t.strength);
+        });
+    }
+};
+    
+newTagValueWidget.cortexit = function(x, index, v, prop, editable, d, events) {
+    //TODO
+};
+
+
 
 
 
