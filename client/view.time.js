@@ -37,7 +37,7 @@ function newTimeView(v) {
         foreachTimedObject(null, function(goals, centroids) {
             function addGoal(g) {
                 var duration = g.duration || timeUnitLengthMS;
-                var gs = newObjectSummary(g, {
+                var gs = newObjectView(g, {
                     depthRemaining: 0,
                     nameClickable: false,
                     showActionPopupButton: false,
@@ -257,7 +257,7 @@ function newTimeViewGridster(v) {
         function addGoal(g) {
             var gg = $('<li class="mainViewButton"></li>');
             gg.css('font-size', goalWidgetScale);
-            var O = newObjectSummary(g, {
+            var O = newObjectView(g, {
                 showAuthorIcon: false,
                 showAuthorName: false,
                 showActionPopupButton: false
@@ -380,7 +380,7 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
          if (_.contains(ogg, 'GoalCentroid'))
          return;
          
-         var gg = newObjectSummary(g).addClass("miniGoalSummary");
+         var gg = newObjectView(g).addClass("miniGoalSummary");
          d.append(gg);
          });
          */
@@ -468,7 +468,7 @@ function newGoalList(target, user, centroids) {
             if (_.contains(ogg, 'GoalCentroid'))
                 return;
 
-            var gg = newObjectSummary(g).addClass("miniGoalSummary");
+            var gg = newObjectView(g).addClass("miniGoalSummary");
             d.append(gg);
         });
 
@@ -477,7 +477,7 @@ function newGoalList(target, user, centroids) {
             _.each(_.filter(centroids, function(c) {
                 return (c.when >= ti) && (c.when < ti + timeUnitLengthMS);
             }), function(g) {
-                newObjectSummary(g).addClass("miniGoalSummary centroidSummary").appendTo(d);
+                newObjectView(g).addClass("miniGoalSummary centroidSummary").appendTo(d);
             });
         }
 

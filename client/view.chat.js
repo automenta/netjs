@@ -325,7 +325,7 @@ function lineClickFunction() {
 
 
     function showFull() {
-        var s = newObjectSummary(x, {
+        var s = newObjectView(x, {
             showActionPopupButton: false,
             showSelectionCheck: false,
             transparent: true
@@ -356,7 +356,7 @@ function newObjectLogLine(x) {
     var e = newDiv().addClass('chatViewLineContent').appendTo(line);
 
 
-    var s = newObjectSummary(x, {
+    var s = newObjectView(x, {
         showActionPopupButton: false,
         showSelectionCheck: false,
         transparent: true,

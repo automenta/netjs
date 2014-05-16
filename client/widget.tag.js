@@ -375,7 +375,7 @@ function newObjectSelector(T) {
 
             _.each(ol, function(o) {
                 var O = $N.getObject(o);
-                var s = newObjectSummary(O, {
+                var s = newObjectView(O, {
                     showActionPopupButton: false,
                     titleClickMode: function(x) {
                         onTagAdded(x.id);

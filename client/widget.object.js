@@ -40,7 +40,7 @@ function newPopupObjectView(_x, p) {
     }
 
     var d = newPopup(x.name, p);
-    var s = newObjectSummary(x, {
+    var s = newObjectView(x, {
         depthRemaining: 4
     });
     s.css('border', 'none');
@@ -72,7 +72,7 @@ function newPopupObjectViews(objectIDs) {
         }
 
         if (o) {
-            e.append(newObjectSummary(o, {
+            e.append(newObjectView(o, {
                 depthRemaining: 0
             }));
             displayedObjects++;
@@ -829,6 +829,14 @@ newTagValueWidget.boolean = function(x, index, v, prop, editable, d, events) {
         ii.attr("disabled", "disabled");
     }
 };
+
+newTagValueWidget.markdown = function(x, index, v, prop, editable, d, events) {
+    if (!editable) {
+        if (v.value)
+            d.append( newDiv().addClass('markdown').html(markdown.toHTML(v.value)) );
+    }        
+};
+
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
 
     if (editable) {
@@ -849,10 +857,8 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
             objAddValue(y, prop.id, dd.val(), v.strength);
         });
     } else {
-        var dd = newDiv();
         if (v.value)
-            dd.html(v.value);
-        d.append(dd);
+            d.append( newDiv().html(v.value) );
     }        
 };
 
@@ -965,33 +971,51 @@ newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
         });
 
     } else {
-        var dd = newEle('span').appendTo(d);
-        if (v.value) {
-            var valstring;
-            
-            if (v.value.unit) {
-                //number and unit were both stored in a JSON object
-                valstring = v.value.number + ' ' + v.value.unit;
-            } else {
-                //only the number was present
-                valstring = v.value;
-            }
+        if (type === 'url') {
+            if (v.value)
+                d.append('<a target="_blank" href="' + v.value + '">' + v.value + '</a>');
+        }
+        else {
+            var dd = newEle('span').appendTo(d);
+            if (v.value) {
+                var valstring;
 
-            dd.html(valstring);
+                if (v.value.unit) {
+                    //number and unit were both stored in a JSON object
+                    valstring = v.value.number + ' ' + v.value.unit;
+                } else {
+                    //only the number was present
+                    valstring = v.value;
+                }
+
+                dd.html(valstring);
+            }
         }
     }
 
 };
 newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) {
 
-    var de = uuid();
-
-    var ee = newDiv().appendTo(d);
-    var dd = newDiv().addClass('focusMap').appendTo(ee).attr('id', de);
-
     var m;
+    var ee = newDiv().appendTo(d);
+    
+    function showMap() {
+
+        var de = uuid();
+
+        var dd = newDiv().addClass('focusMap').appendTo(ee).attr('id', de);
+
+        later(function() {
+            var lat = v.value.lat || configuration.mapDefaultLocation[0];
+            var lon = v.value.lon || configuration.mapDefaultLocation[1];
+            var zoom = v.value.zoom;
+            m = initLocationChooserMap(de, [lat, lon], zoom);
+        });
+    }
 
     if (editable) {
+        showMap();
+        
         var cr = $('<select/>')
                 .css('width', 'auto')
                 .append('<option value="earth" selected>Earth</option>',
@@ -1023,15 +1047,26 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
 
     }
     else {
-        
+        d.append('Location: ');
+        if (v.value) {
+            var mapVisible = false;
+            var sl = newSpaceLink(v.value).appendTo(d).click(function() {
+                if (!mapVisible) {
+                    showMap();
+                    later(freetileView);
+                }
+                else {
+                    ee.empty();
+                    later(freetileView);
+                }
+                mapVisible = !mapVisible;
+            });
+        }
+        else {
+            d.append('Unknown');
+        }
     }
 
-    later(function() {
-        var lat = v.value.lat || configuration.mapDefaultLocation[0];
-        var lon = v.value.lon || configuration.mapDefaultLocation[1];
-        var zoom = v.value.zoom;
-        m = initLocationChooserMap(de, [lat, lon], zoom);
-    });
 };
 
 newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
@@ -1292,145 +1327,23 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
         });
     }
     else {
-        //..
+        if (t.value)
+            var V = $N.object[t.value];
+            d.append(newEle('a').html( (V) ? (V.name || V.id) : '?' ).click(function() {
+                newPopupObjectView(t.value);
+            }));
     }
 };
-    
+
+newTagValueWidget.timeseries = function(x, index, v, prop, editable, d, events) {
+    d.append('<textarea>' + JSON.stringify(vv.value) + '</textarea>');
+};
+
 newTagValueWidget.cortexit = function(x, index, v, prop, editable, d, events) {
     //TODO
 };
 
 
-
-function newObjectDetails(x) {
-    var ud = newEle('ul');
-
-    if (x.value) {
-        x.value.forEach(function(vv) {
-
-            if (vv.id === 'sketch') {
-                var eu = uuid();
-
-                var ee = newDiv(eu).appendTo(ud);
-
-                var options = {
-                    width: 250,
-                    height: 250,
-                    editing: false
-                };
-                if (vv.value) {
-                    options.strokes = JSON.parse(vv.value);
-                }
-                later(function() {
-                    /*var sketchpad =*/ Raphael.sketchpad(eu, options);
-                });
-                return;
-            } else if (vv.id === 'timerange') {
-                /*if (ISODateString) {
-                 ud.append(ISODateString(new Date(vv.value.start)) + ' '
-                 + ISODateString(new Date(vv.value.start)));
-                 }
-                 else*/
-                {
-                    //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
-                    ud.append(new Date(vv.value.start).toISOString() + ' ' + new Date(vv.value.start).toISOString());
-                }
-            } else if (vv.id === 'image') {
-                var url = vv.value;
-                ud.append(newEle('img').attr({class: "objectViewImg", src: url}), '<br/>');
-            } else if (vv.id === 'html') {
-                ud.append(newDiv().html(vv.value));
-            } else if (vv.id === 'markdown') {
-                ud.append(newDiv().addClass('markdown').html(markdown.toHTML(vv.value)));
-            }
-            else if ($N.isProperty(vv.id)) {
-                var strength = vv.strength || 1.0;
-
-                var pv = newPropertyView(x, vv);
-                if (pv) {
-                    if (typeof pv === "string")
-                        pv = $(pv);
-
-                    pv.appendTo(ud);
-
-                    var opa = 0.5 + (strength / 2.0);
-                    if (opa != 1.0)
-                        pv.css('opacity', opa);
-                }
-            }
-        });
-    }
-
-    if (ud.children().length === 0)
-        return null;
-
-    return ud;
-}
-
-
-
-function newPropertyView(x, vv) {
-
-    var p = $N.getProperty(vv.id);
-    if (!p)
-        return ('<li><b>' + vv.id + '</b>: ' + vv.value + '</li>');
-
-    var nameLabel = '<a><b>' + p.name + '</b></a>';
-
-    var ptype = p.extend;
-    if (ptype === 'object') {
-        var o = $N.getObject(vv.value) || {
-            name: vv.value
-        };
-
-        return newEle('li').append(nameLabel, ': ',
-                '<a href="javascript:newPopupObjectView(\'' + vv.value + '\')">' + o.name + '</a>');
-    } else if (ptype === 'url') {
-        return '<li>' + nameLabel +
-                ': <a target="_blank" href="' + vv.value + '">' +
-                vv.value + '</a></li>';
-    } else if (ptype === 'timeseries') {
-        return ('<li>' + nameLabel + '<br/><textarea>' + JSON.stringify(vv.value) + '</textarea></li>');
-    } else if (ptype === 'timepoint') {
-        var when = parseInt(vv.value);
-        return newEle('li').append(nameLabel, ': ', newEle('a').append($.timeago(new Date(when))));
-    } else if ((ptype === 'integer') && (p.incremental)) {
-        function goprev() {
-            objSetFirstValue(x, vv.id, ii - 1);
-            $N.notice(x);
-            $N.pub(x);
-        }
-
-        function gonext() {
-            objSetFirstValue(x, vv.id, ii + 1);
-            $N.notice(x);
-            $N.pub(x);
-        }
-
-        var v = $('<li>' + nameLabel + ': ' + vv.value + '</li>');
-        if (p.min < vv.value) {
-            $('<button>&lt;</button>')
-                    .click(function() {
-                        later(goprev);
-                    }).prependTo(v);
-        }
-        //TODO allow for max
-        $('<button>&gt;</button>').
-                click(function() {
-                    later(gonext);
-                }).appendTo(v);
-        return v;
-
-    } else if ((ptype === 'integer') || (ptype === 'real')) {
-        if (vv.value)
-            if (vv.value.unit) {
-                return $('<li>' + nameLabel + ': ' + vv.value.number + ' ' + vv.value.unit + '</li>');
-            }
-        return $('<li>' + nameLabel + ': ' + vv.value + '</li>');
-    } else {
-        return newEle('li').append(nameLabel, ': ', vv.value);
-    }
-}
 
 function newReplyPopup(x, onReplied) {
     var pp = newPopup("Reply to: " + x.name);
@@ -1644,7 +1557,7 @@ function _refreshActionContext() {
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
  */
-function newObjectSummary(x, options) {
+function newObjectView(x, options) {
     if (!options)
         options = {};
 
@@ -1800,7 +1713,7 @@ function newObjectSummary(x, options) {
 
             //TODO sort the replies by age, oldest first?
             _.values(r).forEach(function(p) {
-                replies.append(newObjectSummary(p, childOptions));
+                replies.append(newObjectView(p, childOptions));
             });
         } else {
             if (replies) {
@@ -1921,14 +1834,37 @@ function newObjectSummary(x, options) {
     return d;
 }
 
+function newSpaceLink(spacepoint) {
+    var lat = _n(spacepoint.lat);
+    var lon = _n(spacepoint.lon);
+    var mll = objSpacePointLatLng($N.myself());
+    var spacelink = newEle('a');
+    if (mll) {
+        var dist = '?';
+        //TODO check planet
+        var sx = [spacepoint.lat, spacepoint.lon];
+        if (mll)
+            dist = geoDist(sx, mll);
+
+        if (dist === 0)
+            spacelink.text('[ Here ]');
+        else
+            spacelink.text('[' + lat + ',' + lon + ':  ' + _n(dist) + ' km away]');
+    } else {
+        spacelink.text('[' + lat + ',' + lon + ']');
+    }            
+    return spacelink;
+}
 
 
+/*
 function ISODateString(d) {
     function pad(n) {
         return n < 10 ? '0' + n : n;
     }
     return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z';
 }
+*/
 
 function newMetadataLine(x, showTime) {
     var mdline = newEle('h2').addClass('MetadataLine');
@@ -1947,26 +1883,8 @@ function newMetadataLine(x, showTime) {
     });
 
     var spacepoint = objSpacePoint(x);
-    if (spacepoint) {
-        var lat = _n(spacepoint.lat);
-        var lon = _n(spacepoint.lon);
-        var mll = objSpacePointLatLng($N.myself());
-        var spacelink = newEle('a');
-        if (mll) {
-            var dist = '?';
-            //TODO check planet
-            var sx = [spacepoint.lat, spacepoint.lon];
-            if (mll)
-                dist = geoDist(sx, mll);
-
-            if (dist === 0)
-                spacelink.text('[here]');
-            else
-                spacelink.text('[' + lat + ',' + lon + ':  ' + _n(dist) + ' km away]');
-        } else {
-            spacelink.text('[' + lat + ',' + lon + ']');
-        }
-        mdline.append(spacelink, '&nbsp;&nbsp;');
+    if (spacepoint) {       
+        mdline.append(newSpaceLink(spacepoint), '&nbsp;&nbsp;');
     }
 
     if (showTime !== false) {

@@ -181,7 +181,7 @@ function newShareView(v) {
 
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
-                var o = newObjectSummary2(x);
+                var o = newObjectView2(x);
                 elements.push(o);
             }
             content.append(elements);
@@ -227,7 +227,7 @@ function newCheckboxTagFilter(tags) {
     return d;
 }
 
-function newObjectSummary2(x) {
+function newObjectView2(x) {
     /*
      Name
      Photo

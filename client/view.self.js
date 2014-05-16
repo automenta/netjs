@@ -239,7 +239,7 @@ function newUsView(v) {
                         var uu = $('<ul></ul>');
                         _.each(nn, function (g) {
                             var G = $N.getObject(g);
-                            var ss = newObjectSummary(G, {
+                            var ss = newObjectView(G, {
                                 showAuthorIcon: false,
                                 showAuthorName: false,
                                 showMetadataLine: false,
@@ -384,7 +384,7 @@ function newUsView(v) {
             /*var iu = $N.objectsWithTag('involvesUser');
             _.each(iu, function(x) {
                 var X = $N.getObject(x);
-                involvesList.append(newObjectSummary(X));
+                involvesList.append(newObjectView(X));
             });*/
 
         }
@@ -895,7 +895,7 @@ function newRoster(selectUser) {
     var anonymous = [];
 
     function h(x) {
-        var sx = newObjectSummary(x, {
+        var sx = newObjectView(x, {
             scale: 0.5,
             depthRemaining: 0,
             nameClickable: !selectUser

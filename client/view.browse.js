@@ -142,7 +142,7 @@ function renderBrowse(v, cssClass, afterCreated) {
         var elements = [];
         for (var i = 0; i < xxrr.length; i++) {
             var x = xxrr[i][0];
-            var o = newObjectSummary(x, {
+            var o = newObjectView(x, {
                 onRemoved: function() {        },
                 scale: xxrr[i][1],
                 depthRemaining: 2,
@@ -192,7 +192,7 @@ function renderBrowseSlides(vv, slideControls) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
 
-                var o = newObjectSummary(x, {
+                var o = newObjectView(x, {
                     onRemoved: function() {   },
                     depthRemaining: 4,
 					transparent: true
