@@ -14,9 +14,9 @@ function getTagIcon(t) {
                     return r;
             }
         }
-        return null;
+        return defaultIcons.unknown;
     } else {
-        return defaultIcons[t];
+        return defaultIcons[t] || defaultIcons.unknown;
     }
 }
 
@@ -30,7 +30,7 @@ function newPopupObjectEdit(n, p) {
 function newPopupObjectView(_x, p) {
     var x;
     if (typeof (_x) == "string")
-        x = $N.getObject(_x);
+        x = $N.object[_x];
     else
         x = _x;
 
@@ -116,13 +116,7 @@ function getAvatarURL(s, style) {
     return configuration.defaultAvatarIcon;
 }
 
-///temporary solution
-function tagObject(tag) {
-    var o = objNew();
-    o.name = tag.name;
-    o = objAddDescription(o, tag.id + ' [tag]');
-    return o;
-}
+
 
 
 //(function is globalalized for optimization purposes)
@@ -130,7 +124,7 @@ function _onTagButtonClicked() {
     var ti = $(this).attr('taguri');
     var t = $N.class[ti];
     if (t)
-        newPopupObjectView(tagObject(t));
+        newPopupObjectView(t);
     return false;
 }
 
@@ -156,15 +150,20 @@ function newTagButton(t, onClicked, isButton) {
     if (!ti)
         ti = getTagIcon(null);
 
-    var i = null;
-    if (ti) {
-        i = newTagImage(ti);
+
+
+    var b;
+    if (isButton) {
+        b = newEle('button');
+        if (ti) b.append(newTagImage(ti));
     }
-
-    var b = isButton ? newEle('button') : newEle('a');
-
-    if (i)
-        b.append(i);
+    else {
+        b = newEle('a').attr({
+           class: 'tagLink',
+           style: 'background-image: url('+ ti + ')' 
+        });
+    }
+    
 
     if (t.name)
         b.append(t.name);
@@ -687,7 +686,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
     var tagLabel = newEle('span').html(tag).addClass('tagLabel');
 
-    var tagIcon = $('<img src="' + getTagIcon(null) + '"/>');
+    var tagIcon = $('<img src="' + getTagIcon(tag) + '"/>');
 
 
 
@@ -1234,7 +1233,7 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
         var value = t.value;
 
         function updateTS(x) {
-            var X = $N.getObject(x) || $N.getTag(x) || {
+            var X = $N.object[x] || {
                 name: x
             };
             if (X.name != x)
@@ -1243,7 +1242,8 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
                 ts.val(X.name);
             ts.result = x;
         }
-        updateTS(value);
+        if (value)
+            updateTS(value);
 
 
         //http://jqueryui.com/autocomplete/#default
@@ -1648,6 +1648,11 @@ function newObjectView(x, options) {
         d.attr('style', "font-size:" + ((scale) ? ((0.5 + scale) * 100.0 + '%') : ("100%")) + (oStyle ? '; ' + oStyle : ''));
 
     var xn = x.name || '';
+    if (x._class)
+        xn += ' (tag)';
+    if (x._property)
+        xn += ' (property)';
+    
     var authorID = x.author;
 
     d.append(cd);
@@ -1867,24 +1872,23 @@ function ISODateString(d) {
 */
 
 function newMetadataLine(x, showTime) {
-    var mdline = newEle('h2').addClass('MetadataLine');
+    var mdline = newDiv().addClass('MetadataLine');
 
-    //var ot = objTags(x);
     var ots = objTagStrength(x, false);
     _.each(ots, function(s, t) {
-        if ($N.isProperty(t))
+        if ($N.property[t])
             return;
 
-        var tt = $N.getTag(t);
+        var tt = $N.class[t];
         var taglink = newTagButton(tt || t);
         applyTagStrengthClass(taglink, s);
 
-        mdline.append(taglink, '&nbsp;&nbsp;');
+        mdline.append(taglink, '&nbsp;');
     });
 
     var spacepoint = objSpacePoint(x);
     if (spacepoint) {       
-        mdline.append(newSpaceLink(spacepoint), '&nbsp;&nbsp;');
+        mdline.append(newSpaceLink(spacepoint), '&nbsp;');
     }
 
     if (showTime !== false) {

@@ -127,9 +127,6 @@ div.olMapViewport {
     height: 5em;
 }
 
-.propertySection .tagLabel img {
-    margin-left: 1.5em;
-}
 .objectView .propertySection .tagLabel img {
     margin-left: 0;
 }
@@ -228,13 +225,6 @@ div.olMapViewport {
 
 .objectView .propertySection .tagLabel { font-weight: bold; }
 
-.MetadataLine a, .MetadataLine button {
-    width: auto !important;
-    min-width: inherit !important;
-    max-width: inherit !important;    
-    float: left !important;
-    font-size: 100%;
-}
 
 .tag0 { opacity: 0.25;  }
 .tag25 { opacity: 0.5; }
@@ -278,11 +268,25 @@ div.olMapViewport {
 .tagSectionHovered {
     background-color: rgba(255, 255, 255, 0.8);
 }
+.tagLink {
+    padding-left: 1.1em;    
+    background-size: auto 1em;
+    background-repeat:no-repeat;
+}
 .MetadataLine {
     opacity: 0.8;
     word-wrap: break-word;
     font-weight: normal;
+    clear: both;
 }
+.MetadataLine a, .MetadataLine button {
+    width: auto !important;
+    min-width: inherit !important;
+    max-width: inherit !important;    
+    font-size: 100%;
+    float: inherit !important;
+}
+
 .MetadataLine img {
     height: 1em;
 }

@@ -151,7 +151,7 @@ addAction({menu: 'Object', name: 'View Source', description: 'Display object\'s 
     accepts: acceptsSelectionOfOne,
     run: function(selection) {
         var x = selection[0];
-        $.pnotify({title: x.id, text: JSON.stringify(x, null, 4)});
+        $.pnotify({title: x.id, text: JSON.stringify(objCompact(x), null, 4)});
         return null;
     }
 });
