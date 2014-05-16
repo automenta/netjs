@@ -17,6 +17,7 @@ a:hover {
 .focusMap {
     width: 98%;
     height: 250px;
+    float: none !important;
 }
 .TypePropertyButtons {
     padding-left: 0.25em;
@@ -129,6 +130,14 @@ div.olMapViewport {
 .propertySection .tagLabel img {
     margin-left: 1.5em;
 }
+.objectView .propertySection .tagLabel img {
+    margin-left: 0;
+}
+.objectView .tagSectionItem div, .objectView .tagSectionItem span {
+    clear: none;
+}
+
+
 .tagDescription {
     width: 98.5%;
     height: 5em;
@@ -198,11 +207,34 @@ div.olMapViewport {
 .ObjectEditDiv .tag75 .tagButtons button {
     padding: 0;
 }
-.ObjectEditDiv .tag0 {    width: 25%; min-width: 25%; max-width: 25%;    }
-.ObjectEditDiv .tag25 {    width: 25%; min-width: 25%; max-width: 25%;    }
-.ObjectEditDiv .tag50 {    width: 25%; min-width: 25%; max-width: 25%;    }
+
+.ObjectEditDiv .tag0, .ObjectEditDiv .tag25, .ObjectEditDiv .tag50 {
+    width: 25%; min-width: 25%; max-width: 25%;    
+}
 .ObjectEditDiv .tag75 {    width: 50%; min-width: 50%; max-width: 50%;      }
 .ObjectEditDiv .tag100 {    width: 100%; min-width: 100%; max-width: 100%;      }
+
+.objectView .tag0, .objectView .tag25, .objectView .tag50 {
+    width: 25%; min-width: 25%; max-width: 25%;    
+    float: left; clear: none;
+    font-size: 75%;
+}
+.objectView .tag75 {    
+    width: 50%; min-width: 50%; max-width: 50%;      
+    float: left; clear: none;
+    font-size: 85%;
+}
+.objectView .tag100 {    width: 100%; min-width: 100%; max-width: 100%;      }
+
+.objectView .propertySection .tagLabel { font-weight: bold; }
+
+.MetadataLine a, .MetadataLine button {
+    width: auto !important;
+    min-width: inherit !important;
+    max-width: inherit !important;    
+    float: left !important;
+    font-size: 100%;
+}
 
 .tag0 { opacity: 0.25;  }
 .tag25 { opacity: 0.5; }

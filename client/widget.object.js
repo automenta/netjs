@@ -355,7 +355,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 tt = newTagValueWidget(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
                 widgetsToAdd.push(tt);
             }
-            if (tt != null) {
+            if (tt !== null) {
                 //hide the last tag section's down button
                 tt.find('.moveDown').hide();
             }
@@ -675,14 +675,15 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     var d = newDiv().addClass('tagSectionItem').appendTo(e);
     applyTagStrengthClass(e, strength);
 
-    if (configuration.device !== configuration.MOBILE) {
-        d.hover(function() {
-            d.addClass('tagSectionHover');
-        }, function() {
-            d.removeClass('tagSectionHover');
-        });
+    if (editable) {
+        if (configuration.device !== configuration.MOBILE) {
+            d.hover(function() {
+                d.addClass('tagSectionHover');
+            }, function() {
+                d.removeClass('tagSectionHover');
+            });
+        }
     }
-
 
     var tagLabel = newEle('span').html(tag).addClass('tagLabel');
 
@@ -690,7 +691,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
 
 
-    d.append(tagLabel, '&nbsp;');
+    d.append(tagLabel);
 
     if (editable) {
         d.addClass('tagSectionEditable');
@@ -764,17 +765,20 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         //tagButtons.hide();
     }
 
+    var prop = $N.property[tag];
+    var defaultValue = null;
 
     var type;
+    var primitive = false;
     if (isPrimitive(tag)) {
         //tagLabel.hide();    
         type = tag;
         tagLabel.hide();
+        primitive = true;
     }
-
-    var prop = $N.property[tag];
     
-    var defaultValue = null;
+
+    
     
     if (prop) {
         type = prop.extend;
@@ -795,55 +799,13 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     if (newTagValueWidget[type]) {
         newTagValueWidget[type](x, index, t, prop, editable, d, events);        
     } else if (tag) {
-        var TAG = $N.class[tag];
+        newTagValueWidget.tag(x, index, t, prop, editable, d, events);        
+    }    
 
-        whenSaved.push(function(y) {
-            objAddTag(y, tag, strength);
-        });
-        if (!TAG) {
-            //d.append('Unknown tag: ' + tag);            
-        } else {
-            var ti = getTagIcon(tag);
-            if ($N.class[tag] !== undefined) {
-                tagLabel.html(TAG.name);
-            }
-            if (ti)
-                tagIcon.attr('src', ti);
-
-            if ((!x.readonly) && (editable)) {
-                /*var pb = $('<button>...</button>');
-                 tagLabel.append(pb);*/
-
-
-                var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
-                var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
-
-                var pp = TAG.property;
-                _.each(pp, function(PP, ppv) {
-                    //TODO dont include if max present reached
-                    if (PP.max)
-                        if (PP.max > 0) {
-                            var existing = objValues(x, ppv).length;
-                            if (PP.max <= existing)
-                                return;
-                        }
-
-                    var ppn = PP.name;
-                    var appv = $('<a title="' + PP.extend + '">+' + ppn + '</a>');
-                    var defaultValue = '';
-                    appv.click(function() {
-                        onAdd(ppv, defaultValue);
-                    });
-
-                    pd.append(appv, '&nbsp;');
-                });
-
-            }
-
-        }
-    }
-
-    tagIcon.prependTo(tagLabel);
+    if (editable)
+        tagIcon.prependTo(tagLabel);
+    else if (!primitive)
+        tagLabel.append(':&nbsp;');
 
     if (t.description)
         d.append('<ul>' + t.description + '</ul>');
@@ -893,7 +855,60 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
         d.append(dd);
     }        
 };
+
+newTagValueWidget.tag = function(x, index, v, prop, editable, d, events) {
     
+    var TAG = $N.class[prop.id];
+
+    if (editable) {
+        events.onSave.push(function(y) {
+            objAddTag(y, prop.id, v.strength);
+        });
+    }
+    
+    if (!TAG) {
+        //d.append('Unknown tag: ' + tag);            
+    } else {
+        /*var ti = getTagIcon(tag);
+        if ($N.class[tag] !== undefined) {
+            tagLabel.html(TAG.name);
+        }
+        if (ti)
+            tagIcon.attr('src', ti);*/
+
+        if ((!x.readonly) && (editable)) {
+            /*var pb = $('<button>...</button>');
+             tagLabel.append(pb);*/
+
+
+            var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
+            var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
+
+            var pp = TAG.property;
+            _.each(pp, function(PP, ppv) {
+                //TODO dont include if max present reached
+                if (PP.max)
+                    if (PP.max > 0) {
+                        var existing = objValues(x, ppv).length;
+                        if (PP.max <= existing)
+                            return;
+                    }
+
+                var ppn = PP.name;
+                var appv = $('<a title="' + PP.extend + '">+' + ppn + '</a>');
+                var defaultValue = '';
+                appv.click(function() {
+                    events.onAdd(ppv, defaultValue);
+                });
+
+                pd.append(appv, '&nbsp;');
+            });
+
+        }
+
+    }
+};
+
 newTagValueWidget.text =
 newTagValueWidget.url =
 newTagValueWidget.real =
@@ -915,6 +930,7 @@ newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
             d.append(sx);
         }
 
+        
         if (v.value) {
             if (v.value.unit) {
                 //number and unit were both stored in a JSON object
@@ -927,6 +943,7 @@ newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
         } else if (prop.default !== undefined) {
             dd.val(prop.default);
         }
+        
 
         events.onSave.push(function(y) {
             if ((type == 'text') || (type == 'url')) {
@@ -938,7 +955,7 @@ newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
                     ddv = dd.val(); //store as string
 
                 if (!sx)
-                    objAddValue(y, prop.id, ddv, t.strength);
+                    objAddValue(y, prop.id, ddv, v.strength);
                 else
                     objAddValue(y, prop.id, {
                         number: ddv,
@@ -948,9 +965,20 @@ newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
         });
 
     } else {
-        var dd = newDiv().appendTo(d);
-        if (v.value)
-            dd.html(v.value);
+        var dd = newEle('span').appendTo(d);
+        if (v.value) {
+            var valstring;
+            
+            if (v.value.unit) {
+                //number and unit were both stored in a JSON object
+                valstring = v.value.number + ' ' + v.value.unit;
+            } else {
+                //only the number was present
+                valstring = v.value;
+            }
+
+            dd.html(valstring);
+        }
     }
 
 };
@@ -993,6 +1021,9 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
             }, v.strength);
         });
 
+    }
+    else {
+        
     }
 
     later(function() {
@@ -1039,13 +1070,20 @@ newTagValueWidget.sketch = function(x, index, v, prop, editable, d, events) {
     if (v.value) {
         options.strokes = JSON.parse(v.value);
     }
+    
+    var sketchpad;
+    
     later(function() {
-        var sketchpad = Raphael.sketchpad(eu, options);
-        
-        events.onSave.push(function(y) {
-            objAddValue(y, "sketch", sketchpad.json(), v.strength);
-        });
+        sketchpad = Raphael.sketchpad(eu, options);        
     });
+    if (editable) {
+        events.onSave.push(function(y) {
+            objAddValue(y, "sketch", sketchpad ? sketchpad.json() : { }, v.strength);
+        });
+    }
+    else {
+        //
+    }
 };
         
 newTagValueWidget.timerange = function(x, index, t, prop, editable, d, events) {
@@ -1253,6 +1291,9 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
             objAddValue(y, prop.id, ts.result || ts.val(), t.strength);
         });
     }
+    else {
+        //..
+    }
 };
     
 newTagValueWidget.cortexit = function(x, index, v, prop, editable, d, events) {
@@ -1260,6 +1301,71 @@ newTagValueWidget.cortexit = function(x, index, v, prop, editable, d, events) {
 };
 
 
+
+function newObjectDetails(x) {
+    var ud = newEle('ul');
+
+    if (x.value) {
+        x.value.forEach(function(vv) {
+
+            if (vv.id === 'sketch') {
+                var eu = uuid();
+
+                var ee = newDiv(eu).appendTo(ud);
+
+                var options = {
+                    width: 250,
+                    height: 250,
+                    editing: false
+                };
+                if (vv.value) {
+                    options.strokes = JSON.parse(vv.value);
+                }
+                later(function() {
+                    /*var sketchpad =*/ Raphael.sketchpad(eu, options);
+                });
+                return;
+            } else if (vv.id === 'timerange') {
+                /*if (ISODateString) {
+                 ud.append(ISODateString(new Date(vv.value.start)) + ' '
+                 + ISODateString(new Date(vv.value.start)));
+                 }
+                 else*/
+                {
+                    //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
+                    ud.append(new Date(vv.value.start).toISOString() + ' ' + new Date(vv.value.start).toISOString());
+                }
+            } else if (vv.id === 'image') {
+                var url = vv.value;
+                ud.append(newEle('img').attr({class: "objectViewImg", src: url}), '<br/>');
+            } else if (vv.id === 'html') {
+                ud.append(newDiv().html(vv.value));
+            } else if (vv.id === 'markdown') {
+                ud.append(newDiv().addClass('markdown').html(markdown.toHTML(vv.value)));
+            }
+            else if ($N.isProperty(vv.id)) {
+                var strength = vv.strength || 1.0;
+
+                var pv = newPropertyView(x, vv);
+                if (pv) {
+                    if (typeof pv === "string")
+                        pv = $(pv);
+
+                    pv.appendTo(ud);
+
+                    var opa = 0.5 + (strength / 2.0);
+                    if (opa != 1.0)
+                        pv.css('opacity', opa);
+                }
+            }
+        });
+    }
+
+    if (ud.children().length === 0)
+        return null;
+
+    return ud;
+}
 
 
 
@@ -1791,9 +1897,22 @@ function newObjectSummary(x, options) {
     //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
 
 
-    var nod = newObjectDetails(x);
-    if (nod)
-        d.append(nod);
+    //var nod = newObjectDetails(x);
+    //if (nod)
+        //d.append(nod);
+
+    if (x.value) {
+        for (var i = 0; i < x.value.length; i++) {
+            var t = x.value[i];
+            
+            if ($N.class[t.id])
+                continue;   //classes are already shown in metadata line
+            
+            tt = newTagValueWidget(x, i, t, false);
+            d.append(tt);
+        }
+    }
+
 
     if (!mini) {
         refreshReplies();
@@ -1802,70 +1921,6 @@ function newObjectSummary(x, options) {
     return d;
 }
 
-function newObjectDetails(x) {
-    var ud = newEle('ul');
-
-    if (x.value) {
-        x.value.forEach(function(vv) {
-
-            if (vv.id === 'sketch') {
-                var eu = uuid();
-
-                var ee = newDiv(eu).appendTo(ud);
-
-                var options = {
-                    width: 250,
-                    height: 250,
-                    editing: false
-                };
-                if (vv.value) {
-                    options.strokes = JSON.parse(vv.value);
-                }
-                later(function() {
-                    /*var sketchpad =*/ Raphael.sketchpad(eu, options);
-                });
-                return;
-            } else if (vv.id === 'timerange') {
-                /*if (ISODateString) {
-                 ud.append(ISODateString(new Date(vv.value.start)) + ' '
-                 + ISODateString(new Date(vv.value.start)));
-                 }
-                 else*/
-                {
-                    //mozilla: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
-                    ud.append(new Date(vv.value.start).toISOString() + ' ' + new Date(vv.value.start).toISOString());
-                }
-            } else if (vv.id === 'image') {
-                var url = vv.value;
-                ud.append(newEle('img').attr({class: "objectViewImg", src: url}), '<br/>');
-            } else if (vv.id === 'html') {
-                ud.append(newDiv().html(vv.value));
-            } else if (vv.id === 'markdown') {
-                ud.append(newDiv().addClass('markdown').html(markdown.toHTML(vv.value)));
-            }
-            else if ($N.isProperty(vv.id)) {
-                var strength = vv.strength || 1.0;
-
-                var pv = newPropertyView(x, vv);
-                if (pv) {
-                    if (typeof pv === "string")
-                        pv = $(pv);
-
-                    pv.appendTo(ud);
-
-                    var opa = 0.5 + (strength / 2.0);
-                    if (opa != 1.0)
-                        pv.css('opacity', opa);
-                }
-            }
-        });
-    }
-
-    if (ud.children().length === 0)
-        return null;
-
-    return ud;
-}
 
 
 function ISODateString(d) {
