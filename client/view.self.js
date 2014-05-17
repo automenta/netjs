@@ -507,7 +507,7 @@ function newTagBar(s, currentTag) {
 
     function tbutton(tag, target) {
         var b = $('<input/>');
-        var cid = uuid() + 'skill_' + tag + '_' + currentTag;
+        var cid = duid();// + 'skill_' + tag + '_' + currentTag;
         b.attr('id', cid);
         b.attr('type', 'checkbox');
 

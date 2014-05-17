@@ -38,13 +38,19 @@ a:hover {
 .PropertyEdit textarea {
     width: 100%;
 }
+
 .AvatarIcon {
     float: left;
     margin-right: 4px;
+    height:1.85em;
+    width:1.85em;
+    background-size: cover;
 }
-.AvatarIcon img {
-    height: 1.85em;
+.chatViewLineAuthor .AvatarIcon {
+    float: right;
+    margin: 0;
 }
+
 .DataSubViewMenu {
     margin-left: 2em;
     float: right;
@@ -1089,13 +1095,13 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }
 .InlineSelfButton {
     cursor: pointer;
-    text-decoration: underline;
-    font-size: 70%;
+    text-decoration: none;
 }
-.InlineSelfButton span {
+.InlineSelfButton div {
     position: relative;
     right: 0;
-    bottom: 0.5em;
+    clear: both;
+    margin-bottom:0.2em;
 }
 .chatViewLineContent {
     float: left;

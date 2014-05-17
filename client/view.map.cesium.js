@@ -8,7 +8,7 @@ function renderCesiumMap(v) {
 	var viewer;
 
 	function render() {
-		var ee = uuid();
+		var ee = duid();
 		var vv = newDiv(ee);
 		vv.attr('class', 'cesiumContainer');
 		v.append(vv);

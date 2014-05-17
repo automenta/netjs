@@ -300,7 +300,7 @@ function newChatView(v) {
 function newInlineSelfButton(s, x) {
     return newEle('a').attr({
         'aid': s.id, 'xid': x.id, 'class': 'InlineSelfButton'
-    }).append(newEle('span').text(s.name), newAvatarImage(s));
+    }).append(newEle('div').html(s.name), newAvatarImage(s));
 }
 
 function newObjectLogLineOnHover() {

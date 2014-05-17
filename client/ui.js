@@ -158,7 +158,7 @@ var refreshActionContext = _.throttle(function() {
 
         //get selected items from .ObjectSelection
         $('.ObjectSelection:checked').each(function(index) {
-            var aoid = $(this).attr('oid');
+            var aoid = $(this).parent().parent().attr('xid');
             if (aoid) {
                 var o = $N.getObject(aoid);
                 if (o)
@@ -916,7 +916,7 @@ function renderFocus(skipSet) {
 
     var where = objSpacePointLatLng(focusValue);
     if (where) {
-        var uu = uuid();
+        var uu = duid();
         var m = newDiv(uu);
         m.attr('style', 'height: 250px; width: 95%');	//TODO use css
         fe.append(m);
@@ -944,3 +944,9 @@ $.fn.extend({
 String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
+
+var _duid = 0;
+/** document unique ID */
+function duid() {
+    return '_' + (_duid++);
+}

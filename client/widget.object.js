@@ -88,8 +88,9 @@ function newPopupObjectViews(objectIDs) {
 
 
 function newAvatarImage(s) {
-    return $(newEle('img')).attr({
-        "src": getAvatarURL(s),
+    return newDiv().attr({
+        "class": 'AvatarIcon',
+        "style": 'background-image:url('+ getAvatarURL(s) +')',
         'title': s.name
     });
 }
@@ -840,8 +841,8 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
 
     if ((editable) && (!prop.readonly)) {
         //var dd = $('<textarea/>').addClass('tagDescription').appendTo(d);
-        var ddi = '_' + uuid();
-        var ddt = '_' + uuid();
+        var ddi = duid();
+        var ddt = duid();
         
         var toolbar = newDiv().attr('id', ddt).appendTo(d);
         {
@@ -1028,9 +1029,9 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
     
     function showMap() {
 
-        var de = uuid();
+        var de = duid();
 
-        var dd = newDiv().addClass('focusMap').appendTo(ee).attr('id', de);
+        var dd = newDiv(de).addClass('focusMap').appendTo(ee);
 
         later(function() {
             var lat = v.value.lat || configuration.mapDefaultLocation[0];
@@ -1121,7 +1122,7 @@ newTagValueWidget.image = function(x, index, v, prop, editable, d, events) {
 };
 
 newTagValueWidget.sketch = function(x, index, v, prop, editable, d, events) {
-    var eu = uuid();
+    var eu = duid();
     var ee = newDiv(eu).appendTo(d);
 
     var options = {
@@ -1598,16 +1599,14 @@ function _objectViewContext() {
     var xid = $(this).parent().parent().attr('xid');
     var x = $N.object[xid];
 
-    if (that.popupmenu) {
-        //click the popup menu button again to disappear an existing menu
+    //click the popup menu button again to disappear an existing menu
+    if (that.parent().find('.ActionMenu').length > 0)
         return closeMenu();
-    }
 
     var popupmenu = that.popupmenu = newContextMenu([x], true, closeMenu).addClass('ActionMenuPopup');
 
     function closeMenu() {
-        popupmenu.remove();
-        that.popupmenu = null;
+        that.parent().find('.ActionMenu').remove();
         return false;
     }
 
@@ -1661,7 +1660,7 @@ function newObjectView(x, options) {
     //check for PDF
     /*
     if (objHasTag(x, 'PDF')) {
-        var ee = uuid();
+        var ee = duid();
         var cd = $('<canvas/>')
         cd.attr('id', ee);
 
@@ -1750,8 +1749,7 @@ function newObjectView(x, options) {
             if (authorID) {
                 var av = newAvatarImage(authorClient)
                         //.attr('align', 'left')
-                        .appendTo(d)
-                        .wrap('<div class="AvatarIcon"/>');
+                        .appendTo(d);
             }
         }
     }
@@ -1761,7 +1759,6 @@ function newObjectView(x, options) {
     if (showSelectionCheck) {
         selectioncheck = $('<input type="checkbox"/>')
                 .addClass('ObjectSelection')
-                .attr('oid', x.id)
                 .click(_refreshActionContext);
     }
 
@@ -1817,7 +1814,7 @@ function newObjectView(x, options) {
         haxn.html(xn);
     } else {
         var xxn = xn.length > 0 ? xn : '?';
-        haxn.append(newEle('a').html(xxn).attr('title', x.id).click(function() {
+        haxn.append(newEle('a').html(xxn).click(function() {
             if ((x.author === $N.id()) && (titleClickMode === 'edit'))
                 newPopupObjectEdit(x, true);
             else if (typeof (titleClickMode) === 'function') {

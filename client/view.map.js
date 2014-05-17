@@ -161,7 +161,7 @@ function newLeafletGeoCoder() {
 }
 
 function renderLeafletMap(v) {
-    var e = uuid();
+    var e = duid();
 	var mapdiv = $('<div style="width: 100%; height: 100%"/>').attr('id', e).appendTo(v);
 
 	var tooltip = $('<div class="lltooltip"/>');

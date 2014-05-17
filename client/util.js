@@ -880,6 +880,7 @@ var Ontology = function(storeInstances, target) {
                         console.error('Class', x.id, 'missing property', v);
                 }                
             }
+            
             if (typeof x.extend === "string")
                 x.extend = [ x.extend ];
             

@@ -131,7 +131,7 @@ function newUserView(v, userid) {
 		d.append('<br/><a href="' + url + '">URL</a>')*/
 
 		/*
-		var jid = uuid();
+		var jid = duid();
 		d.append('<h2>QR Code</h2>');
 		d.append(newDiv(jid));
 		new QRCode(document.getElementById(jid), { text: jsonCodeCompact,
