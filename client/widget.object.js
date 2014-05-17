@@ -838,26 +838,54 @@ newTagValueWidget.markdown = function(x, index, v, prop, editable, d, events) {
 
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
 
-    if (editable) {
-        var dd = $('<textarea/>').addClass('tagDescription').appendTo(d);
-        if (prop.readonly) {
-            dd.attr('readonly', 'readonly');
+    if ((editable) && (!prop.readonly)) {
+        //var dd = $('<textarea/>').addClass('tagDescription').appendTo(d);
+        var ddi = '_' + uuid();
+        var ddt = '_' + uuid();
+        
+        var toolbar = newDiv().attr('id', ddt).appendTo(d);
+        {
+            toolbar.append(
+                '<select class="sc-size"><option value="75%">Small</option><option value="100%" selected>Normal</option><option value="125%">Large</option><option value="150%">Huge</option></select>',
+                '<button class="sc-bold">B</button>',
+                '<button class="sc-italic">I</button>',
+                '<button class="sc-underline">U</button>',
+                '<button class="sc-strike">S</button>',
+                '<button class="sc-link">L</button>'
+            );
         }
+        var dd = newDiv().attr('id', ddi).appendTo(d);
+        
+        var editor;
+        later(function() {
+            editor = new Quill('#' + ddi);
+            editor.addModule('toolbar', {
+                container: '#' + ddt     // Selector for toolbar container
+            });
 
-        if (prop.description)
-            dd.attr('placeholder', prop.description);
+            if (prop.description)
+                dd.attr('placeholder', prop.description);
 
-        if (v.value)
-            dd.val(v.value);
-        else if (prop.default)
-            dd.val(prop.default);
+            if (v.value)
+                editor.setHTML(v.value);
+            else if (prop.default)
+                editor.setHTML(prop.default);
+
+            //freetileView();
+        })
 
         events.onSave.push(function(y) {
-            objAddValue(y, prop.id, dd.val(), v.strength);
+            //objAddValue(y, prop.id, dd.val(), v.strength);
+            var h = editor ? editor.getHTML() : '';
+            var hd = newDiv().html(h);
+            hd.find('p').removeAttr('class').removeAttr('id');
+            h = hd.html();
+            objAddValue(y, prop.id, h, v.strength);
+            hd.remove();
         });
     } else {
         if (v.value)
-            d.append( newDiv().html(v.value) );
+            d.append( newDiv().addClass('htmlview').html(v.value) );
     }        
 };
 
@@ -1548,11 +1576,48 @@ function newSimilaritySummary(x) {
 }
 
 
-//as a static global function for optimization
+//static global functions for optimization
 function _refreshActionContext() {
     refreshActionContext();
     return true;
 }
+function _objectViewEdit() {
+    var xid = $(this).parent().parent().attr('xid');
+    var x = $N.object[xid];
+    var windowParent = $(this).parent().parent().parent().parent();
+    if (windowParent.hasClass('ui-dialog-content')) {
+        windowParent.dialog('close');
+    }
+    newPopupObjectEdit(x, true);
+    return false;
+};
+
+function _objectViewContext() {
+    var that = $(this);
+    var xid = $(this).parent().parent().attr('xid');
+    var x = $N.object[xid];
+
+    if (that.popupmenu) {
+        //click the popup menu button again to disappear an existing menu
+        return closeMenu();
+    }
+
+    var popupmenu = that.popupmenu = newContextMenu([x], true, closeMenu).addClass('ActionMenuPopup');
+
+    function closeMenu() {
+        popupmenu.remove();
+        that.popupmenu = null;
+        return false;
+    }
+
+
+    var closeButton = $('<button>Close</button>')
+            .click(closeMenu)
+            .appendTo(that.popupmenu);
+
+    $(this).after(that.popupmenu);
+    return false;
+};
 
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
@@ -1593,6 +1658,7 @@ function newObjectView(x, options) {
     }
 
     //check for PDF
+    /*
     if (objHasTag(x, 'PDF')) {
         var ee = uuid();
         var cd = $('<canvas/>')
@@ -1628,7 +1694,7 @@ function newObjectView(x, options) {
         } else {
             cd.prepend('Unable to find PDF source.');
         }
-    }
+    }*/
 
 
 
@@ -1655,7 +1721,7 @@ function newObjectView(x, options) {
     
     var authorID = x.author;
 
-    d.append(cd);
+    //d.append(cd);
 
 
     if ((depth === depthRemaining) && (hideAuthorNameAndIconIfZeroDepth))
@@ -1733,48 +1799,14 @@ function newObjectView(x, options) {
         if (ms && (ms.id === x.author)) {
             var editButton = newEle('button').text('..').attr({
                 title: "Edit",
-                'class': 'ObjectViewPopupButton'
-            })
-                    .appendTo(haxn)
-                    .click(function() {
-                        var windowParent = $(this).parent().parent().parent().parent();
-                        if (windowParent.hasClass('ui-dialog-content')) {
-                            windowParent.dialog('close');
-                        }
-                        newPopupObjectEdit(x, true);
-                        return false;
-                    });
+                class: 'ObjectViewPopupButton'
+            }).appendTo(haxn).click(_objectViewEdit);                    
         }
 
         var popupmenuButton = newEle('button').html('&gt;').attr({
             title: "Actions...",
-            'class': 'ObjectViewPopupButton'
-        })
-                .appendTo(haxn)
-                .click(function() {
-                    var that = this;
-
-                    if (this.popupmenu) {
-                        //click the popup menu button again to disappear an existing menu
-                        return closeMenu();
-                    }
-
-                    function closeMenu() {
-                        that.popupmenu.remove();
-                        that.popupmenu = null;
-                        return false;
-                    }
-
-                    this.popupmenu = newContextMenu([x], true, closeMenu).addClass('ActionMenuPopup');
-
-                    var closeButton = $('<button>Close</button>')
-                            .click(closeMenu)
-                            .appendTo(this.popupmenu);
-
-                    $(this).after(this.popupmenu);
-                    return false;
-                });
-
+            class: 'ObjectViewPopupButton'
+        }).appendTo(haxn).click(_objectViewContext);
     }
 
     if (showActionPopupButton)

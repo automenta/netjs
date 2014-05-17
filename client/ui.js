@@ -511,15 +511,21 @@ var TogetherJS;
 
 
 
-function freetileView() {
-    if (window.$N)
-        if ($('.tiled').length > 0) {
-            $('#View').freetile({
-                callback: function() {
-                    $('#View').css('height', '100%');
-                }
-            });
+var _freetileView = _.throttle(function() {
+    $('#View').freetile({
+        callback: function() {
+            $('#View').css('height', '100%');
         }
+    });
+}, 100);
+    
+function freetileView() {
+    
+    if (window.$N) {
+        if ($('.tiled').length > 0) {
+            _freetileView();
+        }
+    }
 }
 
 function whenResized() {

@@ -60,7 +60,7 @@ function netention(f) {
                 include: [],
                 exclude: []
             });
-            this.set('focus', null);
+            this.set('focus', new nobject());
             this.userRelations = null;
         },
         //deprecated

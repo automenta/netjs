@@ -623,13 +623,16 @@ function uuid() {
     //RFC 2396 - Allowed characters in a URI - http://www.ietf.org/rfc/rfc2396.txt
     //		removing all that would confuse jquery
     //var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-_.!~*\'()";
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-_";
+    //var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-_";
 
     //TODO recalculate this
     //70 possible chars
     //	21 chars = 5.58545864083284e+38 ( > UUID) permutations
     //		if we allow author+objectID >= 21 then we can guarantee approximate sparseness as UUID spec
     //			so we should choose 11 character Nobject UUID length
+
+    //TODO recalculate, removed the '-' which affects some query selectors if - is first
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz_";
 
     var string_length = 11;
     var randomstring = '';

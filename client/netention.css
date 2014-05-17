@@ -980,6 +980,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     margin: 0.8em 0.1em 0.0em 2em !important;
     font-size: 90%;
     opacity: 0.95;
+    clear: both;
 }
 .reply-section {
     text-align: left;
@@ -993,15 +994,6 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .ObjectSelection,
 .ObjectViewPopupButton {
     vertical-align: middle;
-}
-.markdown {
-    padding: 0.25em;
-}
-.embeddedHTML {
-    border: 1px solid rgba(127,127,127,0.5);
-    max-height: 12em;
-    overflow: auto;
-    resize: vertical;
 }
 /* Chat */
 
@@ -2094,4 +2086,23 @@ svg {
 }
 .terminal .terminal-output div div, .cmd .prompt {
     line-height: normal;
+}
+
+.sc-toolbar-container {
+    border-bottom: 1px solid gray;
+    padding-bottom: 3px;
+    font-size: 70%;
+}
+.tagSectionItem p {
+    margin: 0;
+    padding: 0;
+}
+.htmlview {
+    overflow: auto;
+    max-height: 12em;
+    overflow: auto;
+    resize: vertical;
+}
+.markdown {
+    padding: 0.25em;
 }
