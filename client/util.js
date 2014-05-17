@@ -794,10 +794,20 @@ var Ontology = function(storeInstances, target) {
         };
     };    
     
-    that.clearInstances = function() {
-        that.instance = { };
+    that.clearInstances = function(exceptInstancesTagged) {
+        var saved = null;
+        if (exceptInstancesTagged) {
+            saved = that.tagged[exceptInstancesTagged];
+        }
         that.tagged = { };
+        that.reply = { };
         that.object = _.extend( _.extend({ }, that.class), that.property ); //replace object with only classes and properties
+
+        that.instance = { };
+        
+        if (saved) {
+            _.values(saved).forEach(function(s) { indexInstance(s); });
+        }
     };
     
     
@@ -911,13 +921,11 @@ var Ontology = function(storeInstances, target) {
            if (!that.tagged[t]) 
                that.tagged[t] = { };
            that.tagged[t][x.id] = x;
-           
-            
         });
         
         x.reply = { };
         
-        //replies to this object
+        //replies to this object: search known objects with replyTo
         _.each(that.reply, function(v, k) {
             if (v.replyTo.indexOf(x.id)!==-1) 
                 x.reply[k] = v;
@@ -1515,6 +1523,8 @@ function objExpand(o) {
         }
         delete o.at;
     }
+    if (o.modifiedAt === undefined)
+        delete o.modifiedAt;
 
     if (!o.value)
         return o;

@@ -157,23 +157,21 @@ function netention(f) {
 
                         $N.set('clientID', nextID);
                         setCookie('clientID', nextID);
+                        
                         var os = $N.get('otherSelves');
                         os.push(nextID);
-
                         $N.save('otherSelves', _.unique(os));
 
-                        $N.clearInstances();
+                        $N.clearInstances(/* except */ "User");
                         $N.clearTransients();
 
-                        $N.getUserObjects(function() {
-                            $N.getAuthorObjects(nextID, function() {
-                                $N.getLatestObjects(1000, function() {
-                                    updateBrand(); //TODO use backbone Model instead of global function
+                        $N.getAuthorObjects(nextID, function() {
+                            $N.getLatestObjects(1000, function() {
+                                updateBrand(); //TODO use backbone Model instead of global function
 
-                                    $N.startURLRouter();
-                                }, true);
-                            });
-                        });
+                                $N.startURLRouter();
+                            }, true);
+                        });                        
 
                     } else {
                         $.pnotify({
