@@ -155,14 +155,15 @@ function newTagButton(t, onClicked, isButton) {
     var b;
     if (isButton) {
         b = newEle('button');
-        if (ti) b.append(newTagImage(ti));
     }
     else {
-        b = newEle('a').attr({
-           class: 'tagLink',
-           style: 'background-image: url('+ ti + ')' 
-        });
+        b = newEle('a');
     }
+    
+    b.attr({
+       class: 'tagLink',
+       style: 'background-image: url('+ ti + ')' 
+    });
     
 
     if (t.name)
@@ -764,7 +765,10 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         //tagButtons.hide();
     }
 
-    var prop = $N.property[tag];
+    var T = $N.object[tag] || { id: tag };
+    var isProp = T._property;
+    var isClass = T._class;
+    
     var defaultValue = null;
 
     var type;
@@ -775,30 +779,26 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         tagLabel.hide();
         primitive = true;
     }
-    
 
-    
-    
-    if (prop) {
-        type = prop.extend;
-        tagLabel.html(prop.name);
+    if (T.name)
+        tagLabel.html(T.name);
+   
+    if (isProp) {
+        type = T.extend;
 
-        if (prop['default']) {
-            defaultValue = prop['default'];
+        if (T.default) {
+            defaultValue = T.default;
         }
         d.addClass('propertySection');
     }
-    else {
-        //default settings for a primitive
-        prop = { id: tag };
-    }
+
 
     //...
     
     if (newTagValueWidget[type]) {
-        newTagValueWidget[type](x, index, t, prop, editable, d, events);        
+        newTagValueWidget[type](x, index, t, T, editable, d, events);        
     } else if (tag) {
-        newTagValueWidget.tag(x, index, t, prop, editable, d, events);        
+        newTagValueWidget.tag(x, index, t, T, editable, d, events);        
     }    
 
     if (editable)
@@ -1248,7 +1248,8 @@ newTagValueWidget.timerange = function(x, index, t, prop, editable, d, events) {
             }, t.strength);
         });
     } else {
-        d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
+        if (t.value)
+            d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
     }
 };
 
@@ -1868,6 +1869,8 @@ function addNewObjectDetails(x, d) {
 
             if ($N.class[t.id])
                 continue;   //classes are already shown in metadata line
+            if (!$N.property[t.id] && !isPrimitive(t.id))
+                continue;   //non-property tags are like classes, shown in metadata line
 
             tt = newTagValueWidget(x, i, t, false);
             d.append(tt);

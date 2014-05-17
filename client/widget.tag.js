@@ -186,8 +186,7 @@ function newTreeBrowser(selected, onTagAdded) {
             var ti = getTagIcon(id) || defaultIcons.unknown;
 
             return {
-                label: '<button id="' + prefix + id + '" class="TagChoice")>' + 
-                       '<img style="height: 1em" src="' + ti + '"/>&nbsp;' + 
+                label: '<button id="' + prefix + id + '" class="TagChoice" style="background-image: url('+ ti + ')">' +
                        content + '</button>'
             };
         },
@@ -314,14 +313,10 @@ function newTagTree(param) {
         });
 
         //autoOpen seems broken in jqtree, so manually open the first level:
-
-        a.find('.jqtree-toggler').click();
-        a.find('.jqtree-toggler').click();
+        a.find('.jqtree-toggler').click().click();
 
         //all should be closed now.  now open the first row:
-
         a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
-        //a.show();
 
         if (param.onCreated)
             param.onCreated(a);

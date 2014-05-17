@@ -268,7 +268,7 @@ div.olMapViewport {
 .tagSectionHovered {
     background-color: rgba(255, 255, 255, 0.8);
 }
-.tagLink {
+.tagLink, .TagChoice {
     padding-left: 1.1em;    
     background-size: auto 1em;
     background-repeat:no-repeat;

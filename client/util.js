@@ -823,22 +823,29 @@ var Ontology = function(storeInstances, target) {
     that.add = function(x) {
         //updates all cached fields, indexes
         //can be called repeatedly to update existing object with that ID
-                      
+        if (!x) return;
+        
         if (x.removed) {        
             return that.remove(x);
         }
-        
+
         that.object[x.id] = x;
         
         if (objIsClass(x)) {
-            that.class[x.id] = x;
-            x._class = true;
-            delete that.property[x.id]; delete x._property;
-            delete that.instance[x.id]; delete x._instance;
-            
-            x.property = { };
-            x.class = { };
-            x.subclass = { };
+            var existing = that.class[x.id];
+            if (!existing) {
+                that.class[x.id] = x;
+                x._class = true;
+                delete that.property[x.id]; delete x._property;
+                delete that.instance[x.id]; delete x._instance;
+                x.property = { };
+                x.class = { };
+                x.subclass = { };
+            }
+            else {
+                _.extend(existing, x);
+                x = existing;
+            }
             
             if (x.value) {
                 if (!Array.isArray(x.value)) {
@@ -878,16 +885,21 @@ var Ontology = function(storeInstances, target) {
                 that.classRoot[x.id] = x;                
             }
             else {
+                delete that.classRoot[x.id];
+                
                 for (var i = 0; i < x.extend.length; i++) {
                     var v = x.extend[i];
                     var c = that.class[v];
-                    if (c) {
-                        x.class[v] = c;
-                        c.subclass[x.id] = x;
+                    if (!c) {
+                        //create an empty class
+                        c = {
+                            id: v,
+                            extend: null
+                        };
+                        that.add(c);
                     }
-                    else {
-                        console.error('Class', x.id, 'extends missing class', v);  
-                    }
+                    x.class[v] = c;
+                    c.subclass[x.id] = x;
                 }
             }
             
