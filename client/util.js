@@ -757,9 +757,9 @@ function objIsProperty(x) {
 exports.objIsProperty = objIsProperty;
 
 
-Array.prototype.pushArray = function(arr) {
+/*Array.prototype.pushArray = function(arr) {
     this.push.apply(this, arr);
-};
+};*/
 
 /** an interface for interacting with nobjects and ontology */
 var Ontology = function(storeInstances, target) {
@@ -770,6 +770,7 @@ var Ontology = function(storeInstances, target) {
         //indexed by id (URI)        
         that.object = { };        
         that.tagged = { };  //index of object tags
+        that.reply = { }; //index of objects with a replyTo
 
         that.instance = { };
         that.property = { };
@@ -887,6 +888,11 @@ var Ontology = function(storeInstances, target) {
             that.serializedPropreties = null;
         }
         else if (storeInstances) {
+            if (that.instance[x.id]) {
+                //existing, unindex first
+                unindexInstance(x);
+            }
+            
             that.instance[x.id] = x;
             x._instance = true;
             delete that.class[x.id];    delete x._class;
@@ -912,12 +918,13 @@ var Ontology = function(storeInstances, target) {
         x.reply = { };
         
         //replies to this object
-        _.each(x.instance, function(v, k) {
-           if (v.replyTo.indexOf(x.id)!==-1) 
-               x.reply[k] = v;
+        _.each(that.reply, function(v, k) {
+            if (v.replyTo.indexOf(x.id)!==-1) 
+                x.reply[k] = v;
         });
         //this object's replies to other object
         if (x.replyTo) {            
+            that.reply[x.id] = x;
             x.replyTo.forEach(function(t) {
                 var T = that.instance[t];
                 if (T) {
@@ -941,6 +948,7 @@ var Ontology = function(storeInstances, target) {
             });
         }
         delete x.reply;
+        delete that.reply[x.id];
         
         var tags = objTags(x, false);                
         tags.forEach(function(t) {
@@ -993,8 +1001,7 @@ var Ontology = function(storeInstances, target) {
                 if (r[i.id])
                     return;
 
-
-                r[i.id] = true;
+                r[i.id] = r;
                 
                 if (i.reply)
                     addReplies(_.keys(i.reply));
@@ -1002,7 +1009,7 @@ var Ontology = function(storeInstances, target) {
         }
 
         addReplies(objects);
-        return _.keys(r);
+        return _.values(r);
     };
     
     //deprecated
@@ -1462,11 +1469,11 @@ function objCompact(o) {
             } else {
                 var ia = v.id;
                 var va = v.value || null;
-                var s = v.strength || null;
-                if ((s) && (s != 1.0))
-                    newValues.push([ia, va, s]);
-                else if (va)
-                    newValues.push([ia, va]);
+                var s = v.strength || 1.0;
+                if (va)
+                    newValues.push([ia, s, va]);
+                else if ((!va) && (s!=1.0))
+                    newValues.push([ia, s]);
                 else if (ia)
                     newValues.push(ia);
                 else
@@ -1520,10 +1527,10 @@ function objExpand(o) {
             var r = {
                 id: v[0]
             };
-            if (v[1])
-                r.value = v[1];
+            if (v.length > 1)
+                r.strength = v[1];
             if (v.length > 2)
-                r.strength = v[2];
+                r.value = v[2];
             newValues.push(r);
         } else if (typeof v === 'object') {
             newValues.push(v);

@@ -127,23 +127,23 @@ function newChatView(v) {
         var removed = _.difference(displayedObjects, toDisplayWithReplies);
         var newlyChanged = _.filter(toDisplayWithReplies, function(D) {
             var dd = D.modifiedAt || D.createdAt;
-            var changed = false;
+            var c = false;
             if (modifiedDate[D.id]) {
                 if (modifiedDate[D.id] === dd) {
-                    changed = false;
+                    c = false;
                 }
                 else {
-                    changed = true;
+                    c = true;
                 }
             }
             modifiedDate[D.id] = dd;
-            return changed;
+            return c;
         });
 
         changed = _.union(changed, newlyChanged);
 
         if (!force) {
-            if ((added.length == 0) && (removed.length == 0) && (changed.length == 0)) {
+            if ((added.length === 0) && (removed.length === 0) && (changed.length === 0)) {
                 updatesAvailable = false;
                 updates.hide();
                 return;

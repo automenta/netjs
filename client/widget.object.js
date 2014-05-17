@@ -1819,18 +1819,8 @@ function newObjectView(x, options) {
     //if (nod)
         //d.append(nod);
 
-    if (x.value) {
-        for (var i = 0; i < x.value.length; i++) {
-            var t = x.value[i];
-            
-            if ($N.class[t.id])
-                continue;   //classes are already shown in metadata line
-            
-            tt = newTagValueWidget(x, i, t, false);
-            d.append(tt);
-        }
-    }
-
+    addNewObjectDetails(x, d);
+    
 
     if (!mini) {
         refreshReplies();
@@ -1838,6 +1828,21 @@ function newObjectView(x, options) {
 
     return d;
 }
+
+function addNewObjectDetails(x, d) {
+    if (x.value) {
+        for (var i = 0; i < x.value.length; i++) {
+            var t = x.value[i];
+
+            if ($N.class[t.id])
+                continue;   //classes are already shown in metadata line
+
+            tt = newTagValueWidget(x, i, t, false);
+            d.append(tt);
+        }
+    }
+}
+
 
 function newSpaceLink(spacepoint) {
     var lat = _n(spacepoint.lat);

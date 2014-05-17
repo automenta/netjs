@@ -286,9 +286,8 @@ function newObjectView2(x) {
     }
 
 
-    var nod = newObjectDetails(x);
-    if (nod)
-        e.append(nod.css('clear', 'both'));
+    var nod = newDiv().css('clear', 'both').appendTo(e);
+    addNewObjectDetails(x, nod);    
 
     if (x.author) {
         var authorline = newEle('span').addClass('ShareSummaryAuthor');
