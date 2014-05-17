@@ -828,11 +828,12 @@ var Ontology = function(storeInstances, target) {
         if (x.removed) {        
             return that.remove(x);
         }
-
-        that.object[x.id] = x;
         
+        that.object[x.id] = x;
+                
         if (objIsClass(x)) {
             var existing = that.class[x.id];
+            var existingValues;
             if (!existing) {
                 that.class[x.id] = x;
                 x._class = true;
@@ -843,6 +844,7 @@ var Ontology = function(storeInstances, target) {
                 x.subclass = { };
             }
             else {
+                existingValues = existing.value;
                 _.extend(existing, x);
                 x = existing;
             }
@@ -854,28 +856,28 @@ var Ontology = function(storeInstances, target) {
                     _.each(x.value, function(v, k) {
                         if (v.id===undefined)
                             v.id = k;
-                       vv.push(v);
+                        if (that.property[v.id]===undefined) {
+                            that.add(v);
+                        }
+                        vv.push(k);
                     });
                     x.value = vv;
                 }
                 
+                if (existingValues)
+                    x.value = _.union(x.value, existingValues);
+
                 for (var i = 0; i < x.value.length; i++) {
                     var v = x.value[i];
+                    if (v.id)
+                        v = x.value[i] = v.id;
                     
-                    if (objIsProperty(v)) {
-                        //embedded property
-                        that.add(v);
-                        v = v.id;
-                    }
-                    
-                    if (typeof v === "string") {
-                        var existingProperty = that.property[v];
-                        if (existingProperty)
-                            x.value[i] = x.property[v] = existingProperty;
-                        else
-                            console.error('Class', x.id, 'missing property', k);
-                    }
-                    
+                    var existingProperty = that.property[v];
+
+                    if (existingProperty)
+                        x.property[v] = existingProperty;
+                    else
+                        console.error('Class', x.id, 'missing property', v);
                 }                
             }
             if (typeof x.extend === "string")
@@ -902,7 +904,7 @@ var Ontology = function(storeInstances, target) {
                     c.subclass[x.id] = x;
                 }
             }
-            
+                        
             that.serializedClasses = null;
         }
         else if (objIsProperty(x)) {
@@ -1427,11 +1429,28 @@ function objCompare(a, b) {
 }
 exports.objCompare = objCompare;
 
-function renameField(o, from, to) {
-    if (o[from]!==undefined) {
-        o[to] = o[from];
-        delete o[from];
-    }
+function renameFields(o, f, swap) {
+    f.forEach(function(F) {        
+       var from = F[swap ? 1 : 0], to = F[swap ? 0 : 1]; 
+        if (o[from]!==undefined) {
+            o[to] = o[from];
+            delete o[from];
+        }
+    });
+}
+function renameObjectFields(o, m) {
+    renameFields(o, 
+        [['removed', 'r'],
+        ['id', 'i'],
+        ['subject', 'S'],
+        ['scope', 's'],
+        ['value', 'v'],
+        ['extend', 'e'], 
+        ['author', 'a'],
+        ['name', 'n'],
+        ['description', 'd']],
+        m
+    );    
 }
 
 /* returns a cloned version of the object, compacted */
@@ -1453,6 +1472,8 @@ function objCompact(o) {
             y.t = [ y.createdAt, y.modifiedAt - y.createdAt ];
         }
     }
+    delete y.modifiedAt;
+    delete y.createdAt;
     
     if ((Array.isArray(y.extend)) && (y.extend.length == 1))
         y.extend = y.extend[0];
@@ -1461,8 +1482,6 @@ function objCompact(o) {
     if (y.replyTo && Array.isArray(y.replyTo) && y.replyTo.length===0)
         delete y.replyTo;
     
-    delete y.modifiedAt;
-    delete y.createdAt;
     
     if (y.removed) {
         y.removed = y.id;
@@ -1484,6 +1503,7 @@ function objCompact(o) {
         if (typeof V === 'function') {
             delete y[K];
         }
+        
     }
 
     if (o.value) {
@@ -1521,18 +1541,9 @@ function objCompact(o) {
         y.value = newValues;
         if (y.value.length == 0) {
             delete y.value;
-        }        
+        }            
     }
-
-    renameField(y, 'removed', 'r');
-    renameField(y, 'id', 'i');
-    renameField(y, 'subject', 'S');
-    renameField(y, 'scope', 's');
-    renameField(y, 'value', 'v');
-    renameField(y, 'extend', 'e');
-    renameField(y, 'author', 'a');
-    renameField(y, 'name', 'n');
-    renameField(y, 'description', 'd');
+    renameObjectFields(y, false);
     
     return y;
 }
@@ -1547,15 +1558,7 @@ exports.objExpandAll = objExpandAll;
 
 /** expands an object in-place, and returns it */
 function objExpand(o) {
-    renameField(o, 'r', 'removed');
-    renameField(o, 'i', 'id');
-    renameField(o, 'S', 'subject');
-    renameField(o, 's', 'scope');
-    renameField(o, 'v', 'value');
-    renameField(o, 'e', 'extend');
-    renameField(o, 'a', 'author');
-    renameField(o, 'n', 'name');
-    renameField(o, 'd', 'description');
+    renameObjectFields(o, true);
     
     if (o.removed) {
         if (typeof o.removed != 'boolean') {
