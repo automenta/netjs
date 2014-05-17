@@ -87,7 +87,7 @@ nobject.prototype.setName = function(n) {
     return this;
 };
 //.name is already used, so use n()
-nobject.prototype.n = function(n) {
+nobject.prototype.getName = function(n) {
     if (!n)
         return x.name;
     objName(x, n);
@@ -646,7 +646,7 @@ exports.uuid = uuid;
 
 
 function isSelfObject(u) {
-    return (u.self === true);
+    return (u.id === u.author) && (u.id!=undefined);
 }
 exports.isSelfObject = isSelfObject;
 
@@ -1427,6 +1427,12 @@ function objCompare(a, b) {
 }
 exports.objCompare = objCompare;
 
+function renameField(o, from, to) {
+    if (o[from]!==undefined) {
+        o[to] = o[from];
+        delete o[from];
+    }
+}
 
 /* returns a cloned version of the object, compacted */
 function objCompact(o) {
@@ -1441,10 +1447,10 @@ function objCompact(o) {
 
     if (y.createdAt) {
         if (!y.modifiedAt) {
-            y.at = y.createdAt;            
+            y.t = y.createdAt;            
         }
         else if (y.createdAt!==y.modifiedAt) {
-            y.at = [ y.createdAt, y.modifiedAt - y.createdAt ];
+            y.t = [ y.createdAt, y.modifiedAt - y.createdAt ];
         }
     }
     
@@ -1462,6 +1468,9 @@ function objCompact(o) {
         y.removed = y.id;
         delete y.id;
     }
+    if (y.subject!==undefined)
+        if (y.subject === y.author)
+            y.subject = '';
         
 
     var k = _.keys(y);
@@ -1487,20 +1496,25 @@ function objCompact(o) {
                 return;
 
             //console.log(i + '//' + v);
-            if (((v.value) && (v.value.lat)) || (Array.isArray(v))) {
+            /*if (((v.value) && (v.value.lat)) || (Array.isArray(v))) {
                 newValues.push(v);
-            } else {
+            } else*/ {
                 var ia = v.id;
                 var va = v.value || null;
                 var s = v.strength || 1.0;
                 if (va)
                     newValues.push([ia, s, va]);
-                else if ((!va) && (s!=1.0))
+                else if ((!va) && (s!==1.0))
                     newValues.push([ia, s]);
                 else if (ia)
                     newValues.push(ia);
-                else
+                else {
+                    /*var vv = _.clone(v);
+                    renameField(vv, 'id', 'i');
+                    renameField(vv, 'value', 'v');
+                    renameField(vv, 'strength', '$');*/
                     newValues.push(v);
+                }
             }
         });
         
@@ -1510,16 +1524,38 @@ function objCompact(o) {
         }        
     }
 
-    //console.log('newValue:: ' + newValues);
-    //console.dir(y.value);
-    //console.log('-----');
+    renameField(y, 'removed', 'r');
+    renameField(y, 'id', 'i');
+    renameField(y, 'subject', 'S');
+    renameField(y, 'scope', 's');
+    renameField(y, 'value', 'v');
+    renameField(y, 'extend', 'e');
+    renameField(y, 'author', 'a');
+    renameField(y, 'name', 'n');
+    renameField(y, 'description', 'd');
+    
     return y;
 }
 exports.objCompact = objCompact;
 
 
+function objExpandAll(a) {
+    a.forEach(objExpand);
+    return a;
+}
+exports.objExpandAll = objExpandAll;
+
 /** expands an object in-place, and returns it */
 function objExpand(o) {
+    renameField(o, 'r', 'removed');
+    renameField(o, 'i', 'id');
+    renameField(o, 'S', 'subject');
+    renameField(o, 's', 'scope');
+    renameField(o, 'v', 'value');
+    renameField(o, 'e', 'extend');
+    renameField(o, 'a', 'author');
+    renameField(o, 'n', 'name');
+    renameField(o, 'd', 'description');
     
     if (o.removed) {
         if (typeof o.removed != 'boolean') {
@@ -1528,19 +1564,24 @@ function objExpand(o) {
         }
     }
 
-    if (o.at) {
-        if (Array.isArray(o.at) && (o.at.length == 2)) {
-            o.createdAt = o.at[0];
-            o.modifiedAt = o.at[1] + o.createdAt;
+    if (o.t) {
+        if (Array.isArray(o.t) && (o.t.length === 2)) {
+            o.createdAt = o.t[0];
+            o.modifiedAt = o.t[1] + o.createdAt;
         }
         else {
-            o.createdAt = o.at;
+            o.createdAt = o.t;
         }
-        delete o.at;
+        delete o.t;
     }
     if (o.modifiedAt === undefined)
         delete o.modifiedAt;
-
+    if (o.subject!==undefined) {
+        if (o.subject === '') {
+            o.subject = o.author;
+        }
+    }
+    
     if (!o.value)
         return o;
 
@@ -1557,14 +1598,17 @@ function objExpand(o) {
             if (v.length > 2)
                 r.value = v[2];
             newValues.push(r);
-        } else if (typeof v === 'object') {
+        } else if (typeof v === 'object') { 
+            /*renameField(v, 'i', 'id');
+            renameField(v, 'v', 'value');
+            renameField(v, '$', 'strength');*/            
             newValues.push(v);
         } else if (typeof v === 'string') {
             newValues.push({
                 id: v
             });
         } else {
-            newValues.push(v);
+            console.error('unrecognized tagvalue type', v);
         }
     });
     o.value = newValues;

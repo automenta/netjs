@@ -176,7 +176,7 @@ function netention(f) {
                     } else {
                         $.pnotify({
                             title: 'Unable to switch profile',
-                            text: err + ' ' + (typeof (target) === "string" ? target : target.id),
+                            text: (typeof (target) === "string" ? target : target.id),
                             type: 'Error'
                         });
 
@@ -311,9 +311,9 @@ function netention(f) {
             var that = this;
 
             $.getJSON(url, function(o) {
-                that.addAll(o.property);
-                that.addAll(o.class);
-                                
+                that.addAll(objExpandAll(o.property));
+                that.addAll(objExpandAll(o.class));
+
                 o.class.forEach(function(c) {
                     that.ontoIndex.add({
                         id: c.id,

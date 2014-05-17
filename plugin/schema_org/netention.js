@@ -71,6 +71,8 @@ exports.plugin = function($N) {
                     description: prop.comment,
                     extend: pt
                 };
+                if (p.description.length === 0)
+                    delete p.description;
                 if (pt === 'object') {
                     p.tag = _.map(prop.ranges, function(r) {
                         return mapURI(r);
@@ -92,8 +94,9 @@ exports.plugin = function($N) {
                     }),
                     extend: type.supertypes
                 };
-
-                if (t.id != type.id)
+                if (t.description.length == 0)
+                    delete t.description;
+                if (t.id !== type.id)
                     t.sid = type.id; //the original schema.org URI
 
                 if (_.contains(rootTypes, type.id)) {

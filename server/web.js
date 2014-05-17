@@ -1120,7 +1120,7 @@ exports.start = function(options) {
         if (cookies.authenticated) {
             cid = cookies.clientID;
             if ((cid) && ($N.server.users[key])) {
-                if ($N.server.users[key].indexOf(cid) == -1) {
+                if ($N.server.users[key].indexOf(cid) === -1) {
                     //they are trying to spoof the clientID, deny access because key is invalid
                     return null;
                 }
@@ -1879,7 +1879,7 @@ exports.start = function(options) {
             });
 
             socket.on('pub', function(message, err, success) {
-                if ($N.server.permissions['authenticate_to_create_objects'] != false) {
+                if ($N.server.permissions['authenticate_to_create_objects'] !== false) {
                     if (!session) {
                         if (err)
                             err('Not authenticated');
@@ -1890,7 +1890,7 @@ exports.start = function(options) {
                 //TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
 
                 if ((message.focus) && (message.author)) {
-                    message = util.objExpand(message);
+                    message = $N.objExpand(message);
                     focusHistory.push(message);
 
                     plugins('onFocus', message);
@@ -1966,6 +1966,7 @@ exports.start = function(options) {
                     targetObject = null;
                 }
                 else {
+                    target = $N.objExpand(target);
                     targetObjectID = target.id;
                     targetObject = target;
                 }

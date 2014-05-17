@@ -151,7 +151,6 @@ function newNewProfileWidget(whenFinished) {
         var u = uuid();
         var uo = u;
         var o = new nobject(uo, name);
-        o.self = true;
         o.author = uo;
         o.scope = ObjScope.Global;
         o.addTag('Human');

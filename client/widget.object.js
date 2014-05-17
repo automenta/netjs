@@ -1732,10 +1732,9 @@ function newObjectView(x, options) {
         if (!isSelfObject(x.id)) { //exclude self objects
             if (x.author) {
                 var a = x.author;
-                var as = $N.getObject(x.author);
-                if (as)
-                    a = as.name;
-                //else display UID?
+                var ai = $N.instance[a];
+                if (ai)
+                    a = ai.name || a;
 
                 xn = a + ': ' + (xn.length > 0 ? xn : '?');
             }
