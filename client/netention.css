@@ -461,6 +461,7 @@ div.olMapViewport {
     overflow: auto;
     max-width: 100%;
     margin-left: 1em;
+    clear: both;
 }
 .tagSuggestions {
     margin: 0em;

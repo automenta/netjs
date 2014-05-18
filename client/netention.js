@@ -46,14 +46,6 @@ function netention(f) {
         reset: function() {
             this.clearTransients();
             this.set('clientID', 'undefined');
-            this.ontoIndex = lunr(function() {
-                this.field('name', {
-                    boost: 4
-                });
-                this.field('description');
-                this.field('properties');
-                this.ref('id');
-            });
         },
         clearTransients: function() {
             this.set('layer', {
@@ -316,14 +308,14 @@ function netention(f) {
                 that.addAll(objExpandAll(o.property));
                 that.addAll(objExpandAll(o.class));
 
-                var remaining = _.pluck(o.class, 'id');
+                /*var remaining = _.pluck(o.class, 'id');
                 var batchSize = 32;
                 function nextBatch() {
                     var next = remaining.splice(0, batchSize);
                     if (next.length === 0)
-                        return;
+                        return;*/
                     
-                    next.forEach(function(c) {
+                    o.class.forEach(function(c) {
                         if (!c) return;
                         
                         that.ontoIndex.add({
@@ -335,9 +327,9 @@ function netention(f) {
                         if (c.icon)
                             defaultIcons[c.id] = c.icon;                    
                     });                    
-                    setImmediate(nextBatch);
+                /*    setImmediate(nextBatch);
                 }                
-                setImmediate(nextBatch);
+                setImmediate(nextBatch);*/
                 
                 that.trigger('change:tags');
             
@@ -805,6 +797,15 @@ function netention(f) {
 
     //exports = the variable from util.js which is also used by node.js require()        		
     var $N = new Ontology(true, _.extend(new $NClient(), exports));
+
+    $N.ontoIndex = lunr(function() {
+        this.field('name', {
+            boost: 4
+        });
+        this.field('description');
+        this.field('properties');
+        this.ref('id');
+    });
     
     $N.toString = function() {
         return JSON.stringify(this);
