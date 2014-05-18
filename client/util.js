@@ -1450,7 +1450,8 @@ function renameObjectFields(o, m) {
         ['extend', 'e'], 
         ['author', 'a'],
         ['name', 'n'],
-        ['description', 'd']],
+        ['description', 'd'],
+        ['replyTo', 'R']],
         m
     );    
 }

@@ -9,39 +9,41 @@ exports.plugin = function($N) {
         version: '1.0',
         author: 'http://$N.org',
         start: function(options) {
-            function tolower(s) { return s.toLowerCase(); }
+            function tolower(s) {
+                return s.toLowerCase();
+            }
             options.readChannels = _.map(options.readChannels, tolower);
             options.writeChannels = _.map(options.writeChannels, tolower);
-            
+
             this.options = options;
-            
-            
+
+
             var irc = require('irc');
 
-            $N.addTags([
+            $N.addAll([
                 {
-                    uri: 'IRCChannel', name: 'IRC Channel',
-                    properties: {
+                    id: 'IRCChannel', name: 'IRC Channel', extend: ['Internet'],
+                    value: {
                         //http://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt
                         // irc:[ //[ <host>[:<port>] ]/[<target>] [,needpass] ]
-                        'channelURL': {name: 'URL', type: 'text' /* url */, min: 1, default: 'irc://server/#channel'},
+                        'channelURL': {name: 'URL', extend: 'text' /* url */, min: 1, default: 'irc://server/#channel'},
                     }
                 },
                 {
-                    uri: 'SendToIRC', name: 'Send to IRC',
-                    properties: {
+                    id: 'SendToIRC', name: 'Send to IRC', extend: ['Internet'],
+                    value: {
                         //http://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt
                         // irc:[ //[ <host>[:<port>] ]/[<target>] [,needpass] ]
-                        'SendToWhichIRCChannel': {name: 'Channel', type: 'object', min: 1},
+                        'SendToWhichIRCChannel': {name: 'Channel', extend: 'object', min: 1},
                     }
                 }
 
-            ], ['Internet']);
+            ]);
 
             var ch = _.union(options.readChannels, options.writeChannels);
 
             var maxusernamelength = 9;
-            
+
             var username = options.nick || $N.server.name.replace('/ /g', '_').substring(0, maxusernamelength);
 
             this.channels = ch;
@@ -52,32 +54,32 @@ exports.plugin = function($N) {
 
 
             /*var RiveScript = require("rivescript");
-            var bot = new RiveScript({debug: false});
-            bot.loadDirectory("./plugin/rivescript/brain", function() {
-                bot.sortReplies();
-                bot.ready = true;
-            }, function error_handler(loadcount, err) {
-                console.log("Error loading batch #" + loadcount + ": " + err + "\n");
-            });*/
+             var bot = new RiveScript({debug: false});
+             bot.loadDirectory("./plugin/rivescript/brain", function() {
+             bot.sortReplies();
+             bot.ready = true;
+             }, function error_handler(loadcount, err) {
+             console.log("Error loading batch #" + loadcount + ": " + err + "\n");
+             });*/
 
             // Listen for any message, say to him/her in the room
             var that = this;
             that.prevMsg = '';
-            var messageObject = { };
+            var messageObject = {};
             var bufferedMessages = 0;
             this.irc.addListener("message", function(from, to, text, message) {
                 var t = to.toLowerCase();
                 if (!_.contains(options.readChannels, t))
                     return;
-                             
+
                 var processed = false;
                 try {
                     var m = JSON.parse(text);
                     if (m.id) {
                         m.origin = 'irc://' + options.server + '/' + from;
-                        
+
                         if (m.origin != myOrigin) {
-                            $N.getObjectSnapshot(m.id, function(err, d) {
+                            $N.getObjectByID(m.id, function(err, d) {
                                 var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
                                 if (err) {
                                     $N.pub(m);
@@ -86,7 +88,7 @@ exports.plugin = function($N) {
                                 else {
                                     //only replace if existing object's origin matches
                                     if (m.origin == d[0].origin) {
-                                    
+
                                         if (m.removed) {
                                             //if (d[0].fromIRC) 
                                             $N.deleteObject(m.id, null, "irc://");
@@ -94,35 +96,36 @@ exports.plugin = function($N) {
                                         else {
                                             $N.pub(m);
                                         }
-                                    }                                        
+                                    }
                                 }
                             });
                         }
                         processed = true;
                     }
                 }
-                catch (e) { }
-                
+                catch (e) {
+                }
+
                 if (!processed) {
                     if (!messageObject[t]) {
                         var name = to + ', ' + from + ': ' + text;
-                        var m = $N.objNew();
+                        var m = new $N.nobject();
                         messageObject[t] = m;
                         m.setName(to);
-                        m.origin = 'irc://' + options.server + '/' + to;                        
+                        m.origin = 'irc://' + options.server + '/' + to;
                     }
                     else {
                         messageObject[t].modifiedAt = Date.now();
                     }
-                                        
+
                     messageObject[t].addDescription(from + ': ' + text + '<br/>');
-					messageObject[t].touch();
-                    
-                    
+                    messageObject[t].touch();
+
+
                     $N.pub(messageObject[t]);
 
                     bufferedMessages++;
-                    
+
                     if (bufferedMessages >= options.maxMessagesPerObject) {
                         bufferedMessages = 0;
                         delete messageObject[t];
@@ -131,19 +134,19 @@ exports.plugin = function($N) {
 
 
                 /*if (text.indexOf(username) == 0) {
-                    var firstSpace = text.indexOf(' ');
-                    text = text.substring(firstSpace, text.length);
-                    var reply = bot.reply(from, text);
-                    //that.irc.say(to, reply + ' [netention]');
-
-                    //save response as a reply
-                    var n = $N.objNew();
-                    //m.fromIRC = true; //avoid rebroadcast
-                    n.ircChannels = [from];
-                    n.setName(reply);
-                    n.replyTo = [m.id];
-                    $N.pub(n);
-                }*/
+                 var firstSpace = text.indexOf(' ');
+                 text = text.substring(firstSpace, text.length);
+                 var reply = bot.reply(from, text);
+                 //that.irc.say(to, reply + ' [netention]');
+                 
+                 //save response as a reply
+                 var n = $N.objNew();
+                 //m.fromIRC = true; //avoid rebroadcast
+                 n.ircChannels = [from];
+                 n.setName(reply);
+                 n.replyTo = [m.id];
+                 $N.pub(n);
+                 }*/
             });
 
             var messageSendDelayMS = 1500;
@@ -155,13 +158,13 @@ exports.plugin = function($N) {
         onPub: function(x) {
             //avoid rebroadcast to origin
             if (x.origin)
-                if (x.origin.indexOf('irc://' + this.options.server)==0)
+                if (x.origin.indexOf('irc://' + this.options.server) == 0)
                     return;
 
             x = $N.objCompact(x);
 
             var that = this;
-            
+
             if (x.removed)
                 if (x.content === 'irc://')
                     return;
