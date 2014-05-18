@@ -365,14 +365,14 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             //Add missing required properties, min: >=1 (with their default values) of known objects:
 
             if (!x.readonly) {
-                tags.forEach(function(t) {
-                    t = $N.class[t];
+                for (var i = 0; i < tags.length; i++) {
+                    var t = $N.class[tags[i]];
                     if (!t)
-                        return;
+                        continue;
 
                     var prop = t.property;
                     if (!prop)
-                        return;
+                        continue;
                     
                     _.each(prop, function(P, pid) {
                         if (P.min)
@@ -381,7 +381,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                                     missingProp.push(pid);                        
                     });
                     
-                });
+                };
             }
 
             missingProp.forEach(function(p) {
@@ -840,11 +840,17 @@ newTagValueWidget.markdown = function(x, index, v, prop, editable, d, events) {
 var _alohaHandler = null;
 
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
-    var dd = newDiv().appendTo(d);
+    if (!editable)
+        if (v.value)
+            if (x.author !== $N.id() ) {
+                newDiv().addClass('htmlview').html(v.value).appendTo(d);
+                return;
+            }
     
     function e() {
     
         if ((editable) && (!prop.readonly)) {
+            var dd = newDiv().appendTo(d);
             if (v.value)
                 dd.html(v.value);
 
@@ -902,6 +908,7 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                 
                 Aloha.ready( function() {
                     e();
+                    
                     _alohaHandler = Aloha.bind('aloha-editable-deactivated', function (e, a) {
                         var o = a.editable.obj[0];
                         var xid = o.getAttribute('xid');
@@ -921,6 +928,8 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                             }                                
                         }
                     });   
+                    
+                    reflowView();
                 });
             });
     }
@@ -1068,16 +1077,13 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
     var ee = newDiv().appendTo(d);
     
     function showMap() {
-
-        var de = duid();
-
-        var dd = newDiv(de).addClass('focusMap').appendTo(ee);
+        var dd = newDiv().addClass('focusMap').appendTo(ee);
 
         later(function() {
             var lat = v.value.lat || configuration.mapDefaultLocation[0];
             var lon = v.value.lon || configuration.mapDefaultLocation[1];
             var zoom = v.value.zoom;
-            m = initLocationChooserMap(de, [lat, lon], zoom);
+            m = initLocationChooserMap(dd[0], [lat, lon], zoom);
         });
     }
 
@@ -1467,7 +1473,7 @@ function newSimilaritySummary(x) {
     var count = 0;
     for (var i = 0; i < x.value.length; i++) {
         var v = x.value[i];
-        if (v.id == 'similarTo') {
+        if (v.id === 'similarTo') {
             s[v.value] = v.strength || 1.0;
             count++;
         }

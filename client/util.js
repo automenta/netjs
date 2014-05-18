@@ -390,7 +390,7 @@ function objTagStrength(x, normalize, noProperties) {
         if (isPrimitive(ii))
             return;
         if (noProperties) {
-            if (window.$N.getProperty(ii))
+            if (window.$N.property[ii])
                 return;
         }
         var s = vv.strength || 1.0;
@@ -431,7 +431,8 @@ function objTagStrengthRelevance(xx, yy, noProperties) {
     for (var i = 0; i < xxk.length; i++) {
         var c = xxk[i];
 
-        if (_.contains(yyk, c)) {
+        //if (yyk.indexOf(c)!==-1) {
+        if (yy[c]!==undefined) {
             r += xx[c] * yy[c];
         }
     }
@@ -609,10 +610,11 @@ exports.objSetFirstValue = objSetFirstValue;
 function objValues(object, id) {
     var v = [];
     if (object.value) {
-        object.value.forEach(function(vk) {
+        for (var i = 0; i < object.value.length; i++) {
+            var vk = object.value[i];
             if (vk.id === id)
                 v.push(vk.value);
-        });
+        }
     }
     return v;
 }
@@ -650,7 +652,7 @@ exports.uuid = uuid;
 
 
 function isSelfObject(u) {
-    return (u.id === u.author) && (u.id!=undefined);
+    return (u.id === u.author) && (u.id!==undefined);
 }
 exports.isSelfObject = isSelfObject;
 
@@ -720,7 +722,7 @@ function objUserRelations(trusts) {
         index(uid);
         for (var j = 0; j < trusts[i].value.length; j++) {
             var v = trusts[i].value[j];
-            if ((v.id == 'trusts') || (v.id == 'rippleTrusts')) {
+            if ((v.id === 'trusts') || (v.id === 'rippleTrusts')) {
                 var target = v.value;
                 if (target) {
                     index(target);
@@ -973,22 +975,24 @@ var Ontology = function(storeInstances, target) {
         //TODO index author, replyTo
     }
     function unindexInstance(x) {
-        if (x.replyTo) {            
-            x.replyTo.forEach(function(t) {
-               var T = that.instance[t];
-               if (T) {
-                   delete T.reply[x.id];
-               }
-            });
+        if (x.replyTo) {     
+            for (var i = 0; i < x.replyTo.length; i++) {
+                var t = x.replyTo[i];
+                var T = that.instance[t];
+                if (T) {
+                    delete T.reply[x.id];
+                }
+            }
         }
         delete x.reply;
         delete that.reply[x.id];
         
         var tags = objTags(x, false);                
-        tags.forEach(function(t) {
+        for (var i = 0; i < tags.length; i++) {
+           var t = tags[i];
            if (that.tagged[t]) 
                delete that.tagged[t][x.id];           
-        });        
+        }
         
         
     }

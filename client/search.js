@@ -156,8 +156,8 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var SORT_SPACETIME = (sort === 'Spacetime');
     var SORT_NEAR = (sort === 'Near');
     var SORT_RECENT = (sort === 'Recent');
-    
-    _.each($N.objects(), function(x, k) {
+
+    _.each($N.instance, function(x, k) {
 
         if (x.hidden)
             return;
@@ -166,19 +166,19 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             return;
 
         var tags = objTags(x);
-        
+
         if (preFilter) {
             if (!preFilter(x, tags))
                 return;
         }
-        
+
         {
             var allowed = true;
             if (ii.length > 0) {
                 allowed = false;
                 for (var i = 0; i < ii.length; i++) {
                     var inc = ii[i];
-                    if (_.contains(tags, inc)) {
+                    if (tags.indexOf(inc)!==-1) {
                         allowed = true;
                         break;
                     }
@@ -187,7 +187,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             if (ee.length > 0) {
                 for (var i = 0; i < ee.length; i++) {
                     var exc = ee[i];
-                    if (_.contains(tags, exc)) {
+                    if (tags.indexOf(exc)!==-1) {
                         allowed = false;
                         break;
                     }
@@ -226,9 +226,9 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                             return;
                     }
                 }
-				else {
-					return;
-				}
+                else {
+                    return;
+                }
             }
         }
 
@@ -236,7 +236,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         var r = 1.0;
         if (SORT_RECENT) {
             var w = objTime(x);
-            
+
             if (w === null)
                 return;
             var ageSeconds = Math.abs(now - w) / 1000.0;
@@ -270,7 +270,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             r = 1.0 / (1.0 + ((timeDistance / 60.0) + spaceDistance));
         }
 
-        if (SEMANTIC_RELEVANT)  {
+        if (SEMANTIC_RELEVANT) {
             if (focus) {
                 if (focus.name) {
                     var fn = focus.name.toLowerCase();
@@ -295,7 +295,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                         var f = focusWhen.from;
                         var t = focusWhen.to;
                         var wx = objWhen(x);
-                        if (wx!==undefined) {
+                        if (wx !== undefined) {
                             if (wx < f)
                                 r = 0;
                             if (wx > t)
