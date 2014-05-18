@@ -1,6 +1,5 @@
 if (typeof window != 'undefined') {
     exports = {}; //functions used by both client and server
-    module = {};
 } else {
     _ = require('underscore');
 }
