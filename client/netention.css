@@ -136,10 +136,30 @@ div.olMapViewport {
 .objectView .propertySection .tagLabel img {
     margin-left: 0;
 }
+
+.objectView .tagSectionItem {
+    border: 1px solid rgba(127,127,127,0.35);
+}
+    
 .objectView .tagSectionItem div, .objectView .tagSectionItem span {
     clear: none;
 }
-
+.ObjectViewButtons {
+    float: right;
+    padding: 0;
+    opacity: 1.0 !important;
+}
+.ObjectViewButtons * {
+    margin: 0 !important;
+    padding: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 0;
+    vertical-align: middle;
+}
+.ObjectViewButtons input {
+    opacity: 0.5;
+}
 
 .tagDescription {
     width: 98.5%;
@@ -167,9 +187,8 @@ div.olMapViewport {
     position: relative;
     right: 0;
     float: right;
-    opacity: 0.5;
     margin-left: 0.5em;
-    //margin-bottom: 15px;
+    opacity: 0.5;    
 }
 
 .tagSection {
@@ -275,7 +294,7 @@ div.olMapViewport {
     background-color: rgba(255, 255, 255, 0.8);
 }
 .tagLink, .TagChoice {
-    padding-left: 1.1em;    
+    padding-left: 1.1em !important;    
     background-size: auto 1em;
     background-repeat:no-repeat;
 }
@@ -284,6 +303,7 @@ div.olMapViewport {
     word-wrap: break-word;
     font-weight: normal;
     clear: both;
+    padding-top:2px;
 }
 .MetadataLine a, .MetadataLine button {
     width: auto !important;
@@ -879,7 +899,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
 .objectView {
     position: relative;
-    padding: 0.2em;
+    padding: 4px;
     margin-bottom: 0;
     display: block;
     clear: both;
@@ -887,26 +907,29 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .objectView ul li {
     word-wrap: break-word;
 }
-.objectGridItem3,
-.objectGridItem2 {
-    width: 30%;
-    padding: 0.3em !important;
+.objectGridItem3, .objectGridItem2 {
+    width: 32%;
+    float: left;
+    margin: 0;
+    padding: 0;        
+}
+.objectGridItem3 .objectView, .objectGridItem2 .objectView {
+    padding: 4px !important;
     height: auto;
     clear: none;
-    float: left;
-    margin: 5px;
+    margin: 4px;
 }
+
 .objectGridItem2 {
-    width: 47%;
+    width: 49%;
 }
 .objectListItem {
     width: 98%;
-    padding: 0 !important;
     height: auto;
     clear: none;
-    float: left;
-    margin: 0px;
-    margin-bottom: 5px;
+    margin-left: 4px;
+    margin-right: 0;
+    margin-bottom: 0.5em;
 }
 .ObjectViewHideButton {
     height: 30px;
@@ -927,18 +950,15 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .objectView h1 {
     font-size: 140%;
     font-weight: bold;
-    margin: 2px 0px;
-}
-.objectView h1 button, .objectView h1 input {
-    padding: 0;
-    padding-left: 2px;
-    padding-right: 2px;
     margin: 0;
 }
 .objectView .metadataReplyButton {
-    padding:0;
+    padding: 1px;
     margin-left: 0.2em;
     font-size: 90%;
+    border: 1px solid gray;
+    background-color: transparent;
+    cursor: pointer;
 }
 .objectView h1 a {
     margin-left: 4px;
@@ -996,10 +1016,6 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }
 .ObjectEditDiv button img {
     height: 1em;
-}
-.ObjectSelection,
-.ObjectViewPopupButton {
-    vertical-align: middle;
 }
 /* Chat */
 
@@ -1191,6 +1207,10 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .ui-dialog-content .WikiBrowser-REMOVED {
     max-height: 400px;
 }
+.ui-dialog .ui-dialog-content {
+    padding: 4px !important;
+}
+
 .WikiBrowser {
     clear: both;
     overflow: auto;
@@ -1843,7 +1863,7 @@ div.olControlZoom {
     overflow: visible !important;
     text-align: left;
     width: 150px;
-    font-size: 70% !important;
+    font-size: 100% !important;
     font-weight: normal;
 }
 .ActonMenuSubContents {
@@ -2108,6 +2128,8 @@ svg {
     max-height: 12em;
     overflow: auto;
     resize: vertical;
+    height: auto;
+    padding-bottom: 0.25em;
 }
 .markdown {
     padding: 0.25em;

@@ -662,6 +662,10 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     var strength = t.strength;
     if (strength === undefined)
         t.strength = strength = 1.0;
+    var T = $N.object[tag] || { id: tag };
+    var isProp = T._property;
+    var isClass = T._class;
+    var isPrim = isPrimitive(tag);
 
     var events = {
         onSave: whenSaved,
@@ -690,9 +694,10 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
     var tagIcon = $('<img src="' + getTagIcon(tag) + '"/>');
 
-
-
     d.append(tagLabel);
+    
+    /*if (!isPrim)
+        d.append(newTagButton(tag, false));*/
 
     if (editable) {
         d.addClass('tagSectionEditable');
@@ -766,19 +771,14 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         //tagButtons.hide();
     }
 
-    var T = $N.object[tag] || { id: tag };
-    var isProp = T._property;
-    var isClass = T._class;
     
     var defaultValue = null;
 
     var type;
-    var primitive = false;
-    if (isPrimitive(tag)) {
+    if (isPrim) {
         //tagLabel.hide();    
         type = tag;
         tagLabel.hide();
-        primitive = true;
     }
 
     if (T.name)
@@ -804,7 +804,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
     if (editable)
         tagIcon.prependTo(tagLabel);
-    else if (!primitive)
+    else if (!isPrim)
         tagLabel.append(':&nbsp;');
 
     if (t.description)
@@ -1727,21 +1727,7 @@ function newObjectView(x, options) {
     if ((depth === depthRemaining) && (hideAuthorNameAndIconIfZeroDepth))
         showAuthorName = showAuthorIcon = false;
 
-    if (showAuthorName) {
-        if (!isSelfObject(x.id)) { //exclude self objects
-            if (x.author) {
-                var a = x.author;
-                var ai = $N.instance[a];
-                if (ai)
-                    a = ai.name || a;
-
-                xn = a + ': ' + (xn.length > 0 ? xn : '?');
-            }
-        }
-    }
-
     var replies;
-
 
     if (showAuthorIcon) {
         var authorClient = $N.getObject(authorID);
@@ -1761,6 +1747,8 @@ function newObjectView(x, options) {
                 .addClass('ObjectSelection')
                 .click(_refreshActionContext);
     }
+
+    var buttons = newDiv().addClass('ObjectViewButtons tagButtons').appendTo(d);       
 
     var haxn = newEle('h1').appendTo(d);
 
@@ -1792,27 +1780,29 @@ function newObjectView(x, options) {
     }
 
     function addPopupMenu() {
-        var ms = $N.myself();
-        if (ms && (ms.id === x.author)) {
-            var editButton = newEle('button').text('..').attr({
+        var ms = $N.id();
+        if (ms && (ms === x.author)) {
+            var editButton = newEle('button').text('+').attr({
                 title: "Edit",
                 class: 'ObjectViewPopupButton'
-            }).appendTo(haxn).click(_objectViewEdit);                    
+            }).appendTo(buttons).click(_objectViewEdit);                    
         }
 
         var popupmenuButton = newEle('button').html('&gt;').attr({
             title: "Actions...",
             class: 'ObjectViewPopupButton'
-        }).appendTo(haxn).click(_objectViewContext);
+        }).appendTo(buttons).click(_objectViewContext);
     }
-
     if (showActionPopupButton)
         addPopupMenu();
+
+    if (selectioncheck)
+        buttons.prepend(selectioncheck);
 
     //Name
     if (!nameClickable) {
         haxn.html(xn);
-    } else {
+    } else {        
         var xxn = xn.length > 0 ? xn : '?';
         haxn.append(newEle('a').html(xxn).click(function() {
             if ((x.author === $N.id()) && (titleClickMode === 'edit'))
@@ -1823,13 +1813,29 @@ function newObjectView(x, options) {
                 newPopupObjectView(x.id, true);
             }
             return false;
-        }), '&nbsp;');
+        }));
     }
-    if (selectioncheck)
-        haxn.prepend(selectioncheck);
 
+    if (showAuthorName) {
+        if (!isSelfObject(x.id)) { //exclude self objects
+            if (x.author) {
+                var a = x.author;
+                var ai = $N.instance[a];
+                if (ai)
+                    a = ai.name || a;
 
-    if (showMetadataLine) {
+                if (!nameClickable) {
+                    haxnprepend(a, ':');
+                } else {
+                    haxn.prepend(newEle('a').html(a).click(function() {
+                        newPopupObjectView(x.author, true);                        
+                    }), ':');
+                }
+            }
+        }
+    }
+
+    if ((showMetadataLine) && (!x._class) && (!x._property)) {
         var mdl = newMetadataLine(x, showTime).appendTo(d);
         if (showReplyButton) {
             newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {

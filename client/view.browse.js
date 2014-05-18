@@ -137,7 +137,7 @@ function renderItems(v, maxItems, perItems, preFilter) {
 }
 
 
-function renderBrowse(v, cssClass, afterCreated) {
+function renderBrowse(v, cssClass, afterCreated, filterEach) {
     renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
         var elements = [];
         for (var i = 0; i < xxrr.length; i++) {
@@ -147,9 +147,12 @@ function renderBrowse(v, cssClass, afterCreated) {
                 scale: xxrr[i][1],
                 depthRemaining: 2,
             });
+            if (filterEach)
+                o = filterEach(o);
+            elements.push(o);
+            
             if (cssClass)
                 o.addClass(cssClass(xxrr.length));
-            elements.push(o);
         }
         v.append(elements);
 
@@ -165,7 +168,7 @@ function renderBrowseList(v) {
     }, function(v) {
     });
 }
-function renderBrowseGrid(v) {
+function renderBrowseGrid3(v) {
     renderBrowse(v, function(numitems) {
         if (numitems > 2)
             return 'objectGridItem3 tiled';
@@ -174,6 +177,19 @@ function renderBrowseGrid(v) {
         return 'objectListItem';
     }, function(v) {
         freetileView();
+    }, function(w) {
+        return newDiv().append(w);
+    });
+}
+function renderBrowseGrid2(v) {
+    renderBrowse(v, function(numitems) {
+        if (numitems > 1)    
+            return 'objectGridItem2 tiled';
+        return 'objectListItem';
+    }, function(v) {
+        freetileView();
+    }, function(w) {
+        return newDiv().append(w);
     });
 }
 
@@ -322,7 +338,7 @@ function newListView(v) {
         listRenderer = renderBrowseList;
     }
     else {
-        listRenderer = renderBrowseGrid;
+        listRenderer = renderBrowseGrid3;
     }
                 
 
@@ -330,22 +346,24 @@ function newListView(v) {
     var submenu = $('#AvatarViewMenu');
     var modeSelect = $('<select/>').appendTo(submenu);
                 
-    var gridOption = '<option value="grid">Grid</option>';
+    var gridOption = '<option value="grid3">Grid x3</option>';
+    var grid2Option = '<option value="grid2">Grid x2</option>';
     var listOption = '<option value="list">List</option>';
     if (configuration.device == configuration.MOBILE) {
-        modeSelect.append(listOption, gridOption);
+        modeSelect.append(listOption, gridOption, grid2Option);
     }
     else {
-        modeSelect.append(gridOption, listOption);
-    }
-                
+        modeSelect.append(gridOption, grid2Option, listOption);
+    }                
     modeSelect.append('<option value="slides">Slides</option>');
     modeSelect.change(function() {
         var v = $(this).val();
         if (v === 'list')
             listRenderer = renderBrowseList;
-        else if (v === 'grid')
-            listRenderer = renderBrowseGrid;
+        else if (v === 'grid3')
+            listRenderer = renderBrowseGrid3;
+        else if (v === 'grid2')
+            listRenderer = renderBrowseGrid2;
         else if (v === 'slides')
             listRenderer = renderBrowseSlides;
         update();
@@ -361,7 +379,7 @@ function newListView(v) {
     var textsizeSlider = $('<input type="range" name="points" min="1" value="16" max="32">');
     textsizeSlider.change(function(x) {
         updateFont($(this).val());
-        if (listRenderer === renderBrowseGrid) {
+        if ((listRenderer === renderBrowseGrid2) || (listRenderer === renderBrowseGrid3)) {
             freetileView();
         }
     });

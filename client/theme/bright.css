@@ -10,3 +10,10 @@ h1 a {
     background-color: #149bdf;
 }
 
+.ui-widget-content {
+    background-image: none;
+    border-bottom-left-radius: 0;    
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0;    
+    border-top-right-radius: 0;
+}
