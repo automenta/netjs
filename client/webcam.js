@@ -79,7 +79,15 @@ function webcamStart(previewTarget, gifWidth, gifHeight, ready) {
     };
 
     $('#WebcamStatus').html('Activating Webcam...');
-    startStreaming();
+    //startStreaming();
+    
+/*
+        <script src="lib/gumhelper/gumhelper.js"></script>
+        <script src="lib/animated_gif/Animated_GIF.min.js"></script> */
+      $LAB
+        .script("lib/gumhelper/gumhelper.js")
+        .script("lib/animated_gif/Animated_GIF.min.js")
+        .wait(startStreaming);
 
     /*$(window).on('orientationchange', function() {
       gumHelper.stopVideoStreaming();

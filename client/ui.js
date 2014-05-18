@@ -1,5 +1,3 @@
-"use strict";
-
 jQuery.timeago.settings.allowFuture = true;
 jQuery.timeago.settings.strings = {
     prefixAgo: null,
@@ -23,9 +21,6 @@ jQuery.timeago.settings.strings = {
 };
 
 
-//$.pnotify
-
-$.pnotify.defaults.animation = 'none';
 var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
 var stack_bottomright = {"dir1": "left", "dir2": "up", "push": "top"};
 
@@ -540,7 +535,11 @@ function whenResized() {
     return true;
 }
 
+$('#NotificationArea').html('Loading...');
+
 $(document).ready(function() {
+    $.pnotify.defaults.animation = 'none';
+    
 
     $(window).resize(whenResized);
     whenResized();
@@ -608,189 +607,7 @@ $(document).ready(function() {
         $('#LoadingSplash').hide();
     }
 
-    $('#NotificationArea').html('Loading...');
 
-    netention(function(schemaURL, $N) {
-        $('#NotificationArea').html('System loaded.');
-
-        window.$N = $N;
-
-        setTheme($N.get('theme'));
-
-        $N.loadOntology(schemaURL, function() {
-            $('#NotificationArea').html('Ontology ready. Loading objects...');
-
-            $N.getUserObjects(function() {
-
-                //SETUP ROUTER
-                var Workspace = Backbone.Router.extend({
-                    routes: {
-                        "new": "new",
-                        "me": "me", // #help
-                        "help": "help", // #help
-                        "query/:query": "query", // #search/kiwis
-                        "object/:id": "object",
-                        "object/:id/focus": "focus",
-                        "tag/:tag": "tag",
-                        //"new/with/tags/:t":     "newWithTags",
-                        "example": "completeExample",
-                        "user/:userid": "user",
-                        ":view": "view",
-                        "read/*url": "read"
-                                //"search/:query/:page":  "query"   // #search/kiwis/p7
-                    },
-                    me: function() {
-                        commitFocus($N.myself());
-                    },
-                    completeExample: function() {
-                        commitFocus(exampleObject);
-                    },
-                    showObject: function(id) {
-                        var x = $N.getObject(id);
-                        if (x) {
-                            newPopupObjectView(x);
-                        }
-                        else {
-                            /*$.pnotify({
-                             title: 'Unknown object',
-                             text: id.substring(0, 4) + '...'
-                             });*/
-                        }
-                    },
-                    view: function(view) {
-                        $N.set('currentView', view);
-                    },
-                    user: function(userid) {
-                        $N.set('currentView', {view: 'user', userid: userid});
-                    },
-                    read: function(url) {
-                        later(function() {
-                            viewRead(url);
-                        });
-                    }
-
-                });
-
-
-                updateViewControls();
-
-                $('body.timeago').timeago();
-
-                var viewUpdateMS = configuration.viewUpdateTime[configuration.device][0];
-                var viewDebounceMS = configuration.viewUpdateTime[configuration.device][1];
-                var firstViewDebounceMS = configuration.viewUpdateTime[configuration.device][2];
-                var firstView = true;
-
-                var throttledUpdateView = _.throttle(function() {
-                    later(function() {
-                        _updateView();
-                        if (firstView) {
-                            updateView = _.debounce(throttledUpdateView, viewDebounceMS);
-                            firstView = false;
-                        }
-                    });
-                }, configuration.viewUpdateMS);
-
-                updateView = _.debounce(throttledUpdateView, firstViewDebounceMS);
-
-
-                var msgs = ['I think', 'I feel', 'I wonder', 'I know', 'I want'];
-                //var msgs = ['Revolutionary', 'Extraordinary', 'Bodacious', 'Scrumptious', 'Delicious'];
-                function updatePrompt() {
-                    var l = msgs[parseInt(Math.random() * msgs.length)];
-                    $('.nameInput').attr('placeholder', l + '...');
-                }
-                setInterval(updatePrompt, 7000);
-                updatePrompt();
-
-                $.getScript(configuration.ui, function(data) {
-
-                    var ii = identity();
-
-                    if (ii === ID_AUTHENTICATED) {
-                        $('#NotificationArea').html('Authorized.');
-                    }
-                    else if (ii === ID_ANONYMOUS) {
-                        $('#NotificationArea').html('Anonymous.');
-                    }
-                    else {
-                        $('#NotificationArea').html('Read-only public access.');
-                        /*$('.loginlink').click(function() {
-                         $('#LoadingSplash').show();
-                         nn.hide();
-                         });*/
-                    }
-
-                    $('#ViewWrapper').show();
-                    $('#LoadingSplash2').hide();
-
-
-                    var alreadyLoggedIn = false;
-                    if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'local')) {
-                        var otherSelves = _.filter($N.get("otherSelves"), function(f) {
-                            return $N.getObject(f) != null;
-                        });
-                        if (otherSelves.length >= 1) {
-                            $N.become(otherSelves[0]);
-                            alreadyLoggedIn = true;
-                        }
-                    }
-
-
-                    if (!alreadyLoggedIn) {
-                        if (isAnonymous()) {
-                            //show profile chooser
-                            openSelectProfileModal("Anonymous Profiles");
-                        }
-                        else if ($N.myself() === undefined) {
-                            if (configuration.requireIdentity)
-                                openSelectProfileModal("Start a New Profile");
-                            else {
-                                //$N.trigger('change:attention');
-                                updateView();
-                            }
-                        }
-                    }
-
-                    $('#NotificationArea').html('Ready...');
-                    $('#NotificationArea').fadeOut();
-
-
-                    initKeyboard();
-
-                    var w = new Workspace();
-                    $N.router = w;
-
-
-                    //USEFUL FOR DEBUGGING EVENTS:
-                    /*
-                     $N.on('change:attention', function() { console.log('change:attention'); });
-                     $N.on('change:currentView', function() { console.log('change:currentView'); });
-                     $N.on('change:tags', function() { console.log('change:tags'); });
-                     $N.on('change:focus', function() { console.log('change:focus', $N.focus() ); });
-                     */
-
-                });
-
-
-            });
-        });
-
-
-    });
-
-
-
-    $('#logout').hover(
-            function() {
-                $(this).addClass('ui-state-hover');
-                $(this).addClass('shadow');
-            },
-            function() {
-                $(this).removeClass('ui-state-hover');
-                $(this).removeClass('shadow');
-            }
-    );
 
 
     $('#close-menu').button();
@@ -950,3 +767,52 @@ var _duid = 0;
 function duid() {
     return '_' + (_duid++);
 }
+function _rgba(r, g, b, a) {
+    return 'rgba(' + parseInt(256.0 * r) + ',' + parseInt(256.0 * g) + ',' + parseInt(256.0 * b) + ',' + a + ')';
+}
+
+
+/**
+ * Converts an HSL color value to RGB. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+ * Assumes h, s, and l are contained in the set [0, 1] and
+ * returns r, g, and b in the set [0, 255].
+ *
+ * @param   Number  h       The hue
+ * @param   Number  s       The saturation
+ * @param   Number  l       The lightness
+ * @return  Array           The RGB representation
+ */
+function hslToRgb(h, s, l) {
+    var r, g, b;
+
+    if (s == 0) {
+        r = g = b = l; // achromatic
+    } else {
+        function hue2rgb(p, q, t) {
+            if (t < 0)
+                t += 1;
+            if (t > 1)
+                t -= 1;
+            if (t < 1 / 6)
+                return p + (q - p) * 6 * t;
+            if (t < 1 / 2)
+                return q;
+            if (t < 2 / 3)
+                return p + (q - p) * (2 / 3 - t) * 6;
+            return p;
+        }
+
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1 / 3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1 / 3);
+    }
+
+    return [r * 255, g * 255, b * 255];
+}
+
+
+
+

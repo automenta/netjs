@@ -76,21 +76,24 @@ function newTagCloud(target, onChanged) {
 }
 
 function renderItems(v, maxItems, perItems, preFilter) {
-    var sort = $N.get('list-sort') || 'Recent';
-    var scope = $N.get('list-scope') || 'Public';
-    var semantic = $N.get('list-semantic') || 'Any';
+    setImmediate(function() {
+        var sort = $N.get('list-sort') || 'Recent';
+        var scope = $N.get('list-scope') || 'Public';
+        var semantic = $N.get('list-semantic') || 'Any';
 
-    var rr = getRelevant(sort, scope, semantic, self, maxItems, preFilter);
-    var relevant = rr[0];
-    var relevance = rr[1];
+        var rr = getRelevant(sort, scope, semantic, self, maxItems, preFilter);
+        var relevant = rr[0];
+        var relevance = rr[1];
 
-    var xxrr = [];
-    for (var x = 0; x < relevant.length; x++) {
-        var xx = $N.getObject(relevant[x]);
-        var rr = relevance[relevant[x]];
-        xxrr.push([xx, rr]);
-    }
-    perItems(self, v, xxrr);
+        var xxrr = [];
+        for (var x = 0; x < relevant.length; x++) {
+            var xx = $N.getObject(relevant[x]);
+            var rr = relevance[relevant[x]];
+            xxrr.push([xx, rr]);
+        }
+        perItems(self, v, xxrr);
+        
+    });
 
     /*var semanticFilter = $('<select><option>Any</option><option>Relevant</option></select>');
      semanticFilter.change(function() {

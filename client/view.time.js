@@ -1,141 +1,150 @@
 function newTimeView(v) {
-    timeline = new links.Timeline(v[0]);
+    //            <script src="lib/timeline/timeline-min.js" type="text/javascript"></script>
+    var twrap = newDiv().appendTo(v);
     
-    //http://visjs.org/docs/timeline.html
-    var data = [    ];
-    var options = {
-         'width':  '100%',
-         'height': '100%',
-         'editable': true,   // enable dragging and editing events
-         'style': 'box',
-         'eventMargin': 0,
-         'cluster': true,
-         'autoResize': true,
-         'start': Date.now() - 1*60*60*1000 /* -1 hour */,
-         'end': Date.now() + 2*24*60*60*1000, /* 2 days */
-         'zoomMin': 60*1000, /* 1 min */
-         'groupsChangeable' : false,
-         'animate': 0,
-    };
+    $LAB
+        .script("lib/timeline/timeline-min.js")
+        .wait(function() {
+            var timeline = new links.Timeline(v[0]);
+
+            //http://visjs.org/docs/timeline.html
+            var data = [    ];
+            var options = {
+                 'width':  '100%',
+                 'height': '100%',
+                 'editable': true,   // enable dragging and editing events
+                 'style': 'box',
+                 'eventMargin': 0,
+                 'cluster': true,
+                 'autoResize': true,
+                 'start': Date.now() - 1*60*60*1000 /* -1 hour */,
+                 'end': Date.now() + 2*24*60*60*1000, /* 2 days */
+                 'zoomMin': 60*1000, /* 1 min */
+                 'groupsChangeable' : false,
+                 'animate': 0,
+            };
 
 
-    var times = { };
+            var times = { };
 
-    var numTimeSegments = 128;
-    var timeUnitLengthMS = 30 * 60 * 1000; //30min
-    
-    var currentViewRange = null;
-    function redraw() {
-        if (currentViewRange) {
-            options.start = currentViewRange.start;
-            options.end = currentViewRange.end;
-        }
-        
-        timeline.clearItems();
-        data = [];
-        
-        foreachTimedObject(null, function(goals, centroids) {
-            function addGoal(g) {
-                var duration = g.duration || timeUnitLengthMS;
-                var gs = newObjectView(g, {
-                    depthRemaining: 0,
-                    nameClickable: false,
-                    showActionPopupButton: false,
-                    showSelectionCheck: false,
-                    showTime: false,
-                    showAuthorName: false,
+            var numTimeSegments = 128;
+            var timeUnitLengthMS = 30 * 60 * 1000; //30min
+
+            var currentViewRange = null;
+            function redraw() {
+                if (currentViewRange) {
+                    options.start = currentViewRange.start;
+                    options.end = currentViewRange.end;
+                }
+
+                timeline.clearItems();
+                data = [];
+
+                foreachTimedObject(null, function(goals, centroids) {
+                    function addGoal(g) {
+                        var duration = g.duration || timeUnitLengthMS;
+                        var gs = newObjectView(g, {
+                            depthRemaining: 0,
+                            nameClickable: false,
+                            showActionPopupButton: false,
+                            showSelectionCheck: false,
+                            showTime: false,
+                            showAuthorName: false,
+                        });
+
+                        var G = {
+                                'id': g.id,
+                                'start': g.when,
+                                'end': g.when + duration,
+                                'content': '<div class="timelineLabel" uid="' + g.id + '">' + gs.html() + '</span>'
+                        };
+                        if (g.author == $N.id()) {
+                            G.group = 'me';
+                        }
+                        else if (g.author) {
+                            G.group = 'others';
+                        }
+                        else {
+                            G.group = 'system';
+                        }
+                        G.editable = (g.author === $N.id());
+                        if (G.editable) {
+                            times[g.id] = [ G.start, G.end ];
+                        }
+
+                        data.push(G);            
+                    }
+
+                    _.each(goals, addGoal);
+                    _.each(centroids, addGoal);
+
                 });
 
-                var G = {
-                        'id': g.id,
-                        'start': g.when,
-                        'end': g.when + duration,
-                        'content': '<div class="timelineLabel" uid="' + g.id + '">' + gs.html() + '</span>'
-                };
-                if (g.author == $N.id()) {
-                    G.group = 'me';
-                }
-                else if (g.author) {
-                    G.group = 'others';
-                }
-                else {
-                    G.group = 'system';
-                }
-                G.editable = (g.author === $N.id());
-                if (G.editable) {
-                    times[g.id] = [ G.start, G.end ];
-                }
+                timeline.draw(data, options);
 
-                data.push(G);            
+                v.find('.timelineLabel').click(function() {
+                    var uid = $(this).attr('uid');
+                    newPopupObjectView($N.getObject(uid));
+                });
             }
 
-            _.each(goals, addGoal);
-            _.each(centroids, addGoal);
+            function changed(x) {
+               var d = timeline.getData();
+               for (var i = 0; i < d.length; i++) {
+                   if (d[i].editable) {
+                       var D = d[i];
+                       var id = D.id;
+                       var lastTimes = times[id];
+                        var dstart = D.start;
+                        var dend = D.end;
+                        if (dstart.getTime)
+                            dstart = dstart.getTime();
+                        if (dend.getTime)
+                            dend = dend.getTime();
+                       if ((lastTimes[0]!=dstart) || (lastTimes[1]!=dend)) {
+                           times[id] = [ dstart, dend ];
 
-        });
-
-        timeline.draw(data, options);
-    
-        v.find('.timelineLabel').click(function() {
-            var uid = $(this).attr('uid');
-            newPopupObjectView($N.getObject(uid));
-        });
-    }
-    
-    function changed(x) {
-       var d = timeline.getData();
-       for (var i = 0; i < d.length; i++) {
-           if (d[i].editable) {
-               var D = d[i];
-               var id = D.id;
-               var lastTimes = times[id];
-                var dstart = D.start;
-                var dend = D.end;
-                if (dstart.getTime)
-                    dstart = dstart.getTime();
-                if (dend.getTime)
-                    dend = dend.getTime();
-               if ((lastTimes[0]!=dstart) || (lastTimes[1]!=dend)) {
-                   times[id] = [ dstart, dend ];
-                   
-                   var G = $N.getObject(id);
-                   if (G) {
-                       G.when = dstart;
-                       G.duration = dend - dstart;
-                       $N.pub(G);
+                           var G = $N.getObject(id);
+                           if (G) {
+                               G.when = dstart;
+                               G.duration = dend - dstart;
+                               $N.pub(G);
+                           }
+                       }
                    }
                }
-           }
-       }
-    }
-    
-    redraw();
-    
-    //links.events.addListener(timeline, 'rangechanged', changed);
-    links.events.addListener(timeline, 'edit', changed);
-    links.events.addListener(timeline, 'change', changed);
-    links.events.addListener(timeline, 'changed', changed);
-    links.events.addListener(timeline, 'add', function() {
-        var dd = timeline.getData();
-        var tti = dd[dd.length-1].start.getTime();
-        var d = newPopup("Add a Goal at " + new Date(tti), {width: 800, height: 600, modal: true});
-        d.append(newTagger([], function(results) {
-            saveAddedTags(results, 'Goal', tti);
-            later(function() {
-                d.dialog('close');
+            }
+
+            redraw();
+
+            //links.events.addListener(timeline, 'rangechanged', changed);
+            links.events.addListener(timeline, 'edit', changed);
+            links.events.addListener(timeline, 'change', changed);
+            links.events.addListener(timeline, 'changed', changed);
+            links.events.addListener(timeline, 'add', function() {
+                var dd = timeline.getData();
+                var tti = dd[dd.length-1].start.getTime();
+                var d = newPopup("Add a Goal at " + new Date(tti), {width: 800, height: 600, modal: true});
+                d.append(newTagger([], function(results) {
+                    saveAddedTags(results, 'Goal', tti);
+                    later(function() {
+                        d.dialog('close');
+                    });
+                }));        
+                dd.pop();
+
+                timeline.draw(dd, options);
             });
-        }));        
-        dd.pop();
+            links.events.addListener(timeline, 'rangechanged', function(p) {
+                currentViewRange = p;
+            });
+
+            twrap.onChange = redraw;
         
-        timeline.draw(dd, options);
-    });
-    links.events.addListener(timeline, 'rangechanged', function(p) {
-        currentViewRange = p;
-    });
+        });
 
-    timeline.onChange = redraw;
 
-    return timeline;
+    return twrap;
 }
 
 //DEPRECATED:

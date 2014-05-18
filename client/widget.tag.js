@@ -277,7 +277,7 @@ function newTagTree(param) {
 
         var others = [];
         for (var c in stc) {
-            if (!$N.class[c])
+            if ((!$N.class[c]) && (!$N.property[c]))
                 others.push(c);
         }
 

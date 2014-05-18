@@ -858,22 +858,29 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
         var dd = newDiv().attr('id', ddi).appendTo(d);
         
         var editor;
-        later(function() {
-            editor = new Quill('#' + ddi);
-            editor.addModule('toolbar', {
-                container: '#' + ddt     // Selector for toolbar container
-            });
+        /*$LAB
+            .script("lib/quill/quill.min.js")
+            .wait(function() {*/
+                later(function() {
+            
+                    console.log('quill loaded');
+            
+                    editor = new Quill('#' + ddi, {
+                          modules: { toolbar: {
+                                container: '#' + ddt     // Selector for toolbar container
+                          }}
+                    });
 
-            if (prop.description)
-                dd.attr('placeholder', prop.description);
+                    if (prop.description)
+                        dd.attr('placeholder', prop.description);
 
-            if (v.value)
-                editor.setHTML(v.value);
-            else if (prop.default)
-                editor.setHTML(prop.default);
+                    if (v.value)
+                        editor.setHTML(v.value);
+                    else if (prop.default)
+                        editor.setHTML(prop.default);
 
-            //freetileView();
-        })
+                });
+        //})
 
         events.onSave.push(function(y) {
             //objAddValue(y, prop.id, dd.val(), v.strength);
@@ -1743,12 +1750,13 @@ function newObjectView(x, options) {
     //Selection Checkbox
     var selectioncheck = null;
     if (showSelectionCheck) {
-        selectioncheck = $('<input type="checkbox"/>')
-                .addClass('ObjectSelection')
-                .click(_refreshActionContext);
+        selectioncheck = newEle('input').attr({
+            'type': 'checkbox',
+            'class':'ObjectSelection'
+        }).click(_refreshActionContext);
     }
 
-    var buttons = newDiv().addClass('ObjectViewButtons tagButtons').appendTo(d);       
+    var buttons = newDiv().attr('class','tagButtons ObjectViewButtons').appendTo(d);       
 
     var haxn = newEle('h1').appendTo(d);
 
