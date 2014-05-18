@@ -292,7 +292,7 @@ function newGraphView(v) {
             function addNodeForObject(x) {
                 var N = addNode(x.id, x.name || "", defaultColor, defaultNodeSize, defaultNodeSize, getTagIcon(x));
                 if (timeline) {
-                    if (minTime != maxTime) {
+                    if (minTime !== maxTime) {
                         var when = objTime(x);
                         N.fixedX = timelineWidth * (when - minTime) / (maxTime - minTime);
                     }
@@ -375,10 +375,10 @@ function newGraphView(v) {
                         var tj = rtags[j][0];
                         var edgeStyle = rtags[j][1];
 
-                        if (tj == 'Link')
+                        if (tj === 'Link')
                             continue; //ignore the Link tag
 
-                        if (nodeIndex[tj] == undefined) {
+                        if (nodeIndex[tj] === undefined) {
                             var tag;
                             var ttj = $N.tag(tj);
                             if (ttj) {
@@ -440,12 +440,12 @@ function newGraphView(v) {
                         var vid = vi.id;
                         if (isPrimitive(vid))
                             continue;
-                        var vidp = $N.getProperty(vid);
+                        var vidp = $N.property[vid];
                         if (!vidp)
                             continue;
-                        if (vidp.type == 'object') {
+                        if (vidp.extend === 'object') {
                             var target = vi.value;
-                            if (nodeIndex[target] != undefined) {
+                            if (nodeIndex[target] !== undefined) {
                                 var str = vi.strength || 1.0;                                
                                 addEdge(x.id, target, {
                                     stroke: 'rgba(200,200,200,' + str + ')',

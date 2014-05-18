@@ -571,7 +571,8 @@ function netention(f) {
         focus: function() {
             return this.get('focus');
         },
-        notice: function(x) {
+        notice: function(x, suppressChange) {
+            
             if (!Array.isArray(x)) {
                 return this.notice([x]);
             }
@@ -580,24 +581,26 @@ function netention(f) {
 
             function n(y) {
                 if (!y)
-                    return;
+                    return false;
 
                 var y = objExpand(y);
 
                 if (y.removed) {
                     that.deleteObject(y, true);
-                    return;
+                    return true;
                 }
                 
                 //skip existing with an older modificatin/creation time
                 var existing = $N.object[y.id];
                 if (existing) {
                     var lastModified = y.modifiedAt || y.createdAt || null;
+
                     if (lastModified!==null) {
                         var existingLastModified = existing.modifiedAt || existing.createdAt || null;
                         if (existingLastModified!==null) {
-                            if (lastModified <= existingLastModified)
-                                return;
+                            if (lastModified <= existingLastModified) {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -628,17 +631,18 @@ function netention(f) {
                 if (objHasTag(y, 'Trust')) { //|| Value || etc..
                     that.userRelations = null; //force recalculation of userRelations
                 }
+                return true;
             }
 
 
-            var includesNonFocused = false;
+            var anythingChanged = false;
             for (var i = 0; i < x.length; i++) {
                 if (!x[i].focus) {
-                    n(x[i]);
-                    includesNonFocused = true;
+                    if (n(x[i]))
+                        anythingChanged = true;
                 }
             }
-            if (includesNonFocused)
+            if ((anythingChanged) && (!suppressChange))
                 this.trigger('change:attention');
         },
         subscribe: function(channel, f) {
@@ -652,7 +656,7 @@ function netention(f) {
                 this.socket.emit('unsubscribe', channel);
             }
         },
-        pub: function(object, onErr, onSuccess) {            
+        pub: function(object, onErr, onSuccess, suppressChange) {            
             if (configuration.connection == 'local') {
                 $N.notice(object);
                 if (onSuccess)
@@ -668,7 +672,7 @@ function netention(f) {
                             type: 'error'
                         });
                     }, function() {
-                        $N.notice(object);
+                        $N.notice(object, suppressChange);
                         if (onSuccess)
                             onSuccess();
                     });

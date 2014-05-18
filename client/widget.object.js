@@ -922,7 +922,7 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                                 if (V.value !== hh) {
                                     V.value = hh;
                                     later(function() {
-                                        $N.pub(O);                                            
+                                        $N.pub(O, null, null, true);                                            
                                     });
                                 }
                             }                                

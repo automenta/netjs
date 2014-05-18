@@ -388,10 +388,10 @@ function objTagStrength(x, normalize, noProperties) {
         var vv = x.value[i];
         var ii = vv.id;
         if (isPrimitive(ii))
-            return;
+            continue;
         if (noProperties) {
             if (window.$N.property[ii])
-                return;
+                continue;
         }
         var s = vv.strength || 1.0;
         if (!t[ii])
