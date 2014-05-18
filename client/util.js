@@ -188,7 +188,7 @@ function objRemoveTag(x, t) {
             break;
         for (var i = 0; i < x.value.length; i++) {
 
-            if (x.value[i].id == t) {
+            if (x.value[i].id === t) {
                 x = objRemoveValue(x, i);
                 noneRemain = false;
                 continue;
@@ -271,7 +271,7 @@ exports.objAddDescription = objAddDescription;
 
 function objRemoveDescription(x) {
     for (var i = 0; i < x.value.length; i++) {
-        if (x.value[i].id == 'html')
+        if (x.value[i].id === 'html')
             return objRemoveDescription(objRemoveValue(x, i));
     }
 }
@@ -346,19 +346,20 @@ function objTags(x, includePrimitives) {
         return [];
 
     var newValues = {};
-    x.value.forEach(function(vv) {
+    for (var i = 0; i < x.value.length; i++) {
+        var vv = x.value[i];
         var t = vv.id;
         if (t) {
             if (vv.strength === 0)
-                return;
+                continue;
 
             if (!includePrimitives)
                 if (isPrimitive(t))
-                    return;
+                    continue;
 
             newValues[t] = true;
         }
-    });
+    }
 
     return _.keys(newValues);
 }
@@ -382,8 +383,9 @@ function objTagStrength(x, normalize, noProperties) {
 
     if (normalize === undefined)
         normalize = true;
-
-    x.value.forEach(function(vv) {
+    
+    for (var i = 0; i < x.value.length; i++) {
+        var vv = x.value[i];
         var ii = vv.id;
         if (isPrimitive(ii))
             return;
@@ -396,7 +398,7 @@ function objTagStrength(x, normalize, noProperties) {
             t[ii] = s;
         else
             t[ii] = Math.max(s, t[ii]);
-    });
+    };
 
     if (normalize) {
         var total = 0.0;
@@ -426,11 +428,13 @@ function objTagStrengthRelevance(xx, yy, noProperties) {
 
     var r = 0;
 
-    xxk.forEach(function(c) {
+    for (var i = 0; i < xxk.length; i++) {
+        var c = xxk[i];
+
         if (_.contains(yyk, c)) {
             r += xx[c] * yy[c];
         }
-    });
+    }
 
     var result = r / den;
 
@@ -817,7 +821,9 @@ var Ontology = function(storeInstances, target) {
     that.clear();
     
     that.addAll = function(a) {
-        a.forEach(that.add);
+        for (var i = 0; i < a.length; i++) {
+            that.add(a[i]);
+        }
     };
     
     that.add = function(x) {
@@ -935,11 +941,12 @@ var Ontology = function(storeInstances, target) {
 
     function indexInstance(x) {
         var tags  = objTags(x, false);
-        tags.forEach(function(t) {
+        for (var i = 0; i < tags.length; i++) {
+           var t = tags[i];
            if (!that.tagged[t]) 
                that.tagged[t] = { };
            that.tagged[t][x.id] = x;
-        });
+        }
         
         x.reply = { };
         
@@ -951,7 +958,8 @@ var Ontology = function(storeInstances, target) {
         //this object's replies to other object
         if (x.replyTo) {            
             that.reply[x.id] = x;
-            x.replyTo.forEach(function(t) {
+            for (var i = 0; i < x.replyTo.length; i++) {
+                var t = x.replyTo[i];
                 var T = that.instance[t];
                 if (T) {
                     T.reply[x.id] = x;
@@ -959,7 +967,7 @@ var Ontology = function(storeInstances, target) {
                 else {
                     //console.error(x, 'orphan reply object to', t);
                 }
-            });
+            }
         }
         
         //TODO index author, replyTo
@@ -1430,29 +1438,29 @@ function objCompare(a, b) {
 }
 exports.objCompare = objCompare;
 
+var compactObjectFields = [['removed', 'r'],
+                            ['id', 'i'],
+                            ['subject', 'S'],
+                            ['scope', 's'],
+                            ['value', 'v'],
+                            ['extend', 'e'], 
+                            ['author', 'a'],
+                            ['name', 'n'],
+                            ['description', 'd'],
+                            ['replyTo', 'R']];
 function renameFields(o, f, swap) {
-    f.forEach(function(F) {        
-       var from = F[swap ? 1 : 0], to = F[swap ? 0 : 1]; 
+    var a = swap ? 1 : 0;
+    var b = swap ? 0 : 1;
+    for (var i = f.length-1; i >=0; i--) {
+       var from = f[i][a], to = f[i][b]; 
         if (o[from]!==undefined) {
             o[to] = o[from];
             delete o[from];
         }
-    });
+    }
 }
 function renameObjectFields(o, m) {
-    renameFields(o, 
-        [['removed', 'r'],
-        ['id', 'i'],
-        ['subject', 'S'],
-        ['scope', 's'],
-        ['value', 'v'],
-        ['extend', 'e'], 
-        ['author', 'a'],
-        ['name', 'n'],
-        ['description', 'd'],
-        ['replyTo', 'R']],
-        m
-    );    
+    renameFields(o, compactObjectFields, m);
 }
 
 /* returns a cloned version of the object, compacted */
@@ -1512,8 +1520,8 @@ function objCompact(o) {
 
         var newValues = [];
 
-        //console.log(o.value.length + ' values');
-        o.value.forEach(function(v) {
+        for (var i = 0; i < o.value.length; i++) {
+            var v = o.value[i];
             if (!v)
                 return;
 
@@ -1538,7 +1546,7 @@ function objCompact(o) {
                     newValues.push(v);
                 }
             }
-        });
+        };
         
         y.value = newValues;
         if (y.value.length == 0) {
@@ -1593,7 +1601,8 @@ function objExpand(o) {
     var newValues = [];
     //for (var i = 0; i < o.value.length; i++) {
     //    var v = o.value[i];
-    o.value.forEach(function(v) {
+    for (var i = 0; i < o.value.length; i++) {
+        var v = o.value[i];
         if (Array.isArray(v)) {
             var r = {
                 id: v[0]
@@ -1615,7 +1624,7 @@ function objExpand(o) {
         } else {
             console.error('unrecognized tagvalue type', v);
         }
-    });
+    }
     o.value = newValues;
     return o;
 }

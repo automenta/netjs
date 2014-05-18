@@ -43,6 +43,7 @@
 		"geolib":"",
 		"natural":"",
 		"stopwords":"",
-		"jsonpack":""
+		"jsonpack":"",
+                "etagify":""
     }
 }

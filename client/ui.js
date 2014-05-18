@@ -506,13 +506,15 @@ var TogetherJS;
 
 
 
-function freetileView() {    
+function reflowView() {    
     if (window.$N) {
         if ($('.tiled').length > 0) {
-            $('#View').freetile({
-                callback: function() {
-                    $('#View').css('height', '100%');
-                }
+            later(function() {
+                $('#View').freetile({
+                    callback: function() {
+                        $('#View').css('height', '100%');
+                    }
+                });                
             });
         }
     }
@@ -531,7 +533,7 @@ function whenResized() {
         configuration.device = configuration.DESKTOP;
     }
 
-    freetileView();
+    reflowView();
     return true;
 }
 
@@ -702,7 +704,7 @@ $(document).ready(function() {
                             firstView = false;
                         }
                     });
-                }, configuration.viewUpdateMS);
+                }, viewUpdateMS);
 
                 updateView = _.debounce(throttledUpdateView, firstViewDebounceMS);
 

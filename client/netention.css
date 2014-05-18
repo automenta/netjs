@@ -202,6 +202,9 @@ div.olMapViewport {
     margin: 5px;
     border: 1px solid rgba(127,127,127,0.5);    
 }
+.tagSectionItem .tagButtons {
+    font-size: 70%;    
+}
 
 .tagSectionHover {
     border: 1px solid blue;
@@ -961,8 +964,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     background-color: transparent;
     cursor: pointer;
 }
-.objectView h1 a {
-    margin-left: 4px;
+.objectView h1  {
+    word-break: break-all;
 }
 
 .objectView h2 {
@@ -1849,7 +1852,7 @@ div.olControlZoom {
     float: left;
     margin: 0;
     padding: 0;
-    width: auto;
+    /*width: auto;*/
 }
 .ActionMenuGlobal {
     position: fixed;
@@ -2131,6 +2134,9 @@ svg {
     resize: vertical;
     height: auto;
     padding-bottom: 0.25em;
+}
+.htmleditable {
+    cursor: text;
 }
 .markdown {
     padding: 0.25em;

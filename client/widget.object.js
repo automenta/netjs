@@ -125,7 +125,7 @@ function _onTagButtonClicked() {
     var ti = $(this).attr('taguri');
     var t = $N.class[ti];
     if (t)
-        newPopupObjectView(t);
+        newPopupObjectView(t, true);
     return false;
 }
 
@@ -837,64 +837,97 @@ newTagValueWidget.markdown = function(x, index, v, prop, editable, d, events) {
     }        
 };
 
+var _alohaHandler = null;
+
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
+    var dd = newDiv().appendTo(d);
+    
+    function e() {
+    
+        if ((editable) && (!prop.readonly)) {
+            if (v.value)
+                dd.html(v.value);
 
-    if ((editable) && (!prop.readonly)) {
-        //var dd = $('<textarea/>').addClass('tagDescription').appendTo(d);
-        var ddi = duid();
-        var ddt = duid();
+            Aloha.jQuery(dd).aloha();
+
+            events.onSave.push(function(y) {
+                objAddValue(y, prop.id, dd.html(), v.strength);
+            });
+        } else {
+            if (v.value) {
+                var hv = newDiv().addClass('htmlview').html(v.value).appendTo(d);
+                if (x.author === $N.id()) {
+                    hv.addClass('htmleditable');
+                    Aloha.jQuery(hv).aloha();
+                    hv.attr('xid', x.id);
+                    hv.attr('vid', index);                    
+                }
+            }
+        }        
         
-        var toolbar = newDiv().attr('id', ddt).appendTo(d);
-        {
-            toolbar.append(
-                '<select class="sc-size"><option value="75%">Small</option><option value="100%" selected>Normal</option><option value="125%">Large</option><option value="150%">Huge</option></select>',
-                '<button class="sc-bold">B</button>',
-                '<button class="sc-italic">I</button>',
-                '<button class="sc-underline">U</button>',
-                '<button class="sc-strike">S</button>',
-                '<button class="sc-link">L</button>'
-            );
-        }
-        var dd = newDiv().attr('id', ddi).appendTo(d);
-        
-        var editor;
-        /*$LAB
-            .script("lib/quill/quill.min.js")
-            .wait(function() {*/
-                later(function() {
+    }
+    
+    //<script src="lib/aloha/aloha-full.min.js" type="text/javascript"></script>
+
+    if (_alohaHandler === null) {
             
-                    console.log('quill loaded');
-            
-                    editor = new Quill('#' + ddi, {
-                          modules: { toolbar: {
-                                container: '#' + ddt     // Selector for toolbar container
-                          }}
-                    });
+        $LAB
+            .script("lib/aloha/aloha-full.min.js")
+            .wait(function() {
+                Aloha.settings.toolbar = {
+                    tabs: [
+                        {
+                            label: 'Format',
+                            components: [
+                                [ 'bold', 'italic', 'underline', '\n',
+                                  'subscript', 'superscript', 'strikethrough' ],
+                                [ 'formatBlock' ]
+                            ]
+                        },
+                        {
+                            label: 'Insert',
+                            exclusive: true,
+                            components: [
+                                "createTable", "characterPicker", "insertLink",
+                            ]
+                        },
+                        {
+                            label: 'Link',
+                            components: [ 'editlink' ]
+                        }
+                    ],
+                    exclude: [ 'strong', 'emphasis', 'strikethrough' ]
+                };
 
-                    if (prop.description)
-                        dd.attr('placeholder', prop.description);
-
-                    if (v.value)
-                        editor.setHTML(v.value);
-                    else if (prop.default)
-                        editor.setHTML(prop.default);
-
+                
+                Aloha.ready( function() {
+                    e();
+                    _alohaHandler = Aloha.bind('aloha-editable-deactivated', function (e, a) {
+                        var o = a.editable.obj[0];
+                        var xid = o.getAttribute('xid');
+                        var vid = o.getAttribute('vid');
+                        if (xid && (vid!==undefined)) {
+                            vid = parseInt(vid);                                
+                            var O = $N.object[xid];
+                            if (O) {
+                                var V = O.value[vid];
+                                var hh = o.innerHTML;
+                                if (V.value !== hh) {
+                                    V.value = hh;
+                                    later(function() {
+                                        $N.pub(O);                                            
+                                    });
+                                }
+                            }                                
+                        }
+                    });   
                 });
-        //})
-
-        events.onSave.push(function(y) {
-            //objAddValue(y, prop.id, dd.val(), v.strength);
-            var h = editor ? editor.getHTML() : '';
-            var hd = newDiv().html(h);
-            hd.find('p').removeAttr('class').removeAttr('id');
-            h = hd.html();
-            objAddValue(y, prop.id, h, v.strength);
-            hd.remove();
-        });
-    } else {
-        if (v.value)
-            d.append( newDiv().addClass('htmlview').html(v.value) );
-    }        
+            });
+    }
+    else {
+        e();
+    }
+    
 };
 
 newTagValueWidget.tag = function(x, index, v, prop, editable, d, events) {
@@ -1088,11 +1121,11 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
             var sl = newSpaceLink(v.value).appendTo(d).click(function() {
                 if (!mapVisible) {
                     showMap();
-                    later(freetileView);
+                    reflowView();
                 }
                 else {
                     ee.empty();
-                    later(freetileView);
+                    reflowView();
                 }
                 mapVisible = !mapVisible;
             });
@@ -1577,7 +1610,7 @@ function newSimilaritySummary(x) {
         } else {
             areaMap.hide();
         }
-        freetileView();
+        reflowView();
         return false;
     });
 
@@ -1877,11 +1910,16 @@ function addNewObjectDetails(x, d) {
         for (var i = 0; i < x.value.length; i++) {
             var t = x.value[i];
 
-            if ($N.class[t.id])
-                continue;   //classes are already shown in metadata line
-            if (!$N.property[t.id] && !isPrimitive(t.id))
-                continue;   //non-property tags are like classes, shown in metadata line
-
+            if (x._class) {
+                t = $N.object[t];
+            }
+            else {
+                if ($N.class[t.id])
+                    continue;   //classes are already shown in metadata line
+                if (!$N.property[t.id] && !isPrimitive(t.id))
+                    continue;   //non-property tags are like classes, shown in metadata line
+            }
+                
             tt = newTagValueWidget(x, i, t, false);
             d.append(tt);
         }

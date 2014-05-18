@@ -179,7 +179,7 @@ function renderBrowseGrid3(v) {
             return 'objectGridItem2 tiled';
         return 'objectListItem';
     }, function(v) {
-        freetileView();
+        reflowView();
     }, function(w) {
         return newDiv().append(w);
     });
@@ -190,7 +190,7 @@ function renderBrowseGrid2(v) {
             return 'objectGridItem2 tiled';
         return 'objectListItem';
     }, function(v) {
-        freetileView();
+        reflowView();
     }, function(w) {
         return newDiv().append(w);
     });
@@ -383,7 +383,7 @@ function newListView(v) {
     textsizeSlider.change(function(x) {
         updateFont($(this).val());
         if ((listRenderer === renderBrowseGrid2) || (listRenderer === renderBrowseGrid3)) {
-            freetileView();
+            reflowView();
         }
     });
     slideControls.append(textsizeSlider);

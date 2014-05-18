@@ -28,6 +28,7 @@ function updateIndent(viewmenushown) {
     else {
         $('.view-indented').removeClass('view-indented-more');
     }
+    reflowView();
 }
 
 function showAvatarMenu(b) {
