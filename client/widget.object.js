@@ -840,13 +840,19 @@ newTagValueWidget.markdown = function(x, index, v, prop, editable, d, events) {
 var _alohaHandler = null;
 
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
-    if (!editable)
-        if (v.value)
-            if (x.author !== $N.id() ) {
-                newDiv().addClass('htmlview').html(v.value).appendTo(d);
-                return;
-            }
+    function addReadOnly() {
+        newDiv().addClass('htmlview').html(v.value).appendTo(d);        
+    }
     
+    if (!editable) {
+        if (x.author !== $N.id() )
+            return addReadOnly();
+
+        if (prop)
+            if (prop.readonly)
+                return addReadOnly();
+    }
+        
     function e() {
     
         if ((editable) && (!prop.readonly)) {

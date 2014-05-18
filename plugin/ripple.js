@@ -25,23 +25,21 @@ exports.plugin = function($N) {
             var ripple = require('ripple-lib');
             var _ = require('underscore');
 
-
-
-            $N.addTags([
+            $N.addAll([
                 {
-                    uri: 'RippleUser', name: 'Ripple User', icon: '/icon/wallet.png',
-                    properties: {
-                        'walletBalanceXRP': {name: 'XRP Balance', type: 'real', max: 1, readonly: true},
-                        'walletBalanceHRS': {name: 'Hours Balance', type: 'real', max: 1, readonly: true},
-                        'walletBalanceUSD': {name: 'USD Balance', type: 'real', max: 1, readonly: true},
-                        'rippleActions': {name: 'Ripple Actions', type: 'html', max: 1, readonly: true},
-                        'walletRipple': {name: 'Ripple Wallet', type: 'text', min: 1, max: 1}
+                    id: 'RippleUser', name: 'Ripple User', icon: '/icon/wallet.png', extend: ['User'],
+                    value: {
+                        'walletBalanceXRP': {name: 'XRP Balance', extend: 'real', max: 1, readonly: true},
+                        'walletBalanceHRS': {name: 'Hours Balance', extend: 'real', max: 1, readonly: true},
+                        'walletBalanceUSD': {name: 'USD Balance', extend: 'real', max: 1, readonly: true},
+                        'rippleActions': {name: 'Ripple Actions', extend: 'html', max: 1, readonly: true},
+                        'walletRipple': {name: 'Ripple Wallet', extend: 'text', min: 1, max: 1}
                     }
                 },
                 {
-                    uri: 'RippleTrust', name: 'Ripple Trust', icon: '/icon/wallet.png',
-                    properties: {
-                        'rippleTrusts': {name: 'in', type: 'object', min: 1, readonly: true}
+                    id: 'RippleTrust', name: 'Ripple Credit', icon: '/icon/wallet.png', extend: ['Trust'],
+                    value: {
+                        'rippleTrusts': {name: 'in', extend: 'object', min: 1, readonly: true}
                     }
                 },
             ]);
@@ -55,7 +53,7 @@ exports.plugin = function($N) {
                     if (wallet) {
 
                         if (specificUser) {
-                            if (u.id == specificUser) {
+                            if (u.id === specificUser) {
                                 accountsUpdate[u.id] = true;
                             }
                         }
@@ -66,14 +64,13 @@ exports.plugin = function($N) {
                     }
                 }, function() {
 
-
-				    var remote = new ripple.Remote({// see the API Reference for available options
-				        trusted: true,
-				        local_signing: true,
-				        local_fee: true,
-				        fee_cushion: 1.5,
-				        servers: [{host: 's1.ripple.com', port: 443, secure: true}]
-				    });
+                    var remote = new ripple.Remote({// see the API Reference for available options
+                        trusted: true,
+                        local_signing: true,
+                        local_fee: true,
+                        fee_cushion: 1.5,
+                        servers: [{host: 's1.ripple.com', port: 443, secure: true}]
+                    });
 
                     function finished() {
                         remote.disconnect();
@@ -84,7 +81,7 @@ exports.plugin = function($N) {
                         var wallets = _.values(accounts);
                         var walletUsers = _.invert(accounts);
 
-	                    pending = _.intersection(pending, _.keys(accountsUpdate));
+                        pending = _.intersection(pending, _.keys(accountsUpdate));
 
 
                         //https://github.com/ripple/ripple-lib/blob/develop/docs/REFERENCE.md#2-remote-functions
@@ -96,7 +93,7 @@ exports.plugin = function($N) {
                             }
                             if (!accountsUpdate[userid]) {
                                 //nextAccount();
-								return;
+                                return;
                             }
 
                             var a = accounts[userid];
@@ -115,7 +112,7 @@ exports.plugin = function($N) {
                                             $N.getObjectByID(userid, function(err, U) {
 
                                                 if (!err) {
-	                                                //var originalU = _.clone(U);
+                                                    //var originalU = _.clone(U);
 
                                                     U.removeTag('walletBalanceXRP');
                                                     U.removeTag('walletBalanceHRS');
@@ -184,7 +181,8 @@ exports.plugin = function($N) {
                                                     if (balances['HRS']) {
                                                         U.add('walletBalanceHRS', balances['HRS']);
                                                     }
-                                                    
+
+                                                    U.touch();
                                                     $N.pub(U);
                                                 }
 
@@ -236,6 +234,9 @@ exports.plugin = function($N) {
             if (this.updateRippleData)
                 this.updateRippleData(who.id);
         },
+        /*onPub: function(who) {
+          //..  
+        },*/
     };
 };
 
