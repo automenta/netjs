@@ -401,7 +401,7 @@ var generalTags = [
     {id: 'Earth', name: 'Earth', description: '', icon: 'icon/earth.png', extend: 'Thing'},
     //http://gis.stackexchange.com/questions/6345/list-of-available-online-wms-services-weather-land-data-place-names
     {
-        "uri": "Points of Interest",
+        "id": "Points of Interest",
         "name": "Points of Interest",
         "description": "DBPedia.org",
         //"icon": "http:\/\/climateviewer.com\/gallery\/lightning_bolt.png",
@@ -410,7 +410,7 @@ var generalTags = [
     },
     {id: 'United_States', name: 'United States', description: '', icon: 'icon/earth.png', extend: ['Earth']},
     {
-        "uri": "iem-us-nexrad",
+        "id": "iem-us-nexrad",
         "name": "United States NEXRAD Weather",
         "description": "Weather data © 2012 IEM Nexrad",
         "defaultStrength": 0.75,
@@ -424,7 +424,7 @@ var generalTags = [
     //http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_ir.cgi?VER=1.1.1&SERVICE=WMS&REQUEST=GetCapabilities
     //http://mesonet.agron.iastate.edu/cgi-bin/wms/goes/conus_vis.cgi?VER=1.1.1&SERVICE=WMS&REQUEST=GetCapabilities
     {
-        "uri": "conus_ir",
+        "id": "conus_ir",
         "name": "CONUS Infrared",
         "description": "MesoNet - Iowa State",
         "defaultStrength": 0.75,
@@ -435,7 +435,7 @@ var generalTags = [
         extend: ['United_States']
     },
     {
-        "uri": "conus_vis",
+        "id": "conus_vis",
         "name": "CONUS VIS",
         "description": "MesoNet - Iowa State",
         "defaultStrength": 0.75,
@@ -446,7 +446,7 @@ var generalTags = [
         extend: ['United_States']
     },
     {
-        "uri": "mrms_q3_24h_precipitation",
+        "id": "mrms_q3_24h_precipitation",
         "name": "24h Precipitation",
         "description": "MesoNet - Iowa State",
         "defaultStrength": 0.75,
@@ -457,7 +457,7 @@ var generalTags = [
         extend: ['United_States']
     },
     /*{
-     "uri": "flood_total_economic_loss_risk",
+     "id": "flood_total_economic_loss_risk",
      "name": "Flood Total Economic Loss Risk",
      "description": "Columbia University",
      "defaultStrength": 0.75,
@@ -471,7 +471,7 @@ var generalTags = [
      extend: ['Earth']
      },*/
     {
-        "uri": "terrain-satellite",
+        "id": "terrain-satellite",
         "name": "Satellite",
         "description": "Esri \/ DeLorme",
         "defaultStrength": 0.75,
@@ -479,7 +479,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "terrain-contour",
+        "id": "terrain-contour",
         "name": "Contour",
         "description": "Esri \/ DeLorme",
         "defaultStrength": 0.75,
@@ -488,14 +488,14 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "cycle-map",
+        "id": "cycle-map",
         "name": "Cycle Map",
         "description": "OpenCycleMap.org",
         "defaultStrength": 0.75,
         "tileLayer": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
         extend: ['Earth']
     }, {
-        "uri": "terrain-ocean",
+        "id": "terrain-ocean",
         "name": "Ocean Floor",
         "description": "Esri \/ GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri",
         "defaultStrength": 0.75,
@@ -503,14 +503,14 @@ var generalTags = [
         extend: ['Earth']
     },
     /*{
-     "uri": "Weather",
+     "id": "Weather",
      "name": "Weather",
      "description": "",
      "icon": "http:\/\/climateviewer.com\/gallery\/nws_google.gif"
      extend: ['Map']
      },*/
     {
-        "uri": "owm-clouds",
+        "id": "owm-clouds",
         "name": "Clouds",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
@@ -518,7 +518,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "owm-precipitation",
+        "id": "owm-precipitation",
         "name": "Precipitation",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
@@ -526,7 +526,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "owm-rain",
+        "id": "owm-rain",
         "name": "Rain",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
@@ -534,7 +534,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "owm-pressure",
+        "id": "owm-pressure",
         "name": "Pressure",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
@@ -542,7 +542,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "owm-pressure_cntr",
+        "id": "owm-pressure_cntr",
         "name": "Pressure Contour",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
@@ -550,7 +550,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "owm-wind",
+        "id": "owm-wind",
         "name": "Wind",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
@@ -558,7 +558,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "owm-temp",
+        "id": "owm-temp",
         "name": "Temperature",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,
@@ -566,7 +566,7 @@ var generalTags = [
         extend: ['Earth']
     },
     {
-        "uri": "owm-snow",
+        "id": "owm-snow",
         "name": "Snow",
         "description": "OpenWeatherMap.org",
         "defaultStrength": 0.5,

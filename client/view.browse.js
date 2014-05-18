@@ -203,27 +203,28 @@ function renderBrowseSlides(vv, slideControls) {
     var v = $('<div class="slides"></div>');
     v.appendTo(u);
     vv.append(u);
+    
+    renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
+        var elements = [];
+        for (var i = 0; i < xxrr.length; i++) {
+            var x = xxrr[i][0];
+
+            var o = newObjectView(x, {
+                onRemoved: function() {   },
+                depthRemaining: 4,
+                                    transparent: true
+            });
+
+            //<section>Single Horizontal Slide</section><section><section>Vertical Slide 1</section><section>Vertical Slide 2</section></section>
+            var w = $('<section/>');
+            w.append(o);
+            v.append(w);
+        }
+
+    });
 
     later(function() {
 
-        renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
-            var elements = [];
-            for (var i = 0; i < xxrr.length; i++) {
-                var x = xxrr[i][0];
-
-                var o = newObjectView(x, {
-                    onRemoved: function() {   },
-                    depthRemaining: 4,
-					transparent: true
-                });
-
-                //<section>Single Horizontal Slide</section><section><section>Vertical Slide 1</section><section>Vertical Slide 2</section></section>
-                var w = $('<section/>');
-                w.append(o);
-                v.append(w);
-            }
-
-        });
 
         Reveal.initialize({
             dependencies: [
