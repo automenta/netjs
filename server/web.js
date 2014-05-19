@@ -657,12 +657,10 @@ exports.start = function(options) {
     }
 
     function sendJSON(res, x, pretty, format) {
-        //res.writeHead(200, {'content-type': 'text/json'});
-        res.statusCode = 200;
-        res.setHeader('content-type', 'text/json');
+        res.set('Content-type', 'text/json');
         var p;
         if (!pretty) {
-            if (format == 'jsonpack') {
+            if (format === 'jsonpack') {
                 p = jsonpack.pack(x);
             }
             else {
@@ -693,7 +691,6 @@ exports.start = function(options) {
     express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
     express.use(passport.initialize());
     express.use(passport.session());
-    express.use(require('connect-dyncache')());
     express.disable('x-powered-by');
 
 
@@ -710,25 +707,33 @@ exports.start = function(options) {
 
     //----------------------------- SHAREJS
     //
+    
+    //express.use(require('connect-dyncache')());    
+    
     //Gzip compression
     if ($N.server.httpCompress) {
         express.use(require('compression')({
           threshhold: 512
         }));
     }
+    else {
+        express.use(require('connect-dyncache')());
+    }
+
 
     var io = require('socket.io')(httpServer, {
     });
     
     var socketIOclientSource = fs.readFileSync(require.resolve('socket.io/node_modules/socket.io-client/socket.io.js'), 'utf-8');
+    var socketIOclientGenerated = new Date();
     
     //override serve to provide etag caching
-    express.get('/socket.io.cache.js', function(req, res){
-        res.autoEtag();
-
+    express.get('/socket.io.cache.js', function(req, res){        
+        if (!$N.server.httpCompress) {
+            res.autoEtag();
+        }
         res.setHeader('Content-Type', 'application/javascript');
-        res.statusCode = 200;
-        
+        res.statusCode = 200;       
         res.end(socketIOclientSource);
     });
     
@@ -1018,13 +1023,15 @@ exports.start = function(options) {
                 }
         );
     }
-
+    
+/*
     express.all('*', function(req, res, next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-        res.header('Access-Control-Allow-Headers', 'Content-Type');
+        //res.header('Access-Control-Allow-Origin', '*');
+        //res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+        //res.header('Access-Control-Allow-Headers', 'Content-Type');
         next();
     });
+    */
 
 
     var oneDay = 86400000;
@@ -1682,10 +1689,15 @@ exports.start = function(options) {
 
     express.get('/ontology/:format', function(req, res) {
         var format = req.params.format;
+        
+       
+        var cl = $N.classSerialized();
+        var pr = $N.propertySerialized();
+
         res.autoEtag();
         
         if ((format === 'json') || (format == 'jsonpack'))
-            sendJSON(res, {'class': $N.classSerialized(), 'property': $N.propertySerialized() }, null, format);
+            sendJSON(res, {'class': cl, 'property': pr }, null, format);
         else
             sendJSON(res, 'unknown format: ' + format);
     });

@@ -44,6 +44,6 @@
 		"natural":"",
 		"stopwords":"",
 		"jsonpack":"",
-                "etagify":""
+                "connect-dyncache":""
     }
 }
