@@ -36,7 +36,7 @@
 		"irc":"",
 		"cheerio":"",
 		"rdfstore":"",
-		"kmeans":"",
+                "http://github.com/primaryobjects/clusterfck/archive/master.tar.gz":"",
 		"jsdom": "",
 		"togeojson":"",
 		"rivescript":"",
