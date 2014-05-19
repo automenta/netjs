@@ -1,5 +1,6 @@
 //GENERAL.JS is a PLUGIN WHICH IS AUTOMATICALLY LOADED BY THE WEBSERVER
 
+//http://dataprotocols.org/units/
 var lengthUnits = ['meter', 'foot', 'inch', 'mile'];
 var massUnits = ['kilogram', 'pound', 'ounce'];
 var currencyUnits = ['Bitcoin', 'USDollar', 'Euro', 'Gold(g)', 'Silver(g)'];
