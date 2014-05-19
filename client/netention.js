@@ -674,7 +674,8 @@ function netention(f) {
                     }, function() {
                         $N.notice(object, suppressChange);
                         if (!suppressChange) {
-                            $N.add(object);
+                            if (!object.focus)
+                                $N.add(object);
                             $N.trigger('change:attention');
                         }
                         if (onSuccess)

@@ -1889,7 +1889,7 @@ function newObjectView(x, options) {
                 } else {
                     haxn.prepend(newEle('a').html(a).click(function() {
                         newPopupObjectView(x.author, true);                        
-                    }), ':');
+                    }), ':&nbsp;');
                 }
             }
         }
