@@ -10,16 +10,16 @@ exports.plugin = function($N) {
         author: 'http://openweathermap.org',
         start: function(options) {
 
-            $N.addTags([
+            $N.addAll([
                 {
-                    uri: 'Weather', name: 'Weather',
-                    properties: {
-                        'rainVolumePerHour': {name: 'Rain (mm per hour)', description: 'Volume mm per hour', type: 'real', max: 1, readonly: true },
-                        'snowVolumePerHour': {name: 'Snow (mm per hour)', description: 'Volume mm per hour', type: 'real', max: 1, readonly: true },
-                        'cloudCover': {name: 'Cloud Cover (%)', type: 'real', max: 1, readonly: true },
+                    id: 'Weather', name: 'Weather', extend: ['Physical','Nature'],
+                    value: {
+                        'rainVolumePerHour': {name: 'Rain (mm per hour)', description: 'Volume mm per hour', extend: 'real', max: 1, readonly: true },
+                        'snowVolumePerHour': {name: 'Snow (mm per hour)', description: 'Volume mm per hour', extend: 'real', max: 1, readonly: true },
+                        'cloudCover': {name: 'Cloud Cover (%)', extend: 'real', max: 1, readonly: true },
                     }
                 }
-            ], ['Physical','Nature']);
+            ]);
 
 			var locations = options.locations;
 
