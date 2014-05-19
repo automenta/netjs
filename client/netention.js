@@ -673,6 +673,7 @@ function netention(f) {
                         });
                     }, function() {
                         $N.notice(object, suppressChange);
+                        $N.trigger('change:attention');
                         if (onSuccess)
                             onSuccess();
                     });
