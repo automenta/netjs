@@ -197,137 +197,152 @@ function renderBrowseGrid2(v) {
 }
 
 
+var _revealLoaded = false;
 function renderBrowseSlides(vv, slideControls) {
-
-    var u = $('<div class="reveal"></div>');
-    var v = $('<div class="slides"></div>');
-    v.appendTo(u);
-    vv.append(u);
+    if (!_revealLoaded) {
+        loadCSS("lib/reveal.js/css/reveal.min.css");
+        loadCSS("lib/reveal.js/css/theme/simple2.css");
+        $LAB
+            .script("lib/reveal.js/lib/js/head.min.js")
+            .script("lib/reveal.js/js/reveal.min.js")
+            .wait(d);        
     
-    renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
-        var elements = [];
-        for (var i = 0; i < xxrr.length; i++) {
-            var x = xxrr[i][0];
+        /*<!-- REVEAL.js -->
+        <script src="lib/reveal.js/lib/js/head.min.js"></script>
+        <script src="lib/reveal.js/js/reveal.min.js"></script>*/
+    }
+    else
+        d();
 
-            var o = newObjectView(x, {
-                onRemoved: function() {   },
-                depthRemaining: 4,
-                                    transparent: true
-            });
+    function d() {
+        var u = $('<div class="reveal"></div>');
+        var v = $('<div class="slides"></div>');
+        v.appendTo(u);
+        vv.append(u);
 
-            //<section>Single Horizontal Slide</section><section><section>Vertical Slide 1</section><section>Vertical Slide 2</section></section>
-            var w = $('<section/>');
-            w.append(o);
-            v.append(w);
-        }
+        renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
+            var elements = [];
+            for (var i = 0; i < xxrr.length; i++) {
+                var x = xxrr[i][0];
 
-    });
+                var o = newObjectView(x, {
+                    onRemoved: function() {   },
+                    depthRemaining: 4,
+                                        transparent: true
+                });
 
-    later(function() {
-
-
-        Reveal.initialize({
-            dependencies: [
-                // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
-                {src: '/lib/reveal.js/lib/js/classList.js', condition: function() {
-                        return !document.body.classList;
-                    }},
-                // Interpret Markdown in <section> elements
-                {src: '/lib/reveal.js/plugin/markdown/marked.js', condition: function() {
-                        return !!document.querySelector('[data-markdown]');
-                    }},
-                {src: '/lib/reveal.js/plugin/markdown/markdown.js', condition: function() {
-                        return !!document.querySelector('[data-markdown]');
-                    }},
-                // Syntax highlight for <code> elements
-                //{ src: '/lib/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-
-                // Zoom in and out with Alt+click
-                {src: '/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() {
-                        return !!document.body.classList;
-                    }},
-                // Speaker notes
-                //{ src: '/lib/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-
-                // Remote control your reveal.js presentation using a touch device
-                {src: '/lib/reveal.js/plugin/remotes/remotes.js', async: true, condition: function() {
-                        return !!document.body.classList;
-                    }},
-                // MathJax
-                //{ src: '/lib/reveal.js/plugin/math/math.js', async: true }
-            ],
-            // Display controls in the bottom right corner
-            controls: true,
-            // Display a presentation progress bar
-            progress: true,
-            // Push each slide change to the browser history
-            history: false,
-            // Enable keyboard shortcuts for navigation
-            keyboard: true,
-            // Enable touch events for navigation
-            touch: true,
-            // Enable the slide overview mode
-            overview: true,
-            // Vertical centering of slides
-            center: true,
-            // Loop the presentation
-            loop: false,
-            // Change the presentation direction to be RTL
-            rtl: false,
-            // Number of milliseconds between automatically proceeding to the
-            // next slide, disabled when set to 0, this value can be overwritten
-            // by using a data-autoslide attribute on your slides
-            autoSlide: 0,
-            // Enable slide navigation via mouse wheel
-            mouseWheel: true,
-            // Transition style
-            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
-
-            // Transition speed
-            transitionSpeed: 'slow', // default/fast/slow
-
-            // Transition style for full page backgrounds
-            backgroundTransition: 'default', // default/linear/none,
-
-            embedded: true
+                //<section>Single Horizontal Slide</section><section><section>Vertical Slide 1</section><section>Vertical Slide 2</section></section>
+                var w = $('<section/>');
+                w.append(o);
+                v.append(w);
+            }
 
         });
 
+        later(function() {
 
 
-        /*
-         <div class="reveal">
-         
-         <div class="slides">
-         
-         <section>
-         <h2>Barebones Presentation</h2>
-         <p>This example contains the bare minimum includes and markup required to run a reveal.js presentation.</p>
-         </section>
-         
-         <section>
-         <h2>No Theme</h2>
-         <p>There's no theme included, so it will fall back on browser defaults.</p>
-         </section>
-         
-         </div>
-         
-         </div>
-         
-         <script src="../lib/js/head.min.js"></script>
-         <script src="../js/reveal.min.js"></script>
-         
-         <script>
-         
-         Reveal.initialize();
-         
-         </script>
-         */
-    });
+            Reveal.initialize({
+                dependencies: [
+                    // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+                    {src: '/lib/reveal.js/lib/js/classList.js', condition: function() {
+                            return !document.body.classList;
+                        }},
+                    // Interpret Markdown in <section> elements
+                    {src: '/lib/reveal.js/plugin/markdown/marked.js', condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    {src: '/lib/reveal.js/plugin/markdown/markdown.js', condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    // Syntax highlight for <code> elements
+                    //{ src: '/lib/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+                    // Zoom in and out with Alt+click
+                    {src: '/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() {
+                            return !!document.body.classList;
+                        }},
+                    // Speaker notes
+                    //{ src: '/lib/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+
+                    // Remote control your reveal.js presentation using a touch device
+                    {src: '/lib/reveal.js/plugin/remotes/remotes.js', async: true, condition: function() {
+                            return !!document.body.classList;
+                        }},
+                    // MathJax
+                    //{ src: '/lib/reveal.js/plugin/math/math.js', async: true }
+                ],
+                // Display controls in the bottom right corner
+                controls: true,
+                // Display a presentation progress bar
+                progress: true,
+                // Push each slide change to the browser history
+                history: false,
+                // Enable keyboard shortcuts for navigation
+                keyboard: true,
+                // Enable touch events for navigation
+                touch: true,
+                // Enable the slide overview mode
+                overview: true,
+                // Vertical centering of slides
+                center: true,
+                // Loop the presentation
+                loop: false,
+                // Change the presentation direction to be RTL
+                rtl: false,
+                // Number of milliseconds between automatically proceeding to the
+                // next slide, disabled when set to 0, this value can be overwritten
+                // by using a data-autoslide attribute on your slides
+                autoSlide: 0,
+                // Enable slide navigation via mouse wheel
+                mouseWheel: true,
+                // Transition style
+                transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Transition speed
+                transitionSpeed: 'slow', // default/fast/slow
+
+                // Transition style for full page backgrounds
+                backgroundTransition: 'default', // default/linear/none,
+
+                embedded: true
+
+            });
 
 
 
+            /*
+             <div class="reveal">
 
+             <div class="slides">
+
+             <section>
+             <h2>Barebones Presentation</h2>
+             <p>This example contains the bare minimum includes and markup required to run a reveal.js presentation.</p>
+             </section>
+
+             <section>
+             <h2>No Theme</h2>
+             <p>There's no theme included, so it will fall back on browser defaults.</p>
+             </section>
+
+             </div>
+
+             </div>
+
+             <script src="../lib/js/head.min.js"></script>
+             <script src="../js/reveal.min.js"></script>
+
+             <script>
+
+             Reveal.initialize();
+
+             </script>
+             */
+        });
+        
+    }
+    
 
 
 

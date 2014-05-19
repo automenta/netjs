@@ -1,3 +1,4 @@
+
 jQuery.timeago.settings.allowFuture = true;
 jQuery.timeago.settings.strings = {
     prefixAgo: null,
@@ -23,6 +24,8 @@ jQuery.timeago.settings.strings = {
 
 var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
 var stack_bottomright = {"dir1": "left", "dir2": "up", "push": "top"};
+
+var TogetherJS;
 
 
 var updateView;
@@ -502,20 +505,26 @@ function popupAboutDialog() {
     });
 }
 
-var TogetherJS;
 
 
 
+var _reflowView;
 function reflowView() {    
-    if (window.$N) {
-        if ($('.tiled').length > 0) {
+    if (!_reflowView) {
+        _reflowView = _.debounce(function() {
             later(function() {
                 $('#View').freetile({
                     callback: function() {
                         $('#View').css('height', '100%');
                     }
                 });                
-            });
+            });    
+        }, configuration ? configuration.viewUpdateTime[configuration.device][1] : 200);
+    }
+    
+    if (window.$N) {
+        if ($('.tiled').length > 0) {
+            _reflowView();
         }
     }
 }
@@ -768,7 +777,7 @@ $(document).ready(function() {
                     }
 
                     $('#NotificationArea').html('Ready...');
-                    $('#NotificationArea').fadeOut();
+                    $('#NotificationArea').hide();
 
 
                     //initKeyboard();

@@ -4,30 +4,31 @@ var _ = require('underscore');
 var cheerio = require('cheerio');
 
 var addWebTags = function($N) {
-    $N.addTags([
+    $N.addAll([
         {
-            uri: 'RSSFeed',
+            id: 'RSSFeed',
             name: 'RSS Feed',
-            properties: {
+            extend: ['Internet'],
+            value: {
                 'urlAddress': {
                     name: 'Address (URL)',
-                    type: 'url',
+                    extend: 'url',
                     min: 1,
                     default: 'http://'
                 },
                 'urlFetchPeriod': {
                     name: 'Update Interval (minutes)',
-                    type: 'real' /* number */,
+                    extend: 'real' /* number */,
                     default: "10",
                     max: 1
                 },
                 'addArticleTag': {
                     name: 'Add Tag to Articles',
-                    type: 'text'
+                    extend: 'text'
                 },
                 'lastURLFetch': {
                     name: 'Last Update',
-                    type: 'timepoint',
+                    extend: 'timepoint',
                     readonly: true
                 }
                 //indexLinks
@@ -35,27 +36,29 @@ var addWebTags = function($N) {
             }
         },
         {
-            uri: 'RSSItem',
+            id: 'RSSItem',
             name: 'RSS Item',
-            properties: {
+            extend: ['Internet'],
+            value: {
                 'rssItemURL': {
                     name: 'RSS Item URL',
-                    type: 'url'
+                    extend: 'url'
                 }
             }
         },
         {
-            uri: 'WebURL',
+            id: 'WebURL',
             name: 'Web URL',
-            properties: {
-                'urlAddress': null,
-                'urlFetchPeriod': null,
-                'lastURLFetch': null
-                        //filters
-                        //scrapers
-            }
+            extend: ['Internet'],
+            value: [
+                'urlAddress',
+                'urlFetchPeriod',
+                'lastURLFetch'
+                //filters
+                //scrapers
+            ]
         },
-    ], ['Internet']);
+    ]);
 };
 exports.addWebTags = addWebTags;
 
@@ -96,22 +99,25 @@ exports.plugin = function($N) {
             function updateFeed(f) {
                 var needsFetch = false;
 
-                if (!$N.objFirstValue(f, 'lastURLFetch')) {
-                    needsFetch = true;
-                } else {
-                    var age = (Date.now() - $N.objFirstValue(f, 'lastURLFetch')) / 1000.0;
+                var fetchPeriod = $N.objFirstValue(f, 'urlFetchPeriod');
+                if (fetchPeriod !== undefined) {
 
-                    var fp = $N.objFirstValue(f, 'urlFetchPeriod'); //in minutes
-                    fp = Math.max(fp, minUrlFetchPeriod);
-
-                    if (fp * 60.0 < age) {
+                    if (!$N.objFirstValue(f, 'lastURLFetch')) {
                         needsFetch = true;
                     } else {
-                        //console.log(fp - age, 'seconds to go');
+                        var age = (Date.now() - $N.objFirstValue(f, 'lastURLFetch')) / 1000.0;
+
+                        fetchPeriod = Math.max(parseFloat(fetchPeriod), minUrlFetchPeriod);
+
+                        if (fetchPeriod * 60.0 < age) {
+                            needsFetch = true;
+                        } else {
+                            //console.log(fp - age, 'seconds to go');
+                        }
+
                     }
-
                 }
-
+                
                 if (needsFetch) {
 
                     var furi = $N.objValues(f, 'urlAddress');
@@ -138,7 +144,8 @@ exports.plugin = function($N) {
                         //console.log(f.name, ' missing url');
                     }
 
-                    $N.objSetFirstValue(f, 'lastURLFetch', Date.now());
+                    $N.objSetFirstValue(f, 'lastURLFetch', Date.now());                    
+                    $N.objTouch(f);
                     $N.pub(f);
                 }
             }
@@ -188,13 +195,14 @@ function fetchURL($N, x, url) {
             $('script').remove();
             $('style').remove();
             content = $('body').html();
-            if (!content || content.length == 0)
+            if (!content || content.length === 0)
                 content = body;
             content = content.trim();
         }
 
-        x.add({id: 'html', value: content});
-
+        x.add({id: 'html', value: content });
+        x.touch();
+        
         $N.pub(x);
     });
 }

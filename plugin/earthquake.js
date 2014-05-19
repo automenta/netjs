@@ -9,7 +9,7 @@
 
 exports.plugin = function($N) {
     var _ = require('underscore');
-    var rss = require('./web.in.js');
+    var web = require('./web.in.js');
     var geo = require('geolib');
 
     return {
@@ -30,17 +30,17 @@ exports.plugin = function($N) {
             //possible values: 'hour', 'day', 'week', 'month'
             var historySize = options.historySize || 'week';
 
-            rss.addWebTags($N);
+            web.addWebTags($N);
 
-            $N.addTags([
+            $N.addAll([
                 {
-                    uri: 'Earthquake', name: 'Earthquake',
-                    properties: {
-                        'eqMagnitude': {name: 'Magnitude', type: 'real'},
-                        'eqDepth': {name: 'Depth (m)', type: 'real'}
+                    id: 'Earthquake', name: 'Earthquake', extend: ['Nature', 'Danger'],
+                    value: {
+                        'eqMagnitude': {name: 'Magnitude', extend: 'real'},
+                        'eqDepth': {name: 'Depth (m)', extend: 'real'}
                     }
                 }
-            ], ['Nature', 'Danger']);
+            ]);
 
             var mm;
             if (minMagnitude >= 4.5)
@@ -67,7 +67,7 @@ exports.plugin = function($N) {
 
             function update() {
                 //OLD URL: 'http://earthquake.usgs.gov/earthquakes/catalogs/eqs7day-M5.xml'
-                rss.RSSFeed($N, feedURL, function(eq, a) {
+                web.RSSFeed($N, feedURL, function(eq, a) {
 
                     if (expireAfter) {
                         var now = Date.now();
@@ -81,8 +81,8 @@ exports.plugin = function($N) {
                             if (!included)
                                 return;
                             var distMeters = geo.getDistance(
-                                    {latitude: f.lat, longitude: f.lon},
-                            {latitude: a.geolocation[0], longitude: a.geolocation[1]}
+                                {latitude: f.lat, longitude: f.lon},
+                                {latitude: a.geolocation[0], longitude: a.geolocation[1]}
                             );
                             included = (f.radius * 1000 >= distMeters);
                             //console.log(eq.name, 'dist', distMeters, included);
@@ -114,6 +114,7 @@ exports.plugin = function($N) {
                             var sdepth = s.substring(npr, nps);
                             var depth = parseFloat(sdepth) * 1000;
                             eq.add('eqDepth', depth);
+                            $N.objSetFirstValue(eq, "spacepoint", { lat: a.geolocation[0], lon: a.geolocation[1], alt: -depth } );
                         }
                     }
 
@@ -126,10 +127,12 @@ exports.plugin = function($N) {
                 });
             }
 
-            var that = this;
-            //that.update = update;
-            that.interval = setInterval(update, updateIntervalMS);
-            update();
+            if (updateIntervalMS > 0) {
+                var that = this;
+                //that.update = update;
+                that.interval = setInterval(update, updateIntervalMS);
+                update();
+            }
 
 
         },

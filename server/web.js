@@ -429,7 +429,7 @@ exports.start = function(options) {
                     whenFinished(err, null);
                 }
                 else if (docs.length == 1) {
-                    whenFinished(null, unpack(docs)[0]);
+                    whenFinished(null, unpack(docs)[0]);                    
                 }
                 else {
                     //none found
@@ -455,7 +455,8 @@ exports.start = function(options) {
                     withObjects([]);
                 }
                 else {
-                    withObjects(unpack(docs));
+                    withObjects(unpack(docs));                    
+                    withObjects(docs);
                 }
             });
         });
@@ -479,9 +480,11 @@ exports.start = function(options) {
                     nlog('getObjectsByTag: ' + err);
                 }
                 else {
-                    unpack(docs).forEach(function(d) {
+                    docs = unpack(docs);
+                    for (var i = 0; i < docs.length; i++) {
+                        var d = docs[i];
                         withObject(d);
-                    });
+                    }
                     if (whenFinished)
                         whenFinished();
                 }
@@ -1411,7 +1414,7 @@ exports.start = function(options) {
             getLatestObjects(n,
                     function(objs) {
                         objAccessFilter(objs, req, function(sharedObjects) {
-                            sendJSON(res, compactObjects(unpack(sharedObjects, true)), null, format);
+                            sendJSON(res, compactObjects(sharedObjects), null, format);
                         });
                     },
                     function(error) {
@@ -1446,7 +1449,7 @@ exports.start = function(options) {
 
         getLatestObjects(NUM_OBJECTS, function(objs) {
             objAccessFilter(objs, req, function(sharedObjects) {
-                var compacted = compactObjects(unpack(sharedObjects, true));
+                var compacted = compactObjects(sharedObjects);
 
                 var RSS = require('rss'); //https://github.com/dylang/node-rss
                 var feed = new RSS(feedOptions);
@@ -1906,7 +1909,7 @@ exports.start = function(options) {
                 //var currentUser = getCurrentClientID(session);
                 //TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
 
-                if ((message.focus) && (message.author)) {
+                if (message.f) {
                     message = $N.objExpand(message);
                     focusHistory.push(message);
 
@@ -2121,16 +2124,16 @@ exports.start = function(options) {
              });
              */
 
-
+            /*
             socket.on('getObjects', function(query, withObjects) {
                 //TODO safely handle query
 
                 db.obj.find(function(err, docs) {
                     objAccessFilter(request, docs, function(dd) {
-                        withObjects(unpack(dd, true));
+                        withObjects(dd);
                     });
                 });
-            });
+            });*/
 
             socket.on('delete', function(objectID, whenFinished) {
                 /*if ($N.server.permissions['authenticate_to_delete_objects'] != false) {

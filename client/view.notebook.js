@@ -1,6 +1,7 @@
 function newNotebookView(v) {
     var d = newDiv().appendTo(v);
     
+    loadCSS("lib/jquery.terminal/jquery.terminal.css");
     $LAB
         .script("lib/jquery.terminal/jquery.terminal-0.9.0.min.js")
         .wait(function() {

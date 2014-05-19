@@ -659,7 +659,10 @@ function applyTagStrengthClass(e, s) {
 
 function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange) {
     var tag = t.id;
+
     var strength = t.strength;
+    if (t.readonly)
+        editable = false;
     if (strength === undefined)
         t.strength = strength = 1.0;
     var T = $N.object[tag] || { id: tag };
@@ -792,9 +795,6 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         }
         d.addClass('propertySection');
     }
-
-
-    //...
     
     if (newTagValueWidget[type]) {
         newTagValueWidget[type](x, index, t, T, editable, d, events);        
@@ -841,7 +841,7 @@ var _alohaHandler = null;
 
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
     function addReadOnly() {
-        newDiv().addClass('htmlview').html(v.value).appendTo(d);        
+        return newDiv().addClass('htmlview').html(v.value).appendTo(d);        
     }
     
     if (!editable) {
@@ -855,12 +855,18 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
         
     function e() {
     
-        if ((editable) && (!prop.readonly)) {
-            var dd = newDiv().appendTo(d);
-            if (v.value)
-                dd.html(v.value);
+        if (editable) {
+            var dd;
+            if (prop.readonly) {
+                dd = addReadOnly();
+            }
+            else {
+                dd = newDiv().appendTo(d);
+                if (v.value)
+                    dd.html(v.value);
 
-            Aloha.jQuery(dd).aloha();
+                Aloha.jQuery(dd).aloha();
+            }
 
             events.onSave.push(function(y) {
                 objAddValue(y, prop.id, dd.html(), v.strength);
@@ -882,7 +888,7 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
     //<script src="lib/aloha/aloha-full.min.js" type="text/javascript"></script>
 
     if (_alohaHandler === null) {
-            
+        loadCSS("lib/aloha/css/aloha.css");
         $LAB
             .script("lib/aloha/aloha-full.min.js")
             .wait(function() {
@@ -1150,7 +1156,7 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
 };
 
 newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
-    if (editable) {
+    if ((editable) && (!prop.readonly)) {
         var lr = $('<input type="text" placeholder="Time" />').appendTo(d)
                     .val(new Date(v.at));
         var lb = $('<button style="margin-top: -0.5em"><i class="icon-calendar"/></button>').appendTo(d);
@@ -1159,7 +1165,7 @@ newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
 
         //TODO add save function
     } else {
-        d.append(newEle('a').append($.timeago(new Date(v.at))));
+        d.append(newEle('a').append($.timeago(new Date(v.value))));
     }
 };
 
@@ -1671,6 +1677,21 @@ function _objectViewContext() {
     return false;
 };
 
+function _addObjectViewPopupMenu(authored, target) {
+    if (authored) {
+        var editButton = newEle('button').text('+').attr({
+            title: "Edit",
+            class: 'ObjectViewPopupButton'
+        }).appendTo(target).click(_objectViewEdit);                    
+    }
+
+    var popupmenuButton = newEle('button').html('&gt;').attr({
+        title: "Actions...",
+        class: 'ObjectViewPopupButton'
+    }).appendTo(target).click(_objectViewContext);
+
+}
+
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
  */
@@ -1832,22 +1853,8 @@ function newObjectView(x, options) {
         }
     }
 
-    function addPopupMenu() {
-        var ms = $N.id();
-        if (ms && (ms === x.author)) {
-            var editButton = newEle('button').text('+').attr({
-                title: "Edit",
-                class: 'ObjectViewPopupButton'
-            }).appendTo(buttons).click(_objectViewEdit);                    
-        }
-
-        var popupmenuButton = newEle('button').html('&gt;').attr({
-            title: "Actions...",
-            class: 'ObjectViewPopupButton'
-        }).appendTo(buttons).click(_objectViewContext);
-    }
     if (showActionPopupButton)
-        addPopupMenu();
+        _addObjectViewPopupMenu($N.id() === x.author, buttons);
 
     if (selectioncheck)
         buttons.prepend(selectioncheck);

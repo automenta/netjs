@@ -135,14 +135,19 @@ nobject.prototype.hasTag = function(t) {
 nobject.prototype.tags = function() {
     return objTags(this);
 };
-nobject.prototype.earthPoint = function(lat, lon) {
+
+/* altitiude in meters */
+nobject.prototype.earthPoint = function(lat, lon, alt) {
     if (lat === undefined) {
         return objSpacePointLatLng(this);
     }
-    return this.add('spacepoint', {
+    var sp = {
         'lat': lat,
-        'lon': lon
-    });
+        'lon': lon        
+    };
+    if (alt)
+        sp.alt = alt;
+    return this.add('spacepoint', sp);
 };
 nobject.prototype.firstValue = function(id, defaultValue) {
     return objFirstValue(this, id, defaultValue);
@@ -1451,7 +1456,9 @@ var compactObjectFields = [['removed', 'r'],
                             ['author', 'a'],
                             ['name', 'n'],
                             ['description', 'd'],
-                            ['replyTo', 'R']];
+                            ['replyTo', 'R'],
+                            ['expiresAt','x'],
+                            ['focus','f']];
 function renameFields(o, f, swap) {
     var a = swap ? 1 : 0;
     var b = swap ? 0 : 1;
@@ -1536,8 +1543,15 @@ function objCompact(o) {
                 var ia = v.id;
                 var va = v.value || null;
                 var s = v.strength || 1.0;
-                if (va)
+                
+                if (va) {
+                    
+                    if (v.id === 'spacepoint')
+                        if (va.planet === 'Earth')
+                            delete va.planet; //assume Earth
+                    
                     newValues.push([ia, s, va]);
+                }
                 else if ((!va) && (s!==1.0))
                     newValues.push([ia, s]);
                 else if (ia)
