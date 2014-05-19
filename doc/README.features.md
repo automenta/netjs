@@ -78,19 +78,18 @@ Designed to serve clients and connect to other servers and services to form an o
 # Ontology
 Collection of **Tags** providing a common semantic vocabulary for describing reality and imagination.  A default ontology is provided by the server for clients to use.
 
- * **uri** (Uniform Resource Identifier)
+ * **id** (Uniform Resource Identifier)
  * **name**
  * **description** (optional)
    * Used along with Name to match keywords for auto-suggesting tags while editing objects
- * **tag** - Array of (zero or more) super-tags that they inherit from, forming a **type hierarchy**
+ * **extend** - Array of (zero or more) super-tags that they inherit from, forming a **type hierarchy**
  * **reserved** (optional) - prevents use by users
  * **icon** (optional) - relative URL to an icon image                         
- * **operator** (optional) - indicates if a tag that operates on other tags
  * **properties** - Set of (zero or more) data-typed properties for which values may be specified
-   * **uri**
+   * **id**
    * **name**
    * **description** (optional)
-   * **type** - data type; analogous to MIME Content-type
+   * **extend** - string, extends one primitive data type; analogous to MIME Content-type
         * **boolean**
         * **integer**
         * **real** (floating point number)
@@ -144,6 +143,7 @@ They are canonically serializable as **JSON** objects which is a compact represe
  * **subject** - ID of who or what the object describes
  * **createdAt** - unix time this object was created
  * **modifiedAt** - unix time this object was last modified.  if not present, assumed to be the same as createdAt
+ * **focus** - indicates if object is a focus change
  * **expiresAt** - unix time by which this object should be automatically removed
  * **removed** - indicates that any instances of an object with this ID should be deleted (used for broadcasting deletion)
  * **hidden** - indicates the object should not ordinarily be displayed in lists and feeds

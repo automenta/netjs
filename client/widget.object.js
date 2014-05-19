@@ -248,7 +248,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var n = objNew(x.id, na);
             n.createdAt = x.createdAt;
             n.author = x.author;
-
+            n.modifiedAt = Date.now();
+            
             //copy all metadata
 
             if (x.subject)
