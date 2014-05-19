@@ -76,7 +76,7 @@ exports.plugin = function($N) {
 
             function _updateCentroids() {
 
-                $N.deleteObjectsWithTag(that.centroidtag, function() {
+                $N.deleteObjectsWithTag(that.centroidTag, function() {
 
                     var p = [];
                     var now = Date.now();
