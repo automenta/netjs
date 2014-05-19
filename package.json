@@ -12,6 +12,7 @@
         "cookie": "",
         "cookie-parser": "",
         "express-session": "",
+        "connect-dyncache": "",
         "body-parser": "",
         "parted": "",
         "request": "",
@@ -45,7 +46,7 @@
         "geolib": "",
         "natural": "",
         "stopwords": "",
-        "jsonpack": "",
-        "connect-dyncache": ""
+        "matilda": "",
+        "jsonpack": ""
     }
 }

@@ -49,10 +49,8 @@
  */
 
 var _ = require('underscore');
-var geo = require('geolib');
 var cluster = require('../server/cluster.js');
 
-var timeResolution = 1000*60*15; //5min
 
 exports.plugin = function($N) {
 
@@ -70,67 +68,67 @@ exports.plugin = function($N) {
 
             this.matchingTags = ['Goal'];
             this.centroidTag = 'GoalCentroid';
+            var timeResolution = 1000 * 60 * 30; //30min
+            //item limit
+            //include keywords
+            //include space
+            //include time
 
             function _updateCentroids() {
 
-                var existingCentroids = [];
+                $N.deleteObjectsWithTag(that.centroidtag, function() {
 
-                $N.getObjectsByTag(that.centroidTag, function(o) {
-                    existingCentroids.push(o);
-                }, function() {
+                    var p = [];
+                    var now = Date.now();
+                    $N.getObjectsByTag(that.matchingTags, function(t) {
 
-                    //remove old centroids, then create new ones
-                    $N.deleteObjects(existingCentroids, function() {
+                        if (!t.when)
+                            return;
 
-                        var p = [];
-                        var now = Date.now();
-                        $N.getObjectsByTag(that.matchingTags, function(t) {
+                        var tt = t.when;
 
-                            if (!t.when)
-                                return;
+                        if (tt < now)
+                            return;
+                        if (!t.author)
+                            return;
 
-                            var tt = t.when;
+                        p.push(t);
 
-                            if (tt < now)
-                                return;
-                            if (!t.author)
-                                return;
+                    }, function() {
+                        that.matchedID = p.map(function(x) {
+                            return x.id;
+                        });
 
-                            p.push(t);
+                        if (p.length < 2)
+                            return;
 
-                        }, function() {
-                            that.matchedID = p.map(function(x) {
-                                return x.id;
+                        var c = cluster.getSpaceTimeTagCentroids($N, p, true, true, that.matchingTags, timeResolution);
+
+                        for (var i = 0; i < c.length; i++) {
+                            var cc = c[i];
+
+                            cc.setName('Possibility ' + i);
+
+                            cc.addTag(that.centroidTag);
+
+                            _.each(cc.tags, function(v, k) {
+                                cc.addTag(k, v);
                             });
 
-                            if (p.length < 2)
-                                return;
+                            //JSON.stringify(cc.tags, null, 4) + ' ' + JSON.stringify(cc.implicates, null, 4)
+                            var d = _.map(_.keys(cc.tags), function(k) {
+                                return k + '(' + (100.0 * cc.tags[k]).toFixed(2) + '%)'
+                            }).join(', ');
+                            //d += ' for ' + cc.replyTo.join(', ');
 
-                            var c = getSpaceTimeTagCentroids($N, p, true, true, that.matchingTags);
+                            cc.addDescription(d);
 
-                            for (var i = 0; i < c.length; i++) {
-                                var cc = c[i];
+                            delete cc.tags;
 
-                                cc.setName('Possibility ' + i);
-
-                                cc.addTag(that.centroidTag);
-                                
-                                _.each(cc.tags, function(v, k) {
-                                   cc.addTag(k, v); 
-                                });
-
-                                      //JSON.stringify(cc.tags, null, 4) + ' ' + JSON.stringify(cc.implicates, null, 4)
-                                var d = _.map(_.keys(cc.tags), function(k) { return k + '(' + (100.0 * cc.tags[k]).toFixed(2) + '%)' } ).join(', ');
-                                //d += ' for ' + cc.replyTo.join(', ');
-                                                                
-                                cc.addDescription(d);
-                                
-                                delete cc.tags;
-
-                                $N.pub(cc);
-                            }
-                        });
+                            $N.pub(cc);
+                        }
                     });
+
                 });
 
             }
@@ -153,284 +151,10 @@ exports.plugin = function($N) {
     };
 };
 
-
-function hoursFromNow(n) {
-    return Date.now() + 60.0 * 60.0 * 1000.0 * n;
-}
-
-
-function getUniqueTags(objs, IgnoreTags) {
-    var tags = [];
-    for (var i = 0; i < objs.length; i++) {
-        var T = objs[i];
-        var ot =
-                tags = tags.concat(T.tags(T));
-    }
-    tags = _.unique(tags);
-
-    if (IgnoreTags)
-        tags = _.difference(tags, IgnoreTags);
-
-    return tags;
-}
-
-
-function getObservations($N, t, tags, includeSpace, includeTime) {
-    var obs = [];
-    for (var i = 0; i < t.length; i++) {
-        var tt = t[i];
-
-        var lat, lon;
-        if (includeSpace) {
-            var sp = $N.objSpacePointLatLng(tt);
-            if (!sp)
-                continue; //ignore this obj
-            lat = sp[0];
-            lon = sp[1];
-        }
-        else {
-            lat = lon = 0;
-        }
-
-        var timepoints = [];
-        
-        if (includeTime) {
-            var w = tt.when;
-            if (w === undefined)
-                continue;	//ignore this obj
-            
-            timepoints.push(w);
-            
-            var duration = tt.duration || timeResolution;
-            
-            if (duration) {
-                for (var j = 0; j < duration; j+=timeResolution) {
-                    timepoints.push(w + j);
-                }
-            }
-        }
-        else {
-            timepoints.push(0);
-        }
-
-        timepoints.forEach(function(t) {
-            var l = [];
-            l.push(lat);
-            l.push(lon);
-            l.push(t);
-            
-            var ta = $N.objTagStrength(tt, false);
-
-            //TODO remove totalContained denominator if not being used:
-            var totalContained = 0;
-            for (var k = 0; k < tags.length; k++) {
-                var K = tags[k];
-                if (ta[K])
-                    totalContained += ta[K];
-            }
-            for (var k = 0; k < tags.length; k++) {
-                if (totalContained > 0) {
-                    var v = ta[tags[k]];
-                    //l.push((v !== undefined) ? (v /*/ totalContained*/) : 0.0);
-                    l.push((v !== undefined) ? (v/totalContained) : 0);
-                }
-                else
-                    l.push(0);                
-            }
-            obs.push(l);
-        });
-    }
-
-    return obs;
-}
-
-
-function getSpaceTimeTagCentroids($N, objects, includeSpace, includeTime, IgnoreTags) {
-
-    //console.log('Objects: ', objects);
-
-    var tags = getUniqueTags(objects, IgnoreTags);
-    //console.log('Unique tags: ', tags);
-
-    var obs = getObservations($N, objects, tags, includeSpace, includeTime);
-    //console.log('Observations: ', obs);
-
-    //console.log('observations: ', tags, includeSpace, includeTime, obs);
-    
-    if (obs.length === 0)
-        return; //nothing to work with
-
-    var centroids = parseInt(Math.pow(obs.length,0.5));
-    
-
-    var dimensions = obs[0].length;
-
-    var normLat, normLon, normTime;
-
-    //TODO move these to function parameters
-    var spaceScale = 1.0;
-    var timeScale = 1.0;
-
-    if (includeSpace) {
-        normLat = normLon = 1.0;        
-        //normLat = normalize(obs, 0, spaceScale);
-        //normLon = normalize(obs, 1, spaceScale);
-    }
-    if (includeTime) {
-        normTime = 1.0;
-        //normTime = normalize(obs, 2, timeScale);
-    }
-
-    //console.log('Normalized Obs: ', obs);
-    //console.log('Normalized Limits: ', normLat, normLon, normTime);
-
-    //TODO normalize lat/lon
-    var distFunc = function(a, b) {
-        var distMeters = geo.getDistance(
-            {latitude: a[0], longitude: a[1]},
-            {latitude: b[0], longitude: b[1]}
-        );
-
-        var distSeconds = Math.abs(a[2] - b[2])/1000.0;
-        
-
-        var distSemantic = 0;
-        for (var i = 3; i < a.length; i++) {
-             distSemantic += Math.abs(a[i] - b[i]);
-             //distSemantic += Math.pow(a[i] - b[i], 2);
-        }
-        //distSemantic = Math.sqrt(distSemantic) * 2000.0;
-        distSemantic = distSemantic * 2000.0;
-        
-        var d =Math.sqrt( distSeconds*distSeconds + 
-               distMeters*distMeters + 
-               distSemantic*distSemantic);
-        //console.log(d, distSeconds, distMeters, distSemantic);
-        return d;
-    };
-    
-    var m = cluster.kmeans(centroids, obs, distFunc);
-    m = m.centroids;
-
-/*    
-    //console.log('obs', obs);
-    
-    var km = new clusterfck.Kmeans();
-    //var cc = km.cluster(obs, centroids, distFunc);
-
-    var cc = clusterfck.hcluster(obs);//, centroids, distFunc);
-           
-           
-    console.log(cc);
-    //console.log('points', obs);
-    //console.log('centroids', km.centroids);
-    //console.log('clusters', cc);
-    
-    var mi = []; //implicated objects
-
-    //console.log('Centroid Means:', m);
-    //console.log('Centroid Clusters:', cc);
-*/
-
 /*
-    for (var i = 0; i < m.length; i++) {
-        var c = cc[i];
-        var implicated = [];
-        for (var j = 0; j < cc[i].length; j++) {
-            implicated.push(obs.indexOf(cc[i][j]));
-        }
-        mi.push(implicated);
-    }*/
-    
+ function hoursFromNow(n) {
+ return Date.now() + 60.0 * 60.0 * 1000.0 * n;
+ }*/
 
-    //console.log('Centroid implicates:', mi);
-
-    var results = [];
-    var j = 0;
-    for (var i = 0; i < m.length; i++) {
-        /*if (mi[i].length == 0)
-            continue;*/
-
-        var mm = m[i];
-
-        var res = new $N.nobject();
-
-        if (includeSpace) {
-            $N.objAddGeoLocation(res, mm[0], mm[1]);
-        }
-        if (includeTime) {
-            res.when = parseInt(mm[2]);
-        }
-
-        var restags = {};
-        var tagSum = 0;
-        for (var k = 3; k < mm.length; k++) {
-            var t = tags[k - 3];
-            if (mm[k] > 0) {
-                restags[t] = mm[k];
-                tagSum += restags[t];                
-            }
-        }
-        if (tagSum > 0)
-            _.each(restags, function(v, k) {
-                restags[k]/=tagSum;
-            });
-
-        res.tags = restags;
-
-/*
-        res.replyTo = mi[i].map(function(n) {
-            return objects[n].id;
-        });*/
-
-        results.push(res);
-        
-    }
-
-    //console.log('Results:', results);
-
-    return results;
-}
-exports.getSpaceTimeTagCentroids = getSpaceTimeTagCentroids;
-
-
-function normalize(points, index, scale) {
-    var min, max;
-
-    min = max = points[0][index];
-    for (var i = 1; i < points.length; i++) {
-        var pp = points[i][index];
-        if (pp < min)
-            min = pp;
-        if (pp > max)
-            max = pp;
-    }
-
-    for (var i = 0; i < points.length; i++) {
-        var pp = points[i][index];
-        if (min != max) {
-            pp = (pp - min) / (max - min);
-        }
-        else {
-            pp = 0.5;
-        }
-        points[i][index] = pp * scale;
-    }
-    return [parseFloat(min), parseFloat(max)];
-}
-
-function denormalize(value, minmax) {
-    if (minmax[1] === minmax[0]) {
-        return minmax[0];
-    }
-
-    if (value < 0)
-        value = 0;
-
-    var v = (minmax[1] > minmax[0]) ? (value * (minmax[1] - minmax[0]) + minmax[0]) :
-            (value * (minmax[0] - minmax[1]) + minmax[1]);
-
-    return v;
-}
 
 

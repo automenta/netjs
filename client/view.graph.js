@@ -448,7 +448,7 @@ function newGraphView(v) {
                             if (nodeIndex[target] !== undefined) {
                                 var str = vi.strength || 1.0;                                
                                 addEdge(x.id, target, {
-                                    stroke: 'rgba(200,200,200,' + str + ')',
+                                    stroke: 'rgba(200,200,200,' + (0.25 + 0.75 * str) + ')',
                                     strokeWidth: Math.max(1.0, thickLine * str),
                                     strength: str
                                 });

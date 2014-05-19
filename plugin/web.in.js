@@ -229,11 +229,13 @@ var RSSFeed = function($N, url, perArticle, whenFinished /*, onlyItemsAfter*/) {
         var x = $N.objNew($N.MD5(a['guid']), a['title']);
         x.createdAt = w;
 
-        $N.objAddDescription(x, a['description']);
+        var desc = a['description'];
+        if (desc && (desc.length > 0))
+            $N.objAddDescription(x, desc);
 
         if (a['georss:point']) {
             var pp = a['georss:point'];
-            if (pp.length == 2) {
+            if (pp.length === 2) {
                 $N.objAddGeoLocation(x, pp[0], pp[1]);
             }
             else {

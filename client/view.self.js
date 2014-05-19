@@ -121,7 +121,7 @@ function newUsView(v) {
     var plans = [];
     var centroids = [];
     for (var k = 0; k < centroidTimes.length; k++) {
-        centroids.push($N.object(centroidTimes[k]));
+        centroids.push($N.instance[centroidTimes[k]]);
     }
 
 

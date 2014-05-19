@@ -311,6 +311,18 @@ exports.start = function(options) {
     ;
     $N.deleteObjects = deleteObjects;
 
+
+    function deleteObjectsWithTag(tag, callback) {
+        var existing = [];
+
+        $N.getObjectsByTag(tag, function(o) {
+            existing.push(o);
+        }, function() {
+            $N.deleteObjects(existing, callback);
+        });
+    }        
+    $N.deleteObjectsWithTag = deleteObjectsWithTag;
+
     function noticeAll(l) {
         var i = 0;
 
@@ -1392,6 +1404,8 @@ exports.start = function(options) {
             });
         });
     }
+    $N.getLatestObjects = getLatestObjects;
+    
     function getExpiredObjects(withObjects) {
         db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
             if (err) {

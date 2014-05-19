@@ -10,6 +10,8 @@ var stopwords = { };
 for (var i = 0; i < stopwordsArray.length; i++)
 	stopwords[stopwordsArray[i]] = true;
 
+exports.stopwords = stopwords;
+
 /*
 https://github.com/NaturalNode/natural
 https://github.com/ushahidi/Chambua (Stanford CoreNLP, Java)

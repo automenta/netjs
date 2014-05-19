@@ -58,6 +58,7 @@ function newShareView(v) {
         var catFilter = newCheckboxTagFilter(shareCategories);
         catFilter.appendTo(sb);
 
+        var onlyUsers = false;
 
         modeCombo.append('<option value="all">All</option>');
         //modeCombo.append('<option value="posts">Posts</option>');
@@ -81,6 +82,7 @@ function newShareView(v) {
 
                 f.value = [];
                 objAddTag(f, 'User');
+                onlyUsers = true;
             }
             else if (v == 'posts') {
                 sb.show();
@@ -187,9 +189,9 @@ function newShareView(v) {
             content.append(elements);
 
             //$('body').timeago('refresh');
-        }, function(x, tags) {
+        }, (!onlyUsers) ? function(x, tags) {
             return _.intersection(tags, allShareTags).length > 0;
-        });
+        } : undefined);
     }
 
     frame.onChange = function() {

@@ -1,4 +1,295 @@
-//-----------------------
+var _ = require('underscore');
+var geo = require('geolib');
+
+function getSpaceTimeTagCentroids($N, objects, includeSpace, includeTime, IgnoreTags, durationResolution) {
+
+    //console.log('Objects: ', objects);
+
+    var tags = getUniqueTags(objects, IgnoreTags);
+    //console.log('Unique tags: ', tags);
+
+    var obs = getObservations($N, objects, tags, includeSpace, includeTime, durationResolution);
+    //console.log('Observations: ', obs);
+
+    //console.log('observations: ', tags, includeSpace, includeTime, obs);
+    
+    if (obs.length === 0)
+        return; //nothing to work with
+
+    var centroids = parseInt(Math.pow(obs.length,0.5));
+    
+
+    var dimensions = obs[0].length;
+
+    var normLat, normLon, normTime;
+
+    //TODO move these to function parameters
+    var spaceScale = 1.0;
+    var timeScale = 1.0;
+
+    if (includeSpace) {
+        normLat = normLon = 1.0;        
+        //normLat = normalize(obs, 0, spaceScale);
+        //normLon = normalize(obs, 1, spaceScale);
+    }
+    if (includeTime) {
+        normTime = 1.0;
+        //normTime = normalize(obs, 2, timeScale);
+    }
+
+    //console.log('Normalized Obs: ', obs);
+    //console.log('Normalized Limits: ', normLat, normLon, normTime);
+
+    //TODO normalize lat/lon
+    var distFunc = function(a, b) {
+        var distMeters = geo.getDistance(
+            {latitude: a[0], longitude: a[1]},
+            {latitude: b[0], longitude: b[1]}
+        );
+
+        var distSeconds = Math.abs(a[2] - b[2])/1000.0;
+        
+
+        var distSemantic = 0;
+        for (var i = 3; i < a.length; i++) {
+             distSemantic += Math.abs(a[i] - b[i]);
+             //distSemantic += Math.pow(a[i] - b[i], 2);
+        }
+        //distSemantic = Math.sqrt(distSemantic) * 2000.0;
+        distSemantic = distSemantic * 5000.0;
+        
+        /*var d = Math.sqrt( distSeconds*distSeconds + 
+               distMeters*distMeters + 
+               distSemantic*distSemantic);*/
+        var d = distSeconds + distMeters + distSemantic;
+        //console.log(d, distSeconds, distMeters, distSemantic);
+        return d;
+    };
+    
+    
+    /*var m = cluster.kmeans(centroids, obs, distFunc);
+    m = m.centroids;*/
+    
+    //http://jydelort.appspot.com/resources/figue/demo.html
+    //epislon = 0.3, fuzziness = 2
+    var m = fcmeans(centroids, obs, 0.3, 2, distFunc);
+    m = m.centroids;
+
+/*    
+    //console.log('obs', obs);
+    
+    var km = new clusterfck.Kmeans();
+    //var cc = km.cluster(obs, centroids, distFunc);
+
+    var cc = clusterfck.hcluster(obs);//, centroids, distFunc);
+           
+           
+    console.log(cc);
+    //console.log('points', obs);
+    //console.log('centroids', km.centroids);
+    //console.log('clusters', cc);
+    
+    var mi = []; //implicated objects
+
+    //console.log('Centroid Means:', m);
+    //console.log('Centroid Clusters:', cc);
+*/
+
+/*
+    for (var i = 0; i < m.length; i++) {
+        var c = cc[i];
+        var implicated = [];
+        for (var j = 0; j < cc[i].length; j++) {
+            implicated.push(obs.indexOf(cc[i][j]));
+        }
+        mi.push(implicated);
+    }*/
+    
+
+    //console.log('Centroid implicates:', mi);
+
+    var results = [];
+    var j = 0;
+    for (var i = 0; i < m.length; i++) {
+        /*if (mi[i].length == 0)
+            continue;*/
+
+        var mm = m[i];
+
+        var res = new $N.nobject();
+
+        if (includeSpace) {
+            $N.objAddGeoLocation(res, mm[0], mm[1]);
+        }
+        if (includeTime) {
+            res.when = parseInt(mm[2]);
+            res.duration = durationResolution;
+        }
+        
+
+        var restags = {};
+        var tagSum = 0;
+        for (var k = 3; k < mm.length; k++) {
+            var t = tags[k - 3];
+            if (mm[k] > 0) {
+                restags[t] = mm[k];
+                tagSum += restags[t];                
+            }
+        }
+        if (tagSum > 0)
+            _.each(restags, function(v, k) {
+                restags[k]/=tagSum;
+            });
+
+        res.tags = restags;
+
+/*
+        res.replyTo = mi[i].map(function(n) {
+            return objects[n].id;
+        });*/
+
+        results.push(res);
+        
+    }
+
+    //console.log('Results:', results);
+
+    return results;
+}
+exports.getSpaceTimeTagCentroids = getSpaceTimeTagCentroids;
+
+
+function getUniqueTags(objs, IgnoreTags) {
+    var tags = [];
+    for (var i = 0; i < objs.length; i++) {
+        var T = objs[i];
+        var ot =
+                tags = tags.concat(T.tags(T));
+    }
+    tags = _.unique(tags);
+
+    if (IgnoreTags)
+        tags = _.difference(tags, IgnoreTags);
+
+    return tags;
+}
+
+
+function getObservations($N, t, tags, includeSpace, includeTime, durationResolution) {
+    var obs = [];
+    for (var i = 0; i < t.length; i++) {
+        var tt = t[i];
+
+        var lat, lon;
+        if (includeSpace) {
+            var sp = $N.objSpacePointLatLng(tt);
+            if (!sp)
+                continue; //ignore this obj
+            lat = sp[0];
+            lon = sp[1];
+        }
+        else {
+            lat = lon = 0;
+        }
+
+        var timepoints = [];
+        
+        if (includeTime) {
+            var w = tt.when;
+            if (w === undefined)
+                continue;	//ignore this obj
+            
+            timepoints.push(w);
+            
+            var duration = tt.duration || durationResolution/2.0;
+            
+            if (duration) {
+                for (var j = 0; j < duration; j+=durationResolution) {
+                    timepoints.push(w + j);
+                }
+            }
+        }
+        else {
+            timepoints.push(0);
+        }
+
+        timepoints.forEach(function(t) {
+            var l = [];
+            l.push(lat);
+            l.push(lon);
+            l.push(t);
+            
+            var ta = $N.objTagStrength(tt, false);
+
+            //TODO remove totalContained denominator if not being used:
+            var totalContained = 0;
+            for (var k = 0; k < tags.length; k++) {
+                var K = tags[k];
+                if (ta[K])
+                    totalContained += ta[K];
+            }
+            for (var k = 0; k < tags.length; k++) {
+                if (totalContained > 0) {
+                    var v = ta[tags[k]];
+                    //l.push((v !== undefined) ? (v /*/ totalContained*/) : 0.0);
+                    l.push((v !== undefined) ? (v/totalContained) : 0);
+                }
+                else
+                    l.push(0);                
+            }
+            obs.push(l);
+        });
+    }
+
+    return obs;
+}
+
+
+
+
+function normalize(points, index, scale) {
+    var min, max;
+
+    min = max = points[0][index];
+    for (var i = 1; i < points.length; i++) {
+        var pp = points[i][index];
+        if (pp < min)
+            min = pp;
+        if (pp > max)
+            max = pp;
+    }
+
+    for (var i = 0; i < points.length; i++) {
+        var pp = points[i][index];
+        if (min != max) {
+            pp = (pp - min) / (max - min);
+        }
+        else {
+            pp = 0.5;
+        }
+        points[i][index] = pp * scale;
+    }
+    return [parseFloat(min), parseFloat(max)];
+}
+
+function denormalize(value, minmax) {
+    if (minmax[1] === minmax[0]) {
+        return minmax[0];
+    }
+
+    if (value < 0)
+        value = 0;
+
+    var v = (minmax[1] > minmax[0]) ? (value * (minmax[1] - minmax[0]) + minmax[0]) :
+            (value * (minmax[0] - minmax[1]) + minmax[1]);
+
+    return v;
+}
+
+
+
+
+
 
 /*!
  * Figue v1.0.1
@@ -593,7 +884,9 @@ Array.prototype.compare = function(testArr) {
 
 //--------------------
 
-exports.fcmeans = figue.fcmeans;
+var fcmeans = figue.fcmeans;
+
+exports.fcmeans = fcmeans;
 exports.kmeans = figue.kmeans;
 
 

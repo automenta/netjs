@@ -2074,6 +2074,9 @@ svg {
     cursor: crosshair;
     font-size: 60%;
 }
+.timelineLabel h1 {
+    margin: 0;
+}
 .SimilaritySection {
     margin-top: 1em;
     margin-bottom: 1em;
