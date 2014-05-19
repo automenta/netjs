@@ -51,6 +51,8 @@
 var _ = require('underscore');
 var kmeans = require('kmeans'); //https://github.com/olalonde/kmeans.js
 
+var timeResolution = 1000*60*15; //15min
+
 exports.plugin = function($N) {
     return {
         name: 'Goal Matching',
@@ -102,13 +104,12 @@ exports.plugin = function($N) {
                             if (p.length < 2)
                                 return;
 
-                            var centroids = Math.floor(Math.pow(p.length, 0.55)); //a sub-exponential curve, steeper than log(x) and sqrt(x)
-                            var c = getSpaceTimeTagCentroids($N, p, centroids, true, true, that.matchingTags);
+                            var c = getSpaceTimeTagCentroids($N, p, true, true, that.matchingTags);
 
                             for (var i = 0; i < c.length; i++) {
                                 var cc = c[i];
 
-                                cc.setName('Possible Goal ' + i);
+                                cc.setName('Possibility ' + i);
 
                                 cc.addTag(that.centroidTag);
                                 
@@ -118,7 +119,7 @@ exports.plugin = function($N) {
 
                                       //JSON.stringify(cc.tags, null, 4) + ' ' + JSON.stringify(cc.implicates, null, 4)
                                 var d = _.map(_.keys(cc.tags), function(k) { return k + '(' + (100.0 * cc.tags[k]).toFixed(2) + '%)' } ).join(', ');
-                                d += ' for ' + cc.replyTo.join(', ');
+                                //d += ' for ' + cc.replyTo.join(', ');
                                                                 
                                 cc.addDescription(d);
                                 
@@ -176,48 +177,65 @@ function getObservations($N, t, tags, includeSpace, includeTime) {
     var obs = [];
     for (var i = 0; i < t.length; i++) {
         var tt = t[i];
-        var l = [];
 
+        var lat, lon;
         if (includeSpace) {
             var sp = $N.objSpacePointLatLng(tt);
             if (!sp)
                 continue; //ignore this obj
-            l.push(sp[0]);
-            l.push(sp[1]);
+            lat = sp[0];
+            lon = sp[1];
         }
         else {
-            l.push(0);
-            l.push(0);
+            lat = lon = 0;
         }
 
+        var timepoints = [];
+        
         if (includeTime) {
             var w = tt.when;
-            if (w == undefined)
+            if (w === undefined)
                 continue;	//ignore this obj
-            l.push(w);
+            
+            timepoints.push(w);
+            
+            var duration = tt.duration || timeResolution;
+            
+            if (duration) {
+                for (var j = 0; j < duration; j+=timeResolution) {
+                    timepoints.push(w + j);
+                }
+            }
         }
         else {
-            l.push(0);
+            timepoints.push(0);
         }
 
-        var ta = $N.objTagStrength(tt, false);
+        timepoints.forEach(function(t) {
+            var l = [];
+            l.push(lat);
+            l.push(lon);
+            l.push(t);
+            
+            var ta = $N.objTagStrength(tt, false);
 
-        //TODO remove totalContained denominator if not being used:
-        var totalContained = 0;
-        for (var k = 0; k < tags.length; k++) {
-            var K = tags[k];
-            if (ta[K])
-                totalContained += ta[K];
-        }
-        for (var k = 0; k < tags.length; k++) {
-            if (totalContained > 0) {
-                var v = ta[tags[k]];
-                l.push((v != undefined) ? (v /*/ totalContained*/) : 0.0);
+            //TODO remove totalContained denominator if not being used:
+            var totalContained = 0;
+            for (var k = 0; k < tags.length; k++) {
+                var K = tags[k];
+                if (ta[K])
+                    totalContained += ta[K];
             }
-            else
-                l.push(0);
-        }
-        obs.push(l);
+            for (var k = 0; k < tags.length; k++) {
+                if (totalContained > 0) {
+                    var v = ta[tags[k]];
+                    l.push((v != undefined) ? (v /*/ totalContained*/) : 0.0);
+                }
+                else
+                    l.push(0);
+            }
+            obs.push(l);
+        });
     }
 
     return obs;
@@ -262,7 +280,7 @@ function denormalize(value, minmax) {
     return v;
 }
 
-function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeTime, IgnoreTags) {
+function getSpaceTimeTagCentroids($N, objects, includeSpace, includeTime, IgnoreTags) {
 
     //console.log('Objects: ', objects);
 
@@ -273,9 +291,12 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
     //console.log('Observations: ', obs);
 
     //console.log('observations: ', tags, includeSpace, includeTime, obs);
-
-    if (obs.length == 0)
+    
+    if (obs.length === 0)
         return; //nothing to work with
+
+    var centroids = parseInt(Math.pow(obs.length,0.55));
+    
 
     var dimensions = obs[0].length;
 
@@ -311,6 +332,8 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
     //console.log('Centroid Means:', m);
     //console.log('Centroid Clusters:', cc);
 
+
+
     for (var i = 0; i < m.length; i++) {
         var c = cc[i];
         var implicated = [];
@@ -319,18 +342,20 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
         }
         mi.push(implicated);
     }
+    
 
     //console.log('Centroid implicates:', mi);
 
     var results = [];
     var j = 0;
     for (var i = 0; i < m.length; i++) {
-        if (mi[i].length == 0)
-            continue;
+        console.log(i,'->',mi[i]);
+        /*if (mi[i].length == 0)
+            continue;*/
 
         var mm = m[i];
 
-        var res = $N.objNew();
+        var res = new $N.nobject();
 
         if (includeSpace) {
             $N.objAddGeoLocation(res, denormalize(mm[0] / spaceScale, normLat), denormalize(mm[1] / spaceScale, normLon));
@@ -355,9 +380,10 @@ function getSpaceTimeTagCentroids($N, objects, centroids, includeSpace, includeT
 
         res.tags = restags;
 
+/*
         res.replyTo = mi[i].map(function(n) {
             return objects[n].id;
-        });
+        });*/
 
         results.push(res);
     }
