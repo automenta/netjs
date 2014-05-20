@@ -17,9 +17,7 @@ exports.plugin = function($N) {
             $N.addAll([
                 {
                     id: 'TopicLDA', name: 'Topic (LDA)', extend: ['Concept'],
-                    value: {
-                        'topicLDACorrelation': { name: 'Similarity', extend: 'object', tag: 'TopicLDA' }
-                    }
+                        icon: 'icon/rrze/categories/book.png'
                 }
             ]);
             
@@ -89,17 +87,20 @@ exports.plugin = function($N) {
                                 return u.word + ' ' + vp + '%';
                             }).join(', '));
 
+                            //correlations
+                            x.with = { };
                             graph.links.forEach(function(l) {
-                               if (l.source === topicNum) {
-                                   x.add('topicLDACorrelation', 'TopicLDA_' + l.target, l.value);
+                                if (l.source > l.target) return; //skip half of the matrix
+                                if (l.source === topicNum) {
+                                    x.with['TopicLDA_' + l.target] = l.value;
                                }
                             });
                             
-                            if (options.edgeThreshold!==undefined) {
+                            if (options.memberThreshold!==undefined) {
                                 var outs = { };
                                 var added = 0;
                                 _.each(member, function(v, k) {
-                                    if (v[topicNum] > options.edgeThreshold) {
+                                    if (v[topicNum] > options.memberThreshold) {
                                         outs[k] = v[topicNum];
                                         added++;
                                     }

@@ -83,8 +83,11 @@ function newGraphView(v) {
         return nn;
     }
 
+    function hasEdge(from, to) {
+        return (edgeIndex[from+'|'+to] !== undefined);
+    }
     function addEdge(from, to, style) {
-        if (edgeIndex[from+'|'+to] !== undefined)
+        if (hasEdge(from, to))
             return;
 
         var ee = {
@@ -464,7 +467,7 @@ function newGraphView(v) {
                 }
             }
 
-            if (includeEdges['Directed']) {
+            if (includeEdges['Edge']) {
                 for (var k = 0; k < xxrr.length; k++) {
                     var x = xxrr[k][0];
 
@@ -473,29 +476,71 @@ function newGraphView(v) {
                         var e = inEdges[j];
                         var edgeValue = $N.dgraph.edge(e);
                         var source = $N.dgraph.source(e);
+                        
+                        if (hasEdge(source, x.id)) continue;
+                        
                         var s = 1.0;
                         if (typeof edgeValue === "number")
                             s = parseFloat(edgeValue);                        
                         addEdge(source, x.id, {
-                            stroke: 'rgba(200,200,200,' + (0.1 + 0.9 * s) + ')',
+                            stroke: 'rgba(100,200,100,' + (0.1 + 0.9 * s) + ')',
                             strokeWidth: Math.max(1.0, thickLine * s),
                             strength: s
                         });                                                    
                     }
+                    
                     var outEdges = $N.dgraph.outEdges(x.id);
                     for (var j = 0; j < outEdges.length; j++) {
                         var e = outEdges[j];
                         var edgeValue = $N.dgraph.edge(e);
                         var target = $N.dgraph.target(e);
+
+                        if (hasEdge(x.id, target)) continue;
+                        
                         var s = 1.0;
                         if (typeof edgeValue === "number")
                             s = parseFloat(edgeValue);                        
                         addEdge(x.id, target, {
-                            stroke: 'rgba(200,200,200,' + (0.1 + 0.9 * s) + ')',
+                            stroke: 'rgba(100,100,200,' + (0.1 + 0.9 * s) + ')',
                             strokeWidth: Math.max(1.0, thickLine * s),
                             strength: s
                         });                                                    
                     }
+
+                    var uedges = $N.ugraph.incidentEdges(x.id);
+                    for (var j = 0; j < uedges.length; j++) {
+                        var e = uedges[j];
+                        var incidentNodes = $N.ugraph.incidentNodes(e);
+                        
+                        var order = incidentNodes[0] < incidentNodes[1];
+                        var a = order ? incidentNodes[1] : incidentNodes[0] ;
+                        var b = order ? incidentNodes[0] : incidentNodes[1] ;
+                        
+                        if (hasEdge(a, b)) continue;
+
+                        var edgeValue = $N.ugraph.edge(e);
+                        var s = null;
+                        if (typeof edgeValue === "number") s = edgeValue;
+                        else {
+                            var values = _.values(edgeValue);
+                            for (var i = 0; i < values.length; i++) {
+                                if (typeof values[i] === "number")
+                                    s = (s === null) ? values[i] : Math.max(values[i], s);
+                            }
+                        }
+                        if (s === null) s = 0.5;
+                        
+                        //TODO calculate strength from values inside edgeValue
+                        /*if (typeof edgeValue === "number")
+                            s = parseFloat(edgeValue);                        */
+
+                        addEdge(a, b, {
+                            stroke: 'rgba(100,100,100,' + (0.1 + 0.9 * s) + ')',
+                            strokeWidth: Math.max(1.0, thickLine * s),
+                            strength: s
+                        });                                                    
+                    }
+                
                 }
             }
 
@@ -649,9 +694,8 @@ function newGraphView(v) {
     });
 
     submenu.append('<hr/>');
-    submenu.append('Edges:<br/>');
 
-    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust', 'Directed' /*, 'Value'*/ ];
+    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust', 'Edge' /*, 'Value'*/ ];
     _.each(edgeTypes, function (e) {
         var includeCheck = $('<input type="checkbox"/>').appendTo(submenu);
         submenu.append(e + '<br/>');
