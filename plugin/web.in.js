@@ -2,6 +2,8 @@ var feedparser = require('feedparser'); //https://github.com/danmactough/node-fe
 var request = require('request');
 var _ = require('underscore');
 var cheerio = require('cheerio');
+var ical = require('ical');
+
 
 var addWebTags = function($N) {
     $N.addAll([
@@ -58,6 +60,16 @@ var addWebTags = function($N) {
                 //scrapers
             ]
         },
+        {
+            id: 'ICalURL',
+            name: 'Calendar (iCal) URL',
+            extend: ['Internet'],
+            value: [
+                'urlAddress',
+                'urlFetchPeriod',
+                'lastURLFetch'
+            ]
+        },
     ]);
 };
 exports.addWebTags = addWebTags;
@@ -86,7 +98,7 @@ exports.plugin = function($N) {
 
                 that.feeds = {};
 
-                $N.getObjectsByTag(['RSSFeed', 'WebURL'], function(x) {
+                $N.getObjectsByTag(['RSSFeed', 'WebURL', 'ICalURL'], function(x) {
                     that.feeds[x.id] = x;
                 }, function() {
                     if (f)
@@ -142,6 +154,10 @@ exports.plugin = function($N) {
                             if (f.hasTag('WebURL')) {
                                 fetchURL($N, f, furi[ff]);
                             }
+                            if (f.hasTag('ICalURL')) {
+                                fetchICal($N, f, furi[ff]);
+                            }
+                            
                         }
                     } else {
                         //set error message as f property
@@ -168,13 +184,13 @@ exports.plugin = function($N) {
 
         },
         onPub: function(x) {
-            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL')) {
+            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL') || x.hasTag('ICalURL')) {
                 this.updateFeed(x);
                 this.feeds[x.id] = x;
             }
         },
         onDelete: function(x) {
-            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL'))
+            if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL') || x.hasTag('ICalURL'))
                 delete feeds[x.id];
         },
         stop: function() {
@@ -185,6 +201,58 @@ exports.plugin = function($N) {
         }
     };
 };
+
+function fetchICal($N, x, url) {
+    
+    function event2Object(e) {
+        if (!e.summary)
+            return null;
+
+        var n = new $N.nobject(e.uid);
+        n.setName(e.summary);
+
+        n.addTag('Event');
+
+        if (e.description)
+            n.addDescription(e.description);
+
+        if (e.geo)
+            n.earthPoint(e.geo.lat, e.geo.lon);
+
+        if (e.location)                    
+            n.addDescription(e.location);
+
+        if (e.url) {
+            n.addTag('WebURL');
+            n.add('urlAddress', e.url);
+        }
+
+        if (e.start) {
+            var start = e.start.getTime();
+            n.when = start;
+            if (e.end) {
+                var end = e.end.getTime();
+                n.duration = end - n.when;
+            }
+        }
+
+        return n;
+    }
+    
+    ical.fromURL(url, {}, function(err, data) {
+        for (var k in data) {
+            if (data.hasOwnProperty(k)) {
+                var ev = data[k];
+
+                var n = event2Object(ev);
+                if (n)
+                    $N.pub(n);
+
+            }
+        }
+    });
+    
+}
 
 function fetchURL($N, x, url) {
     request.get({

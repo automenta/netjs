@@ -121,7 +121,7 @@ exports.plugin = function($N) {
 
                     var prevDesc = messageObject[t].getDescription() || '';
                     messageObject[t].removeTag('html');
-                    messageObject[t].addDescription(prevDesc + '<br/>' + from + ': ' + text);
+                    messageObject[t].addDescription( (prevDesc.length > 0 ? prevDesc + '<br/>' : '') + from + ': ' + text);
                     messageObject[t].touch();
 
 
