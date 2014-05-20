@@ -95,14 +95,17 @@ exports.plugin = function($N) {
                                }
                             });
                             
-                            if (options.replyThreshold!==undefined) {
-                                var rt = [];
+                            if (options.edgeThreshold!==undefined) {
+                                var outs = { };
+                                var added = 0;
                                 _.each(member, function(v, k) {
-                                    if (v[topicNum] > options.replyThreshold)
-                                        rt.push(k);
+                                    if (v[topicNum] > options.edgeThreshold) {
+                                        outs[k] = v[topicNum];
+                                        added++;
+                                    }
                                 });
-                                if (rt.length > 0)
-                                    x.replyTo = rt;
+                                if (added > 0)
+                                    x.out = outs;
                                 
                             }
                             

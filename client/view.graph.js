@@ -461,6 +461,28 @@ function newGraphView(v) {
                 }
             }
 
+            if (includeEdges['Directed']) {
+                for (var k = 0; k < xxrr.length; k++) {
+                    var x = xxrr[k][0];
+
+                    var inEdges = $N.dgraph.inEdges(x.id);
+                    for (var j = 0; j < inEdges.length; j++) {
+                        var e = inEdges[j];
+                        var edgeValue = $N.dgraph.edge(e);
+                        var source = $N.dgraph.source(e);
+                        var s = 1.0;
+                        if (typeof edgeValue === "number")
+                            s = parseFloat(edgeValue);                        
+                        addEdge(source, x.id, {
+                            stroke: 'rgba(200,200,200,' + (0.1 + 0.9 * s) + ')',
+                            strokeWidth: Math.max(1.0, thickLine * s),
+                            strength: s
+                        });                                                    
+                    }
+                }
+            }
+
+
             force
                 .nodes(nodes)
                 .links(edges);
@@ -612,7 +634,7 @@ function newGraphView(v) {
     submenu.append('<hr/>');
     submenu.append('Edges:<br/>');
 
-    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust' /*, 'Value'*/ ];
+    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust', 'Directed' /*, 'Value'*/ ];
     _.each(edgeTypes, function (e) {
         var includeCheck = $('<input type="checkbox"/>').appendTo(submenu);
         submenu.append(e + '<br/>');

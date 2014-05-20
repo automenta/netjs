@@ -826,6 +826,8 @@ var Ontology = function(storeInstances, target) {
         that.reply = { };
         that.object = _.extend( _.extend({ }, that.class), that.property ); //replace object with only classes and properties
 
+        that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
+
         that.instance = { };
         
         if (saved) {
@@ -999,19 +1001,21 @@ var Ontology = function(storeInstances, target) {
         }
         
         var outs = x.out || { };
-        var existingOutEdges = that.dgraph.outEdges(x.id);
+        if (that.dgraph.hasNode(x.id)) {
+            var existingOutEdges = that.dgraph.outEdges(x.id);
 
-        //remove non-existing edges
-        for (var i = 0; i < existingOutEdges.length; i++) {
-            var E = existingOutEdges[i];
-            if (E.indexOf('~')!==-1) continue; //out edge, skip
-            var source = that.dgraph.source(E);
-            var target = that.dgraph.target(E);
-            if (source === x.id)
-                if (outs[target] === undefined)
-                    that.dgraph.delEdge(E);
+            //remove non-existing edges
+            for (var i = 0; i < existingOutEdges.length; i++) {
+                var E = existingOutEdges[i];
+                if (E.indexOf('~')!==-1) continue; //out edge, skip
+                var source = that.dgraph.source(E);
+                var target = that.dgraph.target(E);
+                if (source === x.id)
+                    if (outs[target] === undefined)
+                        that.dgraph.delEdge(E);
+            }
         }
-
+            
         //add existing edges
         _.each(outs, function(v, k) {               
             var edgeID = x.id + '|' + k;
@@ -1027,20 +1031,23 @@ var Ontology = function(storeInstances, target) {
         });
         
         var ins = x.in || { };
-        var existingInEdges = that.dgraph.inEdges(x.id);
+        if (that.dgraph.hasNode(x.id)) {
 
-        //remove non-existing edges
-        for (var i = 0; i < existingInEdges.length; i++) {
-            var E = existingInEdges[i];
-            if (E.indexOf('|')!==-1) continue; //out edge, skip
-            var source = that.dgraph.source(E);
-            var target = that.dgraph.target(E);
-            if (target === x.id)
-                if (ins[source] === undefined) {
-                    that.dgraph.delEdge(E);
-                }
+            var existingInEdges = that.dgraph.inEdges(x.id);
+
+            //remove non-existing edges
+            for (var i = 0; i < existingInEdges.length; i++) {
+                var E = existingInEdges[i];
+                if (E.indexOf('|')!==-1) continue; //out edge, skip
+                var source = that.dgraph.source(E);
+                var target = that.dgraph.target(E);
+                if (target === x.id)
+                    if (ins[source] === undefined) {
+                        that.dgraph.delEdge(E);
+                    }
+            }
         }
-
+            
         //add existing edges
         _.each(ins, function(v, k) {               
             var edgeID = k + '~' + x.id;
