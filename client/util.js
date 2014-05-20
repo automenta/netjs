@@ -997,36 +997,73 @@ var Ontology = function(storeInstances, target) {
             //that.dgraph.addNode(x.id, x);
             //that.ugraph.addNode(x.id, x);
         }
-        if (x.out) {
-            var outs = x.out;
-            var existingOutEdges = that.dgraph.outEdges(x.id);
-            
-            //remove non-existing edges
-            for (var i = 0; i < existingOutEdges.length; i++) {
-                var targetName = existingOutEdges[i].split('|')[1];
-                if (x.out[targetName] === undefined)
-                    that.dgraph.delEdge(existingOutEdges[i]);
-            }
-            
-            //add existing edges
-            _.each(outs, function(v, k) {               
-                var edgeID = x.id + '|' + k;
-                if (that.dgraph.hasEdge(edgeID)) {
-                    that.dgraph.edge(edgeID, v);
-                }
-                else {
-                    if (!that.dgraph.hasNode(k)) {                        
-                        that.add({ id: k }); //placeholder object
-                    }
-                    that.dgraph.addEdge(edgeID, x.id, k, v);
-                }
-            });
+        
+        var outs = x.out || { };
+        var existingOutEdges = that.dgraph.outEdges(x.id);
+
+        //remove non-existing edges
+        for (var i = 0; i < existingOutEdges.length; i++) {
+            var E = existingOutEdges[i];
+            if (E.indexOf('~')!==-1) continue; //out edge, skip
+            var source = that.dgraph.source(E);
+            var target = that.dgraph.target(E);
+            if (source === x.id)
+                if (outs[target] === undefined)
+                    that.dgraph.delEdge(E);
         }
+
+        //add existing edges
+        _.each(outs, function(v, k) {               
+            var edgeID = x.id + '|' + k;
+            if (that.dgraph.hasEdge(edgeID)) {
+                that.dgraph.edge(edgeID, v);
+            }
+            else {
+                if (!that.dgraph.hasNode(k)) {                        
+                    that.add({ id: k }); //placeholder object
+                }
+                that.dgraph.addEdge(edgeID, x.id, k, v);
+            }
+        });
+        
+        var ins = x.in || { };
+        var existingInEdges = that.dgraph.inEdges(x.id);
+
+        //remove non-existing edges
+        for (var i = 0; i < existingInEdges.length; i++) {
+            var E = existingInEdges[i];
+            if (E.indexOf('|')!==-1) continue; //out edge, skip
+            var source = that.dgraph.source(E);
+            var target = that.dgraph.target(E);
+            if (target === x.id)
+                if (ins[source] === undefined) {
+                    that.dgraph.delEdge(E);
+                }
+        }
+
+        //add existing edges
+        _.each(ins, function(v, k) {               
+            var edgeID = k + '~' + x.id;
+            if (that.dgraph.hasEdge(edgeID)) {
+                that.dgraph.edge(edgeID, v);
+            }
+            else {
+                if (!that.dgraph.hasNode(k)) {                        
+                    that.add({ id: k }); //placeholder object
+                }
+                that.dgraph.addEdge(edgeID, k, x.id, v);
+            }
+        });
         
     }
     
     function unindexInstance(x, keepGraphNode) {
         if (!keepGraphNode) {
+            var dedges = that.dgraph.incidentEdges(x.id);
+            var uedges = that.ugraph.incidentEdges(x.id);
+            for (var i = 0; i < dedges.length; i++) that.dgraph.delEdge(dedges[i]);
+            for (var i = 0; i < uedges.length; i++) that.ugraph.delEdge(uedges[i]);
+            
             delete that.dgraph._inEdges[x.id];
             delete that.dgraph._outEdges[x.id];
             delete that.ugraph._incidentEdges[x.id];
@@ -1146,7 +1183,7 @@ var Ontology = function(storeInstances, target) {
     };        
     
     that.remove = function(x) {
-        if (typeof x == "object") {            
+        if (typeof x === "object") {            
             x = x.id;
         }
         var existingObject = that.object[x];

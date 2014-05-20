@@ -126,7 +126,18 @@ test("Graph", function() {
     strictEqual(1, $N.dgraph.edges().length, "the one existing edge replaced");
     strictEqual(true, $N.dgraph.edge("a|c"), "edge value");
     strictEqual("a", $N.dgraph.predecessors("c")[0], "a is predecessor of c");
+        
+    //test in edges
+    c.in = { "b": 1 };
+    $N.add(c);
+    strictEqual(2, $N.dgraph.edges().length, "additional edge, b->c");
     
+    delete c.in;
+    $N.add(c);
+    strictEqual(1, $N.dgraph.edges().length, "removed income edge");
     
+    //test removal of all nodes, should be no edges
+    $N.remove(a).remove(b).remove(c);
+    strictEqual(0, $N.dgraph.edges().length, "no edges when no nodes in graph");
     
 });
