@@ -6,4 +6,4 @@ nbproject/*
 /nbproject/private/
 options.js
 doc/.~lock.*
-
+coverage/

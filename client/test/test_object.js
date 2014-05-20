@@ -22,13 +22,11 @@ test("Object compact & expand", function() {
 	x.add({id: 'tag1',strength: 0.5});
 	x.add('tag2');
 
-	//ok(true, JSON.stringify(x));
-
 	var y = objCompact(x);
-	ok(y.value.length == 3);
-	ok(typeof y.value[0] == "string"); //the first should be turned into a string since it has strenght==1 (the default)
-	ok(typeof y.value[1] != "string");
-	ok(typeof y.value[2] == "string");
+	ok(y.v.length == 3);
+	ok(typeof y.v[0] == "string"); //the first should be turned into a string since it has strenght==1 (the default)
+	ok(typeof y.v[1] != "string");
+	ok(typeof y.v[2] == "string");
 	//ok(true, JSON.stringify(y));
 
 	var z = objExpand(y);

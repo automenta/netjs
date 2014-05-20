@@ -49,5 +49,11 @@
         "jsonpack": "",
         "ical": "",
 	"graphlib": ""
+    },
+    "devDependencies": {
+        "qunit": ""
+    },
+    "scripts": {
+        "test": "node server/test"
     }
 }

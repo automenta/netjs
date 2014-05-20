@@ -938,9 +938,11 @@ var Ontology = function(storeInstances, target) {
             that.serializedPropreties = null;
         }
         else if (storeInstances) {
+            var existing = false;
             if (that.instance[x.id]) {
                 //existing, unindex first
-                unindexInstance(x);
+                unindexInstance(x, true);
+                existing = true;
             }
             
             that.instance[x.id] = x;
@@ -948,14 +950,14 @@ var Ontology = function(storeInstances, target) {
             delete that.class[x.id];    delete x._class;
             delete that.property[x.id]; delete x._property;            
             
-            indexInstance(x);
+            indexInstance(x, existing);
         }
         
         return that;        
     };
     
 
-    function indexInstance(x) {
+    function indexInstance(x, keepGraphNode) {
         var tags  = objTags(x, false);
         for (var i = 0; i < tags.length; i++) {
            var t = tags[i];
@@ -984,13 +986,53 @@ var Ontology = function(storeInstances, target) {
                     //console.error(x, 'orphan reply object to', t);
                 }
             }
-        }
-        
+        }        
         
         //TODO index author, replyTo
+        
+        if (!keepGraphNode) {
+            that.dgraph._inEdges[x.id] = { };
+            that.dgraph._outEdges[x.id] = { };
+            that.ugraph._incidentEdges[x.id] = { };
+            //that.dgraph.addNode(x.id, x);
+            //that.ugraph.addNode(x.id, x);
+        }
+        if (x.out) {
+            var outs = x.out;
+            var existingOutEdges = that.dgraph.outEdges(x.id);
+            
+            //remove non-existing edges
+            for (var i = 0; i < existingOutEdges.length; i++) {
+                var targetName = existingOutEdges[i].split('|')[1];
+                if (x.out[targetName] === undefined)
+                    that.dgraph.delEdge(existingOutEdges[i]);
+            }
+            
+            //add existing edges
+            _.each(outs, function(v, k) {               
+                var edgeID = x.id + '|' + k;
+                if (that.dgraph.hasEdge(edgeID)) {
+                    that.dgraph.edge(edgeID, v);
+                }
+                else {
+                    if (!that.dgraph.hasNode(k)) {                        
+                        that.add({ id: k }); //placeholder object
+                    }
+                    that.dgraph.addEdge(edgeID, x.id, k, v);
+                }
+            });
+        }
+        
     }
-    function unindexInstance(x) {
-        that.dgraph.removeNode(x.id);
+    
+    function unindexInstance(x, keepGraphNode) {
+        if (!keepGraphNode) {
+            delete that.dgraph._inEdges[x.id];
+            delete that.dgraph._outEdges[x.id];
+            delete that.ugraph._incidentEdges[x.id];
+            //that.dgraph.delNode(x.id);
+            //that.ugraph.delNode(x.id);
+        }
         
         if (x.replyTo) {     
             for (var i = 0; i < x.replyTo.length; i++) {
@@ -1113,7 +1155,6 @@ var Ontology = function(storeInstances, target) {
         
         unindexInstance(existingObject);
         
-        delete that.object[x];
         if (that.class[x]) {
             delete that.class[x];
             that.serializedClasses = null;                        
@@ -1123,6 +1164,9 @@ var Ontology = function(storeInstances, target) {
             that.serializedPropreties = null;            
         }
         delete that.instance[x];
+
+        delete that.object[x];
+        
         return that;
     };
     
