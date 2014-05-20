@@ -1914,7 +1914,7 @@ function newObjectView(x, options) {
     //if (nod)
         //d.append(nod);
 
-    addNewObjectDetails(x, d);
+    addNewObjectDetails(x, d, showMetadataLine ? ['spacepoint'] : undefined);
     
 
     if (!mini) {
@@ -1924,10 +1924,14 @@ function newObjectView(x, options) {
     return d;
 }
 
-function addNewObjectDetails(x, d) {
+function addNewObjectDetails(x, d, excludeTags) {
     if (x.value) {
         for (var i = 0; i < x.value.length; i++) {
             var t = x.value[i];
+            
+            if (excludeTags)
+                if (excludeTags.indexOf(t.id)!==-1)
+                    continue;
 
             if (x._class) {
                 t = $N.object[t];
