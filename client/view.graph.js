@@ -61,7 +61,6 @@ function newGraphView(v) {
 
     var nodes = [];
     var nodeIndex = {};
-    var edges = [];
     var edgeIndex = { };
     
     var defaultIcon = getTagIcon("unknown");
@@ -96,7 +95,6 @@ function newGraphView(v) {
 
         if ((ee.source !== undefined) && (ee.target !== undefined)) {
             edgeIndex[from+'|'+to] = ee;
-            edges.push(ee);
         }
         return ee;
     }
@@ -280,10 +278,8 @@ function newGraphView(v) {
         svg.selectAll(".link").remove();
 
         nodes = [];
-        edges = [];
         nodeIndex = {};
         edgeIndex = {};
-
 
         renderItems(v, GRAPH_MAX_NODES, function (s, v, xxrr) {
 
@@ -504,6 +500,7 @@ function newGraphView(v) {
             }
 
 
+            var edges = _.values(edgeIndex);
             force
                 .nodes(nodes)
                 .links(edges);
@@ -633,8 +630,7 @@ function newGraphView(v) {
 
             });
 
-
-
+            edges = null;
 
         });
 

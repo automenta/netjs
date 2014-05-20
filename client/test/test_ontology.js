@@ -97,7 +97,7 @@ test("Ontology", function() {
 });
 
 
-test("Graph", function() {
+test("Directed Graph", function() {
     var $N = new Ontology(true);        
     var a = new nobject("a");
     var b = new nobject("b");
@@ -140,4 +140,46 @@ test("Graph", function() {
     $N.remove(a).remove(b).remove(c);
     strictEqual(0, $N.dgraph.edges().length, "no edges when no nodes in graph");
     
+});
+
+test("Undirected Graph", function() {
+    var $N = new Ontology(true);        
+    var a = new nobject("a");
+    var b = new nobject("b");
+
+    a.with = {
+        "b": 1
+    };
+    
+    $N.add(a).add(b);
+    strictEqual(1, $N.ugraph.edges().length, "Ugraph has 1 undirected edge");
+    strictEqual(0, $N.dgraph.edges().length, "Dgraph has 0 edges");
+
+    b.with = {
+        "a": 0.5
+    };
+    
+    $N.add(b);
+    strictEqual(1, $N.ugraph.edges().length, "After update, ugraph has still has 1 undirected edge");
+    strictEqual('a`b', $N.ugraph.edges()[0], "Ugraph edge has value of 1.0, the max of the strengths");
+    strictEqual(1.0, $N.ugraph.edge( $N.ugraph.edges()[0] ).a, "Ugraph edge value, from a");
+    strictEqual(0.5, $N.ugraph.edge( $N.ugraph.edges()[0] ).b, "Ugraph edge value, from b");
+
+    delete a.with;
+    $N.add(a);
+    strictEqual(1, $N.ugraph.edges().length, "After update, ugraph has still has 1 undirected edge");
+    strictEqual(undefined, $N.ugraph.edge( $N.ugraph.edges()[0] ).a, "Missing ugraph edge value, from a");
+    strictEqual(0.5, $N.ugraph.edge( $N.ugraph.edges()[0] ).b, "Ugraph edge value, from b");
+    
+    
+    delete b.with;
+    $N.add(b);
+    strictEqual(0, $N.ugraph.edges().length, "After update, ugraph has 0 undirected edge");
+
+    a.with = { "b": 1 };
+    $N.add(a);
+    strictEqual(1, $N.ugraph.edges().length, "After update, ugraph has still has 1 undirected edge");
+
+    $N.remove(a).remove(b);
+    strictEqual(0, $N.ugraph.edges().length, "No edges after all objects removed");
 });

@@ -152,6 +152,9 @@ They are canonically serializable as **JSON** objects which is a compact represe
    * **id** - URI of the tag this represents, or the property this provides a value for
    * **value** - object representing the data value (not used if id refers to a tag)
    * **strength** - value from 0 to 100% (0.0 to 1.0) indicating the relative strength or weight of this value in relation to other values in this object
+ * **in** - embedded object whose indexes are ID's of the objects to form a directed edge to; the value is the edge's associated value (can be numeric, represnting strength, or an object)
+ * **out** - embedded object whose indexes are ID's of the objects to form a directed edge from
+ * **with** - embedded object whose indexes are ID's of the objects to form an undirected edge with
 
 ----
 

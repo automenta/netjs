@@ -1061,6 +1061,49 @@ var Ontology = function(storeInstances, target) {
                 that.dgraph.addEdge(edgeID, k, x.id, v);
             }
         });
+
+        var withs = x.with || { };
+        if (that.ugraph.hasNode(x.id)) {
+
+            var existingEdges = that.ugraph.incidentEdges(x.id);
+
+            //remove non-existing edges
+            for (var i = 0; i < existingEdges.length; i++) {
+                var E = existingEdges[i];
+                var nodes = that.ugraph.incidentNodes(E);
+                var otherNode = (nodes[0] === x.id) ? nodes[1] : nodes[0];
+                var value = that.ugraph.edge(E);
+                if (withs[otherNode] === undefined) {
+                    delete value[x.id];
+                    if (_.keys(value).length === 0)
+                        that.ugraph.delEdge(E);
+                    else
+                        that.ugraph.edge(E, value);
+                }
+            }
+        }
+            
+        //add existing edges
+        _.each(withs, function(v, k) {          
+            var aid = k;
+            var bid = x.id;
+            //sort so that the first component is always less than the second
+            var edgeID = (aid < bid) ? (aid + '`' + bid) : (bid + '`' + aid);
+            
+            if (that.ugraph.hasEdge(edgeID)) {
+                var value = that.ugraph.edge(edgeID);
+                value[x.id] = v;
+                that.ugraph.edge(edgeID, value);
+            }
+            else {
+                if (!that.ugraph.hasNode(k)) {                        
+                    that.add({ id: k }); //placeholder object
+                }
+                var V = { };
+                V[x.id] = v;
+                that.ugraph.addEdge(edgeID, x.id, k, V);
+            }
+        });
         
     }
     
