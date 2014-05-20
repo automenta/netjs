@@ -2,7 +2,9 @@ if (typeof window != 'undefined') {
     exports = {}; //functions used by both client and server
 } else {
     _ = require('underscore');
+    graphlib = require("graphlib");
 }
+
 
 
 var ObjScope = {
@@ -781,8 +783,15 @@ var Ontology = function(storeInstances, target) {
     
     //resets to empty state
     that.clear = function() {
-        //indexed by id (URI)        
-        that.object = { };        
+        
+        that.object = { };        //indexed by id (URI)        
+
+        that.dgraph = new graphlib.Digraph();
+        that.ugraph = new graphlib.Graph();
+
+        that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
+        
+        
         that.tagged = { };  //index of object tags
         that.reply = { }; //index of objects with a replyTo
 
@@ -977,9 +986,12 @@ var Ontology = function(storeInstances, target) {
             }
         }
         
+        
         //TODO index author, replyTo
     }
     function unindexInstance(x) {
+        that.dgraph.removeNode(x.id);
+        
         if (x.replyTo) {     
             for (var i = 0; i < x.replyTo.length; i++) {
                 var t = x.replyTo[i];

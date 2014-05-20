@@ -1,6 +1,5 @@
-
-jQuery.timeago.settings.allowFuture = true;
-jQuery.timeago.settings.strings = {
+$.timeago.settings.allowFuture = true;
+$.timeago.settings.strings = {
     prefixAgo: null,
     prefixFromNow: null,
     suffixAgo: "ago",
@@ -20,7 +19,9 @@ jQuery.timeago.settings.strings = {
     wordSeparator: " ",
     numbers: []
 };
-
+$.ajaxSetup({
+  cache: true
+});
 
 var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
 var stack_bottomright = {"dir1": "left", "dir2": "up", "push": "top"};
@@ -727,6 +728,7 @@ $(document).ready(function() {
                 setInterval(updatePrompt, 7000);
                 updatePrompt();
 
+                
                 $.getScript(configuration.ui, function(data) {
 
                     var ii = identity();
@@ -848,7 +850,7 @@ function clearFocus() {
     //userRelation = null
     $('#FocusClearButton').hide();
 }
-clearFocus();
+later(clearFocus);
 
 function renderFocus(skipSet) {
     if (!skipSet)

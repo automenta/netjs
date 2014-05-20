@@ -47,6 +47,7 @@
         "natural": "",
         "stopwords": "",
         "jsonpack": "",
-        "ical": ""
+        "ical": "",
+	"graphlib": ""
     }
 }

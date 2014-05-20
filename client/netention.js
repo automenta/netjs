@@ -598,9 +598,16 @@ function netention(f) {
                     if (lastModified!==null) {
                         var existingLastModified = existing.modifiedAt || existing.createdAt || null;
                         if (existingLastModified!==null) {
-                            if (lastModified < existingLastModified) {
-                                return false;
+                            
+                            if ($N.id() === y.author) {
+                                if (lastModified <= existingLastModified)
+                                    return false;
                             }
+                            else {
+                                if (lastModified < existingLastModified)
+                                    return false;
+                            }
+                            
                         }
                     }
                 }
