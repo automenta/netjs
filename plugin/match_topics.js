@@ -68,7 +68,6 @@ exports.plugin = function($N) {
                         var tw = lda.getTopicWords(options.wordsPerTopic);
                         var topicNum = 0;
                         
-                        console.log(member);
                         tw.forEach(function(t) {
                             var x = new $N.nobject('TopicLDA_' + topicNum);
 

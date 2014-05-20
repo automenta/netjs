@@ -118,7 +118,10 @@ exports.plugin = function($N) {
                         messageObject[t].modifiedAt = Date.now();
                     }
 
-                    messageObject[t].addDescription(from + ': ' + text + '<br/>');
+
+                    var prevDesc = messageObject[t].getDescription() || '';
+                    messageObject[t].removeTag('html');
+                    messageObject[t].addDescription(prevDesc + '<br/>' + from + ': ' + text);
                     messageObject[t].touch();
 
 
