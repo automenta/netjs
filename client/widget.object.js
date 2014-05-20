@@ -2008,5 +2008,23 @@ function newMetadataLine(x, showTime) {
             mdline.append(newEle('a').append($.timeago(new Date(ww))));
         }
     }
+    
+    var numIn = $N.dgraph.inEdges(x.id);
+    var numOut = $N.dgraph.outEdges(x.id);
+    if ((numIn.length > 0) || (numOut.length > 0)) {
+        mdline.append('&nbsp;');
+    }    
+    
+    if (numIn.length > 0) {
+        mdline.append( newEle('a').html('&lt;' + numIn.length).attr('title', 'In links') );
+    }
+    
+    if (numOut.length > 0) {
+        if (numIn.length > 0)
+            mdline.append('|');
+        mdline.append( newEle('a').html(numOut.length + '&gt;').attr('title', 'Out links') );
+    }
+    
+    
     return mdline;
 }

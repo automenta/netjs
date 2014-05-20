@@ -62,7 +62,8 @@ function newGraphView(v) {
     var nodes = [];
     var nodeIndex = {};
     var edges = [];
-
+    var edgeIndex = { };
+    
     var defaultIcon = getTagIcon("unknown");
 
     function addNode(i, name, color, width, height, icon, shape) {
@@ -84,14 +85,19 @@ function newGraphView(v) {
     }
 
     function addEdge(from, to, style) {
+        if (edgeIndex[from+'|'+to] !== undefined)
+            return;
+
         var ee = {
             source: nodeIndex[from],
             target: nodeIndex[to],
             style: style
         };
 
-        if ((ee.source !== undefined) && (ee.target !== undefined))
+        if ((ee.source !== undefined) && (ee.target !== undefined)) {
+            edgeIndex[from+'|'+to] = ee;
             edges.push(ee);
+        }
         return ee;
     }
 
@@ -276,6 +282,7 @@ function newGraphView(v) {
         nodes = [];
         edges = [];
         nodeIndex = {};
+        edgeIndex = {};
 
 
         renderItems(v, GRAPH_MAX_NODES, function (s, v, xxrr) {
@@ -474,6 +481,20 @@ function newGraphView(v) {
                         if (typeof edgeValue === "number")
                             s = parseFloat(edgeValue);                        
                         addEdge(source, x.id, {
+                            stroke: 'rgba(200,200,200,' + (0.1 + 0.9 * s) + ')',
+                            strokeWidth: Math.max(1.0, thickLine * s),
+                            strength: s
+                        });                                                    
+                    }
+                    var outEdges = $N.dgraph.outEdges(x.id);
+                    for (var j = 0; j < outEdges.length; j++) {
+                        var e = outEdges[j];
+                        var edgeValue = $N.dgraph.edge(e);
+                        var target = $N.dgraph.target(e);
+                        var s = 1.0;
+                        if (typeof edgeValue === "number")
+                            s = parseFloat(edgeValue);                        
+                        addEdge(x.id, target, {
                             stroke: 'rgba(200,200,200,' + (0.1 + 0.9 * s) + ')',
                             strokeWidth: Math.max(1.0, thickLine * s),
                             strength: s
