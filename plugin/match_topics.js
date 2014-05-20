@@ -63,10 +63,12 @@ exports.plugin = function($N) {
 
                         lda.run(options.iterations);
 
-                        var graph = lda.getCorrelationGraph(0);
-
+                        var graph = lda.getCorrelationGraph(options.minTopicCorrelation);
+                        var member = lda.getDocumentMembership();
                         var tw = lda.getTopicWords(options.wordsPerTopic);
                         var topicNum = 0;
+                        
+                        console.log(member);
                         tw.forEach(function(t) {
                             var x = new $N.nobject('TopicLDA_' + topicNum);
 
@@ -93,13 +95,24 @@ exports.plugin = function($N) {
                                    x.add('topicLDACorrelation', 'TopicLDA_' + l.target, l.value);
                                }
                             });
+                            
+                            if (options.replyThreshold!==undefined) {
+                                var rt = [];
+                                _.each(member, function(v, k) {
+                                    if (v[topicNum] > options.replyThreshold)
+                                        rt.push(k);
+                                });
+                                if (rt.length > 0)
+                                    x.replyTo = rt;
+                                
+                            }
+                            
                             $N.pub(x);
                             topicNum++;
                         });
 
                         //console.log(graph);
 
-                        //console.log( lda.getDocumentMembership() ); 
 
                     });
                 });

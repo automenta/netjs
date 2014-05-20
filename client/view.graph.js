@@ -362,7 +362,7 @@ function newGraphView(v) {
                                 stroke: 'rgba(64,128,64,0.5)',
                                 strokeWidth: Math.max(1.0, thi),
                                 strength: str
-                            }])
+                            }]);
                         });
                         
                     }
@@ -387,8 +387,11 @@ function newGraphView(v) {
                                 ttj = $N.getObject(tj) || null; // || { name: '<' + tj + '>' };
                                 tag = false;
                             }
-                            if (!ttj)
-                                continue;
+                            if (!ttj) {
+                                tag = true;
+                                ttj = { id: tj, name: tj };
+                            }
+                                //continue;
 
                             if (tag) {
                                 var tagIcon = null;

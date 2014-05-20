@@ -131,6 +131,10 @@ exports.plugin = function($N) {
                             if (f.hasTag('RSSFeed')) {
                                 RSSFeed($N, furi[ff], function(a) {
                                     //TODO add extra tags from 'f'
+                                    var rtags = $N.objValues(f, 'addArticleTag');
+                                    rtags.forEach(function(r) {
+                                       a.addTag(r); 
+                                    });
                                     $N.pub(a);
                                     return a;
                                 });
