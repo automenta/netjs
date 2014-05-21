@@ -1,8 +1,9 @@
 function newTimeView(v) {
+    
     //            <script src="lib/timeline/timeline-min.js" type="text/javascript"></script>
     var twrap = newDiv().appendTo(v);
 
-    $LAB
+        $LAB
             .script("lib/timeline/timeline-min.js")
             .wait(function() {
                 var timeline = new links.Timeline(v[0]);
@@ -23,7 +24,6 @@ function newTimeView(v) {
                     'groupsChangeable': false,
                     'animate': 0,
                 };
-
 
                 var times = {};
 
@@ -306,6 +306,8 @@ function foreachTimedObject(user, withObjects) {
 
     var goals = _.filter(_.values($N.instance), function(x) {
         var w = x.when || 0;
+        if (x.duration)
+            w += x.duration;
         return (w >= time);
     });
 
