@@ -85,11 +85,14 @@ exports.plugin = function($N) {
                         if (!t.when)
                             return;
 
+                        if (!t.author)
+                            return;
+
                         var tt = t.when;
+                        if (t.duration)
+                            tt += t.duration;
 
                         if (tt < now)
-                            return;
-                        if (!t.author)
                             return;
 
                         p.push(t);

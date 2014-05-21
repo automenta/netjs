@@ -253,13 +253,18 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             if (x.subject)
                 n.subject = x.subject;
-            if (x.when)
-                n.when = x.when;
+            if (x.when) n.when = x.when;
+            if (x.duration) n.duration = x.duration;
             if (x.expiresAt)
                 n.expiresAt = x.expiresAt;
             if (x.replyTo)
                 n.replyTo = x.replyTo;
-
+            if (x.in) n.in = x.in;
+            if (x.out) n.out = x.out;
+            if (x.with) n.with = x.with;
+            if (x.inout)
+                n.inout = x.inout;
+            
             n.scope = x.scope || configuration.defaultScope;
 
             //TODO copy any other metadata
