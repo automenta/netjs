@@ -16,7 +16,7 @@ exports.plugin = function($N) {
             
             $N.addAll([
                 {
-                    id: 'TopicLDA', name: 'Topic (LDA)', extend: ['Concept'],
+                    id: 'TopicLDA', name: 'Topic', extend: ['Concept'],
                         icon: 'icon/rrze/categories/book.png'
                 }
             ]);
@@ -69,7 +69,8 @@ exports.plugin = function($N) {
                         tw.forEach(function(t) {
                             var x = new $N.nobject('TopicLDA_' + topicNum);
 
-                            x.name = 'Topic ' + topicNum;
+                            x.name =  _.pluck(t.slice(0,3),'word').join(' ');
+                            //'Topic' + topicNum;
                             x.addTag('TopicLDA');
 
                             var totalCounts = 0;
@@ -79,13 +80,14 @@ exports.plugin = function($N) {
                             if (totalCounts > 0) {
                                 t.forEach(function(tc) {
                                    tc.count/=totalCounts; 
+                                   tc.count = parseFloat($N._n(tc.count,4));
                                 });
                             }
-                            x.addDescription(t.map(function(u) { 
-                                var v = u.count;
-                                var vp = $N._n(100.0 * u.count, 1);
-                                return u.word + ' ' + vp + '%';
-                            }).join(', '));
+                            var tt = { };
+                            _.each(t, function(v, k) {
+                                tt[v.word] = v.count; 
+                            });
+                            x.add('tagcloud', tt);
 
                             //correlations
                             x.with = { };

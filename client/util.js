@@ -261,7 +261,7 @@ function objName(x, newName) {
 }
 exports.objName = objName;
 
-var primitiveRegEx = /^(boolean|text|html|integer|real|url|object|spacepoint|timepoint|timerange|sketch|markdown|image)$/;
+var primitiveRegEx = /^(boolean|text|html|integer|real|url|object|spacepoint|timepoint|timerange|sketch|markdown|image|tagcloud)$/;
 
 function isPrimitive(t) {
     return primitiveRegEx.test(t);

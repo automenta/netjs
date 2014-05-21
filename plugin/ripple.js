@@ -15,10 +15,8 @@ exports.plugin = function($N) {
         options: {},
         version: '1.0',
         author: 'http://ripple.com',
-        start: function() {
-
-
-            var RIPPLE_UPDATE_INTERVAL_MS = 1000 * 60 * 15; //15min
+        start: function(options) {
+            
             var defaultPaymentCurrency = 'HRS';
 
             //https://github.com/ripple/ripple-lib
@@ -225,7 +223,9 @@ exports.plugin = function($N) {
             }
 
             updateRippleData();
-            setInterval(updateRippleData, RIPPLE_UPDATE_INTERVAL_MS);
+            
+            if (options.walletUpdateIntervalMS)
+                setInterval(updateRippleData, options.walletUpdateIntervalMS);
 
             this.updateRippleData = updateRippleData;
 

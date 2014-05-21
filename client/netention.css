@@ -2165,3 +2165,10 @@ svg {
 .ViewBusy {
     opacity: 0.5;
 }
+.valueTagCloud {
+    word-break: break-all;
+    line-height: 0.5em;
+}
+.valueTagCloud span {
+    margin-right: 2px;
+}
