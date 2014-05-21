@@ -955,6 +955,16 @@ function newTagCloud(onChanged) {
 
     function updateTagCloud() {
         var tagcount = $N.getTagCount();
+        //TODO noramlize to 1.0
+        var counts = _.values(tagcount);
+        var minc = _.min(counts);
+        var maxc = _.max(counts);
+        if (minc!=maxc) {
+            _.each(tagcount, function(v, k) {
+                tagcount[k] = (v - minc) / (maxc-minc);
+            });
+        }
+        
         var tags = _.keys(tagcount);
         tags.sort(function(a,b) {
            return tagcount[b] - tagcount[a]; 
@@ -979,7 +989,7 @@ function newTagCloud(onChanged) {
                 return function() {
                     if (browseTagFilters[x]) {
                         delete browseTagFilters[x];
-                        ab.css('opacity', 0.3);
+                        ab.css('opacity', 0.4);
                     }
                     else {
                         browseTagFilters[x] = true;
@@ -995,11 +1005,11 @@ function newTagCloud(onChanged) {
             ab.html('&nbsp;');
             ab.attr('title', label||k);
 
-            ab.css('font-size', 100.0 * (1.0 + Math.log(ti + 1)) * 0.5 + '%');            
+            ab.css('font-size', 200.0 * ( 0.5  + 0.5 * ti) + '%');            
             //ab.css('float','left');
 
             if (!browseTagFilters[k]) {
-                ab.css('opacity', 0.3);
+                ab.css('opacity', 0.4);
             }
 
             tagcloud.append(ab,'&nbsp;');

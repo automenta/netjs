@@ -744,6 +744,7 @@ function netention(f) {
             if (!onlySelf) {
                 //fast count
                 _.each(this.tagged, function(v, k) {
+                    if ($N.property[k]) return;
                     if (v)
                         tagCount[k] = _.keys(v).length; 
                 });
