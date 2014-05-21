@@ -2148,6 +2148,10 @@ svg {
     padding: 0.25em;
 }
 
+.FocusTagCloud {
+    max-height: 6em;
+    overflow: scroll;
+}
 .FocusTagCloud .tagLink {
     padding-left: 0.4em !important;
     padding-right: 0.4em !important;
