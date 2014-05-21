@@ -1109,6 +1109,9 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
         float: right  !important;
         clear: none !important;
     }
+    #FocusEdit {
+        clear: none !important;
+    }
 
 }
 @media (min-width: 700px) {
@@ -2151,10 +2154,14 @@ svg {
 .FocusTagCloud {
     max-height: 6em;
     line-height: 1.0em;
-    
+    padding-top: 5px;
+    padding-bottom: 5px;
     overflow: auto;
 }
 .FocusTagCloud .tagLink {
     padding-left: 0.4em !important;
     padding-right: 0.4em !important;
+}
+.ViewBusy {
+    opacity: 0.5;
 }

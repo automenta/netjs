@@ -708,12 +708,14 @@ $(document).ready(function() {
                 var firstView = true;
 
                 var throttledUpdateView = _.throttle(function() {
+                    $('#AvatarButton').addClass('ViewBusy');
                     later(function() {
                         _updateView();
                         if (firstView) {
                             updateView = _.debounce(throttledUpdateView, viewDebounceMS);
                             firstView = false;
                         }
+                        $('#AvatarButton').removeClass('ViewBusy');
                     });
                 }, viewUpdateMS);
 
