@@ -43,6 +43,7 @@ Designed to serve clients and connect to other servers and services to form an o
   * Private - only accessible by author
   * Trusted - only accessible by those "trusted" by author
   * Public - accessible by all
+  * Anonymous - public, missing author information
  * **Configuration**
   * options.js file
   * _TODO:_ online configuration for administrator
@@ -120,6 +121,7 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
         * **object** (reference to another object)
             * _TODO_: tag restrictions (optional)
         * **timeseries** (timeseries data, multiple keyed values per time index)
+        * **tagcloud** (set of weighted tags, index ->  strength)
         * _TODO:_ **select**
             * options (string array)
             * min, max (integer, number that can be selected)

@@ -603,7 +603,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         //store on server but share with who i follow
                         '<option value="5">Trusted</option>',
                         //store on server for public access (inter-server)
-                        '<option value="7">Public</option>').
+                        '<option value="7">Public</option>',
+                        '<option value="7a">Anonymous</option>' ).
                         val(getEditedFocus().scope);
 
                 if (configuration.connection == 'local')
@@ -611,16 +612,27 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 else {
                     scopeSelect.change(function() {
                         var e = getEditedFocus();
-                        e.scope = parseInt(scopeSelect.val());
+                        e.scope = scopeSelect.val();
                         update(e);
                     });
                 }
             }
 
             var saveButton = $('<button style="float:right"><b>Save</b></button>').click(function() {
+                
                 var e = getEditedFocus();
-                e.author = $N.id();
+                
+                if (e.scope === '7a') {                    
+                    e.scope = 7;
+                }
+                else {
+                    e.author = $N.id();
+                }
+                
+                e.scope = parseInt(e.scope);
+                
                 objTouch(e);
+                
                 $N.pub(e, function(err) {
                     $.pnotify({
                         title: 'Unable to save.',
