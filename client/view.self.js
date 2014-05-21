@@ -48,6 +48,10 @@ function saveAddedTags(gt, tag, when) {
         ng = objAddTag(ng, tag);
         ng = objAddTag(ng, g);
         ng.subject = $N.myself().id;
+        
+        ng.inout = { };
+        ng.inout[ng.subject] = { };
+        ng.inout[ng.subject][g] = tag;
 
         $N.pub(ng, function (err) {
             $.pnotify({

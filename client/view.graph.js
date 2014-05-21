@@ -35,6 +35,20 @@ function newGraphView(v) {
         .attr("width", "100%")
         .attr("height", "100%");
 
+    // build the arrow.
+    svgCanvas.append("svg:defs").selectAll("marker")
+        .data(["end"])      // Different link/path types can be defined here
+      .enter().append("svg:marker")    // This section adds in the arrows
+        .attr("id", String)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 30)
+        .attr("refY", 0)
+        .attr("markerWidth", 3)
+        .attr("markerHeight", 3)
+        .attr("orient", "auto")
+      .append("svg:path")
+        .attr("d", "M0,-5L10,0L0,5");
+
     //svg = d3.select("#" + eid + " svg").append('g');
     var svg = svgCanvas.append('g');
 
@@ -339,7 +353,8 @@ function newGraphView(v) {
                         rtags.push([k, {
                             stroke: 'rgba(64,64,64,0.5)',
                             strokeWidth: (thickLine * v),
-                            strength: v
+                            strength: v,
+                            undirected: true
                         }]);
                     });
                 }
@@ -481,7 +496,8 @@ function newGraphView(v) {
                         
                         var s = 1.0;
                         if (typeof edgeValue === "number")
-                            s = parseFloat(edgeValue);                        
+                            s = parseFloat(edgeValue);         
+                        
                         addEdge(source, x.id, {
                             stroke: 'rgba(100,200,100,' + (0.1 + 0.9 * s) + ')',
                             strokeWidth: Math.max(1.0, thickLine * s),
@@ -499,9 +515,10 @@ function newGraphView(v) {
                         
                         var s = 1.0;
                         if (typeof edgeValue === "number")
-                            s = parseFloat(edgeValue);                        
+                            s = parseFloat(edgeValue);     
+                        
                         addEdge(x.id, target, {
-                            stroke: 'rgba(100,100,200,' + (0.1 + 0.9 * s) + ')',
+                            stroke: 'rgba(100,200,100,' + (0.1 + 0.9 * s) + ')',
                             strokeWidth: Math.max(1.0, thickLine * s),
                             strength: s
                         });                                                    
@@ -537,7 +554,8 @@ function newGraphView(v) {
                         addEdge(a, b, {
                             stroke: 'rgba(100,100,100,' + (0.1 + 0.9 * s) + ')',
                             strokeWidth: Math.max(1.0, thickLine * s),
-                            strength: s
+                            strength: s,
+                            undirected: true
                         });                                                    
                     }
                 
@@ -557,10 +575,17 @@ function newGraphView(v) {
                     oncell = false;
                 });
 
+    
             var link = svg.selectAll(".link")
                 .data(edges)
                 .enter().append("line")
-                .attr("class", "link");
+                .attr("class", "link")
+                .attr("marker-end", function(l) {
+                    if (l.style)
+                        if (l.style.undirected)
+                            return '';                    
+                    return "url(#end)";
+                });
 
             node = svg.selectAll(".node")
                 .data(nodes)

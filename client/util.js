@@ -56,24 +56,24 @@ function nobject(x, name, initialTags) {
     var id;
     if (x) {
         if (typeof x === "string") {
-           id = x; 
-        }            
+            id = x;
+        }
         else {
             _.extend(this, x);
             return;
         }
     }
-    
+
     this.id = id || uuid();
-    this.name = name || '';   
+    this.name = name || '';
     this.createdAt = Date.now();
 
     if (initialTags) {
         if (!Array.isArray(initialTags))
             initialTags = [initialTags];
         this.addTags(initialTags);
-    }    
-    
+    }
+
 }
 exports.nobject = nobject;
 
@@ -145,7 +145,7 @@ nobject.prototype.earthPoint = function(lat, lon, alt) {
     }
     var sp = {
         'lat': lat,
-        'lon': lon        
+        'lon': lon
     };
     if (alt)
         sp.alt = alt;
@@ -390,7 +390,7 @@ function objTagStrength(x, normalize, noProperties) {
 
     if (normalize === undefined)
         normalize = true;
-    
+
     for (var i = 0; i < x.value.length; i++) {
         var vv = x.value[i];
         var ii = vv.id;
@@ -405,7 +405,8 @@ function objTagStrength(x, normalize, noProperties) {
             t[ii] = s;
         else
             t[ii] = Math.max(s, t[ii]);
-    };
+    }
+    ;
 
     if (normalize) {
         var total = 0.0;
@@ -439,7 +440,7 @@ function objTagStrengthRelevance(xx, yy, noProperties) {
         var c = xxk[i];
 
         //if (yyk.indexOf(c)!==-1) {
-        if (yy[c]!==undefined) {
+        if (yy[c] !== undefined) {
             r += xx[c] * yy[c];
         }
     }
@@ -580,15 +581,15 @@ function objFirstValue(object, id, defaultValue) {
         if (Array.isArray(id)) {
             for (var i = 0; i < object.value.length; i++) {
                 var v = object.value[i];
-                if (id.indexOf(v.id)!==-1)
-                    return v.value;            
+                if (id.indexOf(v.id) !== -1)
+                    return v.value;
             }
         }
         else {
             for (var i = 0; i < object.value.length; i++) {
                 var v = object.value[i];
                 if (v.id === id)
-                    return v.value;            
+                    return v.value;
             }
         }
     }
@@ -659,7 +660,7 @@ exports.uuid = uuid;
 
 
 function isSelfObject(u) {
-    return (u.id === u.author) && (u.id!==undefined);
+    return (u.id === u.author) && (u.id !== undefined);
 }
 exports.isSelfObject = isSelfObject;
 
@@ -747,19 +748,19 @@ exports.objUserRelations = objUserRelations;
 
 /** true if its first value is a reference to the Class tag */
 function objIsClass(x) {
-    if (x.extend!==undefined) {
-        
+    if (x.extend !== undefined) {
+
         if (x.extend === null)
             return true;
-        
+
         if ((typeof x.extend) === "string") {
             return (!isPrimitive(x.extend))
         }
-        
+
         if (Array.isArray(x.extend))
-           return true;
+            return true;
     }
-   return false;
+    return false;
 }
 exports.objIsClass = objIsClass;
 
@@ -767,127 +768,132 @@ exports.objIsClass = objIsClass;
 function objIsProperty(x) {
     if (x.extend)
         if (isPrimitive(x.extend))
-           return true;
-   return false;   
+            return true;
+    return false;
 }
 exports.objIsProperty = objIsProperty;
 
 
 /*Array.prototype.pushArray = function(arr) {
-    this.push.apply(this, arr);
-};*/
+ this.push.apply(this, arr);
+ };*/
 
 /** an interface for interacting with nobjects and ontology */
 var Ontology = function(storeInstances, target) {
-    var that = target ? target : this;        
-    
+    var that = target ? target : this;
+
     //resets to empty state
     that.clear = function() {
-        
-        that.object = { };        //indexed by id (URI)        
+
+        that.object = {};        //indexed by id (URI)        
 
         that.dgraph = new graphlib.Digraph();
         that.ugraph = new graphlib.Graph();
 
         that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
-        
-        
-        that.tagged = { };  //index of object tags
-        that.reply = { }; //index of objects with a replyTo
 
-        that.instance = { };
-        that.property = { };
-        that.class = { };
-        that.classRoot = { };   //root classes        
-        
+        that.dgraphInOut = {};
+
+        that.tagged = {};  //index of object tags
+        that.reply = {}; //index of objects with a replyTo
+
+        that.instance = {};
+        that.property = {};
+        that.class = {};
+        that.classRoot = {};   //root classes        
+
         that.primitive = {
-          'default': { },
-          
-          'instance': { },
-          'property': { },
-          'class': { },
-          
-          'integer': { },
-          'real': { },
-          'text': { },
-          'html': { },
-          'object': { },
-          'spacepoint': { }
-          //...
+            'default': {},
+            'instance': {},
+            'property': {},
+            'class': {},
+            'integer': {},
+            'real': {},
+            'text': {},
+            'html': {},
+            'object': {},
+            'spacepoint': {}
+            //...
         };
-    };    
-    
+    };
+
     that.clearInstances = function(exceptInstancesTagged) {
         var saved = null;
         if (exceptInstancesTagged) {
             saved = that.tagged[exceptInstancesTagged];
         }
-        that.tagged = { };
-        that.reply = { };
-        that.object = _.extend( _.extend({ }, that.class), that.property ); //replace object with only classes and properties
+        that.tagged = {};
+        that.reply = {};
+        that.object = _.extend(_.extend({}, that.class), that.property); //replace object with only classes and properties
+        that.dgraphInOut = {};
 
         that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
 
-        that.instance = { };
-        
+        that.instance = {};
+
         if (saved) {
-            _.values(saved).forEach(function(s) { indexInstance(s); });
+            _.values(saved).forEach(function(s) {
+                indexInstance(s);
+            });
         }
     };
-    
-    
+
+
     that.clear();
-    
+
     that.addAll = function(a) {
         for (var i = 0; i < a.length; i++) {
             that.add(a[i]);
         }
     };
-    
+
     that.add = function(x) {
         //updates all cached fields, indexes
         //can be called repeatedly to update existing object with that ID
-        if (!x) return;
-        
-        if (x.removed) {        
+        if (!x)
+            return;
+
+        if (x.removed) {
             return that.remove(x);
         }
-        
+
         that.object[x.id] = x;
-                
+
         if (objIsClass(x)) {
             var existing = that.class[x.id];
             var existingValues;
             if (!existing) {
                 that.class[x.id] = x;
                 x._class = true;
-                delete that.property[x.id]; delete x._property;
-                delete that.instance[x.id]; delete x._instance;
-                x.property = { };
-                x.class = { };
-                x.subclass = { };
+                delete that.property[x.id];
+                delete x._property;
+                delete that.instance[x.id];
+                delete x._instance;
+                x.property = {};
+                x.class = {};
+                x.subclass = {};
             }
             else {
                 existingValues = existing.value;
                 _.extend(existing, x);
                 x = existing;
             }
-            
+
             if (x.value) {
                 if (!Array.isArray(x.value)) {
                     //convert from object form to array
                     var vv = [];
                     _.each(x.value, function(v, k) {
-                        if (v.id===undefined)
+                        if (v.id === undefined)
                             v.id = k;
-                        if (that.property[v.id]===undefined) {
+                        if (that.property[v.id] === undefined) {
                             that.add(v);
                         }
                         vv.push(k);
                     });
                     x.value = vv;
                 }
-                
+
                 if (existingValues)
                     x.value = _.union(x.value, existingValues);
 
@@ -895,25 +901,25 @@ var Ontology = function(storeInstances, target) {
                     var v = x.value[i];
                     if (v.id)
                         v = x.value[i] = v.id;
-                    
+
                     var existingProperty = that.property[v];
 
                     if (existingProperty)
                         x.property[v] = existingProperty;
                     else
                         console.error('Class', x.id, 'missing property', v);
-                }                
+                }
             }
-            
+
             if (typeof x.extend === "string")
-                x.extend = [ x.extend ];
-            
-            if ((x.extend===null) || (x.extend.length === 0)) {
-                that.classRoot[x.id] = x;                
+                x.extend = [x.extend];
+
+            if ((x.extend === null) || (x.extend.length === 0)) {
+                that.classRoot[x.id] = x;
             }
             else {
                 delete that.classRoot[x.id];
-                
+
                 for (var i = 0; i < x.extend.length; i++) {
                     var v = x.extend[i];
                     var c = that.class[v];
@@ -929,15 +935,21 @@ var Ontology = function(storeInstances, target) {
                     c.subclass[x.id] = x;
                 }
             }
-                        
+
             that.serializedClasses = null;
+        
+            indexInstance(x, false);
         }
         else if (objIsProperty(x)) {
             that.property[x.id] = x;
             x._property = true;
-            delete that.class[x.id];    delete x._class;
-            delete that.instance[x.id]; delete x._instance;
+            delete that.class[x.id];
+            delete x._class;
+            delete that.instance[x.id];
+            delete x._instance;
             that.serializedPropreties = null;
+            
+            indexInstance(x, false);
         }
         else if (storeInstances) {
             var existing = false;
@@ -946,201 +958,267 @@ var Ontology = function(storeInstances, target) {
                 unindexInstance(x, true);
                 existing = true;
             }
-            
+
             that.instance[x.id] = x;
             x._instance = true;
-            delete that.class[x.id];    delete x._class;
-            delete that.property[x.id]; delete x._property;            
-            
+            delete that.class[x.id];
+            delete x._class;
+            delete that.property[x.id];
+            delete x._property;
+
             indexInstance(x, existing);
         }
-        
-        return that;        
+
+        return that;
     };
-    
+
 
     function indexInstance(x, keepGraphNode) {
-        var tags  = objTags(x, false);
-        for (var i = 0; i < tags.length; i++) {
-           var t = tags[i];
-           if (!that.tagged[t]) 
-               that.tagged[t] = { };
-           that.tagged[t][x.id] = x;
-        }
-        
-        x.reply = { };
-        
-        //replies to this object: search known objects with replyTo
-        _.each(that.reply, function(v, k) {
-            if (v.replyTo.indexOf(x.id)!==-1) 
-                x.reply[k] = v;
-        });
-        //this object's replies to other object
-        if (x.replyTo) {            
-            that.reply[x.id] = x;
-            for (var i = 0; i < x.replyTo.length; i++) {
-                var t = x.replyTo[i];
-                var T = that.instance[t];
-                if (T) {
-                    T.reply[x.id] = x;
-                }
-                else {
-                    //console.error(x, 'orphan reply object to', t);
+        if (x._instance) {
+            var tags = objTags(x, false);
+            for (var i = 0; i < tags.length; i++) {
+                var t = tags[i];
+                if (!that.tagged[t])
+                    that.tagged[t] = {};
+                that.tagged[t][x.id] = x;
+            }
+
+            x.reply = {};
+
+            //replies to this object: search known objects with replyTo
+            _.each(that.reply, function(v, k) {
+                if (v.replyTo.indexOf(x.id) !== -1)
+                    x.reply[k] = v;
+            });
+            //this object's replies to other object
+            if (x.replyTo) {
+                that.reply[x.id] = x;
+                for (var i = 0; i < x.replyTo.length; i++) {
+                    var t = x.replyTo[i];
+                    var T = that.instance[t];
+                    if (T) {
+                        T.reply[x.id] = x;
+                    }
+                    else {
+                        //console.error(x, 'orphan reply object to', t);
+                    }
                 }
             }
-        }        
-        
+        }
+
         //TODO index author, replyTo
-        
+
+
         if (!keepGraphNode) {
-            that.dgraph._inEdges[x.id] = { };
-            that.dgraph._outEdges[x.id] = { };
-            that.ugraph._incidentEdges[x.id] = { };
+            that.dgraph._inEdges[x.id] = {};
+            that.dgraph._outEdges[x.id] = {};
+            that.ugraph._incidentEdges[x.id] = {};
             //that.dgraph.addNode(x.id, x);
             //that.ugraph.addNode(x.id, x);
         }
-        
-        var outs = x.out || { };
-        if (that.dgraph.hasNode(x.id)) {
-            var existingOutEdges = that.dgraph.outEdges(x.id);
 
-            //remove non-existing edges
-            for (var i = 0; i < existingOutEdges.length; i++) {
-                var E = existingOutEdges[i];
-                if (E.indexOf('~')!==-1) continue; //out edge, skip
-                var source = that.dgraph.source(E);
-                var target = that.dgraph.target(E);
-                if (source === x.id)
-                    if (outs[target] === undefined)
-                        that.dgraph.delEdge(E);
-            }
-        }
-            
-        //add existing edges
-        _.each(outs, function(v, k) {               
-            var edgeID = x.id + '|' + k;
-            if (that.dgraph.hasEdge(edgeID)) {
-                that.dgraph.edge(edgeID, v);
-            }
-            else {
-                if (!that.dgraph.hasNode(k)) {                        
-                    that.add({ id: k }); //placeholder object
-                }
-                that.dgraph.addEdge(edgeID, x.id, k, v);
-            }
-        });
-        
-        var ins = x.in || { };
-        if (that.dgraph.hasNode(x.id)) {
+        {
+            var inouts = x.inout || {};
 
-            var existingInEdges = that.dgraph.inEdges(x.id);
+            if (that.dgraphInOut[x.id])
+                _.each(that.dgraphInOut[x.id], function(v, k) {
+                    var source = v[0];
+                    var target = v[1];
+                    if (inouts[source])
+                        if (inouts[source][target])
+                            return;
+                    that.dgraph.delEdge(k);
+                });
 
-            //remove non-existing edges
-            for (var i = 0; i < existingInEdges.length; i++) {
-                var E = existingInEdges[i];
-                if (E.indexOf('|')!==-1) continue; //out edge, skip
-                var source = that.dgraph.source(E);
-                var target = that.dgraph.target(E);
-                if (target === x.id)
-                    if (ins[source] === undefined) {
-                        that.dgraph.delEdge(E);
+            delete that.dgraphInOut[x.id];
+
+            _.each(inouts, function(sources, source) {
+                _.each(sources, function(v, target) {
+                    var edgeID = x.id + '*' + source + '*' + target;
+
+                    if (that.dgraph.hasEdge(edgeID)) {
+                        that.dgraph.edge(edgeID, v);
                     }
-            }
+                    else {
+                        if (!that.dgraph.hasNode(source))
+                            that.add({id: source}); //placeholder object
+                        if (!that.dgraph.hasNode(target))
+                            that.add({id: target}); //placeholder object
+
+                        that.dgraph.addEdge(edgeID, source, target, v);
+
+                    }
+                    if (that.dgraphInOut[x.id] === undefined)
+                        that.dgraphInOut[x.id] = {};
+
+                    that.dgraphInOut[x.id][edgeID] = [source, target];
+
+                });
+            });
         }
-            
-        //add existing edges
-        _.each(ins, function(v, k) {               
-            var edgeID = k + '~' + x.id;
-            if (that.dgraph.hasEdge(edgeID)) {
-                that.dgraph.edge(edgeID, v);
-            }
-            else {
-                if (!that.dgraph.hasNode(k)) {                        
-                    that.add({ id: k }); //placeholder object
-                }
-                that.dgraph.addEdge(edgeID, k, x.id, v);
-            }
-        });
+        {
+            var outs = x.out || {};
+            if (that.dgraph.hasNode(x.id)) {
+                var existingOutEdges = that.dgraph.outEdges(x.id);
 
-        var withs = x.with || { };
-        if (that.ugraph.hasNode(x.id)) {
-
-            var existingEdges = that.ugraph.incidentEdges(x.id);
-
-            //remove non-existing edges
-            for (var i = 0; i < existingEdges.length; i++) {
-                var E = existingEdges[i];
-                var nodes = that.ugraph.incidentNodes(E);
-                var otherNode = (nodes[0] === x.id) ? nodes[1] : nodes[0];
-                var value = that.ugraph.edge(E);
-                if (withs[otherNode] === undefined) {
-                    delete value[x.id];
-                    if (_.keys(value).length === 0)
-                        that.ugraph.delEdge(E);
-                    else
-                        that.ugraph.edge(E, value);
+                //remove non-existing edges
+                for (var i = 0; i < existingOutEdges.length; i++) {
+                    var E = existingOutEdges[i];
+                    if (E.indexOf('~') !== -1)
+                        continue; //out edge, skip
+                    if (E.indexOf('*') !== -1)
+                        continue; //declared by another node, skip
+                    var source = that.dgraph.source(E);
+                    var target = that.dgraph.target(E);
+                    if (source === x.id)
+                        if (outs[target] === undefined)
+                            that.dgraph.delEdge(E);
                 }
             }
+
+            //add existing edges
+            _.each(outs, function(v, k) {
+                var edgeID = x.id + '|' + k;
+                if (that.dgraph.hasEdge(edgeID)) {
+                    that.dgraph.edge(edgeID, v);
+                }
+                else {
+                    if (!that.dgraph.hasNode(k)) {
+                        that.add({id: k}); //placeholder object
+                    }
+                    that.dgraph.addEdge(edgeID, x.id, k, v);
+                }
+            });
         }
-            
-        //add existing edges
-        _.each(withs, function(v, k) {          
-            var aid = k;
-            var bid = x.id;
-            //sort so that the first component is always less than the second
-            var edgeID = (aid < bid) ? (aid + '`' + bid) : (bid + '`' + aid);
-            
-            if (that.ugraph.hasEdge(edgeID)) {
-                var value = that.ugraph.edge(edgeID);
-                value[x.id] = v;
-                that.ugraph.edge(edgeID, value);
-            }
-            else {
-                if (!that.ugraph.hasNode(k)) {                        
-                    that.add({ id: k }); //placeholder object
+
+        {
+            var ins = x.in || {};
+            if (that.dgraph.hasNode(x.id)) {
+
+                var existingInEdges = that.dgraph.inEdges(x.id);
+
+                //remove non-existing edges
+                for (var i = 0; i < existingInEdges.length; i++) {
+                    var E = existingInEdges[i];
+                    if (E.indexOf('|') !== -1)
+                        continue; //out edge, skip
+                    if (E.indexOf('*') !== -1)
+                        continue; //declared by another node, skip
+                    var source = that.dgraph.source(E);
+                    var target = that.dgraph.target(E);
+                    if (target === x.id)
+                        if (ins[source] === undefined) {
+                            that.dgraph.delEdge(E);
+                        }
                 }
-                var V = { };
-                V[x.id] = v;
-                that.ugraph.addEdge(edgeID, x.id, k, V);
             }
-        });
-        
+
+            //add existing edges
+            _.each(ins, function(v, k) {
+                var edgeID = k + '~' + x.id;
+                if (that.dgraph.hasEdge(edgeID)) {
+                    that.dgraph.edge(edgeID, v);
+                }
+                else {
+                    if (!that.dgraph.hasNode(k)) {
+                        that.add({id: k}); //placeholder object
+                    }
+                    that.dgraph.addEdge(edgeID, k, x.id, v);
+                }
+            });
+        }
+
+        {
+            var withs = x.with || {};
+            if (that.ugraph.hasNode(x.id)) {
+
+                var existingEdges = that.ugraph.incidentEdges(x.id);
+
+                //remove non-existing edges
+                for (var i = 0; i < existingEdges.length; i++) {
+                    var E = existingEdges[i];
+                    var nodes = that.ugraph.incidentNodes(E);
+                    var otherNode = (nodes[0] === x.id) ? nodes[1] : nodes[0];
+                    var value = that.ugraph.edge(E);
+                    if (withs[otherNode] === undefined) {
+                        delete value[x.id];
+                        if (_.keys(value).length === 0)
+                            that.ugraph.delEdge(E);
+                        else
+                            that.ugraph.edge(E, value);
+                    }
+                }
+            }
+
+            //add existing edges
+            _.each(withs, function(v, k) {
+                var aid = k;
+                var bid = x.id;
+                //sort so that the first component is always less than the second
+                var edgeID = (aid < bid) ? (aid + '`' + bid) : (bid + '`' + aid);
+
+                if (that.ugraph.hasEdge(edgeID)) {
+                    var value = that.ugraph.edge(edgeID);
+                    value[x.id] = v;
+                    that.ugraph.edge(edgeID, value);
+                }
+                else {
+                    if (!that.ugraph.hasNode(k)) {
+                        that.add({id: k}); //placeholder object
+                    }
+                    var V = {};
+                    V[x.id] = v;
+                    that.ugraph.addEdge(edgeID, x.id, k, V);
+                }
+            });
+        }
+
     }
-    
+
     function unindexInstance(x, keepGraphNode) {
         if (!keepGraphNode) {
             var dedges = that.dgraph.incidentEdges(x.id);
             var uedges = that.ugraph.incidentEdges(x.id);
-            for (var i = 0; i < dedges.length; i++) that.dgraph.delEdge(dedges[i]);
-            for (var i = 0; i < uedges.length; i++) that.ugraph.delEdge(uedges[i]);
-            
+            for (var i = 0; i < dedges.length; i++)
+                that.dgraph.delEdge(dedges[i]);
+            for (var i = 0; i < uedges.length; i++)
+                that.ugraph.delEdge(uedges[i]);
+
             delete that.dgraph._inEdges[x.id];
             delete that.dgraph._outEdges[x.id];
             delete that.ugraph._incidentEdges[x.id];
             //that.dgraph.delNode(x.id);
             //that.ugraph.delNode(x.id);
-        }
-        
-        if (x.replyTo) {     
-            for (var i = 0; i < x.replyTo.length; i++) {
-                var t = x.replyTo[i];
-                var T = that.instance[t];
-                if (T) {
-                    delete T.reply[x.id];
-                }
+
+            if (x.inout) {
+                _.each(that.dgraphInOut[x.id], function(v, k) {
+                    that.dgraph.delEdge(k);
+                });
+                delete that.dgraphInOut[x.id];
             }
         }
-        delete x.reply;
-        delete that.reply[x.id];
-        
-        var tags = objTags(x, false);                
-        for (var i = 0; i < tags.length; i++) {
-           var t = tags[i];
-           if (that.tagged[t]) 
-               delete that.tagged[t][x.id];           
+
+        if (x._instance) {
+            if (x.replyTo) {
+                for (var i = 0; i < x.replyTo.length; i++) {
+                    var t = x.replyTo[i];
+                    var T = that.instance[t];
+                    if (T) {
+                        delete T.reply[x.id];
+                    }
+                }
+            }
+            delete x.reply;
+            delete that.reply[x.id];
+
+            var tags = objTags(x, false);
+            for (var i = 0; i < tags.length; i++) {
+                var t = tags[i];
+                if (that.tagged[t])
+                    delete that.tagged[t][x.id];
+            }
         }
-        
-        
+
     }
     that.getReplyRoots = function(r) {
         //trace up the reply chain until an object with no replyTo
@@ -1149,7 +1227,7 @@ var Ontology = function(storeInstances, target) {
         var R = that.instance[r];
         if (!R)
             return [];
-        
+
         var rr = R.replyTo;
         if (!rr)
             return [r];
@@ -1165,28 +1243,28 @@ var Ontology = function(storeInstances, target) {
 
         return _.keys(t);
     };
-    
+
     that.getReplies = function(x) {
         return x.reply || [];
     };
-    
+
     that.getAllReplies = function(objects) {
         var r = {};
 
         function addReplies(ii) {
-            
+
             ii.forEach(function(i) {
                 if (typeof i === "string")
                     i = that.instance[i];
-                
+
                 if (!i)
                     return;
-                
+
                 if (r[i.id])
                     return;
 
                 r[i.id] = r;
-                
+
                 if (i.reply)
                     addReplies(_.keys(i.reply));
             });
@@ -1195,68 +1273,70 @@ var Ontology = function(storeInstances, target) {
         addReplies(objects);
         return _.values(r);
     };
-    
+
     //deprecated
     that.getSubTags = function(s) {
         if (typeof s === "string")
             s = this.class[s];
         return s.subclass;
     };
-    
+
     /** 
      * TODO: rename to getTagged
      * t = a class ID,or an array of class ID's - returns a list of object id's 
-     * */        
-    that.getTagged = that.objectsWithTag =  function(t, fullObject, includeSubTags) {
+     * */
+    that.getTagged = that.objectsWithTag = function(t, fullObject, includeSubTags) {
         //TODO use tag index            
         //TODO support subtags recursively
-        if ((typeof t === "object") && !Array.isArray(t)) 
+        if ((typeof t === "object") && !Array.isArray(t))
             t = [t.id];
         if (!Array.isArray(t))
             t = [t];
 
-        var r = { };
+        var r = {};
 
         if (includeSubTags) {
             t = _.union(t, that.getSubTags(t));
         }
 
-        t.forEach(function(ti) {            
-            _.extend(r, _.object( _.keys(that.tagged[ti]), true));
+        t.forEach(function(ti) {
+            _.extend(r, _.object(_.keys(that.tagged[ti]), true));
         });
-        
+
         r = _.keys(r);
         if (fullObject)
-            return r.map(function(s) { return $N.instance[s] });
-        else 
+            return r.map(function(s) {
+                return $N.instance[s]
+            });
+        else
             return r;
-    };        
-    
+    };
+
     that.remove = function(x) {
-        if (typeof x === "object") {            
+        if (typeof x === "object") {
             x = x.id;
         }
         var existingObject = that.object[x];
         if (!existingObject)
             return false;
-        
+
         unindexInstance(existingObject);
-        
+
         if (that.class[x]) {
             delete that.class[x];
-            that.serializedClasses = null;                        
+            that.serializedClasses = null;
         }
         if (that.property[x]) {
             delete that.property[x];
-            that.serializedPropreties = null;            
+            that.serializedPropreties = null;
         }
         delete that.instance[x];
 
         delete that.object[x];
-        
+
         return that;
     };
-    
+
     that.getOntologySummary = function() {
         return {
             numObjects: _.keys(that.object).length,
@@ -1266,19 +1346,19 @@ var Ontology = function(storeInstances, target) {
             numInstances: _.keys(that.instances).length,
         };
     };
-    
+
     that.serializedPropreties = null; //cache
     that.propertySerialized = function() {
-        if (that.serializedPropreties===null)
+        if (that.serializedPropreties === null)
             that.serializedPropreties = _.map(that.property, function(p) {
                 return objCompact(p);
             });
         return that.serializedPropreties;
     };
-    
+
     that.serializedClasses = null;
     that.classSerialized = function() {
-        if (that.serializedClasses===null)
+        if (that.serializedClasses === null)
             that.serializedClasses = _.map(that.class, function(c) {
                 var d = objCompact(c);
                 delete d.class;
@@ -1289,10 +1369,84 @@ var Ontology = function(storeInstances, target) {
         return that.serializedClasses;
     };
     
+    //graphlib.alg.floydWarshall
+    //ex: JSON.stringify( $N.getGraphDistances("Trust"), null, 4 )
+    that.getGraphDistances = function(edgeFilter) {
+        var g = that.dgraph;
+
+        var results = {},
+                nodes = _.keys(that.instance);
+
+        var weightFunc = weightFunc || function() {
+            return 1;
+        };
+        var incidentFunc =  function(u) {
+                                if (typeof edgeFilter === "string") {                                    
+                                    return _.filter(g.outEdges(u), function(e) {
+                                        var E = that.dgraph.edge(e);
+                                        return (E === edgeFilter);
+                                    });
+                                }
+                                else if (edgeFilter)
+                                    return _.filter(g.outEdges(u), edgeFilter);
+                                else
+                                    return g.outEdges(u);
+                            };
+
+        nodes.forEach(function(u) {
+            results[u] = {};
+            results[u][u] = {distance: 0};
+            nodes.forEach(function(v) {
+                if (u !== v) {
+                    results[u][v] = {distance: Number.POSITIVE_INFINITY};
+                }
+            });
+            incidentFunc(u).forEach(function(e) {
+                var incidentNodes = g.incidentNodes(e),
+                        v = incidentNodes[0] !== u ? incidentNodes[0] : incidentNodes[1],
+                        d = weightFunc(e);
+                if (d < results[u][v].distance) {
+                    results[u][v] = {distance: d, predecessor: u};
+                }
+            });
+        });
+
+        nodes.forEach(function(k) {
+            var rowK = results[k];
+            nodes.forEach(function(i) {
+                var rowI = results[i];
+                nodes.forEach(function(j) {
+                    var ik = rowI[k];
+                    var kj = rowK[j];
+                    var ij = rowI[j];
+                    var altDistance = ik.distance + kj.distance;
+                    if (altDistance < ij.distance) {
+                        ij.distance = altDistance;
+                        ij.predecessor = kj.predecessor;
+                    }
+                });
+            });
+        });
+        nodes.forEach(function(k) {
+            var rowK = results[k];
+            nodes.forEach(function(i) {
+                if (results[k][i].distance===Infinity)
+                    delete results[k][i];
+                if (k === i)
+                    delete results[k][i];
+            });
+            if (_.keys(results[k]).length === 0)
+                delete results[k];
+        });
+
+        return results;
+    };
+
+
     //.searchOntology(query)
     //.getGraph(propertyList,options)
-        //extracts a graph via the object values of certain types; useful for computing trust and other networks
-        
+    //extracts a graph via the object values of certain types; useful for computing trust and other networks
+
     return that;
 };
 exports.Ontology = Ontology;
@@ -1591,23 +1745,23 @@ function objCompare(a, b) {
 exports.objCompare = objCompare;
 
 var compactObjectFields = [['removed', 'r'],
-                            ['id', 'i'],
-                            ['subject', 'S'],
-                            ['scope', 's'],
-                            ['value', 'v'],
-                            ['extend', 'e'], 
-                            ['author', 'a'],
-                            ['name', 'n'],
-                            ['description', 'd'],
-                            ['replyTo', 'R'],
-                            ['expiresAt','x'],
-                            ['focus','f']];
+    ['id', 'i'],
+    ['subject', 'S'],
+    ['scope', 's'],
+    ['value', 'v'],
+    ['extend', 'e'],
+    ['author', 'a'],
+    ['name', 'n'],
+    ['description', 'd'],
+    ['replyTo', 'R'],
+    ['expiresAt', 'x'],
+    ['focus', 'f']];
 function renameFields(o, f, swap) {
     var a = swap ? 1 : 0;
     var b = swap ? 0 : 1;
-    for (var i = f.length-1; i >=0; i--) {
-       var from = f[i][a], to = f[i][b]; 
-        if (o[from]!==undefined) {
+    for (var i = f.length - 1; i >= 0; i--) {
+        var from = f[i][a], to = f[i][b];
+        if (o[from] !== undefined) {
             o[to] = o[from];
             delete o[from];
         }
@@ -1630,31 +1784,31 @@ function objCompact(o) {
 
     if (y.createdAt) {
         if (!y.modifiedAt) {
-            y.t = y.createdAt;            
+            y.t = y.createdAt;
         }
-        else if (y.createdAt!==y.modifiedAt) {
-            y.t = [ y.createdAt, y.modifiedAt - y.createdAt ];
+        else if (y.createdAt !== y.modifiedAt) {
+            y.t = [y.createdAt, y.modifiedAt - y.createdAt];
         }
     }
     delete y.modifiedAt;
     delete y.createdAt;
-    
+
     if ((Array.isArray(y.extend)) && (y.extend.length == 1))
         y.extend = y.extend[0];
-    
+
     delete y.reply;
-    if (y.replyTo && Array.isArray(y.replyTo) && y.replyTo.length===0)
+    if (y.replyTo && Array.isArray(y.replyTo) && y.replyTo.length === 0)
         delete y.replyTo;
-    
-    
+
+
     if (y.removed) {
         y.removed = y.id;
         delete y.id;
     }
-    if (y.subject!==undefined)
+    if (y.subject !== undefined)
         if (y.subject === y.author)
             y.subject = '';
-        
+
 
     var k = _.keys(y);
     for (var i = 0; i < k.length; i++) {
@@ -1667,7 +1821,7 @@ function objCompact(o) {
         if (typeof V === 'function') {
             delete y[K];
         }
-        
+
     }
 
     if (o.value) {
@@ -1681,41 +1835,42 @@ function objCompact(o) {
 
             //console.log(i + '//' + v);
             /*if (((v.value) && (v.value.lat)) || (Array.isArray(v))) {
-                newValues.push(v);
-            } else*/ {
+             newValues.push(v);
+             } else*/ {
                 var ia = v.id;
                 var va = v.value || null;
                 var s = v.strength || 1.0;
-                
+
                 if (va) {
-                    
+
                     if (v.id === 'spacepoint')
                         if (va.planet === 'Earth')
                             delete va.planet; //assume Earth
-                    
+
                     newValues.push([ia, s, va]);
                 }
-                else if ((!va) && (s!==1.0))
+                else if ((!va) && (s !== 1.0))
                     newValues.push([ia, s]);
                 else if (ia)
                     newValues.push(ia);
                 else {
                     /*var vv = _.clone(v);
-                    renameField(vv, 'id', 'i');
-                    renameField(vv, 'value', 'v');
-                    renameField(vv, 'strength', '$');*/
+                     renameField(vv, 'id', 'i');
+                     renameField(vv, 'value', 'v');
+                     renameField(vv, 'strength', '$');*/
                     newValues.push(v);
                 }
             }
-        };
-        
+        }
+        ;
+
         y.value = newValues;
         if (y.value.length == 0) {
             delete y.value;
-        }            
+        }
     }
     renameObjectFields(y, false);
-    
+
     return y;
 }
 exports.objCompact = objCompact;
@@ -1730,7 +1885,7 @@ exports.objExpandAll = objExpandAll;
 /** expands an object in-place, and returns it */
 function objExpand(o) {
     renameObjectFields(o, true);
-    
+
     if (o.removed) {
         if (typeof o.removed != 'boolean') {
             o.id = o.removed;
@@ -1750,12 +1905,12 @@ function objExpand(o) {
     }
     if (o.modifiedAt === undefined)
         delete o.modifiedAt;
-    if (o.subject!==undefined) {
+    if (o.subject !== undefined) {
         if (o.subject === '') {
             o.subject = o.author;
         }
     }
-    
+
     if (!o.value)
         return o;
 
@@ -1773,10 +1928,10 @@ function objExpand(o) {
             if (v.length > 2)
                 r.value = v[2];
             newValues.push(r);
-        } else if (typeof v === 'object') { 
+        } else if (typeof v === 'object') {
             /*renameField(v, 'i', 'id');
-            renameField(v, 'v', 'value');
-            renameField(v, '$', 'strength');*/            
+             renameField(v, 'v', 'value');
+             renameField(v, '$', 'strength');*/
             newValues.push(v);
         } else if (typeof v === 'string') {
             newValues.push({

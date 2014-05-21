@@ -97,7 +97,7 @@ test("Ontology", function() {
 });
 
 
-test("Directed Graph", function() {
+test("Directed Graph in, out", function() {
     var $N = new Ontology(true);        
     var a = new nobject("a");
     var b = new nobject("b");
@@ -139,6 +139,54 @@ test("Directed Graph", function() {
     //test removal of all nodes, should be no edges
     $N.remove(a).remove(b).remove(c);
     strictEqual(0, $N.dgraph.edges().length, "no edges when no nodes in graph");
+    
+});
+
+test("Directed Graph inout", function() {
+    var $N = new Ontology(true);        
+    var a = new nobject("a");
+    var c = new nobject("c");
+    var d = new nobject("d");
+    
+    a.inout = {
+        'c': {
+            'd': "linked"
+        }
+    };
+    
+    $N.addAll([a,c,d]);
+    
+    strictEqual(3, $N.dgraph.order());
+    strictEqual(1, $N.dgraph.edges().length, "one edge defined");
+    strictEqual("linked", $N.dgraph.edge( $N.dgraph.edges()[0] ), "one edge defined");
+    strictEqual("c", $N.dgraph.source( $N.dgraph.edges()[0] ), "correct source");
+    strictEqual("d", $N.dgraph.target( $N.dgraph.edges()[0] ), "correct target");
+        
+    delete a.inout;
+    $N.add(a);
+    strictEqual(0, $N.dgraph.edges().length, "after c declares no inout's, zero edges remain");
+
+    a.inout = {
+        'c': {
+            'd': "linked"
+        }
+    };
+    $N.add(a);
+    strictEqual(1, $N.dgraph.edges().length, "one edge defined");
+
+    $N.remove(a);
+    strictEqual(0, $N.dgraph.edges().length, "zero edge defined after removing node");
+   
+    a.inout = {
+        'c': {
+            'b': "linked",
+            'd': "linked"
+        }
+    };
+    $N.add(a);
+    strictEqual(2, $N.dgraph.edges().length, "two edges defined");
+    strictEqual(2, $N.dgraph.outEdges('c').length, "c has 2 outedges");
+    strictEqual(1, $N.dgraph.inEdges('b').length, "b has 1 inedge");
     
 });
 

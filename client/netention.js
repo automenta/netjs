@@ -664,6 +664,42 @@ function netention(f) {
             }
         },
         pub: function(object, onErr, onSuccess, suppressChange) {            
+            
+            //Experimental 'subject' handling, creates .inout edges for each object link from the object's subject to the values of those object properties
+            if (object.subject) {
+                var x = object;
+                x.inout = { };
+                x.inout[x.subject] = { };
+                if (x.value) {
+                    var firstTag = null;
+                    for (var j = 0; j < x.value.length; j++) {
+                        var vi = x.value[j];
+                        var vid = vi.id;
+                        
+                        
+                        if (isPrimitive(vid))
+                            continue;
+                        
+                        if (($N.class[vid]) && (firstTag==null))
+                            firstTag = vid;
+                                                    
+                        var vidp = $N.property[vid];
+                        if (!vidp)
+                            continue;
+                                                                        
+                        if (vidp.extend === 'object') {
+                            var target = vi.value;
+
+                            x.inout[x.subject][target] = (firstTag || true);
+                            console.log(x.inout);
+
+                        }
+                    }
+                }
+                
+            }
+            
+            
             if (configuration.connection == 'local') {
                 $N.notice(object);
                 if (onSuccess)
