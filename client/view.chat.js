@@ -280,6 +280,10 @@ function newChatView(v) {
         //later(scrollbottom);
     }
 
+    var fh = $N.on('change:focus', function() {
+        _myNewObject = $N.focus();
+    });
+    
     content.onChange = function() {
         updateContent(_myNewObject);
         _myNewObject = null;
@@ -289,6 +293,7 @@ function newChatView(v) {
         _.values(rootsUnaffected).forEach(function(x) {
             x.remove();
         }); //destroy the DOM cache
+        $N.off('change:focus', fh);
     };
 
     updateContent(true);

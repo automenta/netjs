@@ -447,6 +447,9 @@ div.olMapViewport {
 #ui-dialog {
     z-index: 2000 !important;
 }
+
+
+
 .TagTree {
     font-size: 160%;
     padding-top: 0.3em;
@@ -2143,4 +2146,9 @@ svg {
 }
 .markdown {
     padding: 0.25em;
+}
+
+.FocusTagCloud .tagLink {
+    padding-left: 0.4em !important;
+    padding-right: 0.4em !important;
 }

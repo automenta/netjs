@@ -139,14 +139,17 @@ function newTagImage(ti) {
 
 function newTagButton(t, onClicked, isButton) {
     var ti = null;
+    
+    if (t) {
 
-    if (!t.id) {
-        var to = $N.class[t];
-        if (to)
-            t = to;
-    }
-    if (t.id) {
-        ti = getTagIcon(t.id);
+        if (!t.id) {
+            var to = $N.class[t];
+            if (to)
+                t = to;
+        }
+        if (t.id) {
+            ti = getTagIcon(t.id);
+        }
     }
     if (!ti)
         ti = getTagIcon(null);
@@ -166,8 +169,7 @@ function newTagButton(t, onClicked, isButton) {
        style: 'background-image: url('+ ti + ')' 
     });
     
-
-    if (t.name)
+    if (t && (t.name))
         b.append(t.name);
     else
         b.append(t);

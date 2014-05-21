@@ -229,6 +229,7 @@ function _updateView(force) {
 
 
     updateBrand();
+    renderFocus(true);
 
     //s.saveLocal();
 
@@ -826,19 +827,20 @@ $.extend({
 });
 
 function isFocusClear() {
-    if (!focusValue)
+    var f = $N.focus();
+    if (!f)
         return true;
 
-    if (focusValue.value)
-        if (focusValue.value.length > 0)
+    if (f.value)
+        if (f.value.length > 0)
             return false;
-    if (focusValue.when)
+    if (f.when)
         return false;
-    if (focusValue.where)
+    if (f.where)
         return false;
-    if (focusValue.who)
+    if (f.who)
         return false;
-    if (focusValue.userRelation)
+    if (f.userRelation)
         return false;
     return true;
 }
@@ -884,7 +886,7 @@ function renderFocus(skipSet) {
             var tags = objTags(focusValue);
             var existingIndex = _.indexOf(tags, tag);
 
-            if (existingIndex != -1)
+            if (existingIndex !== -1)
                 objRemoveValue(focusValue, existingIndex);
 
             if (newStrength > 0) {
@@ -924,6 +926,93 @@ function renderFocus(skipSet) {
             $N.setFocus(newFocus);
         };
     }
+    
+    var tc = newTagCloud(function(filter) {
+        later(function() {
+            var f = new $N.nobject();
+            _.keys(filter).forEach(function(t) {
+                f.addTag(t);
+            });
+            $N.setFocus(f);
+            renderFocus(true);            
+        });
+    });
+    fe.append(tc);
+    
+}
+
+
+function newTagCloud(onChanged) {
+    var tagcloud = newDiv().addClass('FocusTagCloud').css('word-break','break-all');
+    var browseTagFilters = {};
+    
+    var f =  $N.focus();
+    var ft = objTags(f);
+    ft.forEach(function(t) {
+      browseTagFilters[t] = true;
+    });
+
+
+    function updateTagCloud() {
+        var tagcount = $N.getTagCount();
+        var tags = _.keys(tagcount);
+        tags.sort(function(a,b) {
+           return tagcount[b] - tagcount[a]; 
+        });
+        
+        tagcloud.empty();
+
+        tags.forEach(function(k) {
+
+            var t = $N.tag(k);
+            var ti = tagcount[k];
+
+            var name;
+            if (t !== undefined)
+                name = t.name;
+            else
+                name = k;
+
+            var ab;
+
+            function toggleTag(x) {
+                return function() {
+                    if (browseTagFilters[x]) {
+                        delete browseTagFilters[x];
+                        ab.css('opacity', 0.3);
+                    }
+                    else {
+                        browseTagFilters[x] = true;
+                        ab.css('opacity', 1.0);
+                    }
+                    if (onChanged)
+                        onChanged(browseTagFilters);
+                };
+            }
+
+            ab = newTagButton(t, toggleTag(k));
+            var label = ab.html();
+            ab.html('&nbsp;');
+            ab.attr('title', label||k);
+
+            ab.css('font-size', 100.0 * (1.0 + Math.log(ti + 1)) * 0.5 + '%');            
+            //ab.css('float','left');
+
+            if (!browseTagFilters[k]) {
+                ab.css('opacity', 0.3);
+            }
+
+            tagcloud.append(ab,'&nbsp;');
+
+        });
+
+    }
+
+    updateTagCloud();
+
+    tagcloud.update = updateTagCloud;
+
+    return tagcloud;
 }
 
 

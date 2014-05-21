@@ -1,79 +1,5 @@
 var BROWSE_ITEMS_MAX_DISPLAYED = 75;
 
-function newTagCloud(target, onChanged) {
-    var tagcloud = newDiv();
-    target.append(tagcloud);
-
-
-    function updateTagCloud() {
-        var tagcount = $N.getTagCount();
-
-        tagcloud.empty();
-
-        for (var k in tagcount) {
-            var ti = tagcount[k];
-
-            var t = $N.tag(k);
-
-            var name;
-            if (t != undefined)
-                name = t.name;
-            else
-                name = k;
-
-            var d = $('<div/>');
-
-            var ab;
-
-            function toggleTag(x, elem) {
-                return function() {
-                    if (browseTagFilters[x]) {
-                        delete browseTagFilters[x];
-                        elem.css('opacity', 0.5);
-                    }
-                    else {
-                        browseTagFilters[x] = true;
-                        elem.css('opacity', 1.0);
-                    }
-                    onChanged();
-                }
-            }
-
-            if (t != undefined)
-                ab = newTagButton(t, toggleTag(k, d));
-            else {
-                (function() {
-                    ab = $('<a href="#">' + name + '</a>');
-                    var tt = toggleTag(k, d);
-                    ab.click(function() {
-                        tt();
-                        return false;
-                    });
-                })();
-            }
-
-
-            d.append(ab);
-
-            d.css('font-size', 100.0 * (1.0 + Math.log(ti + 1)) * 0.5 + '%');
-            d.css('float', 'left');
-
-            if (!browseTagFilters[k]) {
-                d.css('opacity', 0.5);
-            }
-
-            tagcloud.append(d);
-
-        }
-
-    }
-
-    updateTagCloud();
-
-    return {
-        update: updateTagCloud
-    };
-}
 
 function renderItems(v, maxItems, perItems, preFilter) {
     setImmediate(function() {
@@ -407,6 +333,7 @@ function newListView(v) {
     textsizeSlider.change();
     submenu.append(slideControls);
 
+    
     //var actionMenu = $('');
     //submenu.append(actionMenu);
 
