@@ -142,6 +142,66 @@ test("Directed Graph in, out", function() {
     
 });
 
+test("Trust Network", function() {
+    var $N = new Ontology(true);
+    $N.graphDistanceTag = [ "Trust" ];
+    
+    
+    var trust = new nobject("Trust");
+    trust.extend = [];
+    $N.add(trust);
+    
+    var a = new nobject("a");
+    a.author = a.id;
+    
+    var b = new nobject("b");
+    b.author = b.id;
+    
+    var ab = new nobject("a trust b");
+    ab.author = ab.subject = a.id;
+    ab.addTag("Trust").add("object", "b");
+    
+    $N.add(a);
+    $N.add(ab);
+    $N.add(b);       
+    
+    strictEqual(1, $N.dgraph.edges().length, "implied trust edge from a->b");
+
+    var ba = new nobject("b trust a");
+    ba.author = ba.subject = b.id;
+    ba.addTag("Trust").add("object", "a");
+    
+    $N.add(ba);
+    strictEqual(2, $N.dgraph.edges().length, "updated trust, b->a");
+    
+    $N.remove(ab);    
+    strictEqual(1, $N.dgraph.edges().length, "trust removed from a->b");
+    
+    $N.remove(ba);
+    strictEqual(0, $N.dgraph.edges().length, "trust removed from b->b");
+
+    $N.add(ba);
+    strictEqual(1, $N.dgraph.edges().length, "trust added from a->b");
+
+    strictEqual(undefined, $N._graphDistance['Trust'], "Trust distance not cached yet");
+    ok($N.getGraphDistances("Trust"), "trust network calculated");
+    ok($N._graphDistance['Trust'], "Trust distance cached");   
+
+    $N.add(ab);    
+    strictEqual(2, $N.dgraph.edges().length, "updated trust, b->a");
+    strictEqual(undefined, $N._graphDistance['Trust'], "Trust distance invalidated");
+    ok($N.getGraphDistances("Trust"), "trust network re-calculated");
+
+    
+    $N.remove(ba);    
+    strictEqual(1, $N.dgraph.edges().length, "updated trust, b->a");
+    strictEqual(undefined, $N._graphDistance['Trust'], "Trust distance invalidated");
+    ok($N.getGraphDistances("Trust"), "trust network re-calculated");
+    
+    
+    //TODO test attempt at setting trust for someone other than self, which should fail
+});
+
 test("Directed Graph inout", function() {
     var $N = new Ontology(true);        
     var a = new nobject("a");

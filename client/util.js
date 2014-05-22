@@ -429,10 +429,10 @@ function objTagStrengthRelevance(xx, yy) {
     var xxc = 0, yyc = 0;
     for (var i in xx)
         xxc++;
-    if (xxc === 0) return;
+    if (xxc === 0) return 0;
     for (var i in yy)
         yyc++;
-    if (yyc === 0) return;
+    if (yyc === 0) return 0;
     
     var den = Math.max(xxc, yyc);
 
@@ -710,6 +710,7 @@ exports.acceptsAnotherProperty = acceptsAnotherProperty;
  */
 
 
+//deprecated
 function objUserRelations(trusts) {
     var userRelations = {};
     //...
@@ -785,6 +786,7 @@ var Ontology = function(storeInstances, target) {
     var that = target ? target : this;
 
     //resets to empty state
+    //TODO unify with the clearInstances function to not duplicate code
     that.clear = function() {
 
         that.object = {};        //indexed by id (URI)        
@@ -792,10 +794,11 @@ var Ontology = function(storeInstances, target) {
         that.dgraph = new graphlib.Digraph();
         that.ugraph = new graphlib.Graph();
 
+
         that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
 
         that.dgraphInOut = {};
-
+        
         that.tagged = {};  //index of object tags
         that.reply = {}; //index of objects with a replyTo
 
@@ -803,6 +806,27 @@ var Ontology = function(storeInstances, target) {
         that.property = {};
         that.class = {};
         that.classRoot = {};   //root classes        
+
+        that._graphDistance = { };
+        
+        function invalidateGraphDistance(v) {
+            if (!that.graphDistanceTag)
+                return;
+            var valueTag = v;           
+            if (typeof valueTag === "string")
+                if (that.graphDistanceTag.indexOf(valueTag)!==-1) {
+                    delete that._graphDistance[valueTag]; //invalidate
+                }            
+        }
+        that.dgraph.addEdge = function(e, a, b, v) {
+            invalidateGraphDistance(v);
+            graphlib.Digraph.prototype.addEdge.apply(that.dgraph, arguments);
+        };
+        that.dgraph.delEdge = function(e) {
+            if (that.dgraph.hasEdge(e))
+                invalidateGraphDistance(that.dgraph.edge(e));
+            graphlib.Digraph.prototype.delEdge.apply(that.dgraph, arguments);
+        };
 
         that.primitive = {
             'default': {},
@@ -828,6 +852,7 @@ var Ontology = function(storeInstances, target) {
         that.reply = {};
         that.object = _.extend(_.extend({}, that.class), that.property); //replace object with only classes and properties
         that.dgraphInOut = {};
+        that._graphDistance = { };
 
         that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
 
@@ -1003,6 +1028,42 @@ var Ontology = function(storeInstances, target) {
                     }
                     else {
                         //console.error(x, 'orphan reply object to', t);
+                    }
+                }
+            }
+        }
+        
+        //'subject' handling, creates .inout edges for each object link from the object's subject to the values of those object properties        
+        if (x.subject && that.instance[x.subject] && (that.instance[x.subject].author === x.author)) {
+            
+            if (x.inout === undefined)
+                x.inout = { };
+            
+            if (x.inout[x.subject]===undefined)
+                x.inout[x.subject] = { };
+            
+            if (x.value) {
+                var firstTag = null;
+                for (var j = 0; j < x.value.length; j++) {
+                    var vi = x.value[j];
+                    var vid = vi.id;
+
+                    var objValue = false;
+                    
+                    if ((isPrimitive(vid) && (vid === "object" )))
+                        objValue = true;
+
+                    if ((that.class[vid]) && (firstTag===null))
+                        firstTag = vid;
+
+                    var vidp = that.property[vid];
+                    if (vidp && (vidp.extend === 'object'))
+                        objValue = true;
+
+                    if (objValue) {
+                        var target = vi.value;
+
+                        x.inout[x.subject][target] = (firstTag || true);
                     }
                 }
             }
@@ -1374,6 +1435,12 @@ var Ontology = function(storeInstances, target) {
     //graphlib.alg.floydWarshall
     //ex: JSON.stringify( $N.getGraphDistances("Trust"), null, 4 )
     that.getGraphDistances = function(edgeFilter) {
+        if (typeof edgeFilter === "string") {
+            var existing = that._graphDistance[edgeFilter];
+            if (existing)
+                return existing;
+        }
+            
         var g = that.dgraph;
 
         var results = {},
@@ -1440,6 +1507,11 @@ var Ontology = function(storeInstances, target) {
             if (_.keys(results[k]).length === 0)
                 delete results[k];
         });
+        
+        if (typeof edgeFilter === "string") {
+            if (that.graphDistanceTag.indexOf(edgeFilter)!==-1)
+                that._graphDistance[edgeFilter] = results;
+        }
 
         return results;
     };
