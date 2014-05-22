@@ -137,11 +137,10 @@ function newTagImage(ti) {
     });
 }
 
-function newTagButton(t, onClicked, isButton) {
+function newTagButton(t, onClicked, isButton, dom) {
     var ti = null;
     
     if (t) {
-
         if (!t.id) {
             var to = $N.class[t];
             if (to)
@@ -154,39 +153,33 @@ function newTagButton(t, onClicked, isButton) {
     if (!ti)
         ti = getTagIcon(null);
 
-
-
     var b;
     if (isButton) {
-        b = newEle('button');
+        b = newEle('button', true);
     }
     else {
-        b = newEle('a');
+        b = newEle('a', true);
     }
     
-    b.attr({
-       class: 'tagLink',
-       style: 'background-image: url('+ ti + ')' 
-    });
+    b.setAttribute('class', 'tagLink');
+    b.style.backgroundImage="url(" + ti + ")";
     
-    if (t && (t.name))
-        b.append(t.name);
-    else
-        b.append(t);
-
-
+    if (t && (t.name)) {
+        b.innerHTML = t.name;
+        b.setAttribute('taguri', t.id || (t + ''));
+    }
+    else {
+        b.innerHTML = t;
+    }
+        
     if (!onClicked)
         onClicked = _onTagButtonClicked;
-    /*onClicked = function () {
-     newPopupObjectView(tagObject(t));
-     };*/
-
-    b.t = t;
-    if (t)
-        b.attr('taguri', t.id || (t + ''));
-    b.click(onClicked);
-
-    return b;
+    
+    b.onclick = onClicked;
+    
+    if (dom)
+        return b;
+    return $(b);
 }
 
 function newReplyWidget(onReply, onCancel) {
@@ -662,17 +655,21 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
     return D;
 }
 
-function applyTagStrengthClass(e, s) {
+function getTagStrengthClass(s) {
     if (s === 0.0)
-        e.addClass('tag0');
+        return 'tag0';
     else if (s <= 0.25)
-        e.addClass('tag25');
+        return 'tag25';
     else if (s <= 0.50)
-        e.addClass('tag50');
+        return 'tag50';
     else if (s <= 0.75)
-        e.addClass('tag75');
+        return 'tag75';
     else
-        e.addClass('tag100');
+        return 'tag100';
+}
+
+function applyTagStrengthClass(e, s) {
+    e.addClass(getTagStrengthClass(s));
 }
 
 
@@ -863,7 +860,9 @@ newTagValueWidget.tagcloud = function(x, index, v, prop, editable, d, events) {
             var tc = newDiv().addClass('valueTagCloud');
             _.each(v.value, function(v, k) {
                 var fs = 100.0 * (0.5 + 0.5 * v);
-                var t = newEle('a').html(k).attr('style', 'font-size: ' + fs + '%');
+                var t = newEle('a', true);
+                t.innerHTML = k;
+                t.style.fontSize = fs + '%';
                 tc.append(t, ' ');
             });            
             tc.append(newDiv().attr('style','clear:both'));
@@ -1177,7 +1176,7 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
         d.append('Location: ');
         if (v.value) {
             var mapVisible = false;
-            var sl = newSpaceLink(v.value).appendTo(d).click(function() {
+            var sl = $(newSpaceLink(v.value)).appendTo(d).click(function() {
                 if (!mapVisible) {
                     showMap();
                     reflowView();
@@ -1720,17 +1719,32 @@ function _objectViewContext() {
 
 function _addObjectViewPopupMenu(authored, target) {
     if (authored) {
-        var editButton = newEle('button').text('+').attr({
-            title: "Edit",
-            class: 'ObjectViewPopupButton'
-        }).appendTo(target).click(_objectViewEdit);                    
+        var editButton = _addObjectViewPopupMenu.editButton;
+        if (!editButton) {
+            editButton = _addObjectViewPopupMenu.editButton = newEle('button').text('+').attr({
+                title: "Edit",
+                class: 'ObjectViewPopupButton'
+            });
+        }
+        else {
+            editButton = editButton.clone();
+        }
+        editButton[0].onclick = _objectViewEdit;
+        editButton.appendTo(target);
     }
 
-    var popupmenuButton = newEle('button').html('&gt;').attr({
-        title: "Actions...",
-        class: 'ObjectViewPopupButton'
-    }).appendTo(target).click(_objectViewContext);
-
+    var popupmenuButton = _addObjectViewPopupMenu.popupmenuButton;
+    if (!popupmenuButton) {
+        popupmenuButton = _addObjectViewPopupMenu.popupmenuButton = newEle('button')
+                                .html('&gt;').attr({
+                                    title: "Actions...",
+                                    class: 'ObjectViewPopupButton'
+                                });
+    }
+    else {
+       popupmenuButton = popupmenuButton.clone(); 
+    }
+    popupmenuButton.appendTo(target).click(_objectViewContext)
 }
 
 /**
@@ -1995,7 +2009,10 @@ function newSpaceLink(spacepoint) {
     var lat = _n(spacepoint.lat);
     var lon = _n(spacepoint.lon);
     var mll = objSpacePointLatLng($N.myself());
-    var spacelink = newEle('a');
+    
+    var spacelink = newEle('a', true);
+    
+    var text = '';
     if (mll) {
         var dist = '?';
         //TODO check planet
@@ -2004,12 +2021,15 @@ function newSpaceLink(spacepoint) {
             dist = geoDist(sx, mll);
 
         if (dist === 0)
-            spacelink.text('[ Here ]');
+            text = ('[ Here ]');
         else
-            spacelink.text('[' + lat + ',' + lon + ':  ' + _n(dist) + ' km away]');
+            text = ('[' + _n(lat,2) + ',' + _n(lon, 2) + ':  ' + _n(dist) + ' km away]');
     } else {
-        spacelink.text('[' + lat + ',' + lon + ']');
-    }            
+        text = ('[' + _n(lat,2) + ',' + _n(lon,2) + ']');
+    }          
+    
+    spacelink.innerHTML = text;
+    
     return spacelink;
 }
 
@@ -2026,46 +2046,63 @@ function ISODateString(d) {
 function newMetadataLine(x, showTime) {
     var mdline = newDiv().addClass('MetadataLine');
 
+    var e = [];
+    
     var ots = objTagStrength(x, false);
     _.each(ots, function(s, t) {
         if ($N.property[t])
             return;
 
         var tt = $N.class[t];
-        var taglink = newTagButton(tt || t);
-        applyTagStrengthClass(taglink, s);
+        
+        var taglink = newTagButton(tt || t, false, undefined, true);
+        taglink.classList.add(getTagStrengthClass(s));
 
-        mdline.append(taglink, '&nbsp;');
+        e.push(taglink);
+        e.push(' ');
     });
 
     var spacepoint = objSpacePoint(x);
     if (spacepoint) {       
-        mdline.append(newSpaceLink(spacepoint), '&nbsp;');
+        e.push(newSpaceLink(spacepoint));
+        e.push(' ');
     }
 
     if (showTime !== false) {
         var ww = objWhen(x);
         if (ww) {
-            mdline.append(newEle('a').append($.timeago(new Date(ww))));
+            //e.push(newEle('a').append($.timeago(new Date(ww))));
+            e.push($.timeago(new Date(ww)));
         }
     }
     
     var numIn = $N.dgraph.inEdges(x.id);
     var numOut = $N.dgraph.outEdges(x.id);
     if ((numIn.length > 0) || (numOut.length > 0)) {
-        mdline.append('&nbsp;');
+        e.push(' ');
     }    
     
     if (numIn.length > 0) {
-        mdline.append( newEle('a').html('&lt;' + numIn.length).attr('title', 'In links') );
+        e.push( newA('&Larr;' + numIn.length, 'In links') );
     }
     
     if (numOut.length > 0) {
         if (numIn.length > 0)
-            mdline.append('|');
-        mdline.append( newEle('a').html(numOut.length + '&gt;').attr('title', 'Out links') );
+            e.push('|');
+        e.push( newA(numOut.length + '&Rarr;', 'Out links') );
     }
     
     
-    return mdline;
+    return mdline.append(e);
+}
+
+function newA(html, title, func) {
+    var n = newEle('a', true);
+    if (html)
+    n.innerHTML = html;
+    if (title)
+        n.setAttribute('title', title);
+    if (func)
+        n.onclick = func;
+    return n;
 }

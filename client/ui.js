@@ -1003,7 +1003,16 @@ function newTagCloud(onChanged) {
                 };
             }*/
 
-            ab = newTagButton(k, null);
+            ab = newTagButton(k, function() {
+                if (browseTagFilters[k] < 0)
+                    delete browseTagFilters[k];
+                else if ((browseTagFilters[k] === 0) || (browseTagFilters[k] === undefined))
+                    browseTagFilters[k] = 1;
+                else if (browseTagFilters[k] > 0)
+                    browseTagFilters[k] = -1;
+                onChanged(browseTagFilters);
+                return false;
+            }, false);
             
 
             var ti = tagcount[k];

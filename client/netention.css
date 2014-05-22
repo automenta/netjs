@@ -2165,7 +2165,9 @@ svg {
 .FocusTagCloud button {
     background: transparent;
     border: none;
-    padding: 0;    
+    margin: 0;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 .ViewBusy {
     opacity: 0.5;

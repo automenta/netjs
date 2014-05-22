@@ -61,7 +61,6 @@ exports.plugin = function($N) {
 							o.name = title;
 							o.earthPoint(where[0], where[1]);
 
-							o.addTag('Goal');
 							o.addTag('Weather');
 
 							if (rainMM > 0) {

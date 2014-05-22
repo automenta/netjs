@@ -903,8 +903,11 @@ function newDiv(id) {
     return e;
 }
 
-function newEle(e) {
-    return $(document.createElement(e));
+function newEle(e, dom) {
+    var d = document.createElement(e);
+    if (dom)
+        return d;    
+    return $(d);
 }
 
 function newPopup(title, p, isModal) {
