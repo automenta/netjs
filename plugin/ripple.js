@@ -81,7 +81,6 @@ exports.plugin = function($N) {
 
                         pending = _.intersection(pending, _.keys(accountsUpdate));
 
-
                         //https://github.com/ripple/ripple-lib/blob/develop/docs/REFERENCE.md#2-remote-functions
                         function nextAccount() {
                             var userid = pending.pop();
@@ -94,14 +93,14 @@ exports.plugin = function($N) {
                                 return;
                             }
 
-                            var a = accounts[userid];
+                            var a = accounts[userid].trim();
 
                             remote.request_account_info({
                                 account: a
                             }, function(err, res) {
                                 if (!err) {
                                     var xrpBalance = parseFloat(res.account_data.Balance) / 1e6;
-
+                                
                                     remote.request_account_lines({
                                         account: a
                                     }, function(err, res) {

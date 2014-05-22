@@ -157,6 +157,8 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var SORT_NEAR = (sort === 'Near');
     var SORT_RECENT = (sort === 'Recent');
 
+    var focusTagStrength = objTagStrength(focus, false);
+    
     _.each($N.instance, function(x, k) {
 
         if (x.hidden)
@@ -165,10 +167,11 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         if (x.replyTo)  //TODO make this conditoin optional
             return;
 
-        var tags = objTags(x);
+        var xx;
 
         if (preFilter) {
-            if (!preFilter(x, tags))
+            xx = objTagStrength(x, false);
+            if (!preFilter(x, xx))
                 return;
         }
 
@@ -178,7 +181,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                 allowed = false;
                 for (var i = 0; i < ii.length; i++) {
                     var inc = ii[i];
-                    if (tags.indexOf(inc)!==-1) {
+                    if (tags[inc]!==undefined) {
                         allowed = true;
                         break;
                     }
@@ -187,7 +190,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             if (ee.length > 0) {
                 for (var i = 0; i < ee.length; i++) {
                     var exc = ee[i];
-                    if (tags.indexOf(exc)!==-1) {
+                    if (tags[exc]!==undefined) {
                         allowed = false;
                         break;
                     }
@@ -283,13 +286,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                         return;
                     }
                 }
-
-                if (r > 0) {
-                    if (ft.length > 0) {
-                        var m = objTagRelevance(focus, x);
-                        r *= m;
-                    }
-                }
+                
                 if (r > 0) {
                     if (focusWhen) {
                         var f = focusWhen.from;
@@ -301,6 +298,14 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                             if (wx > t)
                                 r = 0;
                         }
+                    }
+                }
+
+                if (r > 0) {
+                    if (ft.length > 0) {
+                        if (!xx)
+                             xx = objTagStrength(x, false);
+                        r *= objTagStrengthRelevance(xx, focusTagStrength);
                     }
                 }
             }

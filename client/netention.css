@@ -785,7 +785,6 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     padding-top: 0.5em;
 }
 #AvatarFocus {
-    position: absolute;
     bottom: 0;
     padding-bottom: 5px;
 }
@@ -2152,23 +2151,37 @@ svg {
 }
 
 .FocusTagCloud {
-    max-height: 6em;
-    line-height: 1.0em;
+    max-height: 16em;
     padding-top: 5px;
     padding-bottom: 5px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    line-height: 0.5em;
+    width: 100%;
 }
-.FocusTagCloud .tagLink {
-    padding-left: 0.4em !important;
-    padding-right: 0.4em !important;
+.FocusTagCloud a {
+    white-space: pre;
+}
+.FocusTagCloud button {
+    background: transparent;
+    border: none;
+    padding: 0;    
 }
 .ViewBusy {
     opacity: 0.5;
 }
-.valueTagCloud {
+ .valueTagCloud {
     word-break: break-all;
-    line-height: 0.5em;
-}
+   line-height: 0.5em;
+ }
 .valueTagCloud span {
     margin-right: 2px;
+}
+.tagFilterExclude {
+    text-decoration: line-through;
+    background-color: rgba(255,0, 0,0.25);
+}
+.tagFilterInclude {
+    opacity: 0.8;    
+    background-color: rgba(0,255,0,0.25);
 }

@@ -716,7 +716,8 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
     var tagIcon = $('<img src="' + getTagIcon(tag) + '"/>');
 
-    d.append(tagLabel);
+    if (!isPrim)
+        d.append(tagLabel);
     
     /*if (!isPrim)
         d.append(newTagButton(tag, false));*/
@@ -800,7 +801,6 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     if (isPrim) {
         //tagLabel.hide();    
         type = tag;
-        tagLabel.hide();
     }
 
     if (T.name)
@@ -860,13 +860,14 @@ newTagValueWidget.markdown = function(x, index, v, prop, editable, d, events) {
 newTagValueWidget.tagcloud = function(x, index, v, prop, editable, d, events) {
     if (!editable) {
         if (v.value) {
-            var tc = newDiv().addClass('valueTagCloud').appendTo(d);
+            var tc = newDiv().addClass('valueTagCloud');
             _.each(v.value, function(v, k) {
                 var fs = 100.0 * (0.5 + 0.5 * v);
                 var t = newEle('a').html(k).attr('style', 'font-size: ' + fs + '%');
                 tc.append(t, ' ');
             });            
             tc.append(newDiv().attr('style','clear:both'));
+            tc.appendTo(d);
         }
     }        
 };
@@ -906,8 +907,14 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                 objAddValue(y, prop.id, dd.html(), v.strength);
             });
         } else {
-            if (v.value) {
-                var hv = newDiv().addClass('htmlview').html(v.value).appendTo(d);
+            var vvv = v.value;
+            
+            if (!vvv)
+                if (x.author === $N.id())
+                    vvv = '';
+            
+            if (vvv!==undefined) {
+                var hv = newDiv().addClass('htmlview').html(vvv).appendTo(d);
                 if (x.author === $N.id()) {
                     hv.addClass('htmleditable');
                     Aloha.jQuery(hv).aloha();

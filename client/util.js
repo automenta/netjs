@@ -425,29 +425,46 @@ function objTagStrength(x, normalize, noProperties) {
 }
 exports.objTagStrength = objTagStrength;
 
-function objTagStrengthRelevance(xx, yy, noProperties) {
-    var xxk = _.keys(xx);
-    var yyk = _.keys(yy);
-
-    if ((xxk.length === 0) && (yyk.length === 0))
-        return 0;
-
-    var den = parseFloat(Math.max(xxk.length, yyk.length));
+function objTagStrengthRelevance(xx, yy) {
+    var xxc = 0, yyc = 0;
+    for (var i in xx)
+        xxc++;
+    if (xxc === 0) return;
+    for (var i in yy)
+        yyc++;
+    if (yyc === 0) return;
+    
+    var den = Math.max(xxc, yyc);
 
     var r = 0;
+    var negatives = _.min(yy) < 0;
+    var positives = _.max(yy) > 0;
 
-    for (var i = 0; i < xxk.length; i++) {
-        var c = xxk[i];
+    for (var c in xx) {
 
         //if (yyk.indexOf(c)!==-1) {
         if (yy[c] !== undefined) {
-            r += xx[c] * yy[c];
+            
+            //only yy is tested for having negative values
+            if (negatives) {
+                if ((yy[c] < 0) && (xx[c] > 0))
+                    return 0;
+                if (!positives)
+                    r += 1;
+            }
+            if (positives) {         
+                r += xx[c] * yy[c];
+            }
+        }
+        else { 
+            if (negatives) {
+                if (!positives)
+                    r += 1;
+            }
         }
     }
 
-    var result = r / den;
-
-    return result;
+    return r / den;
 }
 exports.objTagStrengthRelevance = objTagStrengthRelevance;
 
@@ -457,7 +474,7 @@ function objTagRelevance(x, y, noProperties) {
     var xx = objTagStrength(x, false, noProperties);
     var yy = objTagStrength(y, false, noProperties);
 
-    return objTagStrengthRelevance(xx, yy, noProperties);
+    return objTagStrengthRelevance(xx, yy);
 }
 exports.objTagRelevance = objTagRelevance;
 
@@ -532,43 +549,25 @@ function objHasTag(x, t) {
             continue;
 
         var vid = vv.id;
-        if (typeof vv == "string")
-            vid = vv;
-        else if (Array.isArray(vv))
-            vid = vv[0];
-
         if (!vid)
             continue;
 
-        if (vv.strength === 0)
-            continue;
+        if (vv.strength!==undefined)
+            if (vv.strength <= 0)
+                continue;
         if (isPrimitive(vid))
             continue;
 
         if (tIsArray) {
-            if (t.indexOf(vid) != -1) //may be slightly faster than _.contains
+            if (t.indexOf(vid) !== -1)
                 return true;
-            /*if (_.contains(t, vid))
-             return true;*/
         } else {
-            if (vid == t)
+            if (vid === t)
                 return true;
         }
     }
     return false;
 
-}
-
-function objHasTagOLD(x, t) {
-    //if t is an array, return true if any one of t's elements is a tag 
-    if (Array.isArray(t)) {
-        var ot = objTags(x);
-        for (var i = 0; i < t.length; i++)
-            if (_.contains(ot, t[i]))
-                return true;
-        return false;
-    } else
-        return _.contains(objTags(x), t);
 }
 exports.objHasTag = objHasTag;
 
@@ -605,10 +604,13 @@ function objSetFirstValue(object, id, newValue) {
         objAddValue(object, id, newValue);
     } else {
         if (object.value) {
-            object.value.forEach(function(vk) {
-                if (vk.id === id)
+            for (var i = 0; i < object.value.length; i++) {
+                var vk = object.value[i];
+                if (vk.id === id) {
                     vk.value = newValue;
-            });
+                    break;
+                }
+            }            
         }
     }
 }
@@ -1793,7 +1795,7 @@ function objCompact(o) {
     delete y.modifiedAt;
     delete y.createdAt;
 
-    if ((Array.isArray(y.extend)) && (y.extend.length == 1))
+    if ((Array.isArray(y.extend)) && (y.extend.length === 1))
         y.extend = y.extend[0];
 
     delete y.reply;
@@ -1813,7 +1815,7 @@ function objCompact(o) {
     var k = _.keys(y);
     for (var i = 0; i < k.length; i++) {
         var K = k[i];
-        if (K[0] == '_') {
+        if (K[0] === '_') {
             delete y[K];
             continue;
         }
@@ -1839,7 +1841,7 @@ function objCompact(o) {
              } else*/ {
                 var ia = v.id;
                 var va = v.value || null;
-                var s = v.strength || 1.0;
+                var s = (v.strength!==undefined) ? v.strength : 1.0;
 
                 if (va) {
 
@@ -1865,7 +1867,7 @@ function objCompact(o) {
         ;
 
         y.value = newValues;
-        if (y.value.length == 0) {
+        if (y.value.length === 0) {
             delete y.value;
         }
     }
@@ -1887,7 +1889,7 @@ function objExpand(o) {
     renameObjectFields(o, true);
 
     if (o.removed) {
-        if (typeof o.removed != 'boolean') {
+        if (typeof o.removed !== 'boolean') {
             o.id = o.removed;
             o.removed = true;
         }

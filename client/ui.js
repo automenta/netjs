@@ -932,8 +932,8 @@ function renderFocus(skipSet) {
     var tc = newTagCloud(function(filter) {
         later(function() {
             var f = new $N.nobject();
-            _.keys(filter).forEach(function(t) {
-                f.addTag(t);
+            _.each(filter, function(v, t) {
+                f.addTag(t, v);
             });
             $N.setFocus(f);
             renderFocus(true);            
@@ -945,13 +945,13 @@ function renderFocus(skipSet) {
 
 
 function newTagCloud(onChanged) {
-    var tagcloud = newDiv().addClass('FocusTagCloud').css('word-break','break-all');
+    var tagcloud = newDiv().addClass('FocusTagCloud');
     var browseTagFilters = {};
     
     var f =  $N.focus();
-    var ft = objTags(f);
-    ft.forEach(function(t) {
-      browseTagFilters[t] = true;
+    var ft = objTagStrength(f, false);
+    _.each(ft, function(v, t) {
+      browseTagFilters[t] = v;
     });
 
 
@@ -976,18 +976,19 @@ function newTagCloud(onChanged) {
 
         tags.forEach(function(k) {
 
-            var t = $N.tag(k);
-            var ti = tagcount[k];
+            var t = $N.tag(k);          
 
             var name;
-            if (t !== undefined)
+            if (t !== undefined) {
+                if (t.hidden) return;
                 name = t.name;
+            }
             else
                 name = k;
 
             var ab;
 
-            function toggleTag(x) {
+            /*function toggleTag(x) {
                 return function() {
                     if (browseTagFilters[x]) {
                         delete browseTagFilters[x];
@@ -1000,21 +1001,44 @@ function newTagCloud(onChanged) {
                     if (onChanged)
                         onChanged(browseTagFilters);
                 };
-            }
+            }*/
 
-            ab = newTagButton(t, toggleTag(k));
-            var label = ab.html();
-            ab.html('&nbsp;');
-            ab.attr('title', label||k);
+            ab = newTagButton(k, null);
+            
 
-            ab.css('font-size', 200.0 * ( 0.5  + 0.5 * ti) + '%');            
+            var ti = tagcount[k];
+            ab.css('font-size', 120.0 * ( 0.8  + 0.2 * ti) + '%');            
             //ab.css('float','left');
 
-            if (!browseTagFilters[k]) {
-                ab.css('opacity', 0.4);
+            ab.removeClass('tagFilterInclude tagFilterExclude');
+            if (browseTagFilters[k] < 0) {
+                ab.addClass('tagFilterExclude');
+            }
+            else if (browseTagFilters[k] > 0) {
+                ab.addClass('tagFilterInclude');
+            }
+            else {
             }
 
-            tagcloud.append(ab,'&nbsp;');
+            if (browseTagFilters[k]!==-1.0)
+                var downButton = newEle('button').html('-').click(function() {
+                     var v = browseTagFilters[k];
+                     if (v === 1.0)     delete browseTagFilters[k];
+                     else if (v === undefined)   browseTagFilters[k] = -1;
+                     onChanged(browseTagFilters);
+                     return false;
+                });
+            if (browseTagFilters[k]!==1.0)
+                var upButton = newEle('button').html('+').click(function() {                
+                     var v = browseTagFilters[k];
+                     if (v === -1.0)     delete browseTagFilters[k];
+                     else if (v === undefined)   browseTagFilters[k] = +1;
+                     onChanged(browseTagFilters);
+                     return false;
+                });
+            
+            ab.prepend(downButton, upButton);
+            tagcloud.append(newEle('div').append(ab));
 
         });
 

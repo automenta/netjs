@@ -190,7 +190,11 @@ function newShareView(v) {
 
             //$('body').timeago('refresh');
         }, (!onlyUsers) ? function(x, tags) {
-            return _.intersection(tags, allShareTags).length > 0;
+            for (var i in tags) {
+                if (allShareTags.indexOf(i)!==-1)
+                    return true;
+            }
+            return false;
         } : undefined);
     }
 

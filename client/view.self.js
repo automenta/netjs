@@ -49,9 +49,6 @@ function saveAddedTags(gt, tag, when) {
         ng = objAddTag(ng, g);
         ng.subject = $N.myself().id;
         
-        ng.inout = { };
-        ng.inout[ng.subject] = { };
-        ng.inout[ng.subject][g] = tag;
 
         $N.pub(ng, function (err) {
             $.pnotify({
@@ -205,8 +202,10 @@ function newUsView(v) {
                     return function () {
                         var x = objNew();
                         x.name = T.name;
-                        x.author = x.subject = $N.id();
+                        x.author = 
+                            x.subject = $N.id();
                         x.addTag(T.id);
+                        
                         newPopupObjectEdit(x);
                     }
                 } else {
