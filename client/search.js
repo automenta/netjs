@@ -111,6 +111,7 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
 
 function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
+    var myid = $N.id();
     var now = Date.now();
     var location = objSpacePointLatLng($N.myself());
 
@@ -139,11 +140,6 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             return true;
         });
 
-        if (focus.userRelation) {
-            if ($N.userRelations == null) {
-                $N.userRelations = objUserRelations($N.objectsWithTag('Trust', true));
-            }
-        }
 
     }
 
@@ -218,14 +214,18 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
             if (focus.userRelation) {
                 if (x.author) {
+                    if (myid===x.author)
+                        return;
+                    
                     if (focus.userRelation.itrust) {
                         //do I trust the author of the object?
-                        if ($N.userRelations[$N.id()]['trusts'][x.author] === undefined)
+                        if ($N.getTrust(myid, x.author) <= 0)
                             return;
                     }
+                    
                     if (focus.userRelation.trustme) {
                         //do I trust the author of the object?
-                        if ($N.userRelations[$N.id()]['trustedBy'][x.author] === undefined)
+                        if ($N.getTrust(x.author, myid) <= 0)
                             return;
                     }
                 }

@@ -1434,7 +1434,8 @@ var Ontology = function(storeInstances, target) {
     
     //graphlib.alg.floydWarshall
     //ex: JSON.stringify( $N.getGraphDistances("Trust"), null, 4 )
-    that.getGraphDistances = function(edgeFilter) {
+    //warning: always use the same node filter because the cache will not automatically invalidate if you change it
+    that.getGraphDistances = function(edgeFilter, nodeFilter) {
         if (typeof edgeFilter === "string") {
             var existing = that._graphDistance[edgeFilter];
             if (existing)
@@ -1443,8 +1444,11 @@ var Ontology = function(storeInstances, target) {
             
         var g = that.dgraph;
 
-        var results = {},
-                nodes = _.keys(that.instance);
+        var results = {};
+        
+        var nodes = nodeFilter ?
+                _.pluck(_.filter(_.values(that.instance), nodeFilter), 'id') :
+                _.keys(that.instance);
 
         var weightFunc = weightFunc || function() {
             return 1;
@@ -1461,6 +1465,7 @@ var Ontology = function(storeInstances, target) {
                                 else
                                     return g.outEdges(u);
                             };
+
 
         nodes.forEach(function(u) {
             results[u] = {};
@@ -1496,6 +1501,7 @@ var Ontology = function(storeInstances, target) {
                 });
             });
         });
+        
         nodes.forEach(function(k) {
             var rowK = results[k];
             nodes.forEach(function(i) {
@@ -1509,17 +1515,22 @@ var Ontology = function(storeInstances, target) {
         });
         
         if (typeof edgeFilter === "string") {
-            if (that.graphDistanceTag.indexOf(edgeFilter)!==-1)
+            if (that.graphDistanceTag && that.graphDistanceTag.indexOf(edgeFilter)!==-1)
                 that._graphDistance[edgeFilter] = results;
         }
 
         return results;
     };
-    that.getGraphDistance = function(edgeFilter, fromNode, toNode) {
-        var d = that.getGraphDistances(edgeFilter);
+    
+    that.getGraphDistance = function(edgeFilter, nodeFilter, fromNode, toNode) {
+        if (fromNode === toNode)
+            return 0;
+        
+        var d = that.getGraphDistances(edgeFilter, nodeFilter);
         if (d[fromNode])
             if (d[fromNode][toNode])
                 return d[fromNode][toNode].distance;
+        
         return Infinity;
     };
 

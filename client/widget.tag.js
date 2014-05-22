@@ -169,9 +169,6 @@ function newNeedsBrowser() {
     return e;
 }
 
-var _onTagAddedFunc = function() {
-    onTagAdded($(this).attr('id').substring(prefix.length));
-};
 
 function newTreeBrowser(selected, onTagAdded) {
     var e = newDiv().addClass('SelfTimeTagTree');
@@ -180,6 +177,9 @@ function newTreeBrowser(selected, onTagAdded) {
 
     var prefix = 'S_';
 
+    var _onTagAddedFunc = function() {
+        onTagAdded($(this).attr('id').substring(prefix.length));
+    };
     
     newTagTree({
         target: e,

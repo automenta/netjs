@@ -986,24 +986,7 @@ function newTagCloud(onChanged) {
             else
                 name = k;
 
-            var ab;
-
-            /*function toggleTag(x) {
-                return function() {
-                    if (browseTagFilters[x]) {
-                        delete browseTagFilters[x];
-                        ab.css('opacity', 0.4);
-                    }
-                    else {
-                        browseTagFilters[x] = true;
-                        ab.css('opacity', 1.0);
-                    }
-                    if (onChanged)
-                        onChanged(browseTagFilters);
-                };
-            }*/
-
-            ab = newTagButton(k, function() {
+            var ab = newTagButton(k, function() {
                 if (browseTagFilters[k] < 0)
                     delete browseTagFilters[k];
                 else if ((browseTagFilters[k] === 0) || (browseTagFilters[k] === undefined))
