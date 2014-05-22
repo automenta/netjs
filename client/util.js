@@ -1515,6 +1515,13 @@ var Ontology = function(storeInstances, target) {
 
         return results;
     };
+    that.getGraphDistance = function(edgeFilter, fromNode, toNode) {
+        var d = that.getGraphDistances(edgeFilter);
+        if (d[fromNode])
+            if (d[fromNode][toNode])
+                return d[fromNode][toNode].distance;
+        return Infinity;
+    };
 
 
     //.searchOntology(query)

@@ -198,6 +198,12 @@ test("Trust Network", function() {
     strictEqual(undefined, $N._graphDistance['Trust'], "Trust distance invalidated");
     ok($N.getGraphDistances("Trust"), "trust network re-calculated");
     
+    strictEqual(1, $N.getGraphDistance("Trust", "a", "b"), "correct graph distance calculation = 1 between directly connected");
+    strictEqual(Infinity, $N.getGraphDistance("Trust", "b", "a"), "correct graph distance calculation = Infinity when no connection exist");
+
+    $N.add(ba);
+    
+    strictEqual(1, $N.getGraphDistance("Trust", "b", "a"), "correct graph distance calculation = Infinity when no connection exist");
     
     //TODO test attempt at setting trust for someone other than self, which should fail
 });
