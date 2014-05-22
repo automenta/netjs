@@ -396,6 +396,7 @@ div.olMapViewport {
 }
 #ViewSelect {
     float: left;
+    line-height: 0;
 }
 #ViewOptions {
     text-align: right;
@@ -690,15 +691,16 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     float: left;
     border: 0;
     background-color: #333;
-    opacity: 0.6;
+    opacity: 0.5;
 }
 .ViewControl:hover,
 .ViewActive {
     opacity: 1.0;
-    background-color: #111;
+    background-color: #fff;
 }
 .ViewControl img {
     width: 45px;
+    background-color: #222;
 }
 .view-indented {
     left: 55px !important;
