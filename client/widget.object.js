@@ -709,9 +709,9 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         }
     }
 
-    var tagLabel = newEle('span').html(tag).addClass('tagLabel');
-
-    var tagIcon = $('<img src="' + getTagIcon(tag) + '"/>');
+    var tagLabel = newEle('span', true);
+    tagLabel.innerHTML = tag;
+    tagLabel.classList.add('tagLabel');
 
     if (!isPrim)
         d.append(tagLabel);
@@ -801,7 +801,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     }
 
     if (T.name)
-        tagLabel.html(T.name);
+        tagLabel.innerHTML = T.name;
    
     if (isProp) {
         type = T.extend;
@@ -818,10 +818,11 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         newTagValueWidget.tag(x, index, t, T, editable, d, events);        
     }    
 
-    if (editable)
-        tagIcon.prependTo(tagLabel);
+    if (editable) {
+        $('<img src="' + getTagIcon(tag) + '"/>').prependTo($(tagLabel));
+    }
     else if (!isPrim)
-        tagLabel.append(':&nbsp;');
+        tagLabel.innerHTML += ':&nbsp;';
 
     if (t.description)
         d.append('<ul>' + t.description + '</ul>');
@@ -1105,7 +1106,7 @@ newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
                 d.append('<a target="_blank" href="' + v.value + '">' + v.value + '</a>');
         }
         else {
-            var dd = newEle('span').appendTo(d);
+            var dd = newEle('span', true);
             if (v.value) {
                 var valstring;
 
@@ -1117,8 +1118,9 @@ newTagValueWidget.integer = function(x, index, v, prop, editable, d, events) {
                     valstring = v.value;
                 }
 
-                dd.html(valstring);
+                dd.innerHTML = (valstring);
             }
+            d.append(dd);
         }
     }
 
