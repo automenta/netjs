@@ -965,7 +965,7 @@ var Ontology = function(storeInstances, target) {
 
             that.serializedClasses = null;
         
-            indexInstance(x, false);
+            //indexInstance(x, false); //index classes?
         }
         else if (objIsProperty(x)) {
             that.property[x.id] = x;
@@ -976,7 +976,7 @@ var Ontology = function(storeInstances, target) {
             delete x._instance;
             that.serializedPropreties = null;
             
-            indexInstance(x, false);
+            //indexInstance(x, false); //index properties?
         }
         else if (storeInstances) {
             var existing = false;
