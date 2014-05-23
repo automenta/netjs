@@ -222,12 +222,41 @@ function updateViewControls() {
 
 }
 
+var viewlock = true;
+var viewUpdatesBuffered = 0;
+function setViewLock(b) {
+    if (b) {
+        $('#ViewUpdates').show();
+        $('#ViewUpdates').html('');
+        $('#ViewUpdates').append(newEle('button').html('Update').click(function() {
+            later(function() {
+                _updateView(true);            
+                updateViewLock(0);                
+            });
+        }).hide());        
+    }
+    else {
+        $('#ViewUpdates').hide();
+    }
+    viewlock = b;
+}
+setViewLock(true);
+
+function updateViewLock(n) {
+    if (n!==undefined)
+        viewUpdatesBuffered += n;
+    
+    if (viewUpdatesBuffered > 0) {
+        $('#ViewUpdates button').html(viewUpdatesBuffered + ' updates').show();
+    }
+    else {
+        $('#ViewUpdates button').hide();
+    }
+}
 
 var _firstView = true;
 
 function _updateView(force) {
-
-
     updateBrand();
     renderFocus(true);
 
@@ -260,6 +289,14 @@ function _updateView(force) {
     }
     else
         return;
+
+    console.log(viewlock, force, _firstView);
+    if (viewlock && !force && !_firstView) {
+        updateViewLock(1);
+        return;
+    }
+    viewUpdatesBuffered = 0;
+
 
     if (!force) {
         if ((currentView) && (view === lastView)) {
@@ -367,7 +404,7 @@ function _updateView(force) {
         else
             _firstView = false;
     }
-
+    _firstView = false;
 
 }
 
@@ -620,7 +657,11 @@ $(document).ready(function() {
         $('#LoadingSplash').hide();
     }
 
-
+    //add tooltips
+    $('.ViewControl').each(function(x) {
+        $(this).prepend(newEle('span').html($(this).attr('title')));
+        $(this).attr('title','');
+    });
 
 
     $('#close-menu').button();

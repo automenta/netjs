@@ -68,6 +68,10 @@ function openSelectProfileModal(title) {
     $('#ProfileSelect').html(newProfileWidget());
 }
 
+$( "#FocusTabs" ).tabs({
+  collapsible: true
+});
+  
 $('#SelectProfileButton').click(function() {
     openSelectProfileModal()
 });

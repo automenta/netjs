@@ -85,24 +85,24 @@
                 <button id="TogetherJSTalk" onclick="startTalk(); return false;" 
                         title="Toggle Communicator" style="display: none">Talk</button>
 
-                <a _href="#" id="main" class="ViewControl" title="Main"><img src="icon/view.main.svg"></a>
-                <a _href="#" id="us" class="ViewControl" title="Us"><img src="icon/view.us.svg"></a>
-                <a _href="#" id="map" class="ViewControl" title="Map"><img src="icon/view.map.svg"></a>
-                <a _href="#" id="time" class="ViewControl" title="Time"><img src="icon/view.time.svg"></a>
-                <a _href="#" id="browse" class="ViewControl" title="Browse"><img src="icon/view.browse.svg"></a>
-                <a _href="#" id="chat" class="ViewControl" title="Chat"><img src="icon/view.chat.svg"></a>
-                <a _href="#" id="graph" class="ViewControl" title="Network"><img src="icon/view.graph.svg"></a>
-                <a _href="#" id="share" class="ViewControl" title="Share"><img src="icon/view.share.svg"></a>
-                <a _href="#" id="trends" class="ViewControl" title="Trends"><img src="icon/view.trends.svg"></a>
-                <a _href="#" id="wiki" class="ViewControl" title="Wiki"><img src="icon/view.wiki.svg"></a>
-                <!-- <a _href="#" id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></a> -->
-                <a _href="#" id="notebook" class="ViewControl" title="Notebook"><img src="icon/view.browse.svg"></a>
+                <a id="us" class="ViewControl" title="Us"><img src="icon/view.us.svg"></a>
+                <a id="map" class="ViewControl" title="Map"><img src="icon/view.map.svg"></a>
+                <a id="time" class="ViewControl" title="Time"><img src="icon/view.time.svg"></a>
+                <a id="browse" class="ViewControl" title="Browse"><img src="icon/view.browse.svg"></a>
+                <a id="chat" class="ViewControl" title="Chat"><img src="icon/view.chat.svg"></a>
+                <a id="graph" class="ViewControl" title="Network"><img src="icon/view.graph.svg"></a>
+                <a id="share" class="ViewControl" title="Share"><img src="icon/view.share.svg"></a>
+
+                <a id="main" class="ViewControl ViewControlMinor" title="Main"><img src="icon/view.main.svg"></a>
+                <a id="trends" class="ViewControl ViewControlMinor" title="Trends"><img src="icon/view.trends.svg"></a>
+                <a id="wiki" class="ViewControl ViewControlMinor" title="Wiki"><img src="icon/view.wiki.svg"></a>
+                <!-- <a id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></a> -->
+                <a id="notebook" class="ViewControl ViewControlMinor" title="Notebook"><img src="icon/view.browse.svg"></a>
+            </div>
+            <div id="ViewUpdates" style="display:none" class="section">
             </div>
 
             <div id="AvatarFocus" class="section">
-                <a id="AddContentButton" href="#" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
-                <a id="FocusNeedButton" href="#" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
-                <a id="FocusClearButton" href="#" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
                 <!--
                                 <button id="FocusWhatButton">What?</button>
                                 <button id="FocusWhereButton">Where?</button>
@@ -112,10 +112,22 @@
                                 <button id="FocusClearButton" title="Clear">[x]</button>
                 -->
 
-                <div id="FocusEdit"></div>
-            </div>
+                <div id="FocusTabs">
+                <ul>
+                  <li><a href="#ft1">Focus</a></li>
+                  <li><a href="#ft2">Options</a></li>
+                </ul>
+                  <div id="ft1">
+                        <div id="FocusEdit"></div>
+                        <a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
+                        <a id="FocusNeedButton" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
+                        <a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
+                  </div>
+                  <div id="ft2">
+                        <div id="AvatarViewMenu" class="section"></div>
+                  </div>
+                </div>
 
-            <div id="AvatarViewMenu" class="section"></div>
 
 
         </div>

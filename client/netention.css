@@ -695,12 +695,36 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .ViewControl:hover,
 .ViewActive {
     opacity: 1.0;
-    background-color: #fff;
 }
-.ViewControl img {
-    width: 45px;
+a.ViewControl img {
+    width: 46px;
     background-color: #222;
 }
+a.ViewControlMinor img {
+    width: 23px;
+}
+
+a.ViewControl {outline:none; }
+a.ViewControl:hover {text-decoration:none;} 
+a.ViewControl span {
+    z-index:1000;
+    display:inline;
+    opacity:0;
+    margin-top:0px; margin-left:0px;
+    position:absolute;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+}
+a.ViewControl:hover span{
+    opacity:1.0;
+    color:#fff;
+    width:auto;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+
+}
+
+
 .view-indented {
     left: 55px !important;
     border-left: none !important;
@@ -755,6 +779,18 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     overflow: hidden !important;
     height: 100%;
 }
+#FocusTabs, #FocusTabs ul {
+    background: transparent;
+    border: none;
+}
+#FocusTabs div {
+    padding: 0;
+}
+#FocusTabs li a {
+    padding: 0;
+}
+
+
 .viewmenu-container {
     position: relative;
     display: block;
@@ -1099,14 +1135,11 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
         margin: 0 !important;
     }
     #AvatarFocus {
-        text-align: right;
-        float: right;
     }
     #AvatarFocus .ViewControl:nth-child(2) {
         clear:both !important;
     }
     #AvatarFocus .tagSection {
-        float: right  !important;
         clear: none !important;
     }
     #FocusEdit {
@@ -1446,10 +1479,12 @@ html > body .ui-pnotify {
         text-align: left;
     }
     #identity {
-        float: left;
+        //float: left;
         text-align: left;
         position: fixed;
-        top: 69px;
+        //top: 69px;
+        top: 0px;
+        right: 0px;
     }
     #ViewMenu .section {
         clear: none;
@@ -1474,9 +1509,19 @@ html > body .ui-pnotify {
     .FocusButtonIcon {
         display: none !important;
     }
+    #FocusTabs ul {
+        float: right;
+        text-align: right;
+    }
+    
+    #FocusTabs div { clear: both;    }
+    
     .logon > div,
     .modal > div {
         width: 280px;
+    }
+    #FocusTabs {
+        clear: both;
     }
 }
 @media (min-width: 700px) {
