@@ -221,7 +221,7 @@ function newLayersWidget() {
 //            $('#View').empty();
 //            $('#View').html('<iframe src="' + embedLocation + '" frameBorder="0" id="embed-frame"></iframe>');
 //            $("#View").removeClass("ui-widget-content");
-//            var vm = $('#ViewMenu');
+//            var vm = $('#MainMenu');
 //            var shown = vm.is(':visible');
 //            showAvatarMenu(!shown);
 //            e.preventDefault();
@@ -288,7 +288,7 @@ function newLayersWidget() {
             
             $('#close-iframe').show();
             
-            var vm = $('#ViewMenu');
+            var vm = $('#MainMenu');
 
             var shown = vm.is(':visible');
             showAvatarMenu(!shown);

@@ -282,7 +282,7 @@ function newListView(v) {
 
     listRenderer = renderBrowseList;
 
-    var submenu = $('#AvatarViewMenu');
+    var submenu = $('#ViewMenu');
     var modeSelect = $('<select/>').appendTo(submenu);
                 
     var gridOption = '<option value="grid3">Grid x3</option>';

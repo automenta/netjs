@@ -294,7 +294,7 @@ function _updateView(force) {
     var vw = $('#ViewWrapper');
 
     var o = $('#ViewOptions');
-    var submenu = $('#AvatarViewMenu');
+    var submenu = $('#ViewMenu');
 
     if (vw.is(':visible')) {
     }
@@ -323,13 +323,13 @@ function _updateView(force) {
 
     o.empty();
 
-    $('#AvatarViewMenu').empty();
+    $('#ViewMenu').empty();
     submenu.empty();
 
     updateIndent(false);
 
     lastView = view;
-    $('#ViewMenu a').removeClass('ViewActive');
+    $('#MainMenu a').removeClass('ViewActive');
     $('#' + view).addClass('ViewActive');
 
     if (currentView)
@@ -342,7 +342,7 @@ function _updateView(force) {
     function indent() {
         submenu.show();
         vw.addClass('overthrow view-indented');
-        updateIndent($('#ViewMenu').is(":visible"));
+        updateIndent($('#MainMenu').is(":visible"));
     }
 
 

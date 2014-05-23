@@ -55,7 +55,7 @@ function newChatView(v) {
     var oldestNewObjectMS = 10 * 60 * 1000; //10 min
 
     //var roster = newRoster().attr('class', 'ChatViewRoster');    
-    var content = newDiv().addClass('ChatViewContent');
+    var content = v;//newDiv().addClass('ChatViewContent');
     var input = newChatInput(onChatSend).addClass('ChatViewInput');
     var roster = newRosterWidget().addClass('ChatViewRoster');
     var updates = newDiv().addClass('ChatViewUpdates').addClass('ui-widget-content');
@@ -94,7 +94,7 @@ function newChatView(v) {
         content.scrollTop(content.prop('scrollHeight'));
     }, 150);
 
-    var viewMenu = $('#AvatarViewMenu');
+    var viewMenu = $('#ViewMenu');
     $('<button>Scroll to Bottom</button>').appendTo(viewMenu).click(scrollbottom);
     //TODO toggle replies
     //TODO adjust highlight history period

@@ -130,7 +130,7 @@ function newUsView(v) {
         v.empty();
         var container = newDiv().addClass('usContainer').appendTo(v);
 
-        var currentGoalHeader = $('#AvatarViewMenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
+        var currentGoalHeader = $('#ViewMenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
 
         var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
         var goalList = newDiv('goalviewList').addClass('goalviewColumn');

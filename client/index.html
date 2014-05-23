@@ -66,11 +66,11 @@
         <!-- UI LAYERS -->
         <div id="NotificationArea"></div>
         <div id="ViewWrapper"></div>
-        <div id="toggle-menu" style="display:none;" class="ui-corner-all shadow"><img id="toggle-img" title="Click here to expand the control panel" class="ui-corner-all" alt="toggle menu button" src="icon/netention-button.png" /></div>
+        <a id="AvatarButtonMini" style="display:none;" class="ui-corner-all shadow"><img id="toggle-img" title="Click here to expand the control panel" class="ui-corner-all" alt="toggle menu button" src="icon/netention-button.png" /></a>
 
         <div id="ActionMenuWrapper"></div>
         <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;"><img id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" /></div>
-        <div id="ViewMenu" style="display:none;" class="ui-widget shadow overthrow">
+        <div id="MainMenu" style="display:none;" class="ui-widget shadow overthrow">
             <!-- <li class="viz"><a class="ui-button" id="time" title="Timeline" href="#"><b class="icon-time"></b><span class="display-menu-collapse">Timeline</span></a></li> -->
             <!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
             <!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
@@ -105,8 +105,12 @@
             </div>
             <div id="ViewUpdates" style="display:none" class="section">
             </div>
+            <div id="ViewMenu" class="section"></div>
 
             <div id="AvatarFocus" class="section">
+                <a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
+                <a id="FocusNeedButton" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
+                <a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
                 <!--
                                 <button id="FocusWhatButton">What?</button>
                                 <button id="FocusWhereButton">Where?</button>
@@ -115,24 +119,8 @@
 
                                 <button id="FocusClearButton" title="Clear">[x]</button>
                 -->
-
-                <div id="FocusTabs">
-                <ul>
-                  <li><a href="#ft1">Focus</a></li>
-                  <li><a href="#ft2">Options</a></li>
-                </ul>
-                  <div id="ft1">
-                        <div id="FocusEdit"></div>
-                        <a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
-                        <a id="FocusNeedButton" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
-                        <a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
-                  </div>
-                  <div id="ft2">
-                        <div id="AvatarViewMenu" class="section"></div>
-                  </div>
-                </div>
-
-
+            </div>
+            <div id="FocusEdit" class="MenuPopout"></div>
 
         </div>
         <!-- END HIDDEN UNTIL LOADED -->

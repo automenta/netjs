@@ -10,11 +10,11 @@ body {
     margin: 0;
     padding: 0;    
 }
-#ViewMenu {
+#MainMenu {
     background-color: #149bdf;
 	color: white;
 }
-#ViewMenu a {
+#MainMenu a {
 	color: white;
 }
 .ui-widget-content {

@@ -54,7 +54,7 @@ a:hover {
     margin: 0;
 }
 
-.DataSubViewMenu {
+.DataSubMainMenu {
     margin-left: 2em;
     float: right;
     color: white;
@@ -394,7 +394,11 @@ div.olMapViewport {
 #Menu {
     display: none;
 }
-#ViewSelect {} .ViewSelectNormal {} .ViewSelectIndented {
+#View {
+    height: 100%;
+}
+#ViewSelect {} .ViewSelectNormal {} 
+.ViewSelectIndented {
     padding-left: 50px;
 }
 #ViewSelect {
@@ -668,7 +672,6 @@ body {
     width: 100%;
 }
 
-#View { height: 100%; }
 
 #embed-frame {
     position: relative;
@@ -729,40 +732,17 @@ a.ViewControl:hover span{
 }
 
 
-.view-indented {
-    left: 55px !important;
-    border-left: none !important;
-    width: auto !important;
-}
-.view-indented-more {
-    left: 160px !important;
-}
 /* User Control Panel */
 
-#toggle-menu {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    z-index: 25;
-    width: 45px;
-    height: 45px;
-    max-width: 45px;
-    cursor: crosshair;
-}
-#toggle-menu img {
-    width: 45px;
-    height: 45px;
-    margin: 0;
-}
-#AvatarViewMenu {}
+#ViewMenu {}
 /*.toggle-submenu-absolute {
         position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
 }*/
 
-#AvatarViewMenu button {
+#ViewMenu button {
     padding: 1px;
 }
-#AvatarViewMenu input {
+#ViewMenu input {
     width: 43px;
 }
 #NotificationArea {
@@ -771,17 +751,6 @@ a.ViewControl:hover span{
     bottom: 0;
     right: 0;
     font-size: 200%;
-}
-#ViewMenu {
-    position: fixed;
-    z-index: 15;
-    top: 0;
-    left: 0;
-    width: 150px;
-    margin: 0;
-    padding: 0;
-    overflow: hidden !important;
-    height: 100%;
 }
 #FocusTabs, #FocusTabs ul {
     background: transparent;
@@ -803,29 +772,7 @@ a.ViewControl:hover span{
     overflow: visible;
     text-align: center;
 }
-#AvatarButton,
-#AvatarButton img {
-    width: 70px;
-    height: 70px;
-    margin: 0;
-    padding: 0;
-    z-index: 25;
-}
-#AvatarButton {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    margin: 0px;
-    padding: 0px;
-}
-#AvatarButton img {
-    border: none;
-    cursor: crosshair;
-}
-#ViewMenu .section {
-    clear: both;
-    padding-top: 5px;
-}
+
 
 .TagBar {
     font-size: 85%;
@@ -837,8 +784,6 @@ a.ViewControl:hover span{
 #FocusEdit {
     height: auto;
     margin: 0;
-    display: block;
-    clear: both;
     padding: 0;
 }
 #FocusEdit button {
@@ -1065,11 +1010,11 @@ a.ViewControl:hover span{
 /* Chat */
 
 .ChatViewContent {
-    height: 100%;
-    margin-left: 1em;
+    top: 10%;
     height: 90%;
     overflow: auto;
     min-width: 50%;
+    position:relative;
 }
 .ChatViewContentLine {
     border-left: 3px solid transparent;
@@ -1086,12 +1031,11 @@ a.ViewControl:hover span{
 .ChatViewContentLineHover {
     border-left: 3px solid gray;
 }
-/*.ChatViewRoster { float: left; width: 23%; max-height: 95%; overflow: auto; left: 0; position: fixed; padding-left: 4em; }*/
 
 .ChatViewInput {
     position: fixed;
     text-align: right;
-    bottom: 0;
+    top: 0;
     width: 47%;
     right: 0;
 }
@@ -1099,7 +1043,7 @@ a.ViewControl:hover span{
 .ChatViewRoster {
     position: fixed;
     text-align: left;
-    bottom: 0;
+    top: 0;
     width: 47%;
     height: 2.5em;	
     overflow: auto;
@@ -1444,6 +1388,75 @@ html > body .ui-pnotify {
  * less than 320 = small mobile mode 
  */
 
+.view-indented {
+    top: auto !important;    
+}
+.view-indented-more {
+    bottom: 75px !important;
+}
+
+#AvatarButtonMini, #AvatarButtonMini img {
+    width: 45px;
+    height: 45px;    
+    z-index: 25;
+    margin: 0;
+    padding: 0;
+}
+#AvatarButtonMini {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    cursor: crosshair;
+    opacity: 0.6;
+}
+#AvatarButtonMini:hover {
+    opacity: 0.9;
+}
+#AvatarButtonMini img {
+    border: none;
+}
+
+
+#AvatarButton, #AvatarButton img {
+    width: 70px;
+    height: 70px;
+    margin: 0;
+    padding: 0;
+    z-index: 25;
+}
+#AvatarButton {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    cursor: crosshair;
+}
+#AvatarButton img {
+    border: none;
+}
+
+
+
+#MainMenu {
+    position: fixed;
+    z-index: 15;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important;
+    height: auto;
+}
+
+#MainMenu .section {
+   vertical-align: bottom;
+   height: 100%;
+}
+
+.MenuPopout {
+    display: none;
+}
+
 @media (max-width: 400px) {
     .ViewControl img { width: 30px; }
     #ViewSelect {
@@ -1461,11 +1474,11 @@ html > body .ui-pnotify {
         display: block;
         text-align: right;
     }
-    #ViewMenu,
+    #MainMenu,
     #ViewWrapper {
         height: auto;
     }
-    #ViewMenu {
+    #MainMenu {
         width: 100% !important;
     }
     #ViewWrapper {
@@ -1474,7 +1487,7 @@ html > body .ui-pnotify {
     #AvatarFocus {
         position: initial;
     }
-    #AvatarViewMenu select, #AvatarViewMenu div { 
+    #ViewMenu select, #ViewMenu div { 
         clear: none !important; 
         float: left;
         margin: 0;
@@ -1490,7 +1503,7 @@ html > body .ui-pnotify {
         top: 0px;
         right: 0px;
     }
-    #ViewMenu .section {
+    #MainMenu .section {
         clear: none;
         margin: 0;
         padding: 0;
@@ -1532,12 +1545,10 @@ html > body .ui-pnotify {
     #welcome {
         text-align: center;
     }
-    #ViewMenu {
-        width: 150px;
+    #MainMenu {
+        padding-left: 75px;
     }
     #ViewSelect {
-        margin-right: 5px;
-        margin-left: 5px;
     }
     #identity {
         width: 75px;
@@ -1549,21 +1560,17 @@ html > body .ui-pnotify {
         float: right;
     }
     .section {
-        margin-left: 5px !important;
+        float: left;
+        padding-top:3px;
+        padding-left:3px;
+        padding-right:3px;
     }
 
     .logon > div,
     .modal > div {
         width: 500px;
     }
-    #AvatarFocus {
-        position: fixed;
-        bottom: 0;
-        margin: 0;
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important
-        
-    }
+
 }
 div.olControlZoom {
     top: auto !important;
@@ -1620,7 +1627,7 @@ div.olControlZoom {
     display: none !important;
 }
 #ViewWrapper,
-#ViewMenu {
+#MainMenu {
     display: none;
 }
 .ui-pnotify {

@@ -18,7 +18,7 @@ function startTalk() {
 }
 
 function toggleAvatarMenu() {
-    showAvatarMenu(!$('#ViewMenu').is(':visible'));
+    showAvatarMenu(!$('#MainMenu').is(':visible'));
 }
 
 function updateIndent(viewmenushown) {
@@ -32,16 +32,16 @@ function updateIndent(viewmenushown) {
 }
 
 function showAvatarMenu(b) {
-    var vm = $('#ViewMenu');
+    var vm = $('#MainMenu');
     if (!b) {
         $('#close-menu').hide();
         $('#AvatarButton').hide();
         vm.fadeOut();
-        $('#toggle-menu').show();
+        $('#AvatarButtonMini').show();
         updateIndent(false);
     }
     else {
-        $('#toggle-menu').hide();
+        $('#AvatarButtonMini').hide();
         vm.fadeIn();
         $('#close-menu').show();
         $('#AvatarButton').show();
@@ -68,15 +68,12 @@ function openSelectProfileModal(title) {
     $('#ProfileSelect').html(newProfileWidget());
 }
 
-$( "#FocusTabs" ).tabs({
-  collapsible: true
-});
   
 $('#SelectProfileButton').click(function() {
     openSelectProfileModal()
 });
 
-$('#ViewMenu input').click(function(x) {
+$('#MainMenu input').click(function(x) {
     var b = $(this);
     var v = b.attr('id');
     if ((b.attr('type') === 'text') || (b.attr('type') === 'checkbox'))
@@ -87,13 +84,13 @@ $('#ViewMenu input').click(function(x) {
 });
 
 
-$('#toggle-menu').click(function() {
-    var vm = $('#ViewMenu');
+$('#AvatarButtonMini').click(function() {
+    var vm = $('#MainMenu');
     var shown = vm.is(':visible');
     showAvatarMenu(!shown);
 });
 $('#close-menu').click(function() {
-    var vm = $('#ViewMenu');
+    var vm = $('#MainMenu');
     var shown = vm.is(':visible');
     showAvatarMenu(!shown);
 });
