@@ -2351,8 +2351,6 @@ exports.start = function(options) {
                 $N.add(to);    
             }, function() {
 
-                console.log($N.getGraphDistances('Trust'));
-
                 loadPlugins();
                 
                 httpServer.listen($N.server.port);

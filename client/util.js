@@ -1260,12 +1260,24 @@ var Ontology = function(tagInclude, target) {
 
     function unindexInstance(x, keepGraphNode) {
         if (!keepGraphNode) {
-            var dedges = that.dgraph.incidentEdges(x.id);
-            var uedges = that.ugraph.incidentEdges(x.id);
-            for (var i = 0; i < dedges.length; i++)
-                that.dgraph.delEdge(dedges[i]);
-            for (var i = 0; i < uedges.length; i++)
-                that.ugraph.delEdge(uedges[i]);
+            try {
+                var dedges = that.dgraph.incidentEdges(x.id);
+                for (var i = 0; i < dedges.length; i++)
+                    that.dgraph.delEdge(dedges[i]);
+            }
+            catch (e) {
+                console.error('unable to remove incident directed edges of:', x.id);
+            }
+            
+            try {
+                var uedges = that.ugraph.incidentEdges(x.id);
+                for (var i = 0; i < uedges.length; i++)
+                    that.ugraph.delEdge(uedges[i]);
+            }
+            catch (e) {
+                console.error('unable to remove incident undirected edges of:', x.id);
+            }
+            
 
             delete that.dgraph._inEdges[x.id];
             delete that.dgraph._outEdges[x.id];
