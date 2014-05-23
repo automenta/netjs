@@ -164,7 +164,7 @@ function netention(f) {
                             $N.getAuthorObjects(nextID, function() {
                                 $N.getLatestObjects(1000, function() {
                                     updateBrand(); //TODO use backbone Model instead of global function
-
+                                    updateViewLock(0);
                                     $N.startURLRouter();
                                 }, true);
                             });                        

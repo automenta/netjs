@@ -188,3 +188,4 @@ if (configuration.avatarMenuTagTreeAlways) {
 }
 
 
+setViewLock(configuration.viewlockDefault);

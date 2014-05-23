@@ -222,10 +222,13 @@ function updateViewControls() {
 
 }
 
-var viewlock = true;
+var viewlock = false;
 var viewUpdatesBuffered = 0;
 function setViewLock(b) {
     if (b) {
+        $('#viewpause').hide();
+        $('#viewplay').show();
+        
         $('#ViewUpdates').show();
         $('#ViewUpdates').html('');
         $('#ViewUpdates').append(newEle('button').html('Update').click(function() {
@@ -236,11 +239,13 @@ function setViewLock(b) {
         }).hide());        
     }
     else {
+        $('#viewpause').show();
+        $('#viewplay').hide();
+
         $('#ViewUpdates').hide();
     }
     viewlock = b;
 }
-setViewLock(true);
 
 function updateViewLock(n) {
     if (n!==undefined)
@@ -417,7 +422,7 @@ function _updateView(force) {
 
 function initKeyboard() {
     var views = [];
-    $('.ViewControl').each(function(x) {
+    $('.ViewSelect').each(function(x) {
         views.push($(this).attr('id'));
     });
 
@@ -669,9 +674,17 @@ $(document).ready(function() {
         $(this).attr('title','');
     });
 
+    $('#viewplay').click(function() {
+        $.pnotify({title: 'Live', text: 'Updates will appear automatically', delay: 1000});
+        setViewLock(false);    
+    });
+    $('#viewpause').click(function() {        
+        $.pnotify({title: 'Paused', text: 'Updates will be queued', delay: 1000});
+        setViewLock(true);    
+    });
 
     $('#close-menu').button();
-    $("#ViewSelect .ViewControl").click(function() {
+    $("#ViewSelect .ViewSelect").click(function() {
         var v = $(this);
         var vi = v.attr('id');
         $N.router.navigate(vi, {trigger: false});

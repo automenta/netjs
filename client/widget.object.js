@@ -875,6 +875,8 @@ newTagValueWidget.tagcloud = function(x, index, v, prop, editable, d, events) {
 var _alohaHandler = null;
 
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
+    var wasViewLocked = false;
+    
     function addReadOnly() {
         return newDiv().addClass('htmlview').html(v.value).appendTo(d);        
     }
@@ -917,6 +919,8 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                 var hv = newDiv().addClass('htmlview').html(vvv).appendTo(d);
                 if (x.author === $N.id()) {
                     hv.addClass('htmleditable');
+                    
+                    
                     Aloha.jQuery(hv).aloha();
                     hv.attr('xid', x.id);
                     hv.attr('vid', index);                    
@@ -929,6 +933,7 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
     //<script src="lib/aloha/aloha-full.min.js" type="text/javascript"></script>
 
     if (_alohaHandler === null) {
+        
         loadCSS("lib/aloha/css/aloha.css");
         $LAB
             .script("lib/aloha/aloha-full.min.js")
@@ -960,27 +965,38 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
 
                 
                 Aloha.ready( function() {
-                    e();
+                    e();                    
                     
-                    _alohaHandler = Aloha.bind('aloha-editable-deactivated', function (e, a) {
-                        var o = a.editable.obj[0];
-                        var xid = o.getAttribute('xid');
-                        var vid = o.getAttribute('vid');
-                        if (xid && (vid!==undefined)) {
-                            vid = parseInt(vid);                                
-                            var O = $N.object[xid];
-                            if (O) {
-                                var V = O.value[vid];
-                                var hh = o.innerHTML;
-                                if (V.value !== hh) {
-                                    V.value = hh;
-                                    later(function() {
-                                        $N.pub(O, null, null, true);                                            
-                                    });
-                                }
-                            }                                
-                        }
-                    });   
+                    if (_alohaHandler === null) {
+                        _alohaHandler = true;
+                        _alohaHandler = Aloha.bind('aloha-editable-deactivated', function (e, a) {
+                            var o = a.editable.obj[0];
+                            var xid = o.getAttribute('xid');
+                            var vid = o.getAttribute('vid');
+                            if (xid && (vid!==undefined)) {
+                                vid = parseInt(vid);                                
+                                var O = $N.object[xid];
+                                if (O) {
+                                    var V = O.value[vid];
+                                    var hh = o.innerHTML;
+                                    if (V.value !== hh) {
+                                        V.value = hh;
+                                        later(function() {
+                                            $N.pub(O, null, null, true);
+                                        });
+                                    }
+                                }                                
+                            }
+                            setViewLock(wasViewLocked);
+                        });   
+                        Aloha.bind('aloha-editable-activated', function (e, a) {
+                            console.log('aloha activated');
+
+                            wasViewLocked = viewlock;
+                            setViewLock(true);
+                        });
+                    }
+
                     
                     reflowView();
                 });
