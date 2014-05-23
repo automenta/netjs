@@ -991,7 +991,9 @@ var Ontology = function(tagInclude, target) {
             //indexInstance(x, false); //index properties?
         }
         else {
-            if ((tagInclude === true) || (objHasTag(x, tagInclude))) {
+            
+            if (that.indexingInstance(x)) {
+
                 var existing = false;
                 if (that.instance[x.id]) {
                     //existing, unindex first
@@ -1012,7 +1014,10 @@ var Ontology = function(tagInclude, target) {
 
         return that;
     };
-
+    
+    that.indexingInstance = function (x) {
+        return (tagInclude === true) || (objHasTag(x, tagInclude));
+    };
 
     function indexInstance(x, keepGraphNode) {
         if (x._instance) {
@@ -1090,7 +1095,6 @@ var Ontology = function(tagInclude, target) {
         }
 
         //TODO index author, replyTo
-
 
         if (!keepGraphNode) {
             that.dgraph._inEdges[x.id] = {};
@@ -1258,8 +1262,9 @@ var Ontology = function(tagInclude, target) {
 
     }
 
-    function unindexInstance(x, keepGraphNode) {
+    function unindexInstance(x, keepGraphNode) {        
         if (!keepGraphNode) {
+            
             try {
                 var dedges = that.dgraph.incidentEdges(x.id);
                 for (var i = 0; i < dedges.length; i++)
@@ -1267,6 +1272,7 @@ var Ontology = function(tagInclude, target) {
             }
             catch (e) {
                 console.error('unable to remove incident directed edges of:', x.id);
+                console.log(e, e.stack);
             }
             
             try {
@@ -1276,6 +1282,7 @@ var Ontology = function(tagInclude, target) {
             }
             catch (e) {
                 console.error('unable to remove incident undirected edges of:', x.id);
+                console.log(e, e.stack);
             }
             
 
@@ -1415,8 +1422,9 @@ var Ontology = function(tagInclude, target) {
         if (!existingObject)
             return false;
 
-        unindexInstance(existingObject);
-
+        if (that.indexingInstance(existingObject))
+            unindexInstance(existingObject);
+        
         if (that.class[x]) {
             delete that.class[x];
             that.serializedClasses = null;
