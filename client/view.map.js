@@ -331,7 +331,8 @@ function renderLeafletMap(v) {
 
 	function addLayer(tag, strength, onAdded) {
 		var T = $N.getTag(tag);
-
+                if (!T) return;
+                
 		if (T.geoJSON) {
 			$.getJSON(T.geoJSON, function(x) {
 

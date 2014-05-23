@@ -574,7 +574,7 @@ function netention(f) {
                     //$.pnotify({title: 'Focus noticed.'});
                 });
             }
-            //$N.trigger('change:focus');
+            $N.trigger('change:focus');
 
         },
         focus: function() {

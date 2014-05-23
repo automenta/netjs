@@ -156,7 +156,7 @@ var refreshActionContext = _.throttle(function() {
         var s = [];
 
         //get selected items from .ObjectSelection
-        $('.ObjectSelection:checked').each(function(index) {
+        $('input.ObjectSelection:checked').each(function(index) {
             var aoid = $(this).parent().parent().attr('xid');
             if (aoid) {
                 var o = $N.getObject(aoid);
@@ -177,7 +177,7 @@ var refreshActionContext = _.throttle(function() {
 
         $('#ActionMenuWrapper').empty();
 
-        if (s.length == 0)
+        if (s.length === 0)
             return;
 
         var u = newContextMenu(s).addClass('ActionMenuGlobal');
@@ -187,7 +187,7 @@ var refreshActionContext = _.throttle(function() {
         var clearButton = $('<button>Clear</button>');
         clearButton.click(function() {
             later(function() {
-                $('.ObjectSelection:checked').each(function(index) {
+                $('input.ObjectSelection:checked').each(function(index) {
                     $(this).prop('checked', false);
                 });
                 refreshActionContext();

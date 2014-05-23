@@ -24,8 +24,6 @@ function newShareView(v) {
             f.name = k;
         else
             delete f.name;
-
-        console.log('search');
         
         $N.setFocus(f);
     };
@@ -206,8 +204,6 @@ function newShareView(v) {
     //Not needed because when this function clearFocus(), it will trigger the onChange later.
     //frame.onChange();
 
-    console.log('share');
-    console.log(new Error().stack);
     
     clearFocus();
     renderFocus();
