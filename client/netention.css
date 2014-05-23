@@ -2213,9 +2213,9 @@ svg {
     padding-top: 5px;
     padding-bottom: 5px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     line-height: 0.5em;
-    width: 100%;
+    max-width: 143px;    
 }
 .FocusTagCloud a {
     white-space: pre;
