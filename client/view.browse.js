@@ -83,11 +83,11 @@ function renderBrowse(v, cssClass, afterCreated, filterEach) {
             if (cssClass)
                 o.addClass(cssClass(xxrr.length));
         }
-        v.append(elements);
 
+        v.append(elements);
+        
         if (afterCreated)
             afterCreated(v, xxrr.length);
-
 
     });
 }
@@ -337,7 +337,7 @@ function newListView(v) {
     
     //var actionMenu = $('');
     //submenu.append(actionMenu);
-
+    
     function update() {
         v.empty();
 
@@ -346,6 +346,10 @@ function newListView(v) {
         refreshActionContext();
     }
     update();
+    
+    listRenderer.onChange = update;
+    
+    return listRenderer;
 }
 
 
