@@ -297,6 +297,11 @@ function newChatView(v) {
     };
 
     updateContent(true);
+    
+    setTimeout(function() {
+        later(scrollbottom);        
+    },500);
+            
 
 
     return content;

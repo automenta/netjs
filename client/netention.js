@@ -822,11 +822,7 @@ function netention(f) {
                 $N.on('change:attention', updateView);
                 $N.on('change:currentView', updateView);
                 $N.on('change:tags', updateView);
-                                
-                $N.on('change:focus', function() {
-                    _forceNextView = true;
-                    updateView();
-                });
+                $N.on('change:focus', updateView);                                
 
                 updateView();
 

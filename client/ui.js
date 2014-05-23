@@ -852,12 +852,12 @@ $(document).ready(function() {
 
 
                     //USEFUL FOR DEBUGGING EVENTS:
-                    
+                    /*
                      $N.on('change:attention', function() { console.log('change:attention'); });
                      $N.on('change:currentView', function() { console.log('change:currentView'); });
                      $N.on('change:tags', function() { console.log('change:tags'); });
                      $N.on('change:focus', function() { console.log('change:focus', $N.focus() ); });
-                     
+                     */
 
                 });
 
@@ -1046,16 +1046,41 @@ function newTagCloud(onChanged) {
             else
                 name = k;
 
-            var ab = newTagButton(k, function() {
-                if (browseTagFilters[k] < 0)
-                    delete browseTagFilters[k];
-                else if ((browseTagFilters[k] === 0) || (browseTagFilters[k] === undefined))
-                    browseTagFilters[k] = 1;
-                else if (browseTagFilters[k] > 0)
-                    browseTagFilters[k] = -1;
-                onChanged(browseTagFilters);
-                return false;
-            }, false);
+            function plusone() {
+                var v = browseTagFilters[k];
+                if (v === -1.0)     delete browseTagFilters[k];
+                else if (v === undefined)   browseTagFilters[k] = +1;
+                onChanged(browseTagFilters);                
+            }
+            function minusone() {
+                var v = browseTagFilters[k];
+                if (v === 1.0)     delete browseTagFilters[k];
+                else if (v === undefined)   browseTagFilters[k] = -1;
+                onChanged(browseTagFilters);                
+            }
+            
+            var ab = newTagButton(k, function() { }, false);
+            
+            ab.bind('contextmenu', function() { return false; });
+            
+            ab.mousedown(function(e) {
+                var v = browseTagFilters[k];
+                if (e.button === 2) {
+                    if (v === -1)
+                        plusone();   
+                    else
+                        minusone();
+                    e.preventDefault();  // return false; also works
+                    return false;
+                }
+                else if (e.button === 0) {
+                    if (v === 1)
+                        minusone();
+                    else
+                        plusone();
+                    return false;                                    
+                }
+            });
             
 
             var ti = tagcount[k];
@@ -1074,18 +1099,12 @@ function newTagCloud(onChanged) {
 
             if (browseTagFilters[k]!==-1.0)
                 var downButton = newEle('button').html('-').click(function() {
-                     var v = browseTagFilters[k];
-                     if (v === 1.0)     delete browseTagFilters[k];
-                     else if (v === undefined)   browseTagFilters[k] = -1;
-                     onChanged(browseTagFilters);
+                     minusone();
                      return false;
                 });
             if (browseTagFilters[k]!==1.0)
                 var upButton = newEle('button').html('+').click(function() {                
-                     var v = browseTagFilters[k];
-                     if (v === -1.0)     delete browseTagFilters[k];
-                     else if (v === undefined)   browseTagFilters[k] = +1;
-                     onChanged(browseTagFilters);
+                     plusone();
                      return false;
                 });
             

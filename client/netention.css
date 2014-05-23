@@ -3,6 +3,9 @@
  * Discombobulated by @rezn8d
  */
 
+
+
+
 .ui-autocomplete {
     z-index: 5000 !important;
 }
@@ -714,6 +717,7 @@ a.ViewControl span {
     position:absolute;
     transition: opacity 1s;
     -webkit-transition: opacity 1s;
+    pointer-events: none;
 }
 a.ViewControl:hover span{
     opacity:1.0;
@@ -721,7 +725,7 @@ a.ViewControl:hover span{
     width:auto;
     transition: opacity 1s;
     -webkit-transition: opacity 1s;
-
+    pointer-events: none;
 }
 
 
@@ -782,6 +786,7 @@ a.ViewControl:hover span{
 #FocusTabs, #FocusTabs ul {
     background: transparent;
     border: none;
+    padding: 0;
 }
 #FocusTabs div {
     padding: 0;
@@ -819,12 +824,9 @@ a.ViewControl:hover span{
 }
 #ViewMenu .section {
     clear: both;
-    padding-top: 0.5em;
+    padding-top: 5px;
 }
-#AvatarFocus {
-    bottom: 0;
-    padding-bottom: 5px;
-}
+
 .TagBar {
     font-size: 85%;
 }
@@ -1134,8 +1136,7 @@ a.ViewControl:hover span{
     #welcome button {
         margin: 0 !important;
     }
-    #AvatarFocus {
-    }
+    
     #AvatarFocus .ViewControl:nth-child(2) {
         clear:both !important;
     }
@@ -1150,6 +1151,9 @@ a.ViewControl:hover span{
 @media (min-width: 700px) {
     .ChatViewInput input {
         width: 80%;
+    }
+    #viewplay, #viewpause {
+        float: right;
     }
 }
 .InlineSelfButton {
@@ -1551,6 +1555,14 @@ html > body .ui-pnotify {
     .logon > div,
     .modal > div {
         width: 500px;
+    }
+    #AvatarFocus {
+        position: fixed;
+        bottom: 0;
+        margin: 0;
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important
+        
     }
 }
 div.olControlZoom {
@@ -2197,7 +2209,7 @@ svg {
 }
 
 .FocusTagCloud {
-    max-height: 16em;
+    max-height:300px;
     padding-top: 5px;
     padding-bottom: 5px;
     overflow-y: auto;
@@ -2232,4 +2244,31 @@ svg {
 .tagFilterInclude {
     opacity: 0.8;    
     background-color: rgba(0,255,0,0.25);
+}
+
+
+
+/*
+ *  STYLE 2
+ */
+
+
+::-webkit-scrollbar-track
+{
+	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+	/*border-radius: 12px;*/
+	background-color: rgba(127, 127, 127, 0.5);
+}
+
+::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+::-webkit-scrollbar-thumb
+{
+	/*border-radius: 10px;*/
+	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
+	background-color: #222;        
 }

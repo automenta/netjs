@@ -17,3 +17,6 @@ h1 a {
     border-top-left-radius: 0;    
     border-top-right-radius: 0;
 }
+::-webkit-scrollbar-thumb {
+       background-color: rgba(92, 146, 24, 0.59) !important;
+}
