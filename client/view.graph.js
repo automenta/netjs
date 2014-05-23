@@ -434,12 +434,14 @@ function newGraphView(v) {
             }
 
             if (includeEdges['Trust']) {
+                /*
                 var t = objUserRelations($N.objectsWithTag('Trust', true));
                 for (var u in t) {
                     for (var v in t[u]['trusts']) {
                         addEdge(u, v, edgeStyle);
                     }
                 }
+                */
             }
 
             /*

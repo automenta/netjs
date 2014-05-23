@@ -153,16 +153,22 @@ function netention(f) {
                         os.push(nextID);
                         $N.save('otherSelves', _.unique(os));
 
-                        $N.clearInstances(/* except */ "User");
+                        //$N.clearInstances(/* except */ ["User","Trust"]);
+                        $N.clear();
+                        
                         $N.clearTransients();
 
-                        $N.getAuthorObjects(nextID, function() {
-                            $N.getLatestObjects(1000, function() {
-                                updateBrand(); //TODO use backbone Model instead of global function
+                        $N.indexOntology();
+                        
+                        $N.getUserObjects(function() {
+                            $N.getAuthorObjects(nextID, function() {
+                                $N.getLatestObjects(1000, function() {
+                                    updateBrand(); //TODO use backbone Model instead of global function
 
-                                $N.startURLRouter();
-                            }, true);
-                        });                        
+                                    $N.startURLRouter();
+                                }, true);
+                            });                        
+                        });
 
                     } else {
                         $.pnotify({
@@ -300,40 +306,45 @@ function netention(f) {
                 $N.set('roster', r);
             });
         },
+        indexOntology: function() {
+            var that = this;
+            that.addAll(that.ontologyProperties);
+            that.addAll(that.ontologyClasses);
+
+            /*var remaining = _.pluck(o.class, 'id');
+            var batchSize = 32;
+            function nextBatch() {
+                var next = remaining.splice(0, batchSize);
+                if (next.length === 0)
+                    return;*/
+                    
+                    for (var i = 0; i < that.ontologyClasses.length; i++) {
+                        var c = that.ontologyClasses[i];                        
+                        if (!c) return;
+                        
+                        that.ontoIndex.add({
+                            id: c.id,
+                            name: c.name,
+                            description: c.description
+                        });
+
+                        if (c.icon)
+                            defaultIcons[c.id] = c.icon;                    
+                    }               
+
+            /*    setImmediate(nextBatch);
+            }                
+            setImmediate(nextBatch);*/
+
+            that.trigger('change:tags');
+            
+        },
         loadOntology: function(url, f) {
             var that = this;
 
             $.getJSON(url, function(o) {
-                that.addAll(objExpandAll(o.property));
-                that.addAll(objExpandAll(o.class));
-
-                /*var remaining = _.pluck(o.class, 'id');
-                var batchSize = 32;
-                function nextBatch() {
-                    var next = remaining.splice(0, batchSize);
-                    if (next.length === 0)
-                        return;*/
-                    setImmediate(function() {
-                        for (var i = 0; i < o.class.length; i++) {
-                            var c = o.class[i];                        
-                            if (!c) return;
-
-                            that.ontoIndex.add({
-                                id: c.id,
-                                name: c.name,
-                                description: c.description
-                            });
-
-                            if (c.icon)
-                                defaultIcons[c.id] = c.icon;                    
-                        }               
-                        
-                    });
-                /*    setImmediate(nextBatch);
-                }                
-                setImmediate(nextBatch);*/
-                
-                that.trigger('change:tags');
+                that.ontologyProperties = objExpandAll(o.property);
+                that.ontologyClasses = objExpandAll(o.class);
             
                 f();
             });

@@ -363,6 +363,8 @@ exports.start = function(options) {
                 return;
             }
 
+            $N.add(o);
+            
             if (whenFinished)
                 whenFinished();
         });
@@ -1239,6 +1241,7 @@ exports.start = function(options) {
                     return true;
 
                 var userRelations = $N.getGraphDistances("Trust", $N.userNodeFilter);
+                console.log(userRelations);
                 if (userRelations[o.author]) {
                     var dist = userRelations[o.author][cid];
                     if (dist===undefined) return false;

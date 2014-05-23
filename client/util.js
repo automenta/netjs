@@ -792,11 +792,9 @@ var Ontology = function(tagInclude, target) {
         that.object = {};        //indexed by id (URI)        
         
         that.graphDistanceTag = ['Trust'];
-    
 
         that.dgraph = new graphlib.Digraph();
         that.ugraph = new graphlib.Graph();
-
 
         that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
 
@@ -846,6 +844,7 @@ var Ontology = function(tagInclude, target) {
         };
     };
 
+    /*
     that.clearInstances = function(exceptInstancesTagged) {
         var saved = null;
         if (exceptInstancesTagged) {
@@ -863,11 +862,11 @@ var Ontology = function(tagInclude, target) {
 
         if (saved) {
             _.values(saved).forEach(function(s) {
-                indexInstance(s);
+                add(s);
             });
         }
     };
-
+    */
 
     that.clear();
 
@@ -1040,37 +1039,43 @@ var Ontology = function(tagInclude, target) {
         }
         
         //'subject' handling, creates .inout edges for each object link from the object's subject to the values of those object properties        
-        if (x.subject && that.instance[x.subject] && (that.instance[x.subject].author === x.author)) {            
-            if (x.inout === undefined)
-                x.inout = { };
-            
-            if (x.inout[x.subject]===undefined)
-                x.inout[x.subject] = { };
-            
-            if (x.value) {
-                var firstTag = null;
-                for (var j = 0; j < x.value.length; j++) {
-                    var vi = x.value[j];
-                    var vid = vi.id;
+        if (x.subject) {
+            //if (x.subject && that.instance[x.subject] && (that.instance[x.subject].author === x.author)) {
+            if (x.subject === x.author) {
+                if (x.inout === undefined)
+                    x.inout = { };
 
-                    var objValue = false;
-                    
-                    if ((isPrimitive(vid) && (vid === "object" )))
-                        objValue = true;
+                if (x.inout[x.subject]===undefined)
+                    x.inout[x.subject] = { };
 
-                    if ((that.class[vid]) && (firstTag===null))
-                        firstTag = vid;
+                if (x.value) {
+                    var firstTag = null;
+                    for (var j = 0; j < x.value.length; j++) {
+                        var vi = x.value[j];
+                        var vid = vi.id;
 
-                    var vidp = that.property[vid];
-                    if (vidp && (vidp.extend === 'object'))
-                        objValue = true;
+                        var objValue = false;
 
-                    if (objValue) {
-                        var target = vi.value;
+                        if ((isPrimitive(vid) && (vid === "object" )))
+                            objValue = true;
 
-                        x.inout[x.subject][target] = (firstTag || true);
+                        if ((that.class[vid]) && (firstTag===null))
+                            firstTag = vid;
+
+                        var vidp = that.property[vid];
+                        if (vidp && (vidp.extend === 'object'))
+                            objValue = true;
+
+                        if (objValue) {
+                            var target = vi.value;
+
+                            x.inout[x.subject][target] = (firstTag || true);
+                        }
                     }
                 }
+            }
+            else {
+               console.log('Error validating object making subject claim', x); 
             }
         }
 
