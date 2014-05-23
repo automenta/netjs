@@ -244,7 +244,7 @@ setViewLock(true);
 
 function updateViewLock(n) {
     if (n!==undefined)
-        viewUpdatesBuffered += n;
+        viewUpdatesBuffered = n;
     
     if (viewUpdatesBuffered > 0) {
         $('#ViewUpdates button').html(viewUpdatesBuffered + ' updates').show();
@@ -255,8 +255,14 @@ function updateViewLock(n) {
 }
 
 var _firstView = true;
+var _forceNextView = false;
 
 function _updateView(force) {
+    if (_forceNextView) {
+        force = true;
+        _forceNextView = false;
+    }
+    
     updateBrand();
     renderFocus(true);
 
@@ -290,12 +296,12 @@ function _updateView(force) {
     else
         return;
 
-    console.log(viewlock, force, _firstView);
-    if (viewlock && !force && !_firstView) {
-        updateViewLock(1);
+    if (viewlock && !force && !_firstView && viewUpdatesBuffered > 0) {
         return;
     }
-    viewUpdatesBuffered = 0;
+    if (viewlock) {
+        updateViewLock(0);
+    }
 
 
     if (!force) {
@@ -833,12 +839,12 @@ $(document).ready(function() {
 
 
                     //USEFUL FOR DEBUGGING EVENTS:
-                    /*
+                    
                      $N.on('change:attention', function() { console.log('change:attention'); });
                      $N.on('change:currentView', function() { console.log('change:currentView'); });
                      $N.on('change:tags', function() { console.log('change:tags'); });
                      $N.on('change:focus', function() { console.log('change:focus', $N.focus() ); });
-                     */
+                     
 
                 });
 

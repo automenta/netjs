@@ -972,7 +972,7 @@ a.ViewControl:hover span{
     clear: none;
     margin-left: 4px;
     margin-right: 0;
-    margin-bottom: 0.5em;
+    margin-bottom: 8px;
 }
 .ObjectViewHideButton {
     height: 30px;

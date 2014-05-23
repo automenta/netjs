@@ -280,14 +280,7 @@ function newListView(v) {
 
     var listRenderer;
 
-    if (configuration.device == configuration.MOBILE) {
-        listRenderer = renderBrowseList;
-    }
-    else {
-        listRenderer = renderBrowseGrid3;
-    }
-                
-
+    listRenderer = renderBrowseList;
 
     var submenu = $('#AvatarViewMenu');
     var modeSelect = $('<select/>').appendTo(submenu);
@@ -295,12 +288,9 @@ function newListView(v) {
     var gridOption = '<option value="grid3">Grid x3</option>';
     var grid2Option = '<option value="grid2">Grid x2</option>';
     var listOption = '<option value="list">List</option>';
-    if (configuration.device == configuration.MOBILE) {
-        modeSelect.append(listOption, gridOption, grid2Option);
-    }
-    else {
-        modeSelect.append(gridOption, grid2Option, listOption);
-    }                
+    
+    modeSelect.append(listOption, gridOption, grid2Option);
+    
     modeSelect.append('<option value="slides">Slides</option>');
     modeSelect.change(function() {
         var v = $(this).val();

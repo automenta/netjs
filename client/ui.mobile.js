@@ -147,22 +147,6 @@ $('#FocusWhereButton').click(function() {
     }
 });
 
-/*
-var periodMS = FOCUS_KEYWORD_UPDATE_PERIOD;
-var ty = _.throttle(function() {
-    var t = $('#FocusKeywords').val();
-    var newFocus = _.clone(focusValue);
-    newFocus.name = t;
-    $N.setFocus(newFocus);
-}, periodMS);
-
-$('#FocusKeywords').keyup(
-        function() {
-            ty();
-        }
-);
-*/
-
 
 $('#FocusClearButton').click(function() {
     clearFocus();

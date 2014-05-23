@@ -574,8 +574,7 @@ function netention(f) {
                     //$.pnotify({title: 'Focus noticed.'});
                 });
             }
-
-            $N.trigger('change:focus');
+            //$N.trigger('change:focus');
 
         },
         focus: function() {
@@ -651,14 +650,21 @@ function netention(f) {
 
 
             var anythingChanged = false;
+            var anythingChangedFromOthers = false;
             for (var i = 0; i < x.length; i++) {
                 if (!x[i].focus) {
-                    if (n(x[i]))
+                    if (n(x[i])) {
                         anythingChanged = true;
+                        if (x[i].author!==$N.id())
+                            anythingChangedFromOthers = true;
+                    }
                 }
             }
-            if ((anythingChanged) && (!suppressChange))
+            if ((anythingChanged) && (!suppressChange)) {
+                if (anythingChangedFromOthers)
+                    updateViewLock(viewUpdatesBuffered + 1);
                 this.trigger('change:attention');
+            }
         },
         subscribe: function(channel, f) {
             if (this.socket) {
@@ -693,7 +699,7 @@ function netention(f) {
                         if (!suppressChange) {
                             if (!object.focus)
                                 $N.add(object);
-                            $N.trigger('change:attention');
+                            //$N.trigger('change:attention');
                         }
                         if (onSuccess)
                             onSuccess();
@@ -816,7 +822,11 @@ function netention(f) {
                 $N.on('change:attention', updateView);
                 $N.on('change:currentView', updateView);
                 $N.on('change:tags', updateView);
-                $N.on('change:focus', updateView);
+                                
+                $N.on('change:focus', function() {
+                    _forceNextView = true;
+                    updateView();
+                });
 
                 updateView();
 
