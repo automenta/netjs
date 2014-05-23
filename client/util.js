@@ -821,12 +821,22 @@ var Ontology = function(tagInclude, target) {
         }
         that.dgraph.addEdge = function(e, a, b, v) {
             invalidateGraphDistance(v);
-            graphlib.Digraph.prototype.addEdge.apply(that.dgraph, arguments);
+            try {
+                graphlib.Digraph.prototype.addEdge.apply(that.dgraph, arguments);
+            }
+            catch (e) {
+                console.error('unable to add edge:',e,a,b,v);
+            }
         };
         that.dgraph.delEdge = function(e) {
             if (that.dgraph.hasEdge(e))
                 invalidateGraphDistance(that.dgraph.edge(e));
-            graphlib.Digraph.prototype.delEdge.apply(that.dgraph, arguments);
+            try {
+                graphlib.Digraph.prototype.delEdge.apply(that.dgraph, arguments);
+            }
+            catch (e) {
+                console.error('unable to remove edge:',e);
+            }            
         };
 
         that.primitive = {
