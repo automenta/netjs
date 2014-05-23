@@ -782,7 +782,7 @@ exports.objIsProperty = objIsProperty;
  };*/
 
 /** an interface for interacting with nobjects and ontology */
-var Ontology = function(storeInstances, target) {
+var Ontology = function(tagInclude, target) {
     var that = target ? target : this;
 
     //resets to empty state
@@ -790,6 +790,9 @@ var Ontology = function(storeInstances, target) {
     that.clear = function() {
 
         that.object = {};        //indexed by id (URI)        
+        
+        that.graphDistanceTag = ['Trust'];
+    
 
         that.dgraph = new graphlib.Digraph();
         that.ugraph = new graphlib.Graph();
@@ -978,22 +981,24 @@ var Ontology = function(storeInstances, target) {
             
             //indexInstance(x, false); //index properties?
         }
-        else if (storeInstances) {
-            var existing = false;
-            if (that.instance[x.id]) {
-                //existing, unindex first
-                unindexInstance(x, true);
-                existing = true;
+        else {
+            if ((tagInclude === true) || (objHasTag(x, tagInclude))) {
+                var existing = false;
+                if (that.instance[x.id]) {
+                    //existing, unindex first
+                    unindexInstance(x, true);
+                    existing = true;
+                }
+
+                that.instance[x.id] = x;
+                x._instance = true;
+                delete that.class[x.id];
+                delete x._class;
+                delete that.property[x.id];
+                delete x._property;
+
+                indexInstance(x, existing);                
             }
-
-            that.instance[x.id] = x;
-            x._instance = true;
-            delete that.class[x.id];
-            delete x._class;
-            delete that.property[x.id];
-            delete x._property;
-
-            indexInstance(x, existing);
         }
 
         return that;
@@ -1002,6 +1007,7 @@ var Ontology = function(storeInstances, target) {
 
     function indexInstance(x, keepGraphNode) {
         if (x._instance) {
+            
             var tags = objTags(x, false);
             for (var i = 0; i < tags.length; i++) {
                 var t = tags[i];
@@ -1034,8 +1040,7 @@ var Ontology = function(storeInstances, target) {
         }
         
         //'subject' handling, creates .inout edges for each object link from the object's subject to the values of those object properties        
-        if (x.subject && that.instance[x.subject] && (that.instance[x.subject].author === x.author)) {
-            
+        if (x.subject && that.instance[x.subject] && (that.instance[x.subject].author === x.author)) {            
             if (x.inout === undefined)
                 x.inout = { };
             
@@ -1534,6 +1539,14 @@ var Ontology = function(storeInstances, target) {
         return Infinity;
     };
 
+    that.userNodeFilter = function(n) { return n.author === n.id; };
+    
+    that.getTrust = function(a, b) {
+        var d = that.getGraphDistance("Trust", that.userNodeFilter, a, b);
+        if (d === Infinity) return 0;
+        else if (d === 0) return Infinity;
+        else return 1.0/d;
+    };
 
     //.searchOntology(query)
     //.getGraph(propertyList,options)

@@ -817,15 +817,6 @@ function netention(f) {
     //exports = the variable from util.js which is also used by node.js require()        		
     var $N = new Ontology(true, _.extend(new $NClient(), exports));
     
-    $N.graphDistanceTag = ['Trust'];
-    
-    var userNodeFilter = function(n) { return n.author === n.id; };
-    $N.getTrust = function(a, b) {
-        var d = $N.getGraphDistance("Trust", userNodeFilter, a, b);
-        if (d === Infinity) return 0;
-        else if (d === 0) return Infinity;
-        else return 1.0/d;
-    };
     
     $N.ontoIndex = lunr(function() {
         this.field('name', {

@@ -690,7 +690,6 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     display: block;
     float: left;
     border: 0;
-    background-color: #333;
     opacity: 0.5;
 }
 .ViewControl:hover,

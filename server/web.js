@@ -38,7 +38,7 @@ exports.start = function(options) {
     var express = expressm();
 
     var $N = _.clone(util);
-    _.extend($N, new $N.Ontology(false));
+    _.extend($N, new $N.Ontology(['User', 'Trust']));
     
     $N.server = options;
     $N.httpserver = express;
@@ -78,6 +78,7 @@ exports.start = function(options) {
     }
 
     //deprecated
+    /*
     function _plugin(kv, options) {
         var v = kv;
 
@@ -136,7 +137,9 @@ exports.start = function(options) {
         //console.log('Loaded invalid plugin: ' + v);
     }
     //$N.plugin = plugin;
-
+    */
+   
+    //calls a plugin operation
     function plugins(operation, parameter) {
         var plugins = $N.server.plugins;
 
@@ -346,8 +349,6 @@ exports.start = function(options) {
         if (_tag.length > 0)
             o._tag = _tag;
 
-        if (_.contains(_tag, 'Trust')) //|| Value || ...
-            userRelations = null;
 
         //nlog('notice: ' + JSON.stringify(o, null, 4));
 
@@ -931,7 +932,6 @@ exports.start = function(options) {
         var possibleClients = getClientSelves(key);
         if (!possibleClients)
             possibleClients = [];
-        //cid = possibleClients[possibleClients.length - 1];
 
         if (!anonymous) {
             res.cookie('authenticated', key != undefined);
@@ -1084,7 +1084,6 @@ exports.start = function(options) {
         var targetFile = './upload/' + util.uuid() + '.gif';
         var stream = fs.createWriteStream(targetFile);
 
-
         stream.once('open', function(fd) {
             stream.write(buf);
             stream.end();
@@ -1182,7 +1181,7 @@ exports.start = function(options) {
 
     function addClientSelf(req, uid) {
         var key = getSessionKey(req);
-        if ((!key) || (key == '')) {
+        if ((!key) || (key === '')) {
             key = 'anonymous';
         }
         if (!$N.server.users)
@@ -1226,40 +1225,27 @@ exports.start = function(options) {
         });
     }
 
-    var userRelations = null;
-
-    function updateUserRelations(whenFinished) {
-        if (userRelations) {
-            whenFinished(userRelations);
-            return;
-        }
-
-        var users = [];
-        getObjectsByTag(['Trust'], function(o) {
-            users.push(o);
-        }, function() {
-            userRelations = util.objUserRelations(users);
-
-            whenFinished(userRelations);
-        });
-    }
-
     function objCanSendTo(o, cid) {
         var ObjScope = util.ObjScope;
         var scope = o.scope || options.client.defaultScope;
-        if (scope == ObjScope.ServerSelf) {
+        if (scope === ObjScope.ServerSelf) {
             if (o.author)
-                return (o.author == cid);
+                return (o.author === cid);
             return true;
         }
-        else if (scope == ObjScope.ServerFollow) {
+        else if (scope === ObjScope.ServerFollow) {
             if (o.author) {
-                if (o.author == cid) //self
+                if (o.author === cid) //self
                     return true;
 
+                var userRelations = $N.getGraphDistances("Trust", $N.userNodeFilter);
                 if (userRelations[o.author]) {
-                    var whoOsAuthorTrusts = userRelations[o.author]['trusts'];
-                    return (whoOsAuthorTrusts[cid] !== undefined);
+                    var dist = userRelations[o.author][cid];
+                    if (dist===undefined) return false;
+                    dist = dist.distance;
+                    if (typeof dist === "number")
+                        if ((dist > 0) && (dist < Infinity))
+                            return (1.0 / dist) >= $N.server.trustThreshold;
                 }
                 else
                     return false;
@@ -1276,11 +1262,9 @@ exports.start = function(options) {
 
         //console.log('objAccessFilter', cid, getClientSelves(req), getSessionKey(req));
 
-        updateUserRelations(function(rels) {
-            withObjects(_.filter(objs, function(o) {
-                return objCanSendTo(o, cid);
-            }));
-        });
+        withObjects(_.filter(objs, function(o) {
+            return objCanSendTo(o, cid);
+        }));
     }
 
 
@@ -1314,14 +1298,12 @@ exports.start = function(options) {
                 io.sockets.in('*').emit('notice', co); //send to everyone
         }
         else {
-            updateUserRelations(function() {
-                for (var i = 0; i < allsockets.length; i++) {
-                    var sid = allsockets[i].clientID;
-                    if (objCanSendTo(o, sid)) {
-                        sendToSocket(i);
-                    }
+            for (var i = 0; i < allsockets.length; i++) {
+                var sid = allsockets[i].clientID;
+                if (objCanSendTo(o, sid)) {
+                    sendToSocket(i);
                 }
-            });
+            }
         }
 
         o = new $N.nobject($N.objExpand(o));
@@ -2310,17 +2292,6 @@ exports.start = function(options) {
         console.error(err.stack);
     });
 
-
-
-    $N.client = options.client || {};
-    $N.permissions = options.permissions || {};
-    $N.enablePlugins = options.plugins || {};
-
-    require('./general.js').plugin($N).start();
-
-
-    $N.nlog = nlog;
-
     function removeExpired() {
         getExpiredObjects(function(objs) {
             if (objs.length == 0)
@@ -2358,25 +2329,46 @@ exports.start = function(options) {
         });
     }
 
+    $N.client = options.client || {};
+    $N.permissions = options.permissions || {};
+    $N.enablePlugins = options.plugins || {};
+    $N.nlog = nlog;
+
     removeExpired();
+
+    require('./general.js').plugin($N).start();
     
-    getObjectsByTag('User', function(to) {
-        notice(to);
-    });
-
     loadState(function() {
-        loadPlugins();
+        //first load existing users
+        getObjectsByTag('User', function(to) {    
+            $N.add(to);    
+        }, function() {
+            //then add trust
+            getObjectsByTag('Trust', function(to) {
+                $N.add(to);    
+            }, function() {
+
+                console.log($N.getGraphDistances('Trust'));
+
+                loadPlugins();
+                
+                httpServer.listen($N.server.port);
+
+                nlog('Web server: http://' + $N.server.host + ':' + $N.server.port);
+
+                if ($N.server.start)
+                    $N.server.start($N);
+
+                setInterval(removeExpired, $N.server.memoryUpdateIntervalMS);
+
+            });
+            
+        });
+        
+
     });
-    httpServer.listen($N.server.port);
-
-    nlog('Web server: http://' + $N.server.host + ':' + $N.server.port);
-
-    if ($N.server.start)
-        $N.server.start($N);
-
-
-    setInterval(removeExpired, $N.server.memoryUpdateIntervalMS);
-
+    
+ 
     return $N;
 
 };
