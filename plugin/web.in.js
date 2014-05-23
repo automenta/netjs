@@ -144,14 +144,16 @@ exports.plugin = function($N) {
                                 RSSFeed($N, furi[ff], function(a) {
                                     //TODO add extra tags from 'f'
                                     var rtags = $N.objValues(f, 'addArticleTag');
-                                    rtags.forEach(function(r) {
-                                       a.addTag(r); 
-                                    });
+                                    if (rtags) 
+                                        rtags.forEach(function(r) {
+                                           a.addTag(r); 
+                                        });
+                                    a.author = f.author;
                                     $N.pub(a);
                                     return a;
                                 });
                             }
-                            if (f.hasTag('WebURL')) {
+                            if (f.hasTag('WebURL')) {                                
                                 fetchURL($N, f, furi[ff]);
                             }
                             if (f.hasTag('ICalURL')) {
@@ -227,6 +229,8 @@ function fetchICal($N, x, url) {
             n.add('urlAddress', e.url);
         }
 
+        n.author = x.author;
+        
         if (e.start) {
             var start = e.start.getTime();
             n.when = start;

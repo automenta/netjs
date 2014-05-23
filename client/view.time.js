@@ -71,7 +71,8 @@ function newTimeView(v) {
                             if (G.editable) {
                                 times[g.id] = [G.start, G.end];
                             }
-
+                            
+                            
                             data.push(G);
                         }
 
@@ -82,10 +83,6 @@ function newTimeView(v) {
 
                     timeline.draw(data, options);
 
-                    v.find('.timelineLabel').click(function() {
-                        var uid = $(this).attr('uid');
-                        newPopupObjectView($N.getObject(uid));
-                    });
                 }
 
                 function changed(x) {
@@ -117,10 +114,25 @@ function newTimeView(v) {
 
                 redraw();
 
+                function updateHandlers() {
+                    $('.timelineLabel').off('dblclick');
+                    $('.timelineLabel').dblclick(function() {
+                        var uid = $(this).attr('uid');
+                        newPopupObjectView($N.getObject(uid));
+                        return false;
+                    });                        
+                }
+                    
+                links.events.addListener(timeline, 'ready', function() {
+                    updateHandlers();
+                });
+                
                 //links.events.addListener(timeline, 'rangechanged', changed);
                 links.events.addListener(timeline, 'edit', changed);
                 links.events.addListener(timeline, 'change', changed);
                 links.events.addListener(timeline, 'changed', changed);
+                /*links.events.addListener(timeline, 'select', function(s) {
+                });                */
                 links.events.addListener(timeline, 'add', function() {
                     var dd = timeline.getData();
                     var tti = dd[dd.length - 1].start.getTime();
@@ -136,6 +148,7 @@ function newTimeView(v) {
                     timeline.draw(dd, options);
                 });
                 links.events.addListener(timeline, 'rangechanged', function(p) {
+                    updateHandlers();
                     currentViewRange = p;
                 });
 

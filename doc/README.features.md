@@ -90,7 +90,7 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
    * **id**
    * **name**
    * **description** (optional)
-   * **extend** - string, extends one primitive data type; analogous to MIME Content-type
+   * **extend** - string, extends one primitive data type; analogous to MIME Content-type.  each type has associated TagView & TagEdit widgets that display and support interaction with instances of them.
         * **boolean**
         * **integer**
         * **real** (floating point number)
