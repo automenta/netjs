@@ -24,6 +24,11 @@ exports.plugin = function($N) {
                     return 'Human';
                 return n;
             }
+            function mapPropertyName(u, n) {
+                if (u === 's_email')
+                    return 'email';
+                return n;
+            }
 
             var excludeProperties = ['description', 'image', 'name', 'url', 'about', 'sameAs', 'additionalType', 'alternateName'];
             var excludeTypes = ['Class', 'Property'];
@@ -66,7 +71,7 @@ exports.plugin = function($N) {
 
                 var pt = propType(prop.ranges);
                 var p = {
-                    id: propPrefix + prop.id,
+                    id: mapPropertyName(propPrefix + prop.id),
                     name: prop.label,
                     description: prop.comment,
                     extend: pt
