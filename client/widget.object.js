@@ -471,7 +471,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     for (var i = 0; i < t.length; i++) {
                         var T = $N.getTag(t[i]);
                         if ((T) && (T.reserved)) {
-                            $.pnotify('Tag "' + T.name + '" can not be added to objects.');
+                            notify('Tag "' + T.name + '" can not be added to objects.');
                         } else
                             objAddTag(y, t[i]);
                     }
@@ -627,13 +627,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 objTouch(e);
                 
                 $N.pub(e, function(err) {
-                    $.pnotify({
+                    notify({
                         title: 'Unable to save.',
                         text: x.name,
                         type: 'Error'
                     });
                 }, function() {
-                    $.pnotify({
+                    notify({
                         title: 'Saved (' + x.id.substring(0, 6) + ')'
                                 //text: '<button disabled>Goto: ' + x.name + '</button>'  //TODO button to view object
                     });
@@ -1514,14 +1514,14 @@ function newReplyPopup(x, onReplied) {
             };
 
             $N.pub(rr, function(err) {
-                $.pnotify({
+                notify({
                     title: 'Error replying (' + x.id.substring(0, 6) + ')',
                     text: err,
                     type: 'Error'
                 })
             }, function() {
                 //$N.notice(rr);
-                $.pnotify({
+                notify({
                     title: 'Replied (' + x.id.substring(0, 6) + ')'
                 })
             });

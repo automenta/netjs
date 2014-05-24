@@ -5,9 +5,10 @@ h1 a {
 #View {
     background: none !important;
 }
-#MainMenu {
-    opacity: 0.94;
-    background-color: #149bdf;
+
+.ui-mainmenu {
+    /*background-color: #149bdf;*/
+    background-color: rgba(62,182,243,0.8);    
 }
 
 .ui-widget-content {

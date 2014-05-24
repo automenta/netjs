@@ -16,7 +16,7 @@ function setClientID($N, cid, key, otherSelves) {
     $N.set('authorized', key);
     $N.set('otherSelves', _.unique(otherSelves));
 
-    /*$.pnotify({
+    /*notify({
      title: 'Connected',
      text: that.myself().name + ' (' + that.get('clientID').substring(0,4) + ')'
      });*/
@@ -85,7 +85,7 @@ function netention(f) {
         deleteSelf: function(clientID) {
             var os = this.get('otherSelves');
             if (os.length < 2) {
-                $.pnotify({
+                notify({
                     title: 'Can not delete self: ' + clientID.substring(6) + '...',
                     text: 'Must have one extra self to become after deleting',
                     type: 'Error'
@@ -171,7 +171,7 @@ function netention(f) {
                         });
 
                     } else {
-                        $.pnotify({
+                        notify({
                             title: 'Unable to switch profile',
                             text: (typeof (target) === "string" ? target : target.id),
                             type: 'Error'
@@ -241,7 +241,7 @@ function netention(f) {
 
                 socket.on('connect', function() {
                     socket.on('disconnect', function() {
-                        /*$.pnotify({
+                        /*notify({
                          title: 'Disconnected.'
                          });*/
 
@@ -253,13 +253,13 @@ function netention(f) {
                     });
 
                     /*socket.on('reconnecting', function() {
-                     $.pnotify({
+                     notify({
                      title: 'Reconnecting..'
                      }); 
                      });*/
                     /*
                      socket.on('reconnect', function() {
-                     $.pnotify({
+                     notify({
                      title: 'Reconnected.'
                      }); 
                      init();
@@ -282,16 +282,15 @@ function netention(f) {
                         $N.set('roster', r);
                     });
 
+                    
                     $(document).ready(function() {
-                        $.pnotify({
+                        notify({
                             title: 'Connected.',
                             stack: stack_bottomright,
                             addclass: "stack-bottomright",
                             type: 'success',
                             delay: 2000
-                        }).click(function() {
-                            $(this).remove();
-                        });                        
+                        });
                     });
 
                     reconnect();
@@ -388,14 +387,14 @@ function netention(f) {
          
          var that = this;
          this.pub(this.myself(), function(err) {
-         $.pnotify({
+         notify({
          title: 'Unable to share location.',
          text: err,
          type: 'Error'                        
          });              
          
          }, function() {
-         $.pnotify({
+         notify({
          title: 'Geolocated.',
          text: that.myself().geolocation
          });              
@@ -420,7 +419,7 @@ function netention(f) {
             
             if (configuration.connection !== 'local') {
                 if ((!this.socket) && (!localOnly)) {
-                    $.pnotify({
+                    notify({
                         title: 'Unable to delete: Not connected, must login.'
                     });
                     return false;
@@ -451,7 +450,7 @@ function netention(f) {
                         that.trigger('change:deleted');
                         that.trigger('change:attention');
 
-                        $.pnotify({
+                        notify({
                             title: 'Deleted',
                             text: id,
                             addclass: "stack-bottomleft",
@@ -461,7 +460,7 @@ function netention(f) {
                         removeLocal();
                     } else {
                         //console.dir(err);
-                        $.pnotify({
+                        notify({
                             title: 'Unable to delete: ' + err,
                             text: id
                         });
@@ -470,7 +469,7 @@ function netention(f) {
             } else {
                 if (removeLocal()) {
                     if (x.author) {
-                        $.pnotify({
+                        notify({
                             title: 'Deleted',
                             text: id,
                             addclass: "stack-bottomleft",
@@ -571,7 +570,7 @@ function netention(f) {
                 this.pub(f, function(err) {
                     console.log('setFocus err: ', err);
                 }, function() {
-                    //$.pnotify({title: 'Focus noticed.'});
+                    //notify({title: 'Focus noticed.'});
                 });
             }
             $N.trigger('change:focus');
@@ -689,7 +688,7 @@ function netention(f) {
                     this.socket.emit('pub', objCompact(object), function(err) {
                         if (onErr)
                             onErr(object);
-                        $.pnotify({
+                        notify({
                             title: 'Error saving:',
                             text: err,
                             type: 'error'

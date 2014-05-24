@@ -125,7 +125,7 @@ function renderBrowseGrid2(v) {
 
 
 var _revealLoaded = false;
-function renderBrowseSlides(vv, slideControls) {
+function renderBrowseSlides(vv) {
     if (!_revealLoaded) {
         loadCSS("lib/reveal.js/css/reveal.min.css");
         loadCSS("lib/reveal.js/css/theme/simple2.css");
@@ -311,7 +311,6 @@ function newListView(v) {
         v.css('font-size', vp + '%');
     }
 
-    var slideControls = newDiv();
     var textsizeSlider = $('<input type="range" name="points" min="1" value="16" max="32">');
     textsizeSlider.change(function(x) {
         updateFont($(this).val());
@@ -319,10 +318,9 @@ function newListView(v) {
             reflowView();
         }
     });
-    slideControls.append(textsizeSlider);
 
     textsizeSlider.change();
-    submenu.append(slideControls);
+    submenu.append(textsizeSlider);
 
     
     //var actionMenu = $('');
@@ -331,7 +329,7 @@ function newListView(v) {
     function update() {
         v.empty();
 
-        listRenderer(v, slideControls);
+        listRenderer(v);
 
         refreshActionContext();
     }

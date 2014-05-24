@@ -715,7 +715,8 @@ a.ViewControl span {
     z-index:1000;
     display:inline;
     opacity:0;
-    margin-top:0px; margin-left:0px;
+    margin-top:1em;
+    margin-left:0px;
     position:absolute;
     transition: opacity 1s;
     -webkit-transition: opacity 1s;
@@ -730,6 +731,9 @@ a.ViewControl:hover span{
     pointer-events: none;
 }
 
+a.PopoutControl img {
+    height: 23px !important;
+}
 
 /* User Control Panel */
 
@@ -780,10 +784,23 @@ a.ViewControl:hover span{
     padding-right: 0.5em;
     padding-left: 0.5em;
 }
+
+.brand {
+    font-weight: bold;
+}
+
+.MenuPopout {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 52px !important;
+    z-index: 20;
+    padding: 6px;
+}
+
 #FocusEdit {
-    height: auto;
-    margin: 0;
-    padding: 0;
+    max-height: 75%;
+    right: 0;
 }
 #FocusEdit button {
     font-size: .8em;
@@ -1393,7 +1410,7 @@ html > body .ui-pnotify {
 }
 .view-indented-more {
     top: 0px !important;
-    margin-bottom: 75px !important;
+    margin-bottom: 55px !important;
     height: auto;
 }
 
@@ -1420,16 +1437,16 @@ html > body .ui-pnotify {
 
 
 #AvatarButton, #AvatarButton img {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     margin: 0;
     padding: 0;
     z-index: 25;
 }
 #AvatarButton {
     position: fixed;
-    bottom: 0px;
-    left: 0px;
+    bottom: -3px;
+    left: -3px;
     cursor: crosshair;
 }
 #AvatarButton img {
@@ -1448,6 +1465,7 @@ html > body .ui-pnotify {
     padding: 0;
     overflow: hidden !important;
     height: auto;
+    font-size: 75%;
 }
 
 #MainMenu .section {
@@ -1455,9 +1473,6 @@ html > body .ui-pnotify {
    height: 100%;
 }
 
-.MenuPopout {
-    display: none;
-}
 
 @media (max-width: 400px) {
     .ViewControl img { width: 30px; }
@@ -1548,7 +1563,6 @@ html > body .ui-pnotify {
         text-align: center;
     }
     #MainMenu {
-        padding-left: 75px;
     }
     #ViewSelect {
     }
@@ -1578,11 +1592,15 @@ div.olControlZoom {
     top: auto !important;
     bottom: 8px !important;
 }
-#TagSelectWidget {} #FocusEdit .ObjectEditDiv div {
+#TagSelectWidget {} 
+
+#FocusEdit .ObjectEditDiv div {
     width: auto;
     float: left;
 }
-#welcomeoptions {} .PluginID {
+#welcomeoptions {} 
+
+.PluginID {
     width: 14%;
     left: auto;
     float: left;
@@ -1901,12 +1919,19 @@ div.olControlZoom {
 }
 */
 
-.MapControl {
+.HUDTopLeft, .HUDTopRight {
     position: fixed;
-    right: 5px;
-    bottom: 5px;
-    z-index: 5000;
+    top: 8px;
+    left: 8px;
+    z-index: 1000;
+    font-size: 75%;
+    opacity: 0.75;
 }
+.HUDTopRight {
+    right: 8px;
+}
+
+
 /* HORIZONTAL jquery-ui MENU - http://stackoverflow.com/questions/12944364/how-to-make-jquery-ui-nav-menu-horizontal */
 
 /* Clearfix for the menu */
@@ -2218,13 +2243,11 @@ svg {
 }
 
 .FocusTagCloud {
-    max-height:300px;
     padding-top: 5px;
     padding-bottom: 5px;
     overflow-y: auto;
     overflow-x: auto;
     line-height: 0.5em;
-    max-width: 143px;    
 }
 .FocusTagCloud a {
     white-space: pre;

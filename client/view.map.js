@@ -114,11 +114,15 @@ function newMapView(v) {
         planetSelect.append('<option>Moon</option>');
         planetSelect.append('<option>Mars</option>');
 
-		mapControl.append('<span class="readwrite">Right click to Add</span>');
         mapControl.append(typeSelect);
         mapControl.append(planetSelect);
+        mapControl.append('<div class="MapInstructions">Right Click to Add</div>');
 
-        mapControl.addClass('MapControl');
+        mapControl.addClass('HUDTopLeft');
+        
+        setTimeout(function() {
+            $('div.MapInstructions').fadeOut();
+        }, 1500);
         
         
         if (map2d) {
@@ -184,9 +188,8 @@ function renderLeafletMap(v) {
 	});
 	baseLayer.addTo(map);
 	
-	new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
-
 	map.addControl(newLeafletGeoCoder());
+	new L.Control.Zoom({ position: 'topright' }).addTo(map);
 
 
 	//https://github.com/Leaflet/Leaflet.draw -------------
@@ -295,7 +298,7 @@ function renderLeafletMap(v) {
 		
 		var n = objAddGeoLocation(objNew(), p.lat, p.lng);
 
-		$.pnotify( { title: 'New Object', text: ('@ ' + _n(p.lat) + ',' + _n(p.lng)) } );
+		notify( { title: 'New Object', text: ('@ ' + _n(p.lat) + ',' + _n(p.lng)) } );
 		newPopupObjectEdit( n );
 	});
 
@@ -455,7 +458,7 @@ function renderLeafletMap(v) {
 			var tl = L.tileLayer(template, options);
 
 			if (options.reprojected) {
-				$.pnotify({title:"Map Re-projected", text:"The '" + T.name + "' layer uses an alternate map projection.  It may not appear aligned with other layers."});
+				notify({title:"Map Re-projected", text:"The '" + T.name + "' layer uses an alternate map projection.  It may not appear aligned with other layers."});
 				tl.reprojects = true;				
 			}
 

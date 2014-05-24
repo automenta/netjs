@@ -69,17 +69,20 @@
         <a id="AvatarButtonMini" style="display:none;" class="ui-corner-all shadow"><img id="toggle-img" title="Click here to expand the control panel" class="ui-corner-all" alt="toggle menu button" src="icon/netention-button.png" /></a>
 
         <div id="ActionMenuWrapper"></div>
-        <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;"><img id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" /></div>
-        <div id="MainMenu" style="display:none;" class="ui-widget shadow overthrow">
+        <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;">
+            <img id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" />
+            <div id="IdentityPopout" class="MenuPopout ui-mainmenu">
+                <span class="brand">Anonymous</span><br/>
+                <a id="EditProfileButton" class="ViewControl" title="Edit Profile"><img src="icon/view.browse.svg"></a><br/>
+                <a id="SelectProfileButton" class="ViewControl" title="Switch Identity"><img src="icon/view.share.svg"></a><br/>
+            </div>
+        </div>
+        <div id="MainMenu" style="display:none;" class="ui-widget shadow overthrow ui-mainmenu">
             <!-- <li class="viz"><a class="ui-button" id="time" title="Timeline" href="#"><b class="icon-time"></b><span class="display-menu-collapse">Timeline</span></a></li> -->
             <!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
             <!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
 
-            <div id="identity" class="section">
-                <span id="welcome">
-                    <button id="SelectProfileButton" class="brand" title="Identity">Anonymous</button><br/>
-                </span>
-            </div>
+            <div class="section" style="padding-left: 67px;"></div>
 
             <div id="ViewSelect" class="section">
                 <button id="TogetherJSTalk" onclick="startTalk(); return false;" 
@@ -105,12 +108,18 @@
             </div>
             <div id="ViewUpdates" style="display:none" class="section">
             </div>
-            <div id="ViewMenu" class="section"></div>
 
-            <div id="AvatarFocus" class="section">
+            <div id="ViewMenuWrap" class="section">       
+                <div id="ViewMenu" class="section"></div>
+                <!--<a id="ViewMenuPopoutToggleButton" class="ViewControl PopoutControl" title="Options"><img src="icon/up.svg"></a>-->
+                <!--<div id="ViewMenuPopout" class="MenuPopout"></div>-->
+            </div>
+
+            <div id="AvatarFocus" class="section" style="float: right">
                 <a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
                 <a id="FocusNeedButton" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
                 <a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
+                <a id="FocusEditToggleButton" class="ViewControl PopoutControl" title="Filter"><img src="icon/up.svg"></a>
                 <!--
                                 <button id="FocusWhatButton">What?</button>
                                 <button id="FocusWhereButton">Where?</button>
@@ -120,9 +129,9 @@
                                 <button id="FocusClearButton" title="Clear">[x]</button>
                 -->
             </div>
-            <div id="FocusEdit" class="MenuPopout"></div>
-
         </div>
+        <div id="FocusEdit" class="MenuPopout ui-mainmenu"></div>
+
         <!-- END HIDDEN UNTIL LOADED -->
 
 

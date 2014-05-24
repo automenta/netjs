@@ -65,6 +65,11 @@ function later(f) {
     setImmediate(f);
 }
 
+function notify(param) {
+    $.pnotify(param).click(function() {
+        $(this).remove();
+    });                                                
+}
 
 
 
@@ -113,11 +118,11 @@ function newContextMenu(s, excludeEmptyMenus, clickCallback) {
                         later(function() {
                             var result = vv.run(s);
                             if (result)
-                                $.pnotify(result);
+                                notify(result);
                         });
                     }
                     else {
-                        $.pnotify('"' + vv.name + '" not ready yet.');
+                        notify('"' + vv.name + '" not ready yet.');
                     }
 
                     if (clickCallback)
@@ -599,7 +604,8 @@ function whenResized() {
 $('#NotificationArea').html('Loading...');
 
 $(document).ready(function() {
-    $.pnotify.defaults.animation = 'none';
+    notify.defaults = { };
+    notify.defaults.animation = 'none';
     
 
     $(window).resize(whenResized);
@@ -675,11 +681,11 @@ $(document).ready(function() {
     });
 
     $('#viewplay').click(function() {
-        $.pnotify({title: 'Live', text: 'Updates will appear automatically', delay: 1000});
+        notify({title: 'Live', text: 'Updates will appear automatically', delay: 1000});
         setViewLock(false);    
     });
     $('#viewpause').click(function() {        
-        $.pnotify({title: 'Paused', text: 'Updates will be queued', delay: 1000});
+        notify({title: 'Paused', text: 'Updates will be queued', delay: 1000});
         setViewLock(true);    
     });
 
@@ -737,7 +743,7 @@ $(document).ready(function() {
                             newPopupObjectView(x);
                         }
                         else {
-                            /*$.pnotify({
+                            /*notify({
                              title: 'Unknown object',
                              text: id.substring(0, 4) + '...'
                              });*/

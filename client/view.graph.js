@@ -720,16 +720,17 @@ function newGraphView(v) {
         nd.onChange();
     });
 
-    submenu.append('<hr/>');
+    var hudmenu = newDiv().addClass('HUDTopLeft').appendTo(nd);
 
     var edgeTypes = ['Edge', 'Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust' /*, 'Value'*/ ];
     _.each(edgeTypes, function (e) {
-        var includeCheck = $('<input type="checkbox"/>').appendTo(submenu);
-        submenu.append(e + '<br/>');
+        var includeCheck = $('<input type="checkbox"/>');
         includeCheck.click(function () {
             includeEdges[e] = (includeCheck.is(':checked'));
             nd.onChange();
         });
+
+        hudmenu.append(includeCheck, e + '<br/>');
     });
 
 

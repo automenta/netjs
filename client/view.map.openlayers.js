@@ -56,7 +56,7 @@ function renderOLMap(s, o, v) {
 		var lonlat = unproject(m.getLonLatFromPixel(pixel));
 		var n = objAddGeoLocation(objNew(), lonlat.lat, lonlat.lon);
 
-		$.pnotify( { title: 'New Object', text: ('@ ' + _n(lonlat.lat) + ',' + _n(lonlat.lon)) } );
+		notify( { title: 'New Object', text: ('@ ' + _n(lonlat.lat) + ',' + _n(lonlat.lon)) } );
 		newPopupObjectEdit( n );
 		
 	    //alert("Lat: " + lonlat.lat + " (Pixel.x:" + pixel.x + ")" + "\n" + "Lon: " + lonlat.lon + " (Pixel.y:" + pixel.y + ")" );

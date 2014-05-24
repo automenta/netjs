@@ -151,7 +151,7 @@ addAction({menu: 'Object', name: 'View Source', description: 'Display object\'s 
     accepts: acceptsSelectionOfOne,
     run: function(selection) {
         var x = selection[0];
-        $.pnotify({title: x.id, text: JSON.stringify(objCompact(x), null, 4)});
+        notify({title: x.id, text: JSON.stringify(objCompact(x), null, 4)});
         return null;
     }
 });
@@ -165,7 +165,7 @@ addAction({menu: 'Object', name: 'Delete',
                         return "Deleted " + selection.length + ' object(s).';
                 }
                 else {
-                    $.pnotify("Can not delete: Not author of object " + x.id);
+                    notify("Can not delete: Not author of object " + x.id);
                 }
             });
         }
@@ -205,18 +205,18 @@ addAction({menu: 'Tag', name: 'Favorite (toggle)', accepts: acceptsSelectionOfOn
         var ot = objTags(x);
         var exists = _.contains(ot, 'Favorite');
         if (!exists) {
-            $.pnotify('Added favorite.');
+            notify('Added favorite.');
             x = objAddTag(x, 'Favorite');
         }
         else {
             var n = ot.indexOf('Favorite');
-            $.pnotify('Removed favorite.');
-            //$.pnotify({ title: 'Removed favorite.', text: 'At index ' + n });
+            notify('Removed favorite.');
+            //notify({ title: 'Removed favorite.', text: 'At index ' + n });
             x = objRemoveValue(x, n);
         }
 
         $N.pub(x, function(err) {
-            $.pnotify({
+            notify({
                 title: 'Error updating Favorite',
                 text: err,
                 type: 'Error'

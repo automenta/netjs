@@ -70,8 +70,14 @@ function openSelectProfileModal(title) {
 
   
 $('#SelectProfileButton').click(function() {
-    openSelectProfileModal()
+    openSelectProfileModal();
+    return false;
 });
+$('#EditProfileButton').click(function() {
+    newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));    
+    return false;
+});
+
 
 $('#MainMenu input').click(function(x) {
     var b = $(this);
@@ -144,6 +150,15 @@ $('#FocusWhereButton').click(function() {
     }
 });
 
+$('#AvatarButton').hover(function() {
+    $('#IdentityPopout').fadeIn();
+}, function() {
+    $('#IdentityPopout').fadeOut();    
+});
+
+$('#FocusEditToggleButton').click(function() {
+    $('#FocusEdit').slideToggle();
+});
 
 $('#FocusClearButton').click(function() {
     clearFocus();

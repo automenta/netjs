@@ -73,7 +73,7 @@ function renderOptions(s, o, v) {
                                                 //notify
                                             }
                                             else {
-                                                $.pnotify({
+                                                notify({
                                                     title: 'Unable to configure plugin',
                                                     text: err                       
                                                 }); 
@@ -94,7 +94,7 @@ function renderOptions(s, o, v) {
                                                 //notify
                                             }
                                             else {
-                                                $.pnotify({
+                                                notify({
                                                     title: 'Unable to configure plugin',
                                                     text: err                       
                                                 }); 

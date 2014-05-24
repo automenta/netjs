@@ -51,12 +51,12 @@ function saveAddedTags(gt, tag, when) {
         
 
         $N.pub(ng, function (err) {
-            $.pnotify({
+            notify({
                 title: 'Unable to save Goal.',
                 type: 'Error'
             });
         }, function () {
-            $.pnotify({
+            notify({
                 title: 'Goal saved (' + ng.id.substring(0, 6) + ')'
             });
             $N.notice(ng);
@@ -145,8 +145,7 @@ function newUsView(v) {
             
             var myself = $N.myself();
             if (myself) {
-                newAvatarImage(myself)
-                        .attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
+                //newAvatarImage(myself).attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
             }
 
             var exportButton = $('<button>Summarize</button>');
@@ -164,13 +163,7 @@ function newUsView(v) {
                 if (currentUser == $N.myself().id) {
                     var editButton = $('<button>Edit Self</button>').appendTo(currentGoalHeader);
                     editButton.click(function () {
-                        newPopup("Profile", {
-                            width: 375,
-                            height: 450,
-                            modal: true,
-                            position: 'center'
-                        }).
-                        append(newObjectEdit($N.getObject(currentUser), true));
+                        newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));
                     });
 
 
@@ -476,14 +469,14 @@ function newTagBarSaveButton(s, currentTag, tagBar, onSave) {
             objAddTag(o, currentTag);
 
             $N.pub(o, function (err) {
-                $.pnotify({
+                notify({
                     title: 'Error saving:',
                     text: err,
                     type: 'error'
                 });
             }, function () {
                 $N.notice(o);
-                $.pnotify({
+                notify({
                     title: 'Saved',
                     text: currentTag
                 });
@@ -696,14 +689,14 @@ function saveSelf(editFunction) {
     objTouch(m);
 
     $N.pub(m, function (err) {
-        $.pnotify({
+        notify({
             title: 'Unable to save Self.',
             type: 'Error',
             text: err
         });
     }, function () {
         $N.notice(m);
-        $.pnotify({
+        notify({
             title: 'Self Saved.'
         });
     });
