@@ -215,7 +215,7 @@ function newSelfSummary(userid) {
 			}*/
 		}
 	
-		var user = $N.object(userid);
+		var user = $N.instance[userid];
 		tags['@'] = objSpacePointLatLng(U);
 		tags['name'] = user.name;
 

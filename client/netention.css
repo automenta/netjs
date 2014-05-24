@@ -14,9 +14,6 @@ a, a:visited {
     color: black;
 }
 
-a:hover {
-    color: blue !important;
-}
 .focusMap {
     width: 98%;
     height: 250px;
@@ -695,19 +692,22 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     display: block;
     float: left;
     border: 0;
-    opacity: 0.5;
+    opacity: 0.68;
 }
 .ViewControl:hover,
 .ViewActive {
     opacity: 1.0;
 }
 a.ViewControl img {
-    width: 46px;
-    background-color: #222;
+    width: 46px !important;
+    max-height: 46px !important;
+    background-color: #222 !important;
 }
 a.ViewControlMinor img {
-    width: 23px;
+    width: 23px !important;
+    max-height: 23px !important;
 }
+
 
 a.ViewControl {outline:none; }
 a.ViewControl:hover {text-decoration:none;} 
@@ -1415,6 +1415,14 @@ html > body .ui-pnotify {
     height: auto;
 }
 
+#IdentityPopout {
+    z-index: -1;
+    padding-bottom: 10px;
+}
+#IdentityPopout div {
+    clear: both;
+}
+
 #AvatarButtonMini, #AvatarButtonMini img {
     width: 45px;
     height: 45px;    
@@ -1466,7 +1474,10 @@ html > body .ui-pnotify {
     padding: 0;
     overflow: hidden !important;
     height: auto;
-    font-size: 75%;
+}
+
+.ui-mainmenu {
+    font-size: 75%;    
 }
 
 #MainMenu .section {
@@ -1578,7 +1589,7 @@ html > body .ui-pnotify {
     }
     .section {
         float: left;
-        padding-top:3px;
+        padding-top:0px;
         padding-left:3px;
         padding-right:3px;
     }

@@ -158,18 +158,6 @@ function newUsView(v) {
 
             currentGoalHeader.append(avatarButton, exportButton);
 
-            if ($N.myself()) {
-
-                if (currentUser == $N.myself().id) {
-                    var editButton = $('<button>Edit Self</button>').appendTo(currentGoalHeader);
-                    editButton.click(function () {
-                        newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));
-                    });
-
-
-                }
-            }
-
             //.append('<button disabled title="Set Focus To This Goal">Focus</button>')
             //.append('<button disabled title="Clear">[x]</button>');
 

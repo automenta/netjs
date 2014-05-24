@@ -680,17 +680,17 @@ $(document).ready(function() {
         $(this).attr('title','');
     });
 
-    $('#viewplay').click(function() {
+    $('#viewplay').mousedown(function() {
         notify({title: 'Live', text: 'Updates will appear automatically', delay: 1000});
         setViewLock(false);    
     });
-    $('#viewpause').click(function() {        
+    $('#viewpause').mousedown(function() {        
         notify({title: 'Paused', text: 'Updates will be queued', delay: 1000});
         setViewLock(true);    
     });
 
     $('#close-menu').button();
-    $("#ViewSelect .ViewSelect").click(function() {
+    $("#ViewSelect .ViewSelect").mousedown(function() {
         var v = $(this);
         var vi = v.attr('id');
         $N.router.navigate(vi, {trigger: false});

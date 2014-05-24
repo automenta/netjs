@@ -72,9 +72,9 @@
         <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;">
             <img id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" />
             <div id="IdentityPopout" class="MenuPopout ui-mainmenu">
-                <span class="brand">Anonymous</span><br/>
-                <a id="EditProfileButton" class="ViewControl" title="Edit Profile"><img src="icon/view.browse.svg"></a><br/>
-                <a id="SelectProfileButton" class="ViewControl" title="Switch Identity"><img src="icon/view.share.svg"></a><br/>
+                <div class="brand">Anonymous</div>
+                <div><a id="EditProfileButton" class="ViewControl" title="Edit Profile"><img src="icon/view.browse.svg"></a></div>
+                <div><a id="SelectProfileButton" class="ViewControl" title="Switch Identity"><img src="icon/view.share.svg"></a></div>
             </div>
         </div>
         <div id="MainMenu" style="display:none;" class="ui-widget shadow overthrow ui-mainmenu">
@@ -82,7 +82,7 @@
             <!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
             <!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
 
-            <div class="section" style="padding-left: 67px;"></div>
+            <div class="section" style="padding-left: 55px;">&nbsp;</div>
 
             <div id="ViewSelect" class="section">
                 <button id="TogetherJSTalk" onclick="startTalk(); return false;" 
@@ -128,9 +128,9 @@
 
                                 <button id="FocusClearButton" title="Clear">[x]</button>
                 -->
+                <div id="FocusEdit" class="MenuPopout ui-mainmenu"></div>
             </div>
         </div>
-        <div id="FocusEdit" class="MenuPopout ui-mainmenu"></div>
 
         <!-- END HIDDEN UNTIL LOADED -->
 

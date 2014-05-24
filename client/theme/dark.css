@@ -1,4 +1,6 @@
 @import url('/lib/jquery-ui/1.10.4/themes/vader/jquery-ui.min.css');
+@import url('rainbow_menu.css');
+
 
 body {
     color: white;
@@ -8,32 +10,23 @@ body {
     color: #ddd;
 }
 
-
-.objectView, #focus {
-    padding: 0.25em;
-    margin-bottom: 0.5em;
-    background-color: rgba(36, 36, 36, 0.8);
-    background-image: -webkit-linear-gradient(top right, rgba(33, 33, 33, 0.8) 0%, rgba(99, 99, 99, 0.8) 100%);
-    border-left: 5px solid rgba(0, 0, 0, 0.5);
-}
-
 h1 a {
-    color: white;
+    color: white !important;
 }
 
-a {
-    color: #ffd278; 
+a, a:visited {
+    color: #FFB800 !important; 
 }
 a:hover {
-	color: #aaf !important;
+    color: #bbf !important;
 }
 
 #View  {
     background: none !important;
 }
-#MainMenu {
+.ui-mainmenu {
     background-color: #222;
-    opacity: 1.0;
+    opacity: 0.8;
 }
 #LoadingSplash2 { 
     background-color: black; 
@@ -46,4 +39,10 @@ a:hover {
     color: white;
     background-color: black;
     border: 1px solid gray;
+}
+.link {
+    fill: white;
+}
+.node text {
+    fill: white;
 }
