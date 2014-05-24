@@ -24,11 +24,12 @@ exports.plugin = function($N) {
                     return 'Human';
                 return n;
             }
-            function mapPropertyName(u, n) {
+            function mapPropertyName(u) {
                 if (u === 's_email')
                     return 'email';
-                return n;
+                return u;
             }
+            
 
             var excludeProperties = ['description', 'image', 'name', 'url', 'about', 'sameAs', 'additionalType', 'alternateName'];
             var excludeTypes = ['Class', 'Property'];
@@ -95,7 +96,7 @@ exports.plugin = function($N) {
                     name: mapTagName(type.id, type.label),
                     description: type.comment,
                     value: _.map(_.difference(type.properties, excludeProperties), function(p) {
-                        return propPrefix + p;
+                        return mapPropertyName(propPrefix + p);
                     }),
                     extend: type.supertypes
                 };

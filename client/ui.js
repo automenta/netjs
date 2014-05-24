@@ -694,6 +694,7 @@ $(document).ready(function() {
         var v = $(this);
         var vi = v.attr('id');
         $N.router.navigate(vi, {trigger: false});
+        _forceNextView = true;
         $N.set('currentView', vi);
     });
 

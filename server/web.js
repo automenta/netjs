@@ -2310,6 +2310,7 @@ exports.start = function(options) {
 
         var pluginOption = {};
 
+        /*
         fs.readdirSync("./plugin").forEach(function(ifile) {
             var file = ifile + '';
             if (file === 'README')
@@ -2329,6 +2330,12 @@ exports.start = function(options) {
                 if (po.enable != false)
                     startPlugin(file, pluginOption[file]);
             }
+        });
+        */
+        
+        _.each($N.server.plugins, function(po, file) {
+            if (po.enable != false)
+                startPlugin(file, po);            
         });
     }
 
