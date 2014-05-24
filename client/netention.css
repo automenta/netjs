@@ -696,11 +696,40 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 .ViewActive {
     opacity: 1.0;
 }
+
+
+@media (min-width: 900px) {
+    a.ViewControl img { 
+        width: 46px !important; 
+        max-height: 46px !important;
+    }
+}
+@media (max-width: 899px) {
+    a.ViewControl img { 
+        width: 38px !important; 
+        max-height: 38px !important;
+    }
+    #ViewMenu {
+       margin-left: 4px;
+       margin-right: 4px;    
+       max-width: 35%;
+    }
+    #ViewSelect {
+        max-width: 35%;
+    }
+}
+@media (max-width: 599px) {
+    a.ViewControl img { 
+        width: 30px !important; 
+        max-height: 30px !important;
+    }
+}
+
+
 a.ViewControl img {
-    width: 46px !important;
-    max-height: 46px !important;
     background-color: #222 !important;
 }
+
 a.ViewControlMinor img {
     width: 23px !important;
     max-height: 23px !important;
@@ -1487,12 +1516,6 @@ html > body .ui-pnotify {
    margin-right: 8px;    
 }
 
-@media (max-width: 400px) {
-    .ViewControl img { width: 30px; }
-    #ViewSelect {
-        max-width: 60% !important;
-    }
-}
 /*!
  * less than 700 = mobile mode 
  */
@@ -1535,12 +1558,9 @@ html > body .ui-pnotify {
     }
     #MainMenu .section {
         clear: none;
+        float: left;
         margin: 0;
         padding: 0;
-    }
-    #ViewSelect {
-        max-width: 66%;
-        margin-left: 75px !important;
     }
     .view-indented-more {
         left: 0 !important;
