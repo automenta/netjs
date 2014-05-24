@@ -668,7 +668,6 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
-    height: 100%;
     width: 100%;
 }
 
@@ -1392,7 +1391,8 @@ html > body .ui-pnotify {
     top: auto !important;    
 }
 .view-indented-more {
-    bottom: 75px !important;
+    top: 0px !important;
+    margin-bottom: 75px !important;
 }
 
 #AvatarButtonMini, #AvatarButtonMini img {

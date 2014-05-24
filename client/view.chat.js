@@ -61,7 +61,7 @@ function newChatView(v) {
     var updates = newDiv().addClass('ChatViewUpdates').addClass('ui-widget-content');
 
     //frame.append(roster);
-    v.append(content);
+    //v.append(content);
     v.append(input);
     v.append(roster);
     v.append(updates);
@@ -91,7 +91,7 @@ function newChatView(v) {
     });
 
     var scrollbottom = _.debounce(function() {
-        content.scrollTop(content.prop('scrollHeight'));
+        content.parent().scrollTop(content.prop('scrollHeight'));
     }, 150);
 
     var viewMenu = $('#ViewMenu');
