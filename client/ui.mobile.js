@@ -53,7 +53,9 @@ function openSelectProfileModal(title) {
     if (!title)
         title = 'Profiles';
     //var d = newPopup(title, {width: '450px', modal: true});
+    
     $('#LoadingSplash').show();
+    
     $('#LoadingSplashTitle').html(
             (configuration.connection == 'local') ?
             '' :
@@ -100,7 +102,7 @@ $('#close-menu').click(function() {
     var shown = vm.is(':visible');
     showAvatarMenu(!shown);
 });
-$('#AvatarButton').click(function() {
+$('#avatar-img').click(function() {
     showAvatarMenu(false);
 });
 
@@ -157,7 +159,13 @@ $('#AvatarButton').hover(function() {
 });
 
 $('#FocusEditToggleButton').click(function() {
-    $('#FocusEdit').slideToggle();
+    if ($('#FocusEdit').is(':visible')) {
+        $('#FocusEdit').fadeOut();        
+    }
+    else {        
+        $('#FocusEdit').fadeIn();        
+    }
+    //$('#FocusEdit').fadeToggle();
 });
 
 $('#FocusClearButton').click(function() {
@@ -201,3 +209,5 @@ if (configuration.avatarMenuTagTreeAlways) {
 
 
 setViewLock(configuration.viewlockDefault);
+
+$('#Roster').append(newRosterWidget());

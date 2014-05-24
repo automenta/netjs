@@ -14,7 +14,6 @@
  */
 var memory = require('./memory.js');
 var util = require('../client/util.js');
-var feature = require('./feature.js');
 var expressm = require('express');
 var connect = require('connect');
 var cookie = require('cookie');
@@ -29,6 +28,7 @@ var request = require('request');
 var _ = require('underscore');
 var jsonpack = require('jsonpack');
 //var cortexit = require('./cortexit.js');
+//var feature = require('./feature.js');
 
 
 /** 

@@ -12,14 +12,10 @@ body {
     
 }
 
-.objectView, #focus {
-    padding: 0.25em;
-    margin-bottom: 1.8em;
-    background-image: url('/theme/rainforest/mycelium-light.jpg');
-    border-left: 5px solid rgba(0, 0, 0, 0.5);
-    opacity: 0.9;
+.ui-widget-content {
+    background: rgba(225,225,225,0.8);
+    border: 0;
 }
-
-#MainMenu {
+.ui-mainmenu {
     background-color: #b1d34d;
 }

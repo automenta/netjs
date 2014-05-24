@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -57,7 +57,7 @@
      id="layer1"
      transform="translate(-327.14286,-582.36218)">
     <path
-       style="fill:#cccccf;fill-opacity:1;stroke:none"
+       style="fill:#888888;fill-opacity:1;stroke:none"
        d="M 0 0 L 0 100 L 100 100 L 100 0 L 0 0 z M 45.75 18.65625 L 57.65625 18.65625 L 57.65625 45.21875 L 84.1875 45.21875 L 84.1875 57.125 L 57.65625 57.125 L 57.65625 83.65625 L 45.75 83.65625 L 45.75 57.125 L 19.1875 57.125 L 19.1875 45.21875 L 45.75 45.21875 L 45.75 18.65625 z "
        transform="translate(327.14286,582.36218)"
        id="rect2985" />

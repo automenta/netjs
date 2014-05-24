@@ -212,7 +212,7 @@ function updateBrand() {
     if (!$N.myself())
         return;
 
-    $('.brand').html($N.myself().name);
+    $('.brand').attr('alt',$N.myself().name);
 
     var avatarURL = getAvatarURL($N.myself());
     $('#avatar-img').attr('src', avatarURL);
@@ -607,6 +607,18 @@ $(document).ready(function() {
     notify.defaults = { };
     notify.defaults.animation = 'none';
     
+    var themeSelect = $('<select/>');
+    for (var k in themes) {
+        themeSelect.append($('<option id="' + k + '">' + themes[k] + '</option>'));
+    }
+    themeSelect.change(function(e) {
+        var t = $(this).children(":selected").attr("id");
+        setTheme(t);
+        return false;
+    });
+
+    var langSelect = ('<select id="uilanguage"><option>English</option><option>Español</option> <option>Français</option><option>Русский</option><option>עברית</option><option>العربية</option><option>हिन्दी; हिंदी</option><option>中文(简体)</option><option>日本語</option></select>');
+    $('#IdentityPopout').append('<br/>',newDiv().append(themeSelect), newDiv().append(langSelect));
 
     $(window).resize(whenResized);
     whenResized();
@@ -676,8 +688,11 @@ $(document).ready(function() {
 
     //add tooltips
     $('.ViewControl').each(function(x) {
-        $(this).prepend(newEle('span').html($(this).attr('title')));
-        $(this).attr('title','');
+        var ti = $(this).attr('title');
+        if (ti && ti.length > 0) {
+            $(this).prepend(newEle('span').html(ti));
+            $(this).attr('title','');
+        }
     });
 
     $('#viewplay').mousedown(function() {

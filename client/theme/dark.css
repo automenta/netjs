@@ -46,3 +46,12 @@ a:hover {
 .node text {
     fill: white;
 }
+::-webkit-scrollbar-thumb {
+    background-color: rgba(225, 225, 225, 0.7) !important;
+}
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+}
+.ui-widget-content {
+    border: 1px solid gray;
+}

@@ -16,6 +16,7 @@ function newShareView(v) {
 
     //var searchMenu = newDiv().addClass('SearchMenu').appendTo(frame);
     var searchInput = $('<input type="text" placeholder="What are you looking for?"/>').appendTo(searchMenu);
+    searchInput.addClass('ShareSidebarQuery');
 
     var updateSearchFocus = function() {
         var k = searchInput.val();
@@ -30,20 +31,21 @@ function newShareView(v) {
 
     searchInput.on('input', _.throttle(updateSearchFocus, shareSearchFocusUpdateMS));
 
-    var searchButton = $('<button>?</button>').appendTo(searchMenu);
 
     var sidebar = newDiv().addClass('ShareSidebar').appendTo(frame);
     {
 
-        var listButton = $('<button>List</button>');
+        /*var listButton = $('<button>List</button>');
         var gridButton = $('<button>Grid</button>');
         var mapButton = $('<button>Map</button>');
 
         sidebar.append(selfmenu, '<hr/>');
 
-        sidebar.append(listButton, gridButton, mapButton, '<br/><hr/>');
+        sidebar.append(listButton, gridButton, mapButton, '<br/><hr/>');*/
 
-        sidebar.append(searchMenu, '<hr/>');
+        sidebar.append(selfmenu);
+        
+        sidebar.append(searchMenu);
 
         var modeCombo = $('<select>').appendTo(sidebar);
 
@@ -52,7 +54,7 @@ function newShareView(v) {
         var typeFilter = newCheckboxTagFilter(shareTags);
         typeFilter.appendTo(sb);
 
-        sb.append('<hr/>');
+        sb.append('<br/>');
 
         var catFilter = newCheckboxTagFilter(shareCategories);
         catFilter.appendTo(sb);
@@ -92,7 +94,7 @@ function newShareView(v) {
             renderFocus(true);
         });
 
-        sidebar.append('<hr/>');
+        sidebar.append('<br/>');
 
         //distance filter
         var distCombo = $('<select>').appendTo(sidebar);
@@ -102,8 +104,6 @@ function newShareView(v) {
         distCombo.append('<option>&lt; 20 km</option>');
         distCombo.append('<option>&lt; 50 km</option>');
         distCombo.append('<option>&lt; 200 km</option>');
-
-        sidebar.append('<hr/>');
 
 
         //user filter

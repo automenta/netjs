@@ -501,7 +501,7 @@ function newGraphView(v) {
                             s = parseFloat(edgeValue);         
                         
                         addEdge(source, x.id, {
-                            stroke: 'rgba(100,200,100,' + (0.1 + 0.9 * s) + ')',
+                            stroke: 'rgba(80,' + 100.0 * ((0.7) + (0.3 * s)) + ',80,' + (0.1 + 0.9 * s) + ')',
                             strokeWidth: Math.max(1.0, thickLine * s),
                             strength: s
                         });                                                    

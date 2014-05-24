@@ -9,3 +9,11 @@ body {
     margin: 0;
     padding: 0;    
 }
+
+#ViewWrapper {
+    background-color: rgba(0,0,0,0.6);
+}
+.ui-widget-content {
+    background: rgba(0,0,0,0.5);
+    border: 0;
+}

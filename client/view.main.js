@@ -12,17 +12,7 @@ function newMainView(v) {
             var header = newDiv().appendTo(d);
 
 
-            var optionsDiv = newDiv().appendTo(header);
-            var themeSelect = $('<select/>').appendTo(optionsDiv);
-            for (var k in themes) {
-                themeSelect.append($('<option id="' + k + '">' + themes[k] + '</option>'));
-            }
-            themeSelect.change(function() {
-                var t = $(this).children(":selected").attr("id");
-                setTheme(t);
-            });
-
-            header.append('<select id="uilanguage"><option>English</option><option>Español</option> <option>Français</option><option>Русский</option><option>עברית</option><option>العربية</option><option>हिन्दी; हिंदी</option><option>中文(简体)</option><option>日本語</option></select>');
+            //var optionsDiv = newDiv().appendTo(header);
 
             var e = newDiv().addClass('gridster').appendTo(d);
             var grid = $('<ul/>').appendTo(e);

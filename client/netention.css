@@ -71,10 +71,7 @@ a, a:visited {
 div.olMapViewport {
     z-index: 1;
 }
-#uitheme,
-#uilanguage {
-    font-size: 75%;
-}
+
 .SelfBarSection {
     padding: 0.5em;
 }
@@ -376,9 +373,73 @@ div.olMapViewport {
     height: 100%;
     left: 0px;
     top: 0px;
-    background-color: white;
+    background-color: rgba(0,0,0,0.3);
     z-index: 1000000;
 }
+#LoadingSplash {
+/*    background: url('/theme/cybernetic/p2p_banner.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-attachment: fixed;*/
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+#LoadingSplash ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style-type: none;
+    height: 100px;
+}
+#LoadingSplash ul li {
+    float: left;
+    outline: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 16%;
+    list-style-type: none;
+    text-align: center;
+}
+#LoadingSplash ul li span {
+    clear: both;
+    font-size: .7em;
+    display: none;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 0;
+}
+#LoadingSplash ul li span:hover {
+    display: block;
+    clear: both;
+    font-size: .7em;
+    display: none;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 0;
+}
+#LoadingSplash ul li img {
+    margin: 5px 0 0 0;
+    padding: 0;
+    width: 90%;
+    height: auto;
+    filter: gray;
+    _filter: url(filters.svg#grayscale);
+    -webkit-filter: grayscale(1);
+}
+#LoadingSplash ul li img:hover {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
 #LoadingSplash h1 {
     text-align: center;
 }
@@ -571,69 +632,6 @@ body {
 }
 /* Loading Login Screen */
 
-#LoadingSplash {
-    background: url('/theme/cybernetic/p2p_banner.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-attachment: fixed;
-    z-index: 100;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-}
-#LoadingSplash ul {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    list-style-type: none;
-    height: 100px;
-}
-#LoadingSplash ul li {
-    float: left;
-    outline: none;
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 16%;
-    list-style-type: none;
-    text-align: center;
-}
-#LoadingSplash ul li span {
-    clear: both;
-    font-size: .7em;
-    display: none;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 0;
-}
-#LoadingSplash ul li span:hover {
-    display: block;
-    clear: both;
-    font-size: .7em;
-    display: none;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 0;
-}
-#LoadingSplash ul li img {
-    margin: 5px 0 0 0;
-    padding: 0;
-    width: 90%;
-    height: auto;
-    filter: gray;
-    _filter: url(filters.svg#grayscale);
-    -webkit-filter: grayscale(1);
-}
-#LoadingSplash ul li img:hover {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: auto;
-    filter: none !important;
-    -webkit-filter: none !important;
-}
 #openid-img {
     width: 80%;
     height: auto;
@@ -718,21 +716,21 @@ a.ViewControl span {
     margin-top:1em;
     margin-left:0px;
     position:absolute;
-    transition: opacity 1s;
-    -webkit-transition: opacity 1s;
+    /*transition: opacity 1s;
+    -webkit-transition: opacity 1s;*/
     pointer-events: none;
 }
 a.ViewControl:hover span{
     opacity:1.0;
     color:#fff;
     width:auto;
-    transition: opacity 1s;
-    -webkit-transition: opacity 1s;
+    /*transition: opacity 1s;
+    -webkit-transition: opacity 1s;*/
     pointer-events: none;
 }
 
 a.PopoutControl img {
-    height: 23px !important;
+    /*height: 23px !important;*/
 }
 
 /* User Control Panel */
@@ -742,12 +740,11 @@ a.PopoutControl img {
         position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
 }*/
 
-#ViewMenu button {
-    padding: 1px;
+#ViewMenu button, #ViewMenu input {
+    margin: 0;
+    height: 100%;
 }
-#ViewMenu input {
-    width: 43px;
-}
+
 #NotificationArea {
     z-index: 5000;
     position: fixed;
@@ -793,7 +790,7 @@ a.PopoutControl img {
     display: none;
     position: fixed;
     bottom: 0;
-    margin-bottom: 52px !important;
+    margin-bottom: 46px !important;
     z-index: 20;
     padding: 6px;
 }
@@ -801,7 +798,7 @@ a.PopoutControl img {
 #FocusEdit {
     max-height: 75%;
     overflow: auto;
-    right: 0;
+    right: 15px;
 }
 #FocusEdit button {
     font-size: .8em;
@@ -915,7 +912,7 @@ a.PopoutControl img {
     word-wrap: break-word;
 }
 .objectGridItem3, .objectGridItem2 {
-    width: 32%;
+    width: 33%;
     float: left;
     margin: 0;
     padding: 0;        
@@ -935,10 +932,9 @@ a.PopoutControl img {
     height: auto;
     clear: none;
     margin-left: 4px;
-    margin-right: 0;
     margin-bottom: 8px;
 }
-.ObjectViewHideButton {
+button.ObjectViewHideButton {
     height: 30px;
     position: absolute;
     top: -4px;
@@ -946,20 +942,20 @@ a.PopoutControl img {
     opacity: 0;
     display: inline-block;
 }
-.ObjectViewHideButton:hover {
+button.ObjectViewHideButton:hover {
     opacity: 1;
 }
-.ObjectViewHideButton button {
+button.ObjectViewHideButton button {
     position: relative;
     padding: 5px;
     margin: 0px;
 }
-.objectView h1 {
+div.objectView h1 {
     font-size: 140%;
     font-weight: bold;
     margin: 0;
 }
-.objectView .metadataReplyButton {
+div.objectView .metadataReplyButton {
     padding: 1px;
     margin-left: 0.2em;
     font-size: 90%;
@@ -1050,11 +1046,7 @@ a.PopoutControl img {
 }
 
 .ChatViewInput {
-    position: fixed;
-    text-align: right;
-    top: 0;
-    width: 47%;
-    right: 0;
+    float: left;
 }
 
 .ChatViewRoster {
@@ -1110,9 +1102,6 @@ a.PopoutControl img {
 
 }
 @media (min-width: 700px) {
-    .ChatViewInput input {
-        width: 80%;
-    }
     #viewplay, #viewpause {
         float: right;
     }
@@ -1411,16 +1400,25 @@ html > body .ui-pnotify {
 }
 .view-indented-more {
     top: 0px !important;
-    margin-bottom: 55px !important;
+    margin-bottom: 46px !important;
     height: auto;
 }
 
 #IdentityPopout {
     z-index: -1;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
+    max-width: 30%;
 }
 #IdentityPopout div {
     clear: both;
+}
+#IdentityPopout select {
+    width: 100%;
+}
+
+#Roster div {
+    clear: none;
+    float: left;
 }
 
 #AvatarButtonMini, #AvatarButtonMini img {
@@ -1484,7 +1482,10 @@ html > body .ui-pnotify {
    vertical-align: bottom;
    height: 100%;
 }
-
+#ViewMenu {
+   margin-left: 8px;
+   margin-right: 8px;    
+}
 
 @media (max-width: 400px) {
     .ViewControl img { width: 30px; }
@@ -1575,6 +1576,8 @@ html > body .ui-pnotify {
         text-align: center;
     }
     #MainMenu {
+        max-height: 46px;
+        overflow-y: hidden;
     }
     #ViewSelect {
     }
@@ -1591,7 +1594,6 @@ html > body .ui-pnotify {
         float: left;
         padding-top:0px;
         padding-left:3px;
-        padding-right:3px;
     }
 
     .logon > div,
@@ -2114,6 +2116,15 @@ svg {
     width: 20%;
     float: left;
     position: fixed;
+    max-height:90%;
+    overflow:auto;
+    left: 0;
+    top:0;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+.ShareSidebarQuery {
+    width: 90%;
 }
 .Share .ShareContent {
     width: 75%;
@@ -2295,21 +2306,18 @@ svg {
  */
 
 
-::-webkit-scrollbar-track
-{
+::-webkit-scrollbar-track {
 	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
 	/*border-radius: 12px;*/
 	background-color: rgba(127, 127, 127, 0.5);
 }
 
-::-webkit-scrollbar
-{
+::-webkit-scrollbar {
 	width: 12px;
 	background-color: rgba(255, 255, 255, 0.8);
 }
 
-::-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
 	/*border-radius: 10px;*/
 	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
 	background-color: #222;        

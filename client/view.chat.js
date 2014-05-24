@@ -16,54 +16,16 @@ function onChatSend(name, desc, tag) {
     _myNewObject = o;
 }
 
-function newRosterWidget() {
-    if (!$N.get('roster')) {
-        $N.updateRoster();
-    }
-
-    var d = newDiv();
-
-    var updateRosterDisplay = function() {
-        var r = $N.get('roster');
-        d.empty();
-        if (!r)
-            return;
-
-        _.keys(r).forEach(function(uid) {
-            var U = $N.getObject(uid);
-            if (U) {
-                var a = newAvatarImage(U).appendTo(d);
-                a.click(function() {
-                    newPopupObjectView(U);
-                });
-            }
-        });
-    };
-
-    $N.on("change:roster", updateRosterDisplay);
-
-    d.destroy = function() {
-        $N.off("change:roster", updateRosterDisplay);
-    };
-
-    updateRosterDisplay();
-
-    return d;
-}
 
 function newChatView(v) {
     var oldestNewObjectMS = 10 * 60 * 1000; //10 min
 
-    //var roster = newRoster().attr('class', 'ChatViewRoster');    
     var content = v;//newDiv().addClass('ChatViewContent');
     var input = newChatInput(onChatSend).addClass('ChatViewInput');
-    var roster = newRosterWidget().addClass('ChatViewRoster');
     var updates = newDiv().addClass('ChatViewUpdates').addClass('ui-widget-content');
-
-    //frame.append(roster);
+   
     //v.append(content);
-    v.append(input);
-    v.append(roster);
+    //v.append(input);    
     v.append(updates);
 
     var nearBottom = false;
@@ -93,9 +55,10 @@ function newChatView(v) {
     var scrollbottom = _.debounce(function() {
         content.parent().scrollTop(content.prop('scrollHeight'));
     }, 150);
+    var scrolltop = _.debounce(function() {
+        content.parent().scrollTop(0);
+    }, 150);
 
-    var viewMenu = $('#ViewMenu');
-    $('<button>Scroll to Bottom</button>').appendTo(viewMenu).click(scrollbottom);
     //TODO toggle replies
     //TODO adjust highlight history period
 
@@ -289,7 +252,6 @@ function newChatView(v) {
         _myNewObject = null;
     };
     content.destroy = function() {
-        roster.destroy();
         _.values(rootsUnaffected).forEach(function(x) {
             x.remove();
         }); //destroy the DOM cache
@@ -302,6 +264,10 @@ function newChatView(v) {
         later(scrollbottom);        
     },500);
             
+    var viewMenu = $('#ViewMenu');
+    $('<button title="Scroll to Top">&UpArrow;</button>').appendTo(viewMenu).click(scrolltop);
+    $('<button title="Scroll to Bottom">&DownArrow;</button>').appendTo(viewMenu).click(scrollbottom);
+    viewMenu.append(input.children());
 
 
     return content;
@@ -401,7 +367,7 @@ function newObjectLogLine(x) {
 function newChatInput(onSend) {
     var d = newDiv();
 
-    var inputBar = $('<input class="nameInput" x-webkit-speech/>');
+    var inputBar = $('<input placeholder="Chat" x-webkit-speech/>');
     inputBar.keyup(function(event) {
         if (event.keyCode === 13) {
             if (onSend)
@@ -412,7 +378,7 @@ function newChatInput(onSend) {
     });
     d.append(inputBar);
 
-    var webcamButton = $('<button title="Add Webcam..."><img style="height: 1em" src="icon/play.png"></button>');
+    var webcamButton = $('<button title="Add Webcam..."><img style="height: 0.8em" src="icon/play.png"></button>');
     webcamButton.click(function() {
         newWebcamWindow(function(imgURL) {
             if (onSend)

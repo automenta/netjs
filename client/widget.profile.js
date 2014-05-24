@@ -175,3 +175,40 @@ function newNewProfileWidget(whenFinished) {
 
     return d;
 }
+
+
+function newRosterWidget() {
+    if (!$N.get('roster')) {
+        $N.updateRoster();
+    }
+
+    var d = newDiv();
+
+    var updateRosterDisplay = function() {
+        var r = $N.get('roster');
+        d.empty();
+        if (!r)
+            return;        
+
+        _.keys(r).forEach(function(uid) {
+            var U = $N.instance[uid];
+            if (U) {
+                var a = newAvatarImage(U).appendTo(d);
+                a.click(function() {
+                    newPopupObjectView(U);
+                });
+            }
+        });
+    };
+
+    $N.on("change:roster", updateRosterDisplay);
+
+    d.destroy = function() {
+        $N.off("change:roster", updateRosterDisplay);
+    };
+    
+    
+    updateRosterDisplay();
+
+    return d;
+}

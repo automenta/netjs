@@ -62,7 +62,7 @@ var addWebTags = function($N) {
         },
         {
             id: 'ICalURL',
-            name: 'Calendar (iCal) URL',
+            name: 'Calendar (iCal)',
             extend: ['Internet'],
             value: [
                 'urlAddress',
@@ -109,6 +109,7 @@ exports.plugin = function($N) {
 
 
             function updateFeed(f) {
+                
                 var needsFetch = false;
 
                 var fetchPeriod = $N.objFirstValue(f, 'urlFetchPeriod');
@@ -148,7 +149,7 @@ exports.plugin = function($N) {
                                         rtags.forEach(function(r) {
                                            a.addTag(r); 
                                         });
-                                    a.author = f.author;
+                                    a.author = f.id;
                                     $N.pub(a);
                                     return a;
                                 });
@@ -187,8 +188,8 @@ exports.plugin = function($N) {
         },
         onPub: function(x) {
             if (x.hasTag('web.RSSFeed') || x.hasTag('WebURL') || x.hasTag('ICalURL')) {
-                this.updateFeed(x);
                 this.feeds[x.id] = x;
+                this.updateFeed(x);
             }
         },
         onDelete: function(x) {
@@ -229,7 +230,7 @@ function fetchICal($N, x, url) {
             n.add('urlAddress', e.url);
         }
 
-        n.author = x.author;
+        n.author = x.id;
         
         if (e.start) {
             var start = e.start.getTime();

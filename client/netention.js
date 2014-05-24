@@ -153,7 +153,6 @@ function netention(f) {
                         os.push(nextID);
                         $N.save('otherSelves', _.unique(os));
 
-                        //$N.clearInstances(/* except */ ["User","Trust"]);
                         $N.clear();
                         
                         $N.clearTransients();
@@ -163,9 +162,16 @@ function netention(f) {
                         $N.getUserObjects(function() {
                             $N.getAuthorObjects(nextID, function() {
                                 $N.getLatestObjects(1000, function() {
+                                    
                                     updateBrand(); //TODO use backbone Model instead of global function
+                                    
                                     updateViewLock(0);
+                                    
                                     $N.startURLRouter();
+                                    
+                                    $N.updateRoster();
+
+                                    
                                 }, true);
                             });                        
                         });
@@ -301,6 +307,7 @@ function netention(f) {
         updateRoster: function() {
             $.getJSON('/users/connected/json', function(r) {
                 $N.set('roster', r);
+                $N.trigger('change:roster');
             });
         },
         indexOntology: function() {
@@ -819,7 +826,7 @@ function netention(f) {
                 $N.on('change:attention', updateView);
                 $N.on('change:currentView', updateView);
                 $N.on('change:tags', updateView);
-                $N.on('change:focus', updateView);                                
+                $N.on('change:focus', updateView);
 
                 updateView();
 
@@ -888,12 +895,13 @@ function newEle(e, dom) {
     return $(d);
 }
 
-function newPopup(title, p, isModal) {
+function newPopup(title, p, isModal, existingDiv) {
     if (configuration.device == configuration.MOBILE) {
         p = isModal = true;
     }
 
-    var d = newDiv();
+    var d = existingDiv ? existingDiv : newDiv();
+        
     d.attr('title', title);
 
     $('body').append(d);
@@ -911,7 +919,7 @@ function newPopup(title, p, isModal) {
             width: clientWidth - leftMargin - margin,
             height: clientHeight - margin * 3,
             //position: [leftMargin, margin]
-            position: {my: "center", at: "center", of: window}
+            position: {my: "center", at: "center", of: document}
         };
     }
 
