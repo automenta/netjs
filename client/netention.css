@@ -800,6 +800,7 @@ a.PopoutControl img {
 
 #FocusEdit {
     max-height: 75%;
+    overflow: auto;
     right: 0;
 }
 #FocusEdit button {
@@ -2245,8 +2246,6 @@ svg {
 .FocusTagCloud {
     padding-top: 5px;
     padding-bottom: 5px;
-    overflow-y: auto;
-    overflow-x: auto;
     line-height: 0.5em;
 }
 .FocusTagCloud a {

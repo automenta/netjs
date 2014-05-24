@@ -286,8 +286,6 @@ function netention(f) {
                     $(document).ready(function() {
                         notify({
                             title: 'Connected.',
-                            stack: stack_bottomright,
-                            addclass: "stack-bottomright",
                             type: 'success',
                             delay: 2000
                         });
