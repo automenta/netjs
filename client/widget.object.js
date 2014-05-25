@@ -859,13 +859,17 @@ newTagValueWidget.tagcloud = function(x, index, v, prop, editable, d, events) {
     if (!editable) {
         if (v.value) {
             var tc = newDiv().addClass('valueTagCloud');
-            _.each(v.value, function(v, k) {
-                var fs = 100.0 * (0.5 + 0.5 * v);
-                var t = newEle('a', true);
-                t.innerHTML = k;
+            var ele = [];
+            for (var k in v.value) {
+                var s = v.value[k];
+                var fs = 100.0 * (0.5 + 0.5 * s);
+                var t = newEle('span', true);
+                t.innerHTML = k + ' ';
                 t.style.fontSize = fs + '%';
-                tc.append(t, ' ');
-            });            
+                //tc.append(t, ' ');
+                ele.push(t);
+            }
+            tc.append(ele);
             tc.append(newDiv().attr('style','clear:both'));
             tc.appendTo(d);
         }
@@ -873,6 +877,12 @@ newTagValueWidget.tagcloud = function(x, index, v, prop, editable, d, events) {
 };
 
 var _alohaHandler = null;
+function _ensureHasAloha() {
+   if (!$(this).hasClass('aloha-editable-active')) {
+        //TODO auto-focus the newly created editor so clicking twice isnt necessary
+        Aloha.jQuery($(this)).aloha();
+   }                        
+}
 
 newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
     var wasViewLocked = false;
@@ -923,15 +933,9 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                 var hv = newDiv().addClass('htmlview').html(vvv).appendTo(d);
                 if (x.author === $N.id()) {
                     hv.addClass('htmleditable');
-                    hv.click(function() {
-                       if (!hv.attr('xid')) {
-                            hv.attr('xid', x.id);
-                            hv.attr('vid', index);                           
-                            //TODO auto-focus the newly created editor so clicking twice isnt necessary
-                            Aloha.jQuery(hv).aloha();
-                       }
-                    });
-                    
+                    hv.attr('xid', x.id);
+                    hv.attr('vid', index);
+                    hv.click(_ensureHasAloha);                    
                 }
             }
         }        
@@ -991,7 +995,7 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                                         V.value = hh;
                                         later(function() {
                                             $N.pub(O, null, null, true);
-                                            notify('Saved.');
+                                            notify('Saved.');                                            
                                         });
                                     }
                                 }                                

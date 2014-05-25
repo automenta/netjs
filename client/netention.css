@@ -646,7 +646,7 @@ body {
 }
 /* View Screen */
 
-#ViewWrapper {
+#View {
     border: none;
     position: fixed;
     top: 0;
@@ -1537,13 +1537,13 @@ html > body .ui-pnotify {
         text-align: right;
     }
     #MainMenu,
-    #ViewWrapper {
+    #View {
         height: auto;
     }
     #MainMenu {
         width: 100% !important;
     }
-    #ViewWrapper {
+    #View {
         width: auto !important;
     }
     #AvatarFocus {
@@ -1689,7 +1689,6 @@ div.olControlZoom {
 .olControlAttribution {
     display: none !important;
 }
-#ViewWrapper,
 #MainMenu {
     display: none;
 }

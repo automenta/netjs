@@ -57,7 +57,7 @@ function loadJS(url) {
                 type: "text/javascript",
                 src: url
             })
-            );
+    );
 }
 
 function later(f) {
@@ -65,10 +65,10 @@ function later(f) {
     setImmediate(f);
 }
 
+function _notifyRemoval() { $(this).remove(); }
+
 function notify(param) {
-    $.pnotify(param).click(function() {
-        $(this).remove();
-    });                                                
+    $.pnotify(param).click(_notifyRemoval);                                                
 }
 
 
@@ -296,10 +296,8 @@ function _updateView(force) {
         delete param.view;
     }
 
-    var vw = $('#ViewWrapper');
+    var vw = $('#View');
 
-    var o = $('#ViewOptions');
-    var submenu = $('#ViewMenu');
 
     if (vw.is(':visible')) {
     }
@@ -322,31 +320,34 @@ function _updateView(force) {
             }
         }
     }
-
-    $('#View').remove();
-    var v = newDiv().attr('id', 'View').appendTo(vw);
-
-    o.empty();
-
-    $('#ViewMenu').empty();
-    submenu.empty();
-
-    updateIndent(false);
-
-    lastView = view;
-    $('#MainMenu a').removeClass('ViewActive');
-    $('#' + view).addClass('ViewActive');
-
     if (currentView)
         if (currentView.destroy)
             currentView.destroy();
+    
+    delete currentView;
+    
+    vw.detach();
+    later(vw.remove); //do full removal when JS becomes idle
 
-    v.css('font-size', '100%').removeClass('ui-widget-content overflow-hidden nobg');
-    vw.removeClass('view-indented overthrow');
+    lastView = view;    
+    
+    $('#ViewOptions').empty();
+    $('#ViewMenu').empty();
+
+
+    updateIndent(false);
+
+    $('#MainMenu a').removeClass('ViewActive');
+    $('#' + view).addClass('ViewActive');
+
+    var v = newDiv('View').appendTo($('body'));
+
+    v.css('font-size', '100%');
+    /*v.removeClass('ui-widget-content overflow-hidden nobg');
+    v.removeClass('view-indented overthrow');*/
 
     function indent() {
-        submenu.show();
-        vw.addClass('overthrow view-indented');
+        v.addClass('overthrow view-indented');
         updateIndent($('#MainMenu').is(":visible"));
     }
 
@@ -421,6 +422,8 @@ function _updateView(force) {
             _firstView = false;
     }
     _firstView = false;
+    
+    delete v;
 
 }
 
@@ -832,7 +835,7 @@ $(document).ready(function() {
                          });*/
                     }
 
-                    $('#ViewWrapper').show();
+                    $('#View').show();
                     $('#LoadingSplash2').hide();
 
 
