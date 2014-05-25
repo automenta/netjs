@@ -341,8 +341,10 @@ var generalTags = [
 		value: {
             //'repeatNeed': {name: 'Repeat', extend: 'timerepeat' },
         }
-	},
-    {id: 'Not', name: 'Not', extend: ['Concept'], icon: '/icon/not.png' },
+    },
+    {id: 'Not', name: 'Not', extend: ['Concept'], icon: '/icon/not.png',
+           value: {  'nots': {name: 'in', extend: 'object' }    },
+    },
 
     {id: 'Offer', name: 'Offer', extend: ['Can'], icon: '/icon/can.png'},
     {id: 'Sell', name: 'Sell', extend: ['Can'], icon: '/icon/can.png'},

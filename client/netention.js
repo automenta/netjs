@@ -96,7 +96,7 @@ function netention(f) {
                 os = _.without(os, clientID);
                 this.set('otherSelves', os);
 
-                this.deleteObject(this.object(clientID));
+                $N.deleteObject($N.instance[$N.id()]);
             }
 
         },

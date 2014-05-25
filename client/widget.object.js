@@ -983,6 +983,7 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                                         V.value = hh;
                                         later(function() {
                                             $N.pub(O, null, null, true);
+                                            notify('Saved.');
                                         });
                                     }
                                 }                                
@@ -990,8 +991,6 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                             setViewLock(wasViewLocked);
                         });   
                         Aloha.bind('aloha-editable-activated', function (e, a) {
-                            console.log('aloha activated');
-
                             wasViewLocked = viewlock;
                             setViewLock(true);
                         });
@@ -1765,6 +1764,33 @@ function _addObjectViewPopupMenu(authored, target) {
     popupmenuButton.appendTo(target).click(_objectViewContext)
 }
 
+
+function newSubjectTagButton(buttonTitle, objSuffix, objName, objTag, property) {
+
+    return newEle('button').text(buttonTitle).addClass('metadataReplyButton').click(function() {
+        var x = $N.instance[$(this).parent().parent().attr('xid')];
+        if (!x) return;
+        
+        var defaultLikesID = $N.id() + objSuffix;
+        var defaultLikes = $N.instance[defaultLikesID];
+
+        if (!defaultLikes) {
+            defaultLikes = new $N.nobject(defaultLikesID, objName, objTag);
+            defaultLikes.author = defaultLikes.subject = $N.id();
+            defaultLikes.add(property, x.id);
+        }
+        else {
+            //TODO use getObject if it will return a nobject
+            defaultLikes = new $N.nobject(defaultLikes);                    
+            //TODO check if existing
+            defaultLikes.add(property, x.id);
+            defaultLikes.touch();
+        }
+        $N.pub(defaultLikes);               
+    });
+
+}
+
 /**
  produces a self-contained widget representing a nobject (x) to a finite depth. activates all necessary renderers to make it presented
  */
@@ -1977,6 +2003,13 @@ function newObjectView(x, options) {
                         options.replyCallback(rx);
                 });
             });
+                        
+            mdl.append(
+                newSubjectTagButton("Like", '_Likes', 'Likes', 'Value', 'values'),
+                newSubjectTagButton("Dislike", '_Dislikes', 'Dislikes', 'Not', 'nots'),
+                newSubjectTagButton("Trust", '_Trusts', 'Trusts', 'Trust', 'trusts')
+            );
+                        
         }
     }
 

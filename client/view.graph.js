@@ -515,7 +515,7 @@ function newGraphView(v) {
                 }
             }
 
-            if (includeEdges['Trust'] || includeEdges['Value'] || includeEdges['Other']) {
+            if (includeEdges['Trust'] || includeEdges['Value'] || includeEdges['Not'] || includeEdges['Other']) {
                 
                 function edgeType(e) {
                     if (!e) return 'Other';
@@ -524,6 +524,7 @@ function newGraphView(v) {
                     if (typeof e === "string") {
                         if (e === 'Trust') return 'Trust';
                         if (e === 'Value') return 'Value';
+                        if (e === 'Not') return 'Not';
                     }
                     return 'Other';
                  }
@@ -558,6 +559,10 @@ function newGraphView(v) {
                     }
                     else if (et === 'Value') {
                         stroke = 'orange';
+                        strokeWidth /= 2;
+                    }                    
+                    else if (et === 'Not') {
+                        stroke = 'red';
                         strokeWidth /= 2;
                     }                    
                     else {
@@ -797,7 +802,7 @@ function newGraphView(v) {
     var edgeMenu = newDiv().addClass('HUDTopRight').appendTo(nd);
     edgeMenu.css('text-align','right');
     
-    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust', 'Value', 'Other' ];
+    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust', 'Value', 'Not', 'Other' ];
     _.each(edgeTypes, function (e) {
         var includeCheck = $('<input type="checkbox"/>');
         includeCheck.click(function () {
