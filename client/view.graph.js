@@ -345,7 +345,8 @@ function newGraphView(v) {
                 if (size <= 0) 
                     return;
                 
-                var N = addNode(x.id, x.name || "", defaultColor, size, size, getTagIcon(x));
+                
+                var N = addNode(x.id, x.name || "", defaultColor, size, size, objIcon(x));
                 
                 if (timeline) {
                     if (minTime !== maxTime) {
@@ -732,10 +733,8 @@ function newGraphView(v) {
             force.charge(function(d) {
                 return -(d.width*12.0);
             });
-            /*force.chargeDistance(function(d) {
-                //return (d.width*1.0);
-                return Infinity;
-            });*/
+            force.chargeDistance(1000);
+            force.theta(0.5); //default=0.8 
             
             force.on("tick", function () {
                 node.attr("transform", function (d) {

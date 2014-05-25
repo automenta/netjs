@@ -236,6 +236,26 @@ function newCheckboxTagFilter(tags) {
     return d;
 }
 
+function objIcon(x) {
+    if (x.author == x.id) {
+        var a = getAvatarURL(x);
+        if (a)
+            return a;
+    }
+    
+    var firstMedia = objFirstValue(x, 'image');
+
+    var imgurl;
+
+    if ((firstMedia) && (typeof firstMedia === "string")) {
+        imgurl = firstMedia;
+    }
+    else {
+        imgurl = getTagIcon(x) || getTagIcon(null);// 'icon/placeholder.png';
+    }
+    return imgurl;
+}
+
 function newObjectView2(x) {
     /*
      Name
@@ -249,15 +269,7 @@ function newObjectView2(x) {
 
     var img = newDiv().addClass('ShareSummaryImage').appendTo(d);
 
-    var firstMedia = objFirstValue(x, 'image');
-
-    var imgurl;
-    if ((firstMedia) && (typeof firstMedia === "string")) {
-        imgurl = firstMedia;
-    }
-    else {
-        imgurl = getTagIcon(x) || getTagIcon(null);// 'icon/placeholder.png';
-    }
+    imgurl = objIcon(x);
 
     img.append(newEle('img').attr('src', imgurl));
 
