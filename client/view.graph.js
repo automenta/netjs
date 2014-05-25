@@ -1,6 +1,4 @@
-var GRAPH_MAX_NODES = 300;
-
-
+var GRAPH_MAX_NODES = 350;
 
 function newGraphView(v) {
     var eid = uuid();
@@ -97,36 +95,47 @@ function newGraphView(v) {
         return nn;
     }
 
-    function hasEdge(from, to) {
-        return (edgeIndex[from+'|'+to] !== undefined);
+    function hasEdge(from, to, edgeType) {
+        var edgeID = from+'|'+to;
+        if (edgeType)
+            edgeID+='|'+edgeType;
+        
+        if (edgeIndex[edgeID] !== undefined)
+            return true;
+        return edgeID;
     }
-    function addEdge(from, to, style) {
-        if (hasEdge(from, to))
-            return;
-
-        var ee = {
-            source: nodeIndex[from],
-            target: nodeIndex[to],
-            style: style
-        };
-
-        if ((ee.source !== undefined) && (ee.target !== undefined)) {
-            edgeIndex[from+'|'+to] = ee;
+    function addEdge(from, to, style, edgeType) {
+        var ees = nodeIndex[from];
+        var eet = nodeIndex[to];
+        if ((ees !== undefined) && (eet !== undefined)) {
+            var index = hasEdge(from, to, edgeType, true);
+            if (index === true)
+                return;
+            
+            var ee = {
+                source: ees,
+                target: eet,
+                style: style
+            };
+            edgeIndex[index] = ee;
+            
+            return ee;
         }
-        return ee;
+
     }
 
     var timeline = false;
     var timelineWidth = 2500;
 
+    var nodeScale = { };
     var includeEdges = {};
 
     var defaultIconSize = 34;
     var defaultNodeSize = 34;
     var defaultTagSize = 56;
-    var defaultColor = "rgba(200,200,200,0.4)"; //#ccc";
+    var defaultColor = "rgba(180,180,180,0.4)"; //#ccc";
     var tagColor = "rgba(150,150,150,0.2)";
-    var highlightColor = '#eee';
+    var highlightColor = "rgba(200,200,200,0.6)";
     var thickLine = 8.0;
     var thinLine = thickLine/2.0;
     var sketchResolution = 6.0;
@@ -145,6 +154,8 @@ function newGraphView(v) {
     force.on("end", function () {
         ended = true;
     });
+
+    var nodeMenu = newDiv().addClass('HUDTopLeft').appendTo(nd);
 
 
     function updateSVGTransform() {
@@ -173,7 +184,7 @@ function newGraphView(v) {
     });
 
     cc.mousedown(function (m) {
-        if (m.which == 3) {
+        if (m.which === 3) {
             sketching = true;
             startDragPoint = [m.clientX, m.clientY];
             if (touched)
@@ -181,7 +192,7 @@ function newGraphView(v) {
             return;
         }
 
-        if ((m.which == 1) && (!oncell)) {
+        if ((m.which === 1) && (!oncell)) {
             dragging = true;
             startDragPoint = [m.clientX, m.clientY];
             return;
@@ -294,6 +305,10 @@ function newGraphView(v) {
         svg.selectAll(".node").remove();
         svg.selectAll(".link").remove();
 
+        nodeMenu.empty();
+        
+        var nodeTags = { };
+        
         nodes = [];
         nodeIndex = {};
         edgeIndex = {};
@@ -309,8 +324,29 @@ function newGraphView(v) {
                 maxTime = _.max(times);
             }
 
-            function addNodeForObject(x) {
-                var N = addNode(x.id, x.name || "", defaultColor, defaultNodeSize, defaultNodeSize, getTagIcon(x));
+            function addNodeForObject(x, ots) {
+                var size = defaultNodeSize;
+                
+                if (ots) {
+                    var maxScale = undefined;
+                    for (var i in ots) {
+                        if (nodeScale[i]!==undefined) {
+                            if (maxScale === undefined)
+                                maxScale = nodeScale[i];
+                            else
+                                maxScale = Math.max(maxScale,nodeScale[i]);
+                            console.log(nodeScale[i], maxScale);
+                        }                            
+                    }
+                    if (maxScale!==undefined)
+                        size *= maxScale;
+                }
+                
+                if (size <= 0) 
+                    return;
+                
+                var N = addNode(x.id, x.name || "", defaultColor, size, size, getTagIcon(x));
+                
                 if (timeline) {
                     if (minTime !== maxTime) {
                         var when = objTime(x);
@@ -321,8 +357,18 @@ function newGraphView(v) {
 
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
-                addNodeForObject(x);
 
+                var ots = objTagStrength(x, true, true);
+                x.ots = ots;
+
+                addNodeForObject(x, ots);
+
+                for (var t in ots) {
+                    if (nodeTags[t] === undefined)
+                        nodeTags[t] = 0;
+                    nodeTags[t] += ots[t];
+                }
+                
                 if (includeEdges['Reply']) {
                     var replies = $N.getReplies(x);
                     for (var j = 0; j < replies.length; j++) {
@@ -334,6 +380,8 @@ function newGraphView(v) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 var r = xxrr[i][1];
+                
+                var ots = x.ots;
 
                 /*var N = addNode(x.id, x.name || "", defaultColor, 35, 35, getTagIcon(x) );
                  if (timeline) {
@@ -349,7 +397,7 @@ function newGraphView(v) {
 
                    
                 if (includeEdges['Type']) {
-                    _.each(objTagStrength(x, true, true), function(v, k) {
+                    _.each(ots, function(v, k) {
                         rtags.push([k, {
                             stroke: 'rgba(64,64,64,0.5)',
                             strokeWidth: (thickLine * v),
@@ -370,7 +418,8 @@ function newGraphView(v) {
                     if (x.subject)
                         rtags.push([x.subject, {
                             stroke: 'rgba(64,64,128,0.5)',
-                            strokeWidth: thinLine
+                            strokeWidth: thinLine,
+                            contains: true
                         }]);
                 }
                 if (includeEdges['Reply']) {
@@ -433,24 +482,6 @@ function newGraphView(v) {
 
             }
 
-            if (includeEdges['Trust']) {
-                /*
-                var t = objUserRelations($N.objectsWithTag('Trust', true));
-                for (var u in t) {
-                    for (var v in t[u]['trusts']) {
-                        addEdge(u, v, edgeStyle);
-                    }
-                }
-                */
-            }
-
-            /*
-            if (includeEdges['Value']) {
-                var t = objUserRelations($N.objectsWithTag('Value', true));
-                console.log('value', t);
-            }
-            */
-
 
 
             //add object links
@@ -484,46 +515,92 @@ function newGraphView(v) {
                 }
             }
 
-            if (includeEdges['Edge']) {
+            if (includeEdges['Trust'] || includeEdges['Value'] || includeEdges['Other']) {
+                
+                function edgeType(e) {
+                    if (!e) return 'Other';
+                    if (typeof e === "number")
+                        return 'Other';
+                    if (typeof e === "string") {
+                        if (e === 'Trust') return 'Trust';
+                        if (e === 'Value') return 'Value';
+                    }
+                    return 'Other';
+                 }
+                 
+                 //TODO if edge already exists, replace with a style that indicates multiple edge types exist
+
+                 function getEdgeVisual(e, undirected) {
+                    var edgeValue = undirected ? $N.ugraph.edge(e) : $N.dgraph.edge(e);
+
+                    var et = edgeType(edgeValue);
+                    if (!includeEdges[et]) return null;
+                     
+                    var s = null;
+                    if (typeof edgeValue === "number") s = edgeValue;
+                    else {
+                        var values = _.values(edgeValue);
+                        for (var i = 0; i < values.length; i++) {
+                            if (typeof values[i] === "number")
+                                s = (s === null) ? values[i] : Math.max(values[i], s);
+                        }
+                    }
+                    if (s === null) s = 1.0;
+                        
+                    function p(s, min, max) {
+                        return s*(max-min) + min;
+                    }
+                    
+                    var stroke;
+                    var strokeWidth = Math.max(1.0, thickLine * s);
+                    if (et === 'Trust') {
+                        stroke = 'rgba(40,' + parseInt(p(s, 0.7, 1.0)*255) + ',40,' + p(s,0.5, 0.9) + ')';
+                    }
+                    else if (et === 'Value') {
+                        stroke = 'orange';
+                        strokeWidth /= 2;
+                    }                    
+                    else {
+                        var g = p(s, 0.4, 0.5);
+                        stroke = 'rgba(' + parseInt(g*255) + ',' + parseInt(g*255) + ',' + parseInt(g*255) + ',' + g + ')';
+                    }
+                                        
+                    var q = {
+                        stroke: stroke,
+                        strokeWidth: strokeWidth,
+                        strength: s
+                    };      
+                    if (undirected)
+                        q.undirected = true;
+                    return q;
+                 }
+
+                
                 for (var k = 0; k < xxrr.length; k++) {
                     var x = xxrr[k][0];
 
                     var inEdges = $N.dgraph.inEdges(x.id);
                     for (var j = 0; j < inEdges.length; j++) {
                         var e = inEdges[j];
-                        var edgeValue = $N.dgraph.edge(e);
-                        var source = $N.dgraph.source(e);
-                        
-                        if (hasEdge(source, x.id)) continue;
-                        
-                        var s = 1.0;
-                        if (typeof edgeValue === "number")
-                            s = parseFloat(edgeValue);         
-                        
-                        addEdge(source, x.id, {
-                            stroke: 'rgba(80,' + 100.0 * ((0.7) + (0.3 * s)) + ',80,' + (0.1 + 0.9 * s) + ')',
-                            strokeWidth: Math.max(1.0, thickLine * s),
-                            strength: s
-                        });                                                    
+                        var source = $N.dgraph.source(e);                        
+                             
+                        if (hasEdge(source, x.id, e)===true) continue;                                                  
+
+                        var ev = getEdgeVisual(e);                        
+                        if (ev)
+                            addEdge(source, x.id, ev, e);                                                    
                     }
                     
                     var outEdges = $N.dgraph.outEdges(x.id);
                     for (var j = 0; j < outEdges.length; j++) {
                         var e = outEdges[j];
-                        var edgeValue = $N.dgraph.edge(e);
                         var target = $N.dgraph.target(e);
-
-                        if (hasEdge(x.id, target)) continue;
+                                                
+                        if (hasEdge(x.id, target, e)===true) continue;
                         
-                        var s = 1.0;
-                        if (typeof edgeValue === "number")
-                            s = parseFloat(edgeValue);     
-                        
-                        addEdge(x.id, target, {
-                            stroke: 'rgba(100,200,100,' + (0.1 + 0.9 * s) + ')',
-                            strokeWidth: Math.max(1.0, thickLine * s),
-                            strength: s
-                        });                                                    
+                        var ev = getEdgeVisual(e);
+                        if (ev)
+                            addEdge(x.id, target, ev, e);                                                    
                     }
 
                     var uedges = $N.ugraph.incidentEdges(x.id);
@@ -535,30 +612,12 @@ function newGraphView(v) {
                         var a = order ? incidentNodes[1] : incidentNodes[0] ;
                         var b = order ? incidentNodes[0] : incidentNodes[1] ;
                         
-                        if (hasEdge(a, b)) continue;
-
-                        var edgeValue = $N.ugraph.edge(e);
-                        var s = null;
-                        if (typeof edgeValue === "number") s = edgeValue;
-                        else {
-                            var values = _.values(edgeValue);
-                            for (var i = 0; i < values.length; i++) {
-                                if (typeof values[i] === "number")
-                                    s = (s === null) ? values[i] : Math.max(values[i], s);
-                            }
-                        }
-                        if (s === null) s = 0.5;
+                        if (hasEdge(a, b, e)===true) continue;
                         
-                        //TODO calculate strength from values inside edgeValue
-                        /*if (typeof edgeValue === "number")
-                            s = parseFloat(edgeValue);                        */
-
-                        addEdge(a, b, {
-                            stroke: 'rgba(100,100,100,' + (0.1 + 0.9 * s) + ')',
-                            strokeWidth: Math.max(1.0, thickLine * s),
-                            strength: s,
-                            undirected: true
-                        });                                                    
+                        
+                        var ev = getEdgeVisual(e, true);
+                        if (ev)
+                            addEdge(a, b, ev, e);                                                    
                     }
                 
                 }
@@ -566,16 +625,13 @@ function newGraphView(v) {
 
 
             var edges = _.values(edgeIndex);
+            
             force
                 .nodes(nodes)
-                .links(edges);
-
-            var drag = force.drag()
-                .on("dragstart", function () {
-                    oncell = true;
-                }).on("dragend", function () {
-                    oncell = false;
-                });
+                .links(edges)
+                .drag()
+                    .on("dragstart", function () { oncell = true;})
+                    .on("dragend",   function () { oncell = false; });
 
     
             var link = svg.selectAll(".link")
@@ -630,78 +686,97 @@ function newGraphView(v) {
              .attr("width", function(d) { return d.width; } )
              .attr("height", function(d) { return d.height; } )
              .style("fill", function(d) { return d.color; });*/
-
-            node.append("circle")
-                .attr("x", function (d) {
-                    return -d.width / 2;
-                })
-                .attr("y", function (d) {
-                    return -d.height / 2;
-                })
-                .attr("r", function (d) {
-                    return d.width;
-                })
-                .style("fill", function (d) {
-                    return d.color;
+            node.append("circle").each(function (d) {
+                d3.select(this).attr({
+                    x: -d.width/2,
+                    y: -d.width/2,
+                    r: d.width,
+                    fill: d.color                    
                 });
-
-            node.append("image")
-                .attr("xlink:href", function (d) {
-                    return d.icon;
-                })
-                .attr("x", -defaultIconSize / 2.0)
-                .attr("y", -defaultIconSize / 2.0)
-                .attr("width", defaultIconSize)
-                .attr("height", defaultIconSize);
-
-            node.append("text")
-                .attr("dx", function (d) {
-                    return -d.width / 2;;
-                })
-                .attr("dy", "4em")
-                .text(function (d) {
-                    return d.name;
+            });               
+            node.append("image").each(function (d) {
+                var iconSize = d.width;
+                d3.select(this).attr({
+                    "xlink:href": d.icon,
+                    x: -iconSize/2,
+                    y: -iconSize/2,
+                    width: iconSize,
+                    height: iconSize
                 });
+            });            
+            node.append("text").each(function (d) {
+                d3.select(this).attr({
+                    dx: -d.width/2,
+                    dy: "4em"
+                }).text(d.name);
+            });
+            
+            link.each(function(l) {
+                var sw = ((l.style) && (l.style.strokeWidth)) ? l.style.strokeWidth : 3;
+                var s = ((l.style) && (l.style.stroke)) ? l.style.stroke : 'black';
+                d3.select(this).attr({
+                    "stroke-width": sw,
+                    "stroke": s                    
+                });
+            });
 
-
-            link.attr("stroke-width", function (l) {
-                if ((l.style) && (l.style.strokeWidth))
-                    return l.style.strokeWidth;
-                return 3;
-            }).attr("stroke", function (l) {
-                if ((l.style) && (l.style.stroke))
-                    return l.style.stroke;
-                return 'black';
-            });/*.attr("opacity", function (l) {
-                if ((l.style) && (l.style.opacity))
-                    return l.style.opacity;
-                return 1.0;
+            force.linkDistance(function(d) {
+                if (d.style.contains) {
+                    return 0;
+                }
+                
+                var sw = d.source.width;
+                var tw = d.target.width;
+                return sw+tw;
+            });
+            force.charge(function(d) {
+                return -(d.width*12.0);
+            });
+            /*force.chargeDistance(function(d) {
+                //return (d.width*1.0);
+                return Infinity;
             });*/
-
+            
             force.on("tick", function () {
                 node.attr("transform", function (d) {
                     if (timeline) {
-                        if (d.fixedX != undefined)
+                        if (d.fixedX !== undefined)
                             d.x = d.fixedX;
                     }
                     return "translate(" + d.x + "," + d.y + ")";
                 });
 
-                link.attr("x1", function (d) {
-                    return d.source.x;
-                })
-                .attr("y1", function (d) {
-                    return d.source.y;
-                })
-                .attr("x2", function (d) {
-                    return d.target.x;
-                })
-                .attr("y2", function (d) {
-                    return d.target.y;
+                link.each(function(d) {
+                    if (d.link===undefined)
+                        d.link = d3.select(this);
+                    d.link.attr({
+                        x1: d.source.x,
+                        y1: d.source.y,
+                        x2: d.target.x,
+                        y2: d.target.y
+                    });
                 });
 
             });
 
+            later(function() {
+                //TODO don't recreate this menu, cache it and update if changed
+                
+                nodeMenu.empty();            
+                _.each(nodeTags, function(v, k) {
+                    var nc = newDiv();
+                    var v = (nodeScale[k]!==undefined) ? nodeScale[k] : 1;                    
+                    var sl = $('<input type="range" min="0" max="10" value="' + v + '"/>')
+                        .change(function() {
+                            nodeScale[k] = parseFloat(sl.val());
+                            later(nd.onChange);
+                        });         
+                    nc.append(sl, k);
+                    nodeMenu.append(nc);
+                });
+                
+            });
+            
             edges = null;
 
         });
@@ -720,9 +795,11 @@ function newGraphView(v) {
         nd.onChange();
     });
 
-    var hudmenu = newDiv().addClass('HUDTopLeft').appendTo(nd);
-
-    var edgeTypes = ['Edge', 'Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust' /*, 'Value'*/ ];
+    
+    var edgeMenu = newDiv().addClass('HUDTopRight').appendTo(nd);
+    edgeMenu.css('text-align','right');
+    
+    var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust', 'Value', 'Other' ];
     _.each(edgeTypes, function (e) {
         var includeCheck = $('<input type="checkbox"/>');
         includeCheck.click(function () {
@@ -730,7 +807,7 @@ function newGraphView(v) {
             nd.onChange();
         });
 
-        hudmenu.append(includeCheck, e + '<br/>');
+        edgeMenu.append(e, includeCheck, '<br/>');
     });
 
 
