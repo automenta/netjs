@@ -335,7 +335,6 @@ function newGraphView(v) {
                                 maxScale = nodeScale[i];
                             else
                                 maxScale = Math.max(maxScale,nodeScale[i]);
-                            console.log(nodeScale[i], maxScale);
                         }                            
                     }
                     if (maxScale!==undefined)
@@ -634,6 +633,11 @@ function newGraphView(v) {
                     .on("dragstart", function () { oncell = true;})
                     .on("dragend",   function () { oncell = false; });
 
+            node = svg.selectAll(".node")
+                .data(nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .call(force.drag);
     
             var link = svg.selectAll(".link")
                 .data(edges)
@@ -646,11 +650,6 @@ function newGraphView(v) {
                     return "url(#end)";
                 });
 
-            node = svg.selectAll(".node")
-                .data(nodes)
-                .enter().append("g")
-                .attr("class", "node")
-                .call(force.drag);
 
             loadPositions();
 

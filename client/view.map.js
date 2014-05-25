@@ -508,7 +508,7 @@ function renderLeafletMap(v) {
 					if (objHasTag(x, 'Earthquake')) {
                         m.setOpacity(0.25);
 						var mag = parseFloat(objFirstValue(x, 'eqMagnitude'));
-						var depthKM = (s.alt||0) /* parseFloat(objFirstValue(x, 'eqDepth')) */ /1000.0;
+						var depthKM = -(s.alt||0) /* parseFloat(objFirstValue(x, 'eqDepth')) */ /1000.0;
 						var ipx = undefined;
 						if (mag) {
 							var rad = 500 + Math.exp(mag) * 1000;

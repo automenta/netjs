@@ -1519,9 +1519,10 @@ var Ontology = function(tagInclude, target) {
                 var incidentNodes = g.incidentNodes(e),
                         v = incidentNodes[0] !== u ? incidentNodes[0] : incidentNodes[1],
                         d = weightFunc(e);
-                if (d < results[u][v].distance) {
-                    results[u][v] = {distance: d, predecessor: u};
-                }
+                if (results[u][v])
+                    if (d < results[u][v].distance) {
+                        results[u][v] = {distance: d, predecessor: u};
+                    }
             });
         });
 
