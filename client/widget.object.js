@@ -1996,7 +1996,8 @@ function newObjectView(x, options) {
 
     if ((showMetadataLine) && (!x._class) && (!x._property)) {
         var mdl = newMetadataLine(x, showTime).appendTo(d);
-        if (showReplyButton) {
+        
+        if (showReplyButton && (x.id !== $N.id())) {
             newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {
                 newReplyPopup(x, function(rx) {
                     if (options.replyCallback)

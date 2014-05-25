@@ -811,6 +811,24 @@ a.ViewControlMinor img {
     padding: 6px;
 }
 
+#FocusTagger {
+    max-height: 75%;
+    right: 25%;
+    position: fixed;
+    max-width: 50%;
+    overflow: auto;
+}
+#FocusTagger .taggerContent {
+}
+#FocusTagger .taggerHeader {
+    position: fixed;
+    margin-top:-2.5em;
+    background-color: white;
+    border: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
 #FocusEditWrap {
     max-height: 75%;
     overflow: auto;

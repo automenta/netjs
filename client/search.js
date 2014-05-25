@@ -116,7 +116,6 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var focus = $N.focus();
 
     var location = objSpacePointLatLng($N.myself());
-    
 
     var relevance = {};
 

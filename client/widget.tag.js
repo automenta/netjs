@@ -1,4 +1,19 @@
-function newTagger(selected, onFinished, tagRestrictions, maxTags) {    
+function newTagger(options, onFinished, tagRestrictions, maxTags) {    
+    var selected;
+    var inDialog = true;
+    var addImmediately = false;
+    if (!options) {
+        
+    }
+    else if (Array.isArray(options)) {
+        selected = options;
+    }
+    else {
+        selected = options.selected;
+        inDialog = options.inDialog;
+        addImmediately = options.addImmediately;
+    }
+    
     if (!selected)
         selected = [];
     if (!Array.isArray(selected))
@@ -7,8 +22,8 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
     var tags = _.clone(selected);
 
     var d = newDiv();
-    var t = newDiv(); //target for the browser instances
-    t.attr('id', 'TagSelectWidget');
+    var t = newDiv('TagSelectWidget'); //target for the browser instances
+    t.addClass('taggerContent');
 
     var currentBrowser = null;
 
@@ -34,6 +49,11 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
     tagsCombo.update();
 
     function onTagAdded(t) {
+        if (addImmediately) {
+            addImmediately(t);
+            return;
+        }
+        
         if (maxTags)
             if (tags.length >= maxTags)
                 return;
@@ -55,7 +75,7 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
         t.append(currentBrowser);
     }
 
-    var selectBar = $('<div/>').attr('id', 'tagSelectHeader');
+    var selectBar = $('<div/>').attr('id', 'tagSelectHeader').addClass('taggerHeader');
     
     var modeFunctions = {};
     var modeSelect = $('<select autofocus/>')
@@ -120,11 +140,17 @@ function newTagger(selected, onFinished, tagRestrictions, maxTags) {
         }).appendTo(saveBar);
     }
     
-    later(function() {        
-        selectBar.append(saveBar);
-        //d.parent().parent().children(".ui-dialog-titlebar").append(selectBar);
-        d.parent().before(selectBar);
-    });
+    selectBar.append(saveBar);
+
+    if (inDialog) {
+        later(function() {        
+            d.parent().before(selectBar);
+        });
+    }
+    else {
+        d.prepend(selectBar);
+    }
+        
 
     t.attr('style', 'clear: both');
     d.append(t);

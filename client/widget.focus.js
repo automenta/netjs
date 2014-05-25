@@ -147,21 +147,27 @@ function initFocusButtons() {
 
     //TODO ABSTRACT this into a pluggable focus template system
 
-    $('#FocusNeedButton').click(function() {
-        /*var needs = ['Volunteer', 'Shelter', 'Food', 'Tools', 'Health', 'Transport', 'Service', 'Animal'];
-         //TODO select child tags of 'Support' (their parent tag) to avoid hardcoding it here
-         _.each(needs, function(n) {
-         objAddValue(focusValue, {id: n});
-         });
-         renderFocus();*/
-        var d = newPopup("Add Focus Tags", true, true);
-        d.append(newTagger([], function(x) {
-            for (var i = 0; i < x.length; i++)
-                objAddTag($N.focus(), x[i]);
+    $('#FocusWhatButton').click(function() {
+        var ft = $('#FocusTagger');
+        
+        function hide() { $('#FocusTagger').empty().hide(); }
+        
+        if (ft.is(':visible')) {
+            hide();
+        }
+        else {
+            var taggerOptions = {
+                inDialog: false,
+                addImmediately: function(t) {
+                    objAddTag($N.focus(), t);
+                    renderFocus();
+                }
+            };
 
-            renderFocus();
-            d.dialog('close');
-        }));
+            ft.append(newTagger(taggerOptions, function(x) {
+                hide();
+            })).show();            
+        }        
 
     });
     
