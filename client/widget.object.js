@@ -878,7 +878,11 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
     var wasViewLocked = false;
     
     function addReadOnly() {
-        return newDiv().addClass('htmlview').html(v.value).appendTo(d);        
+        var y = newEle('div',true);
+        y.classList.add('htmlview');
+        y.innerHTML = v.value;
+        d.append(y);
+        return $(y);
     }
     
     if (!editable) {
@@ -919,11 +923,15 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
                 var hv = newDiv().addClass('htmlview').html(vvv).appendTo(d);
                 if (x.author === $N.id()) {
                     hv.addClass('htmleditable');
+                    hv.click(function() {
+                       if (!hv.attr('xid')) {
+                            hv.attr('xid', x.id);
+                            hv.attr('vid', index);                           
+                            //TODO auto-focus the newly created editor so clicking twice isnt necessary
+                            Aloha.jQuery(hv).aloha();
+                       }
+                    });
                     
-                    
-                    Aloha.jQuery(hv).aloha();
-                    hv.attr('xid', x.id);
-                    hv.attr('vid', index);                    
                 }
             }
         }        
