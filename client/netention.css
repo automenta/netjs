@@ -203,10 +203,10 @@ div.olMapViewport {
     font-size: 70%;    
 }
 
-.tagSectionHover {
+/*.tagSectionHover {
     border: 1px solid blue;
     background-color: rgba(255,255,255,0.1);
-} 
+}*/
 
 .createSubObjectButton {
     font-size: 80%;
@@ -375,18 +375,14 @@ div.olMapViewport {
     top: 0px;
     background-color: rgba(0,0,0,0.3);
     z-index: 1000000;
-}
-#LoadingSplash {
 /*    background: url('/theme/cybernetic/p2p_banner.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     background-attachment: fixed;*/
-    z-index: 100;
     width: 100%;
     height: 100%;
-    position: fixed;
 }
 #LoadingSplash ul {
     margin: 0;
@@ -405,7 +401,7 @@ div.olMapViewport {
     list-style-type: none;
     text-align: center;
 }
-#LoadingSplash ul li span {
+/*#LoadingSplash ul li span {
     clear: both;
     font-size: .7em;
     display: none;
@@ -421,8 +417,8 @@ div.olMapViewport {
     width: 100%;
     margin-bottom: 10px;
     padding: 0;
-}
-#LoadingSplash ul li img {
+}*/
+.LoadingSplashImg {
     margin: 5px 0 0 0;
     padding: 0;
     width: 90%;
@@ -431,7 +427,7 @@ div.olMapViewport {
     _filter: url(filters.svg#grayscale);
     -webkit-filter: grayscale(1);
 }
-#LoadingSplash ul li img:hover {
+.LoadingSplashImg:hover {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -440,9 +436,6 @@ div.olMapViewport {
     -webkit-filter: none !important;
 }
 
-#LoadingSplash h1 {
-    text-align: center;
-}
 .ui-pnotify.stack-bottomleft {
     bottom: 25px;
     left: 25px;
@@ -550,9 +543,6 @@ div.olMapViewport {
     vertical-align: middle;
     text-align: center;
     min-width: 4em;
-}
-.tagSuggestions a:hover {
-    color: #33b;
 }
 .tagSuggestions img {
     height: 1em;
@@ -692,11 +682,9 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     border: 0;
     opacity: 0.68;
 }
-.ViewControl:hover,
-.ViewActive {
+.ViewControl:hover, .ViewActive {
     opacity: 1.0;
 }
-
 
 @media (min-width: 900px) {
     a.ViewControl img { 
@@ -736,9 +724,8 @@ a.ViewControlMinor img {
 }
 
 
-a.ViewControl {outline:none; }
-a.ViewControl:hover {text-decoration:none;} 
-a.ViewControl span {
+.ViewControl {outline:none; text-decoration:none; }
+.ViewControl span {
     z-index:1000;
     display:inline;
     opacity:0;
@@ -749,7 +736,7 @@ a.ViewControl span {
     -webkit-transition: opacity 1s;*/
     pointer-events: none;
 }
-a.ViewControl:hover span{
+.ViewControl:hover span{
     opacity:1.0;
     color:#fff;
     width:auto;
@@ -758,7 +745,7 @@ a.ViewControl:hover span{
     pointer-events: none;
 }
 
-a.PopoutControl img {
+.PopoutControl img {
     /*height: 23px !important;*/
 }
 
@@ -971,9 +958,7 @@ button.ObjectViewHideButton {
     opacity: 0;
     display: inline-block;
 }
-button.ObjectViewHideButton:hover {
-    opacity: 1;
-}
+
 button.ObjectViewHideButton button {
     position: relative;
     padding: 5px;
@@ -1464,9 +1449,7 @@ html > body .ui-pnotify {
     cursor: crosshair;
     opacity: 0.6;
 }
-#AvatarButtonMini:hover {
-    opacity: 0.9;
-}
+
 #AvatarButtonMini img {
     border: none;
 }
