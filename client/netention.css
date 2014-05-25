@@ -811,10 +811,15 @@ a.ViewControlMinor img {
     padding: 6px;
 }
 
-#FocusEdit {
+#FocusEditWrap {
     max-height: 75%;
     overflow: auto;
     right: 15px;
+    max-width: 50%;
+}
+#FocusEditButtons {
+    float: right;
+    padding-top: 6px;
 }
 #FocusEdit button {
     font-size: .8em;
@@ -1118,6 +1123,9 @@ div.objectView .metadataReplyButton {
 @media (min-width: 700px) {
     #viewplay, #viewpause {
         float: right;
+    }
+    #AvatarFocus {
+        margin-right: 14px;
     }
 }
 .InlineSelfButton {

@@ -17,9 +17,6 @@ function startTalk() {
 
 }
 
-function toggleAvatarMenu() {
-    showAvatarMenu(!$('#MainMenu').is(':visible'));
-}
 
 function updateIndent(viewmenushown) {
     if (viewmenushown) {
@@ -30,6 +27,8 @@ function updateIndent(viewmenushown) {
     }
     reflowView();
 }
+
+function toggleAvatarMenu() {    showAvatarMenu(!$('#MainMenu').is(':visible'));  }
 
 function showAvatarMenu(b) {
     var vm = $('#MainMenu');
@@ -71,16 +70,8 @@ function openSelectProfileModal(title) {
 }
 
   
-$('#SelectProfileButton').click(function() {
-    openSelectProfileModal();
-    return false;
-});
-$('#EditProfileButton').click(function() {
-    newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));    
-    return false;
-});
 
-
+/*
 $('#MainMenu input').click(function(x) {
     var b = $(this);
     var v = b.attr('id');
@@ -90,7 +81,7 @@ $('#MainMenu input').click(function(x) {
     $N.save('currentView', v);
     showAvatarMenu(false);
 });
-
+*/
 
 $('#AvatarButtonMini').click(function() {
     var vm = $('#MainMenu');
@@ -115,42 +106,15 @@ $('#AddContentButton').click(function() {
             o.value = focus.value;
     newPopupObjectEdit(o, {title: 'New...', width: '50%'});
 });
-
-$('#FocusButton').click(function() {
-    /*
-     <div id="Layer" class="ui-widget-header overthrow">
-     </div>
-     <span>
-     <input type="text" placeholder="Filter" disabled/>
-     <input type="checkbox" id="GeographicToggle">Exclude Un-Mappable</input>
-     </span>                                                        
-     */
+$('#SelectProfileButton').click(function() {
+    openSelectProfileModal();
+    return false;
+});
+$('#EditProfileButton').click(function() {
+    newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));    
+    return false;
 });
 
-if (configuration.avatarMenuDisplayInitially)
-    showAvatarMenu(true);
-else
-    showAvatarMenu(false);
-
-
-
-$('#FocusWhereButton').click(function() {
-    if (!objSpacePointLatLng(focusValue)) {
-        /*focusValue.where = _.clone(objSpacePoint($N.myself()) || 
-         {lat: configuration.mapDefaultLocation[0] , lon: configuration.mapDefaultLocation[0], planet: 'Earth'});*/
-        objSetFirstValue(focusValue, 'spacepoint', {lat: configuration.mapDefaultLocation[0], lon: configuration.mapDefaultLocation[1], planet: 'Earth'});
-        renderFocus();
-    }
-    else {
-        if (confirm("Remove focus's 'Where'?")) {
-            var tags = objTags(focusValue, true);
-            var spi = _.indexOf(tags, 'spacepoint');
-            if (spi != -1)
-                objRemoveValue(focusValue, spi);
-            renderFocus();
-        }
-    }
-});
 
 $('#AvatarButton').hover(function() {
     $('#IdentityPopout').fadeIn();
@@ -158,56 +122,15 @@ $('#AvatarButton').hover(function() {
     $('#IdentityPopout').fadeOut();    
 });
 
-$('#FocusEditToggleButton').click(function() {
-    if ($('#FocusEdit').is(':visible')) {
-        $('#FocusEdit').fadeOut();        
-    }
-    else {        
-        $('#FocusEdit').fadeIn();        
-    }
-    //$('#FocusEdit').fadeToggle();
-});
-
-$('#FocusClearButton').click(function() {
-    clearFocus();
-    renderFocus();
-});
-
-$('#FocusWhatButton').click(function() {
-    focusValue.what = !focusValue.what;
-    renderFocus();
-});
-$('#FocusWhenButton').click(function() {
-    objAddValue(focusValue, {id: 'timerange', value: {from: 0, to: 0}});
-    renderFocus();
-});
-
-//TODO ABSTRACT this into a pluggable focus template system
-
-$('#FocusNeedButton').click(function() {
-    /*var needs = ['Volunteer', 'Shelter', 'Food', 'Tools', 'Health', 'Transport', 'Service', 'Animal'];
-     //TODO select child tags of 'Support' (their parent tag) to avoid hardcoding it here
-     _.each(needs, function(n) {
-     objAddValue(focusValue, {id: n});
-     });
-     renderFocus();*/
-    var d = newPopup("Add Focus Tags", true, true);
-    d.append(newTagger([], function(x) {
-        for (var i = 0; i < x.length; i++)
-            objAddTag(focusValue, x[i]);
-
-        renderFocus();
-        d.dialog('close');
-    }));
-
-});
-
-if (configuration.avatarMenuTagTreeAlways) {
-    $('#FocusWhatButton').hide();
-    renderFocus();	//force a render
-}
-
+initFocusButtons();
 
 setViewLock(configuration.viewlockDefault);
 
 $('#Roster').append(newRosterWidget());
+
+
+if (configuration.avatarMenuDisplayInitially)
+    showAvatarMenu(true);
+else
+    showAvatarMenu(false);
+

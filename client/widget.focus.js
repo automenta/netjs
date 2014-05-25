@@ -1,10 +1,196 @@
+function isFocusClear() {
+    var f = $N.focus();
+    if (!f)
+        return true;
+
+    if (f.value)
+        if (f.value.length > 0)
+            return false;
+    if (f.when)
+        return false;
+    if (f.where)
+        return false;
+    if (f.who)
+        return false;
+    if (f.userRelation)
+        return false;
+    return true;
+}
+
+function clearFocus() {
+    $('#FocusKeywords').val('');
+    $N.setFocus({when: null, where: null});
+    
+    //userRelation = null
+    $('#FocusClearButton').hide();
+}
+
+function renderFocus(skipSet) {
+    if (!skipSet) {
+        $N.setFocus($N.focus());
+    }
+    
+    var fe = $('#FocusEdit');
+    fe.empty();
+
+    var newFocusValue = $N.focus() || { };
+    
+    var noe = newObjectEdit(newFocusValue, true, true, function(xx) {
+        $N.setFocus(xx);
+        renderFocus();
+    }, function(x) {
+        $N.setFocus(x);
+    }, ['spacepoint']); //do not show spacepoint property, custom renderer is below
+
+    if (!isFocusClear())
+        $('#FocusClearButton').show();
+    else
+        $('#FocusClearButton').hide();
+
+    noe.find('.tagSuggestionsWrap').remove();
+
+    fe.append(noe);
+
+    /*
+    if ((configuration.avatarMenuTagTreeAlways) || (newFocusValue.what)) {
+        var tt = newFocusTagTree(focusValue, function(tag, newStrength) {
+
+            var tags = objTags(focusValue);
+            var existingIndex = _.indexOf(tags, tag);
+
+            if (existingIndex !== -1)
+                objRemoveValue(focusValue, existingIndex);
+
+            if (newStrength > 0) {
+                objAddTag(focusValue, tag, newStrength);
+            }
+
+            renderFocus();
+        });
+        tt.attr('style', 'height: ' + Math.floor($(window).height() * 0.4) + 'px !important');
+        fe.append(tt);
+    }
+    */
+    
+    if (newFocusValue.when) {
+    }
+
+    if (newFocusValue.who) {
+        fe.append('User: ' + $N.getObject(newFocusValue.who).name + '<br/>');
+    }
+    
+    if (newFocusValue.userRelation) {
+        if (newFocusValue.userRelation.itrust) {
+            fe.append('Sources I Trust<br/>');
+        }
+        if (newFocusValue.userRelation.trustme) {
+            fe.append('Sources Trusting Me<br/>');
+        }
+    }
+
+    var where = objSpacePointLatLng(newFocusValue);
+    if (where) {        
+        var uu = duid();
+        var m = newDiv(uu).attr('style', 'height: 250px');	//TODO use css
+        fe.append(m);
+        var lmap = initLocationChooserMap(uu, where, 3);
+        lmap.onClick = function(l) {
+            objSetFirstValue($N.focus(), 'spacepoint', {lat: l.lat, lon: l.lng, planet: 'Earth'});
+            renderFocus();
+        };
+    }
+    
+    /*
+    var tc = newTagCloud(function(filter) {
+        later(function() {
+            var f = new $N.nobject();
+            _.each(filter, function(v, t) {
+                f.addTag(t, v);
+            });
+            $N.setFocus(f);
+            renderFocus(true);            
+        });
+    });
+    fe.append(tc);
+    */
+}
+
+
+function initFocusButtons() {
+    $('#FocusEditToggleButton').click(function() {
+        if ($('#FocusEditWrap').is(':visible')) {
+            $('#FocusEditWrap').fadeOut();        
+        }
+        else {        
+            $('#FocusEditWrap').fadeIn();        
+        }
+    });
+        
+    $('#FocusEditWrap').fadeIn();        //TEMPORARY
+
+    $('#FocusClearButton').click(function() {
+        clearFocus();
+        renderFocus();
+    });
+
+    /*
+    $('#FocusWhatButton').click(function() {
+        newFocusValue.what = !newFocusValue.what;
+        renderFocus();
+    });
+    */
+    
+    $('#FocusWhenButton').click(function() {
+        objAddValue($N.focus(), {id: 'timerange', value: {from: 0, to: 0}});
+        renderFocus();
+    });
+
+    //TODO ABSTRACT this into a pluggable focus template system
+
+    $('#FocusNeedButton').click(function() {
+        /*var needs = ['Volunteer', 'Shelter', 'Food', 'Tools', 'Health', 'Transport', 'Service', 'Animal'];
+         //TODO select child tags of 'Support' (their parent tag) to avoid hardcoding it here
+         _.each(needs, function(n) {
+         objAddValue(focusValue, {id: n});
+         });
+         renderFocus();*/
+        var d = newPopup("Add Focus Tags", true, true);
+        d.append(newTagger([], function(x) {
+            for (var i = 0; i < x.length; i++)
+                objAddTag($N.focus(), x[i]);
+
+            renderFocus();
+            d.dialog('close');
+        }));
+
+    });
+    
+    $('#FocusWhereButton').click(function() {
+        if (!objSpacePointLatLng($N.focus())) {
+            /*focusValue.where = _.clone(objSpacePoint($N.myself()) || 
+             {lat: configuration.mapDefaultLocation[0] , lon: configuration.mapDefaultLocation[0], planet: 'Earth'});*/
+            objSetFirstValue($N.focus(), 'spacepoint', {lat: configuration.mapDefaultLocation[0], lon: configuration.mapDefaultLocation[1], planet: 'Earth'});
+            renderFocus();
+        }
+        else {
+            if (confirm("Remove focus's 'Where'?")) {
+                var tags = objTags($N.focus(), true);
+                var spi = _.indexOf(tags, 'spacepoint');
+                if (spi != -1)
+                    objRemoveValue($N.focus(), spi);
+                renderFocus();
+            }
+        }
+    });
+
+}
 
 function newFocusTagTree(currentFocus, onTagChanged) {
     var e = newDiv('FocusTagTree');
-    
+
     //$('.TagChoice').remove();
-	var prefix = 'FTT_';
-    
+    var prefix = 'FTT_';
+
     var p = {
         target: e,
         newTagDiv: function(id, content) {
@@ -15,77 +201,77 @@ function newFocusTagTree(currentFocus, onTagChanged) {
                 label: ('<input id="' + prefix + id + '" type="checkbox" class="FTT_TagChoice"/>' + content)
             };
         },
-		onCreated: function() {
-			e.find('.FTT_TagChoice').each(function(x) {
-				var t = $(this);
-				t.change(function() {
+        onCreated: function() {
+            e.find('.FTT_TagChoice').each(function(x) {
+                var t = $(this);
+                t.change(function() {
 
-					var tag = t.attr('id').substring(prefix.length);
-					if (t.is(':checked')) {
+                    var tag = t.attr('id').substring(prefix.length);
+                    if (t.is(':checked')) {
 
 
 
-						function strength(v) {
-							later(function() {
-								if (onTagChanged)
-									onTagChanged(tag, v);
-							});
-						}
+                        function strength(v) {
+                            later(function() {
+                                if (onTagChanged)
+                                    onTagChanged(tag, v);
+                            });
+                        }
 
-						strength(1.0);					
-						/*
+                        strength(1.0);
+                        /*
+                         
+                         var sd = $('<span/>').addClass('tagButtons').addClass('tagButtonsLeft').appendTo(t.parent());
+                         //2 placeholders to match the CSS nth child
+                         $('<button style="display: none"></button>').appendTo(sd);
+                         $('<button style="display: none"></button>').appendTo(sd);
+                         var p25Button =  $('<button title="25%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.25); });
+                         var p50Button =  $('<button title="50%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.5); });
+                         var p75Button =  $('<button title="75%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.75); });
+                         var p100Button = $('<button title="100%">&nbsp;</button>').appendTo(sd).click(function() {  strength(1.0); });
+                         
+                         p100Button.addClass('tagButtonSelected');
+                         
+                         var bb = [p25Button, p50Button, p75Button, p100Button];
+                         _.each(bb, function(b) {
+                         b.click(function() {
+                         _.each(bb, function(c) { c.removeClass('tagButtonSelected'); });
+                         b.addClass('tagButtonSelected');
+                         
+                         });
+                         });*/
+                    }
+                    else {
+                        t.parent().find('span').remove();
+                        if (onTagChanged)
+                            onTagChanged(tag, 0);
+                    }
 
-						var sd = $('<span/>').addClass('tagButtons').addClass('tagButtonsLeft').appendTo(t.parent());
-						//2 placeholders to match the CSS nth child
-						$('<button style="display: none"></button>').appendTo(sd);
-						$('<button style="display: none"></button>').appendTo(sd);
-						var p25Button =  $('<button title="25%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.25); });
-						var p50Button =  $('<button title="50%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.5); });
-						var p75Button =  $('<button title="75%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.75); });
-						var p100Button = $('<button title="100%">&nbsp;</button>').appendTo(sd).click(function() {  strength(1.0); });
-				
-						p100Button.addClass('tagButtonSelected');
-
-						var bb = [p25Button, p50Button, p75Button, p100Button];
-						_.each(bb, function(b) {
-							b.click(function() {
-								_.each(bb, function(c) { c.removeClass('tagButtonSelected'); });
-								b.addClass('tagButtonSelected');
-					
-							});
-						});*/
-					}
-					else {
-						t.parent().find('span').remove();
-						if (onTagChanged)
-							onTagChanged(tag, 0);
-					}
-
-				   //onTagAdded();
-				});
-			});
-		}
+                    //onTagAdded();
+                });
+            });
+        }
     };
-    newTagTree(p);    
-    
+    newTagTree(p);
+
     return e;
-    
+
 }
 
 //DEPRECATED
-function newLayersWidget() { 
+function newLayersWidget() {
     var target = newDiv();
 
     //var isGeographic = $('#GeographicToggle').is(':checked');
     //updateLayers();
-    
+
     var l = $N.layer();
-    if (!l.include) 
-        l.include = { };
+    if (!l.include)
+        l.include = {};
     if (!l.exclude)
-        l.exclude = { };
+        l.exclude = {};
     if (!l.kml)
-        l.kml = [ ];
+        l.kml = [];
 
     var p = {
         'target': target,
@@ -94,7 +280,7 @@ function newLayersWidget() {
                 var kmlFolder = {
                     label: 'Map Layer',
                     children: []
-                };      
+                };
 
                 function addKML(label, url) {
                     kmlFolder.children.push({
@@ -111,7 +297,7 @@ function newLayersWidget() {
                 var extFolder = {
                     label: 'External Link',
                     children: []
-                }; 
+                };
                 var t = [
                     {
                         label: 'Global Alerts',
@@ -127,12 +313,12 @@ function newLayersWidget() {
                         ]
                     }
                 ];
-                root.push(extFolder);        
+                root.push(extFolder);
             }
 
             kmlsubtree(T);
-            externalsubtree(T);        
-    
+            externalsubtree(T);
+
         },
         newTagDiv: function(id, content) {
             var ti = getTagIcon(id);
@@ -141,32 +327,32 @@ function newLayersWidget() {
             return {
                 label: ('<span id="' + id + '" class="TagLayer">' + content + '</span>')
             };
-        }        
+        }
     };
     newTagTree(p);
-    
+
     function commitLayer() {
         $N.save('layer', l);
         updateLayers();
     }
-    
+
     if (_.size(l.include) > 0) {
         $('.TagLayer').addClass('TagLayerFaded');
     }
-    
+
     $('.TagLayer').each(function(x) {
         var t = $(this);
         var id = t.attr('id');
-        var included = l.include[id]; 
+        var included = l.include[id];
         var excluded = l.exclude[id];
-        
+
         if (included) {
             t.addClass('TagLayerInclude');
         }
         else if (excluded) {
             t.addClass('TagLayerExclude');
         }
-        
+
         t.click(function() {
             later(function() {
                 if ((!included) && (!excluded)) {
@@ -186,14 +372,14 @@ function newLayersWidget() {
                     delete l.include[id];
                     delete l.exclude[id];
                     commitLayer();
-                }                
+                }
             });
         });
     });
     $('.KMLLayer').each(function(x) {
-        var t = $(this);        
+        var t = $(this);
         var url = t.attr('url');
-        
+
         var included = _.contains(l.kml, url);
         if (included) {
             t.addClass('TagLayerInclude');
@@ -211,7 +397,7 @@ function newLayersWidget() {
             }
         });
     });
-    
+
 //    a.delegate("a", "click", function(e) {
 //        /*if ($(e.currentTarget).blur().attr('href').match('^#$')) {
 //            $("#layer-tree").jstree("open_node", this);
@@ -228,81 +414,200 @@ function newLayersWidget() {
 //            return false;
 //        }*/
 //    });
-                   
-    
+
+
     /*
-    //update display of type counts and other type metadata
-    function updateTypeCounts() {
-        for (var t in stc) {
-            $('a:contains("' + t + '")').append(' '+ stc[t]);
-        }    
-    }
-    */
+     //update display of type counts and other type metadata
+     function updateTypeCounts() {
+     for (var t in stc) {
+     $('a:contains("' + t + '")').append(' '+ stc[t]);
+     }    
+     }
+     */
 
 }
 
-/*
-    //KML
-    {        
-        if ($N.layer)
-            delete $N.layer().kml;
-        
-        $("#KMLLayers input").change(function() {
-           var t = $(this);
-           var url = t.attr('url');
-           var checked = t.is(':checked');
-           
-           var l = $N.layer();
-           
-           if (!l.kml) l.kml = [];
-           
-           if (checked) {
-               l.kml.push(url);
-               l.kml = _.unique( l.kml );
-           }
-           else {
-               l.kml = _.without( l.kml, url);
-           }                      
-           
-           $N.save('layer', l);
-           $N.trigger('change:layer');
-        });
-    }
-*/
-    /* IFRAME EMBED */
+function newTagCloud(onChanged) {
+    var tagcloud = newDiv().addClass('FocusTagCloud');
+    var browseTagFilters = {};
+    
+    var f =  $N.focus();
+    var ft = objTagStrength(f, false);
+    _.each(ft, function(v, t) {
+      browseTagFilters[t] = v;
+    });
 
-    //$("#url-tree").jstree({"plugins": ["html_data", "ui", "themeroller"]});
 
-    /*
-    $("#url-tree").delegate("a", "click", function(e) {
-        if ($(e.currentTarget).blur().attr('href').match('^#$')) {
-            $("#url-tree").jstree("open_node", this);
-            return false;
-        } else {
-
-            var embedLocation = (this).href;
-            $('#View').empty();
-            $('#View').html('<iframe src="' + embedLocation + '" frameBorder="0" id="embed-frame"></iframe>');
-            $("#View").removeClass("ui-widget-content");
-            $('#View').addClass('view-indented');
-            
-            $('#close-iframe').show();
-            
-            var vm = $('#MainMenu');
-
-            var shown = vm.is(':visible');
-            showAvatarMenu(!shown);
-            e.preventDefault();
-            return false;
+    function updateTagCloud() {
+        var tagcount = $N.getTagCount();
+        //TODO noramlize to 1.0
+        var counts = _.values(tagcount);
+        var minc = _.min(counts);
+        var maxc = _.max(counts);
+        if (minc!=maxc) {
+            _.each(tagcount, function(v, k) {
+                tagcount[k] = (v - minc) / (maxc-minc);
+            });
         }
-    });
-     */
+        
+        var tags = _.keys(tagcount);
+        tags.sort(function(a,b) {
+           return tagcount[b] - tagcount[a]; 
+        });
+        
+        tagcloud.empty();
+
+        tags.forEach(function(k) {
+
+            var t = $N.tag(k);          
+
+            var name;
+            if (t !== undefined) {
+                if (t.hidden) return;
+                name = t.name;
+            }
+            else
+                name = k;
+
+            function plusone() {
+                var v = browseTagFilters[k];
+                if (v === -1.0)     delete browseTagFilters[k];
+                else if (v === undefined)   browseTagFilters[k] = +1;
+                onChanged(browseTagFilters);                
+            }
+            function minusone() {
+                var v = browseTagFilters[k];
+                if (v === 1.0)     delete browseTagFilters[k];
+                else if (v === undefined)   browseTagFilters[k] = -1;
+                onChanged(browseTagFilters);                
+            }
+            
+            var ab = newTagButton(k, function() { }, false);
+            
+            ab.bind('contextmenu', function() { return false; });
+            
+            ab.mousedown(function(e) {
+                var v = browseTagFilters[k];
+                if (e.button === 2) {
+                    if (v === -1)
+                        plusone();   
+                    else
+                        minusone();
+                    e.preventDefault();  // return false; also works
+                    return false;
+                }
+                else if (e.button === 0) {
+                    if (v === 1)
+                        minusone();
+                    else
+                        plusone();
+                    return false;                                    
+                }
+            });
+            
+
+            var ti = tagcount[k];
+            ab.css('font-size', 120.0 * ( 0.8  + 0.2 * ti) + '%');            
+            //ab.css('float','left');
+
+            ab.removeClass('tagFilterInclude tagFilterExclude');
+            if (browseTagFilters[k] < 0) {
+                ab.addClass('tagFilterExclude');
+            }
+            else if (browseTagFilters[k] > 0) {
+                ab.addClass('tagFilterInclude');
+            }
+            else {
+            }
+
+            if (browseTagFilters[k]!==-1.0)
+                var downButton = newEle('button').html('-').click(function() {
+                     minusone();
+                     return false;
+                });
+            if (browseTagFilters[k]!==1.0)
+                var upButton = newEle('button').html('+').click(function() {                
+                     plusone();
+                     return false;
+                });
+            
+            ab.prepend(downButton, upButton);
+            tagcloud.append(newEle('div').append(ab));
+
+        });
+
+    }
+
+    updateTagCloud();
+
+    tagcloud.update = updateTagCloud;
+
+    return tagcloud;
+}
+
 
 /*
-    $('#close-iframe').click(function() {
-        updateView(true);
-        $('#close-iframe').hide();
-    });
-    */
+ //KML
+ {        
+ if ($N.layer)
+ delete $N.layer().kml;
+ 
+ $("#KMLLayers input").change(function() {
+ var t = $(this);
+ var url = t.attr('url');
+ var checked = t.is(':checked');
+ 
+ var l = $N.layer();
+ 
+ if (!l.kml) l.kml = [];
+ 
+ if (checked) {
+ l.kml.push(url);
+ l.kml = _.unique( l.kml );
+ }
+ else {
+ l.kml = _.without( l.kml, url);
+ }                      
+ 
+ $N.save('layer', l);
+ $N.trigger('change:layer');
+ });
+ }
+ */
+/* IFRAME EMBED */
+
+//$("#url-tree").jstree({"plugins": ["html_data", "ui", "themeroller"]});
+
+/*
+ $("#url-tree").delegate("a", "click", function(e) {
+ if ($(e.currentTarget).blur().attr('href').match('^#$')) {
+ $("#url-tree").jstree("open_node", this);
+ return false;
+ } else {
+ 
+ var embedLocation = (this).href;
+ $('#View').empty();
+ $('#View').html('<iframe src="' + embedLocation + '" frameBorder="0" id="embed-frame"></iframe>');
+ $("#View").removeClass("ui-widget-content");
+ $('#View').addClass('view-indented');
+ 
+ $('#close-iframe').show();
+ 
+ var vm = $('#MainMenu');
+ 
+ var shown = vm.is(':visible');
+ showAvatarMenu(!shown);
+ e.preventDefault();
+ return false;
+ }
+ });
+ */
+
+/*
+ $('#close-iframe').click(function() {
+ updateView(true);
+ $('#close-iframe').hide();
+ });
+ */
 
 

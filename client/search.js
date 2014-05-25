@@ -113,11 +113,20 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
     var myid = $N.id();
     var now = Date.now();
+    var focus = $N.focus();
+
     var location = objSpacePointLatLng($N.myself());
+    
 
     var relevance = {};
-    var focus = $N.focus();
+
     var focusWhen = focus ? objWhen(focus) : undefined;
+
+    var focusWhere = focus ? objSpacePointLatLng(focus) : null;
+    if (focusWhere) {
+        location = focusWhere;
+        sort = 'Near';
+    }
 
     var ft;
     if (focus) {

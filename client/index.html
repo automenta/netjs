@@ -66,7 +66,17 @@
         <!-- UI LAYERS -->
         <div id="NotificationArea"></div>
         
-        <div id="FocusEdit" class="MenuPopout ui-mainmenu"></div>
+        <div id="FocusEditWrap" class="MenuPopout ui-mainmenu">
+            <div id="FocusEdit">
+            </div>
+            <div id="FocusEditButtons">
+                <a id="FocusNeedButton" class="ViewControl" title="What"><img src="icon/find.svg"></a>
+                <a id="FocusWhereButton" class="ViewControl" title="Where"><img src="icon/view.map.svg"></a>
+                <a id="FocusWhenButton" class="ViewControl" title="When"><img src="icon/view.time.svg"></a>
+                <a id="FocusWhoButton" class="ViewControl" title="Who"><img src="icon/view.us.svg"></a>
+                <a id="FocusHowButton" class="ViewControl" title="How"><img src="icon/view.graph.svg"></a>
+            </div>
+        </div>
 
         <div id="ViewWrapper"></div>
         
@@ -122,7 +132,6 @@
 
             <div id="AvatarFocus" class="section" style="float: right">
                 <a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
-                <a id="FocusNeedButton" class="ViewControl" title="Focus Tag..."><img src="icon/find.svg"></a>
                 <a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
                 <a id="FocusEditToggleButton" class="ViewControl PopoutControl" title="Filter"><img src="icon/view.trends.svg"></a>
                 <!--

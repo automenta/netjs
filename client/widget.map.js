@@ -50,8 +50,12 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
     function clickAt(p) {
         location = {lat: p.lat, lng: p.lng};
         marker.setLatLng(location);
+        if (map.onClick) {
+            map.onClick(location);
+        }
     }
 
+    
     map.location = function() {
         return {lat: location.lat, lon: location.lng};
     };
