@@ -68,6 +68,8 @@ function later(f) {
 function _notifyRemoval() { $(this).remove(); }
 
 function notify(param) {
+    param.animation = 'none';
+    param.desktop = 'true';
     $.pnotify(param).click(_notifyRemoval);                                                
 }
 
@@ -579,10 +581,8 @@ function reflowView() {
         }, configuration ? configuration.viewUpdateTime[configuration.device][1] : 200);
     }
     
-    if (window.$N) {
-        if ($('.tiled').length > 0) {
-            _reflowView();
-        }
+    if ($('#View .tiled').length > 0) {
+        _reflowView();
     }
 }
 
@@ -606,8 +606,6 @@ function whenResized() {
 $('#NotificationArea').html('Loading...');
 
 $(document).ready(function() {
-    notify.defaults = { };
-    notify.defaults.animation = 'none';
     
     var themeSelect = $('<select/>');
     for (var k in themes) {
@@ -722,8 +720,6 @@ $(document).ready(function() {
 
     netention(function(schemaURL, $N) {
         $('#NotificationArea').html('System loaded.');
-
-        window.$N = $N;
 
         $N.loadOntology(schemaURL, function() {
             $('#NotificationArea').html('Ontology ready. Loading objects...');

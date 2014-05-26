@@ -38,7 +38,7 @@ exports.start = function(options) {
     var express = expressm();
 
     var $N = _.clone(util);
-    _.extend($N, new $N.Ontology(['User', 'Trust']));
+    _.extend($N, new $N.Ontology(['User', 'Trust', 'Value']));
     
     $N.server = options;
     $N.httpserver = express;

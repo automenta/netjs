@@ -376,7 +376,7 @@ function objProperties(x) {
     if (!x.value)
         return [];
     return _.uniq(_.pluck(x.value, 'id').filter(function(t) {
-        return (window.$N.getProperty(t) !== null);
+        return ($N.getProperty(t) !== null);
     }));
 }
 exports.objProperties = objProperties;
@@ -397,7 +397,7 @@ function objTagStrength(x, normalize, noProperties) {
         if (isPrimitive(ii))
             continue;
         if (noProperties) {
-            if (window.$N.property[ii])
+            if ($N.property[ii])
                 continue;
         }
         var s = vv.strength || 1.0;
@@ -406,7 +406,6 @@ function objTagStrength(x, normalize, noProperties) {
         else
             t[ii] = Math.max(s, t[ii]);
     }
-    ;
 
     if (normalize) {
         var total = 0.0;
@@ -578,6 +577,7 @@ function objFirstValue(object, id, defaultValue) {
 
     if (object.value) {
         if (Array.isArray(id)) {
+            //TODO build a hash and lookup in that
             for (var i = 0; i < object.value.length; i++) {
                 var v = object.value[i];
                 if (id.indexOf(v.id) !== -1)
@@ -824,8 +824,14 @@ var Ontology = function(tagInclude, target) {
             try {
                 graphlib.Digraph.prototype.addEdge.apply(that.dgraph, arguments);
             }
-            catch (e) {
-                console.error('unable to add edge:',e,a,b,v);
+            catch (err) {
+                if (that.instance[a]===undefined) {
+                    console.error('missing source, buffering until', a);
+                }
+                if (that.instance[b]===undefined) {
+                    console.error('missing target, buffering until', b);
+                }
+                console.error('unable to add edge:',err,e,a,b,v);
             }
         };
         that.dgraph.delEdge = function(e) {
@@ -922,20 +928,23 @@ var Ontology = function(tagInclude, target) {
                 if (!Array.isArray(x.value)) {
                     //convert from object form to array
                     var vv = [];
-                    _.each(x.value, function(v, k) {
+                    for (var k in x.value) {
+                        var v = x.value[k];
                         if (v.id === undefined)
                             v.id = k;
                         if (that.property[v.id] === undefined) {
                             that.add(v);
                         }
                         vv.push(k);
-                    });
+                    }
                     x.value = vv;
                 }
+
 
                 if (existingValues)
                     x.value = _.union(x.value, existingValues);
 
+                var vv = [];
                 for (var i = 0; i < x.value.length; i++) {
                     var v = x.value[i];
                     if (v.id)
@@ -947,7 +956,9 @@ var Ontology = function(tagInclude, target) {
                         x.property[v] = existingProperty;
                     else
                         console.error('Class', x.id, 'missing property', v);
+                    vv.push(v);
                 }
+                x.value = vv; //store a compact literal array of strings
             }
 
             if (typeof x.extend === "string")
@@ -1033,10 +1044,12 @@ var Ontology = function(tagInclude, target) {
             x.reply = {};
 
             //replies to this object: search known objects with replyTo
-            _.each(that.reply, function(v, k) {
+            for (var k in that.reply) {
+                var v = that.reply[k];
                 if (v.replyTo.indexOf(x.id) !== -1)
                     x.reply[k] = v;
-            });
+            }
+            
             //this object's replies to other object
             if (x.replyTo) {
                 that.reply[x.id] = x;
@@ -1102,7 +1115,7 @@ var Ontology = function(tagInclude, target) {
             that.ugraph._incidentEdges[x.id] = {};
             //that.dgraph.addNode(x.id, x);
             //that.ugraph.addNode(x.id, x);
-        }
+        }        
 
         {
             var inouts = x.inout || {};
@@ -1121,16 +1134,20 @@ var Ontology = function(tagInclude, target) {
 
             _.each(inouts, function(sources, source) {
                 _.each(sources, function(v, target) {
-                    var edgeID = x.id + '*' + source + '*' + target;
+                    var edgeID = '*' + x.id + '*' + source + '*' + target;
 
                     if (that.dgraph.hasEdge(edgeID)) {
                         that.dgraph.edge(edgeID, v);
                     }
                     else {
-                        if (!that.dgraph.hasNode(source))
+                        if (!that.dgraph.hasNode(source)) {
                             that.add({id: source}); //placeholder object
-                        if (!that.dgraph.hasNode(target))
+                            that.dgraph._outEdges[source] = { };
+                        }
+                        if (!that.dgraph.hasNode(target)) {
                             that.add({id: target}); //placeholder object
+                            that.dgraph._inEdges[target] = { };
+                        }
 
                         that.dgraph.addEdge(edgeID, source, target, v);
 
@@ -1151,9 +1168,9 @@ var Ontology = function(tagInclude, target) {
                 //remove non-existing edges
                 for (var i = 0; i < existingOutEdges.length; i++) {
                     var E = existingOutEdges[i];
-                    if (E.indexOf('~') !== -1)
+                    if (E[0] === '~')
                         continue; //out edge, skip
-                    if (E.indexOf('*') !== -1)
+                    if (E[0] === '*')
                         continue; //declared by another node, skip
                     var source = that.dgraph.source(E);
                     var target = that.dgraph.target(E);
@@ -1165,7 +1182,7 @@ var Ontology = function(tagInclude, target) {
 
             //add existing edges
             _.each(outs, function(v, k) {
-                var edgeID = x.id + '|' + k;
+                var edgeID = '|' + x.id + '|' + k;
                 if (that.dgraph.hasEdge(edgeID)) {
                     that.dgraph.edge(edgeID, v);
                 }
@@ -1187,9 +1204,9 @@ var Ontology = function(tagInclude, target) {
                 //remove non-existing edges
                 for (var i = 0; i < existingInEdges.length; i++) {
                     var E = existingInEdges[i];
-                    if (E.indexOf('|') !== -1)
+                    if (E[0] === '|')
                         continue; //out edge, skip
-                    if (E.indexOf('*') !== -1)
+                    if (E[0] === '*')
                         continue; //declared by another node, skip
                     var source = that.dgraph.source(E);
                     var target = that.dgraph.target(E);
@@ -1202,7 +1219,7 @@ var Ontology = function(tagInclude, target) {
 
             //add existing edges
             _.each(ins, function(v, k) {
-                var edgeID = k + '~' + x.id;
+                var edgeID = '~' + k + '~' + x.id;
                 if (that.dgraph.hasEdge(edgeID)) {
                     that.dgraph.edge(edgeID, v);
                 }
@@ -2003,7 +2020,7 @@ function objCompact(o) {
                 }
             }
         }
-        ;
+        
 
         y.value = newValues;
         if (y.value.length === 0) {

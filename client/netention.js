@@ -3,6 +3,7 @@
  * Attentionated by @automenta and @rezn8d
  */
 
+var $N = null;
 
 var ID_UNKNOWN = 0;
 var ID_ANONYMOUS = 1;
@@ -156,8 +157,6 @@ function netention(f) {
                         $N.clear();
                         
                         $N.clearTransients();
-
-                        $N.indexOntology();
                         
                         $N.getUserObjects(function() {
                             $N.getAuthorObjects(nextID, function() {
@@ -171,7 +170,8 @@ function netention(f) {
                                     
                                     $N.updateRoster();
 
-                                    
+                                    $N.indexOntology();
+
                                 }, true);
                             });                        
                         });
@@ -288,13 +288,12 @@ function netention(f) {
                         $N.set('roster', r);
                     });
 
-                    
-                    $(document).ready(function() {
+                    later(function() {
                         notify({
                             title: 'Connected.',
                             type: 'success',
                             delay: 2000
-                        });
+                        });                        
                     });
 
                     reconnect();
@@ -335,7 +334,8 @@ function netention(f) {
                             if (c.icon)
                                 defaultIcons[c.id] = c.icon;                    
                         }               
-                        
+                        delete that.ontologyProperties;
+                        delete that.ontologyClasses;
                     });
 
             /*    setImmediate(nextBatch);
@@ -838,7 +838,7 @@ function netention(f) {
     });
 
     //exports = the variable from util.js which is also used by node.js require()        		
-    var $N = new Ontology(true, _.extend(new $NClient(), exports));
+    $N = new Ontology(true, _.extend(new $NClient(), exports));
     
     
     $N.ontoIndex = lunr(function() {
@@ -878,6 +878,9 @@ function netention(f) {
         f("ontology.static.json", $N);
     }
 
+    later(function() {
+        setTheme($N.get('theme'));        
+    });
 
 }
 

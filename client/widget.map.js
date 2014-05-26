@@ -78,6 +78,11 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
     });
     baseLayer.addTo(map);
 
+    //TODO call this to cleanup garbage
+    map.onDestroy = function() {
+        map = null;
+    };
+    
     return map;
 }
 

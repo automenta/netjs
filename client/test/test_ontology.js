@@ -124,7 +124,7 @@ test("Directed Graph in, out", function() {
     $N.add(c);
     strictEqual(3, $N.dgraph.order());
     strictEqual(1, $N.dgraph.edges().length, "the one existing edge replaced");
-    strictEqual(true, $N.dgraph.edge("a|c"), "edge value");
+    strictEqual(true, $N.dgraph.edge("|a|c"), "edge value");
     strictEqual("a", $N.dgraph.predecessors("c")[0], "a is predecessor of c");
         
     //test in edges
