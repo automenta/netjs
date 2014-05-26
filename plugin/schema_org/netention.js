@@ -17,11 +17,15 @@ exports.plugin = function($N) {
             function mapURI(u) {
                 if (u === 'Person')
                     return 'Human';
+                if (u === 'Physical')
+                    return 'MedicalPhysical';
                 return u;
             }
             function mapTagName(u, n) {
                 if (u === 'Person')
                     return 'Human';
+                if (u === 'Physical')
+                    return 'Medical Physical (Checkup)';
                 return n;
             }
             function mapPropertyName(u) {

@@ -77,7 +77,7 @@ function newGraphView(v) {
     
     var defaultIcon = getTagIcon("unknown");
 
-    function addNode(i, name, color, width, height, icon, shape) {
+    function addNode(i, name, color, width, height, icon, shape, spacepoint) {
         if (!icon)
             icon = defaultIcon;
 
@@ -90,6 +90,12 @@ function newGraphView(v) {
             icon: icon,
             shape: shape
         };
+        
+        if (spacepoint) {
+            nn.lat = spacepoint[0]; 
+            nn.lon = spacepoint[1];
+        }
+        
         nodes.push(nn);
         nodeIndex[i] = nodes.length - 1;
         return nn;
@@ -125,6 +131,7 @@ function newGraphView(v) {
     }
 
     var timeline = false;
+    var geographic = false;
     var timelineWidth = 2500;
 
     var nodeScale = { };
@@ -343,9 +350,8 @@ function newGraphView(v) {
                 
                 if (size <= 0) 
                     return;
-                
-                
-                var N = addNode(x.id, x.name || "", defaultColor, size, size, objIcon(x));
+                                                
+                var N = addNode(x.id, x.name || "", defaultColor, size, size, objIcon(x), 'circle', geographic ? objSpacePointLatLng(x) : null);
                 
                 if (timeline) {
                     if (minTime !== maxTime) {
@@ -740,11 +746,19 @@ function newGraphView(v) {
             force.chargeDistance(1000);
             force.theta(0.5); //default=0.8 
             
+            
             force.on("tick", function () {
                 node.attr("transform", function (d) {
                     if (timeline) {
                         if (d.fixedX !== undefined)
                             d.x = d.fixedX;
+                    }
+                    if (geographic) {
+                        //TODO project
+                        if ((d.lon!==undefined) && (d.lat!==undefined)) {
+                            d.x = d.lon;
+                            d.y = d.lat;
+                        }
                     }
                     return "translate(" + d.x + "," + d.y + ")";
                 });
@@ -792,9 +806,11 @@ function newGraphView(v) {
 
     var modeSelect = $('<select/>').appendTo(submenu);
     modeSelect.append('<option value="Network">Network</option>');
+    modeSelect.append('<option value="Geographic">Geographic</option>');
     modeSelect.append('<option value="Timeline">Timeline</option>');
     modeSelect.change(function () {
         timeline = $(this).val() == 'Timeline';
+        geographic = $(this).val() == 'Geographic';
         nd.onChange();
     });
 
