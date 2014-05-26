@@ -114,12 +114,17 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var myid = $N.id();
     var now = Date.now();
     var focus = $N.focus();
-
+    
+    var when = null;
     var location = objSpacePointLatLng($N.myself());
 
     var relevance = {};
 
-    var focusWhen = focus ? objWhen(focus) : undefined;
+    var focusWhen = focus ? focus.when : undefined;
+    if (focusWhen) {        
+        sort = 'Recent';
+        when = focusWhen;
+    }
 
     var focusWhere = focus ? objSpacePointLatLng(focus) : null;
     if (focusWhere) {
@@ -296,9 +301,9 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                 }
                 
                 if (r > 0) {
-                    if (focusWhen) {
-                        var f = focusWhen.from;
-                        var t = focusWhen.to;
+                    if (when) {
+                        var f = when[0];
+                        var t = when[1];
                         var wx = objWhen(x);
                         if (wx !== undefined) {
                             if (wx < f)
@@ -306,6 +311,8 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                             if (wx > t)
                                 r = 0;
                         }
+                        else
+                            r = 0;
                     }
                 }
 

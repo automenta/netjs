@@ -25,12 +25,18 @@ function clearFocus() {
     $('#FocusClearButton').hide();
 }
 
+var _focusMap = null;
+
 function renderFocus(skipSet) {
     if (!skipSet) {
         $N.setFocus($N.focus());
     }
     
     var fe = $('#FocusEdit');
+    
+    if (_focusMap!=null)
+        _focusMap.detach();
+    
     fe.empty();
 
     var newFocusValue = $N.focus() || { };
@@ -90,14 +96,25 @@ function renderFocus(skipSet) {
 
     var where = objSpacePointLatLng(newFocusValue);
     if (where) {        
-        var uu = duid();
-        var m = newDiv(uu).attr('style', 'height: 250px; width: 100%');	//TODO use css
-        fe.append(m);
-        var lmap = initLocationChooserMap(uu, where, 3);
-        lmap.onClick = function(l) {
-            objSetFirstValue($N.focus(), 'spacepoint', {lat: l.lat, lon: l.lng, planet: 'Earth'});
-            renderFocus();
-        };
+        if (_focusMap) {
+            fe.append(_focusMap);            
+        }
+        else {
+            var uu = duid();
+            _focusMap = newDiv(uu).attr('style', 'height: 250px; width: 100%');	//TODO use css
+            fe.append(_focusMap);
+            var lmap = initLocationChooserMap(uu, where, 3);
+            lmap.onClick = function(l) {
+                objSetFirstValue($N.focus(), 'spacepoint', {lat: l.lat, lon: l.lng, planet: 'Earth'});
+                renderFocus();
+            };
+        }
+    }
+    else {
+        if (_focusMap) {
+            _focusMap.remove();
+            _focusMap = null;
+        }
     }
     
     /*
@@ -141,8 +158,21 @@ function initFocusButtons() {
     */
     
     $('#FocusWhenButton').click(function() {
-        objAddValue($N.focus(), {id: 'timerange', value: {from: 0, to: 0}});
-        renderFocus();
+        if (!objFirstValue($N.focus(), 'timerange')) {
+            objAddValue($N.focus(), {id: 'timerange', value: {
+                from: Date.now()-(1000*24*60*60), 
+                to: Date.now(), 
+                slider: function(f, t) {
+                    $N.focus().when = [f, t];
+                    renderFocus();
+                }
+            }});
+            renderFocus();
+        }
+        else {
+            objRemoveTag($N.focus(), 'timerange')
+            renderFocus();
+        }
     });
 
     //TODO ABSTRACT this into a pluggable focus template system

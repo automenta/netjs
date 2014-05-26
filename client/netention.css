@@ -257,6 +257,7 @@ div.olMapViewport {
 .tag75 { opacity: 0.95;  }
 .tag100 { opacity: 1.0; }
 
+
 .objectEditDiv {
     height: 100%;
 }
@@ -273,7 +274,7 @@ div.olMapViewport {
 .tagSectionEditable {
 }
 
-.tagButtons button {
+.ObjectEditDiv .tagButtons button {
     border: 0;
     background: transparent;
     margin: 0;
@@ -281,6 +282,32 @@ div.olMapViewport {
     margin-right: 0.1em;
     font-weight: bold;
     font-size: 125%;
+}
+
+#FocusEdit .tagSection {
+    width: 100% !important;
+    float: left !important;
+    font-size: 100% !important;
+    clear: none !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border: none !important;
+}
+#FocusEdit .tagSection .tagSectionItem {
+    margin: 0 !important;
+    border: none !important;
+}
+
+#FocusEdit .tagButtons {
+    float: right !important;
+}
+#FocusEdit .tagButtons button {
+    border: none !important;
+    background: white !important;
+    padding: 2px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
 }
 
 
@@ -833,22 +860,11 @@ a.ViewControlMinor img {
     max-height: 75%;
     overflow: auto;
     right: 15px;
-    max-width: 50%;
+    max-width: 30%;
 }
 #FocusEditButtons {
     float: right;
     padding-top: 6px;
-}
-#FocusEdit button {
-    font-size: .8em;
-}
-#FocusEdit .ObjectEditDiv .tagSection {
-    float: none !important;
-}
-#FocusEdit .tagSection {
-    padding: 0;
-    margin: 0;
-    clear: both;
 }
 #FocusMainMenu {
     clear: both;
@@ -856,11 +872,7 @@ a.ViewControlMinor img {
     margin: 0px 0px 20px 0px;
     padding: 0;
 }
-#Focus {
-    width: 98%;
-    border: none;
-    margin: 20px 0px;
-}
+
 #FocusTagTree {
     text-align: left !important;
     overflow: auto !important;
@@ -1633,10 +1645,7 @@ div.olControlZoom {
 }
 #TagSelectWidget {} 
 
-#FocusEdit .ObjectEditDiv div {
-    width: auto;
-    float: left;
-}
+
 #welcomeoptions {} 
 
 .PluginID {
