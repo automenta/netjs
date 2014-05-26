@@ -1436,12 +1436,8 @@ html > body .ui-pnotify {
 
 .view-indented {
     top: 0px !important;
-    height: auto;
-}
-.view-indented-more {
-    top: 0px !important;
     margin-bottom: 46px !important;
-    height: auto;
+    height: auto !important;
 }
 
 #IdentityPopout {

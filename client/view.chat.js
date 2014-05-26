@@ -53,10 +53,10 @@ function newChatView(v) {
     });
 
     var scrollbottom = _.debounce(function() {
-        content.parent().scrollTop(content.prop('scrollHeight'));
+        content.scrollTop(content.prop('scrollHeight'));
     }, 150);
     var scrolltop = _.debounce(function() {
-        content.parent().scrollTop(0);
+        content.scrollTop(0);
     }, 150);
 
     //TODO toggle replies
