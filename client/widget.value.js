@@ -744,16 +744,16 @@ newTagValueWidget.timerange = function(x, index, v, prop, editable, d, events) {
             var rightButton = $('<button>&gt;</button>').appendTo(t);
             
             leftButton.mousedown(function() {
-                fromSlide.val( parseInt(fromSlide.val()) - 1);
-                toSlide.val( parseInt(toSlide.val()) - 1);
-                slideChanged();
+                fromSlide.val( parseInt(fromSlide.val()) - 2);
+                toSlide.val( parseInt(toSlide.val()) - 2);
+                slideChanged();                    
             });
             rightButton.mousedown(function() {
-                fromSlide.val( parseInt(fromSlide.val()) + 1);
-                toSlide.val( parseInt(toSlide.val()) + 1);                
+                fromSlide.val( parseInt(fromSlide.val()) + 2);
+                toSlide.val( parseInt(toSlide.val()) + 2);                
                 slideChanged();
             });
-            
+
             d.append(s, t, o);
             
             events.onSave.push(function(y) {

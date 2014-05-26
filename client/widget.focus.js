@@ -171,6 +171,7 @@ function initFocusButtons() {
         }
         else {
             objRemoveTag($N.focus(), 'timerange')
+            delete $N.focus.when;
             renderFocus();
         }
     });
