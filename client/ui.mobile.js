@@ -133,4 +133,3 @@ if (configuration.avatarMenuDisplayInitially)
     showAvatarMenu(true);
 else
     showAvatarMenu(false);
-

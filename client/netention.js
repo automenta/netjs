@@ -321,20 +321,22 @@ function netention(f) {
                 var next = remaining.splice(0, batchSize);
                 if (next.length === 0)
                     return;*/
-                    
-                    for (var i = 0; i < that.ontologyClasses.length; i++) {
-                        var c = that.ontologyClasses[i];                        
-                        if (!c) return;
-                        
-                        that.ontoIndex.add({
-                            id: c.id,
-                            name: c.name,
-                            description: c.description
-                        });
+                    later(function() {
+                        for (var i = 0; i < that.ontologyClasses.length; i++) {
+                            var c = that.ontologyClasses[i];                        
+                            if (!c) return;
 
-                        if (c.icon)
-                            defaultIcons[c.id] = c.icon;                    
-                    }               
+                            that.ontoIndex.add({
+                                id: c.id,
+                                name: c.name,
+                                description: c.description
+                            });
+
+                            if (c.icon)
+                                defaultIcons[c.id] = c.icon;                    
+                        }               
+                        
+                    });
 
             /*    setImmediate(nextBatch);
             }                

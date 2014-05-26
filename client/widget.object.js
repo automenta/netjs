@@ -235,7 +235,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         var widgetsToAdd = [];
 
         var whenSaved = [];
-        var nameInput = null;
+        var nameInput = null, tagInput = null;
 
         function getEditedFocus() {
             if (!editable)
@@ -316,12 +316,76 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         if (editable) {
             if (hideWidgets !== true) {
-                nameInput = $('<input/>').attr('type', 'text').attr('x-webkit-speech', 'x-webkit-speech').addClass('nameInput').addClass('nameInputWide');
+                nameInput = $('<input/>').attr('type', 'text').attr('placeholder', 'Title').attr('x-webkit-speech', 'x-webkit-speech').addClass('nameInput').addClass('nameInputWide');
                 nameInput.val(objName(x));
                 widgetsToAdd.push(nameInput);
 
+                tagInput = $('<input name="tags" class="tags"/>');
+                //$('#tags').importTags('foo,bar,baz');
+                //$('#tags').addTag('foo');
+                
+                var tagSearchCache = { };
+                var addedTags = {};
+                
+                later(function() {
+                    tagInput.tagsInput({
+                        // https://github.com/xoxco/jQuery-Tags-Input#options
+                        defaultText: 'Add tags...',
+                        minChars: 2,
+                        width: '15%',
+                        height: '1em',
+                        onAddTag: function(t) {
+                            //addedTags[t] = true;  
+                            update(objAddTag(getEditedFocus(), t));
+                        },
+                        onRemoveTag: function(t) {
+                            delete addedTags[t];
+                        },
+                        
+                        //autocomplete_url: 'http://missingajax',
+                        autocomplete: {
+                            selectFirst:true,
+                            width:'100px',
+                            autoFill:true,
+                            //source: ['this','real','tags'],
+                            source: function( request, response ) {
+                                    var term = request.term;
+                                    var results = $N.searchOntology(term, tagSearchCache);
+                                    results = results.map(function(r) {
+                                        var x = { };
+                                        x.value = r[0];
+                                        var rclass = $N.class[r[0]];
+                                        if (rclass)
+                                            x.label = rclass.name;
+                                        else
+                                            x.label = r[0];
+                                        return x;
+                                    });
+                                    response(results);
+                              }
+                        }
+                        /*onChange: function(elem, elem_tags) {
+                                var languages = ['php','ruby','javascript'];
+                                $(tagInput, elem_tags).each(function() {
+                                    if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+                                            $(this).css('background-color', 'yellow');
+                                });
+                        }*/
+                        //autocomplete: { }
+                        //autocomplete_url:'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+                    });
+                    
+                });
+                widgetsToAdd.push(tagInput);
+
+
                 whenSaved.push(function(y) {
                     objName(y, nameInput.val());
+                    
+                    for (var i in addedTags) {
+                        objAddTag(y, i);
+                    }
+                    addedTags = { };
                 });
             }
         } else {
@@ -344,10 +408,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
         });
 
-        var tsw = $('<div class="tagSuggestionsWrap"></div>');
+        var tsw = $('<div class="tagSuggestionsWrap mainTagSuggestions"></div>');
         widgetsToAdd.push(tsw);
 
         var ts = $('<div/>').addClass('tagSuggestions').appendTo(tsw);
+        
+        widgetsToAdd.push(newEle('div').append('&nbsp;').attr('style','height:1em;clear:both'));
 
         if (x.value) {
             var tags = []; //tags & properties, actually

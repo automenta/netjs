@@ -806,7 +806,7 @@ $(document).ready(function() {
                 updateView = _.debounce(throttledUpdateView, firstViewDebounceMS);
 
 
-                var msgs = ['I think', 'I feel', 'I wonder', 'I know', 'I want'];
+                /*var msgs = ['I think', 'I feel', 'I wonder', 'I know', 'I want'];
                 //var msgs = ['Revolutionary', 'Extraordinary', 'Bodacious', 'Scrumptious', 'Delicious'];
                 function updatePrompt() {
                     var l = msgs[parseInt(Math.random() * msgs.length)];
@@ -814,7 +814,7 @@ $(document).ready(function() {
                 }
                 setInterval(updatePrompt, 7000);
                 updatePrompt();
-
+                */
                 
                 $.getScript(configuration.ui, function(data) {
 

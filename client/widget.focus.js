@@ -142,9 +142,7 @@ function initFocusButtons() {
             $('#FocusEditWrap').fadeIn();        
         }
     });
-        
-    $('#FocusEditWrap').fadeIn();        //TEMPORARY
-
+            
     $('#FocusClearButton').click(function() {
         clearFocus();
         renderFocus();

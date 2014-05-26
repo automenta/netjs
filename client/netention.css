@@ -264,7 +264,8 @@ div.olMapViewport {
 .tagSectionControl {
     border: 0;
     border-top: 1px solid rgba(127,127,127,0.25); 
-    margin-top:0.5em;
+    margin-top: 10px;
+    padding-top: 10px;
     text-align: right;    
 }
 .propertySection .tagLabel {
@@ -549,19 +550,37 @@ div.olMapViewport {
 .nameInputWide {
     width: 98%;
 }
+
+
 .tagSuggestionsWrap {
     overflow: auto;
     max-width: 100%;
     margin-left: 1em;
     clear: both;
 }
+
+div.tagsinput {
+    padding-bottom: 0 !important;
+    float: left;
+}
+
+.mainTagSuggestions {
+    width: 80% !important;
+    float: right !important;
+    clear: none !important;
+    margin: 0 !important;
+    margin-bottom: 8px;
+}
+
 .tagSuggestions {
     margin: 0em;
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
+    margin-top: 5px;
+    margin-bottom: 5px;
     overflow: auto;
     display: table;
     table-layout: fixed;
+    font-size:75%;
+    opacity:0.85;
 }
 .tagSuggestions a {
     text-decoration: none;
