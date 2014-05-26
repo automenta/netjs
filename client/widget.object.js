@@ -484,7 +484,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 update(objAddValue(getEditedFocus(), 'html', ''));
             });
 
-            var whenButton = $('<button disabled title="When?" id="AddWhenButton" ><img src="/icon/clock.png"></button>');
+            var whenButton = $('<button title="When?" id="AddWhenButton" ><img src="/icon/clock.png"></button>').click(function() {
+                update(objAddValue(getEditedFocus(), 'timepoint', ''));
+            });;
 
             var whereButton = $('<button title="Where?"><img src="/icon/rrze/emblems/globe.png"></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'spacepoint', ''));
@@ -495,7 +497,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var drawButton = $('<button title="Draw"><img src="/icon/rrze/emblems/pen.png"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'sketch', ''));
             });
-
 
             var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>').click(function() {
                 newWebcamWindow(function(imgURL) {
@@ -1226,13 +1227,17 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
 
 newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
     if ((editable) && (!prop.readonly)) {
+        //TODO add 'Now' button
+
         var lr = $('<input type="text" placeholder="Time" />').appendTo(d)
                     .val(new Date(v.at));
         var lb = $('<button style="margin-top: -0.5em"><i class="icon-calendar"/></button>').appendTo(d);
-        
-        //TODO add 'Now' button
 
-        //TODO add save function
+        events.onSave.push(function(y) {
+            objAddValue(y, v.id, 0, v.strength);
+        });
+        
+
     } else {
         d.append(newEle('a').append($.timeago(new Date(v.value))));
     }
@@ -1444,6 +1449,9 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
             if (typeof tagRestrictions === "string")
                 tagRestrictions = [tagRestrictions];
 
+            if (tagRestrictions.indexOf('Object')===-1)
+                tagRestrictions.push('Object');
+            
             ts.attr('placeholder', tagRestrictions ? tagRestrictions.join(' or ') : '');
 
             var mb = $('<button>...</button>').attr('title', "Find Object")
@@ -1469,9 +1477,8 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
                 var tnames = [];
                 tagRestrictions.forEach(function(tr) {
                     var T = $N.class[tr];
-                    tnames.push(T.name);
-                    if (!T)
-                        return;
+                    if (T)
+                        tnames.push(T.name);
                 });
                 $('<button title="Create ' + tnames.join(' or ') + '" disabled class="createSubObjectButton">+</button>').appendTo(tt);
             }

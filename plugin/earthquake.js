@@ -93,6 +93,7 @@ exports.plugin = function($N) {
 
 
                     eq.name = eq.name + ' Earthquake';
+                    eq.author = 'Earth';
 
                     var mag = parseFloat(eq.name.substring(1, eq.name.indexOf(' ', 2)));
                     if (mag == undefined) {

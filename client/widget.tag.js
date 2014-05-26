@@ -115,9 +115,15 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
             tagRestrictions = [tagRestrictions];
 
         _.each(tagRestrictions, function(t) {
-            var T = $N.class[t];
-            if (T)
-                addOption(T.name, newObjectSelector(T));
+            if (t === 'Object') {
+                addOption('Object', newObjectSelector(null));
+            }
+            else {
+                var T = $N.class[t];
+                if (T)
+                    addOption(T.name, newObjectSelector(T));
+            }
+            
         });
     }
 
