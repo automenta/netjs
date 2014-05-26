@@ -1228,13 +1228,27 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
 newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
     if ((editable) && (!prop.readonly)) {
         //TODO add 'Now' button
+        var D = parseInt(v.value) || Date.now();
+        var DD = new Date(D);
+        var time = DD.getHours() + ':' + DD.getMinutes() + ':' + DD.getSeconds();
+        console.log(v.value, D, DD, time);
+            
+        var dateChoice = newDiv().appendTo(d);
+        dateChoice.datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+        //TODO add button that transforms this to a timerange
+        dateChoice.datepicker( "setDate", DD );
 
-        var lr = $('<input type="text" placeholder="Time" />').appendTo(d)
-                    .val(new Date(v.at));
-        var lb = $('<button style="margin-top: -0.5em"><i class="icon-calendar"/></button>').appendTo(d);
-
+        var timeChoice = $('<input value="' + time + '"/>').appendTo(d);        
+        timeChoice.timespinner();
+        
         events.onSave.push(function(y) {
-            objAddValue(y, v.id, 0, v.strength);
+            var date = dateChoice.datepicker( "getDate" ) || new Date();
+            var time = timeChoice.timespinner("value");
+            console.log('set', date, time, date.getTime()+time, Date.now());
+            objAddValue(y, v.id, parseInt(date.getTime() + time), v.strength);
         });
         
 
@@ -1243,44 +1257,7 @@ newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
     }
 };
 
-newTagValueWidget.image = function(x, index, v, prop, editable, d, events) {
-    if (editable) {
-        events.onSave.push(function(y) {
-            objAddValue(y, v.id, v.value, v.strength);
-        });
-    }
-    var url = v.value;
-    d.append('<img class="objectViewImg" src="' + url + '"/>');
-};
 
-newTagValueWidget.sketch = function(x, index, v, prop, editable, d, events) {
-    var eu = duid();
-    var ee = newDiv(eu).appendTo(d);
-
-    var options = {
-        width: 250,
-        height: 250,
-        editing: editable
-    };
-    if (v.value) {
-        options.strokes = JSON.parse(v.value);
-    }
-    
-    var sketchpad;
-    
-    later(function() {
-        sketchpad = Raphael.sketchpad(eu, options);        
-    });
-    if (editable) {
-        events.onSave.push(function(y) {
-            objAddValue(y, "sketch", sketchpad ? sketchpad.json() : { }, v.strength);
-        });
-    }
-    else {
-        //
-    }
-};
-        
 newTagValueWidget.timerange = function(x, index, t, prop, editable, d, events) {
     var nn = Date.now();
     var oldest = nn - 5 * 24 * 60 * 60 * 1000; //TODO make this configurable
@@ -1385,6 +1362,46 @@ newTagValueWidget.timerange = function(x, index, t, prop, editable, d, events) {
             d.append(new Date(t.value.start) + ' ' + new Date(t.value.end));
     }
 };
+
+
+newTagValueWidget.image = function(x, index, v, prop, editable, d, events) {
+    if (editable) {
+        events.onSave.push(function(y) {
+            objAddValue(y, v.id, v.value, v.strength);
+        });
+    }
+    var url = v.value;
+    d.append('<img class="objectViewImg" src="' + url + '"/>');
+};
+
+newTagValueWidget.sketch = function(x, index, v, prop, editable, d, events) {
+    var eu = duid();
+    var ee = newDiv(eu).appendTo(d);
+
+    var options = {
+        width: 250,
+        height: 250,
+        editing: editable
+    };
+    if (v.value) {
+        options.strokes = JSON.parse(v.value);
+    }
+    
+    var sketchpad;
+    
+    later(function() {
+        sketchpad = Raphael.sketchpad(eu, options);        
+    });
+    if (editable) {
+        events.onSave.push(function(y) {
+            objAddValue(y, "sketch", sketchpad ? sketchpad.json() : { }, v.strength);
+        });
+    }
+    else {
+        //
+    }
+};
+        
 
 newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
 

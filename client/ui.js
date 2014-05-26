@@ -315,7 +315,7 @@ function _updateView(force) {
     if (!force) {
         if ((currentView) && (view === lastView)) {
             if (currentView.onChange) {
-                currentView.onChange();
+                later(currentView.onChange);
                 return;
             }
         }
@@ -926,6 +926,49 @@ $.fn.extend({
     }
 });
 
+$.widget( "ui.timespinner", $.ui.spinner, {
+    options: {
+      // seconds
+      step: 60 * 1000,
+      // hours
+      page: 60
+    },
+ 
+    _parse: function( value ) {
+      if ( typeof value === "string" ) {
+        // already a timestamp
+        if ( Number( value ) == value ) {
+          return Number( value );
+        }
+        //return +Globalize.parseDate( value );
+        
+        var d = new Date().toString().split(' ').splice(0,4).join(' ');
+        var timezone = new Date().toString().split(' ').splice(5,6).join(' ');
+        var d = new Date(Date.parse( d + " " + value + ' ' + timezone));
+        return d.getHours() * (60*60*1000) +
+               d.getMinutes() * (60*1000) +
+               d.getSeconds() * (1000);
+      }
+      return value;
+    },
+ 
+    _format: function( value ) {
+      //return Globalize.format( new Date(value), "t" );
+      //return new Date(value).toString();
+      console.log('date input', value, new Date());
+      var d = new Date(value);
+      return ('' + d.getHours()).lpad('0', 2) + ":" 
+              + ('' + d.getMinutes()).lpad('0', 2) + ":" 
+              + ('' + d.getSeconds()).lpad('0', 2);
+    }
+  });
+
+String.prototype.lpad = function(padString, length) {
+    var str = this;
+    while (str.length < length)
+        str = padString + str;
+    return str;
+}
 String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
