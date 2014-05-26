@@ -886,6 +886,42 @@ newTagValueWidget.tagcloud = function(x, index, v, prop, editable, d, events) {
     }        
 };
 
+newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
+    function addReadOnly() {
+        var y = newEle('div',true);
+        y.classList.add('htmlview');
+        y.innerHTML = v.value;
+        d.append(y);
+        return $(y);
+    }
+    
+    if (!editable) {
+        addReadOnly();
+        /*if (x.author !== $N.id() )
+            return addReadOnly();
+
+        if (prop)
+            if (prop.readonly)
+                return addReadOnly();*/
+    }
+    else {
+        var dd;
+        if (prop.readonly) {
+            dd = addReadOnly();
+        }
+        else {
+            dd = newDiv().attr('contenteditable','true').appendTo(d);
+            if (v.value)
+                dd.html(v.value);
+        }
+
+        events.onSave.push(function(y) {
+            objAddValue(y, prop.id, dd.html(), v.strength);
+        });        
+    }
+    
+};
+
 var _alohaHandler = null;
 function _ensureHasAloha() {
    if (!$(this).hasClass('aloha-editable-active')) {
@@ -894,7 +930,7 @@ function _ensureHasAloha() {
    }                        
 }
 
-newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
+newTagValueWidget.htmlAloha = function(x, index, v, prop, editable, d, events) {
     var wasViewLocked = false;
     
     function addReadOnly() {
@@ -955,71 +991,115 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
     //<script src="lib/aloha/aloha-full.min.js" type="text/javascript"></script>
 
     if (_alohaHandler === null) {
-        
-        loadCSS("lib/aloha/css/aloha.css");
-        $LAB
-            .script("lib/aloha/aloha-full.min.js")
-            .wait(function() {
-                Aloha.settings.toolbar = {
-                    tabs: [
-                        {
-                            label: 'Format',
-                            components: [
-                                [ 'bold', 'italic', 'underline', '\n',
-                                  'subscript', 'superscript', 'strikethrough' ],
-                                [ 'formatBlock' ]
-                            ]
-                        },
-                        {
-                            label: 'Insert',
-                            exclusive: true,
-                            components: [
-                                "createTable", "characterPicker", "insertLink",
-                            ]
-                        },
-                        {
-                            label: 'Link',
-                            components: [ 'editlink' ]
-                        }
-                    ],
-                    exclude: [ 'strong', 'emphasis', 'strikethrough' ]
-                };
+        _alohaHandler = true;
+        later(function() {
+            loadCSS("lib/aloha/css/aloha.css");
+            $.browser =  { msie: false };
+            $LAB
+                .script("/lib/aloha/require.js")
+                //.script("/lib/aloha/aloha.js")
+                .wait(function() {
+                    define('jquery'  , function(){ return window.jQuery; })
+                    define('jqueryui', function(){ return window.jQuery.ui; })                
+                    $('head').append('<script type="text/javascript" src="/lib/aloha/aloha.js" data-aloha-plugins="common/ui,common/format"></script>');
+                //})
+                //.wait(function() {
+                    $.ui.tabs.prototype.select = function() { return true; }; //patch for jquery 2.x
 
-                
-                Aloha.ready( function() {
-                    e();                    
-                    
-                    if (_alohaHandler === null) {
-                        _alohaHandler = true;
-                        _alohaHandler = Aloha.bind('aloha-editable-deactivated', function (e, a) {
-                            var o = a.editable.obj[0];
-                            var xid = o.getAttribute('xid');
-                            var vid = o.getAttribute('vid');
-                            if (xid && (vid!==undefined)) {
-                                vid = parseInt(vid);                                
-                                var O = $N.object[xid];
-                                if (O) {
-                                    var V = O.value[vid];
-                                    var hh = o.innerHTML;
-                                    if (V.value !== hh) {
-                                        V.value = hh;
-                                        later(function() {
-                                            $N.pub(O, null, null, true);
-                                            notify('Saved.');                                            
-                                        });
-                                    }
-                                }                                
+    /*                "common/ui,common/format,common/table,common/list"
+                                            common/link,
+                                            common/highlighteditables,
+                                            common/block,
+                                            common/undo,
+                                            common/image,
+                                            common/contenthandler,
+                                            common/paste,
+                                            common/commands,
+                                            common/abbr"*/
+
+                    Aloha.settings.predefinedModules = {
+                        'jquery': window.jQuery,
+                        'jqueryui': window.jQuery.ui
+                    };
+                    Aloha.settings.toolbar = {
+                        tabs: [
+                            {
+                                label: 'Format',
+                                components: [
+                                    [ 'bold', 'italic', 'underline', '\n',
+                                      'subscript', 'superscript', 'strikethrough' ],
+                                    [ 'formatBlock' ]
+                                ]
+                            },
+                            {
+                                label: 'Insert',
+                                exclusive: true,
+                                components: [
+                                    "createTable", "characterPicker", "insertLink",
+                                ]
+                            },
+                            {
+                                label: 'Link',
+                                components: [ 'editlink' ]
                             }
-                            setViewLock(wasViewLocked);
-                        });   
-                        Aloha.bind('aloha-editable-activated', function (e, a) {
-                            wasViewLocked = viewlock;
-                            setViewLock(true);
-                        });
-                    }
+                        ],
+                        exclude: [ 'strong', 'emphasis', 'strikethrough' ]
+                    };
+                    Aloha.settings.plugins = {
+                            format: {
+                                    config : [ 'b', 'i','sub','sup'],
+                                    editables : {
+                                            'div'		: [ 'b', 'i', 'del', 'sub', 'sup'  ], 
+                                    }
+                            },
+                            format2: {
+                            // all elements with no specific configuration get this configuration
+                            config: [  'b', 'i', 'sub', 'sup', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ],
+                            editables: {
+                                /*
+                                // no formatting allowed for title
+                                '#title': [],
+                                // just bold and italic for the teaser
+                                '#teaser': [ 'b', 'i' ] */
+                            }
+                        }
+                    };
 
-                    
-                    reflowView();
+                    //Aloha.ready( function() {
+                        e();                    
+
+                        if (_alohaHandler === null) {
+                            _alohaHandler = true;
+                            _alohaHandler = Aloha.bind('aloha-editable-deactivated', function (e, a) {
+                                var o = a.editable.obj[0];
+                                var xid = o.getAttribute('xid');
+                                var vid = o.getAttribute('vid');
+                                if (xid && (vid!==undefined)) {
+                                    vid = parseInt(vid);                                
+                                    var O = $N.object[xid];
+                                    if (O) {
+                                        var V = O.value[vid];
+                                        var hh = o.innerHTML;
+                                        if (V.value !== hh) {
+                                            V.value = hh;
+                                            later(function() {
+                                                $N.pub(O, null, null, true);
+                                                notify('Saved.');                                            
+                                            });
+                                        }
+                                    }                                
+                                }
+                                setViewLock(wasViewLocked);
+                            });   
+                            Aloha.bind('aloha-editable-activated', function (e, a) {
+                                wasViewLocked = viewlock;
+                                setViewLock(true);
+                            });
+                        }
+
+
+                        reflowView();
+                    //});
                 });
             });
     }
