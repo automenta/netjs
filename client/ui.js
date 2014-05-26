@@ -323,19 +323,18 @@ function _updateView(force) {
     if (currentView)
         if (currentView.destroy)
             currentView.destroy();
-    
-    delete currentView;
-    
-    vw.detach();
-    later(vw.remove); //do full removal when JS becomes idle
+        
+    vw.hide();
+    later(function() {
+        vw.remove();
+    });
 
     lastView = view;    
     
     $('#ViewOptions').empty();
     $('#ViewMenu').empty();
 
-
-    updateIndent(false);
+    //updateIndent(false);
 
     $('#MainMenu a').removeClass('ViewActive');
     $('#' + view).addClass('ViewActive');

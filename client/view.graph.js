@@ -755,8 +755,8 @@ function newGraphView(v) {
                     if (geographic) {
                         //TODO project
                         if ((d.lon!==undefined) && (d.lat!==undefined)) {
-                            d.x = d.lon * 20;
-                            d.y = d.lat * 16;
+                            d.x = d.lon * 35;
+                            d.y = d.lat * -50;
                         }
                     }
                     return "translate(" + d.x + "," + d.y + ")";

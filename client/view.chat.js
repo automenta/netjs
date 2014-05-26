@@ -34,6 +34,7 @@ function newChatView(v) {
     var newObjects = {};
     var rootsUnaffected = {};
     var modifiedDate = {};
+    var changed = [];
 
     $(content).scroll(function() {
         var height = content.prop('scrollHeight');
@@ -67,7 +68,6 @@ function newChatView(v) {
         //scrollbottom();
     }
 
-    var changed = [];
 
     function updateContent(force) {
         var numPreviousDisplayed = displayedObjects.length;
@@ -161,7 +161,7 @@ function newChatView(v) {
                 });
             });
             content.find('.objectView').each(function() {
-                var xid = $(this).attr('xid');
+                var xid = $(this).data('xid');
                 var X = toDisplayObj[xid];
 
                 if (!X)
@@ -209,7 +209,7 @@ function newChatView(v) {
         }
 
         content.find('.objectView').each(function() {
-            var xid = $(this).attr('xid');
+            var xid = $(this).data('xid');
             displayedObjects.push(xid);
 
             var when = newObjects[xid];
@@ -243,19 +243,32 @@ function newChatView(v) {
         //later(scrollbottom);
     }
 
-    var fh = $N.on('change:focus', function() {
+    function updateFocus() {
         _myNewObject = $N.focus();
-    });
+    }
+    
+    $N.on('change:focus', updateFocus);
     
     content.onChange = function() {
-        updateContent(_myNewObject);
-        _myNewObject = null;
+        later(function() {
+            updateContent(_myNewObject);            
+            _myNewObject = null;
+        })
     };
+    
     content.destroy = function() {
         _.values(rootsUnaffected).forEach(function(x) {
             x.remove();
         }); //destroy the DOM cache
-        $N.off('change:focus', fh);
+        $N.off('change:focus', updateFocus);
+
+        _myNewObject = null;
+        displayedObjects = null;
+        newObjects = null;
+        rootsUnaffected = null;
+        modifiedDate = null;
+        changed = null;
+
     };
 
     updateContent(true);
@@ -273,10 +286,11 @@ function newChatView(v) {
     return content;
 }
 
-function newInlineSelfButton(s, x) {
-    return newEle('a').attr({
-        'aid': s.id, 'xid': x.id, 'class': 'InlineSelfButton'
-    }).append(newEle('div').html(s.name), newAvatarImage(s));
+function newInlineSelfButton(s) {
+    return newEle('a').data({
+        'aid': s.id
+    }).addClass('InlineSelfButton')
+      .append(newEle('div').html(s.name), newAvatarImage(s));
 }
 
 function newObjectLogLineOnHover() {
@@ -286,9 +300,7 @@ function newObjectLogLineOffHover() {
     $(this).removeClass('ChatViewContentLineHover');
 }
 function newObjectLogLineClick() {
-    var author = $(this).attr('aid');
-    var xid = $(this).attr('xid');
-
+    var author = $(this).data('aid');
     newPopupObjectView(author);
 }
 
@@ -297,7 +309,7 @@ function lineClickFunction() {
 
     var e = $(line.children()[1]);
 
-    var x = $N.getObject(line.attr('xid'));
+    var x = $N.getObject(line.data('xid'));
 
 
     function showFull() {
@@ -322,8 +334,12 @@ function lineClickFunction() {
 
 }
 
+function defaultChatReplyCallback(r) {
+    _myNewObject = r;
+}
+
 function newObjectLogLine(x) {
-    var line = newEle('div').addClass('ChatViewContentLine').attr('xid', x.id);
+    var line = newEle('div').addClass('ChatViewContentLine').data('xid', x.id);
 
     if (configuration.device == configuration.DESKTOP)
         line.hover(newObjectLogLineOnHover, newObjectLogLineOffHover);
@@ -337,25 +353,20 @@ function newObjectLogLine(x) {
         showSelectionCheck: false,
         transparent: true,
         hideAuthorNameAndIconIfZeroDepth: true,
-        replyCallback: function(r) {
-            _myNewObject = r;
-        }
+        replyCallback: defaultChatReplyCallback
     }).appendTo(e);
 
 
     if (x.author) {
-        var a = $N.getObject(x.author);
-        var b;
-        if (a) {
-            b = newInlineSelfButton(a, x);
+        var author = $N.instance[x.author];
+        if (author) {
+            b = newInlineSelfButton(author);
         }
         else {
-            b = newEle('a').text(x.author).attr({'xid': x.id, 'aid': x.author});
+            b = newEle('a').text(x.author).data({'aid': x.author});
         }
-        if (b) {
-            b.click(newObjectLogLineClick);
-            d.append(b);
-        }
+        b.click(newObjectLogLineClick);
+        d.append(b);
     }
     else {
         d.append('&nbsp;');
