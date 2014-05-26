@@ -1444,6 +1444,7 @@ newTagValueWidget.sketch = function(x, index, v, prop, editable, d, events) {
     }
 };
         
+function _objectLinkClick() { newPopupObjectView($(this).data('target')); }
 
 newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
 
@@ -1552,11 +1553,12 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
         });
     }
     else {
-        if (t.value)
+        if (t.value) {
             var V = $N.object[t.value];
-            d.append(newEle('a').html( (V) ? (V.name || V.id) : '?' ).click(function() {
-                newPopupObjectView(t.value);
-            }));
+            var target = t.value;
+            
+            d.append(newEle('a').data('target', target).html( (V) ? (V.name || V.id) : '?' ).click(_objectLinkClick));
+        }
     }
 };
 
@@ -1571,6 +1573,8 @@ newTagValueWidget.cortexit = function(x, index, v, prop, editable, d, events) {
 
 
 function newReplyPopup(x, onReplied) {
+    x = $N.instance[x];
+    
     var pp = newPopup("Reply to: " + x.name);
 
     function closeReplyDialog() {
@@ -1829,31 +1833,41 @@ function _addObjectViewPopupMenu(authored, target) {
 }
 
 
-function newSubjectTagButton(buttonTitle, objSuffix, objName, objTag, property) {
+var subjectTag = {
+    'Like': { objSuffix: '_Likes', objTag: 'Value', objName: 'Likes', property: 'values' },
+    'Dislike': { objSuffix: '_Dislikes', objTag: 'Not', objName: 'Dislikes', property: 'nots' },
+    'Trust': { objSuffix: '_Trusts', objTag: 'Trust', objName: 'Trusts', property: 'trusts' }
+};
 
-    return newEle('button').text(buttonTitle).addClass('metadataReplyButton').click(function() {
-        var x = $N.instance[$(this).parent().parent().attr('xid')];
-        if (!x) return;
-        x = x.id;
-        
-        var defaultLikesID = $N.id() + objSuffix;
-        var defaultLikes = $N.instance[defaultLikesID];
+function _newSubjectTagButtonClick() {
+    var data = $(this).data();
+    
+    var x = $N.instance[$(this).parent().parent().attr('xid')];
+    if (!x) return;
+    x = x.id;
 
-        if (!defaultLikes) {
-            defaultLikes = new $N.nobject(defaultLikesID, objName, objTag);
-            defaultLikes.author = defaultLikes.subject = $N.id();
-            defaultLikes.add(property, x);
-        }
-        else {
-            //TODO use getObject if it will return a nobject
-            defaultLikes = new $N.nobject(defaultLikes);                    
-            //TODO check if existing
-            defaultLikes.add(property, x);
-            defaultLikes.touch();
-        }
-        $N.pub(defaultLikes);               
-    });
+    var defaultLikesID = $N.id() + data.objSuffix;
+    var defaultLikes = $N.instance[defaultLikesID];
 
+    if (!defaultLikes) {
+        defaultLikes = new $N.nobject(defaultLikesID, data.objName, data.objTag);
+        defaultLikes.author = defaultLikes.subject = $N.id();
+        defaultLikes.add(data.property, x);
+    }
+    else {
+        //TODO use getObject if it will return a nobject
+        defaultLikes = new $N.nobject(defaultLikes);                    
+        //TODO check if existing
+        defaultLikes.add(data.property, x);
+        defaultLikes.touch();
+    }
+    $N.pub(defaultLikes);               
+}
+
+function newSubjectTagButton(buttonTitle, params) {
+    return newEle('button').text(buttonTitle)
+            .data(params)
+            .addClass('metadataReplyButton').click(_newSubjectTagButtonClick);
 }
 
 /**
@@ -1863,7 +1877,7 @@ function newObjectView(x, options) {
     if (!options)
         options = {};
 
-    var onRemoved = options.onRemoved;
+    //var onRemoved = options.onRemoved;
     var scale = options.scale;
     var depthRemaining = options.depthRemaining;
     var depth = options.depth || depthRemaining;
@@ -1878,7 +1892,9 @@ function newObjectView(x, options) {
     var titleClickMode = (options.titleClickMode != undefined) ? options.titleClickMode : 'view';
     var showTime = (options.showTime != undefined) ? options.showTime : true;
     var transparent = (options.transparent != undefined) ? options.transparent : false;
-
+    var xid = x.id;
+    var replyCallback = options.replyCallback ? function(rx) { options.replyCallback(rx); } : null;
+   
     if (!x) {
         return newDiv().html('Object Missing');
     }
@@ -1939,7 +1955,7 @@ function newObjectView(x, options) {
 
 
     var d = newDiv().attr({
-        'xid': x.id,
+        'xid': xid,
         'class': 'objectView'
     });
 
@@ -1970,9 +1986,7 @@ function newObjectView(x, options) {
         var authorClient = $N.getObject(authorID);
         if (authorClient) {
             if (authorID) {
-                var av = newAvatarImage(authorClient)
-                        //.attr('align', 'left')
-                        .appendTo(d);
+                newAvatarImage(authorClient).appendTo(d);
             }
         }
     }
@@ -1990,32 +2004,6 @@ function newObjectView(x, options) {
 
     var haxn = newEle('h1').appendTo(d);
 
-    var refreshReplies = function() {
-        var r = x.reply; //$N.getReplies(x);
-        if (r) {
-            if (!replies) {
-                replies = newDiv().addClass('ObjectReply').appendTo(d);
-            }
-            else {
-                replies.empty();
-            }
-
-            var childOptions = _.clone(options);
-            childOptions.depthRemaining = depthRemaining - 1;
-            childOptions.transparent = true;
-            delete childOptions.scale;
-
-            //TODO sort the replies by age, oldest first?
-            _.values(r).forEach(function(p) {
-                replies.append(newObjectView(p, childOptions));
-            });
-        } else {
-            if (replies) {
-                replies.remove();
-                replies = null;
-            }
-        }
-    }
 
     if (showActionPopupButton)
         _addObjectViewPopupMenu($N.id() === x.author, buttons);
@@ -2029,7 +2017,6 @@ function newObjectView(x, options) {
     } else {        
         var xxn = xn.length > 0 ? xn : '?';
         var xauthor = x.author;
-        var xid = x.id;
         haxn.append(newEle('a').html(xxn).click(function() {
             if ((xauthor === $N.id()) && (titleClickMode === 'edit'))
                 newPopupObjectEdit(xid, true);
@@ -2065,17 +2052,15 @@ function newObjectView(x, options) {
         
         if (showReplyButton && (x.id !== $N.id())) {
             newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {
-                newReplyPopup(x, function(rx) {
-                    if (options.replyCallback)
-                        options.replyCallback(rx);
-                });
+                newReplyPopup(xid, replyCallback);
             });
-                        
+                                    
             mdl.append(
-                newSubjectTagButton("Like", '_Likes', 'Likes', 'Value', 'values'),
-                newSubjectTagButton("Dislike", '_Dislikes', 'Dislikes', 'Not', 'nots'),
-                newSubjectTagButton("Trust", '_Trusts', 'Trusts', 'Trust', 'trusts')
+                newSubjectTagButton("Like", subjectTag.Like),
+                newSubjectTagButton("Dislike", subjectTag.Dislike ),
+                newSubjectTagButton("Trust", subjectTag.Trust )
             );
+            
                         
         }
     }
@@ -2091,9 +2076,34 @@ function newObjectView(x, options) {
     
 
     if (!mini) {
-        refreshReplies();
+        var r = x.reply; //$N.getReplies(x);
+        if (r) {
+            if (!replies) {
+                replies = newDiv().addClass('ObjectReply').appendTo(d);
+            }
+            else {
+                replies.empty();
+            }
+
+            var childOptions = _.clone(options);
+            childOptions.depthRemaining = depthRemaining - 1;
+            childOptions.transparent = true;
+            delete childOptions.scale;
+
+            //TODO sort the replies by age, oldest first?
+            _.values(r).forEach(function(p) {
+                replies.append(newObjectView(p, childOptions));
+            });
+        } else {
+            if (replies) {
+                replies.remove();
+                replies = null;
+            }
+        }
     }
 
+    x = null;
+    
     return d;
 }
 
