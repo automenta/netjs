@@ -1,4 +1,4 @@
-var GRAPH_MAX_NODES = 350;
+var GRAPH_MAX_NODES = 200;
 
 function newGraphView(v) {
     var eid = uuid();
