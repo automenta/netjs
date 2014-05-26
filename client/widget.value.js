@@ -930,7 +930,7 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
         var value = t.value;
 
         function updateTS(x) {
-            var X = $N.object[x] || {
+            var X = $N.instance[x] || {
                 name: x
             };
             if (X.name != x)

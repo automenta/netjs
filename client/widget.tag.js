@@ -48,7 +48,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     };
     tagsCombo.update();
 
-    function onTagAdded(t) {
+    function onTagAdded(t) {        
         if (addImmediately) {
             addImmediately(t);
             return;
@@ -406,7 +406,7 @@ function newObjectSelector(T) {
                 var s = newObjectView(O, {
                     showActionPopupButton: false,
                     titleClickMode: function(x) {
-                        onTagAdded(x.id);
+                        onTagAdded(x);
                     }
                 });
                 d.append(s);
