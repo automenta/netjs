@@ -137,12 +137,11 @@ function newGraphView(v) {
     var nodeScale = { };
     var includeEdges = {};
 
-    var defaultIconSize = 34;
     var defaultNodeSize = 34;
     var defaultTagSize = 56;
-    var defaultColor = "rgba(180,180,180,0.4)"; //#ccc";
+    var defaultColor = "rgba(180,180,180,0.3)"; //#ccc";
     var tagColor = "rgba(150,150,150,0.2)";
-    var highlightColor = "rgba(200,200,200,0.6)";
+    var highlightColor = "rgba(200,200,200,0.5)";
     var thickLine = 8.0;
     var thinLine = thickLine/2.0;
     var sketchResolution = 6.0;
@@ -756,8 +755,8 @@ function newGraphView(v) {
                     if (geographic) {
                         //TODO project
                         if ((d.lon!==undefined) && (d.lat!==undefined)) {
-                            d.x = d.lon;
-                            d.y = d.lat;
+                            d.x = d.lon * 20;
+                            d.y = d.lat * 16;
                         }
                     }
                     return "translate(" + d.x + "," + d.y + ")";
