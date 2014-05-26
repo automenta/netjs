@@ -794,14 +794,14 @@ $(document).ready(function() {
 
                 var throttledUpdateView = _.throttle(function() {
                     $('#AvatarButton').addClass('ViewBusy');
-                    later(function() {
+                    //later(function() {
                         _updateView();
                         if (firstView) {
                             updateView = _.debounce(throttledUpdateView, viewDebounceMS);
                             firstView = false;
                         }
                         $('#AvatarButton').removeClass('ViewBusy');
-                    });
+                    //});
                 }, viewUpdateMS);
 
                 updateView = _.debounce(throttledUpdateView, firstViewDebounceMS);
@@ -991,16 +991,18 @@ function hslToRgb(h, s, l) {
 
 
 
-function testGC() {
+function testGC(f) {
+    if (f) {
+        return;
+    }
+    
     if ($N.get('currentView') == 'chat') {
         $N.set('currentView', 'browse');
     }
     else {
         $N.set('currentView', 'chat');        
     }
-        
-    later(gc); // Run Chrome GC
- 
+         
     setTimeout(testGC, 1000);
 }
 function getMemory() {

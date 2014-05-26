@@ -224,6 +224,9 @@ function newReplyWidget(onReply, onCancel) {
  *  commitFocus - a function that takes as parameter the next focus to save
  */
 function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
+    if (typeof ix === "string")
+        ix = $N.instance[ix];
+    
     var D = newDiv().addClass('ObjectEditDiv');
     var headerTagButtons = ix.tagSuggestions || [];
     var ontocache = {};
@@ -1831,6 +1834,7 @@ function newSubjectTagButton(buttonTitle, objSuffix, objName, objTag, property) 
     return newEle('button').text(buttonTitle).addClass('metadataReplyButton').click(function() {
         var x = $N.instance[$(this).parent().parent().attr('xid')];
         if (!x) return;
+        x = x.id;
         
         var defaultLikesID = $N.id() + objSuffix;
         var defaultLikes = $N.instance[defaultLikesID];
@@ -1838,13 +1842,13 @@ function newSubjectTagButton(buttonTitle, objSuffix, objName, objTag, property) 
         if (!defaultLikes) {
             defaultLikes = new $N.nobject(defaultLikesID, objName, objTag);
             defaultLikes.author = defaultLikes.subject = $N.id();
-            defaultLikes.add(property, x.id);
+            defaultLikes.add(property, x);
         }
         else {
             //TODO use getObject if it will return a nobject
             defaultLikes = new $N.nobject(defaultLikes);                    
             //TODO check if existing
-            defaultLikes.add(property, x.id);
+            defaultLikes.add(property, x);
             defaultLikes.touch();
         }
         $N.pub(defaultLikes);               
@@ -2024,13 +2028,15 @@ function newObjectView(x, options) {
         haxn.html(xn);
     } else {        
         var xxn = xn.length > 0 ? xn : '?';
+        var xauthor = x.author;
+        var xid = x.id;
         haxn.append(newEle('a').html(xxn).click(function() {
-            if ((x.author === $N.id()) && (titleClickMode === 'edit'))
-                newPopupObjectEdit(x, true);
+            if ((xauthor === $N.id()) && (titleClickMode === 'edit'))
+                newPopupObjectEdit(xid, true);
             else if (typeof (titleClickMode) === 'function') {
-                titleClickMode(x);
+                titleClickMode(xid);
             } else {
-                newPopupObjectView(x.id, true);
+                newPopupObjectView(xid, true);
             }
             return false;
         }));
@@ -2041,14 +2047,13 @@ function newObjectView(x, options) {
             if (x.author) {
                 var a = x.author;
                 var ai = $N.instance[a];
-                if (ai)
-                    a = ai.name || a;
+                var an = ai ? ai.name || a : a;
 
                 if (!nameClickable) {
                     haxnprepend(a, ':');
                 } else {
-                    haxn.prepend(newEle('a').html(a).click(function() {
-                        newPopupObjectView(x.author, true);                        
+                    haxn.prepend(newEle('a').html(an).click(function() {
+                        newPopupObjectView(a, true);                        
                     }), ':&nbsp;');
                 }
             }
@@ -2162,9 +2167,10 @@ function newMetadataLine(x, showTime) {
     var e = [];
     
     var ots = objTagStrength(x, false);
-    _.each(ots, function(s, t) {
+    for (var t in ots) {
+        var s = ots[t];
         if ($N.property[t])
-            return;
+            continue;
 
         var tt = $N.class[t];
         
@@ -2173,7 +2179,7 @@ function newMetadataLine(x, showTime) {
 
         e.push(taglink);
         e.push(' ');
-    });
+    }
 
     var spacepoint = objSpacePoint(x);
     if (spacepoint) {       
@@ -2196,17 +2202,17 @@ function newMetadataLine(x, showTime) {
     }    
     
     if (numIn.length > 0) {
-        e.push( newA('&Larr;' + numIn.length, 'In links') );
+        e.push( /*newA*/('&Larr;' + numIn.length, 'In links') );
     }
     
     if (numOut.length > 0) {
         if (numIn.length > 0)
             e.push('|');
-        e.push( newA(numOut.length + '&Rarr;', 'Out links') );
+        e.push( /*newA*/(numOut.length + '&Rarr;', 'Out links') );
     }
-    
-    
-    return mdline.append(e);
+        
+    mdline.append(e);
+    return mdline;
 }
 
 function newA(html, title, func) {

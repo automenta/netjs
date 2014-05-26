@@ -72,7 +72,7 @@ function renderBrowse(v, cssClass, afterCreated, filterEach) {
         for (var i = 0; i < xxrr.length; i++) {
             var x = xxrr[i][0];
             var o = newObjectView(x, {
-                onRemoved: function() {        },
+                //onRemoved: function() {        },
                 scale: xxrr[i][1],
                 depthRemaining: 2,
             });
@@ -89,6 +89,7 @@ function renderBrowse(v, cssClass, afterCreated, filterEach) {
         if (afterCreated)
             afterCreated(v, xxrr.length);
 
+        elements = null;
     });
 }
 
