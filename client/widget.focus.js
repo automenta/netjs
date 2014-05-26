@@ -91,7 +91,7 @@ function renderFocus(skipSet) {
     var where = objSpacePointLatLng(newFocusValue);
     if (where) {        
         var uu = duid();
-        var m = newDiv(uu).attr('style', 'height: 250px');	//TODO use css
+        var m = newDiv(uu).attr('style', 'height: 250px; width: 100%');	//TODO use css
         fe.append(m);
         var lmap = initLocationChooserMap(uu, where, 3);
         lmap.onClick = function(l) {

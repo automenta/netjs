@@ -280,6 +280,11 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 onTagRemove(rr);
             update(rr);
         };
+        var onChange = function(i, newValue) {
+            var f = getEditedFocus();
+            f.value[i] = newValue;
+            update(f);
+        };
         var onStrengthChange = function(i, newStrength) {
             if (x.readonly)
                 return;
@@ -353,7 +358,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         continue;
 
                 tags.push(t.id);
-                tt = newTagValueWidget(x, i, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange);
+                tt = newTagValueWidget(x, i, t, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange);
                 widgetsToAdd.push(tt);
             }
             if (tt !== null) {
@@ -387,7 +392,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             missingProp.forEach(function(p) {
                 widgetsToAdd.push(newTagValueWidget(x, i + x.value.length, {
                     id: p
-                }, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange));
+                }, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange));
             });
         }
 
@@ -674,7 +679,7 @@ function applyTagStrengthClass(e, s) {
 }
 
 
-function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, onStrengthChange, onOrderChange, whenSliderChange) {
+function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange) {
     var tag = t.id;
 
     var strength = t.strength;
@@ -686,11 +691,12 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     var isProp = T._property;
     var isClass = T._class;
     var isPrim = isPrimitive(tag);
-
+    
     var events = {
         onSave: whenSaved,
         onAdd: onAdd,
         onRemove: onRemove,
+        onChange: onChange,
         onStrengthChange: onStrengthChange,
         onOrderChange: onOrderChange,
         onSliderChange: whenSliderChange
@@ -1225,40 +1231,73 @@ newTagValueWidget.spacepoint = function(x, index, v, prop, editable, d, events) 
 
 };
 
+function newTimeSelect(v) {
+    var dt = $('<input type="datetime-local"/>');
+    var ds = v ? new Date(v) : new Date();
+    ds = ds.toISOString().split('.')[0];        
+    dt.attr('value', ds );
+    dt.getTime = function() {
+        return new Date(dt.val()).getTime();
+    };
+    return dt;
+}
+
 newTagValueWidget.timepoint = function(x, index, v, prop, editable, d, events) {
     if ((editable) && (!prop.readonly)) {
-        //TODO add 'Now' button
-        var D = parseInt(v.value) || Date.now();
-        var DD = new Date(D);
-        var time = DD.getHours() + ':' + DD.getMinutes() + ':' + DD.getSeconds();
-        console.log(v.value, D, DD, time);
-            
-        var dateChoice = newDiv().appendTo(d);
-        dateChoice.datepicker({
-            changeMonth: true,
-            changeYear: true
-        });
-        //TODO add button that transforms this to a timerange
-        dateChoice.datepicker( "setDate", DD );
+                
+        var dt = newTimeSelect(v.value);
+        dt.appendTo(d);
 
-        var timeChoice = $('<input value="' + time + '"/>').appendTo(d);        
-        timeChoice.timespinner();
-        
         events.onSave.push(function(y) {
-            var date = dateChoice.datepicker( "getDate" ) || new Date();
-            var time = timeChoice.timespinner("value");
-            console.log('set', date, time, date.getTime()+time, Date.now());
-            objAddValue(y, v.id, parseInt(date.getTime() + time), v.strength);
-        });
-        
+            objAddValue(y, v.id, dt.getTime(), v.strength);                
+        });   
+
+        if (v.id === 'timepoint') {
+            var tr = $('<button title="Until...">&rarrtl;</button>').appendTo(d);
+            tr.click(function() {
+                events.onChange(index, { id: 'timerange', value: { 
+                    from: dt.getTime(), to: null
+                } } );
+            });
+        }
 
     } else {
         d.append(newEle('a').append($.timeago(new Date(v.value))));
     }
 };
 
+newTagValueWidget.timerange = function(x, index, v, prop, editable, d, events) {
+    if ((editable) && (!prop.readonly)) {
+                
+        if (!v.value)
+            v.value = { from: Date.now(), to: Date.now() };
+        
+        var dt = newTimeSelect(v.value.from);
+        dt.appendTo(d);
 
-newTagValueWidget.timerange = function(x, index, t, prop, editable, d, events) {
+        var du = newTimeSelect(v.value.to);
+
+        events.onSave.push(function(y) {
+            objAddValue(y, v.id, { from: dt.getTime(), to: du.getTime() }, v.strength);                
+        });   
+
+        if (v.id === 'timerange') {
+            var tr = $('<button title="Point in time...">&larrtl;</button>').appendTo(d);
+            tr.click(function() {
+                events.onChange(index, { id: 'timepoint', value: dt.getTime() } );
+            });
+        }
+        
+        d.append('<br/>', du);
+
+    } else {
+        if (v.value)
+            d.append(newEle('a').append(new Date(v.value.from) + ' to ' + new Date(v.value.to) ));
+    }
+};
+
+
+newTagValueWidget.timerangeOLD = function(x, index, t, prop, editable, d, events) {
     var nn = Date.now();
     var oldest = nn - 5 * 24 * 60 * 60 * 1000; //TODO make this configurable
 
@@ -1463,11 +1502,13 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
         if (!prop.readonly) {
 
             var tagRestrictions = prop.tag;
-            if (typeof tagRestrictions === "string")
-                tagRestrictions = [tagRestrictions];
+            if (tagRestrictions) {
+                if (typeof tagRestrictions === "string")
+                    tagRestrictions = [tagRestrictions];
 
-            if (tagRestrictions.indexOf('Object')===-1)
-                tagRestrictions.push('Object');
+                if (tagRestrictions.indexOf('Object')===-1)
+                    tagRestrictions.push('Object');
+            }
             
             ts.attr('placeholder', tagRestrictions ? tagRestrictions.join(' or ') : '');
 
@@ -1772,32 +1813,16 @@ function _objectViewContext() {
 
 function _addObjectViewPopupMenu(authored, target) {
     if (authored) {
-        var editButton = _addObjectViewPopupMenu.editButton;
-        if (!editButton) {
-            editButton = _addObjectViewPopupMenu.editButton = newEle('button').text('+').attr({
-                title: "Edit",
-                class: 'ObjectViewPopupButton'
-            });
-        }
-        else {
-            editButton = editButton.clone();
-        }
-        editButton[0].onclick = _objectViewEdit;
-        editButton.appendTo(target);
+        newEle('button').text('+').attr({
+            title: "Edit",
+            class: 'ObjectViewPopupButton'
+        }).click(_objectViewEdit).appendTo(target);
     }
 
-    var popupmenuButton = _addObjectViewPopupMenu.popupmenuButton;
-    if (!popupmenuButton) {
-        popupmenuButton = _addObjectViewPopupMenu.popupmenuButton = newEle('button')
-                                .html('&gt;').attr({
-                                    title: "Actions...",
-                                    class: 'ObjectViewPopupButton'
-                                });
-    }
-    else {
-       popupmenuButton = popupmenuButton.clone(); 
-    }
-    popupmenuButton.appendTo(target).click(_objectViewContext)
+    newEle('button').html('&gt;').attr({
+        title: "Actions...",
+        class: 'ObjectViewPopupButton'
+    }).appendTo(target).click(_objectViewContext);
 }
 
 
