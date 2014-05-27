@@ -26,4 +26,5 @@ a:hover {
        background-color: rgba(92, 146, 24, 0.59) !important;
 }
 
-
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited  { color: black !important; }
+.ui-state-focus a, .ui-state-focus a:link, .ui-state-focus a:visited { color: black !important; }

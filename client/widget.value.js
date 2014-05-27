@@ -919,7 +919,7 @@ newTagValueWidget.sketch = function(x, index, v, prop, editable, d, events) {
     }
 };
         
-function _objectLinkClick() { newPopupObjectView($(this).data('target')); }
+function _objectLinkClick() { newPopupObjectView($(this).data('target')); return false; }
 
 newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
 

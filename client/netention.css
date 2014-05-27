@@ -142,6 +142,10 @@ div.olMapViewport {
     padding: 0;
     opacity: 1.0 !important;
 }
+.ObjectViewButtons button {
+    border: 0 !important;
+    background: transparent !important;
+}
 .ObjectViewButtons * {
     margin: 0 !important;
     padding: 0;
@@ -974,9 +978,7 @@ a.ViewControlMinor img {
     display: block;
     clear: both;
 }
-.ObjectViewMinimized {
-    cursor: pointer;
-}
+
 .ObjectViewMinimized div.tagSection,
 .ObjectViewMinimized div.MetadataLine,
 .ObjectViewMinimized div.ObjectViewButtons,
@@ -1028,6 +1030,8 @@ div.objectView .TitleLine {
     font-size: 140%;
     font-weight: bold;
     margin: 0;
+    width: 100%;
+    cursor: pointer !important;
 }
 div.objectView .metadataReplyButton {
     padding: 1px;

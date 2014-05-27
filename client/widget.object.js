@@ -1045,7 +1045,10 @@ function _newSubjectTagButtonClick() {
         defaultLikes.add(data.property, x);
         defaultLikes.touch();
     }
-    $N.pub(defaultLikes);               
+    
+    $N.pub(defaultLikes);
+    
+    return false;
 }
 
 function newSubjectTagButton(buttonTitle, params) {
@@ -1195,16 +1198,15 @@ function newObjectView(x, options) {
             minimize();
         reflowView();
         return false;
-    }
-    
-    if (startMinimized)
-        d.click(toggleMaxMin);
-    
+    }       
     
 
     //Name
     if (showName) {
-        var haxn = newEle('span').addClass('TitleLine').appendTo(d);
+        var haxn = newEle('div').addClass('TitleLine').appendTo(d);
+        if (startMinimized)
+            haxn.click(toggleMaxMin);
+
 
         if (!nameClickable) {
             haxn.html(xn);
@@ -1234,7 +1236,8 @@ function newObjectView(x, options) {
                         haxn.prepend(a, ':');
                     } else {
                         haxn.prepend(newEle('a').html(an).click(function() {
-                            newPopupObjectView(a, true);                        
+                            newPopupObjectView(a, true);         
+                            return false;
                         }), ':&nbsp;');
                     }
                 }
@@ -1274,6 +1277,7 @@ function newObjectView(x, options) {
             if (showReplyButton && (x.id !== $N.id())) {
                 newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {
                     newReplyPopup(xid, replyCallback);
+                    return false;
                 });
 
                 mdl.append(

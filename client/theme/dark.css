@@ -14,7 +14,7 @@ h1 a {
     color: white !important;
 }
 
-a, a:visited {
+a, a:visited, .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, .ui-state-focus a, .ui-state-focus a:link, .ui-state-focus a:visited {
     color: #FFB800 !important; 
 }
 a:hover {
@@ -54,4 +54,7 @@ a:hover {
 }
 .ui-widget-content {
     border: 1px solid gray;
+}
+button {
+    color: white !important;
 }
