@@ -119,6 +119,12 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var location = objSpacePointLatLng($N.myself());
 
     var relevance = {};
+    
+    var focusWho = focus ? focus.who : undefined;
+    if (focusWho) {
+        if (_.keys(focusWho).length === 0)
+            focusWho = undefined;
+    }
 
     var focusWhen = focus ? focus.when : undefined;
     if (focusWhen) {        
@@ -155,6 +161,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
 
     }
+
 
     var ii = _.keys($N.layer().include);
     var ee = _.keys($N.layer().exclude);
@@ -213,18 +220,23 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
         //scope prefilter
         if (SCOPE_MINE) {
-            if (x.author !== s.id())
+            if (x.author !== myid)
                 continue;
         }
         else if (SCOPE_OTHERS) {
-            if (x.author === s.id())
+            if (x.author === myid)
                 continue;
         }
 
         if (focus) {
-            if (focus.who)
-                if (x.author !== focus.who)
+            if (focusWho) {
+                if (x.author === undefined) {
+                    if (!focusWho.unknown)
+                        continue;
+                }
+                else if (!focusWho[x.author])
                     continue;
+            }
 
             if (focus.userRelation) {
                 if (x.author) {

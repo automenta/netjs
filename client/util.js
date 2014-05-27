@@ -1026,6 +1026,26 @@ var Ontology = function(tagInclude, target) {
         return that;
     };
     
+    that.authors = function() {
+        return _.unique(_.pluck(_.values(that.instance),'author'));
+    };
+    that.label = function(idOrObject) {
+      var i;
+      if (typeof idOrObject === "string") {
+          i = that.instance[idOrObject];
+      }
+      else {
+          i = idOrObject;
+      }
+      if (i && i.name) {
+          var n = i.name.trim();
+          if (n.length > 0)
+            return i.name;
+      }
+      
+      return idOrObject;
+    };
+    
     that.indexingInstance = function (x) {
         return (tagInclude === true) || (objHasTag(x, tagInclude));
     };

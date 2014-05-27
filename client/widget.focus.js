@@ -81,9 +81,6 @@ function renderFocus(skipSet) {
     if (newFocusValue.when) {
     }
 
-    if (newFocusValue.who) {
-        fe.append('User: ' + $N.getObject(newFocusValue.who).name + '<br/>');
-    }
     
     if (newFocusValue.userRelation) {
         if (newFocusValue.userRelation.itrust) {
@@ -93,6 +90,35 @@ function renderFocus(skipSet) {
             fe.append('Sources Trusting Me<br/>');
         }
     }
+    
+    var who = newFocusValue.who;
+    if (who) {
+        var w = newDiv().addClass('SourceFilter');
+        var sources = _.compact($N.authors());
+        sources.push(null);
+        sources.forEach(function(s) {
+            if (s == null)
+                s = 'unknown';
+            
+            var l = newDiv().appendTo(w);
+            var cb = $('<input type="checkbox"/>');
+            cb.change(function() {
+                var checked = cb.is(':checked');
+                if (checked)
+                    newFocusValue.who[s] = 1;
+                else
+                    delete newFocusValue.who[s];
+                        
+                $N.setFocus(newFocusValue);
+            });
+            l.append(cb);
+            if (who[s])
+                cb.attr('checked','true');
+            l.append($N.label(s));
+        });        
+        fe.append(w);
+    }
+    
 
     var where = objSpacePointLatLng(newFocusValue);
     if (where) {        
@@ -147,6 +173,7 @@ function renderFocus(skipSet) {
 
 
 function initFocusButtons() {
+    
     $('#FocusEditToggleButton').click(function() {
         if ($('#FocusEditWrap').is(':visible')) {
             $('#FocusEditWrap').fadeOut();        
@@ -155,7 +182,12 @@ function initFocusButtons() {
             $('#FocusEditWrap').fadeIn();        
         }
     });
-            
+
+    later(function() {
+        $('#FocusEditToggleButton').click();
+        $('#FocusWhoButton').click();
+    });
+
     $('#FocusClearButton').click(function() {
         clearFocus();
         renderFocus();
@@ -231,6 +263,16 @@ function initFocusButtons() {
         }
     });
 
+    $('#FocusWhoButton').click(function() {
+       if (!$N.focus().who) {
+            $N.focus().who = {};
+            renderFocus();
+       }
+       else {
+           delete $N.focus().who;
+           renderFocus();
+       }           
+    });
 }
 
 function newFocusTagTree(currentFocus, onTagChanged) {
