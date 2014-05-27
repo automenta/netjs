@@ -139,7 +139,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
         //exclude tile layers from filter
         ft = _.filter(ft, function(t) {
-            var T = $N.getTag(t);
+            var T = $N.class[t];
             if (T) {
                 if (T.tileLayer)
                     return false;
@@ -168,20 +168,21 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
     var focusTagStrength = objTagStrength(focus, false);
     
-    _.each($N.instance, function(x, k) {
+    for (var k in $N.instance) {
+        var x = $N.instance[k];
 
         if (x.hidden)
-            return;
+            continue;
 
         if (x.replyTo)  //TODO make this conditoin optional
-            return;
+            continue;
 
         var xx;
 
         if (preFilter) {
             xx = objTagStrength(x, false);
             if (!preFilter(x, xx))
-                return;
+                continue;
         }
 
         {
@@ -206,44 +207,44 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                 }
             }
             if (!allowed)
-                return;
+                continue;
         }
 
 
         //scope prefilter
         if (SCOPE_MINE) {
             if (x.author !== s.id())
-                return;
+                continue;
         }
         else if (SCOPE_OTHERS) {
             if (x.author === s.id())
-                return;
+                continue;
         }
 
         if (focus) {
             if (focus.who)
                 if (x.author !== focus.who)
-                    return;
+                    continue;
 
             if (focus.userRelation) {
                 if (x.author) {
                     if (myid===x.author)
-                        return;
+                        continue;
                     
                     if (focus.userRelation.itrust) {
                         //do I trust the author of the object?
                         if ($N.getTrust(myid, x.author) <= 0)
-                            return;
+                            continue;
                     }
                     
                     if (focus.userRelation.trustme) {
                         //do I trust the author of the object?
                         if ($N.getTrust(x.author, myid) <= 0)
-                            return;
+                            continue;
                     }
                 }
                 else {
-                    return;
+                    continue;
                 }
             }
         }
@@ -254,7 +255,8 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             var w = objTime(x);
 
             if (w === null)
-                return;
+                continue;
+            
             var ageSeconds = Math.abs(now - w) / 1000.0;
             //r = Math.exp(-ageSeconds/10000.0);
             r = 1.0 / (1.0 + ageSeconds / 60.0);
@@ -262,12 +264,12 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         else if (SORT_NEAR) {
 
             if (!location) {
-                return;
+                continue;
             }
 
             var llx = objSpacePointLatLng(x);
             if (!llx) {
-                return;
+                continue;
             }
 
             var distance = geoDist(location, llx); //kilometers
@@ -278,7 +280,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         else if (SORT_SPACETIME) {
             var llx = objSpacePointLatLng(x);
             if ((!location) || (!llx) || (!x.when)) {
-                return;
+                continue;
             }
             var timeDistance = Math.abs(now - x.when) / 1000.0; //seconds
             var spaceDistance = geoDist(location, llx) * 1000.0; //meters
@@ -296,7 +298,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                         xn = xn.toLowerCase();
 
                     if (xn.indexOf(fn) === -1) {
-                        return;
+                        continue;
                     }
                 }
                 
@@ -331,9 +333,9 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         if (r > 0) {
             relevance[k] = r;
         }
-    });
+    }
 
-    var relevant = _.keys(relevance);
+    var relevant = Object.keys(relevance);
     relevant.sort(function(a, b) {
         return relevance[b] - relevance[a];
     });
@@ -347,7 +349,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
      }
      */
 
-    return [_.first(relevant, maxItems), relevance];
+    return [ _.first(relevant, maxItems), relevance ];
 }
 
 

@@ -243,17 +243,16 @@ function renderLeafletMap(v) {
 
         if (!i)
             return testIcon;
-        if (icons[i])
-            return icons[i];
-        else {
+        
+        if (!icons[i]) {
             icons[i] = L.icon({
                 iconUrl: i,
                 iconSize: [pxsize, pxsize],
                 iconAnchor: [pxsize / 2, pxsize / 2],
                 popupAnchor: [0, -28]
             });
-            return icons[i];
         }
+        return icons[i];
     }
 
     var featureSelect = L.featureSelect();
@@ -322,14 +321,12 @@ function renderLeafletMap(v) {
     function markerHover(m, label) {
         m.on('mouseover', function(e) {
             later(function() {
-                tooltip.css('left', e.originalEvent.clientX);
-                tooltip.css('top', e.originalEvent.clientY);
-
-                tooltip.html(label.substring(0, 40));
-                tooltip.show();
+                tooltip.css({
+                    left:e.originalEvent.clientX,
+                    top:e.originalEvent.clientY                     
+                }).html(label.substring(0, 40)).show();
             });
-        });
-        m.on('mouseout', function(e) {
+        }).on('mouseout', function(e) {
             later(function() {
                 tooltip.hide();
             });
@@ -493,67 +490,83 @@ function renderLeafletMap(v) {
         delete map.layers[S];
     }
 
+    var markers = new WeakMap();
+    function getMarker(x) {
+        var existing = markers.get(x);
+        if ((existing!=null) && (existing!==undefined))
+            return existing;
+        if (existing === undefined) {
+            var s = objSpacePoint(x);
+            if ((s) && (s.lat !== undefined) && (s.lon !== undefined)) {
+                var m = L.marker([s.lat, s.lon], {
+                    clickable: false
+                });
+                m.object = x;
+                markerHover(m, objName(m));
+
+                if (objHasTag(x, 'Earthquake')) {
+                    m.setOpacity(0.25);
+                    var mag = parseFloat(objFirstValue(x, 'eqMagnitude'));
+                    var depthKM = -(s.alt || 0) /* parseFloat(objFirstValue(x, 'eqDepth')) */ / 1000.0;
+                    var ipx = undefined;
+                    if (mag) {
+                        var rad = 500 + Math.exp(mag) * 1000;
+                        var ww = x.modifiedAt || x.createdAt || null;
+                        var op = 1.0;
+                        if (ww) {
+                            var daysAgo = (currentMapNow - ww) / 1000.0 / 60.0 / 60.0 / 24.0;
+                            op = Math.pow((daysAgo + 1) / 7.0, -1);
+                        }
+                        op *= 0.75;
+
+                        var r = Math.pow(depthKM / 10.0, -1); //redness: more red = closer to surface
+                        var g = 1 - r;
+                        var b = 0;
+                        var a = 1.0;
+
+
+                        var eqCircle = L.circle([s.lat, s.lon], rad, {
+                            stroke: true,
+                            color: 'black',
+                            weight: 1,
+                            fillColor: _rgba(r, g, b, a),
+                            opacity: Math.min((op * 2.0), 1.0),
+                            fillOpacity: op
+                        });
+
+                        nobjectLayer.addLayer(eqCircle);
+
+                        ipx = parseInt(10 + mag * 6.0);
+                    }
+                    m.setIcon(getIcon(getTagIcon(x, ipx)));
+                }
+                else {
+                    m.setIcon(getIcon(getTagIcon(x)));
+                }
+
+                markers.set(x, m);
+                return m;
+            }
+            else {
+                markers.set(x, null);
+            }
+        }
+        return null;
+    }
+    
     function updateMap() {
         nobjectLayer.clearLayers();
 
-        var currentMapNow = Date.now();
 
         renderItems(v, MAP_MAX_ITEMS, function(s, v, xxrr) {
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
-                var r = xxrr[i][1];
-                //renderMapFeature(x, r);
-                var s = objSpacePoint(x);
-                if ((s) && (s.lat !== undefined) && (s.lon !== undefined)) {
-                    var m = L.marker([s.lat, s.lon], {
-                        clickable: false
-                    });
-                    m.object = x;
-                    markerHover(m, objName(m));
-
-                    if (objHasTag(x, 'Earthquake')) {
-                        m.setOpacity(0.25);
-                        var mag = parseFloat(objFirstValue(x, 'eqMagnitude'));
-                        var depthKM = -(s.alt || 0) /* parseFloat(objFirstValue(x, 'eqDepth')) */ / 1000.0;
-                        var ipx = undefined;
-                        if (mag) {
-                            var rad = 500 + Math.exp(mag) * 1000;
-                            var ww = x.modifiedAt || x.createdAt || null;
-                            var op = 1.0;
-                            if (ww) {
-                                var daysAgo = (currentMapNow - ww) / 1000.0 / 60.0 / 60.0 / 24.0;
-                                op = Math.pow((daysAgo + 1) / 7.0, -1);
-                            }
-                            op *= 0.75;
-
-                            var r = Math.pow(depthKM / 10.0, -1); //redness: more red = closer to surface
-                            var g = 1 - r;
-                            var b = 0;
-                            var a = 1.0;
-
-
-                            var eqCircle = L.circle([s.lat, s.lon], rad, {
-                                stroke: true,
-                                color: 'black',
-                                weight: 1,
-                                fillColor: _rgba(r, g, b, a),
-                                opacity: Math.min((op * 2.0), 1.0),
-                                fillOpacity: op
-                            });
-
-                            nobjectLayer.addLayer(eqCircle);
-
-                            ipx = parseInt(10 + mag * 6.0);
-                        }
-                        m.setIcon(getIcon(getTagIcon(x, ipx)));
-                    }
-                    else {
-                        m.setIcon(getIcon(getTagIcon(x)));
-                    }
-
+                //var r = xxrr[i][1];
+                
+                var m = getMarker(x);
+                if (m)
                     nobjectLayer.addLayer(m);
 
-                }
             }
         });
 
@@ -633,10 +646,8 @@ function renderLeafletMap(v) {
 
     updateMap();
 
-    map.onChange = function() {
-        updateMap();
-    };
-    map.onDestroy = function() {
+    map.onChange = updateMap;
+    map.destroy = function() {
         map = null;
     }
 

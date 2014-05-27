@@ -2,24 +2,21 @@ var BROWSE_ITEMS_MAX_DISPLAYED = 75;
 
 
 function renderItems(v, maxItems, perItems, preFilter) {
-    setImmediate(function() {
-        var sort = $N.get('list-sort') || 'Recent';
-        var scope = $N.get('list-scope') || 'Public';
-        var semantic = $N.get('list-semantic') || 'Any';
+    var sort = $N.get('list-sort') || 'Recent';
+    var scope = $N.get('list-scope') || 'Public';
+    var semantic = $N.get('list-semantic') || 'Any';
 
-        var rr = getRelevant(sort, scope, semantic, self, maxItems, preFilter);
-        var relevant = rr[0];
-        var relevance = rr[1];
+    var rr = getRelevant(sort, scope, semantic, $N, maxItems, preFilter);
+    var relevant = rr[0];
+    var relevance = rr[1];
 
-        var xxrr = [];
-        for (var x = 0; x < relevant.length; x++) {
-            var xx = $N.getObject(relevant[x]);
-            var rr = relevance[relevant[x]];
-            xxrr.push([xx, rr]);
-        }
-        perItems(self, v, xxrr);
-        
-    });
+    var xxrr = [];
+    for (var x = 0; x < relevant.length; x++) {
+        xxrr.push([$N.getObject(relevant[x]), relevance[relevant[x]]]);
+    }
+    perItems($N, v, xxrr);
+    
+    relevant.length = relevance.length = xxrr.length = 0;
 
     /*var semanticFilter = $('<select><option>Any</option><option>Relevant</option></select>');
      semanticFilter.change(function() {
@@ -91,13 +88,14 @@ function renderBrowse(v, cssClass, afterCreated, filterEach) {
 
         elements = null;
     });
+    v = null;
 }
 
 function renderBrowseList(v) {
     renderBrowse(v, function(numitems) {
         return 'objectListItem';
-    }, function(v) {
     });
+    v = null;
 }
 function renderBrowseGrid3(v) {
     renderBrowse(v, function(numitems) {
@@ -106,22 +104,22 @@ function renderBrowseGrid3(v) {
         if (numitems > 1)
             return 'objectGridItem2 tiled';
         return 'objectListItem';
-    }, function(v) {
-        reflowView();
-    }, function(w) {
+    }, reflowView,
+    function(w) {
         return newDiv().append(w);
     });
+    v = null;
 }
 function renderBrowseGrid2(v) {
     renderBrowse(v, function(numitems) {
         if (numitems > 1)    
             return 'objectGridItem2 tiled';
         return 'objectListItem';
-    }, function(v) {
-        reflowView();
-    }, function(w) {
+    }, reflowView,
+    function(w) {
         return newDiv().append(w);
     });
+    v = null;
 }
 
 
@@ -337,6 +335,10 @@ function newListView(v) {
     update();
     
     listRenderer.onChange = update;
+    listRenderer.destroy = function() {
+        listRenderer = null;
+        v = null;
+    };
     
     return listRenderer;
 }

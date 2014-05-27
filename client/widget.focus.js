@@ -108,6 +108,19 @@ function renderFocus(skipSet) {
                 objSetFirstValue($N.focus(), 'spacepoint', {lat: l.lat, lon: l.lng, planet: 'Earth'});
                 renderFocus();
             };
+            /*
+             * .abs-center {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                z-index: 1;
+                pointer-events: none;
+                }
+            <div class="abs-center" style="width: 100px; height: 100px; margin-left: -50px; margin-top: -50px; border-radius: 50px; border: solid 2px #d015b3;"> </div>
+            <div class="abs-center" style="width: 200px; height: 200px; margin-left: -100px; margin-top: -100px; border-radius: 100px; border: solid 2px #d015b3;"> </div>
+      	    <div class="abs-center" style="width: 2px; height: 100%; background: #d015b3; top: 0px;"> </div>
+    	    <div class="abs-center" style="width: 100%; height: 2px; background: #d015b3; left: 0px;"> </div>
+            */
         }
     }
     else {
