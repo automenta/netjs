@@ -45,6 +45,7 @@ function netention(f) {
     
     var $NClient = Backbone.Model.extend({
         reset: function() {
+            this.channels = { };
             this.clearTransients();
             this.set('clientID', 'undefined');
         },
@@ -286,6 +287,13 @@ function netention(f) {
 
                     socket.on('roster', function(r) {
                         $N.set('roster', r);
+                    });
+                    
+                    socket.on('channelMessage', function(channel, message) {
+                        if (!$N.channels[channel])
+                            $N.channels[channel] = [];
+                        $N.channels[channel].push(message);
+                        $N.trigger('channel:' + channel, message);
                     });
 
                     later(function() {
@@ -833,8 +841,15 @@ function netention(f) {
                 updateView();
 
             }
+        },
+        getChannel: function(channel, callback) {
+            if ($N.channels[channel]) {
+                callback($N.channels[channel]);
+            }
+        },
+        channelSend: function(channel, m) {
+            $N.socket.emit('channelSend', channel, m);
         }
-
     });
 
     //exports = the variable from util.js which is also used by node.js require()        		

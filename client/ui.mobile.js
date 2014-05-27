@@ -115,6 +115,23 @@ $('#EditProfileButton').click(function() {
     return false;
 });
 
+$('#ToggleChatButton').click(function() {
+    var o = new $N.nobject('Chat.Main');
+    o.setName('Main Channel');
+    o.add('chat', { channel: 'main' });
+    o.hidden = true;
+    $N.notice(o);
+    
+    newPopupObjectView(o, {title: 'Main Channel', width: '50%'}, {
+        showMetadataLine: false,
+        showName: false,
+        showActionPopupButton: false,
+        showSelectionCheck: false,
+        transparent: true
+    });
+    return false;
+})
+
 
 $('#AvatarButton').hover(function() {
     $('#IdentityPopout').fadeIn();

@@ -27,7 +27,7 @@ function newPopupObjectEdit(n, p) {
     return e;
 }
 
-function newPopupObjectView(_x, p) {
+function newPopupObjectView(_x, p, ovParams) {
     var x;
     if (typeof (_x) == "string")
         x = $N.object[_x];
@@ -39,10 +39,15 @@ function newPopupObjectView(_x, p) {
         return;
     }
 
+    if (ovParams===undefined) {
+        ovParams = {
+            depthRemaining: 4,
+            nameClickable: false
+        };
+    }
+    
     var d = newPopup(x.name, p);
-    var s = newObjectView(x, {
-        depthRemaining: 4
-    });
+    var s = newObjectView(x, ovParams);
     s.css('border', 'none');
     d.append(s);
     return d;
@@ -1061,6 +1066,7 @@ function newObjectView(x, options) {
     var depthRemaining = options.depthRemaining;
     var depth = options.depth || depthRemaining;
     var nameClickable = (options.nameClickable != undefined) ? options.nameClickable : true;
+    var showName = (options.showName != undefined) ? options.showName : true;
     var showAuthorIcon = (options.showAuthorIcon != undefined) ? options.showAuthorIcon : true;
     var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
     var hideAuthorNameAndIconIfZeroDepth = (options.hideAuthorNameAndIconIfZeroDepth != undefined) ? options.hideAuthorNameAndIconIfZeroDepth : false;
@@ -1181,7 +1187,6 @@ function newObjectView(x, options) {
 
     var buttons = newDiv().attr('class','tagButtons ObjectViewButtons').appendTo(d);       
 
-    var haxn = newEle('h1').appendTo(d);
 
 
     if (showActionPopupButton)
@@ -1191,41 +1196,45 @@ function newObjectView(x, options) {
         buttons.prepend(selectioncheck);
 
     //Name
-    if (!nameClickable) {
-        haxn.html(xn);
-    } else {        
-        var xxn = xn.length > 0 ? xn : '?';
-        var xauthor = x.author;
-        haxn.append(newEle('a').html(xxn).click(function() {
-            if ((xauthor === $N.id()) && (titleClickMode === 'edit'))
-                newPopupObjectEdit(xid, true);
-            else if (typeof (titleClickMode) === 'function') {
-                titleClickMode(xid);
-            } else {
-                newPopupObjectView(xid, true);
-            }
-            return false;
-        }));
-    }
+    if (showName) {
+        var haxn = newEle('h1').appendTo(d);
 
-    if (showAuthorName) {
-        if (!isSelfObject(x.id)) { //exclude self objects
-            if (x.author) {
-                var a = x.author;
-                var ai = $N.instance[a];
-                var an = ai ? ai.name || a : a;
-
-                if (!nameClickable) {
-                    haxnprepend(a, ':');
+        if (!nameClickable) {
+            haxn.html(xn);
+        } else {        
+            var xxn = xn.length > 0 ? xn : '?';
+            var xauthor = x.author;
+            haxn.append(newEle('a').html(xxn).click(function() {
+                if ((xauthor === $N.id()) && (titleClickMode === 'edit'))
+                    newPopupObjectEdit(xid, true);
+                else if (typeof (titleClickMode) === 'function') {
+                    titleClickMode(xid);
                 } else {
-                    haxn.prepend(newEle('a').html(an).click(function() {
-                        newPopupObjectView(a, true);                        
-                    }), ':&nbsp;');
+                    newPopupObjectView(xid, true);
+                }
+                return false;
+            }));
+        }
+
+        if (showAuthorName) {
+            if (!isSelfObject(x.id)) { //exclude self objects
+                if (x.author) {
+                    var a = x.author;
+                    var ai = $N.instance[a];
+                    var an = ai ? ai.name || a : a;
+
+                    if (!nameClickable) {
+                        haxnprepend(a, ':');
+                    } else {
+                        haxn.prepend(newEle('a').html(an).click(function() {
+                            newPopupObjectView(a, true);                        
+                        }), ':&nbsp;');
+                    }
                 }
             }
         }
     }
-
+        
     if ((showMetadataLine) && (!x._class) && (!x._property)) {
         var mdl = newMetadataLine(x, showTime).appendTo(d);
         

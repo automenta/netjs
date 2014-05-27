@@ -2174,6 +2174,10 @@ exports.start = function(options) {
                     }
                 }
             });
+            socket.on('channelSend', function(channel, message) {
+                //TODO use socket channels to send only to subscribers
+                io.sockets.in('*').emit('channelMessage', channel, message);                
+            });
 
         }
 

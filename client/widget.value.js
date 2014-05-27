@@ -1037,6 +1037,76 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
     }
 };
 
+
+newTagValueWidget.chat = function(x, index, t, prop, editable, d, events) {
+    if (!t.value) return;
+    var channel = t.value.channel || 'main';
+    
+    var c = newDiv();
+    
+    var log = newDiv().addClass('ChatLog').appendTo(c);
+            
+    var input = newDiv().addClass('ChatInput').appendTo(c);
+    
+    var textInput = $('<input type="text"/>').appendTo(input);
+    textInput.keydown(function(e) {
+       if (e.keyCode === 13) {
+           var m = $(this).val();
+           $N.channelSend(channel, {a: $N.id(), w: Date.now(), m:m} );
+           $(this).val('');
+       }
+    });
+    
+    function chatlineclick() {
+        var line = $(this).parent();
+        var n = new $N.nobject();
+        n.setName( line.find('span').html() );
+        
+        newPopupObjectEdit(n);        
+    }
+    
+    function newChatLine(l) {
+        var d = newDiv();
+        
+        var A = $N.instance[l.a];
+        if (A) {
+            d.append(newEle('a').html(newAvatarImage(A)).click(chatlineclick));
+        }
+        
+        d.append(newEle('span').html(l.m));
+        return d;
+    }
+    
+    function updateLog() {
+        $N.getChannel(channel, function(history) {
+            log.empty();
+            for (var i = 0; i < history.length; i++) {
+                var h = history[i];
+                log.append(newChatLine(h));
+            }            
+        });
+    }
+    updateLog();
+    
+    $N.on('channel:'+channel, function(m) {
+       if (c.closest(document.documentElement).length === 0) {
+           $N.off('channel:'+channel, this);
+           c.remove();
+       }
+       
+       updateLog();
+       
+       if (m.a!==$N.id()) {
+           var A = $N.instance[m.a];
+           var aname = A ? A.name : m.a;
+           
+           notify({title: aname, text: m.m });
+       }
+    });
+
+    d.append(c);
+};
+
 newTagValueWidget.timeseries = function(x, index, v, prop, editable, d, events) {
     d.append('<textarea>' + JSON.stringify(vv.value) + '</textarea>');
 };
