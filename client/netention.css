@@ -46,10 +46,6 @@ a, a:visited {
     width:1.85em;
     background-size: cover;
 }
-.chatViewLineAuthor .AvatarIcon {
-    float: right;
-    margin: 0;
-}
 
 .DataSubMainMenu {
     margin-left: 2em;
@@ -1195,23 +1191,28 @@ div.objectView .metadataReplyButton {
 .InlineSelfButton div {
     position: relative;
     right: 0;
-    clear: both;
-    margin-bottom:0.2em;
+    clear: none;
 }
 .chatViewLineContent {
     float: left;
-    width: 86%;
+    width: 81%;
 }
 .chatViewLineContent .FirstReply {
     margin-left: 0 !important;
 }
+.chatViewLineAuthor .AvatarIcon {
+    float: right;
+    margin: 0;
+    margin-left: 5px;
+}
+
 
 .chatViewLineContent img {
     max-height: 4em;
 }
 .chatViewLineAuthor {
     clear: both;
-    width: 10%;
+    width: 15%;
     float: left;
     text-align: right;
     padding-right: 15px;

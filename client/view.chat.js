@@ -290,7 +290,7 @@ function newInlineSelfButton(s) {
     return newEle('a').data({
         'aid': s.id
     }).addClass('InlineSelfButton')
-      .append(newEle('div').html(s.name), newAvatarImage(s));
+      .append(newAvatarImage(s), newEle('div').html(s.name));
 }
 
 function newObjectLogLineOnHover() {
@@ -316,8 +316,7 @@ function lineClickFunction() {
         var s = newObjectView(x, {
             showActionPopupButton: false,
             showSelectionCheck: false,
-            transparent: true,
-            startMinimized: true
+            transparent: true
         });
         s.hide();
 
@@ -354,7 +353,8 @@ function newObjectLogLine(x) {
         showSelectionCheck: false,
         transparent: true,
         hideAuthorNameAndIconIfZeroDepth: true,
-        replyCallback: defaultChatReplyCallback
+        replyCallback: defaultChatReplyCallback,
+        startMinimized: true
     }).appendTo(e);
 
 
