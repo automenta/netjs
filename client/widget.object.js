@@ -1193,7 +1193,7 @@ function newObjectView(x, options) {
             maximize();
         else
             minimize();
-        //reflowView();
+        reflowView();
         return false;
     }
     

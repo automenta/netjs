@@ -382,6 +382,7 @@ function _updateView(force) {
     }
     else if (view === 'graph') {
         v.addClass('overflow-hidden');
+        indent(); //should improve rendering performance, to avoid compositing the menu when it redraws        
         currentView = newGraphView(v);
     }
     else if (view === 'wiki') {
