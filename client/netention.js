@@ -648,7 +648,7 @@ function netention(f) {
                 }
 
                 if (objHasTag(y, 'Tag')) {
-                    that.addTags([objTagObjectToTag(y)]);
+                    that.add([objTagObjectToTag(y)]);
                 }
                 
                 return true;
