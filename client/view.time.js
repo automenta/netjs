@@ -50,6 +50,7 @@ function newTimeView(v) {
                                 showSelectionCheck: false,
                                 showTime: false,
                                 showAuthorName: false,
+                                startMinimized: true
                             });
 
                             var G = {
@@ -132,7 +133,8 @@ function newTimeView(v) {
                 links.events.addListener(timeline, 'change', changed);
                 links.events.addListener(timeline, 'changed', changed);
                 /*links.events.addListener(timeline, 'select', function(s) {
-                });                */
+                    
+                });*/
                 links.events.addListener(timeline, 'add', function() {
                     var dd = timeline.getData();
                     var tti = dd[dd.length - 1].start.getTime();
