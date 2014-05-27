@@ -1,5 +1,4 @@
-
-**License:** 100% Open-Source Software - WTFPL / MIT License
+**License:** 100% Open-Source Software (License: AGPL 3.0)
 
 # Components
 **100% Javascript** Client & Server for ubiquity, simplicity, and ease

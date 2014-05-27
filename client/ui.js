@@ -68,9 +68,19 @@ function later(f) {
 function _notifyRemoval() { $(this).remove(); }
 
 function notify(param) {
+    PNotify.desktop.permission();
+    
+    if (typeof param === "string")
+        param = { text: param };
+    if (!param.text)
+        param.text = '';
+    if (!param.type)
+        param.type = 'info';
     param.animation = 'none';
-    param.desktop = 'true';
-    $.pnotify(param).click(_notifyRemoval);                                                
+    param.desktop = {desktop: 'true'};
+    param.styling = 'jqueryui';
+    //param.desktop = true;
+    new PNotify(param).container.click(_notifyRemoval);                                                
 }
 
 
@@ -726,8 +736,6 @@ $(document).ready(function() {
 
             $N.getUserObjects(function() {
                 
-                setTheme($N.get('theme'));
-
                 //SETUP ROUTER
                 var Workspace = Backbone.Router.extend({
                     routes: {

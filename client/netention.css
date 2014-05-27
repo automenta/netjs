@@ -1381,7 +1381,6 @@ div.objectView .metadataReplyButton {
     max-width: 200px !important;
 }
 .ui-pnotify {
-    background: #F00;
     position: relative;
     height: auto;
     z-index: 20000;
