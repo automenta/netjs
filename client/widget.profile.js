@@ -2,6 +2,7 @@
 
 function newProfileWidget() {
     var d = newDiv();
+    
 
     function closeDialog() {
         //d.parent().dialog('close');            

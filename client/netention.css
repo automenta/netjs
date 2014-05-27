@@ -807,11 +807,10 @@ a.ViewControlMinor img {
 #NotificationArea {
     z-index: 5000;
     position: fixed;
-    top: auto;
-    bottom: auto;
-    left: auto;
-    right: auto;
     font-size: 200%;
+    text-align:center;
+    top: 25%;
+    width: 100%;
 }
 #FocusTabs, #FocusTabs ul {
     background: transparent;
@@ -959,9 +958,7 @@ a.ViewControlMinor img {
     border: 0px !important;
     outline: 0px !important;
 }
-#AnonymousLoginButton {
-    display: none;
-}
+
 #themeSelect {
     width: 250px;
     clear: both;

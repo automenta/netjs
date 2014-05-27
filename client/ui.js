@@ -616,6 +616,9 @@ function whenResized() {
 $('#NotificationArea').html('Loading...');
 
 $(document).ready(function() {
+
+    if (!configuration.enableAnonymous)
+        $('#AnonymousLoginButton').hide();
     
     var themeSelect = $('<select/>');
     for (var k in themes) {
@@ -641,8 +644,6 @@ $(document).ready(function() {
         TogetherJS = null;
     }
 
-    if (configuration.enableAnonymous)
-        $('#AnonymousLoginButton').show();
 
 
     $('title').html(configuration.siteName);

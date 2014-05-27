@@ -633,7 +633,6 @@ function newGraphView(v) {
                 }
             }
 
-
             var edges = _.values(edgeIndex);
             
             force
@@ -643,12 +642,8 @@ function newGraphView(v) {
                     .on("dragstart", function () { oncell = true;})
                     .on("dragend",   function () { oncell = false; });
 
-            node = svg.selectAll(".node")
-                .data(nodes)
-                .enter().append("g")
-                .attr("class", "node")
-                .call(force.drag);
-    
+            node = svg.selectAll(".node").data(nodes).enter().append("g").attr("class", "node");
+
             var link = svg.selectAll(".link")
                 .data(edges)
                 .enter().append("line")
@@ -664,30 +659,6 @@ function newGraphView(v) {
             loadPositions();
 
             force.start();
-
-            node.on("mouseover", function (d) {
-                if (d3.event.defaultPrevented)
-                    return; // ignore drag
-                var oid = d.objectID;
-                if (oid)
-                    touched = oid;
-
-                d3.select(this).select('circle').style("fill", highlightColor);
-            });
-            node.on("mouseout", function (d) {
-                if (d3.event.defaultPrevented)
-                    return; // ignore drag
-                touched = null;
-                d3.select(this).select('circle').style("fill", d.color);
-            });
-
-            node.on("click", function (d) {
-                if (d3.event.defaultPrevented)
-                    return; // ignore drag
-                var oid = d.objectID;
-                if (oid)
-                    newPopupObjectView(oid);
-            });
 
             /*node.append("rect")
              .attr("x", function(d) { return -d.width/2; })
@@ -775,6 +746,33 @@ function newGraphView(v) {
             });
 
             later(function() {
+                
+                node.call(force.drag); 
+                
+                node.on("mouseover", function (d) {
+                    if (d3.event.defaultPrevented)
+                        return; // ignore drag
+                    var oid = d.objectID;
+                    if (oid)
+                        touched = oid;
+
+                    d3.select(this).select('circle').style("fill", highlightColor);
+                });
+                node.on("mouseout", function (d) {
+                    if (d3.event.defaultPrevented)
+                        return; // ignore drag
+                    touched = null;
+                    d3.select(this).select('circle').style("fill", d.color);
+                });
+
+                node.on("click", function (d) {
+                    if (d3.event.defaultPrevented)
+                        return; // ignore drag
+                    var oid = d.objectID;
+                    if (oid)
+                        newPopupObjectView(oid);
+                });
+                
                 //TODO don't recreate this menu, cache it and update if changed
                 
                 nodeMenu.empty();            

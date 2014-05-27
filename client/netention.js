@@ -169,7 +169,7 @@ function netention(f) {
                                     
                                     $N.startURLRouter();
 
-                                    $('#NotificationArea').hide();
+                                    $('#NotificationArea').remove();
 
                                     later(function() {
                                         notify({
