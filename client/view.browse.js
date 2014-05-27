@@ -72,6 +72,7 @@ function renderBrowse(v, cssClass, afterCreated, filterEach) {
                 //onRemoved: function() {        },
                 scale: xxrr[i][1],
                 depthRemaining: 2,
+                startMinimized: true
             });
             if (filterEach)
                 o = filterEach(o);

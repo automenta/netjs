@@ -316,7 +316,8 @@ function lineClickFunction() {
         var s = newObjectView(x, {
             showActionPopupButton: false,
             showSelectionCheck: false,
-            transparent: true
+            transparent: true,
+            startMinimized: true
         });
         s.hide();
 

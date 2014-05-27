@@ -979,6 +979,16 @@ a.ViewControlMinor img {
     display: block;
     clear: both;
 }
+.ObjectViewMinimized {
+    cursor: pointer;
+}
+.ObjectViewMinimized div.tagSection,
+.ObjectViewMinimized div.MetadataLine,
+.ObjectViewMinimized div.ObjectViewButtons,
+.ObjectViewMinimized div.ObjectReply
+    { display: none !important; }
+
+
 .objectView ul li {
     word-wrap: break-word;
 }
@@ -1019,7 +1029,7 @@ button.ObjectViewHideButton button {
     padding: 5px;
     margin: 0px;
 }
-div.objectView h1 {
+div.objectView .TitleLine {
     font-size: 140%;
     font-weight: bold;
     margin: 0;
@@ -1032,7 +1042,7 @@ div.objectView .metadataReplyButton {
     background-color: transparent;
     cursor: pointer;
 }
-.objectView h1  {
+.objectView .TitleLine  {
     word-break: break-all;
 }
 

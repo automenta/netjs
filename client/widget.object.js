@@ -1079,7 +1079,8 @@ function newObjectView(x, options) {
     var transparent = (options.transparent != undefined) ? options.transparent : false;
     var xid = x.id;
     var replyCallback = options.replyCallback ? function(rx) { options.replyCallback(rx); } : null;
-   
+    var startMinimized = (options.startMinimized != undefined) ? options.startMinimized : false;
+
     if (!x) {
         return newDiv().html('Object Missing');
     }
@@ -1176,28 +1177,33 @@ function newObjectView(x, options) {
         }
     }
 
-    //Selection Checkbox
-    var selectioncheck = null;
-    if (showSelectionCheck) {
-        selectioncheck = newEle('input').attr({
-            'type': 'checkbox',
-            'class':'ObjectSelection'
-        }).click(_refreshActionContext);
+
+    
+    function minimize() {       
+       d.addClass('ObjectViewMinimized');       
     }
-
-    var buttons = newDiv().attr('class','tagButtons ObjectViewButtons').appendTo(d);       
-
-
-
-    if (showActionPopupButton)
-        _addObjectViewPopupMenu($N.id() === x.author, buttons);
-
-    if (selectioncheck)
-        buttons.prepend(selectioncheck);
+    
+    function maximize() {
+       d.removeClass('ObjectViewMinimized');    
+       ensureMaximized();
+    }
+    
+    function toggleMaxMin() {
+        if (d.hasClass('ObjectViewMinimized'))                
+            maximize();
+        else
+            minimize();
+        return false;
+    }
+    
+    if (startMinimized)
+        d.click(toggleMaxMin);
+    
+    
 
     //Name
     if (showName) {
-        var haxn = newEle('h1').appendTo(d);
+        var haxn = newEle('span').addClass('TitleLine').appendTo(d);
 
         if (!nameClickable) {
             haxn.html(xn);
@@ -1224,7 +1230,7 @@ function newObjectView(x, options) {
                     var an = ai ? ai.name || a : a;
 
                     if (!nameClickable) {
-                        haxnprepend(a, ':');
+                        haxn.prepend(a, ':');
                     } else {
                         haxn.prepend(newEle('a').html(an).click(function() {
                             newPopupObjectView(a, true);                        
@@ -1234,63 +1240,94 @@ function newObjectView(x, options) {
             }
         }
     }
-        
-    if ((showMetadataLine) && (!x._class) && (!x._property)) {
-        var mdl = newMetadataLine(x, showTime).appendTo(d);
-        
-        if (showReplyButton && (x.id !== $N.id())) {
-            newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {
-                newReplyPopup(xid, replyCallback);
-            });
-                                    
-            mdl.append(
-                newSubjectTagButton("Like", subjectTag.Like),
-                newSubjectTagButton("Dislike", subjectTag.Dislike ),
-                newSubjectTagButton("Trust", subjectTag.Trust )
-            );
-            
-                        
-        }
-    }
-
-    //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
-
-
-    //var nod = newObjectDetails(x);
-    //if (nod)
-        //d.append(nod);
-
-    addNewObjectDetails(x, d, showMetadataLine ? ['spacepoint'] : undefined);
     
+    var maximized = false;
+    
+    function ensureMaximized() {
+        if (maximized)
+            return;
+        
+        maximized = true;
 
-    if (!mini) {
-        var r = x.reply; //$N.getReplies(x);
-        if (r) {
-            if (!replies) {
-                replies = newDiv().addClass('ObjectReply').appendTo(d);
+        //Selection Checkbox
+        var selectioncheck = null;
+        if (showSelectionCheck) {
+            selectioncheck = newEle('input').attr({
+                'type': 'checkbox',
+                'class':'ObjectSelection'
+            }).click(_refreshActionContext);
+        }
+
+        var buttons = newDiv().attr('class','tagButtons ObjectViewButtons').prependTo(d);       
+
+        if (showActionPopupButton)
+            _addObjectViewPopupMenu($N.id() === x.author, buttons);
+
+        if (selectioncheck)
+            buttons.prepend(selectioncheck);
+
+        
+        if ((showMetadataLine) && (!x._class) && (!x._property)) {
+            var mdl = newMetadataLine(x, showTime).appendTo(d);
+
+            if (showReplyButton && (x.id !== $N.id())) {
+                newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {
+                    newReplyPopup(xid, replyCallback);
+                });
+
+                mdl.append(
+                    newSubjectTagButton("Like", subjectTag.Like),
+                    newSubjectTagButton("Dislike", subjectTag.Dislike ),
+                    newSubjectTagButton("Trust", subjectTag.Trust )
+                );                                    
             }
-            else {
-                replies.empty();
-            }
+        }
 
-            var childOptions = _.clone(options);
-            childOptions.depthRemaining = depthRemaining - 1;
-            childOptions.transparent = true;
-            delete childOptions.scale;
+        //d.append('<h3>Relevance:' + parseInt(r*100.0)   + '%</h3>');
 
-            //TODO sort the replies by age, oldest first?
-            _.values(r).forEach(function(p) {
-                replies.append(newObjectView(p, childOptions));
-            });
-        } else {
-            if (replies) {
-                replies.remove();
-                replies = null;
+
+        //var nod = newObjectDetails(x);
+        //if (nod)
+            //d.append(nod);
+
+        addNewObjectDetails(x, d, showMetadataLine ? ['spacepoint'] : undefined);
+
+
+        if (!mini) {
+            var r = x.reply; //$N.getReplies(x);
+            if (r) {
+                if (!replies) {
+                    replies = newDiv().addClass('ObjectReply').appendTo(d);
+                }
+                else {
+                    replies.empty();
+                }
+
+                var childOptions = _.clone(options);
+                childOptions.depthRemaining = depthRemaining - 1;
+                childOptions.transparent = true;
+                delete childOptions.scale;
+
+                //TODO sort the replies by age, oldest first?
+                _.values(r).forEach(function(p) {
+                    replies.append(newObjectView(p, childOptions));
+                });
+            } else {
+                if (replies) {
+                    replies.remove();
+                    replies = null;
+                }
             }
         }
     }
-
-    x = null;
+    
+    
+    if (startMinimized) {
+        minimize();
+    }
+    else {
+        maximize();
+    }    
     
     return d;
 }
