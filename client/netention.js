@@ -168,10 +168,21 @@ function netention(f) {
                                     updateViewLock(0);
                                     
                                     $N.startURLRouter();
-                                    
+
+                                    $('#NotificationArea').hide();
+
+                                    later(function() {
+                                        notify({
+                                            title: 'Connected.',
+                                            type: 'success',
+                                            delay: 2000
+                                        });                        
+                                    });
+
                                     $N.updateRoster();
 
                                     $N.indexOntology();
+
 
                                 }, true);
                             });                        
@@ -295,14 +306,7 @@ function netention(f) {
                         $N.channels[channel].push(message);
                         $N.trigger('channel:' + channel, message);
                     });
-
-                    later(function() {
-                        notify({
-                            title: 'Connected.',
-                            type: 'success',
-                            delay: 2000
-                        });                        
-                    });
+                    
 
                     reconnect();
 

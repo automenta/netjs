@@ -869,8 +869,7 @@ $(document).ready(function() {
                         }
                     }
 
-                    $('#NotificationArea').html('Ready...');
-                    $('#NotificationArea').hide();
+                    $('#NotificationArea').html('Connecting...');
 
 
                     //initKeyboard();

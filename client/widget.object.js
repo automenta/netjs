@@ -1180,12 +1180,12 @@ function newObjectView(x, options) {
 
     
     function minimize() {       
-       d.addClass('ObjectViewMinimized');       
+        d.addClass('ObjectViewMinimized');       
     }
     
     function maximize() {
-       d.removeClass('ObjectViewMinimized');    
-       ensureMaximized();
+        d.removeClass('ObjectViewMinimized');
+        ensureMaximized();
     }
     
     function toggleMaxMin() {
@@ -1193,6 +1193,7 @@ function newObjectView(x, options) {
             maximize();
         else
             minimize();
+        reflowView();
         return false;
     }
     

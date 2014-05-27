@@ -318,7 +318,7 @@ function newGraphView(v) {
         nodes = [];
         nodeIndex = {};
         edgeIndex = {};
-
+        
         renderItems(v, GRAPH_MAX_NODES, function (s, v, xxrr) {
 
             var minTime, maxTime;
@@ -664,7 +664,6 @@ function newGraphView(v) {
             loadPositions();
 
             force.start();
-
 
             node.on("mouseover", function (d) {
                 if (d3.event.defaultPrevented)
