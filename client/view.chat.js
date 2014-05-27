@@ -214,7 +214,7 @@ function newChatView(v) {
 
             var when = newObjects[xid];
             if (!when) {
-                var O = toDisplayObj[xid] || $N.getObject(xid);
+                var O = toDisplayObj[xid] || $N.instance[xid];
                 if (O)
                     when = O.modifiedAt || O.createdAt;
             }
@@ -251,7 +251,9 @@ function newChatView(v) {
     
     content.onChange = function() {
         later(function() {
-            updateContent(_myNewObject);            
+            updateContent(_myNewObject);     
+            if (_myNewObject)
+                scrollbottom();
             _myNewObject = null;
         })
     };
@@ -355,7 +357,7 @@ function newObjectLogLine(x) {
         hideAuthorNameAndIconIfZeroDepth: true,
         replyCallback: defaultChatReplyCallback,
         startMinimized: true
-    }).appendTo(e);
+    }).data('xid', x.id).appendTo(e);
 
 
     if (x.author) {
