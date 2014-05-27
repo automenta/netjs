@@ -1207,12 +1207,12 @@ function newObjectView(x, options) {
         if (startMinimized)
             haxn.click(toggleMaxMin);
 
+        var xxn = xn.length > 0 ? xn : '?';
+        var xauthor = x.author;
 
         if (!nameClickable) {
-            haxn.html(xn);
+            haxn.append(xxn);
         } else {        
-            var xxn = xn.length > 0 ? xn : '?';
-            var xauthor = x.author;
             haxn.append(newEle('a').html(xxn).click(function() {
                 if ((xauthor === $N.id()) && (titleClickMode === 'edit'))
                     newPopupObjectEdit(xid, true);
@@ -1233,9 +1233,9 @@ function newObjectView(x, options) {
                     var an = ai ? ai.name || a : a;
 
                     if (!nameClickable) {
-                        haxn.prepend(a, ':');
+                        haxn.prepend(an, ': ');
                     } else {
-                        haxn.prepend(newEle('a').html(an).click(function() {
+                        haxn.prepend(newEle('a').html(an + ' ').click(function() {
                             newPopupObjectView(a, true);         
                             return false;
                         }), ':&nbsp;');

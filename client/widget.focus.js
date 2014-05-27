@@ -183,10 +183,6 @@ function initFocusButtons() {
         }
     });
 
-    later(function() {
-        $('#FocusEditToggleButton').click();
-        $('#FocusWhoButton').click();
-    });
 
     $('#FocusClearButton').click(function() {
         clearFocus();
