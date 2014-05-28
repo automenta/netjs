@@ -2293,6 +2293,17 @@ exports.start = function(options) {
 
     }
 
+
+    if (options.client.webrtc) {
+        var w = options.client.webrtc;
+        if (w.port) {
+            //https://github.com/peers/peerjs-server
+            var PeerServer = require('peer').PeerServer;
+            var server = new PeerServer({port: w.port, path: '/n'});
+            nlog('WebRTC server: http://' + $N.server.host + ':' + w.port);
+        }
+    }
+
     // process.on('uncaughtException', function (err) {
     // console.error('An uncaught error occurred!');
     // console.error(err.stack);

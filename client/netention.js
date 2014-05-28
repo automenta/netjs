@@ -163,26 +163,7 @@ function netention(f) {
                             $N.getAuthorObjects(nextID, function() {
                                 $N.getLatestObjects(1000, function() {
                                     
-                                    updateBrand(); //TODO use backbone Model instead of global function
-                                    
-                                    updateViewLock(0);
-                                    
-                                    $N.startURLRouter();
-
-                                    $('#NotificationArea').remove();
-
-                                    later(function() {
-                                        notify({
-                                            title: 'Connected.',
-                                            type: 'success',
-                                            delay: 2000
-                                        });                        
-                                    });
-
-                                    $N.updateRoster();
-
-                                    $N.indexOntology();
-
+                                    $N.sessionStart();
 
                                 }, true);
                             });                        
@@ -528,7 +509,41 @@ function netention(f) {
          return ((w >= from) && (w < to));
          } );
          },*/
+        
+        //called after connection establishd
+        sessionStart: function() {
+            updateBrand(); //TODO use backbone Model instead of global function
 
+            updateViewLock(0);
+
+            $N.startURLRouter();
+
+            $('#NotificationArea').remove();
+
+            later(function() {
+                notify({
+                    title: 'Connected.',
+                    type: 'success',
+                    delay: 2000
+                });                        
+            });
+
+            $N.updateRoster();
+
+            $N.indexOntology();
+
+            if (configuration.webrtc) {
+                var w = configuration.webrtc;
+                $LAB
+                    .script("/lib/peerjs/peer.js")
+                    .wait(function() {
+                        var peer = new Peer('someid', {host: 'localhost', port: w.port, path: '/n'});
+                        console.log('WebRTC',peer);
+                    });
+            }
+
+
+        },
 
         getObjects: function(query, onObject, onFinished) {
             var that = this;

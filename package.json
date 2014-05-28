@@ -46,7 +46,9 @@
         "stopwords": "",
         "jsonpack": "",
         "ical": "",
-	"graphlib": ""
+	"graphlib": "",
+        "smokesignal":"",
+        "peer":""
     },
     "devDependencies": {
         "qunit": ""
