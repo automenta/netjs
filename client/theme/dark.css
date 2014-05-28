@@ -40,12 +40,7 @@ a:hover {
     background-color: black;
     border: 1px solid gray;
 }
-.link {
-    fill: white;
-}
-.node text {
-    fill: white;
-}
+
 ::-webkit-scrollbar-thumb {
     background-color: rgba(225, 225, 225, 0.7) !important;
 }
@@ -55,6 +50,18 @@ a:hover {
 .ui-widget-content {
     border: 1px solid gray;
 }
-button {
+.ObjectViewButtons button {
     color: white !important;
+}
+
+
+.link {
+    fill: white !important;
+}
+.node text {
+    fill: white !important;
+}
+.graphArrowhead {
+    fill: white !important;
+    opacity: 0.65;
 }

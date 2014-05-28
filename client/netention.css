@@ -986,6 +986,10 @@ a.ViewControlMinor img {
     clear: both;
 }
 
+.ObjectViewMinimized .TitleLine {
+    opacity: 0.6 !important;
+}
+
 .ObjectViewMinimized div.tagSection,
 .ObjectViewMinimized div.MetadataLine,
 .ObjectViewMinimized div.ObjectViewButtons    { 
@@ -1318,8 +1322,15 @@ div.objectView .metadataReplyButton {
 .ui-dialog-content .WikiBrowser-REMOVED {
     max-height: 400px;
 }
+.ui-dialog {
+    padding: 0 !important;
+}
 .ui-dialog .ui-dialog-content {
     padding: 4px !important;
+}
+.ui-widget {
+    font-family: inherit !important;
+    font-size: inherit !important;
 }
 
 .WikiBrowser {
@@ -2202,6 +2213,11 @@ svg {
     fill: gray !important;
     stroke-width: 5px;
 }
+.graphArrowhead {
+    fill: black;
+    opacity: 0.65;
+}
+
 
 .TextReader textarea {
     width: 100%;

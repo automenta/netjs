@@ -44,6 +44,7 @@ function newGraphView(v) {
         .attr("markerWidth", 3)
         .attr("markerHeight", 3)
         .attr("orient", "auto")
+        .attr("class", "graphArrowhead")
       .append("svg:path")
         .attr("d", "M0,-5L10,0L0,5");
 
@@ -876,7 +877,7 @@ function newGraphView(v) {
                     if (nodeScale[k]===undefined) {
                         var nc = newDiv();
                         var v = 1; //(nodeScale[k]!==undefined) ? nodeScale[k] : 1;                    
-                        var sl = $('<input type="range" min="0" max="10" step="0.1" value="' + v + '"/>')
+                        var sl = $('<input type="range" min="0" max="5" step="0.1" value="' + v + '"/>')
                             .change(function() {
                                 var nv = parseFloat(sl.val());
                                 if (nv < 0.2) nv = 0;
