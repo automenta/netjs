@@ -50,6 +50,14 @@ function newGraphView(v) {
     //svg = d3.select("#" + eid + " svg").append('g');
     var svg = svgCanvas.append('g');
 
+    //var defaultDrag = d3.behavior.drag();
+        /*.origin(function(d) { return d; })
+        .on("drag", function (d) {
+              d3.select(this)
+                .attr("x", d3.event.x)
+                .attr("y", d3.event.y);
+            });*/
+        
     var force = d3.layout.force()
         .gravity(.02)
         .linkDistance(150)
@@ -130,6 +138,7 @@ function newGraphView(v) {
 
     }
 
+    var layout;
     var timeline = false;
     var geographic = false;
     var timelineWidth = 2500;
@@ -167,9 +176,11 @@ function newGraphView(v) {
     function updateSVGTransform() {
         ssg.attr('transform', 'translate(' + tx + ',' + ty + ') scale(' + scale + ',' + scale + ')');
         if (ended) {
-            force.start();
-            force.tick();
-            force.stop();
+            if (layout === 'ForceDirected') {                
+                force.start();
+                force.tick();
+                force.stop();
+            }
         }
     }
 
@@ -310,8 +321,6 @@ function newGraphView(v) {
 
         svg.selectAll(".node").remove();
         svg.selectAll(".link").remove();
-
-        nodeMenu.empty();
         
         var nodeTags = { };
         
@@ -635,12 +644,14 @@ function newGraphView(v) {
 
             var edges = _.values(edgeIndex);
             
+
             force
                 .nodes(nodes)
                 .links(edges)
                 .drag()
                     .on("dragstart", function () { oncell = true;})
                     .on("dragend",   function () { oncell = false; });
+        
 
             node = svg.selectAll(".node").data(nodes).enter().append("g").attr("class", "node");
 
@@ -656,9 +667,7 @@ function newGraphView(v) {
                 });
 
 
-            loadPositions();
 
-            force.start();
 
             /*node.append("rect")
              .attr("x", function(d) { return -d.width/2; })
@@ -744,48 +753,62 @@ function newGraphView(v) {
                 });
 
             });
+            
+
+            node.on("mouseover", function (d) {
+                if (d3.event.defaultPrevented)
+                    return; // ignore drag
+                var oid = d.objectID;
+                if (oid)
+                    touched = oid;
+
+                d3.select(this).select('circle').style("fill", highlightColor);
+            });
+            node.on("mouseout", function (d) {
+                if (d3.event.defaultPrevented)
+                    return; // ignore drag
+                touched = null;
+                d3.select(this).select('circle').style("fill", d.color);
+            });
+
+            node.on("click", function (d) {
+                if (d3.event.defaultPrevented)
+                    return; // ignore drag
+                var oid = d.objectID;
+                if (oid)
+                    newPopupObjectView(oid);
+            });
+            
+            loadPositions();
+            
+            node.call(force.drag); 
+            force.start();
+            
+            var fixed = (layout!=='ForceDirected');            
+            node.each(function(d) {
+               d.fixed = fixed;
+            });
 
             later(function() {
                 
-                node.call(force.drag); 
-                
-                node.on("mouseover", function (d) {
-                    if (d3.event.defaultPrevented)
-                        return; // ignore drag
-                    var oid = d.objectID;
-                    if (oid)
-                        touched = oid;
-
-                    d3.select(this).select('circle').style("fill", highlightColor);
-                });
-                node.on("mouseout", function (d) {
-                    if (d3.event.defaultPrevented)
-                        return; // ignore drag
-                    touched = null;
-                    d3.select(this).select('circle').style("fill", d.color);
-                });
-
-                node.on("click", function (d) {
-                    if (d3.event.defaultPrevented)
-                        return; // ignore drag
-                    var oid = d.objectID;
-                    if (oid)
-                        newPopupObjectView(oid);
-                });
-                
-                //TODO don't recreate this menu, cache it and update if changed
-                
-                nodeMenu.empty();            
                 _.each(nodeTags, function(v, k) {
-                    var nc = newDiv();
-                    var v = (nodeScale[k]!==undefined) ? nodeScale[k] : 1;                    
-                    var sl = $('<input type="range" min="0" max="10" value="' + v + '"/>')
-                        .change(function() {
-                            nodeScale[k] = parseFloat(sl.val());
-                            later(nd.onChange);
-                        });         
-                    nc.append(sl, k);
-                    nodeMenu.append(nc);
+                    if (nodeScale[k]===undefined) {
+                        var nc = newDiv();
+                        var v = 1; //(nodeScale[k]!==undefined) ? nodeScale[k] : 1;                    
+                        var sl = $('<input type="range" min="0" max="10" step="0.1" value="' + v + '"/>')
+                            .change(function() {
+                                var nv = parseFloat(sl.val());
+                                if (nv < 0.2) nv = 0;
+                        
+                                nodeScale[k] = nv;
+                                
+                                later(nd.onChange);
+                                return false;
+                            });         
+                        nodeScale[k] = v;
+                        nc.append(sl, k);
+                        nodeMenu.append(nc);
+                    }
                 });
                 
             });
@@ -810,6 +833,15 @@ function newGraphView(v) {
         nd.onChange();
     });
 
+    var layoutSelect = $('<select/>').appendTo(submenu);
+    layoutSelect.append('<option value="ForceDirected">Force Directed</option>');
+    layoutSelect.append('<option value="None">None</option>');
+    layoutSelect.change(function () {        
+        layout = $(this).val();
+        nd.onChange();
+    });
+    layout = "ForceDirected";
+    
     
     var edgeMenu = newDiv().addClass('HUDTopRight').appendTo(nd);
     edgeMenu.css('text-align','right');
@@ -828,7 +860,10 @@ function newGraphView(v) {
 
     nd.onChange();
 
-
+    nd.destroy = function() {
+        svg = null;
+        force = null;
+    };
 
     return nd;
 

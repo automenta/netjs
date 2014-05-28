@@ -13,7 +13,8 @@ function renderItems(v, maxItems, perItems, preFilter) {
     var xxrr = [];
     for (var x = 0; x < relevant.length; x++) {
         xxrr.push([$N.getObject(relevant[x]), relevance[relevant[x]]]);
-    }
+    }    
+    
     perItems($N, v, xxrr);
     
     relevant.length = relevance.length = xxrr.length = 0;

@@ -179,8 +179,10 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
     var focusTagStrength = objTagStrength(focus, false);
     
+    var instances = 0;
     for (var k in $N.instance) {
         var x = $N.instance[k];
+        instances++;
 
         if (x.hidden)
             continue;
@@ -365,7 +367,13 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
      }
      */
 
-    return [ _.first(relevant, maxItems), relevance ];
+    var relevantItems = _.first(relevant, maxItems);
+     $('#FocusStatus').html('Focus: ' + relevantItems.length + ' / ' + instances);
+     
+    if (relevant.length > relevantItems.length)
+        $('#FocusStatus').append('<i>&nbsp;+' + (relevant.length - relevantItems.length) + ' more</li>');
+     
+    return [ relevantItems, relevance ];
 }
 
 
