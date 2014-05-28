@@ -120,6 +120,10 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
     var relevance = {};
     
+    var focusName = focus ? focus.name : undefined;
+    if (focusName === true)
+        focusName = undefined;
+            
     var focusWho = focus ? focus.who : undefined;
     if (focusWho) {
         if (_.keys(focusWho).length === 0)
@@ -302,8 +306,8 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
         if (SEMANTIC_RELEVANT) {
             if (focus) {
-                if (focus.name) {
-                    var fn = focus.name.toLowerCase();
+                if (focusName) {
+                    var fn = focusName.toLowerCase();
 
                     var xn = (x.name || '');
                     if (xn.toLowerCase)

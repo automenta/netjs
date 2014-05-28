@@ -41,12 +41,21 @@ function renderFocus(skipSet) {
 
     var newFocusValue = $N.focus() || { };
     
+    //function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags, onNameChange) {
+    
     var noe = newObjectEdit(newFocusValue, true, true, function(xx) {
         $N.setFocus(xx);
         renderFocus();
     }, function(x) {
         $N.setFocus(x);
-    }, ['spacepoint']); //do not show spacepoint property, custom renderer is below
+    }, ['spacepoint'], function() {
+        var keyword = $(this).val();
+        later(function() {
+            $N.focus().name = keyword;
+            $N.setFocus($N.focus());
+            //$N.trigger('change:focus');
+        });
+    }); //do not show spacepoint property, custom renderer is below
 
     if (!isFocusClear())
         $('#FocusClearButton').show();
@@ -269,6 +278,12 @@ function initFocusButtons() {
            renderFocus();
        }           
     });
+
+    $('#FocusHowButton').click(function() {
+        $N.focus().name = true;
+        renderFocus();
+    });
+
 }
 
 function newFocusTagTree(currentFocus, onTagChanged) {

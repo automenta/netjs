@@ -227,8 +227,9 @@ function newReplyWidget(onReply, onCancel) {
 /**
  *  focus - a function that returns the current focus
  *  commitFocus - a function that takes as parameter the next focus to save
+ *  TODO - use a parameter object like newObjectView
  */
-function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags) {
+function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags, onNameEdit) {
     if (typeof ix === "string")
         ix = $N.instance[ix];
     
@@ -320,11 +321,22 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         widgetsToAdd = [];
 
         if (editable) {
-            if (hideWidgets !== true) {
+            
+            if ((x.name) || (hideWidgets!==true)) {
                 nameInput = $('<input/>').attr('type', 'text').attr('placeholder', 'Title').attr('x-webkit-speech', 'x-webkit-speech').addClass('nameInput').addClass('nameInputWide');
-                nameInput.val(objName(x));
+                nameInput.val(x.name === true ? '' : x.name);
                 widgetsToAdd.push(nameInput);
+                if (onNameEdit) {
+                    //nameInput.keyup(onNameEdit);
+                    nameInput.change(onNameEdit);                    
+                    nameInput.keyup(function(e) {
+                        if (e.keyCode == 13)
+                            onNameEdit.apply($(this));
+                    });
+                }
+            }
 
+            if (hideWidgets !== true) {
                 tagInput = $('<input name="tags" class="tags"/>');
                 //$('#tags').importTags('foo,bar,baz');
                 //$('#tags').addTag('foo');
