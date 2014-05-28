@@ -327,8 +327,6 @@ function netention(f) {
                             if (c.icon)
                                 defaultIcons[c.id] = c.icon;                    
                         }               
-                        delete that.ontologyProperties;
-                        delete that.ontologyClasses;
                     });
 
             /*    setImmediate(nextBatch);
@@ -533,12 +531,11 @@ function netention(f) {
             $N.indexOntology();
 
             if (configuration.webrtc) {
-                var w = configuration.webrtc;
                 $LAB
                     .script("/lib/peerjs/peer.js")
+                    .script("webrtc.js")
                     .wait(function() {
-                        var peer = new Peer('someid', {host: 'localhost', port: w.port, path: '/n'});
-                        console.log('WebRTC',peer);
+                        initWebRTC(configuration.webrtc); 
                     });
             }
 

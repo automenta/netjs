@@ -122,13 +122,18 @@ $('#ToggleChatButton').click(function() {
     o.hidden = true;
     $N.notice(o);
     
-    newPopupObjectView(o, {title: 'Main Channel', width: '50%'}, {
+    var s = newPopupObjectView(o, {title: 'Main Channel', width: '50%'}, {
         showMetadataLine: false,
         showName: false,
         showActionPopupButton: false,
         showSelectionCheck: false,
         transparent: true
     });
+    if (configuration.webrtc) {
+        console.log('adding roster');
+        s.append(newWebRTCRoster());
+    }
+    
     return false;
 })
 
