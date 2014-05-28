@@ -6,7 +6,7 @@ function initWebRTC(w) {
         webrtc.destroy();
     }
     
-    webrtc = new Peer( {host: 'localhost', port: w.port, path: '/n'});
+    webrtc = new Peer( {host: window.location.hostname, port: w.port, path: '/n'});
     webrtc.on('open', function(id) {
         $N.channelSend("webrtc", { a: $N.id(), w: Date.now(), m: id } );
         $N.channelSend("main", { a: $N.id(), w: Date.now(), m: 'WebRTC connected (' + id + ')' } );
@@ -141,6 +141,8 @@ function webRTCVideo(callPeer, target, callback) {
     
 }
 
+//http://simplewebrtc.com/
+//https://github.com/HenrikJoreteg/getScreenMedia
 //https://github.com/peers/peerjs/blob/master/examples/videochat/index.html
 /*
  * <html>

@@ -667,40 +667,39 @@ exports.plugin = function($N) {
             $N.addAll(generalTags);
             $N.addAll(emotionTags);
 
-            if ($N.client.knowLevels == 3) {
-                $N.addAll([
-                    {id: 'Learn', name: 'Learn', extend: ['Know'], icon: 'icon/know/k1.png'},
-                    {id: 'Do', name: 'Do', extend: ['Know'], icon: 'icon/know/k4.png'},
-                    {id: 'Teach', name: 'Teach', extend: ['Know'], icon: 'icon/know/k5.png'}
-                ]);
-            }
-            else if ($N.client.knowLevels == 6) {
-                $N.addAll([
-                    /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
-                     3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
-                    {id: 'Learn', name: 'Learn', extend: ['Know'], icon: 'icon/know/k1.png'},
-                    {id: 'LearnDo', name: 'Learn Do', extend: ['Know'], icon: 'icon/know/k2.png'},
-                    {id: 'DoLearn', name: 'Do Learn', extend: ['Know'], icon: 'icon/know/k3.png'},
-                    //{ id: 'Collaborating', name: 'Collaborating', extend: ['Know'] },
-                    {id: 'DoTeach', name: 'Do Teach', extend: ['Know'], icon: 'icon/know/k4.png'},
-                    {id: 'TeachDo', name: 'Teach Do', extend: ['Know'], icon: 'icon/know/k5.png'},
-                    {id: 'Teach', name: 'Teach', extend: ['Know'], icon: 'icon/know/k6.png'},
-                ]);
-            }
-            else /* 5 */ {
-                $N.addAll([
-                    {id: 'Learn', name: 'Learn', extend: ['Know'],
-                        description: 'No knowledge but curious to learn'},
-                    {id: 'DoLearn', name: 'DoLearn', extend: ['Know'],
-                        description: 'Some knowledge and willing to learn more while collaborating'},
-                    {id: 'Do', name: 'Do', extend: ['Know'],
-                        description: 'Can independently work'},
-                    {id: 'DoTeach', name: 'DoTeach', extend: ['Know'],
-                        description: 'Independently able to work and can teach or train'},
-                    {id: 'Teach', name: 'Teach', extend: ['Know'],
-                        description: 'Has expert knowledge and is most useful in teaching others'}
-                ]);
-            }
+            $N.addAll([
+                {id: 'Learn', name: 'Learn', extend: ['Know'], icon: 'icon/know/k1.png'},
+                {id: 'Do', name: 'Do', extend: ['Know'], icon: 'icon/know/k4.png'},
+                {id: 'Teach', name: 'Teach', extend: ['Know'], icon: 'icon/know/k5.png'}
+            ]);
+            
+//            else if ($N.client.knowLevels == 6) {
+//                $N.addAll([
+//                    /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
+//                     3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
+//                    {id: 'Learn', name: 'Learn', extend: ['Know'], icon: 'icon/know/k1.png'},
+//                    {id: 'LearnDo', name: 'Learn Do', extend: ['Know'], icon: 'icon/know/k2.png'},
+//                    {id: 'DoLearn', name: 'Do Learn', extend: ['Know'], icon: 'icon/know/k3.png'},
+//                    //{ id: 'Collaborating', name: 'Collaborating', extend: ['Know'] },
+//                    {id: 'DoTeach', name: 'Do Teach', extend: ['Know'], icon: 'icon/know/k4.png'},
+//                    {id: 'TeachDo', name: 'Teach Do', extend: ['Know'], icon: 'icon/know/k5.png'},
+//                    {id: 'Teach', name: 'Teach', extend: ['Know'], icon: 'icon/know/k6.png'},
+//                ]);
+//            }
+//            else /* 5 */ {
+//                $N.addAll([
+//                    {id: 'Learn', name: 'Learn', extend: ['Know'],
+//                        description: 'No knowledge but curious to learn'},
+//                    {id: 'DoLearn', name: 'DoLearn', extend: ['Know'],
+//                        description: 'Some knowledge and willing to learn more while collaborating'},
+//                    {id: 'Do', name: 'Do', extend: ['Know'],
+//                        description: 'Can independently work'},
+//                    {id: 'DoTeach', name: 'DoTeach', extend: ['Know'],
+//                        description: 'Independently able to work and can teach or train'},
+//                    {id: 'Teach', name: 'Teach', extend: ['Know'],
+//                        description: 'Has expert knowledge and is most useful in teaching others'}
+//                ]);
+//            }
             
             /*
             _.each(getDefaultTemplates($N), function(x) {
