@@ -656,7 +656,7 @@ Matilda.Model = (function () {
         }, this);
       }
 
-      console.log(meanLogLikelihood, correlationMatrix)
+      //console.log(meanLogLikelihood, correlationMatrix)
       matrixEach(correlationMatrix, function(t1, t2) {
         correlationMatrix[t1][t2] *= normalizer
       }, this);
@@ -709,7 +709,7 @@ Matilda.Model = (function () {
 
       for (i in list) {
           tuples.push([i, list[i]]);
-          console.log(tuples)
+          //console.log(tuples)
           tuples.sort(function(a, b) { return a[1] < b[1] ? 1 : a[1] > b[1] ? -1 : 0 });
         }
 
