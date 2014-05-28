@@ -988,9 +988,24 @@ a.ViewControlMinor img {
 
 .ObjectViewMinimized div.tagSection,
 .ObjectViewMinimized div.MetadataLine,
-.ObjectViewMinimized div.ObjectViewButtons,
-.ObjectViewMinimized div.ObjectReply
-    { display: none !important; }
+.ObjectViewMinimized div.ObjectViewButtons    { 
+    display: none !important; 
+}
+.ObjectViewMaximized div.tagSection,
+.ObjectViewMaximized div.MetadataLine,
+.ObjectViewMaximized div.ObjectViewButtons    { 
+    display: block !important; 
+}
+.ObjectViewMaximized .ObjectViewMinimized div.tagSection, 
+.ObjectViewMaximized .ObjectViewMinimized div.MetadataLine,
+.ObjectViewMaximized .ObjectViewMinimized div.ObjectViewButtons {
+    display: none !important;
+}
+.ObjectViewMinimized .ObjectViewMaximized div.tagSection, 
+.ObjectViewMinimized .ObjectViewMaximized div.MetadataLine,
+.ObjectViewMinimized .ObjectViewMaximized div.ObjectViewButtons {
+    display: block !important;
+}
 
 
 .objectView ul li {
@@ -1095,6 +1110,12 @@ div.objectView .metadataReplyButton {
     font-size: 90%;
     opacity: 0.95;
     clear: both;
+}
+.ObjectReplyChatZeroDepth {
+    margin: 0.8em 0.1em 0.0em 0em !important;
+    font-size: 90%;
+    opacity: 0.95;
+    clear: both;    
 }
 .reply-section {
     text-align: left;

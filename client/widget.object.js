@@ -1078,7 +1078,7 @@ function newObjectView(x, options) {
 
     //var onRemoved = options.onRemoved;
     var scale = options.scale;
-    var depthRemaining = options.depthRemaining;
+    var depthRemaining = options.depthRemaining || 1;
     var depth = options.depth || depthRemaining;
     var nameClickable = (options.nameClickable != undefined) ? options.nameClickable : true;
     var showName = (options.showName != undefined) ? options.showName : true;
@@ -1149,11 +1149,7 @@ function newObjectView(x, options) {
             cd.prepend('Unable to find PDF source.');
         }
     }*/
-
-
-
-    var mini = (depthRemaining === 0);
-
+    
 
     var d = newDiv().attr({
         'xid': xid,
@@ -1178,16 +1174,18 @@ function newObjectView(x, options) {
     //d.append(cd);
 
 
-    if ((depth === depthRemaining) && (hideAuthorNameAndIconIfZeroDepth))
-        showAuthorName = showAuthorIcon = false;
+        //showAuthorName = showAuthorIcon = false;
 
     var replies;
 
     if (showAuthorIcon) {
-        var authorClient = $N.getObject(authorID);
-        if (authorClient) {
-            if (authorID) {
-                newAvatarImage(authorClient).appendTo(d);
+        if (!((depth === depthRemaining) && (hideAuthorNameAndIconIfZeroDepth))) {
+
+            var authorClient = $N.getObject(authorID);
+            if (authorClient) {
+                if (authorID) {
+                    newAvatarImage(authorClient).appendTo(d);
+                }
             }
         }
     }
@@ -1196,10 +1194,12 @@ function newObjectView(x, options) {
     
     function minimize() {       
         d.addClass('ObjectViewMinimized');       
+        d.removeClass('ObjectViewMaximized');
     }
     
     function maximize() {
         d.removeClass('ObjectViewMinimized');
+        d.addClass('ObjectViewMaximized');
         ensureMaximized();
     }
     
@@ -1264,6 +1264,9 @@ function newObjectView(x, options) {
             return;
         
         maximized = true;
+        
+        if (replies)
+            replies.detach();
 
         //Selection Checkbox
         var selectioncheck = null;
@@ -1309,32 +1312,46 @@ function newObjectView(x, options) {
 
         addNewObjectDetails(x, d, showMetadataLine ? ['spacepoint'] : undefined);
 
+        if (replies)
+            replies.appendTo(d);
 
-        if (!mini) {
-            var r = x.reply; //$N.getReplies(x);
-            if (r) {
-                if (!replies) {
-                    replies = newDiv().addClass('ObjectReply').appendTo(d);
-                }
-                else {
-                    replies.empty();
-                }
+    }
+    
+    var r = x.reply;
+    if (r) {
+        var vr = _.values(r);        
 
+        if (vr.length > 0) {
+            if (!replies) {
+                replies = newDiv().appendTo(d);
+                if (!hideAuthorNameAndIconIfZeroDepth)
+                    replies.addClass('ObjectReply');
+                else
+                    replies.addClass('ObjectReplyChatZeroDepth');
+            }
+            else {
+                replies.empty();
+            }
+            if (depthRemaining > 0) {
                 var childOptions = _.clone(options);
                 childOptions.depthRemaining = depthRemaining - 1;
                 childOptions.transparent = true;
+                childOptions.hideAuthorNameAndIconIfZeroDepth = false;
                 delete childOptions.scale;
 
                 //TODO sort the replies by age, oldest first?
-                _.values(r).forEach(function(p) {
+                vr.forEach(function(p) {
                     replies.append(newObjectView(p, childOptions));
                 });
-            } else {
-                if (replies) {
-                    replies.remove();
-                    replies = null;
-                }
             }
+            else {
+                replies.append(vr.length + ' replies...');
+            }
+        }
+    } else {
+        if (replies) {
+            replies.remove();
+            replies = null;
         }
     }
     

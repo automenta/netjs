@@ -269,9 +269,9 @@ function newGraphView(v) {
         updateSVGTransform();
     });
 
-    /*cc.bind("contextmenu", function (e) {
+    cc.bind("contextmenu", function (e) {
         return false;
-    });*/
+    });
 
     cc.mousedown(function (m) {
         if (m.which === 3) {

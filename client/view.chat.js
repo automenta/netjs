@@ -356,7 +356,9 @@ function newObjectLogLine(x) {
         transparent: true,
         hideAuthorNameAndIconIfZeroDepth: true,
         replyCallback: defaultChatReplyCallback,
-        startMinimized: true
+        startMinimized: true,
+        depthRemaining: 4,
+        depth: 4
     }).data('xid', x.id).appendTo(e);
 
 
