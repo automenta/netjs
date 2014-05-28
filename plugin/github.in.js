@@ -29,8 +29,11 @@ exports.plugin = function($N) {
 
                 var p = JSON.parse(g.payload);
 
+                var reponame = p.repository.owner.name + '/' + p.repository.name;
+                
                 var n = new $N.nobject('github:' + p.ref + ':' + p.after)
-                                .setName("GitHub Event")
+                                .setAuthor("GitHub:" + reponame)
+                                .setName("Git Event")
                                 .addDescription(JSON.stringify(p));
 
                 $N.pub(n);

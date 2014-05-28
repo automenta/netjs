@@ -88,6 +88,11 @@ nobject.prototype.setName = function(n) {
     objName(this, n);
     return this;
 };
+nobject.prototype.setAuthor = function(n) {
+    this.author = n;
+    return this;
+};
+
 //.name is already used, so use n()
 nobject.prototype.getName = function(n) {
     if (!n)

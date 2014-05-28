@@ -56,6 +56,7 @@ exports.plugin = function($N) {
 							var o = $N.objNew();
 							o.id = 'weather.' + encodeURIComponent(location) + '.' + when;	
 							o.when = when;
+                                                        o.author = 'Weather:' + location;
 							o.duration = 1000*(60*60*3 - 60); //3 hours-1 min
 							o.expiresAt = when + 1000*60*60*6; //6hours
 							o.name = title;
