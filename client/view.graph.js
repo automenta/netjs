@@ -172,6 +172,79 @@ function newGraphView(v) {
 
     var nodeMenu = newDiv().addClass('HUDTopLeft').appendTo(nd);
 
+    var selected = null;
+    var selectedVisual = null;
+    var selectedID = null;
+    
+    function unselectNode(d, visual) {
+        if (!d) return;
+        
+        d.fixed = (layout !== 'ForceDirected');
+        visual.select('circle').attr("class", "");
+        visual.select('.graphSelectionMenu').remove();
+    }
+    
+    function selectNode(d, visual) {
+        
+        if (d === selected) return;
+        
+        if (d === undefined) {
+            //objectID -> d,visual
+            /*svg.selectAll(".node").data(nodes).select()
+            d = selected;
+            visual = d3.select(d);*/
+            d = selected;
+            visual = d3.select(selectedVisual);
+        }
+        else {
+            if (selected)
+                unselectNode(selected, selectedVisual);            
+        }
+        
+        if (!d) return;
+        
+        d.fixed = true;
+        
+        var circle = visual.select('circle');
+        var menu = visual.append('g').attr('class', 'graphSelectionMenu');
+        
+        circle.attr("class", "graphNodeSelected");                
+        
+        menu.append("rect")
+             .attr("x", function(d) { return d.width; })
+             .attr("y", function(d) { return -10; })
+             .attr("width", function(d) { return 20; } )
+             .attr("height", function(d) { return 20; } )
+             .style("fill", function(d) { return 'lightgray'; })
+             .style("stroke", function(d) { return 'black'; })
+             .style("stroke-width", function(d) { return 1; })
+             .on('click', function() {
+                //var b = this.getBBox(); 
+                var b = this.getCTM();
+                var s = ssg[0].getCTM();
+                tx = (s.e - b.e) + ($(document).width()/2.0);
+                ty = (s.f - b.f) + ($(document).height()/2.0);
+                //scale *= 2.0;
+                updateSVGTransform();
+             });
+        menu.append("rect")
+             .attr("x", function(d) { return -10; })
+             .attr("y", function(d) { return -d.width-20; })
+             .attr("width", function(d) { return 20; } )
+             .attr("height", function(d) { return 20; } )
+             .style("fill", function(d) { return 'lightgray'; })
+             .style("stroke", function(d) { return 'black'; })
+             .style("stroke-width", function(d) { return 1; })
+             .on('click', function() {
+                if (selectedID)
+                    newPopupObjectView(selectedID);
+             });
+
+        
+        selected = d;
+        selectedID = d.objectID;
+        selectedVisual = visual;
+    }
 
     function updateSVGTransform() {
         ssg.attr('transform', 'translate(' + tx + ',' + ty + ') scale(' + scale + ',' + scale + ')');
@@ -196,9 +269,9 @@ function newGraphView(v) {
         updateSVGTransform();
     });
 
-    cc.bind("contextmenu", function (e) {
+    /*cc.bind("contextmenu", function (e) {
         return false;
-    });
+    });*/
 
     cc.mousedown(function (m) {
         if (m.which === 3) {
@@ -667,6 +740,7 @@ function newGraphView(v) {
                 });
 
 
+             
 
 
             /*node.append("rect")
@@ -699,6 +773,14 @@ function newGraphView(v) {
                     dy: "4em"
                 }).text(d.name);
             });
+            
+            svg.selectAll(".node").each(function(n) {
+                if (n.objectID === selectedID) {
+                    selected = n;
+                    selectedVisual = this;
+                }
+                return true;
+             });
             
             link.each(function(l) {
                 var sw = ((l.style) && (l.style.strokeWidth)) ? l.style.strokeWidth : 3;
@@ -774,9 +856,7 @@ function newGraphView(v) {
             node.on("click", function (d) {
                 if (d3.event.defaultPrevented)
                     return; // ignore drag
-                var oid = d.objectID;
-                if (oid)
-                    newPopupObjectView(oid);
+                selectNode(d, d3.select(this));
             });
             
             loadPositions();
@@ -790,6 +870,7 @@ function newGraphView(v) {
             });
 
             later(function() {
+                selectNode();
                 
                 _.each(nodeTags, function(v, k) {
                     if (nodeScale[k]===undefined) {
