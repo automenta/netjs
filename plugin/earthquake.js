@@ -66,6 +66,7 @@ exports.plugin = function($N) {
 
 
             function update() {
+                
                 //OLD URL: 'http://earthquake.usgs.gov/earthquakes/catalogs/eqs7day-M5.xml'
                 web.RSSFeed($N, feedURL, function(eq, a) {
 

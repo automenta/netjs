@@ -515,16 +515,16 @@ function renderLeafletMap(v) {
                         var op = 1.0;
                         if (ww) {
                             var daysAgo = (currentMapNow - ww) / 1000.0 / 60.0 / 60.0 / 24.0;
-                            op = Math.pow((daysAgo + 1) / 7.0, -1);
+                            op = Math.pow((daysAgo + 1) / 12.0, -1);
                         }
                         op *= 0.75;
+                        if (op < 0.1) op = 0.1;
 
                         var r = Math.pow(depthKM / 10.0, -1); //redness: more red = closer to surface
                         var g = 1 - r;
                         var b = 0;
                         var a = 1.0;
-
-
+                                                
                         var eqCircle = L.circle([s.lat, s.lon], rad, {
                             stroke: true,
                             color: 'black',
@@ -534,9 +534,9 @@ function renderLeafletMap(v) {
                             fillOpacity: op
                         });
 
-                        nobjectLayer.addLayer(eqCircle);
+                        m.extraGeometry = [ eqCircle ];
 
-                        ipx = parseInt(10 + mag * 6.0);
+                        //ipx = parseInt(10 + mag * 6.0);
                     }
                     m.setIcon(getIcon(getTagIcon(x, ipx)));
                 }
@@ -555,19 +555,26 @@ function renderLeafletMap(v) {
     }
     
     function updateMap() {
-        nobjectLayer.clearLayers();
 
-
-        renderItems(v, MAP_MAX_ITEMS, function(s, v, xxrr) {
+        renderItems(v, MAP_MAX_ITEMS, function(s, v, xxrr) {            
+            nobjectLayer.clearLayers();
+            
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 //var r = xxrr[i][1];
                 
                 var m = getMarker(x);
-                if (m)
+                if (m) {
                     nobjectLayer.addLayer(m);
+                    if (m.extraGeometry) {
+                        for (var j = 0; j < m.extraGeometry.length; j++) {
+                            nobjectLayer.addLayer(m.extraGeometry[j]);                            
+                        }
+                    }
+                }
 
             }
+ 
         });
 
         var focus = $N.get('focus');

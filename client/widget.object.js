@@ -1235,7 +1235,7 @@ function newObjectView(x, options) {
                     if (!nameClickable) {
                         haxn.prepend(an, ': ');
                     } else {
-                        haxn.prepend(newEle('a').html(an + ' ').click(function() {
+                        haxn.prepend(newEle('a').html(an).click(function() {
                             newPopupObjectView(a, true);         
                             return false;
                         }), ':&nbsp;');
