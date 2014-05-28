@@ -1222,9 +1222,11 @@ exports.start = function(options) {
     });*/
 
     function compactObjects(list) {
-        return list.map(function(o) {
+        return list.map(util.objCompact);
+        
+        /*return list.map(function(o) {
             return util.objCompact(o);
-        });
+        });*/
     }
 
     function objCanSendTo(o, cid) {

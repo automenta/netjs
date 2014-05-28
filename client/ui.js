@@ -336,7 +336,7 @@ function _updateView(force) {
         if (currentView.destroy)
             currentView.destroy();
         
-    vw.hide();
+    vw.detach();
     later(function() {
         vw.remove();
     });
@@ -346,22 +346,17 @@ function _updateView(force) {
     $('#ViewOptions').empty();
     $('#ViewMenu').empty();
 
-    //updateIndent(false);
 
     $('#MainMenu a').removeClass('ViewActive');
     $('#' + view).addClass('ViewActive');
 
     var v = newDiv('View').appendTo($('body'));
 
-    v.css('font-size', '100%');
-    /*v.removeClass('ui-widget-content overflow-hidden nobg');
-    v.removeClass('view-indented overthrow');*/
 
     function indent() {
         v.addClass('overthrow view-indented');
         updateIndent($('#MainMenu').is(":visible"));
     }
-
 
     if (view === 'browse') {
         indent();
