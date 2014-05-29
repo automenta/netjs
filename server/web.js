@@ -865,7 +865,7 @@ exports.start = function(options) {
     }
     ));
     
-    var google_key = options.google_key;
+    var google_key = options.permissions.google_key;
     if (google_key) {
         google_key = google_key.split(':');
         var clientID = google_key[0];
