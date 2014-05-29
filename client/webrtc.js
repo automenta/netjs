@@ -7,6 +7,30 @@ function initWebRTC(w) {
     }
     
     webrtc = new Peer( {host: window.location.hostname, port: w.port, path: '/n'});
+    // stun.stunprotocol.org (UDP and TCP ports 3478).
+    /* https://gist.github.com/yetithefoot/7592580
+     *  {url:'stun:stun01.sipphone.com'},
+        {url:'stun:stun.ekiga.net'},
+        {url:'stun:stun.fwdnet.net'},
+        {url:'stun:stun.ideasip.com'},
+        {url:'stun:stun.iptel.org'},
+        {url:'stun:stun.rixtelecom.se'},
+        {url:'stun:stun.schlund.de'},
+        {url:'stun:stun.l.google.com:19302'},
+        {url:'stun:stun1.l.google.com:19302'},
+        {url:'stun:stun2.l.google.com:19302'},
+        {url:'stun:stun3.l.google.com:19302'},
+        {url:'stun:stun4.l.google.com:19302'},
+        {url:'stun:stunserver.org'},
+        {url:'stun:stun.softjoys.com'},
+        {url:'stun:stun.voiparound.com'},
+        {url:'stun:stun.voipbuster.com'},
+        {url:'stun:stun.voipstunt.com'},
+        {url:'stun:stun.voxgratia.org'},
+        {url:'stun:stun.xten.com'},
+     * 
+     */
+
     webrtc.on('open', function(id) {
         $N.channelSend("webrtc", { a: $N.id(), w: Date.now(), m: id } );
         $N.channelSend("main", { a: $N.id(), w: Date.now(), m: 'WebRTC connected (' + id + ')' } );
@@ -144,6 +168,7 @@ function webRTCVideo(callPeer, target, callback) {
 //http://simplewebrtc.com/
 //https://github.com/HenrikJoreteg/getScreenMedia
 //https://github.com/peers/peerjs/blob/master/examples/videochat/index.html
+//http://www.html5rocks.com/en/tutorials/webrtc/datachannels/ file transfers
 /*
  * <html>
 <head>

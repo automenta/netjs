@@ -693,8 +693,7 @@ exports.start = function(options) {
     //PASSPORT -------------------------------------------------------------- 
     var passport = require('passport')
             , OpenIDStrategy = require('passport-openid').Strategy
-            , GoogleStrategy = require('passport-google').Strategy;
-
+            , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
     var cookieParser = require('cookie-parser')('netention0');
     var bodyParser = require('body-parser');
@@ -865,23 +864,23 @@ exports.start = function(options) {
         // });
     }
     ));
-
-
-
-    passport.use(new GoogleStrategy({
-        returnURL: 'http://' + $N.server.host + '/auth/google/return',
-        realm: 'http://' + $N.server.host + '/'
-    },
-    function(identifier, profile, done) {
-        //console.log(identifier);
-        //console.log(done);
-        //console.log('google', profile);
-        done(null, {id: identifier, email: profile.emails[0].value});
-        // User.findOrCreate({ openId: identifier }, function(err, user) {
-        // done(err, user);
-        // });
+    
+    var google_key = options.google_key;
+    if (google_key) {
+        google_key = google_key.split(':');
+        var clientID = google_key[0];
+        var clientSecret = google_key[1];
+        passport.use(new GoogleStrategy({
+            clientID: clientID,
+            clientSecret: clientSecret,
+            callbackURL: "http://" + $N.server.host + ":" + $N.server.port + "/auth/google/return"
+          },
+          function(accessToken, refreshToken, profile, done) {
+            done(null, {id: profile.id });
+          }
+        ));
     }
-    ));
+
 
     if (options.permissions.facebook_key) {
         var fbkey = options.permissions.facebook_key.split(":");
@@ -1006,6 +1005,7 @@ exports.start = function(options) {
                 res.redirect('/#');
             }
     );
+
 
     express.get('/auth/google', passport.authenticate('google'));
     express.get('/auth/google/return',

@@ -10,6 +10,33 @@ exports.plugin = function($N) {
         version: '1.0',
         author: 'http://netention.org',
         start: function(options) {
+            
+            var node = smoke.createNode(options);
+            this.node = node;
+            
+            // listen on network events...
+
+            node.on('connect', function() {
+              // Hey, now we have at least one peer!
+
+              // ...and broadcast stuff -- this is an ordinary duplex stream!
+              node.broadcast.write('HEYO! I\'m here');
+            })
+
+            node.on('disconnect', function() {
+              // Bah, all peers gone.
+            })
+
+            // Broadcast is a stream
+            process.stdin.pipe(node.broadcast).pipe(process.stdout)
+
+            // Start the darn thing
+            node.start()
+
+        },
+        
+        stop: function() {
+            this.node.stop();
         }
     };
 };

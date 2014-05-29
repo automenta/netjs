@@ -27,7 +27,7 @@
         "xml2object": "",
         "passport": "",
         "passport-openid": "",
-        "passport-google": "",
+        "passport-google-oauth": "",
         "passport-twitter": "",
         "passport-facebook": "",
         "passport-local": "",
