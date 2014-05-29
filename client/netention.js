@@ -10,11 +10,10 @@ var ID_ANONYMOUS = 1;
 var ID_AUTHENTICATED = 2;
 
 
-function setClientID($N, cid, key, otherSelves) {
+function setClientID(cid, otherSelves) {
     if (cid) {
         $N.set('clientID', cid);
     }
-    $N.set('authorized', key);
     $N.set('otherSelves', _.unique(otherSelves));
 
     /*notify({
@@ -30,11 +29,11 @@ function setClientID($N, cid, key, otherSelves) {
 }
 
 function identity() {
-    var a = getCookie('authenticated');
+    var a = getCookie('account');
     if (a === 'anonymous') {
         return ID_ANONYMOUS;
     }
-    if (a !== 'false') {
+    if (a !== 'undefined') {
         return ID_AUTHENTICATED;
     }
     return ID_UNKNOWN;
@@ -207,7 +206,7 @@ function netention(f) {
 
             function reconnect() {
                 socket.emit('connectID', targetID, function(_cid, _key, _selves) {
-                    setClientID($N, _cid, _key, _selves);
+                    setClientID(_cid, _selves);
                     setCookie('clientID', _cid);
 
                     //socket.emit('subscribe', 'User');
@@ -887,10 +886,10 @@ function netention(f) {
 
     $N.reset();
 
+    //var account = getCookie('account');
     var cid = getCookie('clientID');
-    var keys = getCookie('keys');
     var otherSelves = decodeURIComponent(getCookie('otherSelves')).split(',');
-    setClientID($N, cid, keys, otherSelves);
+    setClientID(cid, otherSelves);
 
     if (configuration.connection == 'websocket') {
         $N.connect(null, function() {

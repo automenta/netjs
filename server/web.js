@@ -470,8 +470,7 @@ exports.start = function(options) {
                     withObjects([]);
                 }
                 else {
-                    withObjects(unpack(docs));                    
-                    withObjects(docs);
+                    withObjects(unpack(docs));
                 }
             });
         });
@@ -672,29 +671,38 @@ exports.start = function(options) {
     }
 
     function sendJSON(res, x, pretty, format) {
-        res.set('Content-type', 'text/json');
+        try {
+            res.set('Content-type', 'text/json');
+        }
+        catch (e) { }
         var p;
         if (!pretty) {
             if (format === 'jsonpack') {
                 p = jsonpack.pack(x);
             }
             else {
-                p = JSON.stringify(x);
+                res.json(x);
+                return;
             }
         }
-        else
+        else {
+            console.error('pretty JSON printing not necessary');
             p = JSON.stringify(x, null, 4);
+        }
         res.end(p);
     }
 
     http.globalAgent.maxSockets = 512;
 
 
+    var bodyParser = require('body-parser');
 
     var cookieSession = require('cookie-session');
+    
+    
     var Lockit = require('lockit');
-    var lockitUtils = require('lockit-utils');
-    var bodyParser = require('body-parser');
+    //var lockitUtils = require('lockit-utils');
+    
     
     var security = require('./security.js');
     security.db = {
@@ -712,13 +720,12 @@ exports.start = function(options) {
     express.set('views', './server/views');
     var lockit = new Lockit(security);
     
-    var cookieParser = require('cookie-parser')();
+    var cookieParser = require('cookie-parser')("abc123__");
 
-    express.use(cookieParser);
+    express.use(cookieParser);    
     express.use(cookieSession({
-        secret: 'c655de8a793caff12405'
+        secret: 'abc123__'
     }));
-
 
     express.use(bodyParser.json({strict: false}));
     express.use(require('parted')()); //needed for file uploads
@@ -786,30 +793,6 @@ exports.start = function(options) {
     ]);
     //io.set("polling duration", 5);
 
-    /*var sessionStore = require('express-session').MemoryStore();
-     var SessionSockets = require('session.socket.io')
-     , sessionSockets = new SessionSockets(io, sessionStore, cookieParser);*/
-
-    io.set('authorization', function(handshakeData, accept) {
-
-        if (handshakeData.headers.cookie) {
-
-            handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
-
-            if (handshakeData.cookie['express.sid'])
-                handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
-
-            /*if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
-             return accept('Cookie is invalid.', false);
-             }*/
-
-        } else {
-            return accept('No cookie transmitted.', false);
-        }
-
-        accept(null, true);
-    });
-
 
 
     //https://github.com/gevorg/http-authenticate
@@ -827,10 +810,17 @@ exports.start = function(options) {
 
     var users = {};
 
-
-
-/*
-    var getCookies = function(request) {
+    function parseCookies(c) {
+        var cookies = { };
+        c.split(';').forEach(function(cookie) {
+            var parts = cookie.match(/(.*?)=(.*)$/);
+            if (parts)
+                if (parts.length === 3)
+                    cookies[ parts[1].trim() ] = (parts[2] || '').trim();
+        });        
+        return cookies;
+    }
+    var getCookies = function(request) {                
         var cookies = {};
         if (request)
             if (request.headers)
@@ -838,55 +828,63 @@ exports.start = function(options) {
                     request.headers && request.headers.cookie.split(';').forEach(function(cookie) {
                         var parts = cookie.match(/(.*?)=(.*)$/);
                         if (parts)
-                            if (parts.length == 3)
+                            if (parts.length === 3)
                                 cookies[ parts[1].trim() ] = (parts[2] || '').trim();
                     });
                 }
         return cookies;
-    };*/
-    express.get('/whoami', lockitUtils.restrict(security), function(req, res) {
-      /*res.json({
+    };
+    /*express.get('/whoami2', lockitUtils.restrict(security), function(req, res) {
+      sendJSON(res, req.session);
+        //res.json(req.session);
+    });*/
+    express.get('/whoami', function(req, res) {
+                /*res.json({
         name: req.session.name
       });*/
-        res.json(req.session);
+      sendJSON(res, req.session);
+        //res.json(req.session);
+    });
+   
+    /*lockit.on('login', function(user, res, target) {
+    });*/
+
+    lockit.on('logout', function(user, res) {
+        res.clearCookie('account');
+        res.clearCookie('clientID');
+        res.clearCookie('otherSelves');
+        res.redirect('/');
     });
 
     express.get('/', function(req, res) {
-        //console.log('auth cookie', res.cookie('authenticated'));
+        var account = getSessionKey(req);
+        
+        var anonymous = (account==="anonymous");
+        
+        var possibleClients = getClientSelves(account);
+        var cid = getCurrentClientID(account);
+        
 
-        var cookies = getCookies(req);
-
-        var anonymous = false;
-        if (req.headers.cookie)
-            if (cookies['authenticated'] === 'anonymous')
-                anonymous = true;
-
-        var key = getSessionKey(req);
-
-        //Authenticated but no clientID specified
-        var cid = getCurrentClientID(key);
-        var possibleClients = getClientSelves(key);
-        if (!possibleClients)
-            possibleClients = [];
-
+        /*
         if (!anonymous) {
             res.cookie('authenticated', key != undefined);
         }
         else {
             res.cookie('authenticated', 'anonymous');
         }
+        */
+        res.cookie('account', account);
         res.cookie('clientID', cid);
-
         res.cookie('otherSelves', possibleClients.join(','));
-
+       
         res.sendfile('./client/index.html');
     });
 
     express.get('/anonymous', function(req, res) {
         if (options.permissions.enableAnonymous) {
-            res.cookie('authenticated', 'anonymous');
+            res.cookie('account', 'anonymous');
             res.cookie('clientID', '');
-            req.session.cookie.expires = false;
+            //req.session.cookie.expires = false;
 
             res.redirect("/");
         }
@@ -894,6 +892,7 @@ exports.start = function(options) {
             res.send('Anonymous disabled');
 
     });
+    
     express.get('/client_configuration.js', function(req, res) {
         var configFile = 'netention.client.js';
 
@@ -913,14 +912,14 @@ exports.start = function(options) {
         });
     });
 
-
+/*
     express.post('/login',            
             function(req, res) {
                 var username = req.body.username;
                 var password = req.body.password;
                 
                 function done(id) {
-                    res.cookie('authenticated', 1 );
+                    res.cookie('account', 1 );
                     res.cookie('userid', id );
                     res.end('');
                 }
@@ -956,7 +955,7 @@ exports.start = function(options) {
                 }
             }
     );
-
+*/
 
 
     var oneDay = 86400000;
@@ -1031,25 +1030,24 @@ exports.start = function(options) {
         });
     });
 
-
-    function getSessionKey(req) {
-        if (!req)
-            return undefined;
-
+    function getSessionKey(req) {       
         if (typeof req === "string")
             return req;
-
-        var cookies = getCookies(req);
-        var userid = cookies['userid'];
-        if (!userid)
-            return null;
-        return decodeURIComponent(userid);
+        
+        if (!req)
+            return undefined;
+        if (req.session) {
+            var sessionID = req.session._ctx.cookies['express:sess'];            
+            return req.session.name;
+        }
+        return null;
     }
 
     function getCurrentClientID(req) {
         if (!req)
             return null;
-
+        
+        
         var cookies = getCookies(req);
 
         if (/*($N.server.currentClientID === undefined) ||*/ ($N.server.users === undefined)) {
@@ -1058,45 +1056,41 @@ exports.start = function(options) {
         }
 
         var key = getSessionKey(req);
-        if (!key) {
+        if (!key) return null;
+        /*if (!key) {
             key = 'anonymous';
-        }
+        }*/
 
-        if (!cookies.authenticated)
-            return null;
+        var cid = cookies.clientID;
 
-        var cid;
-        if (cookies.authenticated) {
-            cid = cookies.clientID;
-            if ((cid) && ($N.server.users[key])) {
-                if ($N.server.users[key].indexOf(cid) === -1) {
-                    //they are trying to spoof the clientID, deny access because key is invalid
-                    return null;
-                }
+        if ((cid) && ($N.server.users[key])) {
+            if ($N.server.users[key].indexOf(cid) === -1) {
+                //they are trying to spoof the clientID, deny access because key is invalid
+                //or they have the wrong clientID in their cookie
+                cid = null;
             }
         }
 
+        //default to the first, if exists
         if (!cid) {
             if ($N.server.users[key]) {
                 cid = $N.server.users[key][0];
             }
         }
 
+        //otherwise create an initial user for that key
         if (!cid) {
             cid = util.uuid();
             $N.server.users[key] = [cid];
-            //$N.server.currentClientID[key] = cid;
             saveState();
         }
-
+        
         return cid;
     }
 
     function addClientSelf(req, uid) {
-        var key = getSessionKey(req);
-        if ((!key) || (key === '')) {
-            key = 'anonymous';
-        }
+        var key = getSessionKey(req) || 'anonymous';
+        
         if (!$N.server.users)
             $N.server.users = {};
 
@@ -1115,14 +1109,16 @@ exports.start = function(options) {
 
     }
     function getClientSelves(req) {
+        var key = getSessionKey(req);// || 'anonymous';
+        if (!key) return [];
+
         if (!$N.server.users)
             $N.server.users = {};
-
-        if (!$N.server.users['anonymous']) {
-            $N.server.users['anonymous'] = [];
+       
+        if (!$N.server.users[key]) {
+            $N.server.users[key] = [];
         }
-
-        var key = getSessionKey(req) || 'anonymous';
+        
         return $N.server.users[key];
     }
 
@@ -1175,7 +1171,7 @@ exports.start = function(options) {
 
     function objAccessFilter(objs, req, withObjects) {
         var cid = getCurrentClientID(req);
-
+        
         //console.log('objAccessFilter', cid, getClientSelves(req), getSessionKey(req));
 
         withObjects(_.filter(objs, function(o) {
@@ -1654,14 +1650,6 @@ exports.start = function(options) {
         //console.log(request.body.user.email);
 
     });
-    express.get('/logout', function(req, res) {
-        res.clearCookie('authenticated');
-        res.clearCookie('clientID');
-        res.clearCookie('otherSelves');
-        res.clearCookie('userid');
-        req.logout();
-        res.redirect('/');
-    });
 
     express.get('/report', function(req, res) {
         getReport(
@@ -1799,9 +1787,20 @@ exports.start = function(options) {
         }
     }
     $N.pubAll = pubAll;
-
-
-    //    sessionSockets.on('connection', function(err, socket, session) {
+    
+    io.set('authorization', function(handshakeData, callback) {
+        var cookies = getCookies(handshakeData);
+        
+        var session = cookies['express:sess'];
+        var account = cookies['account'];
+        //TODO validate that session is consistent with the account
+        
+        callback(null, true);
+        //use handshakeData to authorize this connection
+        //Node.js style "cb". ie: if auth is not successful, then cb('Not Successful');
+        //else cb(null, true); //2nd param "true" matters, i guess!!
+    });
+    
     io.sockets.on('connection', function(socket) {
 
         var request;
@@ -1810,8 +1809,9 @@ exports.start = function(options) {
         else
             request = socket.conn.request;
 
-        var session = getSessionKey(request);
-
+        var account = parseCookies(request.headers.cookie).account;        
+        //TODO validate that the session ID matches the name as authorized
+        
 
         {
             //https://github.com/LearnBoost/socket.io/wiki/Rooms
@@ -1824,13 +1824,12 @@ exports.start = function(options) {
 
             socket.on('pub', function(message, err, success) {
                 if ($N.server.permissions['authenticate_to_create_objects'] !== false) {
-                    if (!session) {
+                    if (!account) {
                         if (err)
                             err('Not authenticated');
                     }
                 }
 
-                //var currentUser = getCurrentClientID(session);
                 //TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
 
                 if (message.f) {
@@ -1863,7 +1862,7 @@ exports.start = function(options) {
              return;
              }
              if ($N.server.permissions['authenticate_to_configure_plugins'] != false) {
-             if (!isAuthenticated(session)) {
+             if (!isAuthenticated(account)) {
              callback('Unable to configure plugins (not logged in)');
              return;
              }
@@ -1918,7 +1917,7 @@ exports.start = function(options) {
                 onResult = function(nextID) {
                     var oldID = socket.clientID;
 
-                    if (oldID != nextID) {
+                    if (oldID !== nextID) {
                         updateUserConnection(oldID, nextID, socket);
                         plugins("onConnect", {id: nextID, prevID: oldID});
                     }
@@ -1927,8 +1926,8 @@ exports.start = function(options) {
                 };
 
                 function pubAndSucceed(x) {
-                    pub(x, function() {
-                        addClientSelf(request, targetObjectID);
+                    pub(x, function() {                        
+                        addClientSelf(account, targetObjectID);
                         saveState();
                         if (onResult)
                             onResult(targetObjectID);
@@ -1937,7 +1936,7 @@ exports.start = function(options) {
 
                 var keyRequired = ($N.server.permissions['authenticate_to_create_profiles'] != false);
                 if (!targetObject) {
-                    var selves = getClientSelves(session);
+                    var selves = getClientSelves(account);
                     if (_.contains(selves, target)) {
                         if (onResult)
                             onResult(targetObjectID);
@@ -1954,7 +1953,7 @@ exports.start = function(options) {
 
                 }
                 else {
-                    if ((keyRequired && session) || (!keyRequired)) {
+                    if ((keyRequired && account) || (!keyRequired)) {
                         pubAndSucceed(targetObject);
                     }
                     else {
@@ -1966,21 +1965,19 @@ exports.start = function(options) {
             });
 
             socket.on('connectID', function(cid, callback) {
-                var key = null, email = null;
 
-                var key = getSessionKey(request);
                 if (!cid) {
                     //Authenticated but no clientID specified
-                    cid = getCurrentClientID(key);
+                    cid = getCurrentClientID(account);
                     if (!cid) {
-                        var possibleClients = getClientSelves(key);
+                        var possibleClients = getClientSelves(account);
                         if (possibleClients)
                             cid = possibleClients[possibleClients.length - 1];
                     }
                 }
                 else {
                     //Authenticated and clientID specified, check that the user actually owns that clientID
-                    var possibleClients = getClientSelves(key);
+                    var possibleClients = getClientSelves(account);
                     if (possibleClients) {
                         if (_.contains(possibleClients, cid)) {
                         }
@@ -1990,7 +1987,7 @@ exports.start = function(options) {
                     }
                 }
 
-                var selves = getClientSelves(key);
+                var selves = getClientSelves(account);
 
                 updateUserConnection(null, cid, socket);
                 plugins("onConnect", {id: cid});
@@ -2015,7 +2012,7 @@ exports.start = function(options) {
 
                 socket.clientID = cid;
 
-                callback(cid, key, selves);
+                callback(cid, account, selves);
 
             });
 
@@ -2061,7 +2058,7 @@ exports.start = function(options) {
 
             socket.on('delete', function(objectID, whenFinished) {
                 /*if ($N.server.permissions['authenticate_to_delete_objects'] != false) {
-                 if (!isAuthenticated(session)) {
+                 if (!isAuthenticated(account)) {
                  whenFinished('Unable to delete (not logged in)');
                  return;
                  }
@@ -2077,7 +2074,7 @@ exports.start = function(options) {
                     deleteObject(objectID, whenFinished, null, socket.clientID);
                 }
                 else {
-                    var os = getClientSelves(session);
+                    var os = getClientSelves(account);
                     if (_.contains(os, objectID)) {
                         deleteObject(objectID, whenFinished, null, socket.clientID);
                     }

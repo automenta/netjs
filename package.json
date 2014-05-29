@@ -22,6 +22,8 @@
         "connect": "",
         "request": "",
         "socket.io": "",
+        "session.socket.io-express4":"",
+        "connect-mongo":"",
         "compression": "",
         "always": "",
         "mongojs": "",

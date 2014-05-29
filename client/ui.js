@@ -26,9 +26,6 @@ $.ajaxSetup({
 var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
 var stack_bottomright = {"dir1": "left", "dir2": "up", "push": "top"};
 
-var TogetherJS;
-
-
 var updateView;
 
 var lastView = null;
@@ -613,6 +610,11 @@ $('#NotificationArea').html('Loading...');
 
 $(document).ready(function() {
 
+    if (identity()===0) {
+        //$('#login').show();
+        window.location = '/login';
+    }
+
     if (!configuration.enableAnonymous)
         $('#AnonymousLoginButton').hide();
     
@@ -631,14 +633,6 @@ $(document).ready(function() {
 
     $(window).resize(whenResized);
     whenResized();
-
-    if (configuration.enableTogetherJS) {
-        loadJS('https://togetherjs.com/togetherjs-min.js');
-        $('#TogetherJSTalk').show();
-    }
-    else {
-        TogetherJS = null;
-    }
 
 
 
@@ -662,9 +656,6 @@ $(document).ready(function() {
         $('#password-login').fadeIn();
     });
     
-    if (identity()===0) {
-        $('#login').show();
-    }
     
     $('#password-login-login').click(function() {
         var u = $('#login_email').val();
