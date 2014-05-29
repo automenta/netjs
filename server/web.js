@@ -55,7 +55,7 @@ exports.start = function(options) {
 
 
     //"mydb"; // "username:password@example.com/mydb"
-    var dbURL = $N.server.databaseURL || process.env.MongoURL;
+    var dbURL = $N.server.databaseHost + "/" + $N.server.database; //|| process.env.MongoURL;
     var db = mongo.connect(dbURL, ["obj", "sys"]);
 
 
@@ -167,7 +167,8 @@ exports.start = function(options) {
             interestTime: $N.server.interestTime,
             clientState: $N.server.clientState,
             users: $N.server.users,
-            modifiedAt: Date.now()
+            modifiedAt: Date.now(),
+            anonymousUserExists: $N.server.anonymousUserExists
         };
         db.sys.update({id: "state"}, state, {upsert: true}, function(err, saved) {
             if (err || !saved) {
@@ -200,6 +201,7 @@ exports.start = function(options) {
                 $N.server.interestTime = x.interestTime;
                 $N.server.clientState = x.clientState;
                 $N.server.users = x.users || {};
+                $N.server.anonymousUserExists = x.anonymousUserExists;
                 //$N.server.currentClientID = x.currentClientID || {};
                 //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
 
@@ -700,14 +702,12 @@ exports.start = function(options) {
     var cookieSession = require('cookie-session');
     
     
-    var Lockit = require('lockit');
-    //var lockitUtils = require('lockit-utils');
     
     
     var security = require('./security.js');
     security.db = {
-        url: "mongodb://" + options.databaseURL,
-        name: '',
+        url: "mongodb://" + options.databaseHost + '/',
+        name: options.database,
         collection: 'users'
     };
     security.emailSettings = options.email;
@@ -718,8 +718,11 @@ exports.start = function(options) {
 
     express.set('view engine', 'jade');
     express.set('views', './server/views');
-    var lockit = new Lockit(security);
     
+    var Lockit = require('lockit');
+    //var lockitUtils = require('lockit-utils');
+    var lockit = new Lockit(security);
+
     var cookieParser = require('cookie-parser')("abc123__");
 
     express.use(cookieParser);    
@@ -731,9 +734,10 @@ exports.start = function(options) {
     express.use(require('parted')()); //needed for file uploads
     express.disable('x-powered-by');
 
-
     express.use(lockit.router);
 
+    
+  
     //SHAREJS -----------------------------
     /*var sharejs = require('share').server;
      
@@ -880,6 +884,7 @@ exports.start = function(options) {
         res.sendfile('./client/index.html');
     });
 
+    /*
     express.get('/anonymous', function(req, res) {
         if (options.permissions.enableAnonymous) {
             res.cookie('account', 'anonymous');
@@ -891,7 +896,7 @@ exports.start = function(options) {
         else
             res.send('Anonymous disabled');
 
-    });
+    });*/
     
     express.get('/client_configuration.js', function(req, res) {
         var configFile = 'netention.client.js';
@@ -2282,6 +2287,43 @@ exports.start = function(options) {
             getObjectsByTag('Trust', function(to) {
                 $N.add(to);    
             }, function() {
+
+                if (options.permissions.enableAnonymous && (!$N.server.anonymousUserExists)) {  
+                    setTimeout(function() {
+                        //TODO keep waiting until lockit.adapter.db exists.. since there is no callback
+                        //console.log(lockit.adapter.db);
+
+                        lockit.adapter.find('name', 'anonymous', function(err, user) {
+                            if (err) {
+                                console.log('create anonymous user: error', err);
+                                return;
+                            }
+                            if (!user) {
+                                //console.log('anonymous user does not exist');
+                                lockit.adapter.save('anonymous','anonymous@anonymous.null','anonymous', function(err, user) {
+                                    //console.log('anonymous user created. err=', err, 'user=', user);
+
+                                    /*"emailVerificationTimestamp" : ISODate("2014-05-29T07:52:09.983Z"), "emailVerified" : true,
+                                    { "name" : "anonymous", "email" : "anonymous@anonymous.null", "signupToken" : "d3a6aec4-ad70-4770-9841-8556193333be", "signupTimestamp" : ISODate("2014-05-29T17:48:36.992Z"), "signupTokenExpires" : ISODate("2014-05-30T17:48:36.993Z"), "failedLoginAttempts" : 0, "salt" : "7bb4796276950668a603118e3ea943e1", "derived_key" : "ef49f775532f12a55a47daea158ef9fcfe2076c0", "_id" : ObjectId("538772f446eba3ca0e2c460c") }*/
+
+                                    user.emailVerified = true;
+                                    delete user.signupToken;
+                                    delete user.signupTokenExpires;
+                                    lockit.adapter.update(user, function() {  
+                                        $N.server.anonymousUserExists = true;
+                                        saveState();
+                                    });
+                                });                                
+                            }
+                            else {
+                                //console.log('anonymous user exists', user);
+                                $N.server.anonymousUserExists = true;
+                                saveState();
+                            }
+                        });
+                    }, 500);
+                }
+                    
 
                 loadPlugins();
                 

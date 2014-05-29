@@ -29,12 +29,11 @@ Designed to serve clients and connect to other servers and services to form an o
  * **Anonymous access** (optionally disabled)
    * One-click entry: No password or credentials
    * All anonymous users share a set of Selves
- * **Authentication access** (_Passport.js_)
-   * E-Mail/Password
-   * OpenID
-   * Google Accounts
-   * Facebook
-   * _TODO:_ Twitter
+ * **Authentication access** (_lockit_)
+   * E-Mail verification
+   * Change password
+   * Remind password
+   * Delete account
  * **Site-wide password** (HTTP Basic authentication, optional)
  * **User Objects** - Create, edit, remove, and publish
  * **Uploaded files** - stored and served

@@ -55,11 +55,24 @@ function openSelectProfileModal(title) {
     
     $('#LoadingSplash').show();
     
+    var s;
+    var ident = identity();
+    if (ident == ID_AUTHENTICATED) {
+        s = 'Authenticated: ' + getCookie('account');
+    }
+    else if (ident == ID_ANONYMOUS) {
+        s = 'Anonymous';
+    }
+    else {
+        s = 'Unidentified';
+    }
+    
     $('#LoadingSplashTitle').html(
             (configuration.connection == 'local') ?
             '' :
-            'Authenticated: ' + getCookie('authenticated')
+            s
             );
+    
     $('#LoadingSplashTitle').append(
             (configuration.connection == 'local') ?
             '' :
