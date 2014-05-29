@@ -1006,15 +1006,16 @@ exports.start = function(options) {
             }
     );
 
+    express.get('/auth/google',
+        passport.authenticate('google', { scope: ['https://www.google.com/m8/feeds']}));
 
-    express.get('/auth/google', passport.authenticate('google'));
     express.get('/auth/google/return',
-            passport.authenticate('google', {_successRedirect: '/#', failureRedirect: '/'}),
             function(req, res) {
-                res.cookie('userid', req.user.id);
+                res.cookie('userid', req.params.code);
                 res.redirect('/#');
             }
     );
+
     // -------------------------------------------------------------- PASSPORT 
 
 
