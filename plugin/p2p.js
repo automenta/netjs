@@ -2,7 +2,6 @@
 
 exports.plugin = function($N) {
     //https://github.com/marcelklehr/smokesignal
-    var p2p = require('smokesignal');
 
     return {
         name: 'P2P Network',
@@ -11,33 +10,39 @@ exports.plugin = function($N) {
         author: 'http://netention.org',
         start: function(options) {
 
+            var p2p = require('smokesignal');
             options.address = p2p.localIp(options.address);
             
             var node = p2p.createNode(options);
             this.node = node;
             
             // listen on network events...
+            console.log('IP', node.options.address, 'ID', node.id)
 
             node.on('connect', function() {
               // Hey, now we have at least one peer!
-
+              console.log(node.id, 'CONNECTED', node.peers.list.length);
+              
               // ...and broadcast stuff -- this is an ordinary duplex stream!
-              node.broadcast.write('HEYO! I\'m here');
+              //node.broadcast.write('a');
             })
 
             node.on('disconnect', function() {
-              // Bah, all peers gone.
+              console.log('disconnected');
             })
+            
+            node.on('new peer', function(p) { console.log('new peer', p.id); } );
 
             // Broadcast is a stream
             process.stdin.pipe(node.broadcast).pipe(process.stdout)
 
-            // Start the darn thing
+            console.log('starting');
             node.start()
 
         },
         
         stop: function() {
+            console.log('stopping');
             this.node.stop();
         }
     };

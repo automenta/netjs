@@ -19,3 +19,8 @@ var b = require('../core.js').start({
         }
     }
 });
+
+
+setTimeout(function() {
+    console.log('done');
+}, 10000);

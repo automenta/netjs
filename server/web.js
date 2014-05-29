@@ -687,28 +687,45 @@ exports.start = function(options) {
         res.end(p);
     }
 
-    http.globalAgent.maxSockets = 256;
+    http.globalAgent.maxSockets = 512;
 
 
-    //PASSPORT -------------------------------------------------------------- 
-    var passport = require('passport')
-            , OpenIDStrategy = require('passport-openid').Strategy;
 
-    var cookieParser = require('cookie-parser')('netention0');
+    var cookieSession = require('cookie-session');
+    var Lockit = require('lockit');
+    var lockitUtils = require('lockit-utils');
     var bodyParser = require('body-parser');
+    
+    var security = require('./security.js');
+    security.db = {
+        url: "mongodb://" + options.databaseURL,
+        name: '',
+        collection: 'users'
+    };
+    security.emailSettings = options.email;
+
+    security.appname = options.name;
+    security.url = "http://" + options.host + ((options.port!=80) ? ":" + options.port : '');
+    security.emailFrom = "info@" + options.host;
+
+    express.set('view engine', 'jade');
+    express.set('views', './server/views');
+    var lockit = new Lockit(security);
+    
+    var cookieParser = require('cookie-parser')();
 
     express.use(cookieParser);
-    //express.use(bodyParser({limit: '1mb', strict: false}));
+    express.use(cookieSession({
+        secret: 'c655de8a793caff12405'
+    }));
+
+
     express.use(bodyParser.json({strict: false}));
     express.use(require('parted')()); //needed for file uploads
-    express.use(require('express-session')({secret: 'secret', key: 'express.sid', cookie: {secure: true}}));
-    express.use(passport.initialize());
-    express.use(passport.session());
     express.disable('x-powered-by');
 
 
-    var httpServer = http.createServer(express);
-
+    express.use(lockit.router);
 
     //SHAREJS -----------------------------
     /*var sharejs = require('share').server;
@@ -732,6 +749,8 @@ exports.start = function(options) {
     else {
         express.use(require('connect-dyncache')());
     }
+    
+    var httpServer = http.createServer(express);
 
 
     var io = require('socket.io')(httpServer, {
@@ -808,67 +827,9 @@ exports.start = function(options) {
 
     var users = {};
 
-    passport.serializeUser(function(user, done) {
-        done(null, user.id);
-    });
-
-    passport.deserializeUser(function(id, done) {
-        done(null, {'id': id});
-    });
-
-    /*
-    passport.use(new OpenIDStrategy({
-        returnURL: 'http://' + $N.server.host + '/auth/openid/return',
-        realm: 'http://' + $N.server.host + '/'
-    },
-    function(identifier, done) {
-        //console.log(identifier);
-        //console.log(done);
-        done(null, {id: identifier});
-        // User.findOrCreate({ openId: identifier }, function(err, user) {
-        // done(err, user);
-        // });
-    }
-    ));
-    */
-    
-    /*
-    var google_key = options.permissions.google_key;
-    if (google_key) {
-        google_key = google_key.split(':');
-        var clientID = google_key[0];
-        var clientSecret = google_key[1];
-        passport.use(new GoogleStrategy({
-            clientID: clientID,
-            clientSecret: clientSecret,
-            callbackURL: "http://" + $N.server.host + ":" + $N.server.port + "/auth/google/return"
-          },
-          function(accessToken, refreshToken, profile, done) {
-            done(null, {id: profile.id });
-          }
-        ));
-    }
-    */
-
-    if (options.permissions.facebook_key) {
-        var fbkey = options.permissions.facebook_key.split(":");
-        var appid = fbkey[0];
-        var appsecret = fbkey[1];
-
-        var FacebookStrategy = require('passport-facebook').Strategy;
-
-        passport.use(new FacebookStrategy({
-            clientID: appid,
-            clientSecret: appsecret,
-            callbackURL: "http://" + $N.server.host + "/auth/facebook/callback"
-        },
-        function(accessToken, refreshToken, profile, done) {
-            done(null, {id: accessToken});
-        }
-        ));
-    }
 
 
+/*
     var getCookies = function(request) {
         var cookies = {};
         if (request)
@@ -882,7 +843,13 @@ exports.start = function(options) {
                     });
                 }
         return cookies;
-    };
+    };*/
+    express.get('/whoami', lockitUtils.restrict(security), function(req, res) {
+      /*res.json({
+        name: req.session.name
+      });*/
+        res.json(req.session);
+    });
 
     express.get('/', function(req, res) {
         //console.log('auth cookie', res.cookie('authenticated'));
@@ -990,66 +957,6 @@ exports.start = function(options) {
             }
     );
 
-
-    // Accept the OpenID identifier and redirect the user to their OpenID
-    // provider for authentication.  When complete, the provider will redirect
-    // the user back to the application at:
-    //     /auth/openid/return
-    express.get('/auth/openid', passport.authenticate('openid'));
-    // The OpenID provider has redirected the user back to the application.
-    // Finish the authentication process by verifying the assertion.  If valid,
-    // the user will be logged in.  Otherwise, authentication has failed.
-    express.get('/auth/openid/return',
-            passport.authenticate('openid', {_successRedirect: '/#', failureRedirect: '/'}),
-            function(req, res) {
-                res.cookie('userid', req.user.id);
-                res.redirect('/#');
-            }
-    );
-
-       /*
-    express.get('/auth/google',
-        passport.authenticate('google', { scope: ['https://www.google.com/m8/feeds']}));
-
-    express.get('/auth/google/return',
-            function(req, res) {
-                res.cookie('userid', req.params.code);
-                res.redirect('/#');
-            }
-    );
-    */
-
-    // -------------------------------------------------------------- PASSPORT 
-
-
-    if (options.permissions.facebook_key) {
-        // Redirect the user to Facebook for authentication.  When complete,
-        // Facebook will redirect the user back to the application at
-        //     /auth/facebook/callback
-        express.get('/auth/facebook', passport.authenticate('facebook'));
-
-        // Facebook will redirect the user to this URL after approval.  Finish the
-        // authentication process by attempting to obtain an access token.  If
-        // access was granted, the user will be logged in.  Otherwise,
-        // authentication has failed.
-        express.get('/auth/facebook/callback',
-                passport.authenticate('facebook', {_successRedirect: '/',
-                    failureRedirect: '/login'}),
-                function(req, res) {
-                    res.cookie('userid', req.user.id);
-                    res.redirect('/#');
-                }
-        );
-    }
-    
-/*
-    express.all('*', function(req, res, next) {
-        //res.header('Access-Control-Allow-Origin', '*');
-        //res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-        //res.header('Access-Control-Allow-Headers', 'Content-Type');
-        next();
-    });
-    */
 
 
     var oneDay = 86400000;
