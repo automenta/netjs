@@ -44,12 +44,14 @@
                             <input type="text" name="openid_identifier"/><input type="submit" value="OpenID Login"/>
                         </form>
                     </div>-->
-                    <div style="float:right"><a href="/anonymous"><img class="LoadingSplashImg" src="icon/anonymous-login.png" alt="Anonymous Login" title="Anonymous Login" /></a></div>
-                    <div id="password-login">
-                        <label>E-Mail:</label><input type="email" id="login_email"/><br/>
-                        <label>Password:</label><input type="password" id="login_password"/><br/>
-                        <button id="password-login-login">Login</button>
-                        <div id="password-login-status"></div>
+                    <div id="login" style="display:none">
+                        <div style="float:right"><a href="/anonymous"><img class="LoadingSplashImg" src="icon/anonymous-login.png" alt="Anonymous Login" title="Anonymous Login" /></a></div>
+                        <div id="password-login">
+                            <label>E-Mail:</label><input type="email" id="login_email"/><br/>
+                            <label>Password:</label><input type="password" id="login_password"/><br/>
+                            <button id="password-login-login">Login</button>
+                            <div id="password-login-status"></div>
+                        </div>
                     </div>
                     <div id="ProfileSelect">
                     </div>

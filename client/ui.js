@@ -661,10 +661,17 @@ $(document).ready(function() {
         $('#openid-login').hide();
         $('#password-login').fadeIn();
     });
+    
+    if (identity()===0) {
+        $('#login').show();
+    }
+    
     $('#password-login-login').click(function() {
         var u = $('#login_email').val();
         var ph = hashpassword($('#login_password').val());
-
+        
+        $('#password-login-status').html('Authorizing...');
+        
         $.post('/login', { username: u, password: ph }, function(r) {
             if (!r) {
                 window.location.reload();
