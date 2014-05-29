@@ -10,8 +10,10 @@ exports.plugin = function($N) {
         version: '1.0',
         author: 'http://netention.org',
         start: function(options) {
+
+            options.address = p2p.localIp(options.address);
             
-            var node = smoke.createNode(options);
+            var node = p2p.createNode(options);
             this.node = node;
             
             // listen on network events...

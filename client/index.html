@@ -30,25 +30,26 @@
                 <div>
                     <img alt="Welcome" id="loginLogo"/>
                     <h3 id="LoadingSplashTitle" style="text-align:center;">Login</h3>
-                    <ul id="AuthSelect">
-                        <li id="AnonymousLoginButton"><a href="/anonymous"><img class="LoadingSplashImg" src="icon/anonymous-login.png" alt="Anonymous Login" title="Anonymous Login" /></a></li>
+                    <!--<ul id="AuthSelect">
                         <li id="LocalLoginButton"><a><img class="LoadingSplashImg" id="password-open" src="icon/password.png" alt="Password Login" title="Password Login" /></a></li>
                         <li><a href="/auth/google"><img class="LoadingSplashImg" src="icon/google.png" alt="Google Login" title="Login with your Google Account" /></a></li>
                         <li><img class="LoadingSplashImg" id="openid-open" src="icon/openid.png" alt="Open ID Login" title="Login with your Open ID" id="openid-toggle" /></li>
                         <li><a href="/auth/facebook"><img class="LoadingSplashImg" src="icon/facebook.png" alt="Facebook Login" title="Login with your Facebook Account" /></a></li>
-                        <li><a href="javascript:alert('Twitter login not supported yet.')"><!--<a href="/auth/twitter">--><img class="LoadingSplashImg" src="icon/twitter.png" alt="Twitter Login" title="Login with your Twitter Account" /></a></li>
-                    </ul>
-                    <div id="openid-login" style="display:none">
+                        <li><a href="javascript:alert('Twitter login not supported yet.')"><!--<a href="/auth/twitter"><img class="LoadingSplashImg" src="icon/twitter.png" alt="Twitter Login" title="Login with your Twitter Account" /></a></li>
+                    </ul>-->
+                    <!--<div id="openid-login" style="display:none">
                         <p>Surprise! You may already have an OpenID. Find out, <a href="http://openid.net/get-an-openid/" target="_blank">click here</a>.</p>
                         <form action="/auth/openid" method="get">
                             <label>OpenID:</label>
                             <input type="text" name="openid_identifier"/><input type="submit" value="OpenID Login"/>
                         </form>
-                    </div>
-                    <div id="password-login" style="display:none">
+                    </div>-->
+                    <div style="float:right"><a href="/anonymous"><img class="LoadingSplashImg" src="icon/anonymous-login.png" alt="Anonymous Login" title="Anonymous Login" /></a></div>
+                    <div id="password-login">
                         <label>E-Mail:</label><input type="email" id="login_email"/><br/>
                         <label>Password:</label><input type="password" id="login_password"/><br/>
                         <button id="password-login-login">Login</button>
+                        <div id="password-login-status"></div>
                     </div>
                     <div id="ProfileSelect">
                     </div>

@@ -692,8 +692,7 @@ exports.start = function(options) {
 
     //PASSPORT -------------------------------------------------------------- 
     var passport = require('passport')
-            , OpenIDStrategy = require('passport-openid').Strategy
-            , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+            , OpenIDStrategy = require('passport-openid').Strategy;
 
     var cookieParser = require('cookie-parser')('netention0');
     var bodyParser = require('body-parser');
@@ -817,40 +816,7 @@ exports.start = function(options) {
         done(null, {'id': id});
     });
 
-    var LocalStrategy = require('passport-local').Strategy;
-    passport.use(new LocalStrategy(
-            function(username, password, done) {
-
-                if (!$N.server.localPasswords) {
-                    $N.server.localPasswords = {};
-                }
-
-                if ((username.length == 0) || (username.indexOf('@') == -1)) {
-                    done(null, false, "Invalid username");
-                    return;
-                }
-
-                username = username.toLowerCase();
-
-                var pws = $N.server.localPasswords;
-                if (pws[username]) {
-                    if (pws[username] == password)
-                        done(null, {id: username});
-                    else
-                        done(null, false, "Incorrect password");
-                    return;
-                }
-                else {
-                    //console.log('Creating local login: ', username);
-                    pws[username] = password;
-                    saveState();
-                    done(null, {id: username});
-                    return;
-                }
-
-            }
-    ));
-
+    /*
     passport.use(new OpenIDStrategy({
         returnURL: 'http://' + $N.server.host + '/auth/openid/return',
         realm: 'http://' + $N.server.host + '/'
@@ -864,7 +830,9 @@ exports.start = function(options) {
         // });
     }
     ));
+    */
     
+    /*
     var google_key = options.permissions.google_key;
     if (google_key) {
         google_key = google_key.split(':');
@@ -880,7 +848,7 @@ exports.start = function(options) {
           }
         ));
     }
-
+    */
 
     if (options.permissions.facebook_key) {
         var fbkey = options.permissions.facebook_key.split(":");
@@ -979,13 +947,46 @@ exports.start = function(options) {
     });
 
 
-    express.get('/login',
-            passport.authenticate('local', {_successRedirect: '/#',
-                failureRedirect: '/',
-                failureFlash: false}),
+    express.post('/login',            
             function(req, res) {
-                res.cookie('userid', req.user.id);
-                res.redirect('/#');
+                var username = req.body.username;
+                var password = req.body.password;
+                
+                function done(id) {
+                    res.cookie('authenticated', 1 );
+                    res.cookie('userid', id );
+                    res.end('');
+                }
+                function error(a) {
+                    res.end(a);
+                }
+                    
+                
+                if (!$N.server.localPasswords) {
+                    $N.server.localPasswords = {};
+                }
+
+                if ((username.length === 0) || (username.indexOf('@') === -1)) {
+                    error("Invalid username");
+                    return;
+                }
+
+                username = username.toLowerCase();
+
+                var pws = $N.server.localPasswords;
+                if (pws[username]) {
+                    if (pws[username][0] === password)
+                        done(pws[username][1]);
+                    else
+                        error("Incorrect password");
+                }
+                else {
+                    //console.log('Creating local login: ', username);
+                    var newID = util.uuid();
+                    pws[username] = [password, newID];
+                    saveState();
+                    done(newID);
+                }
             }
     );
 
@@ -1006,6 +1007,7 @@ exports.start = function(options) {
             }
     );
 
+       /*
     express.get('/auth/google',
         passport.authenticate('google', { scope: ['https://www.google.com/m8/feeds']}));
 
@@ -1015,6 +1017,7 @@ exports.start = function(options) {
                 res.redirect('/#');
             }
     );
+    */
 
     // -------------------------------------------------------------- PASSPORT 
 

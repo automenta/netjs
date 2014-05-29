@@ -665,7 +665,15 @@ $(document).ready(function() {
         var u = $('#login_email').val();
         var ph = hashpassword($('#login_password').val());
 
-        window.location.href = '/login?username=' + encodeURIComponent(u) + '&password=' + ph;
+        $.post('/login', { username: u, password: ph }, function(r) {
+            if (!r) {
+                window.location.reload();
+            }
+            else {
+                $('#password-login-status').html(r);
+            }
+        });
+        //window.location.href = '/login?username=' + encodeURIComponent(u) + '&password=' + ph;
     });
 
     $('.logout').show();
