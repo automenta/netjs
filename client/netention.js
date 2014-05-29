@@ -21,10 +21,6 @@ function setClientID(cid, otherSelves) {
      text: that.myself().name + ' (' + that.get('clientID').substring(0,4) + ')'
      });*/
 
-    if (window.TogetherJS) {
-        window.TogetherJS.reinitialize();
-        window.TogetherJS.refreshUserData();
-    }
 
 }
 

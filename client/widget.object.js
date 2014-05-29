@@ -1215,6 +1215,7 @@ function newObjectView(x, options) {
 
     //Name
     if (showName) {
+        
         var haxn = newEle('div').addClass('TitleLine').appendTo(d);
         if (startMinimized)
             haxn.click(toggleMaxMin);
@@ -1237,7 +1238,7 @@ function newObjectView(x, options) {
             }));
         }
 
-        if (showAuthorName) {
+        if (showAuthorName && (!((depth === depthRemaining) && (hideAuthorNameAndIconIfZeroDepth)))) {
             if (!isSelfObject(x.id)) { //exclude self objects
                 if (x.author) {
                     var a = x.author;

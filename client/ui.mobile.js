@@ -1,23 +1,3 @@
-function startTalk() {
-
-    TogetherJSConfig_on_ready = function() {
-    };
-    TogetherJSConfig_toolName = 'Collaboration';
-    TogetherJSConfig_getUserName = function() {
-        return $N.myself().name;
-    };
-    //TogetherJSConfig_getUserAvatar = function () {return avatarUrl;};
-
-    TogetherJSConfig_dontShowClicks = true;
-    TogetherJSConfig_suppressJoinConfirmation = true;
-    TogetherJSConfig_suppressInvite = true;
-
-    //TogetherJS.refreshUserData()
-    TogetherJS(this);
-
-}
-
-
 function updateIndent(viewmenushown) {
     if (viewmenushown) {
         $('.view-indented').addClass('view-indented-more');

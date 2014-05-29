@@ -18,6 +18,7 @@
         "lockit": "",
         "lockit-utils": "",
         "lockit-mongodb-adapter":"",
+        "jade":"",
         "connect": "",
         "request": "",
         "socket.io": "",

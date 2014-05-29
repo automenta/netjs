@@ -146,7 +146,7 @@ function newChatView(v) {
         var rootsAffected = null;
 
 
-        if (numPreviousDisplayed != 0) {
+        if (numPreviousDisplayed !== 0) {
             rootsAffected = {};
             _.union(added, removed, changed).forEach(function(c) {
                 var roots = $N.getReplyRoots(c);

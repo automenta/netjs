@@ -27,6 +27,7 @@ block content
             $(document).ready(function() {
                 $("#LoginAnonymous").click(function() {
                     $('form').hide();
+                    $('form').attr('autocomplete', 'off');
                     $('#login').val('anonymous');
                     $('#password').val('anonymous');
                     $('form').submit();
