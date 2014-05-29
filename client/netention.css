@@ -1252,6 +1252,7 @@ div.objectView .metadataReplyButton {
     text-align: right;
     padding-right: 15px;
     margin-bottom: 0.1em;
+    word-break: break-word;
 }
 .chatViewLineContent ul {
     font-size: 75%;

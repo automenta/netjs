@@ -25,16 +25,24 @@ exports.plugin = function($N) {
               
               // ...and broadcast stuff -- this is an ordinary duplex stream!
               //node.broadcast.write('a');
-            })
+              
+            });
+            
+            $N.p2p = function(whenConnected) {
+                node.on('connect', function() {
+                    whenConnected(node);
+                });
+            };
 
             node.on('disconnect', function() {
               console.log('disconnected');
+              console.log('  ', new Error().stack);
             })
             
             node.on('new peer', function(p) { console.log('new peer', p.id); } );
 
             // Broadcast is a stream
-            process.stdin.pipe(node.broadcast).pipe(process.stdout)
+            //process.stdin.pipe(node.broadcast).pipe(process.stdout)
 
             console.log('starting');
             node.start()
