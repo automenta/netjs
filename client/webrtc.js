@@ -47,7 +47,11 @@ function newChatWidget(onSend) {
         
         newPopupObjectEdit(n);        
     }
-    
+
+    var scrollbottom = function() {
+        log.scrollTop(log.prop('scrollHeight'));
+    };
+
     function newChatLine(l) {
         var d = newDiv();
         
@@ -68,12 +72,18 @@ function newChatWidget(onSend) {
             var h = history[i];
             log.append(newChatLine(h));
         }            
+        scrollbottom();        
     }
     updateLog();
     
+    function appendLog(m) {
+        history.push(m);
+        log.append(newChatLine(m));
+        scrollbottom();
+    }
+    
     c.receive = function(m) {
-       history.push(m);
-       updateLog();
+       appendLog(m);
        
        if (m.a!==$N.id()) {
            var aname = $N.label(m.a);         
@@ -136,8 +146,6 @@ function initWebRTC(w) {
         var callWidget = newWebRTCCall(remotePeer, conn);
         webrtc.connects[remotePeer] = callWidget;
         
-        conn.on('data', callWidget.onDataIncoming);
-        conn.on('close', callWidget.onClose);
     });
     webrtc.on('call', function(call) {
         if (webrtc.connects[call.peer]) {
@@ -146,7 +154,9 @@ function initWebRTC(w) {
     });
     
     
-    webrtc.on('error', function(e) { console.error('WebRTC', error) });
+    webrtc.on('error', function(e) { 
+        console.error('WebRTC', error) 
+    });
     webrtc.on('close', function() { 
         $N.setWebRTC(currentID, false);
         //console.log('WebRTC off') 
@@ -182,29 +192,29 @@ function newWebRTCCall(webrtcid, incoming) {
 
     var currentCall, currentStream, currentData;
     
-    
     function hangup() {
-        if (webrtc.connects[webrtcid] === p)
-            webrtc.connects[webrtcid] = null;        
+        if (currentData) {
+            if (webrtc.connects[webrtcid] === p)
+                webrtc.connects[webrtcid] = null;        
 
-        chat.disable();
-        if (currentStream)
-            currentStream.stop();
-        if (currentCall)
-            currentCall.close();
-        if (currentData)
-            currentData.close();
-        
-        callButton.hide();
-        currentCall = null;
-        currentData = null;
-        currentStream = null;
+            chat.disable();
+            if (currentStream)
+                currentStream.stop();
+            if (currentCall)
+                currentCall.close();
+
+            if (currentData)
+                currentData.close();
+
+            callButton.hide();
+            currentCall = null;
+            currentData = null;
+            currentStream = null;
+        }
     }
     
     var p = newPopup('Call: ' + $N.label(targetUser, webrtcid));
-    p.bind('dialogclose', function(event) {
-        hangup();
-    });
+    p.bind('dialogclose', hangup);
     
     var chat = newChatWidget(function(m) {
         if (currentData) {
@@ -282,24 +292,25 @@ function newWebRTCCall(webrtcid, incoming) {
             currentCall.on('close', endcall);
     }
     
+    function onDataIncoming(m) { 
+        chat.receive({a:targetUser, m:m});
+    }
        
     if (incoming) {
         currentData = incoming;
-        chat.show();
     }
     else {
         currentData = webrtc.connect(webrtcid);
-        currentData.on('open', function(){
-            chat.show();
-            webrtc.connects[webrtcid] = p;
-            currentData.on('data', p.onDataIncoming);
-            currentData.on('close', p.onClose);            
-        });
-        currentData.on('close', function(){
-            hangup();
-        });
-        
     }
+    
+    currentData.on('open', function(){
+        chat.show();
+        webrtc.connects[webrtcid] = p;
+        currentData.on('data', onDataIncoming);
+    });
+    currentData.on('close', hangup);
+    currentData.on('error', hangup);
+    
     
     callButton.off().click(function() {
         callButton.html('Waiting for answer..');
@@ -316,10 +327,6 @@ function newWebRTCCall(webrtcid, incoming) {
     });
     
     
-    p.onDataIncoming = function(m) {
-        chat.receive({a:targetUser, m:m});
-    };
-
     
     p.onCallIncoming = function(call) {
         callButton.hide();

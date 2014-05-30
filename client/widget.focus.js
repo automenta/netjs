@@ -3,6 +3,9 @@ function isFocusClear() {
     if (!f)
         return true;
 
+    if (f.name)
+        return false;
+    
     if (f.value)
         if (f.value.length > 0)
             return false;

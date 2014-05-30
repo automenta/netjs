@@ -112,11 +112,14 @@ var _mainChatWindow = null;
 $('#ToggleChatButton').click(function() {
     if (!_mainChatWindow) {
         _mainChatWindow = newMainChatPopup();
+        _mainChatWindow.bind('dialogclose', function(event) {
+            _mainChatWindow.dialog('close');        
+            _mainChatWindow.remove();
+            _mainChatWindow = null;
+        });
     }
     else {
-        _mainChatWindow.dialog('close');        
-        _mainChatWindow.remove();
-        _mainChatWindow = null;
+        _mainChatWindow.dialog('close');   
     }
         
     return false;

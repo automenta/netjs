@@ -55,10 +55,10 @@ function newForumView(v) {
 
     var scrollbottom = _.debounce(function() {
         content.scrollTop(content.prop('scrollHeight'));
-    }, 150);
+    }, 10);
     var scrolltop = _.debounce(function() {
         content.scrollTop(0);
-    }, 150);
+    }, 10);
 
     //TODO toggle replies
     //TODO adjust highlight history period
@@ -277,7 +277,7 @@ function newForumView(v) {
     
     setTimeout(function() {
         later(scrollbottom);        
-    },500);
+    },250);
             
     var viewMenu = $('#ViewMenu');
     $('<button title="Scroll to Top">&UpArrow;</button>').appendTo(viewMenu).click(scrolltop);
