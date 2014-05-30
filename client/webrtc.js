@@ -1,5 +1,92 @@
 var webrtc;
-var webrtcPeers = { };
+
+
+function newMainChatPopup() {
+    var o = new $N.nobject('Chat.Main');
+    o.setName('Main Channel');
+    o.add('chat', { channel: 'main' });
+    o.hidden = true;
+    $N.notice(o);
+    
+    var s = newPopupObjectView(o, {title: 'Main Channel', width: '50%'}, {
+        showMetadataLine: false,
+        showName: false,
+        showActionPopupButton: false,
+        showSelectionCheck: false,
+        transparent: true
+    });
+    if (configuration.webrtc) {
+        s.append(newWebRTCRoster());
+    }
+    
+    return s;
+}
+
+function newChatWidget(onSend) {
+    var c = newDiv();
+    
+    var history = [];
+    var log = newDiv().addClass('ChatLog').appendTo(c);
+            
+    var input = newDiv().addClass('ChatInput').appendTo(c);
+    
+    var textInput = $('<input type="text"/>').appendTo(input);
+    textInput.keydown(function(e) {
+       if (e.keyCode === 13) {
+           var m = $(this).val();
+           onSend(m);
+           c.receive({a:$N.id(),m:m}); //local echo
+           $(this).val('');
+       }
+    });
+    
+    function chatlineclick() {
+        var line = $(this).parent();
+        var n = new $N.nobject();
+        n.setName( line.find('span').html() );
+        
+        newPopupObjectEdit(n);        
+    }
+    
+    function newChatLine(l) {
+        var d = newDiv();
+        
+        var A = $N.instance[l.a];
+        if (A) {
+            d.append(newEle('a').html(newAvatarImage(A)).click(chatlineclick));
+        }
+        d.append(newEle('span').html(l.m));
+        
+        //TODO scroll to bottom
+        
+        return d;
+    }
+    
+    function updateLog() {
+        log.empty();
+        for (var i = 0; i < history.length; i++) {
+            var h = history[i];
+            log.append(newChatLine(h));
+        }            
+    }
+    updateLog();
+    
+    c.receive = function(m) {
+       history.push(m);
+       updateLog();
+       
+       if (m.a!==$N.id()) {
+           var aname = $N.label(m.a);         
+           notify({title: aname, text: m.m });
+       }
+    };
+    c.disable = function() {
+        textInput.val('Disconnected');
+        textInput.attr('disabled', 'disabled');
+    };
+    
+    return c;
+}
 
 function initWebRTC(w) {
     if (webrtc) {
@@ -7,6 +94,8 @@ function initWebRTC(w) {
     }
     
     webrtc = new Peer( {host: window.location.hostname, port: w.port, path: '/n'});
+    webrtc.connects = {};
+    
     // stun.stunprotocol.org (UDP and TCP ports 3478).
     /* https://gist.github.com/yetithefoot/7592580
      *  {url:'stun:stun01.sipphone.com'},
@@ -30,102 +119,227 @@ function initWebRTC(w) {
         {url:'stun:stun.xten.com'},
      * 
      */
-
+	var currentID;
     webrtc.on('open', function(id) {
-        $N.channelSend("webrtc", { a: $N.id(), w: Date.now(), m: id } );
-        $N.channelSend("main", { a: $N.id(), w: Date.now(), m: 'WebRTC connected (' + id + ')' } );
+        $N.setWebRTC(id, true);
+        currentID = id;
     });
-    webrtc.on('connection', function(dataConnection) {  });
+    
+    
+    webrtc.on('connection', function(conn) {
+        //TODO get remote peer's user's name
+        var remotePeer = conn.peer;
+        var remoteUser = getWebRTCUser(remotePeer);
+        var remoteUserName = $N.label(remoteUser, remotePeer);
+        
+        notify({title:'Connecting', text: remoteUserName });
+        var callWidget = newWebRTCCall(remotePeer, conn);
+        webrtc.connects[remotePeer] = callWidget;
+        
+        conn.on('data', callWidget.onDataIncoming);
+        conn.on('close', callWidget.onClose);
+    });
+    webrtc.on('call', function(call) {
+        if (webrtc.connects[call.peer]) {
+            webrtc.connects[call.peer].onCallIncoming(call);
+        }        
+    });
+    
+    
     webrtc.on('error', function(e) { console.error('WebRTC', error) });
     webrtc.on('close', function() { 
+        $N.setWebRTC(currentID, false);
         //console.log('WebRTC off') 
     });
     
-    $N.on('channel:webrtc', function(m) {
-        var userID = m.a;
-        if (userID == $N.id())
-            return;
-        
-        //var webrtcID = m.m;
-        if (webrtcPeers[userID])
-            webrtcPeers[userID].push(m.m);
-        else
-            webrtcPeers[userID] = [ m.m ];        
-    });
-    
-    /*$N.on('channel:'+channel, function(m) {
-       if (c.closest(document.documentElement).length === 0) {
-           $N.off('channel:'+channel, this);
-           c.remove();
-       }
-       
-       updateLog();
-       
-       if (m.a!==$N.id()) {
-           var A = $N.instance[m.a];
-           var aname = A ? A.name : m.a;
-           
-           notify({title: aname, text: m.m });
-       }
-    });    */
 }
 
 function newWebRTCRoster() {
     if (!webrtc) return;
     
-    var r = newDiv();
-    var myVideo = newEle('video').appendTo(r);
-    var theirVideo = newEle('video').appendTo(r);
-    var peers = newDiv().appendTo(r);
-    
-    function update() {
-        peers.empty();
+    var r = newDiv().addClass('WebRTCRoster');
+    var peers = newRosterWidget(true).appendTo(r);
         
-        
-        peers.append(JSON.stringify(webrtcPeers));
-        _.each(webrtcPeers, function(peerids, userid) {
-            var U = $N.instance[userid];
-            if (!U) return;
-            
-            peers.append(newAvatarImage(U));
-            peerids.forEach(function(p) {
-                r.append($('<button>Call ' + p + '</button>').click(function() {
-                    webRTCVideo(p, myVideo, function(localStream, call) {
-                        call.on('stream', function(stream){
-                            theirVideo.attr('src', URL.createObjectURL(stream));
-                            theirVideo[0].play();
-                        });                        
-                    });
-                }));
-            });
-            peers.append('<br/>');
-        });
-        
-        //r.append(webrtc.id);        
-    }
-    update();
-
-    webrtc.on('call', function(call) {
-        notify({title:'Incoming Call', text: '' });
-        
-        webRTCVideo(null, myVideo, function(stream) {
-            call.answer(stream);            
-        });
-        call.on('stream', function(stream){
-            theirVideo.attr('src', URL.createObjectURL(stream));
-            theirVideo[0].play();
-        });
-        //console.log(mediaConnection);
-    });
-    
-    $N.on('channel:webrtc', function(m) {
-       if (r.closest(document.documentElement).length === 0) {
-           $N.off('channel:webrtc', this);
-       }
-       update();
-    });
-    
     return r;
+}
+
+//find which user in the roster has this id and get the right name
+function getWebRTCUser(w) {
+    var r = $N.get('roster');
+    
+    for (var k in r) {
+        var v = r[k];
+        if (Array.isArray(v)) {
+            if (v.indexOf(w)!=-1) return k;
+        }
+    }
+    
+    return w;
+}
+
+function newWebRTCCall(webrtcid, incoming) {
+    var targetUser = getWebRTCUser(webrtcid);
+
+    var currentCall, currentStream, currentData;
+    
+    
+    function hangup() {
+        if (webrtc.connects[webrtcid] === p)
+            webrtc.connects[webrtcid] = null;        
+
+        chat.disable();
+        if (currentStream)
+            currentStream.stop();
+        if (currentCall)
+            currentCall.close();
+        if (currentData)
+            currentData.close();
+        
+        callButton.hide();
+        currentCall = null;
+        currentData = null;
+        currentStream = null;
+    }
+    
+    var p = newPopup('Call: ' + $N.label(targetUser, webrtcid));
+    p.bind('dialogclose', function(event) {
+        hangup();
+    });
+    
+    var chat = newChatWidget(function(m) {
+        if (currentData) {
+            currentData.send(m);
+        }
+    });
+    chat.appendTo(p).hide();
+    
+    var callButton = newEle('button').html('Start Video').appendTo(p);
+    var answerButton = newEle('button').html('Answer Call').appendTo(p).hide();
+    var myVideo = newEle('video').css('width', '48%').appendTo(p).hide();
+    var theirVideo = newEle('video').css('width', '48%').appendTo(p).hide();
+    var muteVideoButton = newEle('button').html('Mute Video').appendTo(p).hide();
+    var stopVideoButton = newEle('button').html('Stop Video').appendTo(p).hide();
+
+    function disableVideo() {
+        myVideo.remove();
+        theirVideo.remove();
+        callButton.hide();
+        answerButton.hide();
+        muteVideoButton.hide();
+        stopVideoButton.hide();
+        p.append('Video not available');                        
+    }
+    
+    function endPreviousCall() {
+        if (currentCall) {
+            currentCall.close();
+            currentCall = null;
+        }
+        if (currentStream) {
+            currentStream.stop();
+            currentStream = null;
+        }
+    }
+    
+    function newCall(call, stream) {
+        endPreviousCall();
+        currentCall = call;
+        currentStream = stream;
+    }
+        
+    function playRemoteVideo(stream) {
+        myVideo.show();
+        theirVideo.show();
+        theirVideo.attr('src', URL.createObjectURL(stream));
+        theirVideo[0].play();
+        callButton.hide();
+        answerButton.hide();
+        
+        muteVideoButton.off().click(function() {
+            if (currentStream) {
+                if (currentStream.getVideoTracks().length > 0)
+                    currentStream.getVideoTracks()[0].enabled =
+                        !(currentStream.getVideoTracks()[0].enabled);
+                if (currentStream.getAudioTracks().length > 0)
+                    currentStream.getAudioTracks()[0].enabled =
+                        !(currentStream.getAudioTracks()[0].enabled);
+            }
+        }).show();
+        
+        function endcall() {
+            endPreviousCall();
+            theirVideo.hide();
+            myVideo.hide();
+            stopVideoButton.hide();
+            muteVideoButton.hide();
+            callButton.html('Start Video').attr('disabled',null);
+            callButton.show();
+        }
+        
+        stopVideoButton.off().click(endcall).show();
+        
+        if (currentCall)
+            currentCall.on('close', endcall);
+    }
+    
+       
+    if (incoming) {
+        currentData = incoming;
+        chat.show();
+    }
+    else {
+        currentData = webrtc.connect(webrtcid);
+        currentData.on('open', function(){
+            chat.show();
+            webrtc.connects[webrtcid] = p;
+            currentData.on('data', p.onDataIncoming);
+            currentData.on('close', p.onClose);            
+        });
+        currentData.on('close', function(){
+            hangup();
+        });
+        
+    }
+    
+    callButton.off().click(function() {
+        callButton.html('Waiting for answer..');
+        callButton.attr('disabled', 'disabled');
+        answerButton.hide();
+        webRTCVideo(webrtcid, myVideo, function(stream, call) {
+            if (stream) {
+                newCall(call, stream);
+                call.on('stream', playRemoteVideo);
+            }
+            else
+                disableVideo();            
+        });
+    });
+    
+    
+    p.onDataIncoming = function(m) {
+        chat.receive({a:targetUser, m:m});
+    };
+
+    
+    p.onCallIncoming = function(call) {
+        callButton.hide();
+        answerButton.show().off().click(function() {
+            webRTCVideo(null, myVideo, function(stream) {
+                callButton.hide();
+                newCall(call, stream);
+                if (stream) {
+                    call.answer(stream);       
+                    call.on('stream', playRemoteVideo);
+                }
+                else
+                    disableVideo();
+            });
+        });
+    };
+    p.onClose = hangup;
+    
+    return p;
+    
 }
 
 function webRTCVideo(callPeer, target, callback) {
@@ -156,11 +370,13 @@ function webRTCVideo(callPeer, target, callback) {
 
             // errorCallback
             function(err) {
-               console.log("The following error occured: " + err);
+               if (callback)
+                   callback(null);
             }
         );
     } else {
         console.log("getUserMedia not supported");
+        callback(null);
     }    
     
 }

@@ -17,7 +17,7 @@ function onChatSend(name, desc, tag) {
 }
 
 
-function newChatView(v) {
+function newForumView(v) {
     var oldestNewObjectMS = 10 * 60 * 1000; //10 min
 
     var content = v;//newDiv().addClass('ChatViewContent');

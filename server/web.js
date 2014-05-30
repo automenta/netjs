@@ -1156,7 +1156,7 @@ exports.start = function(options) {
     $N.broadcast = broadcast;
 
     express.get('/users/connected/json', function(req, res) {
-        sendJSON(res, getUserConnections());
+        sendJSON(res, getRoster());
     });
     /*
      express.get('/object/users/json', function(req, res) {
@@ -1675,17 +1675,20 @@ exports.start = function(options) {
         returnWikiPage("http://en.wikipedia.org/wiki/" + t, rres);
     });
 
-    function getUserConnections() {
+    function getRoster() {
         var u = {};
         _.keys(connectedUsers).forEach(function(uid) {
-            u[uid] = 1;
+			if (connectedUsers[uid].webRTC)
+				u[uid] = connectedUsers[uid].webRTC;
+			else
+				u[uid] = 1;
         });
         return u;
     }
 
     var rosterBroadcastIntervalMS = 1000;
     var broadcastRoster = _.throttle(function() {
-        var uc = getUserConnections();
+        var uc = getRoster();
         if (_.keys(uc).length > 0)
             io.sockets.in('*').emit('roster', uc);
     }, rosterBroadcastIntervalMS);
@@ -1712,6 +1715,25 @@ exports.start = function(options) {
 
         broadcastRoster();
     }
+    function setUserWebRTC(userID, webrtcID, enabled) {
+		var u = connectedUsers[userID];
+		if (!u) return;
+		
+		if (enabled) {
+			if (!u.webRTC)
+				u.webRTC = [];
+			u.webRTC.push(webrtcID);
+			u.webRTC = _.unique(u.webRTC);
+		}
+		else {
+			if (u.webRTC) {
+				u.webRTC = _.without(u.webRTC, webrtcID);
+				if (u.webRTC.length === 0)
+					delete u.webRTC;
+			}
+		}
+		broadcastRoster();
+	}
 
 
     function pub(object, whenFinished) {
@@ -1969,6 +1991,10 @@ exports.start = function(options) {
             socket.on('disconnect', function() {
                 updateUserConnection(socket.clientID, null, socket);
             });
+            
+            socket.on('webRTC', function(id, enabled) {
+                setUserWebRTC(socket.clientID, id, enabled);
+            });
 
             /*socket.on('updateSelf', function(s, getObjects) {
              socket.get('clientID', function(err, c) {
@@ -2158,6 +2184,14 @@ exports.start = function(options) {
             //https://github.com/peers/peerjs-server
             var PeerServer = require('peer').PeerServer;
             var server = new PeerServer({port: w.port, path: '/n'});
+            server.on('disconnect', function(id) { 
+				//remove from userConnections
+				_.each(connectedUsers, function(v, k) {
+					if (v.webRTC)
+						v.webRTC = _.without(v.webRTC, id);					
+				});
+				broadcastRoster();
+			});
             nlog('WebRTC server: http://' + $N.server.host + ':' + w.port);
         }
     }

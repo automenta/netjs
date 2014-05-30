@@ -815,14 +815,7 @@ a.ViewControlMinor img {
     height: 100%;
 }
 
-#NotificationArea {
-    z-index: 5000;
-    position: fixed;
-    font-size: 200%;
-    text-align:center;
-    top: 25%;
-    width: 100%;
-}
+
 #FocusTabs, #FocusTabs ul {
     background: transparent;
     border: none;

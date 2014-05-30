@@ -385,9 +385,9 @@ function _updateView(force) {
         indent();
         currentView = renderOptions(s, o, v);
     }
-    else if (view === 'chat') {
+    else if (view === 'forum') {
         indent();
-        currentView = newChatView(v);
+        currentView = newForumView(v);
     }
     else if (view === 'share') {
         indent();
@@ -1001,11 +1001,11 @@ function testGC(f) {
         return;
     }
     
-    if ($N.get('currentView') == 'chat') {
+    if ($N.get('currentView') == 'forum') {
         $N.set('currentView', 'browse');
     }
     else {
-        $N.set('currentView', 'chat');        
+        $N.set('currentView', 'forum');        
     }
          
     setTimeout(testGC, 1000);

@@ -1039,6 +1039,8 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
 
 
 newTagValueWidget.chat = function(x, index, t, prop, editable, d, events) {
+    //TODO use abstract chat widget
+    
     if (!t.value) return;
     var channel = t.value.channel || 'main';
     

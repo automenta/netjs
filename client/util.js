@@ -1036,7 +1036,7 @@ var Ontology = function(tagInclude, target) {
     that.authors = function() {
         return _.unique(_.pluck(_.values(that.instance),'author'));
     };
-    that.label = function(idOrObject) {
+    that.label = function(idOrObject, defaultValue) {
       var i;
       if (typeof idOrObject === "string") {
           i = that.instance[idOrObject];
@@ -1050,6 +1050,9 @@ var Ontology = function(tagInclude, target) {
             return i.name;
       }
       
+      if (defaultValue)
+        return defaultValue;
+        
       return idOrObject;
     };
     

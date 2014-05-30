@@ -291,6 +291,9 @@ function netention(f) {
 
             return socket;
         },
+        setWebRTC: function(id, enabled) {
+            this.socket.emit('webRTC', id, enabled);
+        },
         updateRoster: function() {
             $.getJSON('/users/connected/json', function(r) {
                 $N.set('roster', r);
@@ -512,6 +515,11 @@ function netention(f) {
             $N.startURLRouter();
 
             $('#NotificationArea').remove();
+
+            if (configuration.avatarMenuDisplayInitially)
+                showAvatarMenu(true);
+            else
+                showAvatarMenu(false);
 
             later(function() {
                 notify({
@@ -955,13 +963,13 @@ function newPopup(title, p, isModal, existingDiv) {
     }
 
 
-    p = _.extend(p || {}, {
+    p = _.extend({
         close: function() {
             d.remove();
         },
         show: 'fade',
         hide: 'fade' //'drop'
-    });
+    }, p||{});
     if (isModal)
         p.modal = true;
 

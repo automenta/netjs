@@ -108,25 +108,17 @@ $('#EditProfileButton').click(function() {
     return false;
 });
 
+var _mainChatWindow = null;
 $('#ToggleChatButton').click(function() {
-    var o = new $N.nobject('Chat.Main');
-    o.setName('Main Channel');
-    o.add('chat', { channel: 'main' });
-    o.hidden = true;
-    $N.notice(o);
-    
-    var s = newPopupObjectView(o, {title: 'Main Channel', width: '50%'}, {
-        showMetadataLine: false,
-        showName: false,
-        showActionPopupButton: false,
-        showSelectionCheck: false,
-        transparent: true
-    });
-    if (configuration.webrtc) {
-        console.log('adding roster');
-        s.append(newWebRTCRoster());
+    if (!_mainChatWindow) {
+        _mainChatWindow = newMainChatPopup();
     }
-    
+    else {
+        _mainChatWindow.dialog('close');        
+        _mainChatWindow.remove();
+        _mainChatWindow = null;
+    }
+        
     return false;
 })
 
@@ -144,7 +136,3 @@ setViewLock(configuration.viewlockDefault);
 $('#Roster').append(newRosterWidget());
 
 
-if (configuration.avatarMenuDisplayInitially)
-    showAvatarMenu(true);
-else
-    showAvatarMenu(false);

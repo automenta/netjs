@@ -178,14 +178,26 @@ function newNewProfileWidget(whenFinished) {
 }
 
 
-function newRosterWidget() {
+function newRosterWidget(full) {
     if (!$N.get('roster')) {
         $N.updateRoster();
     }
 
     var d = newDiv();
-
+    
+    var wasAttached = false;
+    
     var updateRosterDisplay = function() {
+        
+        var attached = d.closest(document.documentElement).length > 0;
+        if ((!attached) && (wasAttached)) {
+           $N.off('change:roster', this);
+           return;
+        }
+        else {
+            wasAttached = true;
+        }
+        
         var r = $N.get('roster');
         d.empty();
         if (!r)
@@ -194,10 +206,28 @@ function newRosterWidget() {
         _.keys(r).forEach(function(uid) {
             var U = $N.instance[uid];
             if (U) {
-                var a = newAvatarImage(U).appendTo(d);
-                a.click(function() {
-                    newPopupObjectView(U);
-                });
+                if ((full && (uid!=$N.id())) || (!full)) {
+                    var a = newAvatarImage(U).appendTo(d);
+                    a.click(function() {
+                        newPopupObjectView(U);
+                    });
+                    if (full && configuration.webrtc && (uid!=$N.id())) {
+                        var webrtc = r[uid];
+                        if (Array.isArray(webrtc)) {
+                            a.css('padding-left', '1em');
+                            webrtc.forEach(function(i) {
+                                newEle('button').html('&gt;').attr('title', 'Private Call ' + i).data('webrtc', [uid,i])
+                                    .click(function() {
+                                        var w = $(this).data('webrtc');
+                                        newWebRTCCall(w[1]);
+                                        return false;
+                                    })
+                                    .appendTo(a);
+                            });
+                        }
+                    }
+                }
+                
             }
         });
     };
