@@ -27,6 +27,12 @@ var mongo = require("mongojs");
 var request = require('request');
 var _ = require('lodash');
 var jsonpack = require('jsonpack');
+var jsonstream = require('JSONStream');
+//var pson= require('pson');
+
+//
+//
+//
 //var cortexit = require('./cortexit.js');
 //var feature = require('./feature.js');
 
@@ -672,6 +678,16 @@ exports.start = function(options) {
         res.end(t);
     }
 
+    function sendJSONStream(res, x) {
+        res.set('Content-type', 'text/json; charset=UTF-8');
+        res.set('Transfer-Encoding', 'chunked');
+        
+        var js = jsonstream.stringify();
+        js.pipe(res);
+        js.end(x);
+        //res.end();
+    }
+    
     function sendJSON(res, x, pretty, format) {
         try {
             res.set('Content-type', 'text/json');
@@ -783,7 +799,7 @@ exports.start = function(options) {
 
     if (io.enable) {
         io.enable('browser client minification');  // send minified client
-        io.enable('browser client etag');          // apply etag caching logic based on version number
+        //io.enable('browser client etag');          // apply etag caching logic based on version number
         io.enable('browser client gzip');          // gzip the file
     }
     
@@ -1211,6 +1227,22 @@ exports.start = function(options) {
         });
     }
     $N.getLatestObjects = getLatestObjects;
+
+    function getLatestObjectsStream(n, withObject, whenFinished, withError) {
+        db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
+            if (err) {
+                withError('ENSURE INDEX modifiedAt ' + err);
+                return;
+            }
+
+            //TODO scope >= PUBLIC
+            db.obj.find().limit(n).sort({modifiedAt: -1}).forEach( function(err, obj) {
+				if (!obj) { whenFinished(); return; }
+                withObject(obj);
+            });
+        });
+    }
+    $N.getLatestObjects = getLatestObjects;
     
     function getExpiredObjects(withObjects) {
         db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
@@ -1233,11 +1265,29 @@ exports.start = function(options) {
         var n = parseInt(req.params.num);
         var format = req.params.format;
 
-        if ((format === 'json') || (format === 'jsonpack')) {
-            var MAX_LATEST_OBJECTS = 8192;
-            if (n > MAX_LATEST_OBJECTS)
-                n = MAX_LATEST_OBJECTS;
+		var MAX_LATEST_OBJECTS = 8192;
+		if (n > MAX_LATEST_OBJECTS)
+			n = MAX_LATEST_OBJECTS;
 
+		if (format === 'json') {
+			var cid = getCurrentClientID(req);
+
+			res.set('Content-type', 'text/json; charset=UTF-8');
+			res.set('Transfer-Encoding', 'chunked');
+
+			var js = jsonstream.stringify('[',',',']');
+			js.pipe(res);
+			getLatestObjectsStream(n, function(o) {
+				if (objCanSendTo(o, cid)) {
+					js.write(util.objCompact(o));
+				}	
+			}, function() {
+				js.end();				
+			});
+		}		
+        else if (format === 'jsonpack') {
+
+			
             getLatestObjects(n,
                     function(objs) {
                         objAccessFilter(objs, req, function(sharedObjects) {
@@ -1501,7 +1551,9 @@ exports.start = function(options) {
 
         res.autoEtag();
         
-        if ((format === 'json') || (format == 'jsonpack'))
+        if (format === 'json')
+            sendJSON(res, {'class': cl, 'property': pr }, null, format);
+        else if (format == 'jsonpack')
             sendJSON(res, {'class': cl, 'property': pr }, null, format);
         else
             sendJSON(res, 'unknown format: ' + format);

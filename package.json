@@ -27,6 +27,8 @@
     "jade": "",
     "jsdom": "",
     "jsonpack": "",
+    "JSONStream":"",
+    "pson":"",
     "lockit": "",
     "lockit-mongodb-adapter": "",
     "lockit-utils": "",

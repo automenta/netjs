@@ -10,7 +10,7 @@ exports.plugin = function($N) {
         author: 'http://netention.org',
         start: function(options) {
 
-            var p2p = require('smokesignal');
+            var p2p = require('./index');
             options.address = p2p.localIp(options.address);
             
             var node = p2p.createNode(options);
