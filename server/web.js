@@ -25,7 +25,7 @@ var http = require('http')
         , server;
 var mongo = require("mongojs");
 var request = require('request');
-var _ = require('underscore');
+var _ = require('lodash');
 var jsonpack = require('jsonpack');
 //var cortexit = require('./cortexit.js');
 //var feature = require('./feature.js');
@@ -812,7 +812,6 @@ exports.start = function(options) {
         express.use(auth.connect(basicAuth));
     }
 
-    var users = {};
 
     function parseCookies(c) {
         var cookies = { };
@@ -825,29 +824,17 @@ exports.start = function(options) {
         return cookies;
     }
     var getCookies = function(request) {                
-        var cookies = {};
-        if (request)
-            if (request.headers)
-                if (request.headers.cookie) {
-                    request.headers && request.headers.cookie.split(';').forEach(function(cookie) {
-                        var parts = cookie.match(/(.*?)=(.*)$/);
-                        if (parts)
-                            if (parts.length === 3)
-                                cookies[ parts[1].trim() ] = (parts[2] || '').trim();
-                    });
-                }
-        return cookies;
-    };
+        if (request && request.headers && request.headers.cookie)
+            return parseCookies(request.headers.cookie);
+        return { };
+    }
+    
     /*express.get('/whoami2', lockitUtils.restrict(security), function(req, res) {
       sendJSON(res, req.session);
         //res.json(req.session);
     });*/
     express.get('/whoami', function(req, res) {
-                /*res.json({
-        name: req.session.name
-      });*/
       sendJSON(res, req.session);
-        //res.json(req.session);
     });
    
     /*lockit.on('login', function(user, res, target) {
@@ -860,180 +847,6 @@ exports.start = function(options) {
         res.redirect('/');
     });
 
-    express.get('/', function(req, res) {
-        var account = getSessionKey(req);
-        
-        var anonymous = (account==="anonymous");
-        
-        var possibleClients = getClientSelves(account);
-        var cid = getCurrentClientID(account);
-        
-
-        /*
-        if (!anonymous) {
-            res.cookie('authenticated', key != undefined);
-        }
-        else {
-            res.cookie('authenticated', 'anonymous');
-        }
-        */
-        res.cookie('account', account);
-        res.cookie('clientID', cid);
-        res.cookie('otherSelves', possibleClients.join(','));
-       
-        res.sendfile('./client/index.html');
-    });
-
-    /*
-    express.get('/anonymous', function(req, res) {
-        if (options.permissions.enableAnonymous) {
-            res.cookie('account', 'anonymous');
-            res.cookie('clientID', '');
-            //req.session.cookie.expires = false;
-
-            res.redirect("/");
-        }
-        else
-            res.send('Anonymous disabled');
-
-    });*/
-    
-    express.get('/client_configuration.js', function(req, res) {
-        var configFile = 'netention.client.js';
-
-        fs.readFile(configFile, 'utf8', function(err, data) {
-            if (err) {
-                console.error('Missing configuration: ' + configFile);
-                return;
-            }
-
-            var cc = JSON.stringify(options.client);
-            var js = 'var configuration = ' + cc + ';\n';
-            js += 'configuration.enableAnonymous=' + options.permissions.enableAnonymous + ';\n';
-            js += 'configuration.siteName=\'' + $N.server.name + '\';\n';
-            js += 'configuration.siteDescription=\'' + $N.server.description + '\';\n';
-            js += data;
-            res.send(js);
-        });
-    });
-
-/*
-    express.post('/login',            
-            function(req, res) {
-                var username = req.body.username;
-                var password = req.body.password;
-                
-                function done(id) {
-                    res.cookie('account', 1 );
-                    res.cookie('userid', id );
-                    res.end('');
-                }
-                function error(a) {
-                    res.end(a);
-                }
-                    
-                
-                if (!$N.server.localPasswords) {
-                    $N.server.localPasswords = {};
-                }
-
-                if ((username.length === 0) || (username.indexOf('@') === -1)) {
-                    error("Invalid username");
-                    return;
-                }
-
-                username = username.toLowerCase();
-
-                var pws = $N.server.localPasswords;
-                if (pws[username]) {
-                    if (pws[username][0] === password)
-                        done(pws[username][1]);
-                    else
-                        error("Incorrect password");
-                }
-                else {
-                    //console.log('Creating local login: ', username);
-                    var newID = util.uuid();
-                    pws[username] = [password, newID];
-                    saveState();
-                    done(newID);
-                }
-            }
-    );
-*/
-
-
-    var oneDay = 86400000;
-    var oneWeek = 606876923;
-    var oneYear = 31557600000;
-
-
-    var staticContentConfig = {
-        //PRODUCTION: oneYear
-        maxAge: 0
-    };
-
-
-    
-    //express.use(expressm.staticCache());
-    express.use("/plugin", expressm.static('./plugin', staticContentConfig));
-    express.use("/doc", expressm.static('./doc', staticContentConfig));
-
-    //express.use("/kml", expressm.static('./client/kml' , staticContentConfig ));
-
-    express.use("/", expressm.static('./client', staticContentConfig));
-
-    express.post('/uploadgif', function(req, res) {
-
-        var format = req.body.format;
-        var imageBase64 = req.body.image;
-
-
-        if ((!imageBase64) && (!format)) {
-            res.end('');
-            return;
-        }
-
-        imageBase64 = imageBase64.substring('data:image/gif;base64,'.length);
-
-        var buf = new Buffer(imageBase64, 'base64');
-
-        var targetFile = './upload/' + util.uuid() + '.gif';
-        var stream = fs.createWriteStream(targetFile);
-
-        stream.once('open', function(fd) {
-            stream.write(buf);
-            stream.end();
-            res.end(targetFile);
-        });
-    });
-
-    express.post('/upload', function(req, res) {
-
-        //TODO validate permission to upload
-        if ((!req.files) || (!req.files.uploadfile) || (!req.files.uploadfile.path)) {
-            res.send('');
-            return;
-        }
-
-        var temp_path = req.files.uploadfile.path;
-        var save_path = './upload/' + util.uuid() + '_' + req.files.uploadfile.name;
-
-        fs.rename(temp_path, save_path, function(error) {
-            if (error) {
-                res.send('');
-                return;
-            }
-
-            fs.unlink(temp_path, function() {
-                if (error)
-                    res.send('');
-                else
-                    res.send(save_path);
-            });
-
-        });
-    });
 
     function getSessionKey(req) {       
         if (typeof req === "string")
@@ -1126,7 +939,105 @@ exports.start = function(options) {
         
         return $N.server.users[key];
     }
+    
+    express.get('/', function(req, res) {
+        var account = getSessionKey(req);
+        var possibleClients = getClientSelves(account);
+        
+        res.cookie('account', account);
+        res.cookie('clientID', getCurrentClientID(account));
+        res.cookie('otherSelves', possibleClients.join(','));
+       
+        res.sendfile('./client/index.html');
+    });
 
+    express.get('/client_configuration.js', function(req, res) {
+        var configFile = 'netention.client.js';
+
+        fs.readFile(configFile, 'utf8', function(err, data) {
+            if (err) {
+                console.error('Missing configuration: ' + configFile);
+                return;
+            }
+
+            var cc = JSON.stringify(options.client);
+            var js = 'var configuration = ' + cc + ';\n';
+            js += 'configuration.enableAnonymous=' + options.permissions.enableAnonymous + ';\n';
+            js += 'configuration.siteName=\'' + $N.server.name + '\';\n';
+            js += 'configuration.siteDescription=\'' + $N.server.description + '\';\n';
+            js += data;
+            res.send(js);
+        });
+    });
+
+
+    var oneDay = 86400000;
+    var oneWeek = 606876923;
+    var oneYear = 31557600000;
+    var staticContentConfig = {
+        //PRODUCTION: oneYear
+        maxAge: 0
+    };
+
+
+    
+    //express.use(expressm.staticCache());
+    express.use("/plugin", expressm.static('./plugin', staticContentConfig));
+    express.use("/doc", expressm.static('./doc', staticContentConfig));
+
+    express.use("/", expressm.static('./client', staticContentConfig));
+
+    express.post('/uploadgif', function(req, res) {
+
+        var format = req.body.format;
+        var imageBase64 = req.body.image;
+
+
+        if ((!imageBase64) && (!format)) {
+            res.end('');
+            return;
+        }
+
+        imageBase64 = imageBase64.substring('data:image/gif;base64,'.length);
+
+        var buf = new Buffer(imageBase64, 'base64');
+
+        var targetFile = './upload/' + util.uuid() + '.gif';
+        var stream = fs.createWriteStream(targetFile);
+
+        stream.once('open', function(fd) {
+            stream.write(buf);
+            stream.end();
+            res.end(targetFile);
+        });
+    });
+
+    express.post('/upload', function(req, res) {
+
+        //TODO validate permission to upload
+        if ((!req.files) || (!req.files.uploadfile) || (!req.files.uploadfile.path)) {
+            res.send('');
+            return;
+        }
+
+        var temp_path = req.files.uploadfile.path;
+        var save_path = './upload/' + util.uuid() + '_' + req.files.uploadfile.name;
+
+        fs.rename(temp_path, save_path, function(error) {
+            if (error) {
+                res.send('');
+                return;
+            }
+
+            fs.unlink(temp_path, function() {
+                if (error)
+                    res.send('');
+                else
+                    res.send(save_path);
+            });
+
+        });
+    });
 
     /*
     express.get('/log', function(req, res) {
@@ -1135,10 +1046,6 @@ exports.start = function(options) {
 
     function compactObjects(list) {
         return list.map(util.objCompact);
-        
-        /*return list.map(function(o) {
-            return util.objCompact(o);
-        });*/
     }
 
     function objCanSendTo(o, cid) {
@@ -1407,9 +1314,9 @@ exports.start = function(options) {
                 res.end(feed.xml());
             });
         },
-                function(error) {
-                    console.error('object/latest/rss', error);
-                });
+        function(error) {
+            console.error('object/latest/rss', error);
+        });
     });
 
 
@@ -1417,21 +1324,6 @@ exports.start = function(options) {
      var uri = req.params.uri;
      res.redirect('/object.html?id=' + uri);
      });*/
-
-
-    /*express.get('/users/plan', function(req, res) {
-     getPlans(function(p) {
-     sendJSON(res, p); 
-     });
-     });*/
-
-    /*express.get('/users/plan/cluster', function(req, res) {
-     getPlan(function(p) {
-     var kmeans = require('./kmeans.js');           
-     sendJSON(res, kmeans.getCentroids(p, 3));
-     });
-     });*/
-
 
     express.get('/users/tag/rdf', function(req, res) {
         var rdfstore = require('rdfstore');
@@ -1637,12 +1529,8 @@ exports.start = function(options) {
     });
     express.get('/save', function(req, res) {
         saveState(
-                function() {
-                    sendJSON(res, 'Saved');
-                },
-                function(err) {
-                    sendJSON(res, 'Not saved');
-                }
+            function()    {     sendJSON(res, 'Saved');        },
+            function(err) {     sendJSON(res, 'Not saved');    }
         );
     });
     express.get('/team/interestTime', function(req, res) {

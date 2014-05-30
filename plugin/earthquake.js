@@ -8,7 +8,7 @@
 //http://quakes.globalincidentmap.com/
 
 exports.plugin = function($N) {
-    var _ = require('underscore');
+    var _ = require('lodash');
     var web = require('./web.in.js');
     var geo = require('geolib');
 

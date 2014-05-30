@@ -1,5 +1,5 @@
 var util = require('../client/util.js');
-var _ = require('underscore');
+var _ = require('lodash');
 
 
 //return 0..1.0 depending on similarity of two object's tag arrays.

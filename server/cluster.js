@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var geo = require('geolib');
 
 function getSpaceTimeTagCentroids($N, objects, includeSpace, includeTime, IgnoreTags, durationResolution) {

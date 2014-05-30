@@ -20,7 +20,7 @@ www.globalincidentmap.com
 
  */
 var http = require('http');
-var _ = require('underscore');
+var _ = require('lodash');
 
 
 exports.plugin = {

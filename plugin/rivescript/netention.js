@@ -10,7 +10,7 @@ http://www.rivescript.com/yabb2/YaBB.pl?num=1227013586
 */
 var util = require('../../client/util.js');
 var RiveScript = require("rivescript");
-var _ = require('underscore');
+var _ = require('lodash');
 
 exports.plugin = function($N) { return {
         name: 'RiveScript Chatbot',    

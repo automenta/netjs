@@ -23,7 +23,7 @@
 
 */
 var csv = require('ya-csv');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var events = [];
 

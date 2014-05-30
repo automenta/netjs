@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var natural = require('natural');
 var cheerio = require('cheerio');
 var stopwords = require('./nlp.js').stopwords;

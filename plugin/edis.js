@@ -15,7 +15,7 @@ http://hisz.rsoe.hu/alertmap
 
  */
 var http = require('http');
-var _ = require('underscore');
+var _ = require('lodash');
 
 
 var SkipEarthquakes = true;

@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var memory = require('./memory.js');
 var util = require('../client/util.js');
 var expressm = require('express');

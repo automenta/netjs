@@ -5,7 +5,7 @@ node skillgraph.js  < curiosume.rdf > curiosume.dot ; neato curiosume.dot -Tpng 
 */
 
 var readline = require('readline');
-var _ = require('underscore');
+var _ = require('lodash');
 var http = require('http');
 
 var rl = readline.createInterface({

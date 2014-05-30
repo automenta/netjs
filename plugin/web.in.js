@@ -1,6 +1,6 @@
 var feedparser = require('feedparser'); //https://github.com/danmactough/node-feedparser
 var request = require('request');
-var _ = require('underscore');
+var _ = require('lodash');
 var cheerio = require('cheerio');
 var ical = require('ical');
 

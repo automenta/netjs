@@ -21,9 +21,7 @@ exports.plugin = function($N) {
 
             node.on('connect', function() {
               // Hey, now we have at least one peer!
-              console.log(node.id, 'CONNECTED', node.peers.list.length);
               
-              // ...and broadcast stuff -- this is an ordinary duplex stream!
               //node.broadcast.write('a');
               
             });
@@ -39,18 +37,17 @@ exports.plugin = function($N) {
               console.log('  ', new Error().stack);
             })
             
-            node.on('new peer', function(p) { console.log('new peer', p.id); } );
+            //node.on('new peer', function(p) { console.log('new peer', p.id); } );
 
             // Broadcast is a stream
             //process.stdin.pipe(node.broadcast).pipe(process.stdout)
 
-            console.log('starting');
             node.start()
 
         },
         
         stop: function() {
-            console.log('stopping');
+            //console.log('stopping');
             this.node.stop();
         }
     };

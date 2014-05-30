@@ -1,5 +1,5 @@
 exports.plugin = function($N) {
-    var _ = require('underscore');
+    var _ = require('lodash');
     var convnetjs = require('convnetjs');
     
     return {

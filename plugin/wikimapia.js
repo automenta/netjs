@@ -5,7 +5,7 @@
 //http://api.wikimapia.org/?key=example&function=place.getbyarea&coordsby=bbox&bbox=-79.89498%2C40.425%2C-79.86511%2C40.44538&format=json&pack=&language=en&data_blocks=main%2Cphotos%2Ccomments%2Clocation%2C&page=1&count=100&category=&categories_or=&categories_and=
 
 var request = require('request');
-var _ = require('underscore');
+var _ = require('lodash');
 
 exports.plugin = function($N) { return {
 

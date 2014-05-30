@@ -21,7 +21,7 @@ var maxIndices = 16;
 var writeIntervalMS = 100;
 var reportIntervalMS = 1000;
 
-function startNode(port) {
+function startNode(port, pipeToStdout) {
     require('../core.js').start({
         name: 'a' + port,
         plugins: {
@@ -56,10 +56,15 @@ function startNode(port) {
             
             $N.p2p(function(node) {
                 console.log('node',port,'start');
-                
+
                 var b = node.broadcast;
+                
+                if (pipeToStdout) {
+                    b.pipe(process.stdout);
+                }
+                
                 b.pipe(outgoing.createStream({writable: false, sendClock: true})).pipe(b);
-                b.pipe(incoming.createStream({readable: false, sendClock: true})).pipe(b);
+                b.pipe(incoming.createStream({readable: false, sendClock: true}));
             });
         }
     });
@@ -69,10 +74,10 @@ function startNode(port) {
 for (var i = 0; i < numNodes; i++) {
     var f = function(p) {
         return function() {
-            startNode(p);
+            startNode(p+10000, p === 0);
         }
     };
-    setTimeout(f(i+10000), i * startDelay);
+    setTimeout(f(i), i * startDelay);
 }
 
 

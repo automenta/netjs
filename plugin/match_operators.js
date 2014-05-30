@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var match = require('./match_goals.js');
 
 var updatePeriodMS = 3000;

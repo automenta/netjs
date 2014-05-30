@@ -1,5 +1,5 @@
 var util = require('../client/util.js');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var natural = require('natural');
 var TfIdf = natural.TfIdf;

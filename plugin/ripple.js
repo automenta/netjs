@@ -21,7 +21,7 @@ exports.plugin = function($N) {
 
             //https://github.com/ripple/ripple-lib
             var ripple = require('ripple-lib');
-            var _ = require('underscore');
+            var _ = require('lodash');
 
             $N.addAll([
                 {
@@ -161,7 +161,9 @@ exports.plugin = function($N) {
                                                         rt.author = rt.subject = U.id;
                                                         rt.hidden = true;
                                                         rt.readonly = true;
-                                                        rt.addTag('Trust');
+                                                        
+                                                        //rt.addTag('Trust'); //dont add actual Trust until it gets verified by a payment or some other ripple action
+                                                        
                                                         rt.addTag('RippleTrust');
                                                         _.each(trusts, function(v, k) {
                                                             rt.add('rippleTrusts', k);

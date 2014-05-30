@@ -7,7 +7,7 @@ Github Webhook Handler
 
 USE application/x-www-form-urlencoded in Github webhooks settings.
 */
-var _ = require('underscore');
+var _ = require('lodash');
 
 exports.plugin = function($N) {
     return {

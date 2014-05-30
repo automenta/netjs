@@ -48,7 +48,7 @@
  
  */
 
-var _ = require('underscore');
+var _ = require('lodash');
 var cluster = require('../server/cluster.js');
 
 
