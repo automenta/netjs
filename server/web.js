@@ -789,9 +789,7 @@ exports.start = function(options) {
     
     //override serve to provide etag caching
     express.get('/socket.io.cache.js', function(req, res){        
-        if (!$N.server.httpCompress) {
-            res.autoEtag();
-        }
+        res.autoEtag();
         res.setHeader('Content-Type', 'application/javascript');
         res.statusCode = 200;       
         res.end(socketIOclientSource);
