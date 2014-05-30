@@ -992,7 +992,8 @@ var Ontology = function(tagInclude, target) {
             }
 
             that.serializedClasses = null;
-        
+            that.serializedJSON = null;
+
             //indexInstance(x, false); //index classes?
         }
         else if (objIsProperty(x)) {
@@ -1003,6 +1004,7 @@ var Ontology = function(tagInclude, target) {
             delete that.instance[x.id];
             delete x._instance;
             that.serializedPropreties = null;
+			that.serializedJSON = null;
             
             //indexInstance(x, false); //index properties?
         }
@@ -1495,24 +1497,33 @@ var Ontology = function(tagInclude, target) {
     that.serializedPropreties = null; //cache
     that.propertySerialized = function() {
         if (that.serializedPropreties === null)
-            that.serializedPropreties = _.map(that.property, function(p) {
+            that.serializedPropreties = JSON.stringify(_.map(that.property, function(p) {
                 return objCompact(p);
-            });
+            }));
         return that.serializedPropreties;
     };
 
-    that.serializedClasses = null;
+    that.serializedClasses = null; //cache
     that.classSerialized = function() {
         if (that.serializedClasses === null)
-            that.serializedClasses = _.map(that.class, function(c) {
+            that.serializedClasses = JSON.stringify(_.map(that.class, function(c) {
                 var d = objCompact(c);
                 delete d.class;
                 delete d.subclass;
                 delete d.property;
                 return d;
-            });
+            }));
         return that.serializedClasses;
     };
+    that.serializedJSON = null; //cache
+    that.ontologyJSON = function() {
+		if (that.serializedJSON === null) {
+			var cl = that.classSerialized();
+			var pr = that.propertySerialized();
+			that.serializedJSON = "{\"class\":" + cl + ",\"property\":"+pr+"}";
+		}
+		return that.serializedJSON;
+	};
     
     //graphlib.alg.floydWarshall
     //ex: JSON.stringify( $N.getGraphDistances("Trust"), null, 4 )

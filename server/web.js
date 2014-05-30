@@ -767,17 +767,16 @@ exports.start = function(options) {
     
     //express.use(require('connect-dyncache')());    
     
-    var compression = require('compression')();
+    var compression = null;
     
     //Gzip compression
     if ($N.server.httpCompress) {
-        express.use(compression({
+		compression = require('compression')({
           threshhold: 512
-        }));
+        });
     }
-    else {
-        express.use(require('connect-dyncache')());
-    }
+    express.use(require('connect-dyncache')());
+
     
     var httpServer = http.createServer(express);
 
@@ -1263,7 +1262,11 @@ exports.start = function(options) {
 
     }
 
-    express.get('/object/latest/:num/:format', compression, function(req, res) {
+    if (compression)
+		express.get('/object/latest/:num/:format', compression, _getLatestHandler);
+	else
+		express.get('/object/latest/:num/:format', _getLatestHandler);
+	function _getLatestHandler(req, res) {
         var n = parseInt(req.params.num);
         var format = req.params.format;
 
@@ -1303,7 +1306,9 @@ exports.start = function(options) {
         }
         else
             sendJSON(res, 'unknown format: ' + format);
-    });
+    }
+
+
 
     express.get('/object/latest/rss', function(req, res) {
         var NUM_OBJECTS = 64;
@@ -1546,19 +1551,19 @@ exports.start = function(options) {
 
     express.get('/ontology/:format', function(req, res) {
         var format = req.params.format;
-        
-       
-        var cl = $N.classSerialized();
-        var pr = $N.propertySerialized();
-
+               
         res.autoEtag();
         
-        if (format === 'json')
-            sendJSON(res, {'class': cl, 'property': pr }, null, format);
-        else if (format == 'jsonpack')
+        if (format === 'json') {
+            //sendJSON(res, {'class': cl, 'property': pr }, null, format);
+			
+			try { res.set('Content-type', 'text/json'); } catch (e) { }			
+			res.end($N.ontologyJSON());
+		}
+        /*else if (format == 'jsonpack')
             sendJSON(res, {'class': cl, 'property': pr }, null, format);
         else
-            sendJSON(res, 'unknown format: ' + format);
+            sendJSON(res, 'unknown format: ' + format);*/
     });
 
     express.get('/state', function(req, res) {
