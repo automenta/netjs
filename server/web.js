@@ -767,9 +767,11 @@ exports.start = function(options) {
     
     //express.use(require('connect-dyncache')());    
     
+    var compression = require('compression')();
+    
     //Gzip compression
     if ($N.server.httpCompress) {
-        express.use(require('compression')({
+        express.use(compression({
           threshhold: 512
         }));
     }
@@ -1261,7 +1263,7 @@ exports.start = function(options) {
 
     }
 
-    express.get('/object/latest/:num/:format', function(req, res) {
+    express.get('/object/latest/:num/:format', compression, function(req, res) {
         var n = parseInt(req.params.num);
         var format = req.params.format;
 
