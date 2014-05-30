@@ -775,6 +775,10 @@ exports.start = function(options) {
           threshhold: 512
         });
     }
+    else {
+        compression = function(req, res, next){ next(); };
+    }
+    
     express.use(require('connect-dyncache')());
 
     
@@ -1171,7 +1175,7 @@ exports.start = function(options) {
      res.redirect('/object/tag/User/json');        
      });*/
 
-    express.get('/object/tag/:tag/json', function(req, res) {
+    express.get('/object/tag/:tag/json', compression, function(req, res) {
         var tag = req.params.tag;
         if (tag.indexOf(',')) {
             tag = tag.split(',');
@@ -1186,7 +1190,7 @@ exports.start = function(options) {
         });
     });
 
-    express.get('/object/author/:author/json', function(req, res) {
+    express.get('/object/author/:author/json', compression, function(req, res) {
         var author = req.params.author;
         var objects = [];
         getObjectsByAuthor(author, function(objects) {
@@ -1196,7 +1200,7 @@ exports.start = function(options) {
         });
     });
 
-    express.get('/object/:uri/json', function(req, res) {
+    express.get('/object/:uri/json', compression, function(req, res) {
         var uri = req.params.uri;
         getObjectByID(uri, function(err, x) {
             if (x) {
@@ -1259,12 +1263,8 @@ exports.start = function(options) {
         });
 
     }
-
-    if (compression)
-		express.get('/object/latest/:num/:format', compression, _getLatestHandler);
-	else
-		express.get('/object/latest/:num/:format', _getLatestHandler);
-	function _getLatestHandler(req, res) {
+        
+	express.get('/object/latest/:num/:format', compression, function(req, res) {
         var n = parseInt(req.params.num);
         var format = req.params.format;
 
@@ -1304,11 +1304,11 @@ exports.start = function(options) {
         }
         else
             sendJSON(res, 'unknown format: ' + format);
-    }
+    });
 
 
 
-    express.get('/object/latest/rss', function(req, res) {
+    express.get('/object/latest/rss', compression, function(req, res) {
         var NUM_OBJECTS = 64;
 
         var feedOptions = {
@@ -1572,7 +1572,7 @@ exports.start = function(options) {
             sendJSON(res, x, false);
         });
     });
-    express.get('/focus/:historyLengthSeconds', function(req, res) {
+    express.get('/focus/:historyLengthSeconds', compression, function(req, res) {
         var historyLength = req.params.historyLengthSeconds;
         var now = Date.now();
         var oldestAllowedDate = now - historyLength * 1000/*ms*/;
@@ -1661,16 +1661,16 @@ exports.start = function(options) {
                  })*/;
     }
 
-    express.get('/wiki/search/:query', function(req, rres) {
+    express.get('/wiki/search/:query', compression, function(req, rres) {
         var q = req.params.query;
         returnWikiPage('http://en.wikipedia.org/w/index.php?search=' + q, rres);
     });
 
-    express.get('/wiki/:tag/html', function(req, rres) {
+    express.get('/wiki/:tag/html', compression, function(req, rres) {
         var t = req.params.tag;
         returnWikiPage("http://en.wikipedia.org/wiki/" + t, rres);
     });
-    express.get('/wiki/:tag1/:tag2/html', function(req, rres) {
+    express.get('/wiki/:tag1/:tag2/html', compression, function(req, rres) {
         var t = req.params.tag1 + '/' + req.params.tag2;
         returnWikiPage("http://en.wikipedia.org/wiki/" + t, rres);
     });
