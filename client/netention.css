@@ -51,7 +51,11 @@ a, a:visited {
     margin-right: 4px;
     height:1.85em;
     width:1.85em;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.AvatarIcon button {
+    margin: 0;
 }
 
 .DataSubMainMenu {

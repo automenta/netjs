@@ -214,7 +214,7 @@ function newRosterWidget(full) {
                     if (full && configuration.webrtc && (uid!=$N.id())) {
                         var webrtc = r[uid];
                         if (Array.isArray(webrtc)) {
-                            a.css('padding-left', '1em');
+                            a.css('padding-left', '1.85em');
                             webrtc.forEach(function(i) {
                                 newEle('button').html('&gt;').attr('title', 'Private Call ' + i).data('webrtc', [uid,i])
                                     .click(function() {

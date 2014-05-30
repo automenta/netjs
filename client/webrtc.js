@@ -22,8 +22,12 @@ function newMainChatPopup() {
     return s;
 }
 
-function newChatWidget(onSend) {
+function newChatWidget(onSend, options) {
     var c = newDiv();
+    
+    options = options || { 
+        localEcho: true
+    };        
     
     var history = [];
     var log = newDiv().addClass('ChatLog').appendTo(c);
@@ -35,7 +39,8 @@ function newChatWidget(onSend) {
        if (e.keyCode === 13) {
            var m = $(this).val();
            onSend(m);
-           c.receive({a:$N.id(),m:m}); //local echo
+           if (options.localEcho)
+              c.receive({a:$N.id(),m:m}); //local echo
            $(this).val('');
        }
     });
