@@ -17,7 +17,7 @@ exports.plugin = function($N) {
             var Bucket = require('scuttlebucket')
 
             options.address = p2p.localIp(options.address);
-            options.id = $N.server.name;
+            options.id = $N.server.id;
             
             var node = p2p.createNode(options);
             this.node = node;

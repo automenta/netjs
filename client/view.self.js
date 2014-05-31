@@ -534,7 +534,7 @@ function newTagBar(s, currentTag) {
 
 
     {
-        if (configuration.knowLevels == 6) {
+        /*if (configuration.knowLevels == 6) {
             //6 curiosume levels
             tbutton('Learn', skillSet);
             tbutton('LearnDo', skillSet);
@@ -548,7 +548,7 @@ function newTagBar(s, currentTag) {
             tbutton('Do', skillSet);
             tbutton('DoTeach', skillSet);
             tbutton('Teach', skillSet);
-        } else if (configuration.knowLevels == 3) {
+        } else if (configuration.knowLevels == 3)*/ {
             tbutton('Learn', skillSet);
             tbutton('Do', skillSet);
             tbutton('Teach', skillSet);

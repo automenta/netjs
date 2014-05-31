@@ -1,16 +1,23 @@
 exports.options = {
+    "id": null,
     "name": "Netention",
     "description": "http://netention.org",
     "host": "localhost",
     "port": "8080",
-    "databaseURL": "localhost/netention_0",
+    
+    "databaseHost": "localhost",
+    "database": "netention_0",
+    
     "memoryUpdateIntervalMS": 10 * 60 * 1000 /* 10 minutes */,
     "httpCompress": false /* enable this on production servers, but disable if local */,
+    
     "password": "",
+    
     "plugins": {
         "_rss.js": {},
         "_irc.js": {}
     },
+    
     "permissions": {
         "enableAnonymous": true,
         "authenticate_to_configure_plugins": false,
@@ -20,36 +27,58 @@ exports.options = {
         "authenticate_to_create_profiles": false,
         "anyone_to_enable_or_disable_plugin": true
     },
-    "client": {
+    "client": {    
         "connection": "websocket",
-        "ui": "ui.mobile.js",
-        "initialView": "us",
-        "avatarMenuDisplayInitially": false,
-        "avatarMenuTagTreeAlways": false,
+        "webrtc": {port: 8081},
+
         "defaultAvatarIcon": "/theme/default-avatar.jpg",
         "favicon": null,
         "loginLogo": "/theme/login-logo.png",
+
+        "ui": "ui.mobile.js",
+        "initialView": "us",
+        "avatarMenuDisplayInitially": false,
+        
         "wikiStartPage": "Life",
+        
         "showPlanOnSelfPage": true,
         "defaultTheme": "_cybernetic",
+        
         "autoLoginDefaultProfile": true,
         "requireIdentity": true,
         "maxStartupObjects": 8192,
+        
         "defaultMapMode2D": true,
         "mapDefaultLocation": [40.44, -80.0],
-        "enableTogetherJS": false,
+        
         "ontologySearchIntervalMS": 1500,
+        
         "viewUpdateTime": [
             /* mobile: [ min update interval (ms), debounce time (ms), 1st view debounce time (ms) ]  */
             [550, 100, 450],
             /* desktop: [ min update interval (ms), debounce time (ms) ], 1st view debounce time (ms) */
             [150, 10, 100]
         ],
-        "knowLevels": 3,
-        "views": ["us", "map", "browse", "chat", "graph", "trends", "wiki", "templates"],
+        
+        "views": [
+            "us",
+            "map",
+            "browse",
+            "wiki",
+            "graph",
+            "share",
+            //"templates",
+            "forum",
+            "main",
+            "trends",
+            "time",
+            "notebook"
+        ],
         "newUserProperties": [],
+        
         "shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
         "shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'],
+       
         "defaultScope": 7
     },
     start: function($N) {

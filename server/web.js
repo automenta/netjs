@@ -48,7 +48,8 @@ exports.start = function(options) {
     
     $N.server = options;
     $N.httpserver = express;
-
+    if (!options.id)
+        options.id = util.uuid();
     
     var connectedUsers = {};	//current state of all clients, indexed by their clientID 
 
