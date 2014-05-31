@@ -30,6 +30,8 @@ var jsonpack = require('jsonpack');
 var jsonstream = require('JSONStream');
 //var pson= require('pson');
 
+var EventEmitter = require('events').EventEmitter;
+
 //
 //
 //
@@ -43,8 +45,10 @@ var jsonstream = require('JSONStream');
 exports.start = function(options) {
     var express = expressm();
 
-    var $N = _.clone(util);
-    _.extend($N, new $N.Ontology(['User', 'Trust', 'Value']));
+    require('util').inherits(util.Ontology, EventEmitter);
+    
+    var $N = new util.Ontology(['User', 'Trust', 'Value']);
+    $N = _.extend($N, util);
     
     $N.server = options;
     $N.httpserver = express;

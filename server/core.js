@@ -8,18 +8,19 @@ var fs = require('fs')
 var mongo = require("mongojs");
 var jsonpack = require('jsonpack');
 
+var EventEmitter = require('events').EventEmitter;
 
 /** 
  init - callback function that is invoked after the server is created but before it runs 
  */
 exports.start = function(options) {
 
-    var $N = _.clone(util);
-    _.extend($N, new $N.Ontology(['User', 'Trust', 'Value']));
+    require('util').inherits(util.Ontology, EventEmitter);
+    
+    var $N = new util.Ontology(['User', 'Trust', 'Value']);
+    $N = _.extend($N, util);
     
     $N.server = options;
-
-    
 
     var focusHistory = [];
     var focusHistoryMaxAge = 24 * 60 * 60 * 1000; //in ms
@@ -230,8 +231,7 @@ exports.start = function(options) {
             }
         }
         d();
-    }
-    ;
+    }    
     $N.deleteObjects = deleteObjects;
 
 
@@ -259,15 +259,6 @@ exports.start = function(options) {
     $N.noticeAll = noticeAll;
 
     
-    function channelAdd(channel, message, toPlugins) {
-        //TODO use socket channels to send only to subscribers
-        //io.sockets.in('*').emit('channelMessage', channel, message);                
-
-        //TODO allows plugins to choose specific channels to subscribe
-        if (toPlugins)
-            plugins("onChannel", [channel, message]);
-    }
-    $N.channelAdd = channelAdd;
     
     function notice(o, whenFinished, socket) {
 

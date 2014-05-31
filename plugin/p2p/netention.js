@@ -10,20 +10,25 @@ exports.plugin = function($N) {
         author: 'http://netention.org',
         start: function(options) {
             
-            var Model = require('scuttlebutt/model')
-            var ExpiryModel = require("expiry-model");
             //var AppendOnly = require("append-only");
-            var p2p = require('./index');
-            var Bucket = require('scuttlebucket')
+            //var Bucket = require('scuttlebucket')
+            
+            var ExpiryModel = require("expiry-model");
+            //var Model = require('scuttlebutt/model');
 
+            var maxAge = 1000 * 60 * 60 * 2;
+            var maxItems = 64;
+
+            var mainChannel = new ExpiryModel({maxAge:maxAge, max:maxItems});            
+            
+            
+            var p2p = require('./index');
             options.address = options.address; // p2p.localIp(options.address);
             options.id = $N.server.id;            
             
             var node = p2p.createNode(options);
-            this.node = node;
-            
-            // listen on network events...
-            console.log('P2P: Started on ' + node.options.address + ':' + options.port + ', id=' + node.id)
+            this.node = node;            
+
 
             var that = this;
             that.connected = false;
@@ -43,6 +48,8 @@ exports.plugin = function($N) {
                 }
             });
             
+
+                
             $N.p2p = function(whenConnected, whenDisconnected) {
                 if (!that.connected)
                     doWhenConnected.push(whenConnected);
@@ -55,89 +62,55 @@ exports.plugin = function($N) {
                 that.connected = false;
                 if (options.debug) {
                     console.log('disconnect'); 
-                    console.log(_.keys(that.channelsLocal.get("main").toJSON()).length, 
-                                _.keys(that.channelsRemote.get("main").toJSON()).length );
                 }
             });
             
-            node.on('new peer', function(p) { 
+            node.peers.on('add', function(p) { 
                 if (options.debug) {
-                    console.log('New peer', p.id); 
-                    console.log(_.keys(that.channelsLocal.get("main").toJSON()).length, 
-                                _.keys(that.channelsRemote.get("main").toJSON()).length );
+                    console.log('add peer', p.id);
+                }
+            });
+            node.peers.on('remove', function(p) { 
+                if (options.debug) {
+                    console.log('remove peer', p.id); 
                 }
             });
             
             //process.stdin.pipe(node.broadcast).pipe(process.stdout)  // Broadcast is a stream
 
             node.start();
-                        
-            this.channelsLocal = new Bucket();
-            this.channelsRemote = new Bucket();            
-            this.addChannel = function(channel) {
-                var maxAge = 1000 * 60 * 60 * 2;
-                var maxItems = 64;
-                
-                var l = new ExpiryModel({maxAge:maxAge, max:maxItems});
-                var r = new ExpiryModel({maxAge:maxAge, max:maxItems});
-                
-                this.channelsLocal.add(channel, l);
-                this.channelsRemote.add(channel, r);
-                
-                r.on("update", function (key, value) {
-                    $N.channelAdd(channel, value);
-                    //console.log("incoming: ", key, value, _.keys(r.toJSON()).length, '->', _.keys(l.toJSON()).length );
-                });  
-                /*r.on("sync", function() {
-                    console.log(channel, 'sync');
-                });*/
-            };
-            this.addChannel("main");
+
+            // listen on network events...
+            console.log('P2P: Started on ' + node.options.address + ':' + options.port + ', id=' + node.id)
            
             var b = node.broadcast;
-
-            b.pipe(this.channelsRemote.createStream({ readable: true, sendClock: true}))
-             .pipe(this.channelsLocal.createStream({ writable: false, sendClock: true}))
-             .pipe(b);
             
+            if (options.debug)  {
+                //b.pipe(process.stdout);
+            }
+ 
             
-            /*
-                If have are using scuttlebutt in production, you must register on 'error' listener in case someone sends invalid data to it.
-
-                ** Any stream that gets parsed should have an error listener! **
-
-                net.createServer(function (stream) {
-                  var ms = m.createStream()
-                  stream.pipe(ms).pipe(stream)
-                  ms.on('error', function () {
-                    stream.destroy()
-                  })
-                  stream.on('error', function () {
-                    ms.destroy()
-                  })
-                }).listen(9999)            
-            */
+            $N.on('main/out', function(p) {
+                mainChannel.set(node.id, p);
+            });
             
-            /*if (options.debug) {
-                b.pipe(process.stdout);
-            }*/
+            $N.on('main/set', function(k, v) {
+                mainChannel.set(node.id+'/'+k, v);                
+            });
+                        
+            mainChannel.on('update', function(k, v) {
+                if (k.indexOf('/')===-1) {
+                   $N.emit("main/in", v, k);
+                }
+
+                $N.emit('main/get', mainChannel.toJSON(), k, v);
+            });                       
+            
+            var ls = mainChannel.createStream();
+            ls.pipe(node.broadcast).pipe(ls);
+            
         },
         
-        onChannel: function(param) {
-            var channel = param[0];
-            var object = param[1];
-            
-            var m = this.channelsLocal.get(channel);
-
-            if (!m) return; //TODO add channel?
-                
-            if (!m.messageID)
-                m.messageID = 0;
-
-            m.set(this.node.id + '.' + m.messageID, object);
-            m.messageID++;
-            
-        },
         
         stop: function() {
             //console.log('stopping');
@@ -145,3 +118,5 @@ exports.plugin = function($N) {
         }
     };
 };
+
+

@@ -28,7 +28,7 @@ var Peer = function(node, id, socket) {
   }.bind(this))
   
   this.socket.data(['smoke', 'direct'], function(data) {
-    this.push(new Buffer(data/*, 'base64'*/))
+    this.push(new Buffer(data, 'base64'))
   }.bind(this))
 }
 module.exports = Peer
@@ -52,6 +52,6 @@ Peer.prototype._read = function() {
 }
 
 Peer.prototype._write = function(chunk, encoding, cb) {
-  this.socket.emit(['smoke', 'direct'], chunk.toString(/*'base64'*/))
+  this.socket.emit(['smoke', 'direct'], chunk.toString('base64'))
   cb()
 }
