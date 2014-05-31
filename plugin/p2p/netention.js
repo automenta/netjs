@@ -16,8 +16,8 @@ exports.plugin = function($N) {
             var p2p = require('./index');
             var Bucket = require('scuttlebucket')
 
-            options.address = p2p.localIp(options.address);
-            options.id = $N.server.id;
+            options.address = options.address; // p2p.localIp(options.address);
+            options.id = $N.server.id;            
             
             var node = p2p.createNode(options);
             this.node = node;
@@ -30,7 +30,10 @@ exports.plugin = function($N) {
             var doWhenConnected = [];
             node.on('connect', function() {
                 // Hey, now we have at least one peer!
-              
+                
+                if (options.debug)
+                    console.log('connected');
+                
                 if (!that.connected) {
                     that.connected = true;
                     doWhenConnected.forEach(function(d) {

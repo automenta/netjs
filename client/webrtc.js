@@ -60,10 +60,16 @@ function newChatWidget(onSend, options) {
     function newChatLine(l) {
         var d = newDiv();
         
-        var A = $N.instance[l.a];
-        if (A) {
-            d.append(newEle('a').html(newAvatarImage(A)).click(chatlineclick));
+        if (l.a) {
+            var A = $N.instance[l.a];
+            if (A) {
+                d.append(newEle('a').html(newAvatarImage(A)).click(chatlineclick));
+            }
+            else {
+                d.append(newEle('a').html(l.a + ': '));
+            }
         }
+        
         d.append(newEle('span').html(l.m));
         
         //TODO scroll to bottom
