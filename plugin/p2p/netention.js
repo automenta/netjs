@@ -2,12 +2,6 @@
 
 exports.plugin = function($N) {
     //https://github.com/marcelklehr/smokesignal
-
-    var Model = require('scuttlebutt/model')
-    var ExpiryModel = require("expiry-model");
-    //var AppendOnly = require("append-only");
-    var p2p = require('./index');
-    var Bucket = require('scuttlebucket')
     
     return {
         name: 'P2P Network',
@@ -15,6 +9,12 @@ exports.plugin = function($N) {
         version: '1.0',
         author: 'http://netention.org',
         start: function(options) {
+            
+            var Model = require('scuttlebutt/model')
+            var ExpiryModel = require("expiry-model");
+            //var AppendOnly = require("append-only");
+            var p2p = require('./index');
+            var Bucket = require('scuttlebucket')
 
             options.address = p2p.localIp(options.address);
             options.id = $N.server.name;
