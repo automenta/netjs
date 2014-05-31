@@ -16,7 +16,7 @@ function startNode(port, seeds, debug) {
                 
                 if (debug) {
                     $N.on('main/in', function(p) {
-                        //console.log(node.id, 'in', p);
+                        console.log(node.id, 'in', p);
                     });
                     $N.on('main/get', function(data, k, v) {
                         console.log(node.id, 'get', _.keys(data).length, k, v);
@@ -25,10 +25,11 @@ function startNode(port, seeds, debug) {
                 else {
                     var n = 0;
                     function pulse() {
-                        $N.emit('main/out', "event");
-                        $N.emit('main/set', n++, {a:('a' + port), m:('@' + Date.now()) });
+                        $N.emit('main/out', ["event",n]);
+                        //$N.emit('main/set', n, 'a' + port /*, m:('@' + Date.now())*/);
+                        n++;
                     }
-                    setInterval(pulse, 250);
+                    setInterval(pulse, 500);
                     pulse();
                 }
                       
@@ -40,9 +41,9 @@ function startNode(port, seeds, debug) {
     
 
 startNode(10000, [], false);
-startNode(10001, [{port: 10000, address:'127.0.0.1'}], true);
+startNode(10001, [{port: 10000, address:'127.0.0.1'}], false);
 
 setTimeout(function() {
-    startNode(10002, [{port: 10001, address:'127.0.0.1'}], true);
-}, 1000);
+    startNode(10002, [{port: 10000, address:'127.0.0.1'}], true);
+}, 5000);
            

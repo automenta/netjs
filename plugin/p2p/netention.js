@@ -8,7 +8,91 @@ exports.plugin = function($N) {
         description: '',
         version: '1.0',
         author: 'http://netention.org',
+        
         start: function(options) {
+            var pnode = require('pnode');
+            
+            options.id = $N.server.id;
+            
+            var node = pnode.peer({
+              id: options.id,
+              debug: false
+            });
+
+            node.bindOn('tcp://0.0.0.0:' + options.port, function(){
+                console.log('pnode started on port ' + options.port);                
+            });
+            
+            if (options.seeds)
+                options.seeds.forEach(function(s) {
+                    node.bindTo('tcp://' + s.address + ':' + s.port);
+                });
+            
+            $N.p2p = function(whenConnected, whenDisconnected) {
+                //if (!that.connected)
+                    //doWhenConnected.push(whenConnected);
+                //else
+                    whenConnected(node);
+            };            
+
+            node.on("peer", function(peer) {
+                if (options.debug)
+                    console.log(options.id + " peer connected: " + peer.id);
+            });
+            
+            var store = node.store({
+              id:'main',
+              subscribe:true,
+              publish:true,
+              publishInterval: 100, //"nextTick"
+              debug: false,
+              filter: null
+            });
+            
+            /*var LRU = require("lru-cache");
+            store.obj = LRU({ max: 8
+                          //, length: function (n) { return n * 2 }
+                          , dispose: function (key, n) { n.close() }
+                          , maxAge: 1000  * 60 * 60 });*/
+
+
+            store.on('*', function(u, v, w) {
+                if (u === 'set') {                    
+                }
+                if (u === 'add') {
+                }
+                if (u === 'remove') {
+                }
+                if (u === 'update') {
+                }
+                
+                if (options.debug) {
+                    console.log(options.id + ' store ' + u + ': ', v, w, ', length: ' + _.keys(store.object()).length );
+                    console.log(store.object());
+                    //console.log(store.obj);
+                }
+            });
+
+            /*store.set('foo', 24);
+            store.set(['ping','pong'], 0);
+            store.set('bazz', { zip: { zap: "!" } });
+            store.set(["x",0,"y"], { a:"b" });
+            store.set(["x",1], { c:"d" });*/
+
+            /*setTimeout(function() {
+              console.log('peer has:',store.object());
+            }, 1000); */
+            
+            $N.on('main/out', function(p) {
+                store.set(options.id+'event', p);
+            });
+            
+            $N.on('main/set', function(k, v) {
+                store.set(options.id+'/'+k, v);                
+            });
+        },
+        
+        _start: function(options) {
             
             //var AppendOnly = require("append-only");
             //var Bucket = require('scuttlebucket')

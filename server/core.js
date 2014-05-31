@@ -20,6 +20,9 @@ exports.start = function(options) {
     var $N = new util.Ontology(['User', 'Trust', 'Value']);
     $N = _.extend($N, util);
     
+    if (!options.id)
+        options.id = util.uuid();
+    
     $N.server = options;
 
     var focusHistory = [];
