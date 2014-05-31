@@ -2061,8 +2061,7 @@ exports.start = function(options) {
                 }
             });
             socket.on('channelSend', function(channel, message) {
-                //TODO use socket channels to send only to subscribers
-                io.sockets.in('*').emit('channelMessage', channel, message);                
+                channelAdd(channel, message, true);
             });
 
         }
@@ -2070,7 +2069,15 @@ exports.start = function(options) {
 
     });
 
+    function channelAdd(channel, message, toPlugins) {
+        //TODO use socket channels to send only to subscribers
+        io.sockets.in('*').emit('channelMessage', channel, message);                
 
+        //TODO allows plugins to choose specific channels to subscribe
+        if (toPlugins)
+            plugins("onChannel", [channel, message]);
+    }
+    $N.channelAdd = channelAdd;
 
     function updateInterestTime() {
         //reprocess all clientState's to current time

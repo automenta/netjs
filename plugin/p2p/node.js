@@ -24,8 +24,10 @@ function Node(options) {
   }.bind(this))
 
   // Set up properties
-  this.id = Math.abs(Math.random() * Math.random() * Date.now() | 0).toString(36)
-          + Math.abs(Math.random() * Math.random() * Date.now() | 0).toString(36)
+  this.id = options.id ||
+      (Math.abs(Math.random() * Math.random() * Date.now() | 0).toString(36)
+      + Math.abs(Math.random() * Math.random() * Date.now() | 0).toString(36))
+  
   this.listening = false
   this.connected = false
   this.outstandingPongs = {}

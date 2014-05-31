@@ -258,6 +258,17 @@ exports.start = function(options) {
     }
     $N.noticeAll = noticeAll;
 
+    
+    function channelAdd(channel, message, toPlugins) {
+        //TODO use socket channels to send only to subscribers
+        //io.sockets.in('*').emit('channelMessage', channel, message);                
+
+        //TODO allows plugins to choose specific channels to subscribe
+        if (toPlugins)
+            plugins("onChannel", [channel, message]);
+    }
+    $N.channelAdd = channelAdd;
+    
     function notice(o, whenFinished, socket) {
 
         if (o._id)
