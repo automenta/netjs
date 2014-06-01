@@ -15,8 +15,10 @@ exports.plugin = function ($N) {
             
             var Gossiper = require('grapevine').Gossiper;
             // Create a seed peer.
-            var node = new Gossiper(options.port, options.seeds);
-            node.start();
+            var node = new Gossiper(options.port, options.seeds, options.address);
+            node.start(function() {
+                console.log('p2p started on ' + (options.address||'') + ' port ' + options.port);
+            });
 
             $N.p2p = function (whenConnected, whenDisconnected) {
                 node.on('started', whenConnected);
