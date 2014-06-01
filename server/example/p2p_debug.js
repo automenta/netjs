@@ -1,4 +1,4 @@
-function startNode(port, seeds, debug) {
+function startNode(port, seeds, debug, strobe) {
     require('../core.js').start({
         name: 'a' + port,
         plugins: {
@@ -22,11 +22,11 @@ function startNode(port, seeds, debug) {
                         console.log(node.id, 'get', _.keys(data).length, k, v);
                     });
                 }
-                else {
+                if (strobe) {
                     var n = 0;
                     function pulse() {
-                        $N.emit('main/out', ["event",n]);
-                        //$N.emit('main/set', n, 'a' + port /*, m:('@' + Date.now())*/);
+                        //$N.emit('main/out', ["e",n,node.id]);
+                        $N.emit('main/set', n, {x:('a' + port), m:('@' + Date.now())});
                         n++;
                     }
                     setInterval(pulse, 500);
@@ -40,10 +40,10 @@ function startNode(port, seeds, debug) {
 }
     
 
-startNode(10000, [], false);
-startNode(10001, [{port: 10000, address:'127.0.0.1'}], false);
+startNode(10001, ['127.0.0.1:10000'], true);
 
+/*
 setTimeout(function() {
-    startNode(10002, [{port: 10000, address:'127.0.0.1'}], true);
-}, 5000);
+    startNode(10002, ['127.0.0.1:10001'], true, true);
+}, 5000);*/
            

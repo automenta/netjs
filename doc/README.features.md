@@ -17,6 +17,8 @@ Designed to serve clients and connect to other servers and services to form an o
  * **HTTP AJAJ REST API** (_Express framework_)
  * **WebSockets API** (_socket.io_)
    * Real-time server push
+ * **WebRTC** Text, Audio, Video Secure Networking for Direct Browser->Browser Communication
+   * __TODO__: File Transfer
  * **Static content** (HTML, JS, CSS, images, etc...) served for client applications 
  * **Multiple Identities** - each account contains one or more identities
   * Automatically creates default identity on first login
@@ -42,6 +44,7 @@ Designed to serve clients and connect to other servers and services to form an o
   * Trusted - only accessible by those "trusted" by author
   * Public - accessible by all
   * Anonymous - public, missing author information
+ * **Group Chat** in Multiple Channels
  * **Configuration**
   * options.js file
   * _TODO:_ online configuration for administrator

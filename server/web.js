@@ -30,8 +30,7 @@ var jsonpack = require('jsonpack');
 var jsonstream = require('JSONStream');
 //var pson= require('pson');
 
-var EventEmitter = require('events').EventEmitter;
-
+var EventEmitter = require('eventemitter2').EventEmitter2;
 //
 //
 //
@@ -1693,9 +1692,9 @@ exports.start = function(options) {
 
     var rosterBroadcastIntervalMS = 1000;
     var broadcastRoster = _.throttle(function() {
-        var uc = getRoster();
-        if (_.keys(uc).length > 0)
-            io.sockets.in('*').emit('roster', uc);
+        var r = getRoster();
+        io.sockets.in('*').emit('roster', r);
+        $N.emit('main/set', 'roster', r);
     }, rosterBroadcastIntervalMS);
 
     function updateUserConnection(oldID, nextID, socket) {
@@ -2066,7 +2065,7 @@ exports.start = function(options) {
                 }
             });
             socket.on('channelSend', function(channel, message) {
-                channelAdd(channel, message, true);
+                channelAdd(channel, message, true, true);
             });
 
         }
@@ -2074,13 +2073,18 @@ exports.start = function(options) {
 
     });
 
-    function channelAdd(channel, message, toPlugins) {
+    function channelAdd(channel, message, toWebSockets, toP2P) {
         //TODO use socket channels to send only to subscribers
-        io.sockets.in('*').emit('channelMessage', channel, message);                
+        if (toWebSockets)
+            io.sockets.in('*').emit('channelMessage', channel, message);                
 
         //TODO allows plugins to choose specific channels to subscribe
-        if (toPlugins)
-            plugins("onChannel", [channel, message]);
+        //if (toPlugins)
+        //    plugins("onChannel", [channel, message]);
+        if (toP2P)
+            if (channel === 'main') {
+                $N.emit('main/say', message);
+            }
     }
     $N.channelAdd = channelAdd;
 

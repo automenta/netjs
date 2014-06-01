@@ -9,8 +9,6 @@ exports.plugin = function($N) {
         },
         onConnect: function(who) {
         },
-        onChannel: function(channel, object) {
-        },
         prePub: function(x) {
             return x;
         },
