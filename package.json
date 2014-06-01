@@ -21,6 +21,7 @@
     "express": "",
     "feedparser": "",
     "geolib": "",
+    "automenta/grapevine":"",
     "graphlib": "",
     "http-auth": "",
     "ical": "",

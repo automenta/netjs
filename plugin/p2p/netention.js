@@ -11,7 +11,11 @@ exports.plugin = function ($N) {
 
 
         start: function (options) {
-            var sayTTL = 1000 * 60 * 2; //2min
+            
+            //must be long enough to account for server time inconsistencies.
+            //in our server's case, the time is ~3 minutes off. so a TTL of 2 minutes made
+            //received messages ignored.
+            var sayTTL = 1000 * 60 * 10; 
             
             var Gossiper = require('grapevine').Gossiper;
             // Create a seed peer.

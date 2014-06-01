@@ -42,6 +42,10 @@ exports.start = function(options) {
     }
 
 
+    $N.channelAdd = function()  { //temporary
+    };
+    
+    
     function startPlugin(kv, options) {
         var v = kv;
 

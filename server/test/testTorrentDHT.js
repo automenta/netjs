@@ -1,9 +1,3 @@
-//http://thepiratebay.se/rss
-//http://dsn.tm.kit.edu/english/2936.php
-
-return;
-
-
 var dht = require('dht.js');
 
 // Create DHT node (server)
