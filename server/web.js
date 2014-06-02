@@ -1193,7 +1193,24 @@ exports.start = function(options) {
             });
         });
     });
+    //TODO unify this with previous function
+    express.get('/object/tag/:tag/json/expanded', compression, function(req, res) {
+        var tag = req.params.tag;
+        if (tag.indexOf(',')) {
+            tag = tag.split(',');
+        }
+        var objects = [];
+        getObjectsByTag(tag, function(o) {
+            objects.push(o);
+        }, function() {
+            objAccessFilter(objects, req, function(sharedObjects) {
+                sendJSON(res, sharedObjects);
+            });
+        });
+    });
 
+    
+    
     express.get('/object/author/:author/json', compression, function(req, res) {
         var author = req.params.author;
         var objects = [];
