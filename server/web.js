@@ -1194,7 +1194,7 @@ exports.start = function(options) {
         });
     });
     //TODO unify this with previous function
-    express.get('/object/tag/:tag/json/expanded', compression, function(req, res) {
+    express.get('/object/tag/:tag/json_expanded', compression, function(req, res) {
         var tag = req.params.tag;
         if (tag.indexOf(',')) {
             tag = tag.split(',');
@@ -1309,9 +1309,23 @@ exports.start = function(options) {
 				js.end();				
 			});
 		}		
-        else if (format === 'jsonpack') {
+		else if (format === 'json_expanded') {
+			var cid = getCurrentClientID(req);
 
-			
+			res.set('Content-type', 'text/json; charset=UTF-8');
+			res.set('Transfer-Encoding', 'chunked');
+
+			var js = jsonstream.stringify('[',',',']');
+			js.pipe(res);
+			getLatestObjectsStream(n, function(o) {
+				if (objCanSendTo(o, cid)) {
+					js.write(o);
+				}	
+			}, function() {
+				js.end();				
+			});
+		}		
+        else if (format === 'jsonpack') {
             getLatestObjects(n,
                     function(objs) {
                         objAccessFilter(objs, req, function(sharedObjects) {
