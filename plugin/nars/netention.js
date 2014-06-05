@@ -44,26 +44,22 @@ exports.plugin = function($N) {
             }());
 
             function encodeNARSTerm(n) {
-                var r = "";
-                for (var i = 0; i < n.length; i++) {
-                    var next = n[i];
-                    if (next === ' ') next = '_';
-                    else if (next === '_') next = '__';
-                    else if (next === '$') next = '_d';
-                    else if (next === '#') next = '_p';
-                    else if (next === ',') next = '_c';
-                    else if (next === ':') next = '_s';
-                    else if (next === ':') next = '_s';
-                    else if (next === '%') next = '_t';
-                    else {
-                        next = encodeURIComponent(next);
-                        next[0] = '_';
-                    }
-                    
-                    r += next;
-                }
+                var r = encodeURIComponent(n);
+                r = r.replace(/%20/g, '_');
+                //- _ . ! ~ * ' ( )
+                r = r.replace(/\./g, '_p');
+                r = r.replace(/\-/g, '_d');
+                r = r.replace(/\//g, '_s');
+                r = r.replace(/\~/g, '_w');
+                r = r.replace(/\*/g, '_a');
+                r = r.replace(/\'/g, '_p');
+                r = r.replace(/\(/g, '_b');
+                r = r.replace(/\)/g, '_c');
+                r = r.replace(/\*/g, '_a');
+                r = r.replace(/\%/g, '__');
+
                 if (isDigit(r[0])) {
-                    r = '_n' + r;
+                    r = '_' + r;
                 }
                 return r;                
             }
