@@ -110,6 +110,7 @@ Collection of **Tags** providing a common semantic vocabulary for describing rea
             * latitude
             * longitude
             * altitude
+			* heading (degrees from North)
             * planet ID
         * _TODO:_  **spaceregion** (region in space)
             * geocircular

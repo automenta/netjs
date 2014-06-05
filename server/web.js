@@ -1103,6 +1103,7 @@ exports.start = function(options) {
          }*/
         return true;
     }
+    $N.objCanSendTo = objCanSendTo;
 
     function objAccessFilter(objs, req, withObjects) {
         var cid = getCurrentClientID(req);
@@ -1266,7 +1267,7 @@ exports.start = function(options) {
             });
         });
     }
-    $N.getLatestObjects = getLatestObjects;
+    $N.getLatestObjectsStream = getLatestObjectsStream;
     
     function getExpiredObjects(withObjects) {
         db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
@@ -1309,6 +1310,7 @@ exports.start = function(options) {
 				js.end();				
 			});
 		}		
+        //TODO unify with above block
 		else if (format === 'json_expanded') {
 			var cid = getCurrentClientID(req);
 
