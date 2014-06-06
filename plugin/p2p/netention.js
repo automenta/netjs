@@ -46,7 +46,7 @@ exports.plugin = function ($N) {
 					
 					node.get(c.id);
 					node.on('set:' + c.id, function(v) {
-						node.debug();
+						//node.debug();
 					});
 					
 				}				

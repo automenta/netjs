@@ -14,10 +14,14 @@ function update() {
 		
 		console.log();
 	});	
-	log.forEach(console.log);
+	//log.forEach(console.log);
+}
+function log(x) {
+	console.log(x);
 }
 
-setInterval(update, 250);
+
+setInterval(update, 1000);
 
 function startNode(port, seeds, debug, strobe) {
     require('../server/core.js').start({
@@ -38,24 +42,22 @@ function startNode(port, seeds, debug, strobe) {
 				
                 if (debug) {
                     $N.on('main/in', function(p) {
-                        log.push(node.id, 'in', p);
+                        log(node.id, 'in', p);
                     });
                     $N.on('main/get', function(data, k, v) {
-                        log.push(node.id, 'get', _.keys(data).length, k, v);
+                        log(node.id, 'get', _.keys(data).length, k, v);
                     });
                 }
                 if (strobe) {
-                    var n = 0;
                     function pulse() {
-                        //$N.emit('main/out', ["e",n,node.id]);
-                        $N.emit('main/set', node.id, { name:$N.server.name, m:('@' + Date.now())});
-                        n++;
+                        $N.emit('main/set', 'beat', { m:('@' + Date.now()) });
                     }
                     setInterval(pulse, 15000);
                     pulse();
                 }
                 node.on('contact:add', function(c) {
 					peers.push(c);
+					//node.debug();
 				});
                 
             });
@@ -64,7 +66,7 @@ function startNode(port, seeds, debug, strobe) {
 }
     
 
-startNode(9999, ['192.168.0.102:10000'], true, false);
+startNode(9999, ['54.84.209.171:9001','192.168.0.102:10000'], false, true);
 
 /*
 setTimeout(function() {
