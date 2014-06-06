@@ -11,22 +11,51 @@ exports.plugin = function ($N) {
 
 
         start: function (options) {
-            
-            //must be long enough to account for server time inconsistencies.
-            //in our server's case, the time is ~3 minutes off. so a TTL of 2 minutes made
-            //received messages ignored.
-            var sayTTL = 1000 * 60 * 10; 
-            
-            var Gossiper = require('grapevine').Gossiper;
-            // Create a seed peer.
-            var node = new Gossiper(options.port, options.seeds, options.address);
-            node.start(function() {
-                console.log('p2p started on ' + (options.address||'') + ' port ' + options.port);
-            });
-
+            var dht = require('p2pdht');
+			
+			var node = new dht.KNode({
+				id: $N.server.id,
+				address: options.address, 
+				port: options.port, 
+				debug: options.debug
+			}, options.seeds);
+						
+			console.log(node.self.nodeID + ' p2p started on ' + (options.address||'') + ' port ' + options.port);
+			
+			node.set(node.id, {
+					name: $N.server.name
+			});
+			
             $N.p2p = function (whenConnected, whenDisconnected) {
-                node.on('started', whenConnected);
+                //node.on('started', whenConnected);
+				whenConnected();
             };
+			
+			//var peers = { };
+			function updatePeer(c) {
+								
+				//console.log('updating peer', c);
+				//node.debug();
+				
+				if (!c.id) return;
+				
+				/*if (peers[c.id]!=undefined)
+					return;
+				peers[c.id] = Date.now();*/
+				
+				if (c.id!=c.nodeID) {
+					
+					node.get(c.id, function(err, nodeData) {
+						console.log('GET', c.id, nodeData);
+					}, true);
+					node.debug();
+				}				
+			}
+			node.on('contact:add', updatePeer);
+				
+			//node.on('contact:update', console.log);
+
+			/*
             node.on('update', function (peer, k, v) {
                 var peerID = node.peerValue(peer, "id");
                 var peerName = node.peerValue(peer, "name") || peerID;
@@ -40,25 +69,25 @@ exports.plugin = function ($N) {
                     }
                 }
             });
+			*/
 
             //console.log(g.peer_name + ' peers: ' + g.livePeers().length + '/' + g.deadPeers().length);
             $N.on('main/set', function (key, v) {
-                if (v === null)
+                /*if (v === null)
                     node.setLocalState(key, null, Date.now());
                 else
                     node.setLocalState(key, v);
+					*/
             });
             
-            var said = 0;
+            //var said = 0;
             $N.on('main/say', function (v, skipBroadcast) {
                 if (!skipBroadcast) {
-                    node.setLocalState('s' + said, v, Date.now() + sayTTL);
-                    said++;
+                    //node.setLocalState('s' + said, v, Date.now() + sayTTL);
+                    //said++;
                 }
             });
             
-            node.setLocalState("id", $N.server.id);
-            node.setLocalState("name", $N.server.name);
             
         },
 
