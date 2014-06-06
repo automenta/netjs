@@ -186,12 +186,22 @@ function renderFocus(skipSet) {
 
 function initFocusButtons() {
     
+	$( "#FocusEditWrap" ).resizable({
+		handles: "w",
+		resize: function( event, ui ) {
+			$( "#FocusEditWrap" ).css('left', 'auto');
+			$( "#FocusEditWrap" ).css('right', '0');
+		}
+	});
+	
     $('#FocusEditToggleButton').click(function() {
         if ($('#FocusEditWrap').is(':visible')) {
-            $('#FocusEditWrap').fadeOut();        
+            $('#FocusEditWrap').hide(); //fadeOut();
+			reflowView();
         }
         else {        
             $('#FocusEditWrap').fadeIn();        
+			reflowView();
         }
     });
 

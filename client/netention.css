@@ -882,10 +882,10 @@ a.ViewControlMinor img {
 }
 
 #FocusEditWrap {
-    max-height: 75%;
     overflow: auto;
-    right: 15px;
-    max-width: 30%;
+	top:0;
+    right: 0px;
+    max-width: 50%;
 }
 #FocusEditButtons {
     float: right;
@@ -1181,6 +1181,14 @@ div.objectView .metadataReplyButton {
 }
 
 @media (max-width: 699px) {
+	#FocusEditWrap {
+		overflow: auto;
+		top:0;
+		right: 0px;
+		max-width: 100%;
+		width: 100% !important;
+	}	
+	
     .ChatViewContent {
         margin-left: 0;
     }
