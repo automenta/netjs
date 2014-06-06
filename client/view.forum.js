@@ -178,7 +178,7 @@ function newForumView(v) {
         content.empty();
 
         if (toDisplay.length === 0) {
-            content.html('No messages.');
+            content.html('Focus empty.');
             return;
         }
 

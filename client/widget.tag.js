@@ -2,6 +2,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     var selected;
     var inDialog = true;
     var addImmediately = false;
+	var cancelButton = true;
     if (!options) {
         
     }
@@ -12,6 +13,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
         selected = options.selected;
         inDialog = options.inDialog;
         addImmediately = options.addImmediately;
+		cancelButton = options.cancelButton;
     }
     
     if (!selected)
@@ -30,6 +32,8 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     var clearButton = $('<button title="Clear the selected tags">Clear</button>').addClass('halfTransparent');
     
     var b = $('<button><b>OK</b></button>');
+	if (!cancelButton)
+		b.hide();
 
     var tagsCombo = $('<span></span>').attr('id', 'tagsCombo');
     tagsCombo.update = function() {
@@ -70,12 +74,13 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     }
 
     function loadBrowser(w) {
-        t.empty();
-        currentBrowser = w(selected, onTagAdded);
-        t.append(currentBrowser);
+		later(function() {
+			currentBrowser = w(selected, onTagAdded);
+			t.html(currentBrowser);
+		});
     }
 
-    var selectBar = $('<div/>').attr('id', 'tagSelectHeader').addClass('taggerHeader');
+    var selectBar = $('<div/>').attr('id', 'tagSelectHeader').addClass('taggerHeader ui-widget-content');
     
     var modeFunctions = {};
     var modeSelect = $('<select autofocus/>')
@@ -204,7 +209,7 @@ function newNeedsBrowser() {
 
 function newTreeBrowser(selected, onTagAdded) {
     var e = newDiv().addClass('SelfTimeTagTree');
-
+	
     $('.TagChoice').remove();
 
     var prefix = 'S_';
@@ -213,22 +218,25 @@ function newTreeBrowser(selected, onTagAdded) {
         onTagAdded($(this).attr('id').substring(prefix.length));
     };
     
-    newTagTree({
-        target: e,
-        newTagDiv: function(id, content) {
-            var ti = getTagIcon(id) || defaultIcons.unknown;
+	later(function() {
+		newTagTree({
+			target: e,
+			newTagDiv: function(id, content) {
+				var ti = getTagIcon(id) || defaultIcons.unknown;
 
-            return {
-                label: '<button id="' + prefix + id + '" class="TagChoice" style="background-image: url('+ ti + ')">' +
-                       content + '</button>'
-            };
-        },
-        onCreated: function() {
-            e.find('.TagChoice').each(function(x) {
-                $(this).click(_onTagAddedFunc);
-            });
-        }
-    });
+				return {
+					label: '<button id="' + prefix + id + '" class="TagChoice" style="background-image: url('+ ti + ')">' +
+						   content + '</button>'
+				};
+			},
+			onCreated: function() {
+				e.find('.TagChoice').each(function(x) {
+					$(this).click(_onTagAddedFunc);
+				});
+			}
+		});
+
+	});
 
     return e;
 }
@@ -240,6 +248,7 @@ function newTagTree(param) {
     var newTagLayerDiv = param.newTagDiv;
 
     a.empty();
+	
 
     var tree = newDiv();
 
@@ -352,9 +361,12 @@ function newTagTree(param) {
         a.children('ul').children('li').children('div').children('.jqtree-toggler').click();
 
         if (param.onCreated)
-            param.onCreated(a);
-    });
+			param.onCreated(a);
+		
 
+	});
+	
+	
     return tree;
 
 }

@@ -572,13 +572,16 @@ function popupAboutDialog() {
 
 var _reflowView;
 function reflowView() {
+	var viewWidth;
 	if (!$('#FocusEditWrap').is(':visible')) {
-		$('#View').css('width', '100%');
+		viewWidth = '100%';
 	}
 	else {		
 		var vw = $(window).width() - $('#FocusEditWrap').width() - 12;
-		$('#View').css('width', vw + 'px');
+		viewWidth = vw + 'px';
 	}
+	
+	$('#View').css('width', viewWidth);
 	
     if (!_reflowView) {
         _reflowView = _.debounce(function() {

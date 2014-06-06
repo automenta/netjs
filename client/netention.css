@@ -16,7 +16,8 @@ a, a:visited {
 
 #FocusStatus { 
     opacity: 0.75; text-align: right !important; 
-    padding-top: 2px; border-top: 1px solid gray; 
+    padding-top: 2px;
+	padding-bottom: 8px;
     width: 100%;
     float: left;
 }
@@ -141,7 +142,7 @@ div.olMapViewport {
     margin-left: 0;
 }
 
-.objectView .tagSectionItem {
+.tagSectionEditable {
     border: 1px solid rgba(127,127,127,0.35);
 }
     
@@ -206,9 +207,8 @@ div.olMapViewport {
     padding: 0;
 }
 .tagSectionItem {
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid rgba(127,127,127,0.5);    
+    padding: 3px;
+    margin: 3px;
 }
 .tagSectionItem .tagButtons {
     font-size: 70%;    
@@ -296,6 +296,16 @@ div.olMapViewport {
     font-size: 125%;
 }
 
+#FocusEditCloseButton {
+	background: transparent !important;
+	margin-left: 10px;
+}
+#FocusEditCloseButton img {
+	height: 1.5em;
+	max-width: 1.5em;
+	background: transparent !important;
+}
+
 #FocusEdit .tagSection {
     width: 100% !important;
     float: left !important;
@@ -379,6 +389,9 @@ div.olMapViewport {
     overflow-y: auto;
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
+	z-index: 5000 !important;
+	position: fixed;
+	max-width: 25%;
 }
 .trendTagLabel {
     float: left;
@@ -558,8 +571,9 @@ div.olMapViewport {
     text-indent: 15px;
     font-size: 150%;
 }
+
 .nameInputWide {
-    width: 98%;
+    width: 88.5%;
 }
 
 
@@ -572,13 +586,20 @@ div.olMapViewport {
 
 div.tagsinput {
     padding-bottom: 0 !important;
-    float: left;
+    float: right;
     overflow: hidden !important;
+	margin-top: 3px;
+	padding: 0;
+	width: 10%;
+}
+div.tagsinput input {
+	padding: 0;
 }
 
+
 .mainTagSuggestions {
-    width: 80% !important;
-    float: right !important;
+    width: 98% !important;
+    float: left !important;
     clear: none !important;
     margin: 0 !important;
     margin-bottom: 8px;
@@ -864,18 +885,20 @@ a.ViewControlMinor img {
 }
 
 #FocusTagger {
-    max-height: 16em;
+	min-height: 8em;
+    height: 16em;
 	clear:both;
     overflow: auto;
+	resize: vertical;
 }
 #FocusTagger .taggerContent {
 	padding-top: 2em;
 }
 #FocusTagger .taggerHeader {
-    padding-bottom: 0;
+    padding-bottom: 3px;
     margin-bottom: 0;
-	position: fixed;
-	width: 100%;
+	position: absolute;
+	width: 90%;	
 }
 
 #FocusEditWrap {
@@ -896,13 +919,26 @@ a.ViewControlMinor img {
 }
 .SourceFilter .Source {
 	cursor: pointer; 
-	opacity: 0.7;
+	opacity: 0.8;
 	clear: both;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	font-weight: bold;
 }
 .SourceFilter .selected {
 	background-color: rgba(255,255,255,0.3);
 	opacity: 1.0;
 }
+.SourceFilter .sublabel {
+	font-weight: normal;
+	font-size: 75%;
+	opacity: 0.5;
+}
+.SourceFilter .buttons {
+	float: right;
+}
+
 
 #FocusTagTree {
     text-align: left !important;
@@ -1193,6 +1229,8 @@ div.objectView .metadataReplyButton {
 		right: 0px;
 		max-width: 100%;
 		width: 100% !important;
+		margin-bottom:50px;
+		height: 100%;
 	}	
 	
     .ChatViewContent {

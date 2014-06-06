@@ -190,7 +190,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         if (x.replyTo)  //TODO make this conditoin optional
             continue;
 
-        var xx;
+        var xx = null;
 
         if (preFilter) {
             xx = objTagStrength(x, false);
@@ -338,7 +338,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
                 if (r > 0) {
                     if (ft.length > 0) {
-                        if (!xx)
+                        if (xx===null)
                              xx = objTagStrength(x, false);
                         r *= objTagStrengthRelevance(xx, focusTagStrength);
                     }

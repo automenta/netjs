@@ -352,9 +352,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 later(function() {
                     tagInput.tagsInput({
                         // https://github.com/xoxco/jQuery-Tags-Input#options
-                        defaultText: 'Add tags...',
+                        defaultText: 'Tag..',
                         minChars: 2,
-                        width: '15%',
+                        width: '8%',
                         height: '1em',
                         onAddTag: function(t) {
                             //addedTags[t] = true;  

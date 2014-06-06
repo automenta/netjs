@@ -73,7 +73,7 @@ function renderBrowse(v, cssClass, afterCreated, filterEach) {
                 //onRemoved: function() {        },
                 scale: xxrr[i][1],
                 depthRemaining: 2,
-                startMinimized: true
+                startMinimized: (xxrr.length > 1 ? true : false)
             });
             if (filterEach)
                 o = filterEach(o);
@@ -156,7 +156,7 @@ function renderBrowseSlides(vv) {
                 var o = newObjectView(x, {
                     onRemoved: function() {   },
                     depthRemaining: 4,
-                                        transparent: true
+                    transparent: true
                 });
 
                 //<section>Single Horizontal Slide</section><section><section>Vertical Slide 1</section><section>Vertical Slide 2</section></section>

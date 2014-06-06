@@ -113,10 +113,7 @@ function renderFocus(skipSet) {
         var w = newDiv().addClass('SourceFilter');		
         var sources = _.compact($N.authors());
         sources.push(null);
-		
-		//channels
-		sources.push('!main'); 
-		
+				
 		//peers	
 		
 		var peers = $N.get('p2p');
@@ -127,25 +124,24 @@ function renderFocus(skipSet) {
 		}
 		
         sources.forEach(function(s) {
-            if (s == null)
-                s = 'unknown';
+            if (s === null)
+                s = 'Anonymous';
             
-            var cb = $('<input type="checkbox" disabled/>');
-            cb.change(function() {
-                var checked = cb.is(':checked');
-                if (checked)
-                    newFocusValue.who[s] = 1;
-                else
-                    delete newFocusValue.who[s];
-                        
-                $N.setFocus(newFocusValue);
-				return false;
-            });
+            var cb = $('<input type="checkbox" disabled/>')
+				.change(function() {
+					var checked = cb.is(':checked');
+					if (checked)
+						newFocusValue.who[s] = 1;
+					else
+						delete newFocusValue.who[s];
+
+					$N.setFocus(newFocusValue);
+					return false;
+				});
             
-            if (who[s])
-                cb.attr('checked','true');
 			
 			var label = $N.label(s);
+			var sublabel = null;
 			
 			var sourceDiv = newDiv().html(label).appendTo(w)
 					.addClass('Source')
@@ -154,9 +150,39 @@ function renderFocus(skipSet) {
 						cb.click();
 						return false;						
 					});
+			var buttons = newDiv().appendTo(sourceDiv).addClass('buttons');
 			
-			if (cb.is(':checked'))
-				sourceDiv.addClass('selected');
+			if (s[0] == '^') {
+				sublabel = "Network";
+			}			
+			else if (s[0] == '!') {
+				sublabel = "Channel";
+				var c = newEle('button').html('&gt;').attr('title', 'Talk').click(function() {
+					newChannelPopup(s);
+					return false;
+				});
+				buttons.append(c);
+			}
+			else {	
+				var S = $N.instance[s];
+				if (S) {
+					var tags = objTags(S);
+					if (tags.indexOf('Human')!== -1) {
+						sublabel = 'Human';					
+					}
+				}
+			}
+			
+			
+			if (sublabel) {
+				sourceDiv.append(newDiv().html(sublabel).addClass('sublabel'));
+			}
+			
+			if (who[s]) {
+                cb.attr('checked','true');
+				sourceDiv.addClass('selected');				
+			}
+			
 				
 			var icon = newAvatarImage(s);
 			if (icon)
@@ -235,18 +261,27 @@ function initFocusButtons() {
 		}
 	});
 	
+	$('#FocusEditCloseButton').click(function() {
+		$('#FocusEditWrap').hide();
+		reflowView();
+	});
+	
     $('#FocusEditToggleButton').click(function() {
         if ($('#FocusEditWrap').is(':visible')) {
             $('#FocusEditWrap').hide(); //fadeOut();
-
 			reflowView();
         }
         else {
 			$("#FocusEditWrap" ).css('width', $("#FocusEditWrap" ).css('width'));
+			$("#FocusEditWrap" ).css('width', $("#FocusEditWrap" ).width() + 25);
 			$("#FocusEditWrap" ).fadeIn();
 			reflowView();
         }
     });
+	if (configuration.focusEditDisplayStartup) {
+		$('#FocusEditToggleButton').click();
+	}
+	
 
 
     $('#FocusClearButton').click(function() {
@@ -282,26 +317,36 @@ function initFocusButtons() {
 
     //TODO ABSTRACT this into a pluggable focus template system
 
+	var tagger = null;
     $('#FocusWhatButton').click(function() {
         var ft = $('#FocusTagger');
         
-        function hide() { $('#FocusTagger').empty().hide(); }
+        function hide() { $('#FocusTagger').hide(); }
         
         if (ft.is(':visible')) {
             hide();
         }
         else {
+			ft.show();
+			
             var taggerOptions = {
                 inDialog: false,
+				cancelButton: false,
                 addImmediately: function(t) {
                     objAddTag($N.focus(), t);
                     renderFocus();
                 }
             };
+			if (tagger == null) {
+				later(function() {
+					tagger = newTagger(taggerOptions, function(x) {
+						hide();
+					});
+					ft.html(tagger);
+				});
+			}
 
-            ft.append(newTagger(taggerOptions, function(x) {
-                hide();
-            })).show();            
+            
         }        
 
     });
@@ -314,13 +359,11 @@ function initFocusButtons() {
             renderFocus();
         }
         else {
-            if (confirm("Remove focus's 'Where'?")) {
-                var tags = objTags($N.focus(), true);
-                var spi = _.indexOf(tags, 'spacepoint');
-                if (spi != -1)
-                    objRemoveValue($N.focus(), spi);
-                renderFocus();
-            }
+			var tags = objTags($N.focus(), true);
+			var spi = _.indexOf(tags, 'spacepoint');
+			if (spi != -1)
+				objRemoveValue($N.focus(), spi);
+			renderFocus();
         }
     });
 
@@ -336,8 +379,13 @@ function initFocusButtons() {
     });
 
     $('#FocusHowButton').click(function() {
-        $N.focus().name = true;
-        renderFocus();
+		if ($N.focus().name) {
+			delete $N.focus().name;
+		}
+		else {
+			$N.focus().name = true;
+		}
+		renderFocus();
     });
 
 }

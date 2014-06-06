@@ -1,23 +1,35 @@
 var webrtc;
 
+var channelsOpen = { };
 
-function newMainChatPopup() {
-    var o = new $N.nobject('!main');
-    o.setName('Main Channel');
-    o.add('chat', { channel: 'main' });
-    o.hidden = true;
-    $N.notice(o);
+function newChannelPopup(channel) {
+	
+	if (channelsOpen[channel]) {
+		var w = channelsOpen[channel];
+		w.dialog('close');
+		delete channelsOpen[channel];
+		return;
+	}
+	
+	var o = $N.instance[channel];
+	if (!o) return;
     
-    var s = newPopupObjectView(o, {title: 'Main Channel', width: '50%'}, {
+    var s = newPopupObjectView(o, {title: channel, width: '50%'}, {
         showMetadataLine: false,
         showName: false,
         showActionPopupButton: false,
         showSelectionCheck: false,
         transparent: true
     });
-    if (configuration.webrtc) {
+    /*if (configuration.webrtc) {
         s.append(newWebRTCRoster());
-    }
+    }*/
+	
+	channelsOpen[channel] = s;
+	
+    s.bind('dialogclose', function() {
+		delete channelsOpen[channel];
+	});
     
     return s;
 }

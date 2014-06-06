@@ -437,6 +437,8 @@ function objTagStrengthRelevance(xx, yy) {
     for (var i in yy)
         yyc++;
     if (yyc === 0) return 0;
+	
+	
     
     var den = Math.max(xxc, yyc);
 
@@ -467,7 +469,6 @@ function objTagStrengthRelevance(xx, yy) {
             }
         }
     }
-
     return r / den;
 }
 exports.objTagStrengthRelevance = objTagStrengthRelevance;

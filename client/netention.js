@@ -680,7 +680,27 @@ function netention(f) {
                 if (objHasTag(y, 'Tag')) {
                     that.add([objTagObjectToTag(y)]);
                 }
-                
+				
+				//add missing tags to ontology and index
+				//TODO guess type if it's property
+				if (y.value) {
+					for (var i = 0; i < y.value.length; i++) {
+						var c = y.value[i].id;												
+						if ((!$N.class[c]) && (!$N.property[c])) {
+							that.addAll([{
+								id: c, name: c
+							}]);
+							
+							that.ontoIndex.add({
+								id: c,
+								name: c
+							});
+						}
+
+					}
+				}
+				
+						 
                 return true;
             }
 
@@ -714,8 +734,7 @@ function netention(f) {
             }
         },
         pub: function(object, onErr, onSuccess, suppressChange) {            
-                        
-            
+                                    
             if (configuration.connection == 'local') {
                 $N.notice(object);
                 if (onSuccess)
@@ -860,6 +879,9 @@ function netention(f) {
                 $N.on('change:tags', updateView);
                 $N.on('change:focus', updateView);
 
+				var mainChannel = $N.addChannel('main');
+				mainChannel.createdAt = 1382087985419;
+				
                 updateView();
 
             }
@@ -869,6 +891,17 @@ function netention(f) {
                 callback($N.channels[channel]);
             }
         },
+		
+		addChannel: function(channel) {
+			var o = new $N.nobject('!' + channel);
+			o.add('chat', { channel: channel });
+			o.name = channel;
+			o.author = '!' + channel;
+			//o.hidden = true;
+			$N.notice(o);
+			return o;
+		},
+		
         channelSend: function(channel, m) {
             $N.socket.emit('channelSend', channel, m);
         }
@@ -886,7 +919,8 @@ function netention(f) {
         this.field('properties');
         this.ref('id');
     });
-    
+    	
+	
     $N.toString = function() {
         return JSON.stringify(this);
     };
