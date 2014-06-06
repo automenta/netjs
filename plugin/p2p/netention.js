@@ -25,10 +25,10 @@ exports.plugin = function ($N) {
 				name: $N.server.name
 			});
 			
-            $N.p2p = function (whenConnected, whenDisconnected) {
-                //node.on('started', whenConnected);
-				whenConnected(node);
-            };
+            $N.node = node;
+			$N.p2p = function(cb) {
+				cb(node);
+			}
 			
 			//var peers = { };
 			function updatePeer(c) {
@@ -47,8 +47,8 @@ exports.plugin = function ($N) {
 					node.get(c.id);
 					node.on('set:' + c.id, function(v) {
 						//node.debug();
+						$N.broadcastRoster();
 					});
-					
 				}				
 			}
 			node.on('contact:add', updatePeer);

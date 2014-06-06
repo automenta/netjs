@@ -864,21 +864,18 @@ a.ViewControlMinor img {
 }
 
 #FocusTagger {
-    max-height: 75%;
-    right: 25%;
-    position: fixed;
-    max-width: 50%;
+    max-height: 16em;
+	clear:both;
     overflow: auto;
 }
 #FocusTagger .taggerContent {
+	padding-top: 2em;
 }
 #FocusTagger .taggerHeader {
-    position: fixed;
-    margin-top:-2.5em;
-    background-color: white;
-    border: 0;
     padding-bottom: 0;
     margin-bottom: 0;
+	position: fixed;
+	width: 100%;
 }
 
 #FocusEditWrap {
@@ -896,6 +893,15 @@ a.ViewControlMinor img {
     width: 100%;
     margin: 0px 0px 20px 0px;
     padding: 0;
+}
+.SourceFilter .Source {
+	cursor: pointer; 
+	opacity: 0.7;
+	clear: both;
+}
+.SourceFilter .selected {
+	background-color: rgba(255,255,255,0.3);
+	opacity: 1.0;
 }
 
 #FocusTagTree {

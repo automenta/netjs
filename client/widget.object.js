@@ -95,8 +95,8 @@ function newPopupObjectViews(objectIDs) {
 function newAvatarImage(s) {
     return newDiv().attr({
         "class": 'AvatarIcon',
-        "style": 'background-image:url('+ getAvatarURL(s) +')',
-        'title': s.name
+        "style": 'background-image:url(' + getAvatarURL(s) + ')',
+        'title': (s ? s.name : '')
     });
 }
 
@@ -113,10 +113,15 @@ function getAvatarURL(s, style) {
      retro: awesome generated, 8-bit arcade-style pixelated faces
      blank: a transparent PNG image (border added to HTML below for demonstration purposes)    
      */
-
+	if (typeof s === "string") {
+		var i = $N.instance[s];
+		if (i)
+			s = i;
+	}		
+		
     if (s) {
         var e = objFirstValue(s, 'email');
-        var emailHash = e ? MD5(e) : MD5(s.id);
+        var emailHash = e ? MD5(e) : (s.id ? MD5(s.id) : MD5(s.toString()) );
         return "http://www.gravatar.com/avatar/" + emailHash + '?d=' + style;
     }
     return configuration.defaultAvatarIcon;

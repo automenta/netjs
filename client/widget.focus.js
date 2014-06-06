@@ -102,18 +102,35 @@ function renderFocus(skipSet) {
             fe.append('Sources Trusting Me<br/>');
         }
     }
-    
+
+	if (!$N.node)
+		$N.on('change:p2p', function(node) {
+			$N.trigger('change:focus');
+		});
+	
     var who = newFocusValue.who;
     if (who) {
-        var w = newDiv().addClass('SourceFilter');
+        var w = newDiv().addClass('SourceFilter');		
         var sources = _.compact($N.authors());
         sources.push(null);
+		
+		//channels
+		sources.push('!main'); 
+		
+		//peers	
+		
+		var peers = $N.get('p2p');
+		if (peers) {
+			_.each(peers, function(v, k) {
+				sources.push('^' + k);
+			});
+		}
+		
         sources.forEach(function(s) {
             if (s == null)
                 s = 'unknown';
             
-            var l = newDiv().appendTo(w);
-            var cb = $('<input type="checkbox"/>');
+            var cb = $('<input type="checkbox" disabled/>');
             cb.change(function() {
                 var checked = cb.is(':checked');
                 if (checked)
@@ -122,12 +139,36 @@ function renderFocus(skipSet) {
                     delete newFocusValue.who[s];
                         
                 $N.setFocus(newFocusValue);
+				return false;
             });
-            l.append(cb);
+            
             if (who[s])
                 cb.attr('checked','true');
-            l.append($N.label(s));
+			
+			var label = $N.label(s);
+			
+			var sourceDiv = newDiv().html(label).appendTo(w)
+					.addClass('Source')
+					.click(function() {
+						cb.attr('disabled',null);
+						cb.click();
+						return false;						
+					});
+			
+			if (cb.is(':checked'))
+				sourceDiv.addClass('selected');
+				
+			var icon = newAvatarImage(s);
+			if (icon)
+				sourceDiv.prepend(icon);
+			sourceDiv.prepend(cb);
         });        
+		
+
+		
+	
+		
+		
         fe.append(w);
     }
     
@@ -197,10 +238,12 @@ function initFocusButtons() {
     $('#FocusEditToggleButton').click(function() {
         if ($('#FocusEditWrap').is(':visible')) {
             $('#FocusEditWrap').hide(); //fadeOut();
+
 			reflowView();
         }
-        else {        
-            $('#FocusEditWrap').fadeIn();        
+        else {
+			$("#FocusEditWrap" ).css('width', $("#FocusEditWrap" ).css('width'));
+			$("#FocusEditWrap" ).fadeIn();
 			reflowView();
         }
     });
@@ -231,7 +274,7 @@ function initFocusButtons() {
             renderFocus();
         }
         else {
-            objRemoveTag($N.focus(), 'timerange')
+            objRemoveTag($N.focus(), 'timerange');
             delete $N.focus.when;
             renderFocus();
         }

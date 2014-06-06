@@ -1727,8 +1727,15 @@ exports.start = function(options) {
     var broadcastRoster = _.throttle(function() {
         var r = getRoster();
         io.sockets.in('*').emit('roster', r);
+		
+		
+		if ($N.node) {
+			io.sockets.in('*').emit('p2p', $N.node.peers);
+		}
+		
         $N.emit('main/set', 'roster', r);
     }, rosterBroadcastIntervalMS);
+	$N.broadcastRoster = broadcastRoster;
 
     function updateUserConnection(oldID, nextID, socket) {
         //oldID = leaving user

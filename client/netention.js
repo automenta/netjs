@@ -275,6 +275,9 @@ function netention(f) {
                     socket.on('roster', function(r) {
                         $N.set('roster', r);
                     });
+					socket.on('p2p', function(r) {
+                        $N.set('p2p', r);
+                    });
                     
                     socket.on('channelMessage', function(channel, message) {
                         if (!$N.channels[channel])

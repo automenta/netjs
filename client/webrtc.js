@@ -2,7 +2,7 @@ var webrtc;
 
 
 function newMainChatPopup() {
-    var o = new $N.nobject('Chat.Main');
+    var o = new $N.nobject('!main');
     o.setName('Main Channel');
     o.add('chat', { channel: 'main' });
     o.hidden = true;

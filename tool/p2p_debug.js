@@ -25,6 +25,7 @@ setInterval(update, 1000);
 
 function startNode(port, seeds, debug, strobe) {
     require('../server/core.js').start({
+		id: 'p2pdebug',
         name: 'a' + port,
         plugins: {
             "p2p/netention.js": {                
@@ -36,8 +37,7 @@ function startNode(port, seeds, debug, strobe) {
         },
         start: function($N) {
             $N.p2p(function(node) {
-                
-                
+				
                 peers.push(node);
 				
                 if (debug) {
