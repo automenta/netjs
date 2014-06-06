@@ -1,11 +1,32 @@
+var _ = require('lodash');
+
+
+var peers = [];
+var log = [];
+
+function update() {	
+ 	process.stdout.write('\033c');
+	peers.forEach(function(p) {
+		if (p.debug)
+			p.debug();
+		else
+			console.log(p);
+		
+		console.log();
+	});	
+	log.forEach(console.log);
+}
+
+setInterval(update, 250);
+
 function startNode(port, seeds, debug, strobe) {
-    require('../core.js').start({
+    require('../server/core.js').start({
         name: 'a' + port,
         plugins: {
             "p2p/netention.js": {                
                 debug: debug,
                 port: port,
-                address: '127.0.0.1', // Tell it your subnet and it'll figure out the right IP for you
+                address: '192.168.0.102', // Tell it your subnet and it'll figure out the right IP for you
                 seeds: seeds // th e address of a seed (a known node)                        
 			}
         },
@@ -13,26 +34,29 @@ function startNode(port, seeds, debug, strobe) {
             $N.p2p(function(node) {
                 
                 
-                
+                peers.push(node);
+				
                 if (debug) {
                     $N.on('main/in', function(p) {
-                        console.log(node.id, 'in', p);
+                        log.push(node.id, 'in', p);
                     });
                     $N.on('main/get', function(data, k, v) {
-                        console.log(node.id, 'get', _.keys(data).length, k, v);
+                        log.push(node.id, 'get', _.keys(data).length, k, v);
                     });
                 }
                 if (strobe) {
                     var n = 0;
                     function pulse() {
                         //$N.emit('main/out', ["e",n,node.id]);
-                        $N.emit('main/set', n, {x:('a' + port), m:('@' + Date.now())});
+                        $N.emit('main/set', node.id, { name:$N.server.name, m:('@' + Date.now())});
                         n++;
                     }
-                    setInterval(pulse, 500);
+                    setInterval(pulse, 15000);
                     pulse();
                 }
-                      
+                node.on('contact:add', function(c) {
+					peers.push(c);
+				});
                 
             });
         }
@@ -40,7 +64,7 @@ function startNode(port, seeds, debug, strobe) {
 }
     
 
-startNode(10001, ['127.0.0.1:10000'], true);
+startNode(9999, ['192.168.0.102:10000'], true, false);
 
 /*
 setTimeout(function() {

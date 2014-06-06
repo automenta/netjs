@@ -16,19 +16,18 @@ exports.plugin = function ($N) {
 			var node = new dht.KNode({
 				id: $N.server.id,
 				address: options.address, 
-				port: options.port, 
-				debug: options.debug
-			}, options.seeds);
+				port: options.port
+			}, options.seeds, options.debug);
 						
 			console.log(node.self.nodeID + ' p2p started on ' + (options.address||'') + ' port ' + options.port);
 			
 			node.set(node.id, {
-					name: $N.server.name
+				name: $N.server.name
 			});
 			
             $N.p2p = function (whenConnected, whenDisconnected) {
                 //node.on('started', whenConnected);
-				whenConnected();
+				whenConnected(node);
             };
 			
 			//var peers = { };
@@ -45,14 +44,15 @@ exports.plugin = function ($N) {
 				
 				if (c.id!=c.nodeID) {
 					
-					node.get(c.id, function(err, nodeData) {
-						console.log('GET', c.id, nodeData);
-					}, true);
-					node.debug();
+					node.get(c.id);
+					node.on('set:' + c.id, function(v) {
+						node.debug();
+					});
+					
 				}				
 			}
 			node.on('contact:add', updatePeer);
-				
+										
 			//node.on('contact:update', console.log);
 
 			/*
@@ -71,13 +71,13 @@ exports.plugin = function ($N) {
             });
 			*/
 
-            //console.log(g.peer_name + ' peers: ' + g.livePeers().length + '/' + g.deadPeers().length);
             $N.on('main/set', function (key, v) {
+				node.set(node.id + '.' + key, v);
                 /*if (v === null)
                     node.setLocalState(key, null, Date.now());
                 else
                     node.setLocalState(key, v);
-					*/
+				*/
             });
             
             //var said = 0;
