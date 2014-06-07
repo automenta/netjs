@@ -561,19 +561,77 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
 
             var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>').click(function() {
-                var p = newPopup('Select Tags for ' + nameInput.val(), true, true);
-                p.append(newTagger([], function(t) {
+				var p;
+				var taggerOptions;
+				if (configuration.device == configuration.MOBILE) {
+					p = newPopup('Select Tags for ' + nameInput.val(), true, true);
+					taggerOptions = [];
+				}
+				else {
+					taggerOptions = {
+                		inDialog: false,
+						cancelButton: false,
+                		addImmediately: function(t) {
+                    		update(objAddTag(getEditedFocus(), t));
+                		}
+            		};
+					whatButton.attr('disabled', 'disabled');
+				}
+				
+				var tagger = newTagger(taggerOptions, function(t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
                         var T = $N.getTag(t[i]);
                         if ((T) && (T.reserved)) {
                             notify('Tag "' + T.name + '" can not be added to objects.');
-                        } else
-                            objAddTag(y, t[i]);
+                        } else {
+                            y = objAddTag(y, t[i]);
+						}
                     }
                     update(y);
-                    p.dialog('close');
-                }));
+					
+					if (p && p.dialog) p.dialog('close');
+                });
+				
+				if (configuration.device == configuration.DESKTOP) {
+					tagger.css('float', 'left').css('width', '25%')
+						.css('height', '98.5%').css('position', 'absolute')
+						.css('direction', 'rtl').css('text-align', 'left');
+					tagger.find('#TagSelectWidget')
+						.css('overflow-y', 'auto')//.css('zoom', '75%')
+						.css('overflow-x', 'hidden')
+						.css('height', '90%');
+
+					D //.css('margin-left', '26%')
+						.css('float', 'right')
+						.css('padding-left', '5px');
+					
+					D.before(tagger);					
+
+					function updateSize() {
+						var dialogWidth = D.parent().width();
+						var remainingWidth = dialogWidth - tagger.width() - 7 /* margin */;
+						D.css('width', remainingWidth + 'px');
+					}
+					
+					tagger.resizable({
+						handles: "e",
+						resize: updateSize						
+					});
+					
+					D.parent().dialog({
+						resize: updateSize
+					});
+					
+					updateSize();
+										
+				}
+				else {
+					p.append(tagger);
+				}
+				
+
+				
             });
 
             var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/actions/quote.png"></button>').click(function() {

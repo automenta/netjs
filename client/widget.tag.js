@@ -132,26 +132,30 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
         });
     }
 
-    var saveBar = $('<span/>');
-    tagsCombo.update();
-    saveBar.append(tagsCombo);
+	if (!options.addImmediately) {
+		var saveBar = $('<span/>');
+		tagsCombo.update();	
+		saveBar.append(tagsCombo);
 
-    clearButton.click(function() {
-        if (tags.length)
-            if (confirm('Clear selected tags?')) {
-                tags = [];
-                tagsCombo.update();
-            }
-    });
-    saveBar.append(clearButton);
+		clearButton.click(function() {
+			if (tags.length)
+				if (confirm('Clear selected tags?')) {
+					tags = [];
+					tagsCombo.update();
+				}
+		});
+		saveBar.append(clearButton);
+		
+		if (maxTags!==1) {
+			b.click(function() {
+				onFinished(tags);
+			}).appendTo(saveBar);
+		}
 
-    if (maxTags!==1) {
-        b.click(function() {
-            onFinished(tags);
-        }).appendTo(saveBar);
-    }
+		selectBar.append(saveBar);		
+	}
+
     
-    selectBar.append(saveBar);
 
     if (inDialog) {
         later(function() {        

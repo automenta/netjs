@@ -43,6 +43,7 @@ function netention(f) {
             this.channels = { };
             this.clearTransients();
             this.set('clientID', 'undefined');
+			
         },
         clearTransients: function() {
             this.set('layer', {
@@ -50,7 +51,11 @@ function netention(f) {
                 exclude: []
             });
             this.set('focus', new nobject());
-        },
+
+			var mainChannel = $N.addChannel('main');
+			mainChannel.createdAt = 1382087985419;
+
+		},
         //deprecated
         tag: function(t) {
             return this.class[t];
@@ -877,10 +882,7 @@ function netention(f) {
                 $N.on('change:attention', updateView);
                 $N.on('change:currentView', updateView);
                 $N.on('change:tags', updateView);
-                $N.on('change:focus', updateView);
-
-				var mainChannel = $N.addChannel('main');
-				mainChannel.createdAt = 1382087985419;
+                $N.on('change:focus', updateView);				
 				
                 updateView();
 
