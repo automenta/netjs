@@ -16,20 +16,85 @@ exports.plugin = function ($N) {
 							options.port,
 							options.seeds,
 							{
-								address: options.address
+								address: options.address,
+								addressMap: options.addressMap,
+								network: options.network								
 							}
 						);
 
-			node.start();
+			var peers =  { };
+			var local = new $N.nobject('^' + $N.server.id);
+			local.author = local.id;
 			
-			var id = $N.server.id;
-									
-			console.log(node.peer_name + ' p2p started');
+			function updatePeer(peer, active) {
+				var p = peers[peer];
+				
+				if (!p) {
+					//create placeholder object
+					p = new $N.nobject('^' + peer);			
+					p.author = p.id;
+					p.setName(peer);
+					p.addTag('Network');
+					
+					peers[peer] = p;					
+				}
+				
+				//TODO set active state level and republish
+				/*
+				if ($N.pub)
+					$N.pub(p);
+				*/
+			}
 			
-			node.set(id, {
-				name: $N.server.name
+			function setPeer(peer, value) {
+				peers[peer] = value;
+				objTouch(value);				
+				$N.pub(value);
+			}
+			
+			function updateLocal() {
+				local.setName($N.server.name);				
+				
+				var os = require('os');
+								
+				var d = "";
+				d += "Hostname: " + os.hostname() + "<br/>";
+				d += "Uptime: " + os.uptime() + "<br/>";
+				d += "Total Memory: " + os.totalmem() + "<br/>";
+				d += "Free Memory: " + os.freemem() + "<br/>";
+				d += "CPUs: " + JSON.stringify(os.cpus()) + "<br/>";
+				
+				local.setDescription(d);
+				local.addTag('Network');
+
+				node.set('_', local);
+				
+				if ($N.pub)
+					$N.pub(local);
+			}
+			
+			
+			node.on('peer:new', function(peerdata) {
+				//console.log('new peer', peerdata.address, peerdata.port);
+				//console.log('new peer', peerdata);
 			});
 			
+			node.on('peer:start', function(peername) {
+				//console.log('live peer', peername);
+				updatePeer(peername, true);
+			});
+			
+			node.on('peer:stop', function(peername) {
+				//console.log('dead peer', peername);
+				updatePeer(peername, false);
+			});
+						
+			updateLocal();
+			
+			node.start();
+												
+			console.log(node.peer_name + ' p2p started');
+				
 			//var peers = { };
 			/*
 			function updatePeer(c) {
@@ -47,8 +112,6 @@ exports.plugin = function ($N) {
 			}
 			*/
 			
-			//node.on('contact:add', updatePeer);
-				
 
 			/*
             node.on('update', function (peer, k, v) {
@@ -65,21 +128,17 @@ exports.plugin = function ($N) {
                 }
             });
 			*/
-			
-			node.on('peer:new', function(peerdata) {
-				console.log('new peer', peerdata.peer_name);
+
+
+			node.know('_', function(peer, v) {
+				//console.log('peer update', peer, v);
+				setPeer(peer, v);
 			});
 			
-			node.on('peer:start', function(peername) {
-				console.log('live peer', peername);
-			});
-			node.on('peer:stop', function(peername) {
-				console.log('dead peer', peername);
-			});
-			
-			node.know('*', function (peer, v) {
+			/*node.know('*', function (peer, v) {
 				console.log(this.peer_name + " knows " + peer + " set " + this.event + "=" + v);
-    		});
+				//console.log(node.livePeers());
+    		});*/
 			
 			node.hear('*', function (data, fromPeer) {
 				console.log('a received ', this.event, '=', data, 'from', fromPeer);
@@ -99,6 +158,7 @@ exports.plugin = function ($N) {
 					node.say(v);
                 }
             });
+			
                         
         },
 

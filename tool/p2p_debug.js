@@ -25,8 +25,13 @@ function startNode(port, seeds, debug, strobe) {
             "p2p/netention.js": {                
                 debug: debug,
                 port: port,
-                address: '192.168.0.102', // Tell it your subnet and it'll figure out the right IP for you
-                seeds: seeds // th e address of a seed (a known node)                        
+                address: '24.131.65.218', 
+                seeds: seeds,
+				network: "netention",
+				addressMap: {
+					"192.168.0.102": "24.131.65.218",
+					"127.0.0.1": 	 "24.131.65.218"
+				},
 			}
         },
         start: function($N) {
@@ -34,6 +39,11 @@ function startNode(port, seeds, debug, strobe) {
 			node.on('start', function() {
 				
                 peers.push(node);
+				
+				node.know('*', function (peer, v) {
+					console.log(this.peer_name + " knows " + peer + " set " + this.event + "=" + JSON.stringify(v));
+					//console.log(node.livePeers());
+    			});
 				
                 if (debug) {
                     $N.on('main/in', function(p) {
@@ -45,15 +55,12 @@ function startNode(port, seeds, debug, strobe) {
                 }
                 if (strobe) {
                     function pulse() {
-                        $N.emit('main/set', 'beat', { m:('@' + Date.now()) });
+                        $N.emit('main/set', 'beat', Date.now() );
                     }
-                    setInterval(pulse, 15000);
+                    setInterval(pulse, 5000);
                     pulse();
                 }
-                node.on('contact:add', function(c) {
-					peers.push(c);
-					//node.debug();
-				});
+
                 
             });
         }

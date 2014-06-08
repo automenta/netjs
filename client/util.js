@@ -107,6 +107,11 @@ nobject.prototype.addDescription = function(d) {
     objAddDescription(this, d);
     return this;
 };
+nobject.prototype.setDescription = function(d) {
+	objRemoveDescription(this);
+    objAddDescription(this, d);
+    return this;
+};
 nobject.prototype.touch = function() {
     objTouch(this);
     return this;
@@ -282,10 +287,11 @@ function objAddDescription(x, desc) {
 exports.objAddDescription = objAddDescription;
 
 function objRemoveDescription(x) {
-    for (var i = 0; i < x.value.length; i++) {
-        if (x.value[i].id === 'html')
-            return objRemoveDescription(objRemoveValue(x, i));
-    }
+	if (x.value)
+		for (var i = 0; i < x.value.length; i++) {
+			if (x.value[i].id === 'html')
+				return objRemoveDescription(objRemoveValue(x, i));
+		}
 }
 exports.objRemoveDescription = objRemoveDescription;
 
