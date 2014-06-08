@@ -48,7 +48,7 @@ exports.plugin = function ($N) {
 			
 			function setPeer(peer, value) {
 				peers[peer] = value;
-				objTouch(value);				
+				$N.objTouch(value);				
 				$N.pub(value);
 			}
 			
