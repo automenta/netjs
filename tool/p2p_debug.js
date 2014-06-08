@@ -2,17 +2,12 @@ var _ = require('lodash');
 
 
 var peers = [];
-var log = [];
 
 function update() {	
  	process.stdout.write('\033c');
 	peers.forEach(function(p) {
-		if (p.debug)
-			p.debug();
-		else
-			console.log(p);
-		
-		console.log();
+		//console.log(p);		
+		//console.log();
 	});	
 	//log.forEach(console.log);
 }
@@ -20,8 +15,7 @@ function log(x) {
 	console.log(x);
 }
 
-
-setInterval(update, 1000);
+//setInterval(update, 1000);
 
 function startNode(port, seeds, debug, strobe) {
     require('../server/core.js').start({
@@ -36,7 +30,8 @@ function startNode(port, seeds, debug, strobe) {
 			}
         },
         start: function($N) {
-            $N.p2p(function(node) {
+			var node = $N.node;
+			node.on('start', function() {
 				
                 peers.push(node);
 				
@@ -66,7 +61,7 @@ function startNode(port, seeds, debug, strobe) {
 }
     
 
-startNode(9999, ['54.84.209.171:9001','192.168.0.102:10000'], false, true);
+startNode(9999, ['54.84.209.171:9001',':10000'], true, true);
 
 /*
 setTimeout(function() {

@@ -21,7 +21,7 @@
     "express": "",
     "feedparser": "",
     "geolib": "",
-    "automenta/kademlia":"",
+    "automenta/telepathine":"",
     "graphlib": "",
     "http-auth": "",
     "ical": "",

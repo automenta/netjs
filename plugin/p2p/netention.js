@@ -11,36 +11,30 @@ exports.plugin = function ($N) {
 
 
         start: function (options) {
-            var dht = require('p2pdht');
+            var node = $N.node = new (require('telepathine')
+						.Telepathine)(
+							options.port,
+							options.seeds,
+							{
+								address: options.address
+							}
+						);
+
+			node.start();
 			
-			var node = new dht.KNode({
-				id: $N.server.id,
-				address: options.address, 
-				port: options.port
-			}, options.seeds, options.debug);
-						
-			console.log(node.self.nodeID + ' p2p started on ' + (options.address||'') + ' port ' + options.port);
+			var id = $N.server.id;
+									
+			console.log(node.peer_name + ' p2p started');
 			
-			node.set(node.id, {
+			node.set(id, {
 				name: $N.server.name
 			});
 			
-            $N.node = node;
-			$N.p2p = function(cb) {
-				cb(node);
-			}
-			
 			//var peers = { };
+			/*
 			function updatePeer(c) {
 								
-				//console.log('updating peer', c);
-				//node.debug();
-				
 				if (!c.id) return;
-				
-				/*if (peers[c.id]!=undefined)
-					return;
-				peers[c.id] = Date.now();*/
 				
 				if (c.id!=c.nodeID) {
 					
@@ -51,9 +45,10 @@ exports.plugin = function ($N) {
 					});
 				}				
 			}
-			node.on('contact:add', updatePeer);
-										
-			//node.on('contact:update', console.log);
+			*/
+			
+			//node.on('contact:add', updatePeer);
+				
 
 			/*
             node.on('update', function (peer, k, v) {
@@ -70,25 +65,41 @@ exports.plugin = function ($N) {
                 }
             });
 			*/
-
-            $N.on('main/set', function (key, v) {
-				node.set(node.id + '.' + key, v);
-                /*if (v === null)
-                    node.setLocalState(key, null, Date.now());
-                else
-                    node.setLocalState(key, v);
-				*/
+			
+			node.on('peer:new', function(peerdata) {
+				console.log('new peer', peerdata.peer_name);
+			});
+			
+			node.on('peer:start', function(peername) {
+				console.log('live peer', peername);
+			});
+			node.on('peer:stop', function(peername) {
+				console.log('dead peer', peername);
+			});
+			
+			node.know('*', function (peer, v) {
+				console.log(this.peer_name + " knows " + peer + " set " + this.event + "=" + v);
+    		});
+			
+			node.hear('*', function (data, fromPeer) {
+				console.log('a received ', this.event, '=', data, 'from', fromPeer);
+			});
+			
+            $N.on('main/set', function (key, v, expiresAt) {				
+                if (v === null) {
+                    node.set(key, null, Date.now()); //expire now
+				}
+                else {
+                    node.set(key, v, expiresAt);
+				}				
             });
             
-            //var said = 0;
             $N.on('main/say', function (v, skipBroadcast) {
                 if (!skipBroadcast) {
-                    //node.setLocalState('s' + said, v, Date.now() + sayTTL);
-                    //said++;
+					node.say(v);
                 }
             });
-            
-            
+                        
         },
 
         __start: function (options) {
