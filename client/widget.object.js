@@ -560,7 +560,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 addButtons.hide();
             }
 
-            var whatButton = $('<button title="What?"><img src="/icon/rrze/emblems/information.png"></button>').click(function() {
+            var whatButton = $('<button title="What?"><img src="/icon/rrze/information.png"></button>').click(function() {
 				var p;
 				var taggerOptions;
 				if (configuration.device == configuration.MOBILE) {
@@ -634,7 +634,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 				
             });
 
-            var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/actions/quote.png"></button>').click(function() {
+            var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/quote.png"></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'html', ''));
             });
 
@@ -642,13 +642,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 update(objAddValue(getEditedFocus(), 'timepoint', ''));
             });;
 
-            var whereButton = $('<button title="Where?"><img src="/icon/rrze/emblems/globe.png"></button>').click(function() {
+            var whereButton = $('<button title="Where?"><img src="/icon/rrze/globe.png"></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'spacepoint', ''));
             });
 
-            var whoButton = $('<button disabled title="Who?" id="AddWhoButton"><img src="/icon/rrze/categories/user-group.png"></button>');
+            var whoButton = $('<button disabled title="Who?" id="AddWhoButton"><img src="/icon/rrze/user-group.png"></button>');
 
-            var drawButton = $('<button title="Draw"><img src="/icon/rrze/emblems/pen.png"/></button>').click(function() {
+            var drawButton = $('<button title="Draw"><img src="/icon/rrze/pen.png"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'sketch', ''));
             });
 
@@ -658,7 +658,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 });
             });
 
-            var uploadButton = $('<button title="Add Media (Upload or Link)"><img src="/icon/rrze/actions/dial-in.png"/></button>').click(function() {
+            var uploadButton = $('<button title="Add Media (Upload or Link)"><img src="/icon/rrze/dial-in.png"/></button>').click(function() {
 
 
                 function attachURL(url) {
