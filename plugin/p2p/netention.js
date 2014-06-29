@@ -49,7 +49,8 @@ exports.plugin = function ($N) {
 			function setPeer(peer, value) {
 				peers[peer] = value;
 				$N.objTouch(value);				
-				$N.pub(value);
+				if ($N.pub)
+					$N.pub(value);
 			}
 			
 			function updateLocal() {

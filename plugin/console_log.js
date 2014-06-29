@@ -7,23 +7,17 @@ exports.plugin = function($N) {
         
         start: function(options) {
             console.log('start', $N.server.name);
+
+			$N.on('*', function() {
+				console.log(this.event, arguments);
+			});
         },
-        onPub: function(x) {
-            console.log('pub', JSON.stringify(x));
-        },
-        onConnect: function(who) {
-            console.log('connect', JSON.stringify(who));
-        },
-        onFocus: function(who, focus) {
-            console.log('focus', who, focus);
-        },
-        onDelete: function(x) {
-            console.log('delete', x);
-        },
+
         stop: function() {
             console.log('stop');
         }
     };
-}
+};
+
 
 

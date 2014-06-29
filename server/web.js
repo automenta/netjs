@@ -15,15 +15,14 @@
 var memory = require('./memory.js');
 var util = require('../client/util.js');
 var expressm = require('express');
-var connect = require('connect');
+//var connect = require('connect');
 var cookie = require('cookie');
-var http = require('http')
-        , url = require('url')
-        , fs = require('fs')
-        , sys = require('util')
+var http = require('http');
+var url = require('url');
+var fs = require('fs');
+var sys = require('util');
 //        , nodestatic = require('node-static')
-        , server;
-var mongo = require("mongojs");
+
 var request = require('request');
 var _ = require('lodash');
 var jsonpack = require('jsonpack');
@@ -31,6 +30,7 @@ var jsonstream = require('JSONStream');
 //var pson= require('pson');
 
 var EventEmitter = require('eventemitter2').EventEmitter2;
+
 //
 //
 //
@@ -44,12 +44,14 @@ var EventEmitter = require('eventemitter2').EventEmitter2;
 exports.start = function(options) {
     var express = expressm();
 
+
     require('util').inherits(util.Ontology, EventEmitter);
-    
+	EventEmitter.call(util, { wildcard: true, delimiter: ':' });
+
     var $N = new util.Ontology(['User', 'Trust', 'Value']);
     $N = _.extend($N, util);
-    
-    $N.server = options;
+
+
     $N.httpserver = express;
     if (!options.id)
         options.id = util.uuid();
@@ -60,16 +62,14 @@ exports.start = function(options) {
     var focusHistoryMaxAge = 24 * 60 * 60 * 1000; //in ms
     //var attention = memory.Attention(0.95);
     //var logMemory = util.createRingBuffer(256);
-    $N.server.interestTime = {};	//accumualted time per interest, indexed by tag URI
+    options.interestTime = {};	//accumualted time per interest, indexed by tag URI
 
+    $N.server = options; //deprecated
 
+	var db = require('./db.mongo.js')($N);
+	db.start();
 
-    //"mydb"; // "username:password@example.com/mydb"
-    var dbURL = $N.server.databaseHost + "/" + $N.server.database; //|| process.env.MongoURL;
-    var db = mongo.connect(dbURL, ["obj", "sys"]);
-
-
-    function startPlugin(kv, options) {
+    function startPlugin(kv, pluginOptions) {
         var v = kv;
 
         var p = require('../plugin/' + v).plugin;
@@ -80,127 +80,40 @@ exports.start = function(options) {
             return;
         }
 
-        $N.server.plugins[v] = {enabled: true, plugin: p};
+		if (!options.plugins) options.plugins = {};
+
+        options.plugins[v] = {enabled: true, plugin: p};
 
         $N.nlog('Started plugin: ' + p.name);
-        p.start(options);
+        p.start(pluginOptions);
 
     }
 
-    //deprecated
-    /*
-    function _plugin(kv, options) {
-        var v = kv;
+    var saveState = $N.saveState = function(onSaved, onError) {
+		var state = {
+			id: 'state',
+			interestTime: options.interestTime,
+			clientState: options.clientState,
+			users: options.users,
+			modifiedAt: Date.now(),
+			anonymousUserExists: options.anonymousUserExists
+		};
+		db.set('sys', 'state', state, function(err, saved) {
+			if (err || !saved) {
+				if (onError) {
+					nlog('saveState: ' + err);
+					onError(err);
+				}
+			}
+			else {
+				if (onSaved)
+					onSaved();
+			}
+		});
+	};
 
-        var p = require('../plugin/' + v).plugin;
-        if (typeof (p) == "function")
-            p = p($N);
-        else if (p != undefined) {
-            console.error(v + ' plugin format needs upgraded');
-        }
-
-        var filename = v;
-        v = v.split('.js')[0];
-        v = v.split('/netention')[0];
-
-        if (p) {
-            if (p.name) {
-
-                var enabled = false;
-
-                if (!$N.server)
-                    $N.server = {plugins: {}};
-
-                if (!$N.server.plugins[kv]) {
-                    $N.server.plugins[kv] = {
-                        valid: true,
-                        enabled: false
-                    };
-                }
-
-                $N.server.plugins[kv].name = p.name;
-                $N.server.plugins[kv].description = p.description;
-                $N.server.plugins[kv].filename = filename;
-                $N.server.plugins[kv].plugin = p;
-
-
-                //console.log(v, $N.server.plugins[kv]);
-
-                //TODO add required plugins parameter to add others besides 'general'
-                if (($N.server.plugins[kv].enabled) || (v == 'general')) {
-                    $N.nlog('Started plugin: ' + p.name);
-                    p.start(options);
-                    enabled = true;
-                }
-
-                return;
-            }
-        }
-        $N.server.plugins[v] = {};
-        $N.server.plugins[v].name = v;
-        $N.server.plugins[v].valid = false;
-        $N.server.plugins[v].filename = filename;
-
-
-        //TODO remove unused $N.server.plugins entries
-
-        //console.log('Loaded invalid plugin: ' + v);
-    }
-    //$N.plugin = plugin;
-    */
-   
-    //calls a plugin operation
-    function plugins(operation, parameter) {
-        var plugins = $N.server.plugins;
-
-        for (var p in plugins) {
-            if (plugins[p].enabled != false) {
-                var pp = plugins[p].plugin;
-                if (!pp)
-                    continue;
-                if (pp[operation]) {
-                    var result = pp[operation](parameter);
-                    if (result)
-                        parameter = result;
-                }
-            }
-        }
-        return parameter;
-    }
-    $N.plugins = plugins;
-
-
-
-    function saveState(onSaved, onError) {
-        var state = {
-            id: 'state',
-            interestTime: $N.server.interestTime,
-            clientState: $N.server.clientState,
-            users: $N.server.users,
-            modifiedAt: Date.now(),
-            anonymousUserExists: $N.server.anonymousUserExists
-        };
-        db.sys.update({id: "state"}, state, {upsert: true}, function(err, saved) {
-            if (err || !saved) {
-                if (onError) {
-                    nlog('saveState: ' + err);
-                    onError(err);
-                }
-            }
-            else {
-                if (onSaved)
-                    onSaved();
-            }
-
-        });
-    }
-    $N.saveState = saveState;
-
-
-    function loadState(f) {
-
-        db.sys.find({id: "state"}, function(err, state) {
-
+	function loadState(callback) {
+		db.get('sys', 'state', function(err, state) {
             if (err || !state || (state.length === 0)) {
                 nlog("No previous system state found");
             }
@@ -208,32 +121,21 @@ exports.start = function(options) {
                 var now = Date.now();
                 var x = state[0];
                 //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds since last system update'); 
-                $N.server.interestTime = x.interestTime;
-                $N.server.clientState = x.clientState;
-                $N.server.users = x.users || {};
-                $N.server.anonymousUserExists = x.anonymousUserExists;
-                //$N.server.currentClientID = x.currentClientID || {};
-                //nlog('Users: ' +  _.keys($N.server.users).length + ' ' + _.keys($N.server.currentClientID).length);
-
-                /*if (x.plugins) {
-                 for (var pl in x.plugins) {
-                 if (!$N.server.plugins[pl])
-                 $N.server.plugins[pl] = {};
-                 if (x.plugins[pl].enabled)
-                 $N.server.plugins[pl].enabled = x.plugins[pl].enabled;
-                 }
-                 }*/
-
+                options.interestTime = x.interestTime;
+                options.clientState = x.clientState;
+                options.users = x.users || {};
+                options.anonymousUserExists = x.anonymousUserExists;
             }
 
-            if (f)
-                f();
+            if (callback)
+                callback();
+		});
+	}
 
-        });
 
-    }
 
-    function deleteObject(objectID, whenFinished, contentAddedToDeletedObject, byClientID) {
+    var deleteObject = $N.deleteObject = function(
+		objectID, whenFinished, contentAddedToDeletedObject, byClientID) {
 
         if (byClientID) {
             getObjectByID(objectID, function(err, o) {
@@ -265,7 +167,7 @@ exports.start = function(options) {
 
         //TODO move to 'removed' db collection
 
-        db.obj.remove({id: objectID}, function(err, docs) {
+		db.remove('obj', objectID, function(err, docs) {
 
             if (err) {
                 nlog('error deleting ' + objectID + ':' + err);
@@ -276,8 +178,7 @@ exports.start = function(options) {
                 //broadcast removal of objectID
                 pub(objectRemoved(objectID));
 
-                //remove replies                
-                db.obj.remove({$or: [{replyTo: objectID}, {author: objectID}]}, function(err, docs) {
+				db.remove('obj', {$or: [{replyTo: objectID}, {author: objectID}]}, function(err, docs) {
 
                     //nlog('deleted ' + objectID);
 
@@ -297,10 +198,10 @@ exports.start = function(options) {
                 });
             }
         });
-    }
-    $N.deleteObject = deleteObject;
+    };
 
-    function deleteObjects(objs, whenFinished) {
+
+    var deleteObjects = $N.deleteObjects = function(objs, whenFinished) {
         if (objs.length === 0) {
             if (whenFinished)
                 whenFinished();
@@ -314,7 +215,7 @@ exports.start = function(options) {
                 if (typeof n != "string")
                     n = n.id;
 
-                $N.deleteObject(n, d);
+                deleteObject(n, d);
             }
             else {
                 if (whenFinished)
@@ -322,21 +223,18 @@ exports.start = function(options) {
             }
         }
         d();
-    }
-    ;
-    $N.deleteObjects = deleteObjects;
+    };
 
 
-    function deleteObjectsWithTag(tag, callback) {
+    var deleteObjectsWithTag = $N.deleteObjectsWithTag = function(tag, callback) {
         var existing = [];
 
-        $N.getObjectsByTag(tag, function(o) {
+        getObjectsByTag(tag, function(o) {
             existing.push(o);
         }, function() {
-            $N.deleteObjects(existing, callback);
+            deleteObjects(existing, callback);
         });
-    }        
-    $N.deleteObjectsWithTag = deleteObjectsWithTag;
+    };
 
     function noticeAll(l) {
         var i = 0;
@@ -368,8 +266,7 @@ exports.start = function(options) {
             o.modifiedAt = o.createdAt;
 
         //attention.notice(o, 0.1);
-
-        db.obj.update({id: o.id}, o, {upsert: true}, function(err) {
+		db.set('obj', o.id, o, function(err) {
             if (err) {
                 nlog('notice: ' + err);
                 return;
@@ -394,37 +291,7 @@ exports.start = function(options) {
     }
     $N.addProperties = addProperties;
 
-    /*function addTags(at, defaultTag) {
-        at.forEach(function(t) {
-            if (!t)
-                return;
 
-            if (defaultTag)
-                t.tag = defaultTag;
-
-            if (!Array.isArray(t.properties)) {
-                var propertyArray = [];
-                _.each(t.properties, function(prop, uri) {
-                    if (prop != null)
-                        propertyArray.push(_.extend(prop, {uri: uri}));
-                });
-
-                addProperties(propertyArray);
-                t.properties = _.keys(t.properties);
-            }
-
-            if (tags[t.uri]) {
-                if (tags[t.uri].properties) {
-                    t.properties = _.union(tags[t.uri].properties, t.properties);
-                }
-            }
-
-            tags[t.uri] = t;
-        });
-
-        //TODO broadcast change in tags?
-    }
-    $N.addTags = addTags;*/
 
 
     //unpacks an array of objects, returning a new array of the unpacked objects, optionally as nobjects
@@ -439,53 +306,32 @@ exports.start = function(options) {
     }
 
     function getObjectByID(uri, whenFinished) {
-        /*if ($N.class[uri] != undefined) {
-            //it's a tag
-            whenFinished(tags[uri]);
-        }
-        else {*/
-        
-        db.obj.ensureIndex({id: "hashed"}, function(err, res) {
-            if (err) {
-                console.error('ENSURE INDEX id', err);
-            }
-
-            db.obj.find({'id': uri}, function(err, docs) {
-                if (err) {
-                    nlog('getObjectByID: ' + err);
-                    whenFinished(err, null);
-                }
-                else if (docs.length == 1) {
-                    whenFinished(null, unpack(docs)[0]);                    
-                }
-                else {
-                    //none found
-                    whenFinished(true, null);
-                }
-            });
-        });
+		db.get(uri, function(err, docs) {
+			if (err) {
+				nlog('getObjectByID: ' + err);
+				whenFinished(err, null);
+			}
+			else if (docs.length == 1) {
+				whenFinished(null, unpack(docs)[0]);
+			}
+			else {
+				//none found
+				whenFinished(true, null);
+			}
+		});
     }
     $N.getObjectByID = getObjectByID;
-    $N.getObjectSnapshot = getObjectByID; //DEPRECATED
 
     function getObjectsByAuthor(a, withObjects) {
-
-        db.obj.ensureIndex({author: "hashed"}, function(err, res) {
-            if (err) {
-                console.error('ENSURE INDEX author', err);
-                return;
-            }
-
-            db.obj.find({author: a}, function(err, docs) {
-                if (err) {
-                    nlog('getObjectsByAuthor: ' + err);
-                    withObjects([]);
-                }
-                else {
-                    withObjects(unpack(docs));
-                }
-            });
-        });
+		db.getAllByFieldValue('obj', 'author', a, function(err, docs) {
+			if (err) {
+				nlog('getObjectsByAuthor: ' + err);
+				withObjects([]);
+			}
+			else {
+				withObjects(unpack(docs));
+			}
+		});
     }
     $N.getObjectsByAuthor = getObjectsByAuthor;
 
@@ -496,101 +342,24 @@ exports.start = function(options) {
         if (!Array.isArray(t))
             t = [t];
 
-        db.obj.ensureIndex({_tag: 1}, function(err, res) {
-            if (err) {
-                console.error('ENSURE INDEX _tag', err);
-            }
-
-            db.obj.find({_tag: {$in: t}}, function(err, docs) {
-                if (err) {
-                    nlog('getObjectsByTag: ' + err);
-                }
-                else {
-                    docs = unpack(docs);
-                    for (var i = 0; i < docs.length; i++) {
-                        var d = docs[i];
-                        withObject(d);
-                    }
-                    if (whenFinished)
-                        whenFinished();
-                }
-            });
-
-        });
-
+		db.getAllByTag('obj', t, function(err, docs) {
+			if (err) {
+				nlog('getObjectsByTag: ' + err);
+			}
+			else {
+				docs = unpack(docs);
+				for (var i = 0; i < docs.length; i++) {
+					var d = docs[i];
+					withObject(d);
+				}
+				if (whenFinished)
+					whenFinished();
+			}
+		});
     }
     $N.getObjectsByTag = getObjectsByTag;
 
 
-    /*
-     function getObjectsByTags(tags, withObjects) {
-     db.obj.find({ tag: { $in: tags } }, function(err, docs) {
-     
-     
-     if (!err) {						
-     withObjects(docs);
-     }		
-     else {
-     nlog('getObjectsByTags: ' + err);
-     }
-     });		
-     }
-     that.getObjectsByTags = getObjectsByTags;
-     */
-
-    function getReport(lat, lon, whenStart, whenStop, withReport) {
-
-        var histogram = {};
-        var numBins = 38;
-        var numAnalyzed = 0;
-
-        function getHistogramBin(t) {
-            return ((t - whenStart) / (whenStop - whenStart)) * numBins;
-        }
-
-        db.obj.find(function(err, docs) {
-
-            if (err) {
-                nlog('getReport: ' + err);
-            }
-            else {
-                docs.forEach(function(d) {
-                    var t = d.modifiedAt || d.createdAt;
-
-                    if ((t <= whenStop) && (t >= whenStart)) {
-                        var a = feature.objAnalysis(d);
-                        var bin = parseInt(getHistogramBin(t));
-                        for (var k in a) {
-                            if (histogram[k] == undefined)
-                                histogram[k] = [];
-                            if (histogram[k][bin] == undefined)
-                                histogram[k][bin] = 0;
-                            histogram[k][bin] += a[k];
-                        }
-                        numAnalyzed++;
-                    }
-                });
-                var x = {
-                    id: '@somebody',
-                    tStart: whenStart,
-                    tStop: whenStop,
-                    tSteps: numBins,
-                    'numAnalyzed': numAnalyzed,
-                    features: histogram,
-                    conclusions: [
-                        'Person laughs before cursing 60%',
-                        'Person is simultaneously questioning and happy 85%',
-                    ],
-                    suggestions: [
-                        'Person should buy <a href="http://www.amazon.com/gp/product/B001OORMVQ/ref=s9_simh_gw_p147_d1_i4?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-2&pf_rd_r=1D1EGERGCVBCF3PMGYS7&pf_rd_t=101&pf_rd_p=1389517282&pf_rd_i=507846">SATA Adapter</a>',
-                        'Person should talk to @otherperson'
-                    ]
-                };
-                withReport(x);
-            }
-        });
-
-    }
 
 
     function refactorObjectTag(fromTag, toTag) {
@@ -605,13 +374,13 @@ exports.start = function(options) {
                 //console.log('  Refactor to:', o);
                 $N.notice(o);
             });
-        })
+        });
     }
     $N.refactorObjectTag = refactorObjectTag;
 
     function getTagCounts(whenFinished) {
 
-        db.obj.find(function(err, docs) {
+        db.getAll(function(err, docs) {
             if (err) {
                 nlog('getTagCounts: ' + err);
             }
@@ -633,18 +402,7 @@ exports.start = function(options) {
     }
 
 
-
-
-
-    //process.stdin.on('keypress', function(char, key) {
-    //	  if (key && key.ctrl && key.name == 'c') {
-    //   	    nlog('State saved');
-    //		saveState();
-    //	    process.exit();
-    //	  }
-    //});
-
-    function finish() {
+    function stop() {
         saveState(
                 function() {
                     nlog("State saved");
@@ -657,8 +415,8 @@ exports.start = function(options) {
         console.log('FINISHED');
     }
 
-    process.on('SIGINT', finish);
-    process.on('SIGTERM', finish);
+    process.on('SIGINT', stop);
+    process.on('SIGTERM', stop);
 
 
     function nlog(x) {
@@ -721,9 +479,6 @@ exports.start = function(options) {
 
     var cookieSession = require('cookie-session');
     
-    
-    
-    
     var security = require('./security.js');
     security.db = {
         url: "mongodb://" + options.databaseHost + '/',
@@ -756,25 +511,12 @@ exports.start = function(options) {
 
     express.use(lockit.router);
 
-    
-  
-    //SHAREJS -----------------------------
-    /*var sharejs = require('share').server;
-     
-     sharejs.attach(httpServer, { 
-     db: {type: 'none'}
-     //browserChannel: { cors: "*"}
-     });*/
 
-    //----------------------------- SHAREJS
-    //
-    
-    //express.use(require('connect-dyncache')());    
     
     var compression = null;
     
     //Gzip compression
-    if ($N.server.httpCompress) {
+    if (options.httpCompress) {
 		compression = require('compression')({
           threshhold: 512
         });
@@ -823,11 +565,11 @@ exports.start = function(options) {
 
 
     //https://github.com/gevorg/http-authenticate
-    var serverPassword = $N.server.password;
+    var serverPassword = options.password;
     if ((serverPassword) && (serverPassword.length > 0)) {
         var auth = require('http-auth');
         var basicAuth = auth.basic({
-            realm: $N.server.name
+            realm: options.name
         }, function(username, password, callback) { // Custom authentication method.
             callback(password === serverPassword);
         }
@@ -850,12 +592,9 @@ exports.start = function(options) {
         if (request && request.headers && request.headers.cookie)
             return parseCookies(request.headers.cookie);
         return { };
-    }
+    };
     
-    /*express.get('/whoami2', lockitUtils.restrict(security), function(req, res) {
-      sendJSON(res, req.session);
-        //res.json(req.session);
-    });*/
+
     express.get('/whoami', function(req, res) {
       sendJSON(res, req.session);
     });
@@ -891,9 +630,9 @@ exports.start = function(options) {
         
         var cookies = getCookies(req);
 
-        if (/*($N.server.currentClientID === undefined) ||*/ ($N.server.users === undefined)) {
-            //$N.server.currentClientID = {};
-            $N.server.users = {};
+        if (/*(options.currentClientID === undefined) ||*/ (options.users === undefined)) {
+            //options.currentClientID = {};
+            options.users = {};
         }
 
         var key = getSessionKey(req);
@@ -904,8 +643,8 @@ exports.start = function(options) {
 
         var cid = cookies.clientID;
 
-        if ((cid) && ($N.server.users[key])) {
-            if ($N.server.users[key].indexOf(cid) === -1) {
+        if ((cid) && (options.users[key])) {
+            if (options.users[key].indexOf(cid) === -1) {
                 //they are trying to spoof the clientID, deny access because key is invalid
                 //or they have the wrong clientID in their cookie
                 cid = null;
@@ -914,15 +653,15 @@ exports.start = function(options) {
 
         //default to the first, if exists
         if (!cid) {
-            if ($N.server.users[key]) {
-                cid = $N.server.users[key][0];
+            if (options.users[key]) {
+                cid = options.users[key][0];
             }
         }
 
         //otherwise create an initial user for that key
         if (!cid) {
             cid = util.uuid();
-            $N.server.users[key] = [cid];
+            options.users[key] = [cid];
             saveState();
         }
         
@@ -932,16 +671,16 @@ exports.start = function(options) {
     function addClientSelf(req, uid) {
         var key = getSessionKey(req) || 'anonymous';
         
-        if (!$N.server.users)
-            $N.server.users = {};
+        if (!options.users)
+            options.users = {};
 
-        var ss = $N.server.users[key];
+        var ss = options.users[key];
         if (!ss) {
-            $N.server.users[key] = [uid];
+            options.users[key] = [uid];
         }
         else {
-            $N.server.users[key].push(uid);
-            $N.server.users[key] = _.unique($N.server.users[key]);
+            options.users[key].push(uid);
+            options.users[key] = _.unique(options.users[key]);
         }
 
         //HACK clean users?
@@ -953,14 +692,14 @@ exports.start = function(options) {
         var key = getSessionKey(req);// || 'anonymous';
         if (!key) return [];
 
-        if (!$N.server.users)
-            $N.server.users = {};
+        if (!options.users)
+            options.users = {};
        
-        if (!$N.server.users[key]) {
-            $N.server.users[key] = [];
+        if (!options.users[key]) {
+            options.users[key] = [];
         }
         
-        return $N.server.users[key];
+        return options.users[key];
     }
     
     express.get('/', function(req, res) {
@@ -986,8 +725,8 @@ exports.start = function(options) {
             var cc = JSON.stringify(options.client);
             var js = 'var configuration = ' + cc + ';\n';
             js += 'configuration.enableAnonymous=' + options.permissions.enableAnonymous + ';\n';
-            js += 'configuration.siteName=\'' + $N.server.name + '\';\n';
-            js += 'configuration.siteDescription=\'' + $N.server.description + '\';\n';
+            js += 'configuration.siteName=\'' + options.name + '\';\n';
+            js += 'configuration.siteDescription=\'' + options.description + '\';\n';
             js += data;
             res.send(js);
         });
@@ -1092,7 +831,7 @@ exports.start = function(options) {
                     dist = dist.distance;
                     if (typeof dist === "number")
                         if ((dist > 0) && (dist < Infinity))
-                            return (1.0 / dist) >= $N.server.trustThreshold;
+                            return (1.0 / dist) >= options.trustThreshold;
                 }
                 else
                     return false;
@@ -1117,8 +856,10 @@ exports.start = function(options) {
 
 
     function broadcast(socket, o, whenFinished) {
-        if (!o.removed)
-            o = plugins("prePub", o);
+        if (!o.removed) {
+            //o = plugins("prePub", o);
+			$N.emit('object:beforePub', o);
+		}
 
         notice(o, whenFinished, socket);
 
@@ -1157,9 +898,9 @@ exports.start = function(options) {
         o = new $N.nobject($N.objExpand(o));
 
         if (!o.removed)
-            plugins("onPub", o);
+            $N.emit('object:pub', o);
         else
-            plugins("onDelete", o);
+            $N.emit('object:delete', o);
 
     }
     $N.broadcast = broadcast;
@@ -1238,53 +979,22 @@ exports.start = function(options) {
         });
     });
 
-    function getLatestObjects(n, withObjects, withError) {
-        db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
-            if (err) {
-                withError('ENSURE INDEX modifiedAt ' + err);
-                return;
-            }
+    var getLatestObjects = $N.getLatestObjects = function(n, withObjects, withError) {
+		db.getNewest('obj', n, function(err, docs) {
+			if (err)
+				withError(err);
+			else
+				withObjects(docs);
+		});
+    };
 
-            //TODO scope >= PUBLIC
-            db.obj.find().limit(n).sort({modifiedAt: -1}, function(err, objs) {
-                withObjects(objs);
-            });
+    var getLatestObjectsStream = $N.getLatestObjectsStream = function(n, withObject, whenFinished, withError) {
+        db.streamNewest('obj', n, function(err, obj) {
+			if (err) { withError(err); return; }
+			if (!obj) { whenFinished(); return; }
+			withObject(obj);
         });
-    }
-    $N.getLatestObjects = getLatestObjects;
-
-    function getLatestObjectsStream(n, withObject, whenFinished, withError) {
-        db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
-            if (err) {
-                withError('ENSURE INDEX modifiedAt ' + err);
-                return;
-            }
-
-            //TODO scope >= PUBLIC
-            db.obj.find().limit(n).sort({modifiedAt: -1}).forEach( function(err, obj) {
-				if (!obj) { whenFinished(); return; }
-                withObject(obj);
-            });
-        });
-    }
-    $N.getLatestObjectsStream = getLatestObjectsStream;
-    
-    function getExpiredObjects(withObjects) {
-        db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
-            if (err) {
-                withError('ENSURE INDEX modifiedAt ' + err);
-                return;
-            }
-
-            var now = Date.now();
-
-            db.obj.find({expiresAt: {$lte: now}}, function(err, objs) {
-                if (!err)
-                    withObjects(objs);
-            });
-        });
-
-    }
+    };
         
 	express.get('/object/latest/:num/:format', compression, function(req, res) {
         var n = parseInt(req.params.num);
@@ -1349,11 +1059,11 @@ exports.start = function(options) {
         var NUM_OBJECTS = 64;
 
         var feedOptions = {
-            title: $N.server.name,
-            description: $N.server.description,
-            feed_url: $N.server.host + '/object/latest/rss',
-            site_url: $N.server.host,
-            image_url: $N.server.client.loginLogo,
+            title: options.name,
+            description: options.description,
+            feed_url: options.host + '/object/latest/rss',
+            site_url: options.host,
+            image_url: options.client.loginLogo,
             generator: 'Netention',
             //docs: 'http://example.com/rss/docs.html',
             //author: '',
@@ -1385,7 +1095,7 @@ exports.start = function(options) {
                     var item = {
                         title: o.name,
                         description: content,
-                        url: $N.server.host + '/object/' + o.id + '/json',
+                        url: options.host + '/object/' + o.id + '/json',
                         guid: 'netention://object/' + o.id,
                         categories: util.objTags(o, false),
                         author: o.author || 'none', // optional - defaults to feed author property
@@ -1503,7 +1213,7 @@ exports.start = function(options) {
 
         //https://www.mashape.com/alchemyapi/alchemyapi-1
         //http://www.alchemyapi.com/api/concept/textc.html
-        var alchemyKey = $N.server.permissions['alchemyapi_key'];
+        var alchemyKey = options.permissions['alchemyapi_key'];
         if (alchemyKey) {
             request.post(
                     //'http://access.alchemyapi.com/calls/text/TextGetRankedConcepts',
@@ -1534,55 +1244,56 @@ exports.start = function(options) {
 
     });
 
-    express.get('/input/geojson/*', function(req, res) {
-        var url = req.params[0] || '';
 
-        http.get(url, function(res) {
-            //var kml = jsdom(fs.readFileSync(url, 'utf8'));
-            var page = '';
-            res.on("data", function(chunk) {
-                page += chunk;
-            });
-            res.on('end', function() {
-                var tj = require('togeojson'),
-                        // node doesn't have xml parsing or a dom. use jsdom
-                        jsdom = require('jsdom').jsdom;
-
-                var kml = jsdom(page);
-                var converted = tj.kml(kml)['features'];
-
-                var n = 0;
-                _.each(converted, function(o) {
-                    if (o.type == 'Feature') {
-                        /* { type: 'Feature',
-                         geometry:
-                         { type: 'Point',
-                         coordinates: [ -145.1312560955501, 62.3909807260417, 0 ] },
-                         properties: { name: 'Power Plants' } } */
-                        var id = url + '#' + (n++);
-                        var name = '';
-                        var coords = null;
-
-                        if (o['geometry']) {
-                            if (o['geometry']['coordinates'])
-                                coords = o['geometry']['coordinates'];
-                        }
-                        if (o['properties'])
-                            name = o['properties']['name'] || '';
-
-                        var x = util.objNew(id, name);
-                        x = util.objAddTag(x, 'Item');
-                        x = util.objAddGeoLocation(x, coords[1], coords[0]);
-                        pub(x);
-                    }
-                });
-
-                //var converted_with_styles = tj.kml(page, { styles: true });
-                //console.log(converted_with_styles);
-            });
-
-        });
-    });
+//    express.get('/input/geojson/*', function(req, res) {
+//        var url = req.params[0] || '';
+//
+//        http.get(url, function(res) {
+//            //var kml = jsdom(fs.readFileSync(url, 'utf8'));
+//            var page = '';
+//            res.on("data", function(chunk) {
+//                page += chunk;
+//            });
+//            res.on('end', function() {
+//                var tj = require('togeojson'),
+//                        // node doesn't have xml parsing or a dom. use jsdom
+//                        jsdom = require('jsdom').jsdom;
+//
+//                var kml = jsdom(page);
+//                var converted = tj.kml(kml)['features'];
+//
+//                var n = 0;
+//                _.each(converted, function(o) {
+//                    if (o.type == 'Feature') {
+//                        /* { type: 'Feature',
+//                         geometry:
+//                         { type: 'Point',
+//                         coordinates: [ -145.1312560955501, 62.3909807260417, 0 ] },
+//                         properties: { name: 'Power Plants' } } */
+//                        var id = url + '#' + (n++);
+//                        var name = '';
+//                        var coords = null;
+//
+//                        if (o['geometry']) {
+//                            if (o['geometry']['coordinates'])
+//                                coords = o['geometry']['coordinates'];
+//                        }
+//                        if (o['properties'])
+//                            name = o['properties']['name'] || '';
+//
+//                        var x = util.objNew(id, name);
+//                        x = util.objAddTag(x, 'Item');
+//                        x = util.objAddGeoLocation(x, coords[1], coords[0]);
+//                        pub(x);
+//                    }
+//                });
+//
+//                //var converted_with_styles = tj.kml(page, { styles: true });
+//                //console.log(converted_with_styles);
+//            });
+//
+//        });
+//    });
 
     express.get('/ontology/:format', function(req, res) {
         var format = req.params.format;
@@ -1602,13 +1313,15 @@ exports.start = function(options) {
     });
 
     express.get('/state', function(req, res) {
-        sendJSON(res, _.omit($N.server, ['plugins', 'users', 'currentClientID', 'permissions']));
+        sendJSON(res, _.omit(options, ['plugins', 'users', 'currentClientID', 'permissions']));
     });
+
     express.get('/attention', function(req, res) {
         getTagCounts(function(x) {
             sendJSON(res, x, false);
         });
     });
+
     express.get('/focus/:historyLengthSeconds', compression, function(req, res) {
         var historyLength = req.params.historyLengthSeconds;
         var now = Date.now();
@@ -1621,23 +1334,27 @@ exports.start = function(options) {
 
         sendJSON(res, result, false);
     });
-    express.get('/save', function(req, res) {
+
+	express.get('/save', function(req, res) {
         saveState(
             function()    {     sendJSON(res, 'Saved');        },
             function(err) {     sendJSON(res, 'Not saved');    }
         );
     });
+
     express.get('/team/interestTime', function(req, res) {
         updateInterestTime();
-        sendJSON(res, $N.server.interestTime);
+        sendJSON(res, options.interestTime);
     });
-    express.post('/notice', function(request, response) {
+
+    /*express.post('/notice', function(request, response) {
 
         //console.log(request.body.user.name);
         //console.log(request.body.user.email);
 
-    });
+    });*/
 
+/*
     express.get('/report', function(req, res) {
         getReport(
                 parseFloat(req.query['lat']),
@@ -1649,6 +1366,7 @@ exports.start = function(options) {
                 }
         );
     });
+*/
 
 
     function returnWikiPage(url, rres, redirector) {
@@ -1733,7 +1451,7 @@ exports.start = function(options) {
 			io.sockets.in('*').emit('p2p', $N.node.peers);
 		}
 		
-        $N.emit('main/set', 'roster', r);
+        $N.emit('main:set', 'roster', r);
     }, rosterBroadcastIntervalMS);
 	$N.broadcastRoster = broadcastRoster;
 
@@ -1839,7 +1557,7 @@ exports.start = function(options) {
             });
 
             socket.on('pub', function(message, err, success) {
-                if ($N.server.permissions['authenticate_to_create_objects'] !== false) {
+                if (options.permissions['authenticate_to_create_objects'] !== false) {
                     if (!account) {
                         if (err)
                             err('Not authenticated');
@@ -1852,7 +1570,7 @@ exports.start = function(options) {
                     message = $N.objExpand(message);
                     focusHistory.push(message);
 
-                    plugins('onFocus', message);
+                    $N.emit('focus', message);
 
                     //remove elements in focusHistory that are older than focusHistoryMaxAge (seconds)
                     var now = Date.now();
@@ -1869,22 +1587,22 @@ exports.start = function(options) {
             });
 
             /*socket.on('getPlugins', function(f) {
-             f(_.keys($N.server.plugins));
+             f(_.keys(options.plugins));
              });*/
 
             /*socket.on('setPlugin', function(pid, enabled, callback) {
-             if ($N.server.permissions['anyone_to_enable_or_disable_plugin'] == false) {
+             if (options.permissions['anyone_to_enable_or_disable_plugin'] == false) {
              callback('Plugin enabling and disabling not allowed');
              return;
              }
-             if ($N.server.permissions['authenticate_to_configure_plugins'] != false) {
+             if (options.permissions['authenticate_to_configure_plugins'] != false) {
              if (!isAuthenticated(account)) {
              callback('Unable to configure plugins (not logged in)');
              return;
              }
              }
              
-             var pm = $N.server.plugins[pid];
+             var pm = options.plugins[pid];
              if (pm) {
              if (!(pm.valid == false)) {
              var currentState = pm.enabled;
@@ -1935,7 +1653,7 @@ exports.start = function(options) {
 
                     if (oldID !== nextID) {
                         updateUserConnection(oldID, nextID, socket);
-                        plugins("onConnect", {id: nextID, prevID: oldID});
+                        $N.emit("user:connect", {id: nextID, prevID: oldID});
                     }
 
                     _onResult(nextID);
@@ -1950,7 +1668,7 @@ exports.start = function(options) {
                     });
                 }
 
-                var keyRequired = ($N.server.permissions['authenticate_to_create_profiles'] != false);
+                var keyRequired = (options.permissions['authenticate_to_create_profiles'] != false);
                 if (!targetObject) {
                     var selves = getClientSelves(account);
                     if (_.contains(selves, target)) {
@@ -2006,7 +1724,7 @@ exports.start = function(options) {
                 var selves = getClientSelves(account);
 
                 updateUserConnection(null, cid, socket);
-                plugins("onConnect", {id: cid});
+                $N.emit("user:connect", {id: cid});
 
                 var tagsAndTemplates = [];
                 getObjectsByTag(['Tag', 'Template'], function(o) {
@@ -2077,7 +1795,7 @@ exports.start = function(options) {
             });*/
 
             socket.on('delete', function(objectID, whenFinished) {
-                /*if ($N.server.permissions['authenticate_to_delete_objects'] != false) {
+                /*if (options.permissions['authenticate_to_delete_objects'] != false) {
                  if (!isAuthenticated(account)) {
                  whenFinished('Unable to delete (not logged in)');
                  return;
@@ -2123,15 +1841,15 @@ exports.start = function(options) {
         //    plugins("onChannel", [channel, message]);
         if (toP2P)
             if (channel === 'main') {
-                $N.emit('main/say', message);
+                $N.emit('main:say', message);
             }
     }
     $N.channelAdd = channelAdd;
 
     function updateInterestTime() {
         //reprocess all clientState's to current time
-        for (c in $N.server.clientState) {
-            var cl = $N.server.clientState[c];
+        for (c in options.clientState) {
+            var cl = options.clientState[c];
             updateInterests(c, cl);
         }
     }
@@ -2166,7 +1884,7 @@ exports.start = function(options) {
     }
 
     function updateInterests(clientID, state, socket, resubscribe) {
-        var prevState = $N.server.clientState[clientID];
+        var prevState = options.clientState[clientID];
         var now = Date.now();
 
         if (!prevState) {
@@ -2196,8 +1914,8 @@ exports.start = function(options) {
 
             else {
                 var averageInterest = (v + pv) / 2.0;
-                if ($N.server.interestTime[k] == undefined)
-                    $N.server.interestTime[k] = 0;
+                if (options.interestTime[k] == undefined)
+                    options.interestTime[k] = 0;
                 addends[k] = (now - prevState.when) / 1000.0 * averageInterest;
             }
         }
@@ -2207,8 +1925,8 @@ exports.start = function(options) {
             if (v == undefined) {
                 v = 0;
                 var averageInterest = (v + pv) / 2.0;
-                if ($N.server.interestTime[k] == undefined)
-                    $N.server.interestTime[k] = 0;
+                if (options.interestTime[k] == undefined)
+                    options.interestTime[k] = 0;
                 addends[k] = (now - prevState.when) / 1000.0 * averageInterest;
 
                 if (socket)
@@ -2222,14 +1940,14 @@ exports.start = function(options) {
         }
         for (k in addends) {
             var a = addends[k];
-            if ($N.server.interestTime[k] == undefined)
-                $N.server.interestTime[k] = 0;
-            $N.server.interestTime[k] += a / addendSum;
+            if (options.interestTime[k] == undefined)
+                options.interestTime[k] = 0;
+            options.interestTime[k] += a / addendSum;
         }
 
 
         state.when = now;
-        $N.server.clientState[clientID] = state;
+        options.clientState[clientID] = state;
 
     }
 
@@ -2248,7 +1966,7 @@ exports.start = function(options) {
 				});
 				broadcastRoster();
 			});
-            nlog('WebRTC server: http://' + $N.server.host + ':' + w.port);
+            nlog('WebRTC server: http://' + options.host + ':' + w.port);
         }
     }
 
@@ -2260,16 +1978,7 @@ exports.start = function(options) {
         console.error(err.stack);
     });
 
-    function removeExpired() {
-        getExpiredObjects(function(objs) {
-            if (objs.length == 0)
-                return;
-            var ids = _.map(objs, function(o) {
-                return o.id;
-            });
-            deleteObjects(ids);
-        });
-    }
+
 
     function loadPlugins() {
 
@@ -2285,10 +1994,10 @@ exports.start = function(options) {
                 file = file + '/netention.js';
             }
 
-            if (!$N.server.plugins[file])
+            if (!options.plugins[file])
                 return;
 
-            pluginOption[file] = $N.server.plugins[file];
+            pluginOption[file] = options.plugins[file];
 
             if (pluginOption[file]) {
                 var po = pluginOption[file];
@@ -2298,7 +2007,7 @@ exports.start = function(options) {
         });
         */
         
-        _.each($N.server.plugins, function(po, file) {
+        _.each(options.plugins, function(po, file) {
             if (po.enable != false)
                 startPlugin(file, po);            
         });
@@ -2309,7 +2018,7 @@ exports.start = function(options) {
     $N.enablePlugins = options.plugins || {};
     $N.nlog = nlog;
 
-    removeExpired();
+    db.update();
 
     require('./general.js').plugin($N).start();
     
@@ -2323,7 +2032,7 @@ exports.start = function(options) {
                 $N.add(to);    
             }, function() {
 
-                if (options.permissions.enableAnonymous && (!$N.server.anonymousUserExists)) {  
+                if (options.permissions.enableAnonymous && (!options.anonymousUserExists)) {
                     setTimeout(function() {
                         //TODO keep waiting until lockit.adapter.db exists.. since there is no callback
                         //console.log(lockit.adapter.db);
@@ -2345,14 +2054,14 @@ exports.start = function(options) {
                                     delete user.signupToken;
                                     delete user.signupTokenExpires;
                                     lockit.adapter.update(user, function() {  
-                                        $N.server.anonymousUserExists = true;
+                                        options.anonymousUserExists = true;
                                         saveState();
                                     });
                                 });                                
                             }
                             else {
                                 //console.log('anonymous user exists', user);
-                                $N.server.anonymousUserExists = true;
+                                options.anonymousUserExists = true;
                                 saveState();
                             }
                         });
@@ -2362,14 +2071,14 @@ exports.start = function(options) {
 
                 loadPlugins();
                 
-                httpServer.listen($N.server.port);
+                httpServer.listen(options.port);
 
-                nlog('Web server: http://' + $N.server.host + ':' + $N.server.port);
+                nlog('Web server: http://' + options.host + ':' + options.port);
 
-                if ($N.server.start)
-                    $N.server.start($N);
+                if (options.start)
+                    options.start($N);
 
-                setInterval(removeExpired, $N.server.memoryUpdateIntervalMS);
+                setInterval(db.update, options.memoryUpdateIntervalMS);
 
             });
             

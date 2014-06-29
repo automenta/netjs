@@ -1,7 +1,7 @@
 if (typeof window != 'undefined') {
     exports = {}; //functions used by both client and server
 } else {
-    _ = require('underscore');
+    _ = require('lodash');
     graphlib = require("graphlib");
 }
 

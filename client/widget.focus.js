@@ -115,13 +115,14 @@ function renderFocus(skipSet) {
         sources.push(null);
 				
 		//peers	
-		
+		/*
 		var peers = $N.get('p2p');
 		if (peers) {
 			_.each(peers, function(v, k) {
 				sources.push('^' + k);
 			});
 		}
+		*/
 		
         sources.forEach(function(s) {
             if (s === null)

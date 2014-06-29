@@ -7,11 +7,9 @@
   },
   "main": "netention.js",
   "dependencies": {
-    "always": "",
     "body-parser": "",
     "cheerio": "",
     "compression": "",
-    "connect": "",
     "connect-dyncache": "",
     "cookie": "",
     "cookie-parser": "",
@@ -21,7 +19,7 @@
     "express": "",
     "feedparser": "",
     "geolib": "",
-    "automenta/telepathine":"",
+    "telepathine":"automenta/telepathine",
     "graphlib": "",
     "http-auth": "",
     "ical": "",
@@ -39,19 +37,16 @@
     "natural": "",
     "parted": "",
     "peer": "",
-    "rdfstore": "",
     "request": "",
     "rivescript": "",
     "rss": "",
-    "pnode":"",
     "socket.io": "",
     "stopwords": "",
-    "togeojson": "",
-    "xml2object": "",
     "ya-csv": ""
   },
   "devDependencies": {
-    "qunit": ""
+    "qunit": "",
+    "always": ""
   },
   "scripts": {
     "test": "node server/test"
