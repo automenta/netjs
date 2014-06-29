@@ -29,7 +29,7 @@ function removeRecurse(path,cb) {
       }else if(stats.isDirectory()){
         // A folder may contain files
         // We need to delete the files first
-        // When all are deleted we could delete the 
+        // When all are deleted we could delete the
         // dir itself
         fs.readdir(path, function(err, files) {
           if(err){
@@ -49,7 +49,7 @@ function removeRecurse(path,cb) {
               fs.rmdir(path, function(err) {
                 if(err){
                   cb(err,null);
-                }else{ 
+                }else{
                   cb(null,true);
                 }
               });
@@ -75,7 +75,7 @@ function removeRecurse(path,cb) {
                     return;
                   }
                 });
-    
+
               })()
             }
           }
@@ -89,35 +89,35 @@ function endsWith(str, p) {return (str.match(p+"$")==str)}
 function parseKML(data) {
 
 	var parser = new xml2js.Parser();
-	
+
     parser.parseString(data, function (err, result) {
-    	
+
         function processFolder(F) {
-        	
+
             var fName = F.name;
-            
+
             if (F.Placemark!=undefined) {
                 for (var nl = 0; nl < F.Placemark.length; nl++) {
                 	var p = F.Placemark[nl];
-                	
-                	
+
+
                 	var coord = null;
                 	if (p.Point!=undefined) {
                 		coord = p.Point.coordinates;
                 	}
-                	
+
                 	console.log('PLACEMARK ' + p.name, coord);
-                	
+
                 }
-            	
+
             }
-            
+
             if (F.NetworkLink!=undefined) {
                 for (var nl = 0; nl < F.NetworkLink.length; nl++) {
                     var NL = F.NetworkLink[nl];
-                    
+
                     console.log(fName + '.' + NL.name);
-                    
+
                     var u = '';
                     if (NL.Url!=undefined) {
                         u = NL.Url[0].href[0];
@@ -125,13 +125,13 @@ function parseKML(data) {
                     else if (NL.Link!=undefined) {
                         u = NL.Link[0].href[0];
                     }
-                    
+
                     if ((u.indexOf('kml')!=-1) || (u.indexOf('Kml')!=-1)) {
-                        console.log('  layer = ' + u);                            
+                        console.log('  layer = ' + u);
                     	parseKMLURL(u);
                     }
                     else if (u.indexOf('kmz')!=-1) {
-                        console.log('  kmz = ' + u);                                
+                        console.log('  kmz = ' + u);
                     }
                     else {
                         console.log('  unknown = ' + u);
@@ -143,17 +143,17 @@ function parseKML(data) {
                 for (var ff = 0; ff < F.Folder.length; ff++) {
                     var FF = F.Folder[ff];
                     processFolder(FF);
-                }                    
+                }
             }
         }
         if (result.kml.Document.Folder!=undefined) {
-	        for (var rf = 0; rf < result.kml.Document.Folder.length; rf++) {                    
+	        for (var rf = 0; rf < result.kml.Document.Folder.length; rf++) {
 	            processFolder(result.kml.Document.Folder[rf]);
-	        }        	
+	        }
         }
-        
+
         if (result.kml.Folder!=undefined) {
-	        for (var rf = 0; rf < result.kml.Folder.length; rf++) {                    
+	        for (var rf = 0; rf < result.kml.Folder.length; rf++) {
 	            var F = result.kml.Folder[rf];
 	            processFolder(F);
 	        }
@@ -164,7 +164,7 @@ function parseKML(data) {
 //            console.dir(result.kml.Folder[0].Folder);
 
     });
-	
+
 }
 
 function parseKMLURL(kmlUrlPath) {
@@ -187,12 +187,12 @@ function parseKMLFile(kmlfilePath) {
     		parseKML(data);
     	}
     });
-    
+
 }
 function parseKMZ(kmzurl) {
 
     var outputFolder = '/tmp/kmz-' + getRandomFilename();
-    
+
     fs.mkdir(outputFolder);
 
     request(kmzurl).pipe(unzip.Extract({ path: outputFolder  }))
@@ -202,9 +202,9 @@ function parseKMZ(kmzurl) {
       .on("end", function () {
 
         parseKMLFile(outputFolder + '/doc.kml');
-        
+
         removeRecurse(outputFolder, function() { });
-        
+
 
       });
 }

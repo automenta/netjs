@@ -1,4 +1,4 @@
-//a suggestion rule for a specific condition.  
+//a suggestion rule for a specific condition.
 //
 //each rule specifies:
 // condition predicate
@@ -14,14 +14,14 @@ var Suggestion = {
 
     //returns false if georesult doesn't satisfy the condition, or the reason as a HTML string if it does
     condition: function(georesult) { return false },
-    
+
     //ex: product URL
     url: function() { "http://" },
-    
+
     //title
     name: function() { return "" },
-    
+
     //image url for thumbnail
     imageURL: function() { "http://" }
-    
+
 };
