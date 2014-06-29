@@ -565,12 +565,15 @@ function renderLeafletMap(v) {
                 
                 var m = getMarker(x);
                 if (m) {
-                    nobjectLayer.addLayer(m);
-                    if (m.extraGeometry) {
-                        for (var j = 0; j < m.extraGeometry.length; j++) {
-                            nobjectLayer.addLayer(m.extraGeometry[j]);                            
-                        }
-                    }
+					try {
+						nobjectLayer.addLayer(m);
+						if (m.extraGeometry) {
+							for (var j = 0; j < m.extraGeometry.length; j++) {
+								nobjectLayer.addLayer(m.extraGeometry[j]);
+							}
+						}
+					}
+					catch (e) { /* TODO this should not happen. check m before calling addLayer to avoid any overhead involved in catching this */ }
                 }
 
             }

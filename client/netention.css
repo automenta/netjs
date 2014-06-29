@@ -501,9 +501,7 @@ div.olMapViewport {
     height: 100%;
 }
 #ViewSelect {} .ViewSelectNormal {} 
-.ViewSelectIndented {
-    padding-left: 50px;
-}
+
 #ViewSelect {
     float: left;
     line-height: 0;
@@ -878,8 +876,7 @@ a.ViewControlMinor img {
 .MenuPopout {
     display: none;
     position: fixed;
-    bottom: 0;
-    margin-bottom: 46px !important;
+    top: 46px;
     z-index: 20;
     padding: 6px;
 }
@@ -903,9 +900,9 @@ a.ViewControlMinor img {
 
 #FocusEditWrap {
     overflow: auto;
-	top:0;
     right: 0px;
     max-width: 50%;
+	height: 100%;
 }
 #FocusEditButtons {
     float: right;
@@ -1225,12 +1222,12 @@ div.objectView .metadataReplyButton {
 @media (max-width: 699px) {
 	#FocusEditWrap {
 		overflow: auto;
-		top:0;
+		bottom:0;
 		right: 0px;
 		max-width: 100%;
 		width: 100% !important;
-		margin-bottom:50px;
-		height: 100%;
+		margin-top:50px;
+		height: auto;
 	}	
 	
     .ChatViewContent {
@@ -1569,8 +1566,8 @@ html > body .ui-pnotify {
  */
 
 .view-indented {
-    top: 0px !important;
-    margin-bottom: 46px !important;
+    bottom: 0px !important;
+    margin-top: 46px !important;
     height: auto !important;
 }
 
@@ -1600,7 +1597,7 @@ html > body .ui-pnotify {
 }
 #AvatarButtonMini {
     position: fixed;
-    bottom: 5px;
+    top: 5px;
     left: 5px;
     cursor: crosshair;
     opacity: 0.6;
@@ -1612,15 +1609,15 @@ html > body .ui-pnotify {
 
 
 #AvatarButton, #AvatarButton img {
-    width: 65px;
-    height: 65px;
+    width: 51px;
+    height: 51px;
     margin: 0;
     padding: 0;
     z-index: 25;
 }
 #AvatarButton {
     position: fixed;
-    bottom: -3px;
+    top: -3px;
     left: -3px;
     cursor: crosshair;
 }
@@ -1633,7 +1630,7 @@ html > body .ui-pnotify {
 #MainMenu {
     position: fixed;
     z-index: 15;
-    bottom: 0;
+    top: 0;
     left: 0;
     width: 100%;
     margin: 0;
@@ -2294,7 +2291,6 @@ svg {
     max-height:90%;
     overflow:auto;
     left: 0;
-    top:0;
     padding-left: 5px;
     padding-top: 5px;
 }

@@ -1,5 +1,5 @@
 @import url('/lib/jquery-ui/1.10.4/themes/ui-lightness/jquery-ui.min.css');
-@import url('rainbow_menu.css');
+/*@import url('rainbow_menu.css');*/
 
 h1 a {
     color: black;
@@ -12,7 +12,7 @@ a:hover {
 }
 .ui-mainmenu {
     /*background-color: #149bdf;*/
-    background-color: rgba(62,182,243,0.97);    
+    background-color: rgba(203, 223, 143, 0.97);
 }
 
 .ui-widget-content {
