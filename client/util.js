@@ -313,7 +313,7 @@ function objTime(x) {
 exports.objTime = objTime;
 
 
-function objDescription(x) {
+function objDescription(x, maxlen) {
     /* concatenates all 'description' tag values */
     var c = '';
     if (x.value) {
@@ -324,6 +324,13 @@ function objDescription(x) {
             }
         }
     }
+
+	c = c.trim();
+	if (maxlen) {
+		if (c.length > maxlen-1)
+			c = c.substring(0, maxlen-1) + '&hellip;';
+	}
+
     return c.trim();
 }
 exports.objDescription = objDescription;

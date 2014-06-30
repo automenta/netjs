@@ -809,14 +809,14 @@ $(document).ready(function() {
                         commitFocus(exampleObject);
                     },
                     showObject: function(id) {
-                        var x = $N.getObject(id);
+                        var x = $N.object[id];
                         if (x) {
                             newPopupObjectView(x);
                         }
                         else {
                             notify({
-                             title: 'Unknown object',
-                             text: id.substring(0, 4) + '...'
+                             	title: 'Unknown object',
+                             	text: id
                              });
                         }
                     },

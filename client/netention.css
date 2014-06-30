@@ -2515,7 +2515,7 @@ svg {
 	padding: 1em;
 }
 .media-object {
-	max-width: 4em;
+	width: 4em;
 	max-height: 4em;
 }
 #NotificationList {

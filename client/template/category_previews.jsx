@@ -2,11 +2,26 @@
 
 var Panel = ReactBootstrap.Panel;
 
+var TagButton = React.createClass({
+  render: function() {
+  		var tagID = this.props.tagID;
+		var tag = $N.class[tagID];
+		var tagName = tag ? tag.name : tagID;
+		var tagIcon = tag ? getTagIcon(tagID) : null;
+
+		var style = {
+  			backgroundImage: "url(" + tagIcon + ")"
+		};
+
+		return (<a href={'#object/' + tagID} style={style} className="tagLink">{tagName}</a>);
+  }
+});
+
 var CategoryPreviews = React.createClass({
   render: function() {
 	  
 	var tags = this.props.tag;
-	  
+
 	  
     return (
 		<div className="CategoryPreviews container-fluid">
@@ -14,23 +29,13 @@ var CategoryPreviews = React.createClass({
 		{
 			tags.map(function(tag) {
 			  return(
-				<div className="col-xs-6 col-md-4">
-					<Panel header={(<h3>{tag.name}</h3>)}>
+				<div className="col-xs-6 col-md-4 tiled">
+					<Panel header={(<h3><TagButton tagID={tag.id}></TagButton></h3>)}>
 					{
 						tag.object.map(function(o) {
-
-						  return <div className="media">
-							  <a className="pull-left" href="#">
-								<img className="media-object" src={o.icon} alt="..."></img>
-							  </a>
-							  <div className="media-body">
-								<h4 className="media-heading">{o.name}</h4>
-								{o.content}
-							  </div>
-							</div>;
-
+							return <ObjectMedia id={o}></ObjectMedia>
 						})
-					}			
+					}
 					</Panel>
 			  	</div>
 			  )
