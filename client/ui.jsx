@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 $.timeago.settings.allowFuture = true;
 $.timeago.settings.strings = {
     prefixAgo: null,
@@ -33,6 +35,21 @@ var currentView = null;
 
 var Actions = [];
 var ActionMenu = {};
+
+var views = { };
+
+
+
+function addView(v) {
+	views[v.id] = v;
+	
+	var viewButton = $('<a class="ViewControl ViewSelect"></a>')
+		.attr('id', v.id)
+		.attr('title', v.name)
+		.append($('<img/>').attr('src', v.icon))
+		.appendTo($('#ViewSelect'));
+		
+}
 
 
 function loadCSS(url, med) {
@@ -280,10 +297,12 @@ var _firstView = true;
 var _forceNextView = false;
 
 function _updateView(force) {
+
     if (_forceNextView) {
         force = true;
         _forceNextView = false;
     }
+	
     
     updateBrand();
     renderFocus(true);
@@ -332,9 +351,12 @@ function _updateView(force) {
             }
         }
     }
-    if (currentView)
-        if (currentView.destroy)
+    if (currentView) {
+        if (currentView.destroy)  //DEPRECATED
             currentView.destroy();
+        if (currentView.stop)  //DEPRECATED
+            currentView.stop();
+    }
         
     vw.detach();
     later(function() {
@@ -353,6 +375,7 @@ function _updateView(force) {
     var v = newDiv('View').appendTo($('body'));
 
 
+	
     function indent() {
         v.addClass('overthrow view-indented');
         updateIndent($('#MainMenu').is(":visible"));
@@ -417,8 +440,16 @@ function _updateView(force) {
         currentView = newNotebookView(v);
     }
     else {
-        v.html('Unknown view: ' + view);
-        currentView = null;
+		if (views[view]) {
+			indent();
+			currentView = views[view];
+			currentView.start(v);
+			v.append(currentView);
+		}
+		else {
+			v.html('Unknown view: ' + view);
+        	currentView = null;
+		}
     }
 
     if (configuration.device == configuration.MOBILE) {
@@ -789,7 +820,7 @@ $(document).ready(function() {
                              });*/
                         }
                     },
-                    view: function(view) {
+                    view: function(view) {						
                         $N.set('currentView', view);
                     },
                     user: function(userid) {
@@ -814,15 +845,16 @@ $(document).ready(function() {
                 var firstView = true;
 
                 var throttledUpdateView = _.throttle(function() {
+				
                     $('#AvatarButton').addClass('ViewBusy');
-                    //later(function() {
-                        _updateView();
+                    later(function() {
+                        _updateView($N.get('currentView'));
                         if (firstView) {
                             updateView = _.debounce(throttledUpdateView, viewDebounceMS);
                             firstView = false;
                         }
                         $('#AvatarButton').removeClass('ViewBusy');
-                    //});
+                    });
                 }, viewUpdateMS);
 
                 updateView = _.debounce(throttledUpdateView, firstViewDebounceMS);
@@ -872,6 +904,9 @@ $(document).ready(function() {
                     }
 
 
+                    var w = new Workspace();
+                    $N.router = w;
+					
                     if (!alreadyLoggedIn) {
                         if (isAnonymous()) {
                             //show profile chooser
@@ -891,8 +926,6 @@ $(document).ready(function() {
 
                     //initKeyboard();
 
-                    var w = new Workspace();
-                    $N.router = w;
 
 
                     //USEFUL FOR DEBUGGING EVENTS:
@@ -1031,4 +1064,9 @@ function getMemory() {
         usedHeap: p.usedJSHeapSize/(1024*1024),
         totalHeap: p.totalJSHeapSize/(1024*1024)
     };
+}
+
+function stackTrace() {
+    var err = new Error();
+    console.dir(err.stack);
 }

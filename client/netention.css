@@ -2517,3 +2517,12 @@ svg {
     width: 100%;
     clear: both;
 }
+
+.ViewPage {
+	padding: 1em;
+}
+.media-object {
+	max-width: 4em;
+	max-height: 4em;
+}
+

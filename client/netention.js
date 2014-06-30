@@ -876,16 +876,15 @@ function netention(f) {
         },
         startURLRouter: function() {
             if (!this.backboneStarted) {
+				
                 this.backboneStarted = true;
-                Backbone.history.start();
-
+				Backbone.history.start();
+				
                 $N.on('change:attention', updateView);
                 $N.on('change:currentView', updateView);
                 $N.on('change:tags', updateView);
                 $N.on('change:focus', updateView);				
 				
-                updateView();
-
             }
         },
         getChannel: function(channel, callback) {

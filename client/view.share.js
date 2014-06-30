@@ -26,7 +26,7 @@ function newShareView(v) {
         else
             delete f.name;
         
-        $N.setFocus(f);
+        //$N.setFocus(f);
     };
 
     searchInput.on('input', _.throttle(updateSearchFocus, shareSearchFocusUpdateMS));
@@ -90,8 +90,8 @@ function newShareView(v) {
                 f.value = [];
             }
 
-            $N.setFocus(f);
-            renderFocus(true);
+            //$N.setFocus(f);
+            //renderFocus(true);
         });
 
         sidebar.append('<br/>');
@@ -201,12 +201,12 @@ function newShareView(v) {
         updateContent();
     };
 
-    //Not needed because when this function clearFocus(), it will trigger the onChange later.
-    //frame.onChange();
+    
+    frame.onChange();
 
     
-    clearFocus();
-    renderFocus();
+    //clearFocus();
+    //renderFocus();
 
 
     return frame;

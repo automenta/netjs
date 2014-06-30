@@ -105,3 +105,8 @@ Install Netention for Node.JS on OSX
 ========================================
 Coming soon.
 
+
+
+Create a Netention Source Code Archive
+======================================
+git archive --format zip -o netention-src.zip master
