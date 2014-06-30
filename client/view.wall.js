@@ -6,7 +6,6 @@ addView({
 		v.addClass('ViewPage Wall');
 		
 		$.getJSON('/template/category_previews.json').done(function(data) {
-			console.log(data);
 			React.renderComponent(
 				CategoryPreviews(data),
 				v[0]

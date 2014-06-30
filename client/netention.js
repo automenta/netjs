@@ -43,7 +43,7 @@ function netention(f) {
             this.channels = { };
             this.clearTransients();
             this.set('clientID', 'undefined');
-			
+			this.messages = [];
         },
         clearTransients: function() {
             this.set('layer', {
@@ -905,7 +905,12 @@ function netention(f) {
 		
         channelSend: function(channel, m) {
             $N.socket.emit('channelSend', channel, m);
-        }
+        },
+
+		receive: function(message) {
+			$N.messages.push(message);
+			$N.trigger('change:messages');
+		}
     });
 
     //exports = the variable from util.js which is also used by node.js require()        		

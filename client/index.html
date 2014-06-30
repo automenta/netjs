@@ -67,51 +67,53 @@
                 </div>
             </div>
         </div>
-        <div id="MainMenu" style="display:none;" class="ui-widget overthrow ui-mainmenu">
-            <!-- <li class="viz"><a class="ui-button" id="time" title="Timeline" href="#"><b class="icon-time"></b><span class="display-menu-collapse">Timeline</span></a></li> -->
-            <!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
-            <!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
+		<nav id="MainMenu" style="display:none; width: 100%" class="container-fluid " role="navigation">
+			<!-- <li class="viz"><a class="ui-button" id="time" title="Timeline" href="#"><b class="icon-time"></b><span class="display-menu-collapse">Timeline</span></a></li> -->
+			<!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
+			<!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
 
-            <div class="section" style="padding-left: 47px;">&nbsp;</div>
+			<div class="section" style="padding-left: 47px;">&nbsp;</div>
 
-            <div id="ViewSelect" class="section">
-                <a id="us" class="ViewControl ViewSelect" title="Us"><img src="icon/view.us.svg"></a>
-                <a id="map" class="ViewControl ViewSelect" title="Map"><img src="icon/view.map.svg"></a>
-                <a id="time" class="ViewControl ViewSelect" title="Time"><img src="icon/view.time.svg"></a>
-                <a id="browse" class="ViewControl ViewSelect" title="Browse"><img src="icon/view.browse.svg"></a>
-                <a id="forum" class="ViewControl ViewSelect" title="Forum"><img src="icon/view.chat.svg"></a>
-                <a id="graph" class="ViewControl ViewSelect" title="Network"><img src="icon/view.graph.svg"></a>
-                <a id="share" class="ViewControl ViewSelect" title="Share"><img src="icon/view.share.svg"></a>
+			<div id="ViewSelect" class="section">
+				<a id="us" class="ViewControl ViewSelect" title="Us"><img src="icon/view.us.svg"></a>
+				<a id="map" class="ViewControl ViewSelect" title="Map"><img src="icon/view.map.svg"></a>
+				<a id="time" class="ViewControl ViewSelect" title="Time"><img src="icon/view.time.svg"></a>
+				<a id="browse" class="ViewControl ViewSelect" title="Browse"><img src="icon/view.browse.svg"></a>
+				<a id="forum" class="ViewControl ViewSelect" title="Forum"><img src="icon/view.chat.svg"></a>
+				<a id="graph" class="ViewControl ViewSelect" title="Network"><img src="icon/view.graph.svg"></a>
+				<a id="share" class="ViewControl ViewSelect" title="Share"><img src="icon/view.share.svg"></a>
 
-                <a id="main" class="ViewControl ViewControlMinor ViewSelect" title="Main"><img src="icon/view.main.svg"></a>
-                <a id="trends" class="ViewControl ViewControlMinor ViewSelect" title="Trends"><img src="icon/view.trends.svg"></a>
-                <a id="wiki" class="ViewControl ViewControlMinor ViewSelect" title="Wiki"><img src="icon/view.wiki.svg"></a>
-                <!-- <a id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></a> -->
-                <a id="notebook" class="ViewControl ViewControlMinor ViewSelect" title="Notebook"><img src="icon/view.browse.svg"></a>
-                
-                <a id="viewplay" class="ViewControl ViewControlMinor" title="Live Mode"><img src="icon/play_transparent.svg"></a>
-                <a id="viewpause" class="ViewControl ViewControlMinor" title="Pause"><img src="icon/pause_transparent.svg"></a>
-                
-            </div>
-            <div id="ViewUpdates" style="display:none" class="section">
-            </div>
+				<a id="main" class="ViewControl ViewControlMinor ViewSelect" title="Main"><img src="icon/view.main.svg"></a>
+				<a id="trends" class="ViewControl ViewControlMinor ViewSelect" title="Trends"><img src="icon/view.trends.svg"></a>
+				<a id="wiki" class="ViewControl ViewControlMinor ViewSelect" title="Wiki"><img src="icon/view.wiki.svg"></a>
+				<!-- <a id="templates" class="ViewControl" title="Templates"><img src="icon/view.templates.svg"></a> -->
+				<a id="notebook" class="ViewControl ViewControlMinor ViewSelect" title="Notebook"><img src="icon/view.browse.svg"></a>
 
-            <div id="ViewMenu" class="section"></div>
+				<a id="viewplay" class="ViewControl ViewControlMinor" title="Live Mode"><img src="icon/play_transparent.svg"></a>
+				<a id="viewpause" class="ViewControl ViewControlMinor" title="Pause"><img src="icon/pause_transparent.svg"></a>
 
-            <div id="AvatarFocus" class="section" style="float: right">
-                <a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
-                <a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
-                <a id="FocusEditToggleButton" class="ViewControl PopoutControl" title="Focus"><img src="icon/view.trends.svg"></a>
-                <!--
-                                <button id="FocusWhatButton">What?</button>
-                                <button id="FocusWhereButton">Where?</button>
-                                <button id="FocusWhenButton">When?</button>
-                                <input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
+			</div>
+			<div id="ViewUpdates" style="display:none" class="section">
+			</div>
 
-                                <button id="FocusClearButton" title="Clear">[x]</button>
-                -->
-            </div>
-        </div>
+			<li id="ViewMenu" class="section"></li>
+
+
+
+				<!--
+								<button id="FocusWhatButton">What?</button>
+								<button id="FocusWhereButton">Where?</button>
+								<button id="FocusWhenButton">When?</button>
+								<input id="FocusKeywords" x-webkit-speech="x-webkit-speech" type="text"></input>
+
+								<button id="FocusClearButton" title="Clear">[x]</button>
+				-->
+
+			<a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
+			<a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
+			<a id="FocusEditToggleButton" class="ViewControl PopoutControl" title="Focus"><img src="icon/view.trends.svg"></a>
+			<div id="NotificationList"></div>
+		</nav>
         <div id="FocusEditWrap"  style="display:none"  class="MenuPopout ui-mainmenu">
             <a id="FocusEditCloseButton" class="ViewControl" title="Close"><img src="icon/minus.svg"></a>
             <div id="FocusEditButtons">
@@ -125,6 +127,7 @@
 			<div id="FocusTagger" style="display:none" class="ui-widget-content"></div>
 			<div id="FocusEdit"></div>
         </div>
+
 
         <!-- END HIDDEN UNTIL LOADED -->
 
@@ -245,6 +248,7 @@
 
 		<!-- templates -------->
 		<script type="text/jsx" src="template/category_previews.jsx"></script>
+		<script type="text/jsx" src="template/notifications.jsx"></script>
 		
 		
 		

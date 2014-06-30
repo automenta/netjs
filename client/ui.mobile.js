@@ -139,3 +139,19 @@ setViewLock(configuration.viewlockDefault);
 $('#Roster').append(newRosterWidget());
 
 
+//Setup Notification Menu
+(function () {
+	React.renderComponent(
+		NotificationMenu(),
+		$('#NotificationList')[0]
+	);
+
+	//for testing messsages
+	/*setInterval(function() {
+		$N.receive({id:('a'+Date.now()), name: uuid(), type:"urgent"});
+	}, 1000);*/
+})();
+
+
+
+

@@ -792,7 +792,7 @@ $(document).ready(function() {
                         "me": "me", // #help
                         "help": "help", // #help
                         "query/:query": "query", // #search/kiwis
-                        "object/:id": "object",
+                        "object/:id": "showObject",
                         "object/:id/focus": "focus",
                         "tag/:tag": "tag",
                         //"new/with/tags/:t":     "newWithTags",
@@ -814,10 +814,10 @@ $(document).ready(function() {
                             newPopupObjectView(x);
                         }
                         else {
-                            /*notify({
+                            notify({
                              title: 'Unknown object',
                              text: id.substring(0, 4) + '...'
-                             });*/
+                             });
                         }
                     },
                     view: function(view) {						

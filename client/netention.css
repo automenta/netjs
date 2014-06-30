@@ -792,7 +792,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
 
 a.ViewControl img {
-    background-color: #222 !important;
+    background-color: #fff !important;
 }
 
 a.ViewControlMinor img {
@@ -877,7 +877,6 @@ a.ViewControlMinor img {
     display: none;
     position: fixed;
     top: 46px;
-    z-index: 20;
     padding: 6px;
 }
 
@@ -1261,9 +1260,7 @@ div.objectView .metadataReplyButton {
     #viewplay, #viewpause {
         float: right;
     }
-    #AvatarFocus {
-        margin-right: 14px;
-    }
+
 }
 .InlineSelfButton {
     cursor: pointer;
@@ -1635,7 +1632,6 @@ html > body .ui-pnotify {
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden !important;
     height: auto;
 }
 
@@ -1731,10 +1727,7 @@ html > body .ui-pnotify {
     #welcome {
         text-align: center;
     }
-    #MainMenu {
-        max-height: 46px;
-        overflow-y: hidden;
-    }
+
     #ViewSelect {
     }
     #identity {
@@ -2525,4 +2518,11 @@ svg {
 	max-width: 4em;
 	max-height: 4em;
 }
-
+#NotificationList {
+	z-index:5000;
+	float: right;
+}
+#NotificationList .dropdown-menu {
+	left: auto;
+	right: 0;
+}
