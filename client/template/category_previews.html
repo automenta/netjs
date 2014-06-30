@@ -1,0 +1,14 @@
+
+<div class="category_previews">
+  
+  {{#each tag}}	 
+	<h2>{{name}}</h2>
+	{{#each post}}
+		<div class="comment">
+		  <h3>{{name}}</h3>
+		  <div>{{{content}}}</div>
+		</div>
+	{{/each}}
+  {{/each}}
+	
+</div>
