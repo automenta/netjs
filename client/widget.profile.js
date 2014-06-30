@@ -50,7 +50,10 @@ function newProfileWidget() {
         }
     }
 
-    if (c === 0) {
+	if (identity()===ID_UNKNOWN) {
+		$('#LoadingSplashTitle').html('<a href="/login">Login</a>');
+	}	
+    else if (c === 0) {
         d.empty().append(newNewProfileWidget(function(user) {
             become(user);
             closeDialog();

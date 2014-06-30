@@ -8,7 +8,11 @@ exports.plugin = function($N) {
         start: function(options) {
             console.log('start', $N.server.name);
 
+			
 			$N.on('*', function() {
+				console.log(this.event, arguments);
+			});
+			$N.on('*:*', function() {
 				console.log(this.event, arguments);
 			});
         },

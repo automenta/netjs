@@ -218,12 +218,15 @@ var refreshActionContext = _.throttle(function() {
 
 
 function updateBrand() {
-    if (!$N.myself())
-        return;
-
-    $('.brand').attr('alt',$N.myself().name);
-
-    var avatarURL = getAvatarURL($N.myself());
+	var avatarURL;
+    if (!$N.myself()) {
+        avatarURL = configuration.defaultAvatarIcon;
+	}
+	else {
+		$('.brand').attr('alt',$N.myself().name);
+    	avatarURL = getAvatarURL($N.myself());
+	}
+	
     $('#avatar-img').attr('src', avatarURL);
     $('#toggle-img').attr('src', avatarURL);
 }
@@ -621,8 +624,8 @@ $('#NotificationArea').html('Loading...');
 
 $(document).ready(function() {
 
-    if (identity()===0) {
-        //$('#login').show();
+
+    if ((identity()===ID_UNKNOWN) && (configuration.requireIdentity)) {
         window.location = '/login';
     }
 
@@ -652,10 +655,11 @@ $(document).ready(function() {
     if (configuration.favicon)
         $('#favicon').attr('href', configuration.favicon);
 
+	$('.ViewSelect').hide();
     var conviews = configuration.views;
     for (var i = 0; i < conviews.length; i++) {
         var c = conviews[i];
-        $('#' + c).show();
+        $('a#' + c + '.ViewControl').show();
     }
 
     $('#openid-open').click(function() {
@@ -877,8 +881,7 @@ $(document).ready(function() {
                             if (configuration.requireIdentity)
                                 openSelectProfileModal("Start a New Profile");
                             else {
-                                //$N.trigger('change:attention');
-                                updateView();
+								$N.sessionStart();
                             }
                         }
                     }

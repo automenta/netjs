@@ -509,7 +509,7 @@ exports.start = function(options) {
     express.use(require('parted')()); //needed for file uploads
     express.disable('x-powered-by');
 
-    express.use(lockit.router);
+  	express.use(lockit.router);
 
 
     
@@ -609,6 +609,21 @@ exports.start = function(options) {
         res.redirect('/');
     });
 
+	function getAdminUsers() {		
+		return options.adminUsers;
+	}
+	
+	function getUserLevel(uid) {
+		var a = getAdminUsers();
+		if (!a) {
+			return 0;
+		}
+		else if (a.indexOf(uid)!=-1) {
+			return 0;
+		}
+		return 1;
+	}
+	
 
     function getSessionKey(req) {       
         if (typeof req === "string")
@@ -727,6 +742,7 @@ exports.start = function(options) {
             js += 'configuration.enableAnonymous=' + options.permissions.enableAnonymous + ';\n';
             js += 'configuration.siteName=\'' + options.name + '\';\n';
             js += 'configuration.siteDescription=\'' + options.description + '\';\n';
+			js += 'configuration.requireIdentity=' + (options.permissions.connect < 3) + ';\n';
             js += data;
             res.send(js);
         });
@@ -1653,7 +1669,8 @@ exports.start = function(options) {
 
                     if (oldID !== nextID) {
                         updateUserConnection(oldID, nextID, socket);
-                        $N.emit("user:connect", {id: nextID, prevID: oldID});
+						var userLevel = getUserLevel(nextID);
+                        $N.emit("user:connect", {id: nextID, prevID: oldID, level: userLevel});
                     }
 
                     _onResult(nextID);
@@ -1724,7 +1741,7 @@ exports.start = function(options) {
                 var selves = getClientSelves(account);
 
                 updateUserConnection(null, cid, socket);
-                $N.emit("user:connect", {id: cid});
+                $N.emit("user:connect", {id: cid, level: getUserLevel(cid) });
 
                 var tagsAndTemplates = [];
                 getObjectsByTag(['Tag', 'Template'], function(o) {
@@ -2031,7 +2048,7 @@ exports.start = function(options) {
             getObjectsByTag('Trust', function(to) {
                 $N.add(to);    
             }, function() {
-
+				
                 if (options.permissions.enableAnonymous && (!options.anonymousUserExists)) {
                     setTimeout(function() {
                         //TODO keep waiting until lockit.adapter.db exists.. since there is no callback
@@ -2068,6 +2085,10 @@ exports.start = function(options) {
                     }, 500);
                 }
                     
+				
+				if (!getAdminUsers()) {
+					console.error("No admin users specified; All users granted admin priveleges");
+				}				
 
                 loadPlugins();
                 
