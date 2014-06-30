@@ -2,7 +2,7 @@
 	"tag": [
 		{
 			"name": "Can",
-			"post": [
+			"object": [
 				{
 					"id": "sdksdkfjsdf",
 					"name": "A",
@@ -17,7 +17,7 @@
 		},
 		{
 			"name": "Need",
-			"post": [
+			"object": [
 				{
 					"id": "sdksdkfjsdf",
 					"name": "C",

@@ -2,35 +2,73 @@
 
 <head>
 	<script src="lib/jquery/jquery.min.js" type="text/javascript"></script>
-	<script src="lib/handlebars/handlebars-v1.3.0.js" type="text/javascript"></script>
+
+	<script src="lib/react/react-0.10.0.min.js"></script>
+	<script src="lib/react/JSXTransformer-0.10.0.js"></script>
+	
+	<script src="lib/react/react-bootstrap.min.js"></script>
+	
+	<style type="text/css">
+		@import url("lib/bootstrap/bootstrap.min.css");
+		@import url("lib/bootstrap/bootstrap-theme.min.css");
+	</style>
+
 </head>
 
 <body>
 	<div id="output"></div>
+	<div id="output2"></div>	
+	<div id="output3"></div>
 </body>
-<script>
-	function testTemplate(id) {
-		$.get("template/" + id + ".html", function (data, status, xhr) {
+<script type="text/jsx" src="template/category_previews.jsx"></script>
 
-			console.log('template=', data);
+<script type="text/jsx">
+  /** @jsx React.DOM */
+  
+  var CommentBox = React.createClass({
+  render: function() {
+    return (
+      <div className="commentBox">
+        Hello, world! I am a CommentBox.
+      </div>
+    );
+  }
+});
 
-			var template = Handlebars.compile(data);
+React.renderComponent(
+  CommentBox({}),
+  document.getElementById('output')
+);
 
-			console.log('template=', template);
+$.getJSON('/template/category_previews.json').done(function(data) {
+	console.log(data);
+	React.renderComponent(
+		CategoryPreviews(data),
+		document.getElementById('output2')
+	);
+});
 
-			$.getJSON("template/" + id + ".json").done(function( data ) {
-				console.log('data=', data);
-				$('#output').html(template(data));
-  			}).fail(function(e) {
-				console.error(e)
-			});;
-		});
+var Panel = ReactBootstrap.Panel;
 
-	}
+var title = (
+    <h3>Panel title</h3>
+  );
 
-	$(document).ready(function() {
-		testTemplate('category_previews');
-	});
+var panelsInstance = (
+    <div>
+      <Panel header="Panel heading without title">
+        Panel content
+      </Panel>
+      <Panel header={title}>
+        Panel content
+      </Panel>
+    </div>
+  );
+
+React.renderComponent(panelsInstance, document.getElementById('output3'));
+
 </script>
+
+
 
 </html>
