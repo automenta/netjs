@@ -1471,13 +1471,6 @@ div.objectView .metadataReplyButton {
 * 	Version: 1.2.0. Link: http://pinesframework.org/pnotify/   
 */
 
-.well {
-    position: absolute;
-    top: 0px !important;
-    right: 0px !important;
-    width: 200px !important;
-    max-width: 200px !important;
-}
 .ui-pnotify {
     position: relative;
     height: auto;
@@ -1568,17 +1561,7 @@ html > body .ui-pnotify {
     height: auto !important;
 }
 
-#IdentityPopout {
-    z-index: -1;
-    padding-bottom: 20px;
-    max-width: 30%;
-}
-#IdentityPopout div {
-    clear: both;
-}
-#IdentityPopout select {
-    width: 100%;
-}
+
 
 #Roster div {
     clear: none;
@@ -2506,6 +2489,13 @@ svg {
     max-width: 1em !important;
     cursor: pointer;
 }
+.Roster .AvatarIcon, .Roster .AvatarIcon img {
+	height: 4em !important;
+	width: 4em !important;
+}
+
+
+
 .ChatInput {
     width: 100%;
     clear: both;
@@ -2518,11 +2508,12 @@ svg {
 	width: 4em;
 	max-height: 4em;
 }
-#NotificationList {
+#NotificationList, #OptionsMenu {
 	z-index:5000;
 	float: right;
+	margin-left: 10px;
 }
-#NotificationList .dropdown-menu {
+#NotificationList .dropdown-menu, #OptionsMenu .dropdown-menu {
 	left: auto;
 	right: 0;
 }

@@ -37,7 +37,7 @@ var NotificationMenu = React.createClass({
 
 
 	function getTitle() {
-		return "Messages (" + messages.length + ")";
+		return <i className="fa fa-envelope-o fa-fw" title={"Messages (" + messages.length + ")"}></i>
 	}
 
 	var firstMessage = Math.max(0,messages.length - maxMessages);

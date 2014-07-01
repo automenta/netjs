@@ -136,7 +136,7 @@ initFocusButtons();
 
 setViewLock(configuration.viewlockDefault);
 
-$('#Roster').append(newRosterWidget());
+//$('#Roster').append(newRosterWidget());
 
 
 //Setup Notification Menu

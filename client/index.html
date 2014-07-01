@@ -55,17 +55,6 @@
         <div id="ActionMenuWrapper"></div>
         <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;">
             <img alt="brand" id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" />
-            
-            <div id="IdentityPopout" class="MenuPopout ui-mainmenu">                
-                <div id="Roster">
-                </div>
-                <div>
-                    <br/>
-                    <a id="ToggleChatButton" class="ViewControl" title="Chat"><img src="icon/view.chat.svg"></a>
-                    <a id="EditProfileButton" class="ViewControl" title="Edit Profile"><img src="icon/view.browse.svg"></a>
-                    <a id="SelectProfileButton" class="ViewControl" title="Switch Identity"><img src="icon/view.share.svg"></a>
-                </div>
-            </div>
         </div>
 		<nav id="MainMenu" style="display:none; width: 100%" class="container-fluid " role="navigation">
 			<!-- <li class="viz"><a class="ui-button" id="time" title="Timeline" href="#"><b class="icon-time"></b><span class="display-menu-collapse">Timeline</span></a></li> -->
@@ -112,6 +101,25 @@
 			<a id="AddContentButton" class="ViewControl" title="New..."><img src="icon/plus.transparent.svg"></a>
 			<a id="FocusClearButton" class="ViewControl" title="Clear"><img src="icon/remove.transparent.svg"></a>
 			<a id="FocusEditToggleButton" class="ViewControl PopoutControl" title="Focus"><img src="icon/view.trends.svg"></a>
+
+			<div id="OptionsMenu" class="btn-group">
+
+				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-random"></i>&nbsp;&nbsp;<span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li class="divider"></li>
+                    <li><a id="ToggleChatButton" class="ViewControl"><img src="icon/view.chat.svg">Chat</a></li>
+                    <li><a id="EditProfileButton" class="ViewControl"><img src="icon/view.browse.svg">Edit My Profile</a></li>
+                    <li><a id="SelectProfileButton" class="ViewControl"><img src="icon/view.share.svg">Change Identity...</a></li>
+                    <li><a href="/logout" class="ViewControl"><i class="fa fa-sign-in fa-3x"></i> Logout</a></li>
+				</ul>
+
+			</div>
+
 			<div id="NotificationList"></div>
 		</nav>
         <div id="FocusEditWrap"  style="display:none"  class="MenuPopout ui-mainmenu">
@@ -151,6 +159,7 @@
 		<!--<script src="lib/react/react-0.10.0.min.js"></script> -->
 		<script src="lib/react/JSXTransformer-0.10.0.js"></script>
 		
+		<script src="lib/bootstrap/bootstrap.min.js"></script>
 		<script src="lib/react/react-bootstrap.min.js"></script>
 		
 		
@@ -271,6 +280,7 @@
 
 			@import url("lib/bootstrap/bootstrap.min.css");
 			@import url("lib/bootstrap/bootstrap-theme.min.css");
+			@import url("lib/fontawesome/css/font-awesome.min.css");
 
             @import url("netention.css");
         </style>

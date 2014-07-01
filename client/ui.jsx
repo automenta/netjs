@@ -674,7 +674,7 @@ $(document).ready(function() {
     });
 
     var langSelect = ('<select id="uilanguage"><option>English</option><option>Español</option> <option>Français</option><option>Русский</option><option>עברית</option><option>العربية</option><option>हिन्दी; हिंदी</option><option>中文(简体)</option><option>日本語</option></select>');
-    $('#IdentityPopout').append('<br/>',newDiv().append(themeSelect), newDiv().append(langSelect));
+    $('#OptionsMenu ul').prepend(newEle('li').append(themeSelect), newEle('li').append(langSelect));
 
     $(window).resize(whenResized);
     whenResized();

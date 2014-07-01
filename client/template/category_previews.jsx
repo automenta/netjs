@@ -29,7 +29,7 @@ var CategoryPreviews = React.createClass({
 		{
 			tags.map(function(tag) {
 			  return(
-				<div className="col-xs-6 col-md-4 tiled">
+				<div className="col-xs-6 col-md-4">
 					<Panel header={(<h3><TagButton tagID={tag.id}></TagButton></h3>)}>
 					{
 						tag.object.map(function(o) {

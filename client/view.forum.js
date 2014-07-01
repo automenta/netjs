@@ -383,16 +383,7 @@ function newObjectLogLine(x) {
 function newChatInput(onSend) {
     var d = newDiv();
 
-    var inputBar = $('<input placeholder="Chat" x-webkit-speech/>');
-    inputBar.keyup(function(event) {
-        if (event.keyCode === 13) {
-            if (onSend)
-                onSend(inputBar.val());
-            inputBar.val('');
-        }
-
-    });
-    d.append(inputBar);
+    d.append(newShoutLine());
 
     var webcamButton = $('<button title="Add Webcam..."><img style="height: 0.8em" src="icon/play.png"></button>');
     webcamButton.click(function() {
