@@ -1,4 +1,310 @@
+addView({
+	id: 'us',
+	name: 'Users',
+	icon: 'icon/view.us.svg',
+	start: function(v) {		
+		
+		var panel = newDiv().addClass('User ViewPage panel panel-default').appendTo(v);
+		var panelHeading = $('<div class="panel-heading"></div>');
+		
+
+		
+		panelHeading.append('<br/>');
+		panel.append(panelHeading);
+		
+		var panelContent = newDiv().addClass('panel-body').appendTo(panel);
+		panel.append(panelContent);
+		
+		var s = self;
+		var plan = getPlan();
+
+		var planTimes = _.keys(plan);
+
+
+
+
+
+		var centroidTimes = $N.objectsWithTag('GoalCentroid');
+		if (!centroidTimes)
+			centroidTimes = [];
+
+		var plans = [];
+		var centroids = [];
+		for (var k = 0; k < centroidTimes.length; k++) {
+			centroids.push($N.instance[centroidTimes[k]]);
+		}
+
+
+		function updateUsView(currentUser) {
+			panelContent.empty();
+			
+			var container = newDiv().appendTo(panelContent);
+
+
+			var sidebar = newDiv('goalviewSidebar');
+			var goalList = newDiv('goalviewList');
+			//var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');
+
+			
+			//generate panelHeading
+			panelHeading.empty();
+			
+			var avatarButton = $('<span/>').appendTo(panelHeading);			
+			newAvatarImage(currentUser).appendTo(avatarButton);
+			
+			var userSelect = newAuthorCombo(currentUser);
+			userSelect.change(function (v) {
+				updateUsView(userSelect.val());
+			});
+			panelHeading.append(userSelect);
+			
+			
+			var exportButton = $('<button title="Generate Resume"><i class="fa fa-trophy"></i></button>');
+			exportButton.click(function () {
+				$N.saveAll();
+				//window.open('/#user/' + currentUser);
+				//$N.router.navigate('/#user/' + currentUser, {trigger: true});
+				newPopupObjectEdit(newSelfSummary(currentUser), true);
+			});
+
+			
+			panelHeading.append(exportButton);
+			
+
+			function updateNowDiv() {
+				sidebar.empty();
+
+
+
+				//.append('<button disabled title="Set Focus To This Goal">Focus</button>')
+				//.append('<button disabled title="Clear">[x]</button>');
+
+
+
+				var operators = getOperatorTags();
+
+				var currentUserFilter = function (o) {
+					o = $N.getObject(o);
+					if (o.subject)
+						if (o.subject != currentUser) return false;
+
+					return (o.author == currentUser);
+				};
+
+				function addTheTag(T) {
+					if ((T.id === 'Trust') || (T.id === 'Distrust') || (T.id === 'Value')) {
+						return function () {
+							var x = objNew();
+							x.name = T.name;
+							x.author = 
+								x.subject = $N.id();
+							x.addTag(T.id);
+
+							newPopupObjectEdit(x);
+						}
+					} else {
+						return function () {
+							var d = newPopup("Add " + T.name, {
+								width: 800,
+								height: 600,
+								modal: true
+							});
+							d.append(newTagger([], function (results) {
+								saveAddedTags(results, T.id);
+
+								later(function () {
+									d.dialog('close');
+									updateNowDiv();
+								});
+							}));
+						}
+					}
+				}
+
+				_.each(operators, function (o) {
+					var O = $N.class[o];
+
+
+					if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))) {
+						var sdd = newDiv();
+						//not a 3-vector system
+						var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
+
+						var nn = _.filter($N.objectsWithTag(O, false, true), currentUserFilter);
+
+						if (nn.length > 0) {
+							var uu = $('<ul></ul>');
+							_.each(nn, function (g) {
+								var G = $N.getObject(g);
+								var ss = newObjectView(G, {
+									showAuthorIcon: false,
+									showAuthorName: false,
+									showMetadataLine: false,
+									showActionPopupButton: false,
+									titleClickMode: 'edit'
+								}).removeClass("ui-widget-content ui-corner-all").addClass('objectViewBorderless');
+								if (G.name == O.name) {
+									ss.find('h1 a').html('&gt;&gt;');
+									ss.find('h1').replaceTag($('<div style="float: left">'), true);
+									ss.find('ul').replaceTag($('<div style="float: left">'), true);
+									ss.find('li').replaceTag($('<div>'), true);
+								}
+								uu.append(ss);
+							});
+							sdd.append(uu);
+						} else {
+							//header.attr('style', 'font-size: 75%');
+							sdd.append('<br/>');
+						}
+						container.append(sdd);
+					}
+
+
+				});
+
+				if (!$N.getTag('DoLearn')) {
+					//3-vector system : sliders
+					var nn = _.filter($N.objectsWithTag(['Do', 'Learn', 'Teach']), currentUserFilter);
+					var d = newDiv().appendTo(panelContent);
+
+					function rangeToTags(x, newValue) {
+						objRemoveTag(x, 'Do');
+						objRemoveTag(x, 'Learn');
+						objRemoveTag(x, 'Teach');
+
+						if (newValue == 0) {
+							objAddTag(x, 'Do');
+						} else if (newValue > 0) {
+							if (newValue < 1.0)
+								objAddTag(x, 'Do', (1.0 - newValue));
+							objAddTag(x, 'Teach', (newValue));
+						} else if (newValue < 0) {
+							if (newValue > -1.0)
+								objAddTag(x, 'Do', (1.0 + newValue));
+							objAddTag(x, 'Learn', (-newValue));
+						}
+						//console.log(x);
+					}
+
+					function newLeftColDiv() {
+						return $('<div style="width: 48%; float: left; clear: both"/>');
+					}
+
+					function newRightColDiv() {
+						return $('<div style="width: 48%; float: right"/>');
+					}
+
+					newLeftColDiv().addClass('goalRowHeading').appendTo(d).append('Know');
+
+					var kb = newDiv();
+					var lButton = $('<button title="Learn">L</button>').css('width', '32%').css('float', 'left').appendTo(kb);
+					var dButton = $('<button title="Do">D</button>').css('float', 'left').css('width', '34%').appendTo(kb);
+					var tButton = $('<button title="Teach">T</button>').css('width', '32%').css('float', 'left').appendTo(kb);
+					lButton.css('color', '#aa0000').click(addTheTag($N.getTag('Learn')));
+					dButton.css('color', '#00aa00').click(addTheTag($N.getTag('Do')));
+					tButton.css('color', '#0000aa').click(addTheTag($N.getTag('Teach')));
+
+
+
+					newRightColDiv().appendTo(d).append(kb);
+
+					_.each(nn, function (x) {
+						var X = $N.getObject(x);
+						var lc = newLeftColDiv().appendTo(d);
+						var rc = newRightColDiv().appendTo(d);
+
+						var nameLink = $('<a">' + X.name + '</a>');
+						nameLink.click(function () {
+							newPopupObjectView(x);
+						});
+						var colorSquare = $('<span>&nbsp;&nbsp;&nbsp;</span>&nbsp;');
+						lc.append(colorSquare, nameLink);
+
+						var slider = $('<input type="range" min="-1" max="1" step="0.05"/>').addClass('SkillSlider');
+
+						if (X.author != $N.id())
+							slider.attr('disabled', 'disabled');
+
+						slider.attr('value', knowTagsToRange(X));
+
+						var SLIDER_CHANGE_MS = 500;
+
+						var updateTags = _.throttle(function () {
+							rangeToTags(X, parseFloat(slider.val()));
+							$N.pub(X);
+						}, SLIDER_CHANGE_MS);
+
+
+						function updateColor() {
+							var sv = parseFloat(slider.val());
+							var cb = hslToRgb(((sv + 1.0) / 2.1 + 0.0) / 1.7, 0.9, 0.7);
+							var bgString = 'rgba(' + parseInt(cb[0]) + ',' + parseInt(cb[1]) + ',' + parseInt(cb[2]) + ',1.0)';
+							colorSquare.css('background-color', bgString);
+						}
+						updateColor();
+
+						slider.change(function () {
+							updateColor();
+							later(function () {
+								updateTags();
+							});
+						});
+						rc.append(slider);
+
+					});
+				}
+
+
+
+			}
+
+			updateNowDiv();
+
+
+
+			var now = true;
+			var goalTime = Date.now();
+
+
+			function updateGoalList() {
+				goalList.empty();
+
+				newGoalList(goalList, currentUser, centroids);
+			}
+			//setInterval(updateGoalList, updatePeriod);
+			updateGoalList();
+
+			{
+				//TODO find more robust way of displaying these
+
+				/*var iu = $N.objectsWithTag('involvesUser');
+				_.each(iu, function(x) {
+					var X = $N.getObject(x);
+					involvesList.append(newObjectView(X));
+				});*/
+
+			}
+
+
+			panelContent.append(sidebar, goalList /*, involvesList*/ );
+		}
+
+		if ($N.myself())
+			updateUsView($N.myself().id);
+		else {
+			var users = $N.objectsWithTag('User');
+			updateUsView(users[0]); //start with first user
+		}
+
+	},
+	stop: function() {
+	}
+});
+	
+
 var GOAL_EXPIRATION_INTERVAL = 2 * 60 * 60 * 1000; //2 hours, in MS
+
+
 
 function getOperatorTags() {
     return ['Trust','Can', 'Need', 'Not', 'Value'];
@@ -104,290 +410,7 @@ function newAuthorCombo(currentUser, includeAll) {
 
 
 
-function newUsView(v) {
-
-    var s = self;
-    var plan = getPlan();
-
-    var planTimes = _.keys(plan);
-
-
-    var d = newDiv().attr('style', 'width:100%; overflow: auto;');
-
-
-    var centroidTimes = $N.objectsWithTag('GoalCentroid');
-    if (!centroidTimes)
-        centroidTimes = [];
-
-    var plans = [];
-    var centroids = [];
-    for (var k = 0; k < centroidTimes.length; k++) {
-        centroids.push($N.instance[centroidTimes[k]]);
-    }
-
-
-    function updateUsView(currentUser) {
-        v.empty();
-        var container = newDiv().addClass('usContainer').appendTo(v);
-
-        var currentGoalHeader = $('#ViewMenu'); //$('<div id="GoalHeader"></div>').addClass("ui-widget-content ui-corner-all");
-
-        var sidebar = newDiv('goalviewSidebar').addClass('goalviewColumn');
-        var goalList = newDiv('goalviewList').addClass('goalviewColumn');
-        //var involvesList = newDiv('goalviewInvolves').addClass('goalviewColumnNarrow');
-
-        currentGoalHeader.empty();
-
-        function updateNowDiv() {
-            sidebar.empty();
-
-            var avatarButton = $('<span/>');
-            
-            var myself = $N.myself();
-            if (myself) {
-                //newAvatarImage(myself).attr('style', 'height: 1.5em; vertical-align: middle').appendTo(avatarButton);
-            }
-
-            var exportButton = $('<button>Summarize</button>');
-            exportButton.click(function () {
-                $N.saveAll();
-                //window.open('/#user/' + currentUser);
-                //$N.router.navigate('/#user/' + currentUser, {trigger: true});
-                newPopupObjectEdit(newSelfSummary(currentUser), true);
-            });
-
-            currentGoalHeader.append(avatarButton, exportButton);
-
-            //.append('<button disabled title="Set Focus To This Goal">Focus</button>')
-            //.append('<button disabled title="Clear">[x]</button>');
-
-            var userSelect = newAuthorCombo(currentUser);
-            userSelect.change(function (v) {
-                updateUsView(userSelect.val());
-            });
-
-            currentGoalHeader.prepend(userSelect);
-
-            var operators = getOperatorTags();
-
-            var currentUserFilter = function (o) {
-                o = $N.getObject(o);
-                if (o.subject)
-                    if (o.subject != currentUser) return false;
-
-                return (o.author == currentUser);
-            };
-
-            function addTheTag(T) {
-                if ((T.id === 'Trust') || (T.id === 'Distrust') || (T.id === 'Value')) {
-                    return function () {
-                        var x = objNew();
-                        x.name = T.name;
-                        x.author = 
-                            x.subject = $N.id();
-                        x.addTag(T.id);
-                        
-                        newPopupObjectEdit(x);
-                    }
-                } else {
-                    return function () {
-                        var d = newPopup("Add " + T.name, {
-                            width: 800,
-                            height: 600,
-                            modal: true
-                        });
-                        d.append(newTagger([], function (results) {
-                            saveAddedTags(results, T.id);
-
-                            later(function () {
-                                d.dialog('close');
-                                updateNowDiv();
-                            });
-                        }));
-                    }
-                }
-            }
-
-            _.each(operators, function (o) {
-                var O = $N.class[o];
-
-
-                if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))) {
-                    var sdd = newDiv().addClass('ui-widget-content').addClass('goalviewColumn').addClass('operatorDiv');
-                    //not a 3-vector system
-                    var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
-
-                    var nn = _.filter($N.objectsWithTag(O, false, true), currentUserFilter);
-
-                    if (nn.length > 0) {
-                        var uu = $('<ul></ul>');
-                        _.each(nn, function (g) {
-                            var G = $N.getObject(g);
-                            var ss = newObjectView(G, {
-                                showAuthorIcon: false,
-                                showAuthorName: false,
-                                showMetadataLine: false,
-                                showActionPopupButton: false,
-                                titleClickMode: 'edit'
-                            }).removeClass("ui-widget-content ui-corner-all").addClass('objectViewBorderless');
-                            if (G.name == O.name) {
-                                ss.find('h1 a').html('&gt;&gt;');
-                                ss.find('h1').replaceTag($('<div style="float: left">'), true);
-                                ss.find('ul').replaceTag($('<div style="float: left">'), true);
-                                ss.find('li').replaceTag($('<div>'), true);
-                            }
-                            uu.append(ss);
-                        });
-                        sdd.append(uu);
-                    } else {
-                        //header.attr('style', 'font-size: 75%');
-                        sdd.append('<br/>');
-                    }
-                    container.append(sdd);
-                }
-
-
-            });
-
-            if (!$N.getTag('DoLearn')) {
-                //3-vector system : sliders
-                var nn = _.filter($N.objectsWithTag(['Do', 'Learn', 'Teach']), currentUserFilter);
-                var d = newDiv().appendTo(sidebar);
-
-                function rangeToTags(x, newValue) {
-                    objRemoveTag(x, 'Do');
-                    objRemoveTag(x, 'Learn');
-                    objRemoveTag(x, 'Teach');
-
-                    if (newValue == 0) {
-                        objAddTag(x, 'Do');
-                    } else if (newValue > 0) {
-                        if (newValue < 1.0)
-                            objAddTag(x, 'Do', (1.0 - newValue));
-                        objAddTag(x, 'Teach', (newValue));
-                    } else if (newValue < 0) {
-                        if (newValue > -1.0)
-                            objAddTag(x, 'Do', (1.0 + newValue));
-                        objAddTag(x, 'Learn', (-newValue));
-                    }
-                    //console.log(x);
-                }
-
-                function newLeftColDiv() {
-                    return $('<div style="width: 48%; float: left; clear: both"/>');
-                }
-
-                function newRightColDiv() {
-                    return $('<div style="width: 48%; float: right"/>');
-                }
-
-                newLeftColDiv().addClass('goalRowHeading').appendTo(d).append('Know');
-
-                var kb = newDiv();
-                var lButton = $('<button title="Learn">L</button>').css('width', '32%').css('float', 'left').appendTo(kb);
-                var dButton = $('<button title="Do">D</button>').css('float', 'left').css('width', '34%').appendTo(kb);
-                var tButton = $('<button title="Teach">T</button>').css('width', '32%').css('float', 'left').appendTo(kb);
-                lButton.css('color', '#aa0000').click(addTheTag($N.getTag('Learn')));
-                dButton.css('color', '#00aa00').click(addTheTag($N.getTag('Do')));
-                tButton.css('color', '#0000aa').click(addTheTag($N.getTag('Teach')));
-
-
-
-                newRightColDiv().appendTo(d).append(kb);
-
-                _.each(nn, function (x) {
-                    var X = $N.getObject(x);
-                    var lc = newLeftColDiv().appendTo(d);
-                    var rc = newRightColDiv().appendTo(d);
-
-                    var nameLink = $('<a">' + X.name + '</a>');
-                    nameLink.click(function () {
-                        newPopupObjectView(x);
-                    });
-                    var colorSquare = $('<span>&nbsp;&nbsp;&nbsp;</span>&nbsp;');
-                    lc.append(colorSquare, nameLink);
-
-                    var slider = $('<input type="range" min="-1" max="1" step="0.05"/>').addClass('SkillSlider');
-
-                    if (X.author != $N.id())
-                        slider.attr('disabled', 'disabled');
-
-                    slider.attr('value', knowTagsToRange(X));
-
-                    var SLIDER_CHANGE_MS = 500;
-
-                    var updateTags = _.throttle(function () {
-                        rangeToTags(X, parseFloat(slider.val()));
-                        $N.pub(X);
-                    }, SLIDER_CHANGE_MS);
-
-
-                    function updateColor() {
-                        var sv = parseFloat(slider.val());
-                        var cb = hslToRgb(((sv + 1.0) / 2.1 + 0.0) / 1.7, 0.9, 0.7);
-                        var bgString = 'rgba(' + parseInt(cb[0]) + ',' + parseInt(cb[1]) + ',' + parseInt(cb[2]) + ',1.0)';
-                        colorSquare.css('background-color', bgString);
-                    }
-                    updateColor();
-
-                    slider.change(function () {
-                        updateColor();
-                        later(function () {
-                            updateTags();
-                        });
-                    });
-                    rc.append(slider);
-
-                    d.append('<br/>');
-                });
-            }
-
-
-
-        }
-
-        updateNowDiv();
-
-
-
-        var now = true;
-        var goalTime = Date.now();
-
-
-        function updateGoalList() {
-            goalList.empty();
-
-            newGoalList(goalList, currentUser, centroids);
-        }
-        //setInterval(updateGoalList, updatePeriod);
-        updateGoalList();
-
-        {
-            //TODO find more robust way of displaying these
-
-            /*var iu = $N.objectsWithTag('involvesUser');
-            _.each(iu, function(x) {
-                var X = $N.getObject(x);
-                involvesList.append(newObjectView(X));
-            });*/
-
-        }
-
-        sidebar.addClass('ui-widget-content');
-        goalList.addClass('ui-widget-content');
-
-        container.prepend(sidebar, goalList /*, involvesList*/ );
-    }
-
-    if ($N.myself())
-        updateUsView($N.myself().id);
-    else {
-        var users = $N.objectsWithTag('User');
-        updateUsView(users[0]); //start with first user
-    }
-
-}
-
+	
 function getPlan() {
     if (!$N.myself())
         return {};

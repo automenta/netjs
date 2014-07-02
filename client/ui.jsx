@@ -43,13 +43,15 @@ var views = { };
 function addView(v) {
 	views[v.id] = v;
 	
-	var viewButton = $('<a class="ViewControl ViewSelect"></a>')
+	var viewButton = $('<button class="ViewControl ViewSelect btn btn-default"></button>')
 		.attr('id', v.id)
 		.attr('title', v.name)
 		.append($('<img/>').attr('src', v.icon))
 		.appendTo($('#ViewSelect'));
 		
 }
+
+
 
 
 function loadCSS(url, med) {
@@ -381,6 +383,7 @@ function _updateView(force) {
         updateIndent($('#MainMenu').is(":visible"));
     }
 
+/*
     if (view === 'browse') {
         indent();
         currentView = newListView(v);
@@ -440,17 +443,18 @@ function _updateView(force) {
         currentView = newNotebookView(v);
     }
     else {
-		if (views[view]) {
-			indent();
-			currentView = views[view];
-			currentView.start(v);
-			v.append(currentView);
-		}
-		else {
-			v.html('Unknown view: ' + view);
-        	currentView = null;
-		}
-    }
+	*/
+	if (views[view]) {
+		indent();
+		currentView = views[view];
+		currentView.start(v);
+		v.append(currentView);
+	}
+	else {
+		v.html('Unknown view: ' + view);
+		currentView = null;
+	}
+    
 
     if (configuration.device == configuration.MOBILE) {
         //auto-hide the menu
@@ -690,7 +694,7 @@ $(document).ready(function() {
     var conviews = configuration.views;
     for (var i = 0; i < conviews.length; i++) {
         var c = conviews[i];
-        $('a#' + c + '.ViewControl').show();
+        $('#' + c + '.ViewControl').show();
     }
 
     $('#openid-open').click(function() {

@@ -751,29 +751,11 @@ body {
 /*div.olMapViewport { z-index: 1 !important;; }
 div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
-.ViewControl {
-    padding: 0;
-    margin: 0;
-    display: block;
-    float: left;
-    border: 0;
-    opacity: 0.68;
-}
-.ViewControl:hover, .ViewActive {
-    opacity: 1.0;
-}
-
 @media (min-width: 900px) {
-    a.ViewControl img { 
-        width: 46px !important; 
-        max-height: 46px !important;
-    }
+ 
 }
 @media (max-width: 899px) {
-    a.ViewControl img { 
-        width: 38px !important; 
-        max-height: 38px !important;
-    }
+
     #ViewMenu {
        margin-left: 4px;
        margin-right: 4px;    
@@ -784,21 +766,31 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     }
 }
 @media (max-width: 599px) {
-    a.ViewControl img { 
-        width: 30px !important; 
-        max-height: 30px !important;
-    }
+
 }
 
 
-a.ViewControl img {
-    background-color: #fff !important;
+.ViewControl img {
+    /*background-color: #fff !important;*/
+	height: 2em;	
 }
 
-a.ViewControlMinor img {
+.ViewControlMinor img {
     width: 23px !important;
     max-height: 23px !important;
 }
+
+
+
+.ViewControl {
+    margin: 0;
+    display: block;
+    float: left;
+}
+
+/*.ViewControl:hover, .ViewActive {
+    opacity: 1.0;
+}*/
 
 
 .ViewControl {outline:none; text-decoration:none; }
@@ -2495,6 +2487,9 @@ svg {
 }
 
 
+.CategoryPreviews .MoreLink {
+	text-align: right;
+}
 
 .ChatInput {
     width: 100%;
@@ -2516,4 +2511,15 @@ svg {
 #NotificationList .dropdown-menu, #OptionsMenu .dropdown-menu {
 	left: auto;
 	right: 0;
+}
+.User .panel-heading .AvatarIcon {
+	height: 2em;
+	width: 2em;
+	margin:0;
+}
+.User .panel-heading select, .User .panel-heading button  {
+	height: 2em;	
+}
+.User .panel-heading button {
+	margin-left: 0.5em;
 }

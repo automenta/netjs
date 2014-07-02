@@ -21,27 +21,27 @@ var CategoryPreviews = React.createClass({
   render: function() {
 	  
 	var tags = this.props.tag;
-
-	  
-    return (
-		<div className="CategoryPreviews container-fluid">
-		<div className="row">
-		{
+	
+	
+    return (		
+		<div className="CategoryPreviews col-xs-6 col-md-4">
+		{				
 			tags.map(function(tag) {
 			  return(
-				<div className="col-xs-6 col-md-4">
-					<Panel header={(<h3><TagButton tagID={tag.id}></TagButton></h3>)}>
+					<Panel header={(<h3><TagButton tagID={tag.id}></TagButton>&nbsp;<a title={"New " + tag.id + "..."} href={"#/tag/" + tag.id + "/new_instance"}>+</a></h3>)}>
 					{
 						tag.object.map(function(o) {
 							return <ObjectMedia id={o}></ObjectMedia>
 						})
 					}
+					{
+						tag.more ? <div className="MoreLink"><a href={"#browse/tag/" + tag.id}>More...</a></div> : <div></div>
+					}
 					</Panel>
-			  	</div>
 			  )
 			})
 		}
-		</div></div>
+		</div>		
 	);
 										 
   }

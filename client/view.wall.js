@@ -1,43 +1,55 @@
 addView({
 	id: 'wall',
 	name: 'Home',
-	icon: 'icon/view.share.svg',
+	icon: 'icon/view.main.svg',
 	start: function(v) {		
 		v.addClass('ViewPage Wall');
 		
-		var objPerCategory = 6;
+		var objPerCategory = 1;
 
 		function objNewest(objArray, n) {
 			objArray.sort(function(a, b) {
 				return objTime(a) - objTime(b);
 			});
-			objArray.slice(0, n);
-			return objArray;
+			return objArray.slice(0, n);
 		}
 
-		var categories = ['Can', 'Need', 'Learn', 'Teach', 'Do'];
+		var category1 = ['Learn', 'Teach', 'Do'];
+		var category2 = ['Can', 'Need'];
 
-		var data = { tag: [] };
-		categories.forEach(function(t) {
-			data.tag.push({
-				id: t,
-				object: objNewest($N.getTagged(t), objPerCategory)
+
+		function getCategory(tags) {
+			var data = { tag: [] };
+			tags.forEach(function(t) {
+				var objs = $N.getTagged(t);
+				var more = objs.length > objPerCategory;
+				data.tag.push({
+					id: t,
+					object: objNewest(objs, objPerCategory),
+					more: more
+				});
 			});
-		});
-
+			return data;
+		}
+		
+		
+		
+		var categories = newDiv().addClass("CategoryPreviews panel panel-default").appendTo(v);
+		categories.append('<div class="panel-heading">News</div>');
+		var categoryBody = newDiv().addClass('panel-body').appendTo(categories);
+		var col1 = newDiv().appendTo(categoryBody);
+		var col2 = newDiv().appendTo(categoryBody);
+		
+		React.renderComponent( CategoryPreviews(getCategory(category1)), col1[0] );
+		React.renderComponent( CategoryPreviews(getCategory(category2)), col2[0] );
+		
 		var roster = newDiv().addClass('Roster panel panel-default').appendTo(v);
 		var rosterHeading = $('<div class="panel-heading">Online <span class="badge">42</span></div>');
 		rosterHeading.append(newShoutLine().css('float', 'right').css('width', '40%').css('text-align', 'right'));
 		rosterHeading.append('<br/>');
 		roster.append(rosterHeading);
-
 		roster.append(newRosterWidget().addClass('panel-body'));
-
-		var categories = newDiv().appendTo(v);
-		React.renderComponent(
-			CategoryPreviews(data),
-			categories[0]
-		);
+		
 	},
 	stop: function() {
 	}
@@ -61,7 +73,7 @@ function newShoutLine() {
 		});
 	}
 
-	var d = newEle('span').addClass('input-group');
+	var d = newEle('span');//.addClass('input-group');
 	var e = $('<input type="text" placeholder="Say..." x-webkit-speech="x-webkit-speech"/>').appendTo(d);
 	d.append('<button title="Publish"><i class="fa fa-share-alt"></i></button>');
     e.keyup(function(event) {

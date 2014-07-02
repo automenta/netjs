@@ -1,3 +1,74 @@
+addView({
+	id: 'map',
+	name: 'Map',
+	icon: 'icon/view.map.svg',
+	start: function(v) {		
+		var mm = {};
+
+		browseTagFilters = {};	//TEMPORARY
+
+		var typeSelect;
+
+		function updateMap() {
+			v.empty();
+
+			if (typeSelect)
+				map2d = (typeSelect.val() === '2D');
+			else
+				map2d = configuration.defaultMapMode2D;
+
+			var mapControl = newDiv();
+			typeSelect = $('<select/>');
+			typeSelect.append('<option ' + (map2d ? 'selected' : '') + '>2D</option>');
+			typeSelect.append('<option ' + (!map2d ? 'selected' : '') + '>3D</option>');
+			typeSelect.change(function(x) {
+				later(function() {
+					updateMap();
+				});
+			});
+
+			var planetSelect = $('<select/>');
+			planetSelect.append('<option>Earth</option>');
+			planetSelect.append('<option>Moon</option>');
+			planetSelect.append('<option>Mars</option>');
+
+			mapControl.append(typeSelect);
+			mapControl.append(planetSelect);
+			mapControl.append('<div class="MapInstructions">Right Click to Add</div>');
+
+			mapControl.addClass('HUDTopLeft');
+
+			setTimeout(function() {
+				$('div.MapInstructions').fadeOut();
+			}, 1500);
+
+
+			if (map2d) {
+				/*var m = renderOLMap(s, o, v);
+				 mm.onChange = m.onChange;       
+				 mm.location = m.location;*/
+
+				var m = renderLeafletMap(v);
+				mm.onChange = m.onChange;
+			}
+			else {
+				var m = renderCesiumMap(v);
+				if (m.onChange)
+					mm.onChange = m.onChange;
+			}
+
+			v.append(mapControl);
+
+		}
+		updateMap();
+
+		return mm;
+
+	},
+	stop: function() {
+	}
+});
+
 var MAP_MAX_ITEMS = 500;
 
 var currentMapNow = null;
@@ -85,68 +156,6 @@ function renderMapMarker(x, createMarkerFunction) {
 
 var map2d = true;
 
-function newMapView(v) {
-    var mm = {};
-
-    browseTagFilters = {};	//TEMPORARY
-
-    var typeSelect;
-
-    function updateMap() {
-        v.empty();
-
-        if (typeSelect)
-            map2d = (typeSelect.val() === '2D');
-        else
-            map2d = configuration.defaultMapMode2D;
-
-        var mapControl = newDiv();
-        typeSelect = $('<select/>');
-        typeSelect.append('<option ' + (map2d ? 'selected' : '') + '>2D</option>');
-        typeSelect.append('<option ' + (!map2d ? 'selected' : '') + '>3D</option>');
-        typeSelect.change(function(x) {
-            later(function() {
-                updateMap();
-            });
-        });
-
-        var planetSelect = $('<select/>');
-        planetSelect.append('<option>Earth</option>');
-        planetSelect.append('<option>Moon</option>');
-        planetSelect.append('<option>Mars</option>');
-
-        mapControl.append(typeSelect);
-        mapControl.append(planetSelect);
-        mapControl.append('<div class="MapInstructions">Right Click to Add</div>');
-
-        mapControl.addClass('HUDTopLeft');
-
-        setTimeout(function() {
-            $('div.MapInstructions').fadeOut();
-        }, 1500);
-
-
-        if (map2d) {
-            /*var m = renderOLMap(s, o, v);
-             mm.onChange = m.onChange;       
-             mm.location = m.location;*/
-
-            var m = renderLeafletMap(v);
-            mm.onChange = m.onChange;
-        }
-        else {
-            var m = renderCesiumMap(v);
-            if (m.onChange)
-                mm.onChange = m.onChange;
-        }
-
-        v.append(mapControl);
-
-    }
-    updateMap();
-
-    return mm;
-}
 
 function newLeafletGeoCoder() {
     return new L.Control.OSMGeocoder({
