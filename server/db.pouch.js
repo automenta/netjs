@@ -4,10 +4,7 @@ module.exports = function($N, collection) {
 	PouchDB.plugin({ gql: GQL });
 
 	var db = new PouchDB(collection);
-
-
 	var options = $N.server;
-
 
 	return {
 
@@ -36,32 +33,59 @@ module.exports = function($N, collection) {
 		},
 
 		getAllByFieldValue: function(field, value, callback) {
-			/*var fieldMeta = {};
-			fieldMeta[field] = "hashed";
-
-			db[collection].ensureIndex(fieldMeta, function(err, res) {
+			db.query({
+				map: function(doc, emit) {
+					if (doc[field] === value)
+						emit(doc);
+				}
+		 	}, function(err, result) {
 				if (err) {
 					callback(err);
-					return;
 				}
-
-				var q = { };
-				q[field] = value;
-				db[collection].find(q, callback);
-			});*/
-			callback(null, []);
+				else {
+					callback(null, result.rows.map(function(row) {
+						return row.key;
+					}));
+				}
+			});
 		},
 
 		getAllByTag: function(tag, callback) {
-			/*db[collection].ensureIndex({tagList: 1}, function(err, res) {
+			db.query({
+				map: typeof tag === "string" ?
+					function(doc, emit) {
+						//compare string
+						if (doc.tagList.indexOf(tag)!=-1)
+							emit(doc);
+					}
+					:
+					function(doc, emit) {
+						//compare any matching in the array
+						var dtl = doc.tagList;
+						if (!dtl)
+							return;
+						if (dtl.length == 0)
+							return;
+						var contained = false;
+						for (var i = 0; i < tag.length; i++)
+							if (dtl.indexOf(tag[i])!==-1) {
+								contained = true;
+								break;
+							}
+
+						if (contained)
+							emit(doc);
+					}
+		 	}, function(err, result) {
 				if (err) {
 					callback(err);
-					return;
 				}
-
-				db[collection].find({tagList: {$in: tag}}, callback);
-			});*/
-			callback(null, []);
+				else {
+					callback(null, result.rows.map(function(row) {
+						return row.key;
+					}));
+				}
+			});
 		},
 
 		getNewest: function(max, callback) {
@@ -72,9 +96,14 @@ module.exports = function($N, collection) {
 				limit: max,
 				descending: true
 		 	}, function(err, result) {
-				callback(null, result.map(function(row) {
-					return row.key[1];
-				}));
+				if (err) {
+					callback(err);
+				}
+				else {
+					callback(null, result.rows.map(function(row) {
+						return row.key[1];
+					}));
+				}
 			});
 		},
 
@@ -117,19 +146,12 @@ module.exports = function($N, collection) {
 
 
 		remove: function(query, callback) {
-			/*
-			if (typeof query === "string")
-				query = {id: query};
-
-			db[collection].remove(query, callback);
-			*/
 			var that = this;
 			this.db.get(name).then(function(doc) {
 				that.db.remove(doc).then(function() {
 					callback(null, doc);
 				}).catch(callback);
 			}).catch(callback);
-
 		},
 
 		//remove expired, and other periodic maintenance
