@@ -7,3 +7,6 @@ nbproject/*
 options.js
 doc/.~lock.*
 coverage/
+objects/*
+pouch__all_dbs__/*
+

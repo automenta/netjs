@@ -693,7 +693,7 @@ function netention(f) {
 						var c = y.value[i].id;												
 						if ((!$N.class[c]) && (!$N.property[c])) {
 							that.addAll([{
-								id: c, name: c
+								id: c, name: c, extend: 'text'
 							}]);
 							
 							that.ontoIndex.add({

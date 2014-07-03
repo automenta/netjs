@@ -28,6 +28,7 @@ var _ = require('lodash');
 var jsonpack = require('jsonpack');
 var jsonstream = require('JSONStream');
 //var pson= require('pson');
+var PouchDB = require('pouchdb');
 
 var EventEmitter = require('eventemitter2').EventEmitter2;
 
@@ -531,6 +532,7 @@ exports.start = function(options) {
     var httpServer = http.createServer(express);
 
 
+
     var io = require('socket.io')(httpServer, {
     });
     
@@ -764,6 +766,7 @@ exports.start = function(options) {
     express.use("/doc", expressm.static('./doc', staticContentConfig));
 
     express.use("/", expressm.static('./client', staticContentConfig));
+
 
     express.post('/uploadgif', function(req, res) {
 
@@ -1969,23 +1972,6 @@ exports.start = function(options) {
     }
 
 
-    if (options.client.webrtc) {
-        var w = options.client.webrtc;
-        if (w.port) {
-            //https://github.com/peers/peerjs-server
-            var PeerServer = require('peer').PeerServer;
-            var server = new PeerServer({port: w.port, path: '/n'});
-            server.on('disconnect', function(id) { 
-				//remove from userConnections
-				_.each(connectedUsers, function(v, k) {
-					if (v.webRTC)
-						v.webRTC = _.without(v.webRTC, id);					
-				});
-				broadcastRoster();
-			});
-            nlog('WebRTC server: http://' + options.host + ':' + w.port);
-        }
-    }
 
     // process.on('uncaughtException', function (err) {
     // console.error('An uncaught error occurred!');
@@ -2035,6 +2021,42 @@ exports.start = function(options) {
     $N.enablePlugins = options.plugins || {};
     $N.nlog = nlog;
 
+	
+	
+	if (options.client.webrtc) {
+		var path = '/peer';
+		//https://github.com/floatdrop/peerjs-server/tree/express#combining-with-existing-express-app
+			//https://github.com/peers/peerjs-server
+			var PeerServer = require('peer').PeerServer;
+
+			//var server = new PeerServer({port: w.port, path: '/n'});
+			var server = PeerServer({ server: httpServer, path: path });
+			express.use(server);
+
+			server.on('disconnect', function(id) { 
+				//remove from userConnections
+				_.each(connectedUsers, function(v, k) {
+					if (v.webRTC)
+						v.webRTC = _.without(v.webRTC, id);					
+				});
+				broadcastRoster();
+			});
+			nlog('WebRTC server: http://' + options.host + ':' + options.port + '' + path);
+	}	
+	
+	
+	//use this LAST
+	express.get('/img/couchdb-site.png', function(req, res) {
+		res.redirect('/icon/netention-button.png');
+	});
+    express.get('/fauxton', function(req, res) {
+     	res.redirect('/_utils');        
+    });
+	
+	express.use(require('express-pouchdb')(PouchDB));
+	
+	
+	
     db.update();
 
     require('./general.js').plugin($N).start();
@@ -2096,6 +2118,9 @@ exports.start = function(options) {
 
                 nlog('Web server: http://' + options.host + ':' + options.port);
 
+
+				
+				
                 if (options.start)
                     options.start($N);
 

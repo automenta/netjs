@@ -1,8 +1,12 @@
+var server;
 if (typeof window != 'undefined') {
     exports = {}; //functions used by both client and server
+	server = false;
 } else {
     _ = require('lodash');
     graphlib = require("graphlib");
+	PouchDB = require('pouchdb');
+	server = true;
 }
 
 
@@ -804,6 +808,67 @@ exports.objIsProperty = objIsProperty;
 var Ontology = function(tagInclude, target) {
     var that = target ? target : this;
 
+	var pouchOptions = server ? { } : {};
+	
+	that.db = new PouchDB('objects', pouchOptions);
+	
+	that.db.setPending = [];	
+	that.db.setWorking = false;
+	that.db.setObject = function(x) {
+		if (typeof (x.add) == "function") {
+			//get a non-object copy 
+			x = _.clone(x);
+		}
+		
+		if (that.db.setWorking) {
+			that.db.setPending.push(x);
+			return;
+		}
+		
+		upsert(x);
+		
+		function next() {
+			if (that.db.setPending.length == 0) {
+				that.db.setWorking = false;
+				return false;
+			}
+			
+			var x = that.db.setPending.pop();
+			upsert(x);
+			return true;
+		}
+		
+		function upsert(x) {			
+			that.db.setWorking = true;
+			that.db.get(x.id).then(function(existing) {
+				if (existing.modifiedAt == x.modifiedAt)
+					if (existing.name == x.name)
+						if (existing.author == x.author) {
+							return next();
+						}
+
+
+				that.db.put(x, x.id, existing._rev)
+					.then(function(response) { return next(); })
+					.catch(function(err) {
+						console.error('replace', x, err);
+						return next();
+					});
+			}).catch(function(err) {
+				//new
+				that.db.put(x, x.id)
+					.then(function(response) { 
+						return next();
+					})
+					.catch(function(err) {
+						console.error('set', x, err);
+						return next();
+					});
+			});;
+		}		
+		
+	};
+	
     //resets to empty state
     //TODO unify with the clearInstances function to not duplicate code
     that.clear = function() {
@@ -1034,13 +1099,16 @@ var Ontology = function(tagInclude, target) {
                 }
 
                 that.instance[x.id] = x;
-                x._instance = true;
                 delete that.class[x.id];
                 delete x._class;
                 delete that.property[x.id];
                 delete x._property;
 
-                indexInstance(x, existing);                
+                indexInstance(x, existing, true);
+
+				//index in pouchdb
+				that.db.setObject(x);
+
             }
         }
 
@@ -1074,8 +1142,8 @@ var Ontology = function(tagInclude, target) {
         return (tagInclude === true) || (objHasTag(x, tagInclude));
     };
 
-    function indexInstance(x, keepGraphNode) {
-        if (x._instance) {
+    function indexInstance(x, keepGraphNode, isInstance) {
+        if (isInstance) {
             
             var tags = objTags(x, false);
             for (var i = 0; i < tags.length; i++) {
@@ -1320,7 +1388,7 @@ var Ontology = function(tagInclude, target) {
                 }
             });
         }
-
+		
     }
 
     function unindexInstance(x, keepGraphNode) {        
@@ -1361,7 +1429,7 @@ var Ontology = function(tagInclude, target) {
             }
         }
 
-        if (x._instance) {
+        {
             if (x.replyTo) {
                 for (var i = 0; i < x.replyTo.length; i++) {
                     var t = x.replyTo[i];
@@ -1380,6 +1448,8 @@ var Ontology = function(tagInclude, target) {
                 if (that.tagged[t])
                     delete that.tagged[t][x.id];
             }
+			
+			
         }
 
     }

@@ -126,7 +126,7 @@ function initWebRTC(w) {
         webrtc.destroy();
     }
     
-    webrtc = new Peer( {host: window.location.hostname, port: w.port, path: '/n'});
+    webrtc = new Peer( {host: window.location.hostname, port: window.location.port, path: '/peer'});
     webrtc.connects = {};
     
     // stun.stunprotocol.org (UDP and TCP ports 3478).
