@@ -1,3 +1,5 @@
+//Deprecated, this needs to be updated based on db.pouch API
+
 module.exports = function($N) {
 	var mongo;
 	var db;

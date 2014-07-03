@@ -75,10 +75,10 @@ Adapter.prototype.save = function (name, email, pw, done) {
 		if (err) return done(err);
 		user.salt = salt;
 		user.derived_key = hash;
-		that.db.put(user, user.email).then(function (d) {
+		that.db.put(user, user.name).then(function (d) {
 			done(null, user);
-		}).catch(function (e) {
-			done(e, user);
+		}).catch(function (err) {
+			done(err);
 		});
 	});
 };
@@ -123,8 +123,8 @@ Adapter.prototype.find = function (key, value, done) {
 				return;
 			}
 		done(null, null);
-	}).catch(function (e) {
-		done(e, null);
+	}).catch(function (err) {
+		done(err);
 	});
 
 };
@@ -157,13 +157,13 @@ Adapter.prototype.update = function (user, done) {
 	var that = this;
 
 
-	this.db.get(user.email).then(function (existing) {
-		that.db.put(user, user.email, existing._rev)
+	this.db.get(user.name).then(function (existing) {
+		that.db.put(user, user.name, existing._rev)
 			.then(function (response) {
 				done(null, user);
 			})
 			.catch(function (err) {
-				done(err, null);
+				done(err);
 			});
 	}).catch(done);
 
@@ -184,11 +184,13 @@ Adapter.prototype.update = function (user, done) {
  * @param {Function} done - Callback function `function(err, res){}`
  */
 Adapter.prototype.remove = function (name, done) {
-	/*this.db.collection(this.collection).remove({name: name}, function(err, numberOfRemovedDocs) {
-    if (err) return done(err);
-    if (numberOfRemovedDocs === 0) return done(new Error('lockit - Cannot find user "' + name + '"'));
-    done(null, true);
-  });*/
 
-	console.error('Adapter remove not implemented yet');
+	var that = this;
+	this.db.get(name).then(function(doc) {
+  		that.db.remove(doc);
+		done(null, true);
+	}).catch(function(err){
+		done(err);
+	});
+
 };
