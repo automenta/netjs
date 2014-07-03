@@ -1,4 +1,3 @@
-
 var uuid = require('node-uuid');
 var pwd = require('couch-pwd');
 var ms = require('ms');
@@ -17,14 +16,14 @@ var moment = require('moment');
  * @param {Object} config - Lockit configuration
  * @constructor
  */
-var Adapter = module.exports = function(config) {
+var Adapter = module.exports = function (config) {
 
-  if (!(this instanceof Adapter)) return new Adapter(config);
+	if (!(this instanceof Adapter)) return new Adapter(config);
 
-  this.config = config;
-  this.collection = config.db.collection;
+	this.config = config;
+	this.collection = config.db.collection;
 
-  this.db = new PouchDB(this.collection, { });
+	this.db = new PouchDB(this.collection, {});
 
 };
 
@@ -55,33 +54,33 @@ var Adapter = module.exports = function(config) {
  * @param {String} pw - Plain text user password
  * @param {Function} done - Callback function `function(err, user){}`
  */
-Adapter.prototype.save = function(name, email, pw, done) {
-  var that = this;
+Adapter.prototype.save = function (name, email, pw, done) {
+	var that = this;
 
-  var now = moment().toDate();
-  var timespan = ms(that.config.signup.tokenExpiration);
-  var future = moment().add(timespan, 'ms').toDate();
+	var now = moment().toDate();
+	var timespan = ms(that.config.signup.tokenExpiration);
+	var future = moment().add(timespan, 'ms').toDate();
 
-  var user = {
-    name: name,
-    email: email,
-    signupToken: uuid.v4(),
-    signupTimestamp: now,
-    signupTokenExpires: future,
-    failedLoginAttempts: 0
-  };
+	var user = {
+		name: name,
+		email: email,
+		signupToken: uuid.v4(),
+		signupTimestamp: now,
+		signupTokenExpires: future,
+		failedLoginAttempts: 0
+	};
 
-  // create salt and hash
-  pwd.hash(pw, function(err, salt, hash) {
-    if (err) return done(err);
-    user.salt = salt;
-    user.derived_key = hash;
-	that.db.put(user, user.email).then(function(d) {
-		done(null, user);
-	}).catch(function(e) {
-		done(e, null);
+	// create salt and hash
+	pwd.hash(pw, function (err, salt, hash) {
+		if (err) return done(err);
+		user.salt = salt;
+		user.derived_key = hash;
+		that.db.put(user, user.email).then(function (d) {
+			done(null, user);
+		}).catch(function (e) {
+			done(e, user);
+		});
 	});
-  });
 };
 
 
@@ -110,20 +109,23 @@ Adapter.prototype.save = function(name, email, pw, done) {
  * @param {String} query - Corresponding value to `match`
  * @param {Function} done - Callback function `function(err, user){}`
  */
-Adapter.prototype.find = function(key, value, done) {
+Adapter.prototype.find = function (key, value, done) {
 
-  function map(doc, emit) {
-  	  if (doc[key] === value)
-    	emit(doc);
-  }
+	function map(doc, emit) {
+		if (doc[key] === value)
+			emit(doc);
+	}
 
-  this.db.query(map).then(function(users) {
-	  if (users.rows.length === 0)
-		  done(true, null);
-	  done(null, users.rows[0].key);
-  }).catch(function(e) {
-	  done(e, null);
-  });
+	this.db.query(map).then(function (users) {
+		if (users.rows.length > 0)
+			if (users.rows[0]) {
+				done(null, users.rows[0].key);
+				return;
+			}
+		done(null, null);
+	}).catch(function (e) {
+		done(e, null);
+	});
 
 };
 
@@ -151,19 +153,19 @@ Adapter.prototype.find = function(key, value, done) {
  * @param {Object} user - Existing user from db
  * @param {Function} done - Callback function `function(err, user){}`
  */
-Adapter.prototype.update = function(user, done) {
-  var that = this;
+Adapter.prototype.update = function (user, done) {
+	var that = this;
 
 
-  this.db.get(user.email).then(function(existing) {
-	that.db.put(user, user.email, existing._rev)
-		.then(function(response) {
-			done(null, response);
-		})
-		.catch(function(err) {
-			done(err, null);
-		});
-  }).catch(done);
+	this.db.get(user.email).then(function (existing) {
+		that.db.put(user, user.email, existing._rev)
+			.then(function (response) {
+				done(null, user);
+			})
+			.catch(function (err) {
+				done(err, null);
+			});
+	}).catch(done);
 
 }
 
@@ -181,12 +183,12 @@ Adapter.prototype.update = function(user, done) {
  * @param {String} name - User name
  * @param {Function} done - Callback function `function(err, res){}`
  */
-Adapter.prototype.remove = function(name, done) {
-  /*this.db.collection(this.collection).remove({name: name}, function(err, numberOfRemovedDocs) {
+Adapter.prototype.remove = function (name, done) {
+	/*this.db.collection(this.collection).remove({name: name}, function(err, numberOfRemovedDocs) {
     if (err) return done(err);
     if (numberOfRemovedDocs === 0) return done(new Error('lockit - Cannot find user "' + name + '"'));
     done(null, true);
   });*/
 
-  console.error('Adapter remove not implemented yet');
+	console.error('Adapter remove not implemented yet');
 };

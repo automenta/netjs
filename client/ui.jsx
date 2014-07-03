@@ -911,6 +911,11 @@ $(document).ready(function() {
                     var w = new Workspace();
                     $N.router = w;
 					
+					/*
+					if (($N.myself()===undefined) && (identity()!=ID_UNKNOWN)) {
+						openSelectProfileModal("Start a New Profile");
+					}*/
+
                     if (!alreadyLoggedIn) {
                         if (isAnonymous()) {
                             //show profile chooser
@@ -926,6 +931,7 @@ $(document).ready(function() {
                     }
 
                     $('#NotificationArea').html('Connecting...');
+
 
 
                     //initKeyboard();

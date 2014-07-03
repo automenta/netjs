@@ -63,12 +63,13 @@ exports.start = function(options) {
     var focusHistoryMaxAge = 24 * 60 * 60 * 1000; //in ms
     //var attention = memory.Attention(0.95);
     //var logMemory = util.createRingBuffer(256);
-    options.interestTime = {};	//accumualted time per interest, indexed by tag URI
+    options.interestTime = {};	//accumulated time per interest, indexed by tag URI
 
     $N.server = options; //deprecated
 
-	var db = require('./db.mongo.js')($N);
-	db.start();
+	var DB = require('./db.pouch.js');
+	var odb = DB($N, "objects");
+	var sysdb = DB($N, "sys");
 
     function startPlugin(kv, pluginOptions) {
         var v = kv;
@@ -99,7 +100,7 @@ exports.start = function(options) {
 			modifiedAt: Date.now(),
 			anonymousUserExists: options.anonymousUserExists
 		};
-		db.set('sys', 'state', state, function(err, saved) {
+		sysdb.set('state', state, function(err, saved) {
 			if (err || !saved) {
 				if (onError) {
 					nlog('saveState: ' + err);
@@ -114,7 +115,7 @@ exports.start = function(options) {
 	};
 
 	function loadState(callback) {
-		db.get('sys', 'state', function(err, state) {
+		sysdb.get('state', function(err, state) {
             if (err || !state || (state.length === 0)) {
                 nlog("No previous system state found");
             }
@@ -168,7 +169,7 @@ exports.start = function(options) {
 
         //TODO move to 'removed' db collection
 
-		db.remove('obj', objectID, function(err, docs) {
+		odb.remove(objectID, function(err, docs) {
 
             if (err) {
                 nlog('error deleting ' + objectID + ':' + err);
@@ -179,7 +180,7 @@ exports.start = function(options) {
                 //broadcast removal of objectID
                 pub(objectRemoved(objectID));
 
-				db.remove('obj', {$or: [{replyTo: objectID}, {author: objectID}]}, function(err, docs) {
+				odb.remove({$or: [{replyTo: objectID}, {author: objectID}]}, function(err, docs) {
 
                     //nlog('deleted ' + objectID);
 
@@ -267,7 +268,7 @@ exports.start = function(options) {
             o.modifiedAt = o.createdAt;
 
         //attention.notice(o, 0.1);
-		db.set('obj', o.id, o, function(err) {
+		odb.set(o.id, o, function(err) {
             if (err) {
                 nlog('notice: ' + err);
                 return;
@@ -307,7 +308,7 @@ exports.start = function(options) {
     }
 
     function getObjectByID(uri, whenFinished) {
-		db.get(uri, function(err, docs) {
+		odb.get(uri, function(err, docs) {
 			if (err) {
 				nlog('getObjectByID: ' + err);
 				whenFinished(err, null);
@@ -324,7 +325,7 @@ exports.start = function(options) {
     $N.getObjectByID = getObjectByID;
 
     function getObjectsByAuthor(a, withObjects) {
-		db.getAllByFieldValue('obj', 'author', a, function(err, docs) {
+		odb.getAllByFieldValue('author', a, function(err, docs) {
 			if (err) {
 				nlog('getObjectsByAuthor: ' + err);
 				withObjects([]);
@@ -343,7 +344,7 @@ exports.start = function(options) {
         if (!Array.isArray(t))
             t = [t];
 
-		db.getAllByTag('obj', t, function(err, docs) {
+		odb.getAllByTag(t, function(err, docs) {
 			if (err) {
 				nlog('getObjectsByTag: ' + err);
 			}
@@ -381,7 +382,7 @@ exports.start = function(options) {
 
     function getTagCounts(whenFinished) {
 
-        db.getAll(function(err, docs) {
+        odb.getAll(function(err, docs) {
             if (err) {
                 nlog('getTagCounts: ' + err);
             }
@@ -642,7 +643,7 @@ exports.start = function(options) {
             	return req.session.name;
         }
 
-        return null;
+        return undefined;
     }
 
     function getCurrentClientID(req) {
@@ -1005,7 +1006,7 @@ exports.start = function(options) {
     });
 
     var getLatestObjects = $N.getLatestObjects = function(n, withObjects, withError) {
-		db.getNewest('obj', n, function(err, docs) {
+		odb.getNewest(n, function(err, docs) {
 			if (err)
 				withError(err);
 			else
@@ -1014,7 +1015,7 @@ exports.start = function(options) {
     };
 
     var getLatestObjectsStream = $N.getLatestObjectsStream = function(n, withObject, whenFinished, withError) {
-        db.streamNewest('obj', n, function(err, obj) {
+        odb.streamNewest(n, function(err, obj) {
 			if (err) { withError(err); return; }
 			if (!obj) { whenFinished(); return; }
 			withObject(obj);
@@ -1813,7 +1814,7 @@ exports.start = function(options) {
             socket.on('getObjects', function(query, withObjects) {
                 //TODO safely handle query
 
-                db.obj.find(function(err, docs) {
+                odb.obj.find(function(err, docs) {
                     objAccessFilter(request, docs, function(dd) {
                         withObjects(dd);
                     });
@@ -2063,7 +2064,8 @@ exports.start = function(options) {
 	
 	
 	
-    db.update();
+    odb.update();
+	sysdb.update();
 
     require('./general.js').plugin($N).start();
     
@@ -2131,7 +2133,7 @@ exports.start = function(options) {
                 if (options.start)
                     options.start($N);
 
-                setInterval(db.update, options.memoryUpdateIntervalMS);
+                setInterval(odb.update, options.memoryUpdateIntervalMS);
 
             });
             
