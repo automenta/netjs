@@ -543,7 +543,7 @@ function netention(f) {
 
             if (configuration.webrtc) {
                 $LAB
-                    .script("/lib/peerjs/peer.js")
+                    .script("/lib/peerjs/peer.min.js")
                     .script("/webrtc.js")
                     .wait(function() {
                         initWebRTC(configuration.webrtc); 
