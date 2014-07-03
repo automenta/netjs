@@ -187,10 +187,9 @@ Adapter.prototype.remove = function (name, done) {
 
 	var that = this;
 	this.db.get(name).then(function(doc) {
-  		that.db.remove(doc);
-		done(null, true);
-	}).catch(function(err){
-		done(err);
-	});
+  		that.db.remove(doc).then(function() {
+			done(null, true);
+		}).catch(done);
+	}).catch(done);
 
 };

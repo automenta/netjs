@@ -116,12 +116,12 @@ exports.start = function(options) {
 
 	function loadState(callback) {
 		sysdb.get('state', function(err, state) {
-            if (err || !state || (state.length === 0)) {
+            if (err || !state) {
                 nlog("No previous system state found");
             }
             else {
                 var now = Date.now();
-                var x = state[0];
+                var x = state;
                 //nlog('Resuming from ' + (now - x.when) / 1000.0 + ' seconds since last system update'); 
                 options.interestTime = x.interestTime;
                 options.clientState = x.clientState;
@@ -1016,9 +1016,10 @@ exports.start = function(options) {
 
     var getLatestObjectsStream = $N.getLatestObjectsStream = function(n, withObject, whenFinished, withError) {
         odb.streamNewest(n, function(err, obj) {
-			if (err) { withError(err); return; }
-			if (!obj) { whenFinished(); return; }
-			withObject(obj);
+			if (err) { if (withError) withError(err); return; }
+			if (!obj) { if (whenFinished) whenFinished(); return; }
+			if (withObject)
+				withObject(obj);
         });
     };
         

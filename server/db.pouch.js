@@ -1,7 +1,10 @@
 module.exports = function($N, collection) {
 	var PouchDB = require('pouchdb');
+	var GQL = require('gql');
+	PouchDB.plugin({ gql: GQL });
 
 	var db = new PouchDB(collection);
+
 
 	var options = $N.server;
 
@@ -62,34 +65,53 @@ module.exports = function($N, collection) {
 		},
 
 		getNewest: function(max, callback) {
-			/*db[collection].ensureIndex({modifiedAt: 1}, function(err, eres) {
-				if (err) {
-					callback(err);
-					return;
-				}
-
-				//TODO scope >= PUBLIC
-				db[collection].find().limit(max).sort({modifiedAt: -1}, callback);
-			});*/
-			callback(null, []);
+			db.query({
+				map: function(doc, emit) {
+					emit([doc.modifiedAt||doc.createdAt, doc]);
+				},
+				limit: max,
+				descending: true
+		 	}, function(err, result) {
+				callback(null, result.map(function(row) {
+					return row.key[1];
+				}));
+			});
 		},
 
 		streamNewest: function(max, perObject) {
-			/*db[collection].ensureIndex({modifiedAt: 1}, function(err, eres) {
-				if (err) {
-					callback(err);
-					return;
+			db.query({
+				map: function(doc, emit) {
+					emit([doc.modifiedAt||doc.createdAt, doc]);
+				},
+				limit: max,
+				descending: true,
+		 	}, function(err, result) {
+				if (!err) {
+					result.rows.forEach(function(r) {
+						perObject(null, r.key[1]);
+					});
+					perObject(null);
 				}
-
-				//TODO scope >= PUBLIC
-				db[collection].find().limit(max).sort({modifiedAt: -1}).forEach(perObject);
-			});*/
+				else {
+					perObject(err);
+				}
+			});
 		},
 
 
 		getAll: function(callback) {
-			//db[collection].find(callback);
-			callback(null, []);
+			db.allDocs({include_docs: true},
+			    function(err, response) {
+					if (err) {
+						callback(err, null);
+					}
+					else {
+						callback(null, response.map(function(row) {
+							return row.doc;
+						}));
+					}
+		    	}
+ 		    );
 		},
 
 
@@ -101,7 +123,13 @@ module.exports = function($N, collection) {
 
 			db[collection].remove(query, callback);
 			*/
-			callback(null, true);
+			var that = this;
+			this.db.get(name).then(function(doc) {
+				that.db.remove(doc).then(function() {
+					callback(null, doc);
+				}).catch(callback);
+			}).catch(callback);
+
 		},
 
 		//remove expired, and other periodic maintenance
