@@ -8,5 +8,6 @@ options.js
 doc/.~lock.*
 coverage/
 objects/*
+users/*
 pouch__all_dbs__/*
 

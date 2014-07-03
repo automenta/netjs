@@ -48,13 +48,13 @@ module.exports = function($N) {
 		},
 
 		getAllByTag: function(collection, tag, callback) {
-			db[collection].ensureIndex({_tag: 1}, function(err, res) {
+			db[collection].ensureIndex({tagList: 1}, function(err, res) {
 				if (err) {
 					callback(err);
 					return;
 				}
 
-				db[collection].find({_tag: {$in: tag}}, callback);
+				db[collection].find({tagList: {$in: tag}}, callback);
 			});
 		},
 

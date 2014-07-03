@@ -2094,7 +2094,7 @@ function objCompact(o) {
     var k = _.keys(y);
     for (var i = 0; i < k.length; i++) {
         var K = k[i];
-        if (K[0] === '_') {
+        if ((K[0] === '_') || (K[0] == 'tagList')) {
             delete y[K];
             continue;
         }

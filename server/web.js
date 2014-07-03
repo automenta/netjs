@@ -258,7 +258,7 @@ exports.start = function(options) {
 
         var _tag = $N.objTags(o);	//provides an index for faster DB querying ($in)
         if (_tag.length > 0)
-            o._tag = _tag;
+            o.tagList = _tag;
 
 
         //nlog('notice: ' + JSON.stringify(o, null, 4));
@@ -299,7 +299,7 @@ exports.start = function(options) {
     function unpack(x, notNobject) {
         return x.map(function(y) {
             delete y._id;
-            delete y._tag;
+            delete y.tagList;
             if (notNobject)
                 return y;
             return new $N.nobject(y);
@@ -482,10 +482,14 @@ exports.start = function(options) {
     
     var security = require('./security.js');
     security.db = {
+		collection: 'users',
+		url: '_'
+		/*
         url: "mongodb://" + options.databaseHost + '/',
         name: options.database,
-        collection: 'users'
+        */
     };
+	security.db.adapter = require('./lockit-pouchdb-adapter.js')(security);
     security.emailSettings = options.email;
 
     security.appname = options.name;
@@ -625,7 +629,6 @@ exports.start = function(options) {
 		}
 		return 1;
 	}
-	
 
     function getSessionKey(req) {       
         if (typeof req === "string")
@@ -635,8 +638,10 @@ exports.start = function(options) {
             return undefined;
         if (req.session) {
             var sessionID = req.session._ctx.cookies['express:sess'];            
-            return req.session.name;
+			if (req.session.name)
+            	return req.session.name;
         }
+
         return null;
     }
 
@@ -721,8 +726,9 @@ exports.start = function(options) {
     
     express.get('/', function(req, res) {
         var account = getSessionKey(req);
+
         var possibleClients = getClientSelves(account);
-        
+
         res.cookie('account', account);
         res.cookie('clientID', getCurrentClientID(account));
         res.cookie('otherSelves', possibleClients.join(','));
@@ -2076,6 +2082,7 @@ exports.start = function(options) {
                         //TODO keep waiting until lockit.adapter.db exists.. since there is no callback
                         //console.log(lockit.adapter.db);
 
+						//console.log('Looking for anonymous user');
                         lockit.adapter.find('name', 'anonymous', function(err, user) {
                             if (err) {
                                 console.log('create anonymous user: error', err);
