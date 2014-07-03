@@ -88,6 +88,7 @@ module.exports = function($N, collection) {
 			});
 		},
 
+
 		getNewest: function(max, callback) {
 			db.query({
 				map: function(doc, emit) {
@@ -147,7 +148,7 @@ module.exports = function($N, collection) {
 
 		remove: function(query, callback) {
 			var that = this;
-			this.db.get(name).then(function(doc) {
+			this.db.get(query).then(function(doc) {
 				that.db.remove(doc).then(function() {
 					callback(null, doc);
 				}).catch(callback);

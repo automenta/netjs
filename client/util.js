@@ -808,7 +808,7 @@ exports.objIsProperty = objIsProperty;
 var Ontology = function(tagInclude, target) {
     var that = target ? target : this;
 
-	var pouchOptions = server ? { } : {};
+	var pouchOptions = server ? { } : { adapter: 'memory' };
 	
 	that.db = new PouchDB('objects', pouchOptions);
 	
@@ -976,7 +976,7 @@ var Ontology = function(tagInclude, target) {
         }
     };
 
-    that.add = function(x) {
+    that.add = function(x, whenFinished) {
         //updates all cached fields, indexes
         //can be called repeatedly to update existing object with that ID
         if (!x)
@@ -1105,12 +1105,13 @@ var Ontology = function(tagInclude, target) {
                 delete x._property;
 
                 indexInstance(x, existing, true);
-
-				//index in pouchdb
-				that.db.setObject(x);
-
             }
+			//add to DB
+			that.db.setObject(x);
         }
+
+		if (whenFinished)
+			whenFinished();
 
         return that;
     };

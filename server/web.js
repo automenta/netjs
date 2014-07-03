@@ -180,6 +180,8 @@ exports.start = function(options) {
                 //broadcast removal of objectID
                 pub(objectRemoved(objectID));
 
+				//TODO implement remove replies
+				/*
 				odb.remove({$or: [{replyTo: objectID}, {author: objectID}]}, function(err, docs) {
 
                     //nlog('deleted ' + objectID);
@@ -198,6 +200,7 @@ exports.start = function(options) {
                             whenFinished(err);
                     }
                 });
+				*/
             }
         });
     };
@@ -261,25 +264,11 @@ exports.start = function(options) {
         if (_tag.length > 0)
             o.tagList = _tag;
 
-
-        //nlog('notice: ' + JSON.stringify(o, null, 4));
-
-        if (o.modifiedAt === undefined)
-            o.modifiedAt = o.createdAt;
+        /*(if (o.modifiedAt === undefined)
+            o.modifiedAt = o.createdAt;*/
 
         //attention.notice(o, 0.1);
-		odb.set(o.id, o, function(err) {
-            if (err) {
-                nlog('notice: ' + err);
-                return;
-            }
-
-            $N.add(o);
-            
-            if (whenFinished)
-                whenFinished();
-        });
-
+		$N.add(o, whenFinished);
     }
     $N.notice = notice;
 

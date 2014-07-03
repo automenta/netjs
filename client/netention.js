@@ -1070,3 +1070,22 @@ function setCookie(key, value) {
     document.cookie = key + '=' + value;
 }
 
+/*
+function replicate(host) {
+	PouchDB.replicate("objects", host)
+	  .on('change', function (info) {
+  	    console.log('change', info);
+	  }).on('complete', function (info) {
+		console.log('complete', info);
+	  }).on('uptodate', function (info) {
+		console.log('uptodate', info);
+	  }).on('error', function (err) {
+		console.log('err', err);
+	  });
+
+	//$N.db.replicate.from(host)
+}
+function dbreset() {
+	PouchDB.destroy('objects');
+}
+*/
