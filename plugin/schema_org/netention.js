@@ -42,31 +42,31 @@ exports.plugin = function($N) {
             //http://schema.org/docs/full.html
             $N.addAll(_.map(properties, function(prop) {
                 function propType(ranges) {
-                    if (_.contains(ranges, 'URL')) {
+                    if (ranges.indexOf('URL')!=-1) {
                         return 'url';
                     }
-                    else if (_.contains(ranges, 'Text')) {
+                    else if (ranges.indexOf('Text')!=-1) {
                         return 'text';
                     }
-                    else if (_.contains(ranges, 'Number')) {
+                    else if (ranges.indexOf('Number')!=-1) {
                         return 'real';
                     }
-                    else if (_.contains(ranges, 'Boolean')) {
+                    else if (ranges.indexOf('Boolean')!=-1) {
                         return 'boolean';
                     }
-                    else if (_.contains(ranges, 'Date')) {
+                    else if (ranges.indexOf('Date')!=-1) {
                         return 'timerange';
                     }
-                    else if (_.contains(ranges, 'DateTime')) {
+                    else if (ranges.indexOf('DateTime')!=-1) {
                         return 'timepoint';
                     }
-                    else if (_.contains(ranges, 'Time')) {
+                    else if (ranges.indexOf('Time')!=-1) {
                         return 'timerange';
                     }
-                    else if (_.contains(ranges, 'Float')) {
+                    else if (ranges.indexOf('Float')!=-1) {
                         return 'real';
                     }
-                    else if (_.contains(ranges, 'Integer')) {
+                    else if (ranges.indexOf('Integer')!=-1) {
                         return 'integer';
                     }
                     else {

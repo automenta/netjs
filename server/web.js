@@ -28,7 +28,6 @@ var _ = require('lodash');
 var jsonpack = require('jsonpack');
 var jsonstream = require('JSONStream');
 //var pson= require('pson');
-var PouchDB = require('pouchdb');
 
 var EventEmitter = require('eventemitter2').EventEmitter2;
 

@@ -1038,6 +1038,11 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     display: block !important;
 }
 
+.slides  section .objectView {
+	font-size:200%;
+	line-height:200%;
+}
+
 
 .objectView ul li {
     word-wrap: break-word;
@@ -1095,7 +1100,7 @@ div.objectView .metadataReplyButton {
     cursor: pointer;
 }
 .objectView .TitleLine  {
-    word-break: break-all;
+    /*word-break: break-all;*/
 }
 
 .objectView h2 {
