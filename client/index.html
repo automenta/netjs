@@ -63,6 +63,8 @@
 
 			<div class="section" style="padding-left: 47px;">&nbsp;</div>
 
+			<button id="AddContentButton" title="New..." type="button" class="ViewControl btn btn-default"><img src="icon/plus.transparent.svg"/></button>
+
 			<div id="ViewSelect" class="section">
 				<!--
 				<button id="us" title="Users" type="button" class="ViewControl ViewSelect btn btn-default"><img src="icon/view.us.svg"/></button>
@@ -82,8 +84,8 @@
 
 			</div>
 
-			<a id="viewplay" class="ViewControl ViewControlMinor" title="Live Mode"><img src="icon/play_transparent.svg"></a>
-			<a id="viewpause" class="ViewControl ViewControlMinor" title="Pause"><img src="icon/pause_transparent.svg"></a>
+			<button id="viewplay" class="ViewControl" title="Live Mode"><img src="icon/play_transparent.svg"></button>
+			<button id="viewpause" class="ViewControl" title="Pause"><img src="icon/pause_transparent.svg"></button>
 			
 			<div id="ViewUpdates" style="display:none" class="section">
 			</div>
@@ -101,14 +103,13 @@
 
 
 			<div id="OptionsMenu" class="btn-group">
-				<button id="AddContentButton" title="New..." type="button" class="ViewControl btn btn-default"><img src="icon/plus.transparent.svg"/></button>
 
-				<button id="FocusClearButton" title="Clear Focus" type="button" class="btn btn-default"><i class="fa fa-random"></i></button>
+				<button id="FocusClearButton" title="Clear Focus" type="button" class="ViewControl btn btn-default"><i class="fa fa-random fa-2x"></i></button>
 
-				<button id="FocusEditToggleButton" title="Focus" type="button" class="btn btn-default" data-toggle="button"><i class="fa fa-search"></i></button>
+				<button id="FocusEditToggleButton" title="Focus" type="button" class="ViewControl btn btn-default" data-toggle="button"><i class="fa fa-search fa-2x"></i></button>
 
-				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					<i class="fa fa-random"></i>&nbsp;&nbsp;<span class="caret"></span>
+				  <button type="button" class="ViewControl btn btn-default dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-random fa-2x"></i>&nbsp;&nbsp;<span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu" role="menu">
 					<li><a href="#">Action</a></li>

@@ -5,7 +5,7 @@ addView({
 	start: function(v) {		
 		v.addClass('ViewPage Wall');
 		
-		var objPerCategory = 1;
+		var objPerCategory = 3;
 
 		function objNewest(objArray, n) {
 			objArray.sort(function(a, b) {
