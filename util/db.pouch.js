@@ -2,6 +2,7 @@ var server;
 var DB;
 if (typeof window != 'undefined') {
     exports = {}; //functions used by both client and server
+	module = { };
 	server = false;
 } else {
     _ = require('lodash');
@@ -12,9 +13,6 @@ if (typeof window != 'undefined') {
 
 
 module.exports = DB = function(collection, dbOptions) {
-	var PouchDB = require('pouchdb');
-	var GQL = require('gql');
-	PouchDB.plugin({ gql: GQL });
 
 	if (dbOptions===undefined) dbOptions =  {};
 
@@ -33,9 +31,7 @@ module.exports = DB = function(collection, dbOptions) {
 		},
 
 		set: function(id, value, done) {
-			 db.get(id).then(function(existing) {
-				if (existing)
-					value._rev = existing._rev;
+			function insert() {
 				db.put(value, id)
 					.then(function(response) {
 						done(null, response);
@@ -43,9 +39,14 @@ module.exports = DB = function(collection, dbOptions) {
 					.catch(function(err) {
 						done(err, null);
 					});
+			}
+
+			db.get(id).then(function(existing) {
+				if (existing)
+					value._rev = existing._rev;
+				insert();
 			 }).catch(function(err) {
-				 console.error('set catch err', err);
-				 done(null, err);
+				insert();
 			 });
 		},
 

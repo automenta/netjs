@@ -12,8 +12,8 @@
  JSON                                --------------|------
  JavaScript                          ----------------|----
  */
-var memory = require('./memory.js');
-var util = require('../client/util.js');
+//var memory = require('./memory.js');
+var util = require('../util/util.js');
 var expressm = require('express');
 //var connect = require('connect');
 var cookie = require('cookie');
@@ -50,8 +50,7 @@ exports.start = function(options) {
 	EventEmitter.call(util, { wildcard: true, delimiter: ':' });
 
 
-	var DB = require('./db.pouch.js');
-	console.log(DB);
+	var DB = require('../util/db.pouch.js');
 	var odb = DB("objects");
 	var sysdb = DB("sys");
 
@@ -766,6 +765,7 @@ exports.start = function(options) {
     express.use("/doc", expressm.static('./doc', staticContentConfig));
 
     express.use("/", expressm.static('./client', staticContentConfig));
+    express.use("/util", expressm.static('./util', staticContentConfig));
 
 
     express.post('/uploadgif', function(req, res) {

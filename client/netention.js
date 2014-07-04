@@ -914,7 +914,8 @@ function netention(f) {
     });
 
     //exports = the variable from util.js which is also used by node.js require()        		
-    $N = new Ontology(true, _.extend(new $NClient(), exports));
+	var odb = DB('objects', { adapter: 'memory' });
+    $N = new Ontology(odb, true, _.extend(new $NClient(), exports));
     
     
     $N.ontoIndex = lunr(function() {

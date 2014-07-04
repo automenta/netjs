@@ -20,7 +20,6 @@
     "express": "",
     "feedparser": "",
     "geolib": "",
-	  "gql": "",
 	  "node-uuid": "",
 	  "ms": "",
 	  "moment": "",

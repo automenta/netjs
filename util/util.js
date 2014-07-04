@@ -50,7 +50,7 @@ exports._s = _s;
  * nobject( { ...pre-created data .. } )
  * or
  * nobject( id, name, initialTags )
- * 
+ *
  * @param {type} x object array or id string
  * @param {type} name
  * @param {type} initialTags
@@ -454,9 +454,9 @@ function objTagStrengthRelevance(xx, yy) {
     for (var i in yy)
         yyc++;
     if (yyc === 0) return 0;
-	
-	
-    
+
+
+
     var den = Math.max(xxc, yyc);
 
     var r = 0;
@@ -467,7 +467,7 @@ function objTagStrengthRelevance(xx, yy) {
 
         //if (yyk.indexOf(c)!==-1) {
         if (yy[c] !== undefined) {
-            
+
             //only yy is tested for having negative values
             if (negatives) {
                 if ((yy[c] < 0) && (xx[c] > 0))
@@ -475,11 +475,11 @@ function objTagStrengthRelevance(xx, yy) {
                 if (!positives)
                     r += 1;
             }
-            if (positives) {         
+            if (positives) {
                 r += xx[c] * yy[c];
             }
         }
-        else { 
+        else {
             if (negatives) {
                 if (!positives)
                     r += 1;
@@ -501,25 +501,25 @@ function objTagRelevance(x, y, noProperties) {
 exports.objTagRelevance = objTagRelevance;
 
 /*
- 
+
  objRadius(x) -> gets the radius of the first location tag
- 
+
  objWhen(x) -> returns time associated with the object, using values in the priority:
  timeRange (avg time of start and stop)
  timePoint
  modifiedAt
  createdAt
- 
+
  objTagIDs(x) -> array of tags involved, only the tag ID's as strings
  objTagStrengths(x, normalized) -> table of the strengths of tags involved. if a tag doesnt specify a strength, assume 1.  the values will be normalized against others at the end so they dont need to add up to 1
  objStrongestTag(x) -> the strongest tag, or if equal to another, the first listed
- 
+
  objTriples(x) -> the RDF triples associated with an object
- 
+
  objDistanceSpace(x, y) -> meters between two objects, assuming both have locations. otherwise null
  objDistanceTime(x, y) -> time difference between two objects, assuming both have times, otherwise null
- objDistanceSpaceTime(x, y, speed) - speed in meters/sec  
- 
+ objDistanceSpaceTime(x, y, speed) - speed in meters/sec
+
  */
 
 function objSpacePoint(x) {
@@ -564,7 +564,7 @@ function objHasTag(x, t) {
 
     var tIsArray = Array.isArray(t);
 
-    //if t is an array, return true if any one of t's elements is a tag 
+    //if t is an array, return true if any one of t's elements is a tag
     for (var i = 0; i < x.value.length; i++) {
         var vv = x.value[i];
         if (!vv)
@@ -633,7 +633,7 @@ function objSetFirstValue(object, id, newValue) {
                     vk.value = newValue;
                     break;
                 }
-            }            
+            }
         }
     }
 }
@@ -693,7 +693,7 @@ exports.isSelfObject = isSelfObject;
  function addProperty(x, p, value) {
  if (!value)
  value = "";
- 
+
  x.values.push( { uri: p, 'value': value } );
  return x;
  }
@@ -710,7 +710,7 @@ exports.acceptsAnotherProperty = acceptsAnotherProperty;
 /*
  function addTagWithRequiredProperties(self, x, t, value) {
  var y = addTag(x, t, value);
- 
+
  var tt = $N.getTag(t);
  for (var i in tt.properties) {
  var pp = tt.properties[i];
@@ -718,16 +718,16 @@ exports.acceptsAnotherProperty = acceptsAnotherProperty;
  if (pp.min > 0) {
  if (!getProperty(x, i)) {
  var dv = '';
- 
+
  if (pp.default)
  dv = pp.default;
- 
- y = addProperty(y, i, dv);                    
+
+ y = addProperty(y, i, dv);
  }
  }
  }
  }
- 
+
  return y;
  }
  */
@@ -808,49 +808,47 @@ exports.objIsProperty = objIsProperty;
 var Ontology = function(db, tagInclude, target) {
     var that = target ? target : this;
 
-	var pouchOptions = server ? { } : { adapter: 'memory' };
-	
 	that.db = db;
-	
+
 	var qsetPending = [];
 	var qsetWorking = false;
 	function queueSet(x) {
 		if (typeof (x.add) == "function") {
-			//get a non-object copy 
+			//get a non-object copy
 			x = _.clone(x);
 		}
-		
+
 		if (qsetWorking) {
 			qsetPending.push(x);
 			return;
 		}
-		
+
 		upsert(x);
-		
+
 		function next() {
 			if (qsetPending.length == 0) {
 				qsetWorking = false;
 				return false;
 			}
-			
+
 			var x = qsetPending.pop();
 			upsert(x);
 			return true;
 		}
-		
-		function upsert(x) {			
+
+		function upsert(x) {
 			qsetWorking = true;
 			that.db.set(x.id, x, next);
-		}		
-		
+		}
+
 	};
-	
+
     //resets to empty state
     //TODO unify with the clearInstances function to not duplicate code
     that.clear = function() {
 
-        that.object = {};        //indexed by id (URI)        
-        
+        that.object = {};        //indexed by id (URI)
+
         that.graphDistanceTag = ['Trust'];
 
         that.dgraph = new graphlib.Digraph();
@@ -859,25 +857,25 @@ var Ontology = function(db, tagInclude, target) {
         that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
 
         that.dgraphInOut = {};
-        
+
         that.tagged = {};  //index of object tags
         that.reply = {}; //index of objects with a replyTo
 
         that.instance = {};
         that.property = {};
         that.class = {};
-        that.classRoot = {};   //root classes        
+        that.classRoot = {};   //root classes
 
         that._graphDistance = { };
-        
+
         function invalidateGraphDistance(v) {
             if (!that.graphDistanceTag)
                 return;
-            var valueTag = v;           
+            var valueTag = v;
             if (typeof valueTag === "string")
                 if (that.graphDistanceTag.indexOf(valueTag)!==-1) {
                     delete that._graphDistance[valueTag]; //invalidate
-                }            
+                }
         }
         that.dgraph.addEdge = function(e, a, b, v) {
             invalidateGraphDistance(v);
@@ -902,7 +900,7 @@ var Ontology = function(db, tagInclude, target) {
             }
             catch (e) {
                 console.error('unable to remove edge:',e);
-            }            
+            }
         };
 
         that.primitive = {
@@ -1060,11 +1058,11 @@ var Ontology = function(db, tagInclude, target) {
             delete x._instance;
             that.serializedPropreties = null;
 			that.serializedJSON = null;
-            
+
             //indexInstance(x, false); //index properties?
         }
         else {
-            
+
             if (that.indexingInstance(x)) {
 
                 var existing = false;
@@ -1092,7 +1090,7 @@ var Ontology = function(db, tagInclude, target) {
 
         return that;
     };
-    
+
     that.authors = function() {
         return _.unique(_.pluck(_.values(that.instance),'author'));
     };
@@ -1109,20 +1107,20 @@ var Ontology = function(db, tagInclude, target) {
           if (n.length > 0)
             return i.name;
       }
-      
+
       if (defaultValue)
         return defaultValue;
-        
+
       return idOrObject;
     };
-    
+
     that.indexingInstance = function (x) {
         return (tagInclude === true) || (objHasTag(x, tagInclude));
     };
 
     function indexInstance(x, keepGraphNode, isInstance) {
         if (isInstance) {
-            
+
             var tags = objTags(x, false);
             for (var i = 0; i < tags.length; i++) {
                 var t = tags[i];
@@ -1139,7 +1137,7 @@ var Ontology = function(db, tagInclude, target) {
                 if (v.replyTo.indexOf(x.id) !== -1)
                     x.reply[k] = v;
             }
-            
+
             //this object's replies to other object
             if (x.replyTo) {
                 that.reply[x.id] = x;
@@ -1155,8 +1153,8 @@ var Ontology = function(db, tagInclude, target) {
                 }
             }
         }
-        
-        //'subject' handling, creates .inout edges for each object link from the object's subject to the values of those object properties        
+
+        //'subject' handling, creates .inout edges for each object link from the object's subject to the values of those object properties
         if (x.subject) {
             //if (x.subject && that.instance[x.subject] && (that.instance[x.subject].author === x.author)) {
             if (x.subject === x.author) {
@@ -1193,7 +1191,7 @@ var Ontology = function(db, tagInclude, target) {
                 }
             }
             else {
-               console.log('Error validating object making subject claim', x); 
+               console.log('Error validating object making subject claim', x);
             }
         }
 
@@ -1205,7 +1203,7 @@ var Ontology = function(db, tagInclude, target) {
             that.ugraph._incidentEdges[x.id] = {};
             //that.dgraph.addNode(x.id, x);
             //that.ugraph.addNode(x.id, x);
-        }        
+        }
 
         {
             var inouts = x.inout || {};
@@ -1366,12 +1364,12 @@ var Ontology = function(db, tagInclude, target) {
                 }
             });
         }
-		
+
     }
 
-    function unindexInstance(x, keepGraphNode) {        
+    function unindexInstance(x, keepGraphNode) {
         if (!keepGraphNode) {
-            
+
             try {
                 var dedges = that.dgraph.incidentEdges(x.id);
                 for (var i = 0; i < dedges.length; i++)
@@ -1381,7 +1379,7 @@ var Ontology = function(db, tagInclude, target) {
                 console.error('unable to remove incident directed edges of:', x.id);
                 console.log(e, e.stack);
             }
-            
+
             try {
                 var uedges = that.ugraph.incidentEdges(x.id);
                 for (var i = 0; i < uedges.length; i++)
@@ -1391,7 +1389,7 @@ var Ontology = function(db, tagInclude, target) {
                 console.error('unable to remove incident undirected edges of:', x.id);
                 console.log(e, e.stack);
             }
-            
+
 
             delete that.dgraph._inEdges[x.id];
             delete that.dgraph._outEdges[x.id];
@@ -1426,8 +1424,8 @@ var Ontology = function(db, tagInclude, target) {
                 if (that.tagged[t])
                     delete that.tagged[t][x.id];
             }
-			
-			
+
+
         }
 
     }
@@ -1492,12 +1490,12 @@ var Ontology = function(db, tagInclude, target) {
         return s.subclass;
     };
 
-    /** 
+    /**
      * TODO: rename to getTagged
-     * t = a class ID,or an array of class ID's - returns a list of object id's 
+     * t = a class ID,or an array of class ID's - returns a list of object id's
      * */
     that.getTagged = that.objectsWithTag = function(t, fullObject, includeSubTags) {
-        //TODO use tag index            
+        //TODO use tag index
         //TODO support subtags recursively
         if ((typeof t === "object") && !Array.isArray(t))
             t = [t.id];
@@ -1533,7 +1531,7 @@ var Ontology = function(db, tagInclude, target) {
 
         if (that.indexingInstance(existingObject))
             unindexInstance(existingObject);
-        
+
         if (that.class[x]) {
             delete that.class[x];
             that.serializedClasses = null;
@@ -1589,7 +1587,7 @@ var Ontology = function(db, tagInclude, target) {
 		}
 		return that.serializedJSON;
 	};
-    
+
     //graphlib.alg.floydWarshall
     //ex: JSON.stringify( $N.getGraphDistances("Trust"), null, 4 )
     //warning: always use the same node filter because the cache will not automatically invalidate if you change it
@@ -1599,11 +1597,11 @@ var Ontology = function(db, tagInclude, target) {
             if (existing)
                 return existing;
         }
-            
+
         var g = that.dgraph;
 
         var results = {};
-        
+
         var nodes = nodeFilter ?
                 _.pluck(_.filter(_.values(that.instance), nodeFilter), 'id') :
                 _.keys(that.instance);
@@ -1612,7 +1610,7 @@ var Ontology = function(db, tagInclude, target) {
             return 1;
         };
         var incidentFunc =  function(u) {
-                                if (typeof edgeFilter === "string") {                                    
+                                if (typeof edgeFilter === "string") {
                                     return _.filter(g.outEdges(u), function(e) {
                                         var E = that.dgraph.edge(e);
                                         return (E === edgeFilter);
@@ -1660,7 +1658,7 @@ var Ontology = function(db, tagInclude, target) {
                 });
             });
         });
-        
+
         nodes.forEach(function(k) {
             var rowK = results[k];
             nodes.forEach(function(i) {
@@ -1672,7 +1670,7 @@ var Ontology = function(db, tagInclude, target) {
             if (_.keys(results[k]).length === 0)
                 delete results[k];
         });
-        
+
         if (typeof edgeFilter === "string") {
             if (that.graphDistanceTag && that.graphDistanceTag.indexOf(edgeFilter)!==-1)
                 that._graphDistance[edgeFilter] = results;
@@ -1680,21 +1678,21 @@ var Ontology = function(db, tagInclude, target) {
 
         return results;
     };
-    
+
     that.getGraphDistance = function(edgeFilter, nodeFilter, fromNode, toNode) {
         if (fromNode === toNode)
             return 0;
-        
+
         var d = that.getGraphDistances(edgeFilter, nodeFilter);
         if (d[fromNode])
             if (d[fromNode][toNode])
                 return d[fromNode][toNode].distance;
-        
+
         return Infinity;
     };
 
     that.userNodeFilter = function(n) { return n.author === n.id; };
-    
+
     that.getTrust = function(a, b) {
         var d = that.getGraphDistance("Trust", that.userNodeFilter, a, b);
         if (d === Infinity) return 0;
@@ -2121,7 +2119,7 @@ function objCompact(o) {
                 }
             }
         }
-        
+
 
         y.value = newValues;
         if (y.value.length === 0) {
