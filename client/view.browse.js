@@ -4,58 +4,75 @@ addView({
 	icon: 'icon/view.browse.svg',
 	start: function (v) {
 
-		var browse = $('<table cellpadding="0" cellspacing="0" border="0" class="display"></table>');
+		var browse = $('<table cellpadding="0" cellspacing="0" border="0" class="display" style="width:100%"></table>');
+		browse.appendTo(v);
 
 		var rr = getRelevant("Recent", "Public", "Any", $N, 10000, null);
 
 
 		var data = rr[0].map(function(o) {
 			var O = $N.instance[o];
-			return [O.name, objWhen(O), $N.label(O.author) ]
+			return [O, O.name, objWhen(O), $N.label(O.author) ]
 		});
 
 		browse.dataTable({
 			"data": data,
 			"columns": [
-				{ "title": "a", class:"" },
-				{ "title": "b" },
-				{ "title": "c" },
+				{ "title": "NObject", class:"" },
+				{ "title": "Name" },
+				{ "title": "When" },
+				{ "title": "Author" },
         	],
+			"deferRender": true,
 
 			//http://www.datatables.net/extensions/scroller/examples
 			/*
 			"scrollY": "200px",
 			"dom": "frtiS",
-			"deferRender": true,
-			'scrollCollapse': true
+			'scrollCollapse': true,
 			*/
+			"searching": true,
+			"lengthChange": true,
+			"paging":   true,
+			"ordering": true,
 
 			"columnDefs": [
-				{
-					// The `data` parameter refers to the data for the cell (defined by the
-					// `data` option, which defaults to the column being worked with, in
-					// this case `data: 0`.
-					"render": function (data, type, row) {
-						return data + ' (' + row[1] + ')';
-					},
-					"targets": 0
+			   {
+					"targets": [ 0 ],
+					"visible": false,
+					"searchable": false
 				},
-				{
+				/*{
 					// The `data` parameter refers to the data for the cell (defined by the
 					// `data` option, which defaults to the column being worked with, in
 					// this case `data: 0`.
 					"render": function (data, type, row) {
-						return $.timeago(new Date(row[1]))
+						return '';
 					},
 					"targets": 1
-				}
+				},*/
 
-        	]
+
+        	],
+			"createdRow": function ( row, data, index ) {
+				/*if ( data[5].replace(/[\$,]/g, '') * 1 > 4000 ) {
+					$('td', row).eq(5).addClass('highlight');
+				}*/
+				$('td', row).eq(0).html(
+					newObjectView(data[0], {
+						scale: 0.5,
+						depthRemaining: 0,
+						startMinimized: true,
+						showAuthorName: false,
+						transparent: true
+					})
+				);
+				$('td', row).eq(1).html( $.timeago(new Date( data[2])) );
+			}
 		});
 
 		browse.addClass('ViewPage');
-		browse.appendTo(v);
-
+		return v;
 	},
 	stop: function (v) {}
 });
