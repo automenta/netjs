@@ -3,6 +3,7 @@ addView({
 	name: 'Browse',
 	icon: 'icon/view.browse.svg',
 	start: function (v) {
+		v.addClass('ViewPage');
 
 		var browse = $('<table cellpadding="0" cellspacing="0" border="0" class="display" style="width:100%"></table>');
 		browse.appendTo(v);

@@ -643,7 +643,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });;
 
             var whereButton = $('<button title="Where?"><img src="/icon/rrze/globe.png"></button>').click(function() {
-                update(objAddValue(getEditedFocus(), 'spacepoint', ''));
+                update(objAddValue(getEditedFocus(), 'spacepoint', {}));
             });
 
             var whoButton = $('<button disabled title="Who?" id="AddWhoButton"><img src="/icon/rrze/user-group.png"></button>');

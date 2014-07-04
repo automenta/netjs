@@ -34,7 +34,7 @@ module.exports = DB = function (collection, dbOptions) {
 			}).catch(callback);
 		},
 
-		set: function (id, value, done) {
+		set: function (id, value, done, compareFilter) {
 			function insert() {
 				db.put(value, id)
 					.then(function (response) {
@@ -48,9 +48,15 @@ module.exports = DB = function (collection, dbOptions) {
 			}
 
 			db.get(id).then(function (existing) {
-				if (existing)
-					if (existing._rev)
-						value._rev = existing._rev;
+				if (existing) {
+					if (compareFilter) {
+						value = compareFilter(existing, value);
+						if (value == null) {
+							return done(null, null);
+						}
+					}
+					value._rev = existing._rev;
+				}
 				insert();
 			}).catch(function (err) {
 				insert();

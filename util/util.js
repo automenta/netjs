@@ -800,6 +800,22 @@ function objIsProperty(x) {
 exports.objIsProperty = objIsProperty;
 
 
+function objEqual(x, y) {
+	if (x.id == y.id)
+		if (x.name == y.name)
+			if (x.author == y.author)
+				if (x.modifiedAt == y.modifiedAt)
+					if (x.createdAt == y.createdAt)
+						if (_.isEqual(x.value, y.value))
+							if (x.subject == y.subject)
+								if (x.when == y.when)
+									//TODO compare other object fields
+									return true;
+	return false;
+}
+exports.objEqual = objEqual;
+
+
 /*Array.prototype.pushArray = function(arr) {
  this.push.apply(this, arr);
  };*/
@@ -818,12 +834,11 @@ var Ontology = function(db, tagInclude, target) {
 			x = _.clone(x);
 		}
 
+		var tagList = objTags(x);	//provides an index for faster DB querying ($in)
+		if (tagList.length > 0)
+			x.tagList = tagList;
+
 		if (qsetWorking) {
-
-			var tagList = objTags(x);	//provides an index for faster DB querying ($in)
-			if (tagList.length > 0)
-				x.tagList = tagList;
-
 			qsetPending.push(x);
 			return;
 		}
@@ -843,7 +858,15 @@ var Ontology = function(db, tagInclude, target) {
 
 		function upsert(x) {
 			qsetWorking = true;
-			that.db.set(x.id, x, next);
+			that.db.set(x.id, x, next, function(existing, value) {
+
+				if (objEqual(existing, value)) {
+					//console.log('avoided insert');
+					return null;
+				}
+
+				return value;
+			});
 		}
 
 	};
@@ -1495,12 +1518,29 @@ var Ontology = function(db, tagInclude, target) {
         return s.subclass;
     };
 
+	that.getAllByTag = function(t, includeSubTags, callback) {
+        if ((typeof t === "object") && !Array.isArray(t))
+            t = [t.id];
+
+		if (!Array.isArray(t))
+            t = [t];
+
+        if (includeSubTags) {
+            t = _.union(t, that.getSubTags(t));
+        }
+
+		that.db.getAllByTag(t, callback);
+	};
+
     /**
-     * TODO: rename to getTagged
+     * DEPRECATED
      * t = a class ID,or an array of class ID's - returns a list of object id's
      * */
     that.getTagged = that.objectsWithTag = function(t, fullObject, includeSubTags) {
-        //TODO use tag index
+
+
+
+		//TODO use tag index
         //TODO support subtags recursively
         if ((typeof t === "object") && !Array.isArray(t))
             t = [t.id];

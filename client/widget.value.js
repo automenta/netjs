@@ -131,13 +131,13 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
    
     if (isProp) {
         type = T.extend;
-
         if (T.default) {
             defaultValue = T.default;
         }
         d.addClass('propertySection');
     }
     
+
     if (newTagValueWidget[type]) {
         newTagValueWidget[type](x, index, t, T, editable, d, events);        
     } else if (tag) {

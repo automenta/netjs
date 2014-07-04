@@ -690,7 +690,8 @@ function netention(f) {
 				//TODO guess type if it's property
 				if (y.value) {
 					for (var i = 0; i < y.value.length; i++) {
-						var c = y.value[i].id;												
+						var c = y.value[i].id;
+						if (isPrimitive(c)) continue;
 						if ((!$N.class[c]) && (!$N.property[c])) {
 							that.addAll([{
 								id: c, name: c, extend: 'text'

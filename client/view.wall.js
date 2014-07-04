@@ -21,6 +21,8 @@ addView({
 		function getCategory(tags) {
 			var data = { tag: [] };
 			tags.forEach(function(t) {
+				//TODO convert to async getAllByTag
+
 				var objs = $N.getTagged(t);
 				var more = objs.length > objPerCategory;
 				data.tag.push({
