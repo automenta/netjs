@@ -26,12 +26,15 @@ module.exports = DB = function(collection, dbOptions) {
 
 		get: function(id, callback) {
 			db.get(id).then(function(x) {
-				callback(null, x);
+				if (x)
+					callback(null, x);
 			}).catch(callback);
 		},
 
 		set: function(id, value, done) {
 			function insert() {
+
+
 				db.put(value, id)
 					.then(function(response) {
 						done(null, response);
@@ -79,20 +82,18 @@ module.exports = DB = function(collection, dbOptions) {
 					:
 					function(doc, emit) {
 						//compare any matching in the array
-						var dtl = doc.tagList;
-						if (!dtl)
-							return;
-						if (dtl.length == 0)
-							return;
-						var contained = false;
-						for (var i = 0; i < tag.length; i++)
-							if (dtl.indexOf(tag[i])!==-1) {
-								contained = true;
-								break;
-							}
+						var v = doc.value;
+						if (v !== undefined) {
+							var contained = false;
+							for (var i = 0; i < v.length; i++)
+								if (tag.indexOf(v[i].id)!==-1) {
+									contained = true;
+									break;
+								}
 
-						if (contained)
-							emit(doc);
+							if (contained)
+								emit(doc);
+						}
 					}
 		 	}, function(err, result) {
 				if (err) {
