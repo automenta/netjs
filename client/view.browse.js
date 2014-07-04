@@ -12,7 +12,7 @@ addView({
 
 		var data = rr[0].map(function(o) {
 			var O = $N.instance[o];
-			return [O, O.name, objWhen(O), $N.label(O.author) ]
+			return [O, O.name, objWhen(O), $N.label(O.author)||O.name ]
 		});
 
 		browse.dataTable({
