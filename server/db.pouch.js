@@ -1,10 +1,24 @@
-module.exports = function($N, collection) {
+var server;
+var DB;
+if (typeof window != 'undefined') {
+    exports = {}; //functions used by both client and server
+	server = false;
+} else {
+    _ = require('lodash');
+    graphlib = require("graphlib");
+	PouchDB = require('pouchdb');
+	server = true;
+}
+
+
+module.exports = DB = function(collection, dbOptions) {
 	var PouchDB = require('pouchdb');
 	var GQL = require('gql');
 	PouchDB.plugin({ gql: GQL });
 
-	var db = new PouchDB(collection);
-	var options = $N.server;
+	if (dbOptions===undefined) dbOptions =  {};
+
+	var db = new PouchDB(collection, dbOptions);
 
 	return {
 
@@ -20,7 +34,9 @@ module.exports = function($N, collection) {
 
 		set: function(id, value, done) {
 			 db.get(id).then(function(existing) {
-				db.put(value, id, existing._rev)
+				if (existing)
+					value._rev = existing._rev;
+				db.put(value, id)
 					.then(function(response) {
 						done(null, response);
 					})
@@ -28,7 +44,8 @@ module.exports = function($N, collection) {
 						done(err, null);
 					});
 			 }).catch(function(err) {
-				 db.put(value, id, done);
+				 console.error('set catch err', err);
+				 done(null, err);
 			 });
 		},
 
@@ -147,9 +164,8 @@ module.exports = function($N, collection) {
 
 
 		remove: function(query, callback) {
-			var that = this;
-			this.db.get(query).then(function(doc) {
-				that.db.remove(doc).then(function() {
+			db.get(query).then(function(doc) {
+				db.remove(doc).then(function() {
 					callback(null, doc);
 				}).catch(callback);
 			}).catch(callback);

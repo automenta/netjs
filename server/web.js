@@ -49,7 +49,13 @@ exports.start = function(options) {
     require('util').inherits(util.Ontology, EventEmitter);
 	EventEmitter.call(util, { wildcard: true, delimiter: ':' });
 
-    var $N = new util.Ontology(['User', 'Trust', 'Value']);
+
+	var DB = require('./db.pouch.js');
+	console.log(DB);
+	var odb = DB("objects");
+	var sysdb = DB("sys");
+
+    var $N = new util.Ontology(odb, ['User', 'Trust', 'Value']);
     $N = _.extend($N, util);
 
 
@@ -67,9 +73,7 @@ exports.start = function(options) {
 
     $N.server = options; //deprecated
 
-	var DB = require('./db.pouch.js');
-	var odb = DB($N, "objects");
-	var sysdb = DB($N, "sys");
+
 
     function startPlugin(kv, pluginOptions) {
         var v = kv;

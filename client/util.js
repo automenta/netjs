@@ -805,66 +805,42 @@ exports.objIsProperty = objIsProperty;
  };*/
 
 /** an interface for interacting with nobjects and ontology */
-var Ontology = function(tagInclude, target) {
+var Ontology = function(db, tagInclude, target) {
     var that = target ? target : this;
 
 	var pouchOptions = server ? { } : { adapter: 'memory' };
 	
-	that.db = new PouchDB('objects', pouchOptions);
+	that.db = db;
 	
-	that.db.setPending = [];	
-	that.db.setWorking = false;
-	that.db.setObject = function(x) {
+	var qsetPending = [];
+	var qsetWorking = false;
+	function queueSet(x) {
 		if (typeof (x.add) == "function") {
 			//get a non-object copy 
 			x = _.clone(x);
 		}
 		
-		if (that.db.setWorking) {
-			that.db.setPending.push(x);
+		if (qsetWorking) {
+			qsetPending.push(x);
 			return;
 		}
 		
 		upsert(x);
 		
 		function next() {
-			if (that.db.setPending.length == 0) {
-				that.db.setWorking = false;
+			if (qsetPending.length == 0) {
+				qsetWorking = false;
 				return false;
 			}
 			
-			var x = that.db.setPending.pop();
+			var x = qsetPending.pop();
 			upsert(x);
 			return true;
 		}
 		
 		function upsert(x) {			
-			that.db.setWorking = true;
-			that.db.get(x.id).then(function(existing) {
-				if (existing.modifiedAt == x.modifiedAt)
-					if (existing.name == x.name)
-						if (existing.author == x.author) {
-							return next();
-						}
-
-
-				that.db.put(x, x.id, existing._rev)
-					.then(function(response) { return next(); })
-					.catch(function(err) {
-						console.error('replace', x, err);
-						return next();
-					});
-			}).catch(function(err) {
-				//new
-				that.db.put(x, x.id)
-					.then(function(response) { 
-						return next();
-					})
-					.catch(function(err) {
-						console.error('set', x, err);
-						return next();
-					});
-			});;
+			qsetWorking = true;
+			that.db.set(x.id, x, next);
 		}		
 		
 	};
@@ -1106,8 +1082,9 @@ var Ontology = function(tagInclude, target) {
 
                 indexInstance(x, existing, true);
             }
+
 			//add to DB
-			that.db.setObject(x);
+			queueSet(x);
         }
 
 		if (whenFinished)

@@ -14,7 +14,7 @@
     "cookie": "",
     "cookie-parser": "",
     "cookie-session": "",
-	  "cors": "",
+	  "corser": "",
     "eventemitter2":"",
     "escape-html": "",
     "express": "",

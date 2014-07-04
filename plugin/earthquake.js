@@ -125,6 +125,7 @@ exports.plugin = function($N) {
                     eq.removeTag('RSSItem');
                     eq.removeTag('rssItemURL');
                    
+
                     $N.pub(eq);
                 });
             }
