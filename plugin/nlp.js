@@ -1,4 +1,4 @@
-var util = require('../client/util.js');
+var util = require('../util/util.js');
 var _ = require('lodash');
 
 var natural = require('natural');

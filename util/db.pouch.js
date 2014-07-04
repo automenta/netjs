@@ -1,180 +1,162 @@
 var server;
 var DB;
 if (typeof window != 'undefined') {
-    exports = {}; //functions used by both client and server
-	module = { };
+	exports = {}; //functions used by both client and server
+	module = {};
 	server = false;
 } else {
-    _ = require('lodash');
-    graphlib = require("graphlib");
+	_ = require('lodash');
+	graphlib = require("graphlib");
 	PouchDB = require('pouchdb');
 	server = true;
 }
 
 
-module.exports = DB = function(collection, dbOptions) {
+module.exports = DB = function (collection, dbOptions) {
 
-	if (dbOptions===undefined) dbOptions =  {};
+	if (dbOptions === undefined) dbOptions = {};
 
 	var db = new PouchDB(collection, dbOptions);
 
-	return {
 
-		start: function() {
+
+
+	var idb = {
+
+		start: function () {
 			return this;
 		},
 
-		get: function(id, callback) {
-			db.get(id).then(function(x) {
+		get: function (id, callback) {
+			db.get(id).then(function (x) {
 				if (x)
 					callback(null, x);
 			}).catch(callback);
 		},
 
-		set: function(id, value, done) {
+		set: function (id, value, done) {
 			function insert() {
-
-
 				db.put(value, id)
-					.then(function(response) {
-						done(null, response);
+					.then(function (response) {
+						if (done)
+							done(null, response);
 					})
-					.catch(function(err) {
-						done(err, null);
+					.catch(function (err) {
+						if (done)
+							done(err, null);
 					});
 			}
 
-			db.get(id).then(function(existing) {
+			db.get(id).then(function (existing) {
 				if (existing)
-					value._rev = existing._rev;
+					if (existing._rev)
+						value._rev = existing._rev;
 				insert();
-			 }).catch(function(err) {
+			}).catch(function (err) {
 				insert();
-			 });
+			});
 		},
 
-		getAllByFieldValue: function(field, value, callback) {
+		getAllByFieldValue: function (field, value, callback) {
 			db.query({
-				map: function(doc, emit) {
+				map: function (doc, emit) {
 					if (doc[field] === value)
 						emit(doc);
 				}
-		 	}, function(err, result) {
+			}, function (err, result) {
 				if (err) {
 					callback(err);
-				}
-				else {
-					callback(null, result.rows.map(function(row) {
+				} else {
+					callback(null, result.rows.map(function (row) {
 						return row.key;
 					}));
 				}
 			});
 		},
 
-		getAllByTag: function(tag, callback) {
-			db.query({
-				map: typeof tag === "string" ?
-					function(doc, emit) {
-						//compare string
-						if (doc.tagList.indexOf(tag)!=-1)
-							emit(doc);
-					}
-					:
-					function(doc, emit) {
-						//compare any matching in the array
-						var v = doc.value;
-						if (v !== undefined) {
-							var contained = false;
-							for (var i = 0; i < v.length; i++)
-								if (tag.indexOf(v[i].id)!==-1) {
-									contained = true;
-									break;
-								}
+		getAllByTag: function (tag, callback) {
+			if (typeof tag === "string")
+				tag = [tag];
 
-							if (contained)
-								emit(doc);
-						}
-					}
-		 	}, function(err, result) {
+			db.query('tag', { keys: tag, include_docs: true },
+			function (err, result) {
 				if (err) {
 					callback(err);
-				}
-				else {
-					callback(null, result.rows.map(function(row) {
-						return row.key;
+				} else {
+					callback(null, result.rows.map(function (row) {
+						return row.doc;
 					}));
 				}
 			});
 		},
 
 
-		getNewest: function(max, callback) {
+		getNewest: function (max, callback) {
 			db.query({
-				map: function(doc, emit) {
-					emit([doc.modifiedAt||doc.createdAt, doc]);
+				map: function (doc, emit) {
+					emit([doc.modifiedAt || doc.createdAt, doc]);
 				},
 				limit: max,
 				descending: true
-		 	}, function(err, result) {
+			}, function (err, result) {
 				if (err) {
 					callback(err);
-				}
-				else {
-					callback(null, result.rows.map(function(row) {
+				} else {
+					callback(null, result.rows.map(function (row) {
 						return row.key[1];
 					}));
 				}
 			});
 		},
 
-		streamNewest: function(max, perObject) {
+		streamNewest: function (max, perObject) {
 			db.query({
-				map: function(doc, emit) {
-					emit([doc.modifiedAt||doc.createdAt, doc]);
+				map: function (doc, emit) {
+					emit([doc.modifiedAt || doc.createdAt, doc]);
 				},
 				limit: max,
 				descending: true,
-		 	}, function(err, result) {
+			}, function (err, result) {
 				if (!err) {
-					result.rows.forEach(function(r) {
+					result.rows.forEach(function (r) {
 						perObject(null, r.key[1]);
 					});
 					perObject(null);
-				}
-				else {
+				} else {
 					perObject(err);
 				}
 			});
 		},
 
 
-		getAll: function(callback) {
-			db.allDocs({include_docs: true},
-			    function(err, response) {
+		getAll: function (callback) {
+			db.allDocs({
+					include_docs: true
+				},
+				function (err, response) {
 					if (err) {
 						callback(err, null);
-					}
-					else {
-						callback(null, response.map(function(row) {
+					} else {
+						callback(null, response.map(function (row) {
 							return row.doc;
 						}));
 					}
-		    	}
- 		    );
+				}
+			);
 		},
 
 
 
-		remove: function(query, callback) {
-			db.get(query).then(function(doc) {
-				db.remove(doc).then(function() {
+		remove: function (query, callback) {
+			db.get(query).then(function (doc) {
+				db.remove(doc).then(function () {
 					callback(null, doc);
 				}).catch(callback);
 			}).catch(callback);
 		},
 
 		//remove expired, and other periodic maintenance
-		update: function() {
+		update: function () {
 			/*
 			function getExpiredObjects(withObjects) {
 				db.obj.ensureIndex({modifiedAt: 1}, function(err, eres) {
@@ -207,7 +189,37 @@ module.exports = DB = function(collection, dbOptions) {
 			*/
 		},
 
-		stop: function() {
-		}
+		stop: function () {}
 	};
+
+
+	//http://pouchdb.com/2014/05/01/secondary-indexes-have-landed-in-pouchdb.html
+	function newView(name, mapFunction) {
+		var ddoc = {
+			views: {}
+		};
+		ddoc.views[name] = {
+			map: mapFunction.toString()
+		};
+
+		var id = '_design/' + name;
+		idb.set(id, ddoc, function(err, c) {
+			if (err)
+				console.error('newView', err);
+		});
+
+		return ddoc;
+	}
+
+	idb.tagView = newView('tag', function (doc) {
+		if (doc.value) {
+			var v = doc.value;
+			for (var i = 0; i < v.length; i++) {
+				if (v[i].id)
+					emit(v[i].id);
+			}
+		}
+	});
+
+	return idb;
 }

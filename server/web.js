@@ -327,13 +327,10 @@ exports.start = function(options) {
 
     function getObjectsByTag(t, withObject, whenFinished) {
         //t can be a single string, or an array of strings
-
-        if (!Array.isArray(t))
-            t = [t];
-
 		odb.getAllByTag(t, function(err, docs) {
 			if (err) {
 				nlog('getObjectsByTag: ' + err);
+				whenFinished();
 			}
 			else {
 				docs = unpack(docs);
