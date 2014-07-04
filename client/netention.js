@@ -160,11 +160,11 @@ function netention(f) {
                         $N.clearTransients();
                         
                         $N.getUserObjects(function() {
+							$('#NotificationArea').html('Loading my objects...');
                             $N.getAuthorObjects(nextID, function() {
+								$('#NotificationArea').html('Loading new public objects...');
                                 $N.getLatestObjects(1000, function() {
-                                    
                                     $N.sessionStart();
-
                                 }, true);
                             });                        
                         });
@@ -913,11 +913,11 @@ function netention(f) {
 		}
     });
 
-    //exports = the variable from util.js which is also used by node.js require()        		
-	var odb = DB('objects', { adapter: 'memory' });
+	var odb = DB('objects' /*{ adapter: 'memory' }*/ );
     $N = new Ontology(odb, true, _.extend(new $NClient(), exports));
     
-    
+
+
     $N.ontoIndex = lunr(function() {
         this.field('name', {
             boost: 4

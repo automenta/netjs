@@ -819,6 +819,11 @@ var Ontology = function(db, tagInclude, target) {
 		}
 
 		if (qsetWorking) {
+
+			var tagList = objTags(x);	//provides an index for faster DB querying ($in)
+			if (tagList.length > 0)
+				x.tagList = tagList;
+
 			qsetPending.push(x);
 			return;
 		}

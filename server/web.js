@@ -263,10 +263,6 @@ exports.start = function(options) {
 
         o = util.objExpand(o);
 
-        var _tag = $N.objTags(o);	//provides an index for faster DB querying ($in)
-        if (_tag.length > 0)
-            o.tagList = _tag;
-
         /*(if (o.modifiedAt === undefined)
             o.modifiedAt = o.createdAt;*/
 
@@ -300,17 +296,16 @@ exports.start = function(options) {
     }
 
     function getObjectByID(uri, whenFinished) {
-		odb.get(uri, function(err, docs) {
+		odb.get(uri, function(err, doc) {
 			if (err) {
 				nlog('getObjectByID: ' + err);
 				whenFinished(err, null);
 			}
-			else if (docs.length == 1) {
-				whenFinished(null, unpack(docs)[0]);
-			}
 			else {
-				//none found
-				whenFinished(true, null);
+				if (doc!=null)
+					whenFinished(null, unpack([doc]));
+				else
+					whenFinished(null, null);
 			}
 		});
     }
@@ -986,7 +981,7 @@ exports.start = function(options) {
         var uri = req.params.uri;
         getObjectByID(uri, function(err, x) {
             if (x) {
-                objAccessFilter([x], req, function(objs) {
+                objAccessFilter(x, req, function(objs) {
                     if (objs.length == 1)
                         sendJSON(res, util.objCompact(objs[0]));
                     else
