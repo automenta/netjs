@@ -2042,22 +2042,16 @@ exports.start = function(options) {
 	}	
 	
 	
-	//use this LAST
-	express.get('/img/couchdb-site.png', function(req, res) {
-		res.redirect('/icon/netention-button.png');
-	});
-    express.get('/fauxton', function(req, res) {
-     	res.redirect('/_utils');        
-    });
-	
-	express.use(require('express-pouchdb')(PouchDB));
-	
-	
+
+	if (options.db.web) {
+		require('./db.pouch.web.js').start(options.db.web);
+	}
 	
     odb.update();
 	sysdb.update();
 
-    require('./general.js').plugin($N).start();
+	require('./general.js').plugin($N).start();
+
     
     loadState(function() {
         //first load existing users
