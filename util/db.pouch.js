@@ -229,7 +229,8 @@ module.exports = DB = function (collection, dbOptions) {
 	idb.authorView = newView('author', function (doc) {
 		if (doc.author)
 			emit(doc.author);
-	});	
+	});
 	
 	return idb;
 }
+
