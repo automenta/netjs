@@ -9,7 +9,7 @@ doc/.~lock.*
 coverage/
 
 
-objects/*
+objects*/*
 users/*
 sys/*
 pouch__all_dbs__/*

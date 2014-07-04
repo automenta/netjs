@@ -58,17 +58,25 @@ module.exports = DB = function (collection, dbOptions) {
 		},
 
 		getAllByFieldValue: function (field, value, callback) {
-			db.query({
-				map: function (doc, emit) {
-					if (doc[field] === value)
-						emit(doc);
-				}
-			}, function (err, result) {
+			var map;
+			if (field === 'author') {
+				map = 'author';
+			}
+			else {
+				//TODO is this more efficient as a precompiled string?
+				map = {
+					map: function (doc, emit) {
+						emit(doc[field]);
+					}
+				};			
+			}
+			
+			db.query(map, { include_docs: true, key: value }, function (err, result) {
 				if (err) {
 					callback(err);
 				} else {
 					callback(null, result.rows.map(function (row) {
-						return row.key;
+						return row.doc;
 					}));
 				}
 			});
@@ -92,34 +100,26 @@ module.exports = DB = function (collection, dbOptions) {
 
 
 		getNewest: function (max, callback) {
-			db.query({
-				map: function (doc, emit) {
-					emit([doc.modifiedAt || doc.createdAt, doc]);
-				},
-				limit: max,
-				descending: true
-			}, function (err, result) {
+			db.query("modifiedAt",
+					 {	limit: max, descending: true, include_docs: true }, 
+			function (err, result) {
 				if (err) {
 					callback(err);
 				} else {
 					callback(null, result.rows.map(function (row) {
-						return row.key[1];
+						return row.doc;
 					}));
 				}
 			});
 		},
 
 		streamNewest: function (max, perObject) {
-			db.query({
-				map: function (doc, emit) {
-					emit([doc.modifiedAt || doc.createdAt, doc]);
-				},
-				limit: max,
-				descending: true,
-			}, function (err, result) {
+			db.query("modifiedAt",
+					 {	limit: max, descending: true, include_docs: true }, 
+			function (err, result) {
 				if (!err) {
 					result.rows.forEach(function (r) {
-						perObject(null, r.key[1]);
+						perObject(null, r.doc);
 					});
 					perObject(null);
 				} else {
@@ -220,6 +220,16 @@ module.exports = DB = function (collection, dbOptions) {
 			}
 		}
 	});
-
+	idb.modifiedAtView = newView('modifiedAt', function (doc) {
+		if (doc.modifiedAt)
+			emit(doc.modifiedAt);
+		else if (doc.createdAt)
+			emit(doc.createdAt);		
+	});
+	idb.authorView = newView('author', function (doc) {
+		if (doc.author)
+			emit(doc.author);
+	});	
+	
 	return idb;
 }
