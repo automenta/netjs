@@ -17,7 +17,9 @@ addView({
 			else
 				map2d = configuration.defaultMapMode2D;
 
-			var mapControl = newDiv();
+			var mapControl = newDiv().css('z-index', '5000').css('pointer-events', 'auto');
+			mapControl.addClass('leaflet-control leaflet-top leaflet-left');
+
 			typeSelect = $('<select/>');
 			typeSelect.append('<option ' + (map2d ? 'selected' : '') + '>2D</option>');
 			typeSelect.append('<option ' + (!map2d ? 'selected' : '') + '>3D</option>');
@@ -32,12 +34,10 @@ addView({
 			planetSelect.append('<option>Moon</option>');
 			planetSelect.append('<option>Mars</option>');
 
-			mapControl.append(typeSelect);
 			mapControl.append(planetSelect);
+			mapControl.append(typeSelect);
+
 			mapControl.append('<div class="MapInstructions">Right Click to Add</div>');
-
-			mapControl.addClass('HUDTopLeft');
-
 			setTimeout(function() {
 				$('div.MapInstructions').fadeOut();
 			}, 1500);
@@ -57,7 +57,7 @@ addView({
 					mm.onChange = m.onChange;
 			}
 
-			v.append(mapControl);
+			$('.leaflet-control-container .leaflet-top.leaflet-left').append(mapControl);
 
 		}
 		updateMap();

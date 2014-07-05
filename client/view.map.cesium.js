@@ -118,11 +118,15 @@ function renderCesiumMap(v) {
     if (!cesiumLoaded) {
         cesiumLoaded = true;
 
-        loadCSS('http://cesium.agi.com/Cesium/Build/Cesium/Widgets/CesiumWidget/CesiumWidget.css');
+		exports = undefined;
+		module = undefined;
+
+        loadCSS('http://cesiumjs.org/Cesium/Build/Cesium/Widgets/CesiumWidget/CesiumWidget.css');
 
         $LAB
-            .script("http://cesium.agi.com/Cesium/Build/Cesium/Cesium.js")
-            .wait(render);
+			.script("http://cesiumjs.org/Cesium/Build/Cesium/Cesium.js")
+			.wait(render);
+
     }
     else {
         render();

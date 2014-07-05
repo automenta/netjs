@@ -1541,14 +1541,16 @@ html > body .ui-pnotify {
     display: block;
     margin: 0 auto;
 }
-/*!
- * less than 320 = small mobile mode 
- */
+
 
 .view-indented {
+	/* when menu is hidden */
     bottom: 0px !important;
-    margin-top: 46px !important;
     height: auto !important;
+}
+.view-indented-more {
+	/* when menu is visible */
+    margin-top: 46px !important;
 }
 
 
@@ -1559,16 +1561,47 @@ html > body .ui-pnotify {
 }
 
 #AvatarButtonMini, #AvatarButtonMini img {
-    width: 45px;
-    height: 45px;    
+    width: 28px;
+    height: 28px;
     z-index: 25;
     margin: 0;
     padding: 0;
+
+	-webkit-transform-origin: top left;
+	-moz-transform-origin: top left;
+	-o-transform-origin: top left;
+	transform-origin: top left;
+
+	-webkit-transition: -webkit-transform 0.5s ease;
+	-moz-transition: -moz-transform 0.5s ease;
+	transition: transform 0.5s ease;
+
+	-webkit-transition-delay: 0.5s;
+	-moz-transition-delay: 0.5s;
+	transition-delay: 0.5s;
 }
+
+#AvatarButtonMini:hover, #AvatarButtonMini:hover img {
+	transform: scale(1.5);
+
+	-webkit-transform-origin: top left;
+	-moz-transform-origin: top left;
+	-o-transform-origin: top left;
+	transform-origin: top left;
+
+	-webkit-transition: -webkit-transform 0.5s;
+	-moz-transition: -moz-transform 0.5s;
+	transition: transform 0.5s;
+
+	-webkit-transition-delay: 0.1s;
+	-moz-transition-delay: 0.1s;
+	transition-delay: 0.1s;
+}
+
 #AvatarButtonMini {
     position: fixed;
-    top: 5px;
-    left: 5px;
+    top: 0;
+    left: 0px;
     cursor: crosshair;
     opacity: 0.6;
 }
@@ -1667,9 +1700,7 @@ html > body .ui-pnotify {
         margin: 0;
         padding: 0;
     }
-    .view-indented-more {
-        left: 0 !important;
-    }
+
     #FocusMainMenu button {
         display: block;
         width: 100%;
