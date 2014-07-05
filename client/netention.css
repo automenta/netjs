@@ -560,7 +560,6 @@ div.olMapViewport {
 .nameInput {
     padding: 3px;
     text-indent: 15px;
-    font-size: 150%;
 }
 
 .nameInputWide {
@@ -602,12 +601,10 @@ div.tagsinput input {
     overflow: auto;
     display: table;
     table-layout: fixed;
-    font-size:75%;
     opacity:0.85;
 }
 .tagSuggestions a {
     text-decoration: none;
-    font-size: 75%;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
@@ -619,7 +616,6 @@ div.tagsinput input {
 #MatchedTypes button {
     margin: 0.2em;
     opacity: 0.5;
-    font-size: 80%;
     font-variant: italic;
 }
 #footer-span {
@@ -684,11 +680,8 @@ body {
 .overflow-hidden {
     overflow: hidden !important;
 }
-/* jQuery UI overrides */
 
-.ui-widget-header a {
-    color: inherit !important;
-}
+
 /* Loading Login Screen */
 
 #openid-img {
@@ -882,6 +875,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     left: 0px;
     max-width: 50%;
 	height: 100%;
+	-webkit-box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+	box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #FocusEditWrap .panel-body {
 	padding-left: 5px;

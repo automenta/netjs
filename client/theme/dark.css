@@ -9,23 +9,30 @@ body {
     color: #ddd;
 }
 
-h1 a {
-    color: white !important;
+.panel {
+	background-color: rgba(10,10,10, 0.5);
 }
 
 a, a:visited, .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, .ui-state-focus a, .ui-state-focus a:link, .ui-state-focus a:visited {
-    color: #FFB800 !important; 
+    color: #DDD !important;
 }
 a:hover {
-    color: #bbf !important;
+    color: #FFF !important;
+}
+.navbar-default .navbar-brand {
+	color: #FFF;
+}
+.navbar-default {
+	background-color: #222;
+	border: 0;
+	border-bottom: 1px solid gray;
+}
+.modal-content {
+	background-color: rgba(0,0,0,0.85);
 }
 
-#View  {
-    background: none !important;
-}
 .ui-mainmenu {
-    background-color: #222;
-    opacity: 0.8;
+    background-color: rgba(20,20,20,0.4);
 }
 #LoadingSplash2 { 
     background-color: black; 

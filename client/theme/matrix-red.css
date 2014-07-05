@@ -1,4 +1,5 @@
-@import url('/lib/jquery-ui/1.10.3/themes/ui-darkness/jquery-ui.min.css');
+@import url("/theme/dark.css");
+
 body, .display-window { background: url('/theme/matrix/matrix-red.gif') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-attachment:fixed; }
 
 #MainMenu { 

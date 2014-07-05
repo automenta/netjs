@@ -1054,9 +1054,11 @@ function newPopup(title, p, isModal, existingDiv) {
 
 	//Bootstrap Adaptation
 	d.parent().addClass('modal-dialog modal-content');
-	d.prev().addClass('modal-title modal-header');
+	d.prev().addClass('modal-title modal-header navbar navbar-default');
 	var titleSpan = d.prev().find('span').first();
-	titleSpan.html( '<h4>' + titleSpan.text() + '</h4>' );
+	titleSpan.css('height', '1.5em');
+	titleSpan.html( '<a class="navbar-brand" style="padding: 0">' + titleSpan.text() + '</a>' );
+
 
 	var closeButton = d.prev().find('button').first();
 	closeButton.attr('class', 'close');

@@ -24,12 +24,14 @@ function getTagIcon(t) {
 function newPopupObjectEdit(n, p) {
     var e = newObjectEdit(n, true);
     var p = newPopup('Edit', p).append(e);
-	var nameInput = e.find('.nameInput').detach();
 
+	/*
+	var nameInput = e.find('.nameInput').detach();
 	//hack to make the text input functional above the dialog's original draggable title area
 	nameInput.css('z-index', '10').css('width', '90%').css('position', 'absolute').css('margin', '5px');
 	p.parent().prepend(nameInput);
 	p.draggable({ handle: ".ui-dialog-titlebar" });
+	*/
 
     return e;
 }
@@ -495,26 +497,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
 
             var addButtons = newEle('span').appendTo(addButtonWrap);
-
-            if (configuration.device == configuration.DESKTOP) {
-                var addDisplay = $('<button>+</button>').prependTo(addButtonWrap);
-                addDisplay.hover(function() {
-                    if (!addButtons.is(':visible')) {
-                        addButtons.fadeIn();
-                        addDisplay.text('-');
-                    }
-                });
-                addDisplay.click(function() {
-                    if (addButtons.is(':visible')) {
-                        addButtons.fadeOut();
-                        addDisplay.text('+');
-                    } else {
-                        addButtons.fadeIn();
-                        addDisplay.text('-');
-                    }
-                });
-                addButtons.hide();
-            }
 
             var whatButton = $('<button title="What?"><img src="/icon/rrze/information.png"></button>').click(function() {
 				var p;
@@ -1139,10 +1121,11 @@ function _newSubjectTagButtonClick() {
     return false;
 }
 
-function newSubjectTagButton(buttonTitle, params) {
-    return newEle('button').text(buttonTitle)
+function newSubjectTagButton(buttonTitle, icon, params) {
+    return newEle('a').attr('title', buttonTitle)
+			.html('<i class="fa ' + icon + '"></i>')
             .data(params)
-            .addClass('metadataReplyButton').click(_newSubjectTagButtonClick);
+            .click(_newSubjectTagButtonClick);
 }
 
 /**
@@ -1367,15 +1350,18 @@ function newObjectView(x, options) {
             var mdl = newMetadataLine(x, showTime).appendTo(d);
 
             if (showReplyButton && (x.id !== $N.id())) {
-                newEle('button').text('Reply').addClass('metadataReplyButton').appendTo(mdl).click(function() {
-                    newReplyPopup(xid, replyCallback);
-                    return false;
-                });
-
                 mdl.append(
-                    newSubjectTagButton("Like", subjectTag.Like),
-                    newSubjectTagButton("Dislike", subjectTag.Dislike ),
-                    newSubjectTagButton("Trust", subjectTag.Trust )
+					' ',
+					newEle('a').html('<i class="fa fa-mail-reply"></i>').attr('title', 'Reply').click(function() {
+                    	newReplyPopup(xid, replyCallback);
+                    	return false;
+                	}),
+					' ',
+                    newSubjectTagButton("Like", "fa-thumbs-o-up", subjectTag.Like),
+					' ',
+                    newSubjectTagButton("Dislike", "fa-thumbs-o-down", subjectTag.Dislike ),
+					' ',
+                    newSubjectTagButton("Trust", "fa-check", subjectTag.Trust )
                 );                                    
             }
         }

@@ -183,13 +183,12 @@ addView({
 				newLeftColDiv().addClass('goalRowHeading').appendTo(d).append('Know');
 
 				var kb = newDiv();
-				var lButton = $('<button title="Learn">L</button>').css('width', '32%').css('float', 'left').appendTo(kb);
-				var dButton = $('<button title="Do">D</button>').css('float', 'left').css('width', '34%').appendTo(kb);
-				var tButton = $('<button title="Teach">T</button>').css('width', '32%').css('float', 'left').appendTo(kb);
+				var lButton = $('<button title="Learn">Learn</button>').css('width', '32%').css('float', 'left').appendTo(kb);
+				var dButton = $('<button title="Do">Do</button>').css('float', 'left').css('width', '34%').appendTo(kb);
+				var tButton = $('<button title="Teach">Teach</button>').css('width', '32%').css('float', 'left').appendTo(kb);
 				lButton.css('color', '#aa0000').click(addTheTag($N.getTag('Learn')));
 				dButton.css('color', '#00aa00').click(addTheTag($N.getTag('Do')));
 				tButton.css('color', '#0000aa').click(addTheTag($N.getTag('Teach')));
-
 
 
 				newRightColDiv().appendTo(d).append(kb);

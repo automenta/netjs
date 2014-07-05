@@ -13,7 +13,10 @@ body {
 #ViewWrapper {
     background-color: rgba(0,0,0,0.6);
 }
-.ui-widget-content {
-    background: rgba(0,0,0,0.75);
-    border: 0;
+
+a, a:visited, .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, .ui-state-focus a, .ui-state-focus a:link, .ui-state-focus a:visited {
+    color: #FFB800 !important;
+}
+a:hover {
+    color: #bbf !important;
 }

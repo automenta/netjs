@@ -9,6 +9,14 @@ h1 a {
 a:hover {
     color: blue !important;
 }
+
+.navbar-default .navbar-brand {
+	color: #FFF;
+}
+.navbar-default {
+	background-color: #84C9FF;
+}
+
 .ui-mainmenu {
     /*background-color: #149bdf;*/
     background-color: rgba(203, 223, 143, 0.97);
