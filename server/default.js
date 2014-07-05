@@ -18,7 +18,7 @@ exports.plugin = function($N) {
             var generalTags = [
                 {id: 'Thing', name: 'Thing', description: 'Something that may be used or applied', extend:null},
                 {id: 'Concept', name: 'Concept', description: 'An abstract concept', extend:null },
-                {id: 'Action', name: 'Action', extend:null, 
+                {id: 'Action', name: 'Action', extend:null,
                     description: 'An action or event that may be accomplished or attended',
                     value: {
                         'active': {name: 'Active', extend: 'boolean'},
@@ -52,9 +52,9 @@ exports.plugin = function($N) {
                     }
                 },
                 //Being superclass of Human..
-                //TODO "Contact Schema": http://portablecontacts.net/draft-spec.html#schema   
+                //TODO "Contact Schema": http://portablecontacts.net/draft-spec.html#schema
 
-                {id: 'Human', name: 'Human', extend: 'Thing', 
+                {id: 'Human', name: 'Human', extend: 'Thing',
                     value: {
                         'currentRole': {name: 'Current Role', extend: 'text'},
                         'biography': {name: 'Biography', extend: 'html'},
@@ -154,10 +154,10 @@ exports.plugin = function($N) {
                         physicalAtmosphericPressure: { //https://en.wikipedia.org/wiki/Atmosphere_(unit)
                             name: "Atmospheric Pressure", extend: 'real', units: [ 'pascal', 'atmosphere', 'inches of Hg' ]
                         },
-                        physicalOxygenConcentration: { 
+                        physicalOxygenConcentration: {
                             name: "Oxygen Concentration", extend: 'real', units: [ 'O2 to N2 Ratio' ]
                         },
-                        physicalCO2Concentration: { 
+                        physicalCO2Concentration: {
                             name: "CO2 Concentration", extend: 'real', units: [ 'ppm' ]
                         },
 
@@ -290,7 +290,7 @@ exports.plugin = function($N) {
 
                 {id: 'Favorite', name: 'Favorite', extend: ['Concept']},
                 {id: 'User', name: 'User', extend: ['Thing'], reserved: true},
-                //{ id: 'Netention', name: 'Netention'}, //Netention itself, meta 
+                //{ id: 'Netention', name: 'Netention'}, //Netention itself, meta
 
                 {id: 'Message', name: 'Message', extend: ['Thing']},
                 /*
@@ -342,10 +342,10 @@ exports.plugin = function($N) {
                     extend: ['Action'] },
 
                 {id: 'Access', name: 'Access', extend: ['Concept']},
-                {id: 'Can', name: 'Can', extend: ['Access'], icon: '/icon/can.png', 
+                {id: 'Can', name: 'Can', extend: ['Access'], icon: '/icon/can.png',
                             description: 'Something offer, offered, offering, share, shared, sharing, provide, providing, able'
                     },
-                {id: 'Need', name: 'Need', extend: ['Access'], icon: '/icon/need.png', 
+                {id: 'Need', name: 'Need', extend: ['Access'], icon: '/icon/need.png',
                             description: 'Something want, wanted, wanting, need, needed, needing, seek, seeking, request, requested, requesting',
                             value: {
                         //'repeatNeed': {name: 'Repeat', extend: 'timerepeat' },
@@ -385,7 +385,7 @@ exports.plugin = function($N) {
                 {id: 'Theft', name: 'Theft', description: 'Theft or abduction', extend: ['Danger']},
                 {id: 'Physical_security', name: 'Invasion', description: 'Security intrusion',  extend: ['Danger']},
 
-                /*    
+                /*
                  {id: 'PDF', name: 'PDF Slide', value: {
                  'pdfURL': {name: 'PDF URL', extend: 'text'},
                  'slideNumber': {name: 'Slide', extend: 'integer', min: 1, incremental: true}
@@ -619,7 +619,7 @@ exports.plugin = function($N) {
                 {id: 'Emotion.energized', name: 'Energized', extend: ['Emotion']}
                 //{ id: 'Emotion.creative', name: 'Creative', extend: ['Emotion'] }
 
-                /*CBT thought record: 
+                /*CBT thought record:
                  http://www.psychologytools.org/assets/files/Worksheets/CBT_Thought_Record.pdf
 
                  Where were you (geolocation)
@@ -673,10 +673,10 @@ exports.plugin = function($N) {
                 {id: 'Do', name: 'Do', extend: ['Know'], icon: 'icon/know/k4.png'},
                 {id: 'Teach', name: 'Teach', extend: ['Know'], icon: 'icon/know/k5.png'}
             ]);
-            
+
 //            else if ($N.client.knowLevels == 6) {
 //                $N.addAll([
-//                    /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors, 
+//                    /* 0 – No Knowledge, 1- Training / Knowledge Only, 2 – Ability to work with support of seniors,
 //                     3 – Can independently work, 4 – Confidently Lead and Guide others, 5 – Professional Expert / Certified. */
 //                    {id: 'Learn', name: 'Learn', extend: ['Know'], icon: 'icon/know/k1.png'},
 //                    {id: 'LearnDo', name: 'Learn Do', extend: ['Know'], icon: 'icon/know/k2.png'},
@@ -701,7 +701,7 @@ exports.plugin = function($N) {
 //                        description: 'Has expert knowledge and is most useful in teaching others'}
 //                ]);
 //            }
-            
+
             /*
             _.each(getDefaultTemplates($N), function(x) {
 				x.createdAt = null;
@@ -774,9 +774,9 @@ exports.plugin = function($N) {
  | <code>VERSION</code> || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || | {{Check mark|16|color=blue}} || The version of the vCard specification.  In versions 3.0 and 4.0, this must come right after the <code>BEGIN</code> property. || <code>VERSION:3.0</code>
  | <code>XML</code>  |  Any XML data that is attached to the vCard. This is used if the vCard was encoded in XML (xCard standard) and the XML document contained elements which are not part of the xCard standard. || <code>XML:&lt;b&gt;Not an xCard XML element&lt;/b&gt;</code>
  |}
- 
+
  A handful of separate specifications define additional vCard properties.
- 
+
  | <code>BIRTHPLACE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The location of the individual's birth. || <code>BIRTHPLACE;VALUE=text:Maida Vale\, London\, England</code>
  | <code>DEATHDATE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The individual's time of death. || <code>DEATHDATE:19540607</code>
  | <code>DEATHPLACE</code> || [http://tools.ietf.org/html/rfc6474 RFC 6474] || The location of the individual death. || <code>DEATHPLACE;VALUE=id:geo:53.328,-2.229409</code>
@@ -786,30 +786,30 @@ exports.plugin = function($N) {
  | <code>INTEREST</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A recreational activity that the person is interested in, but does not necessarily take part in. || <code>INTEREST;LEVEL=high:baseball</code>
  | <code>ORG-DIRECTORY</code> || [http://tools.ietf.org/html/rfc6715 RFC 6715] || A URI representing the person's work place, which can be used to lookup information on the person's co-workers. || <code>ORG-DIRECTORY:<nowiki>http://www.company.com/employees</nowiki></code>
  |}
- 
+
  | <code>X-ABUID</code> || string || Apple [[Address Book (application)|Address Book]] [[UUID]] for that entry
  | <code>X-ANNIVERSARY</code> || YYYY-MM-DD || arbitrary anniversary (in addition to <code>BDAY</code>, birthday)
  | <code>X-ASSISTANT</code> || string || assistant name (instead of <code>AGENT</code>)
  | <code>X-MANAGER</code> || string || manager name
  | <code>X-SPOUSE</code> || string || spouse name
  | <code>X-GENDER</code> || string || value <code>Male</code> or <code>Female</code>
- | <code>X-AIM</code> || string || rowspan="9" | Instant Messaging (IM) contact information; <code>TYPE</code> parameter as for <code>TEL</code> 
- | <code>X-ICQ</code> || string 
- | <code>X-GOOGLE-TALK</code> || string 
- | <code>X-JABBER</code> || string  
- | <code>X-MSN</code> || string  
- | <code>X-YAHOO</code> || string 
- | <code>X-TWITTER</code> || string 
- | <code>X-SKYPE</code>, <code>X-SKYPE-USERNAME</code> || string 
- | <code>X-GADUGADU</code> || string 
+ | <code>X-AIM</code> || string || rowspan="9" | Instant Messaging (IM) contact information; <code>TYPE</code> parameter as for <code>TEL</code>
+ | <code>X-ICQ</code> || string
+ | <code>X-GOOGLE-TALK</code> || string
+ | <code>X-JABBER</code> || string
+ | <code>X-MSN</code> || string
+ | <code>X-YAHOO</code> || string
+ | <code>X-TWITTER</code> || string
+ | <code>X-SKYPE</code>, <code>X-SKYPE-USERNAME</code> || string
+ | <code>X-GADUGADU</code> || string
  | <code>X-GROUPWISE</code> || string ||
  | <code>X-MS-IMADDRESS</code> || string || IM address in VCF attachment from Outlook (right click Contact, Send Full Contact, Internet Format.)
  | <code>X-MS-CARDPICTURE</code> || string || Works as <code>PHOTO</code> or <code>LOGO</code>. Contains an image of the Card in Outlook.
  | <code>X-PHONETIC-FIRST-NAME</code>, <code>X-PHONETIC-LAST-NAME</code> || string || alternative spellings, for assisting with the pronunciation of unfamiliar names
- 
+
  | <code>X-MOZILLA-HTML</code> || <code>TRUE</code>/<code>FALSE</code> || mail recipient prefers HTML-formatted email
  | <code>X-MOZILLA-PROPERTY</code> || string || Thunderbird specific settings
- 
+
  | <code>X-EVOLUTION-ANNIVERSARY</code> || YYYY-MM-DD || arbitrary anniversary (in addition to <code>BDAY</code>, birthday)
  | <code>X-EVOLUTION-ASSISTANT</code> || string || assistant name (instead of <code>Agent</code>)
  | <code>X-EVOLUTION-BLOG-URL</code> || string/URL || blog URL
@@ -821,7 +821,7 @@ exports.plugin = function($N) {
  | <code>X-EVOLUTION-RADIO</code> || <code>TEL TYPE</code> parameter value || - || radio contact information
  | <code>X-EVOLUTION-TELEX</code> || <code>TEL TYPE</code> parameter value || - || [[Telegraphy#Telex|Telex]] contact information
  | <code>X-EVOLUTION-TTYTDD</code> || <code>TEL TYPE</code> parameter value || - || TTY [[Telecommunications device for the deaf|TDD]] contact information
- 
+
  | <code>X-KADDRESSBOOK-BlogFeed</code> || string/URL || blog URL
  | <code>X-KADDRESSBOOK-X-Anniversary</code> || ISO date || arbitrary anniversary, in addition to <code>BDAY</code> = birthday
  | <code>X-KADDRESSBOOK-X-AssistantsName</code> || string || assistant name (instead of <code>Agent</code>)
@@ -830,8 +830,8 @@ exports.plugin = function($N) {
  | <code>X-KADDRESSBOOK-X-Office</code> || string || office description
  | <code>X-KADDRESSBOOK-X-Profession</code> || string || profession
  | <code>X-KADDRESSBOOK-X-SpouseName</code> || string || spouse name
- 
+
  Country
  ZIP Code
- 
+
  */

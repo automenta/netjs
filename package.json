@@ -35,7 +35,7 @@
     "JSONStream":"",
     "pson":"",
 	"pouchdb":"",
-	"pouchdb-gql":"",
+	"q":"",
 	"express-pouchdb":"",
     "lockit": "",
     "lockit-utils": "",
