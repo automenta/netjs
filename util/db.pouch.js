@@ -28,7 +28,7 @@ module.exports = DB = function (collection, dbOptions) {
 		},
 
 		get: function (id, callback) {
-			db.get(id).then(function (x) {
+			return db.get(id).then(function (x) {
 				if (x)
 					callback(null, x);
 			}).catch(callback);

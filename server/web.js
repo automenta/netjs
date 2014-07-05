@@ -24,6 +24,7 @@ var request = require('request');
 var _ = require('lodash');
 var jsonpack = require('jsonpack');
 var jsonstream = require('JSONStream');
+var Q = require('q');
 //var pson= require('pson');
 
 
@@ -124,7 +125,8 @@ module.exports = function(options) {
 	function loadState(callback) {
 		sysdb.get('state', function(err, state) {
             if (err || !state) {
-                nlog("No previous system state found");
+                //nlog("No previous system state found");
+				$N.emit('initialize');
             }
             else {
                 var now = Date.now();
@@ -332,7 +334,7 @@ module.exports = function(options) {
         //t can be a single string, or an array of strings
 		odb.getAllByTag(t, function(err, docs) {
 			if (err) {
-				nlog('getObjectsByTag: ' + err);
+				//nlog('getObjectsByTag: ' + err);
 				whenFinished();
 			}
 			else {
@@ -348,7 +350,7 @@ module.exports = function(options) {
     }
     $N.getObjectsByTag = getObjectsByTag;
 
-
+	$N.get = $N.db.get;
 
 
     function refactorObjectTag(fromTag, toTag) {
@@ -651,62 +653,76 @@ module.exports = function(options) {
         });
     };
 
+	var filters = $N.filters = { };
 
-    function broadcast(socket, o, whenFinished) {
-        if (!o.removed) {
-            //o = plugins("prePub", o);
-			$N.emit('object:beforePub', o);
+    var pub = $N.pub = function(object, whenFinished, socket) {
+
+		function broadcast(o) {
+			if (!o.removed) {
+				//o = plugins("prePub", o);
+				$N.emit('object:beforePub', o);
+			}
+
+			notice(o, whenFinished, socket);
+
+			co = util.objCompact(o);
+
+			var allsockets = io.sockets.in('*').sockets;
+
+
+			var scope = o.scope || options.client.defaultScope;
+
+			function sendToSocket(i) {
+				if (socket) {
+					if (allsockets[i] !== socket)
+						allsockets[i].emit('notice', co);
+				}
+				else {
+					allsockets[i].emit('notice', co);
+				}
+			}
+
+			if (scope >= util.ObjScope.ServerAll) {
+				if (socket)
+					socket.broadcast.emit('notice', co); //send to everyone except originating socket
+				else
+					io.sockets.in('*').emit('notice', co); //send to everyone
+			}
+			else {
+				for (var i = 0; i < allsockets.length; i++) {
+					var sid = allsockets[i].clientID;
+					if (objCanSendTo(o, sid)) {
+						sendToSocket(i);
+					}
+				}
+			}
+
+			o = new $N.nobject($N.objExpand(o));
+
+			if (!o.removed)
+				$N.emit('object:pub', o);
+			else
+				$N.emit('object:delete', o);
+
 		}
 
-        notice(o, whenFinished, socket);
 
-        co = util.objCompact(o);
+		var pubfilters = $N.filters['pub'];
+		if (pubfilters) {
+			pubfilters.reduce(Q.when, Q(object)).then(broadcast);
+		}
+		else {
+        	broadcast(object);
+		}
+    };
 
-        var allsockets = io.sockets.in('*').sockets;
+	var addFilter = $N.addFilter = function(id, f) {
+		if (filters[id]===undefined) filters[id] = [];
+		filters[id].push(f);
+		return f;
+	};
 
-
-        var scope = o.scope || options.client.defaultScope;
-
-        function sendToSocket(i) {
-            if (socket) {
-                if (allsockets[i] !== socket)
-                    allsockets[i].emit('notice', co);
-            }
-            else {
-                allsockets[i].emit('notice', co);
-            }
-        }
-
-        if (scope >= util.ObjScope.ServerAll) {
-            if (socket)
-                socket.broadcast.emit('notice', co); //send to everyone except originating socket
-            else
-                io.sockets.in('*').emit('notice', co); //send to everyone
-        }
-        else {
-            for (var i = 0; i < allsockets.length; i++) {
-                var sid = allsockets[i].clientID;
-                if (objCanSendTo(o, sid)) {
-                    sendToSocket(i);
-                }
-            }
-        }
-
-        o = new $N.nobject($N.objExpand(o));
-
-        if (!o.removed)
-            $N.emit('object:pub', o);
-        else
-            $N.emit('object:delete', o);
-
-    }
-    $N.broadcast = broadcast;
-
-
-    function pub(object, whenFinished) {
-        broadcast(null, object, whenFinished);
-    }
-    $N.pub = pub;
+	//TODO removeFilter
 
     function pubAll(objects, objectIntervalMS /*, whenFinished*/) {
         if (objectIntervalMS) {
@@ -1628,11 +1644,13 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 					unsub(socket, channel);
 				});
 
-				socket.on('pub', function(message, err, success) {
+				socket.on('pub', function(message, err, callback) {
 					if (options.permissions['authenticate_to_create_objects'] !== false) {
 						if (!account) {
-							if (err)
+							if (err) {
 								err('Not authenticated');
+								callback('Not authenticated', null);
+							}
 						}
 					}
 
@@ -1650,12 +1668,13 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 							return f.whenCreated > (now - focusHistoryMaxAge);
 						});
 
+						if (callback)
+							callback();
+
 					}
 					else
-						broadcast(socket, message);
+						pub(message, callback, socket);
 
-					if (success)
-						success();
 				});
 
 				/*socket.on('getPlugins', function(f) {
@@ -2088,11 +2107,12 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
                 $N.add(to);    
             }, function() {
 
+                loadPlugins();
+
 				if (!getAdminUsers()) {
-					console.error("No admin users specified; All users granted admin priveleges");
+					$N.emit("security:info", "No admin users specified; All users granted admin priveleges");
 				}				
 
-                loadPlugins();
                 
 				$N.emit('ready');
 

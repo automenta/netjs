@@ -828,11 +828,15 @@ var Ontology = function(db, tagInclude, target) {
 
 	var qsetPending = [];
 	var qsetWorking = false;
-	function queueSet(x) {
+	function queueSet(x, callback) {
 		if (typeof (x.add) == "function") {
 			//get a non-object copy
 			x = _.clone(x);
 		}
+
+
+		if (callback)
+			x._callback = callback;
 
 		var tagList = objTags(x);	//provides an index for faster DB querying ($in)
 		if (tagList.length > 0)
@@ -845,6 +849,8 @@ var Ontology = function(db, tagInclude, target) {
 
 		upsert(x);
 
+
+
 		function next() {
 			if (qsetPending.length == 0) {
 				qsetWorking = false;
@@ -852,13 +858,26 @@ var Ontology = function(db, tagInclude, target) {
 			}
 
 			var x = qsetPending.pop();
+
 			upsert(x);
+
 			return true;
 		}
 
 		function upsert(x) {
 			qsetWorking = true;
-			that.db.set(x.id, x, next, function(existing, value) {
+
+			var nextCallback = x._callback||function(){};
+			delete x._callback;
+
+
+			function n(err, result) {
+				next(err, result);
+				nextCallback(err, result);
+			}
+
+			that.db.set(x.id, x, n, function(existing, value) {
+
 
 				if (objEqual(existing, value)) {
 					//console.log('avoided insert');
@@ -1110,11 +1129,12 @@ var Ontology = function(db, tagInclude, target) {
             }
 
 			//add to DB
-			queueSet(x);
+			queueSet(x, whenFinished);
+			return;
         }
-
 		if (whenFinished)
-			whenFinished();
+			whenFinished(null, x);
+
 
         return that;
     };
