@@ -1655,7 +1655,7 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 
 				socket.on('pub', function(obj, callback) {
 					var obj = $N.objExpand(obj);
-					var originalObject = _.clone(obj);
+					var originalObject = _.cloneDeep(obj);
 
 					if (options.permissions['authenticate_to_create_objects'] !== false) {
 						if (!account) {
@@ -1688,6 +1688,7 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 							if (util.objEqual(result, originalObject)) {
 								result = null;
 							}
+
 							callback(err, result);
 						}
 
