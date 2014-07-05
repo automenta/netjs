@@ -70,6 +70,19 @@ var addWebTags = function($N) {
                 'lastURLFetch'
             ]
         },
+        {
+            id: 'GPlusObject',
+            name: 'Google+ Object',
+            extend: ['Internet'],
+            value: {
+                'gplusID': {
+                    name: 'Google+ ID',
+                    extend: 'text'
+                },
+				'urlFetchPeriod': true,
+				'addArticleTag': true
+            }
+        },
     ]);
 };
 exports.addWebTags = addWebTags;
@@ -89,6 +102,29 @@ exports.plugin = function($N) {
             var updatePeriod = options.updatePeriod || 5; //minutes
 
             addWebTags($N);
+
+			//G+ filter
+			$N.addFilterSync('pub', function(x) {
+				console.log('filtering', x);
+
+				if ($N.objHasTag(x, 'GPlusObject') && !$N.objHasTag(x, 'RSSItem')) {
+					console.log('1');
+					var id = $N.objFirstValue(x, 'gplusID');
+					console.log('id');
+					$N.objAddTag(x, 'RSSItem');
+					console.log('tag');
+					$N.objAddValue(x, 'urlAddress', 'http://gplus-to-rss.appspot.com/rss/' + id);
+					console.log('value');
+					console.log('transformed', x);
+				}
+
+				console.log('returning');
+
+				return x;
+			});
+
+
+
 
             this.feeds = {};
 

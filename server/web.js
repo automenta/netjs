@@ -657,6 +657,16 @@ module.exports = function(options) {
 
     var pub = $N.pub = function(object, whenFinished, socket) {
 
+		object = util.objExpand(object);
+
+		var pubfilters = $N.filters['pub'];
+		if (pubfilters) {
+			pubfilters.reduce(Q.when, Q(object)).then(broadcast);
+		}
+		else {
+        	broadcast(object);
+		}
+
 		function broadcast(o) {
 			if (!o.removed) {
 				//o = plugins("prePub", o);
@@ -697,7 +707,7 @@ module.exports = function(options) {
 				}
 			}
 
-			o = new $N.nobject($N.objExpand(o));
+			o = new $N.nobject(o);
 
 			if (!o.removed)
 				$N.emit('object:pub', o);
@@ -705,22 +715,27 @@ module.exports = function(options) {
 				$N.emit('object:delete', o);
 
 		}
-
-
-		var pubfilters = $N.filters['pub'];
-		if (pubfilters) {
-			pubfilters.reduce(Q.when, Q(object)).then(broadcast);
-		}
-		else {
-        	broadcast(object);
-		}
     };
 
-	var addFilter = $N.addFilter = function(id, f) {
+	var addFilter = $N.addFilter = function(id, promiseFilter) {
 		if (filters[id]===undefined) filters[id] = [];
-		filters[id].push(f);
-		return f;
+		filters[id].push(promiseFilter);
+		return promiseFilter;
 	};
+
+	var addFilterSync = $N.addFilterSync = function(id, func) {
+
+		function syncFilter(f) {
+			return function (input) {
+				return Q.Promise(function (resolve, reject, notify) {
+					resolve(f(input));
+				});
+			};
+		}
+
+		return addFilter(id, syncFilter(func));
+	};
+
 
 	//TODO removeFilter
 

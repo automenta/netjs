@@ -54,6 +54,7 @@ describe('web.js', function () {
 				});
 			}
 
+			/*
 			function syncFilter(f) {
 				return function (input) {
 					return Q.Promise(function (resolve, reject, notify) {
@@ -65,7 +66,11 @@ describe('web.js', function () {
 			$N.addFilter('pub', syncFilter(function (f) {
 				f.name = f.name + f.name;
 				return f;
-			}));
+			}));*/
+			$N.addFilterSync('pub', function (f) {
+				f.name = f.name + f.name;
+				return f;
+			});
 
 			var y = new $N.nobject("y");
 			y.setName('y');
