@@ -56,28 +56,14 @@ var themes = {
     "_scroogle": 'Google',
     "_n$a": 'N$A',
 
-	//from ThemeRoller
-    "black-tie": 'Black Tie',
-    "blitzer": 'Blitzer',
-    "cupertino": 'Cupertino',
-    "dark-hive": 'Dark Hive',
-    "dot-luv": 'Dot Luv',
-    "excite-bike": 'Excite Bike',
-    "flick": 'Flick',
-    "hot-sneaks": 'Hot Sneaks',
-    "humanity": 'Humanity',
-    "le-frog": 'Le Frog',
-    "mint-choc": 'Mint Chocolate',
-    "overcast": 'Overcast',
-    "pepper-grinder": 'Pepper Grinder',
-    "redmond": 'Redmond',
-    "smoothness": 'Smoothness',
-    "south-street": 'South Street',
-    "start": 'Start',
-    "sunny": 'Sunny',
-    "swanky-purse": 'Swanky Purse',
-    "trontastic": 'Trontastic',
-    "vader": 'Vader'    
+	//from Bootswatch
+	"_bootswatch.cerulean": "Cerulean",
+	"_bootswatch.darkly": "Darkly",
+	"_bootswatch.cyborg": "Cyborg",
+	"_bootswatch.readable": "Readable",
+	"_bootswatch.simplex": "Simplex",
+	"_bootswatch.spacelab": "SpaceLab"
+
 };
 
 var tagAlias = { };

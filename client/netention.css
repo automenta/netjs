@@ -503,8 +503,8 @@ div.olMapViewport {
 #ViewSelect {} .ViewSelectNormal {} 
 
 #ViewSelect {
-    float: left;
     line-height: 0;
+	margin-left: 2em;
 }
 #ViewOptions {
     text-align: right;
@@ -729,7 +729,6 @@ body {
     top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
     width: 100%;
 }
 
@@ -869,7 +868,6 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     display: none;
     position: fixed;
     top: 46px;
-    padding: 6px;
 }
 
 #FocusTagger {
@@ -891,7 +889,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 
 #FocusEditWrap {
     overflow: auto;
-    right: 0px;
+    left: 0px;
     max-width: 50%;
 	height: 100%;
 }
@@ -1219,7 +1217,7 @@ div.objectView .metadataReplyButton {
 	#FocusEditWrap {
 		overflow: auto;
 		bottom:0;
-		right: 0px;
+		left: 0px;
 		max-width: 100%;
 		width: 100% !important;
 		margin-top:50px;
@@ -1253,12 +1251,7 @@ div.objectView .metadataReplyButton {
     }
 
 }
-@media (min-width: 700px) {
-    #viewplay, #viewpause {
-        float: right;
-    }
 
-}
 .InlineSelfButton {
     cursor: pointer;
     text-decoration: none;
@@ -2508,7 +2501,7 @@ svg {
 	width: 4em;
 	max-height: 4em;
 }
-#NotificationList, #OptionsMenu {
+#OptionsMenu {
 	z-index:5000;
 	float: right;
 	margin-left: 10px;
@@ -2527,4 +2520,14 @@ svg {
 }
 .User .panel-heading button {
 	margin-left: 0.5em;
+}
+
+table.dataTable tbody tr, table.dataTable.hover tbody tr:hover, table.dataTable.hover tbody tr.odd:hover, table.dataTable.hover tbody tr.even:hover, table.dataTable.display tbody tr:hover, table.dataTable.display tbody tr.odd:hover, table.dataTable.display tbody tr.even:hover {
+	background-color: rgba(255,255,255,0.15);
+}
+table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
+	background-color: rgba(225,225,225,0.15);
+}
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+	background-color: rgba(225,225,225,0.15);
 }

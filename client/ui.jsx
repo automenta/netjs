@@ -589,9 +589,9 @@ function setTheme(t) {
             inverse = true;
     }
 
-    $('head').append('<link class="themecss" href="' + themeURL + '" type="text/css" rel="stylesheet"/>');
+    $('#theme').append('<link class="themecss" href="' + themeURL + '" type="text/css" rel="stylesheet"/>');
     if (inverse) {
-        $('head').append('<link class="themecss" href="/theme/black-background.css" type="text/css" rel="stylesheet"/>');
+        $('#theme').append('<link class="themecss" href="/theme/black-background.css" type="text/css" rel="stylesheet"/>');
     }
 
 }
@@ -760,11 +760,11 @@ $(document).ready(function() {
 
     $('#viewplay').mousedown(function() {
         notify({title: 'Live', text: 'Updates will appear automatically', delay: 1000});
-        setViewLock(false);    
+		later(function() {  setViewLock(false);   });
     });
     $('#viewpause').mousedown(function() {        
         notify({title: 'Paused', text: 'Updates will be queued', delay: 1000});
-        setViewLock(true);    
+		later(function() {  setViewLock(true);   });
     });
 
     $('#close-menu').button();

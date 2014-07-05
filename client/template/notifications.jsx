@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
-var SplitButton = ReactBootstrap.SplitButton;
+
+var DropdownButton = ReactBootstrap.DropdownButton;
 var MenuItem = ReactBootstrap.MenuItem;
 
 //var noMessagesMessage = { id: 'noMessages', name: "No messages" };
@@ -62,9 +63,9 @@ var NotificationMenu = React.createClass({
 
 	//var STYLES = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
 	return (
-	  <SplitButton onClick={this.handleShowMore} bsStyle="default" title={getTitle()}>
+	  <DropdownButton onClick={this.handleShowMore} bsStyle="default" title={getTitle()}>
 	  	{items}
-	  </SplitButton>
+	  </DropdownButton>
 	);
   }
 });

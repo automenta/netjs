@@ -47,6 +47,20 @@
         <!-- UI LAYERS -->
         <div id="NotificationArea"></div>
 
+        <div id="FocusEditWrap"  style="display:none"  class="panel panel-default MenuPopout ui-mainmenu">
+			<div class="panel-body">
+				<div id="FocusEditButtons">
+					<a id="FocusWhatButton" class="ViewControl" title="What"><img src="icon/find.svg"></a>
+					<a id="FocusWhereButton" class="ViewControl" title="Where"><img src="icon/view.map.svg"></a>
+					<a id="FocusWhenButton" class="ViewControl" title="When"><img src="icon/view.time.svg"></a>
+					<a id="FocusWhoButton" class="ViewControl" title="Source"><img src="icon/view.us.svg"></a>
+					<a id="FocusHowButton" class="ViewControl" title="How"><img src="icon/view.graph.svg"></a>
+				</div>
+				<span id="FocusStatus"></span>
+				<div id="FocusTagger" style="display:none" class="ui-widget-content"></div>
+				<div id="FocusEdit"></div>
+			</div>
+        </div>
 
         <div id="View"></div>
         
@@ -56,7 +70,8 @@
         <div id="AvatarButton" class="ui-corner-br shadow" style="display:none;">
             <img alt="brand" id="avatar-img" class="ui-corner-br" alt="avatar image" src="icon/load.gif" />
         </div>
-		<nav id="MainMenu" style="display:none; width: 100%" class="container-fluid " role="navigation">
+
+		<nav id="MainMenu" style="display:none; width: 100%" class="container-fluid navbar navbar-default" role="navigation">
 			<!-- <li class="viz"><a class="ui-button" id="time" title="Timeline" href="#"><b class="icon-time"></b><span class="display-menu-collapse">Timeline</span></a></li> -->
 			<!-- <li><button id="FocusToggleButton" title="Toggle Fullsize" ><i class="icon-resize-full"></i></button></li> -->
 			<!-- <li><button id='slides'  title="Slides"><i class="icon-play"></i></button></li> -->
@@ -64,6 +79,12 @@
 			<div class="section" style="padding-left: 47px;">&nbsp;</div>
 
 			<button id="AddContentButton" title="New..." type="button" class="ViewControl btn btn-default"><img src="icon/plus.transparent.svg"/></button>
+			<button id="FocusClearButton" title="Clear Focus" type="button" class="ViewControl btn btn-default"><i class="fa fa-times-circle-o fa-2x"></i></button>
+			<button id="FocusEditToggleButton" title="Focus" type="button" class="ViewControl btn btn-default" data-toggle="button"><i class="fa fa-search fa-2x"></i></button>
+
+			<button id="viewplay" class="ViewControl btn btn-default" title="Live Mode"><i class="fa fa-play fa-2x"></i></button>
+			<button id="viewpause" class="ViewControl btn btn-default" title="Pause"><i class="fa fa-pause fa-2x"></i></button>
+
 
 			<div id="ViewSelect" class="section">
 				<!--
@@ -84,8 +105,6 @@
 
 			</div>
 
-			<button id="viewplay" class="ViewControl" title="Live Mode"><img src="icon/play_transparent.svg"></button>
-			<button id="viewpause" class="ViewControl" title="Pause"><img src="icon/pause_transparent.svg"></button>
 			
 			<div id="ViewUpdates" style="display:none" class="section">
 			</div>
@@ -104,11 +123,9 @@
 
 			<div id="OptionsMenu" class="btn-group">
 
-				<button id="FocusClearButton" title="Clear Focus" type="button" class="ViewControl btn btn-default"><i class="fa fa-random fa-2x"></i></button>
+				  <div id="NotificationList" style="float: left"></div>
 
-				<button id="FocusEditToggleButton" title="Focus" type="button" class="ViewControl btn btn-default" data-toggle="button"><i class="fa fa-search fa-2x"></i></button>
-
-				  <button type="button" class="ViewControl btn btn-default dropdown-toggle" data-toggle="dropdown">
+				  <button type="button" class="ViewControl btn btn-default dropdown-toggle" data-toggle="dropdown"  style="float: right">
 					<i class="fa fa-random fa-2x"></i>&nbsp;&nbsp;<span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu" role="menu">
@@ -124,21 +141,7 @@
 
 			</div>
 
-			<div id="NotificationList"></div>
 		</nav>
-        <div id="FocusEditWrap"  style="display:none"  class="MenuPopout well ui-mainmenu">
-            <a id="FocusEditCloseButton" class="ViewControl" title="Close"><img src="icon/minus.svg"></a>
-            <div id="FocusEditButtons">
-                <a id="FocusWhatButton" class="ViewControl" title="What"><img src="icon/find.svg"></a>
-                <a id="FocusWhereButton" class="ViewControl" title="Where"><img src="icon/view.map.svg"></a>
-                <a id="FocusWhenButton" class="ViewControl" title="When"><img src="icon/view.time.svg"></a>
-                <a id="FocusWhoButton" class="ViewControl" title="Source"><img src="icon/view.us.svg"></a>
-                <a id="FocusHowButton" class="ViewControl" title="How"><img src="icon/view.graph.svg"></a>
-			</div>
-            <span id="FocusStatus"></span>
-			<div id="FocusTagger" style="display:none" class="ui-widget-content"></div>
-			<div id="FocusEdit"></div>
-        </div>
 
 
         <!-- END HIDDEN UNTIL LOADED -->
@@ -272,6 +275,8 @@
         <script>
             $LAB.setGlobalDefaults({AllowDuplicates:false});
         </script>
+
+
         <style type="text/css">
             /*@import url("lib/fractaldom/fractaldom.css");*/
 
@@ -286,15 +291,18 @@
             @import url("lib/jquery-tagsinput/jquery.tagsinput.css");
 
 			@import url("lib/bootstrap/bootstrap.min.css");
-			@import url("lib/bootstrap/bootstrap-theme.min.css");
 			@import url("lib/fontawesome/css/font-awesome.min.css");
 
 			@import url("lib/datatables/css/jquery.dataTables.min.css");
 			/*@import url("lib/datatables/Scroller/css/dataTables.scroller.min.css");*/
 
+
+			@import url('lib/jquery-ui/1.11.0/jquery-ui.css');
+
             @import url("netention.css");
         </style>
-        <style id="customcss"></style>
-            
+        <div id="theme"></div>
+		<style id="customcss"></style>
+
     </body>
 </html>

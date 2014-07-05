@@ -255,17 +255,13 @@ function renderFocus(skipSet) {
 function initFocusButtons() {
     
 	$( "#FocusEditWrap" ).resizable({
-		handles: "w",
+		handles: "e",
 		resize: function( event, ui ) {
-			$( "#FocusEditWrap" ).css('left', 'auto');
-			$( "#FocusEditWrap" ).css('right', '0');
+			$( "#FocusEditWrap" ).css('right', 'auto');
+			$( "#FocusEditWrap" ).css('left', '0');
 		}
 	});
-	
-	$('#FocusEditCloseButton').click(function() {
-		$('#FocusEditWrap').hide();
-		reflowView();
-	});
+
 	
     $('#FocusEditToggleButton').click(function() {
         if ($('#FocusEditWrap').is(':visible')) {
