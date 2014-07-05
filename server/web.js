@@ -100,7 +100,6 @@ exports.start = function(options) {
 			clientState: options.clientState,
 			users: options.users,
 			modifiedAt: Date.now(),
-			anonymousUserExists: options.anonymousUserExists
 		};
 		sysdb.set('state', state, function(err, saved) {
 			if (err || !saved) {
@@ -128,7 +127,6 @@ exports.start = function(options) {
                 options.interestTime = x.interestTime;
                 options.clientState = x.clientState;
                 options.users = x.users || {};
-                options.anonymousUserExists = x.anonymousUserExists;
             }
 
             if (callback)
@@ -643,9 +641,6 @@ exports.start = function(options) {
 
         var key = getSessionKey(req);
         if (!key) return null;
-        /*if (!key) {
-            key = 'anonymous';
-        }*/
 
         var cid = cookies.clientID;
 
@@ -695,7 +690,7 @@ exports.start = function(options) {
 
     }
     function getClientSelves(req) {
-        var key = getSessionKey(req);// || 'anonymous';
+        var key = getSessionKey(req);
         if (!key) return [];
 
         if (!options.users)
@@ -1138,86 +1133,86 @@ exports.start = function(options) {
      res.redirect('/object.html?id=' + uri);
      });*/
 
-    express.get('/users/tag/rdf', function(req, res) {
-        var rdfstore = require('rdfstore');
-        rdfstore.create(function(store) {
-            /*var exampleQuery = 
-             'PREFIX n: <http://netention.org/>\
-             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
-             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\
-             PREFIX : <' + Server.host + '/>\
-             INSERT DATA {\
-             :alice\
-             rdf:type        n:Person ;\
-             n:name       "Alice" ;\
-             n:mbox       <mailto:alice@work> ;\
-             n:knows      :bob ;\
-             .\
-             :bob\
-             rdf:type        n:Person ;\
-             n:name       "Bob" ; \
-             n:knows      :alice ;\
-             n:mbox       <mailto:bob@home> ;\
-             .\
-             }';
-             */
-            var objects = [];
-
-            var st = getOperatorTags();
-            getObjectsByTag(st, function(o) {
-                objects.push(o);
-            }, function() {
-                //PREFIX : <' + Server.host + '/>\
-                var query = '';
-                /*'PREFIX n: <http://netention.org/>\
-                 PREFIX d: <http://dbpedia.org/resource/>\
-                 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
-                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\
-                 INSERT DATA {\n';*/
-
-                var skills = 0; //TODO rename this 'tags'
-                var authors = {};
-                for (var i = 0; i < objects.length; i++) {
-                    var oo = objects[i];
-                    var t = util.objTags(oo);
-
-                    var skillLevel, object;
-                    for (var w = 0; w < st.length; w++) {
-                        if (_.contains(t, st[w])) {
-                            skillLevel = st[w];
-                            t = _.without(t, st[w]);
-                            object = t[0];
-                            break;
-                        }
-                    }
-                    if ((skillLevel) && (object)) {
-                        skills++;
-                        query += '<http://netention.org/' + oo.author + '> <http://netention.org/' + skillLevel + '> <http://dbpedia.org/resource/' + object + '> .\n';
-                    }
-                    if (authors[oo.author])
-                        continue;
-
-                    var authorName = attention.object(oo.author);
-                    if (authorName) {
-                        authorName = authorName.name; // + (' ' + (authorName.email ? ('<' + authorName.email + '>') : '')); 
-                    }
-                    else {
-                        authorName = "Anonymous";
-                    }
-                    authors[oo.author] = authorName;
-                }
-                for (var aid in authors) {
-                    var aname = authors[aid];
-                    query += '<http://netention.org/' + aid + '> <foaf:name> "' + aname + '".\n';
-                }
-
-                sendText(res, query);
-
-            });
-
-        });
-
-    });
+//    express.get('/users/tag/rdf', function(req, res) {
+//        var rdfstore = require('rdfstore');
+//        rdfstore.create(function(store) {
+//            /*var exampleQuery =
+//             'PREFIX n: <http://netention.org/>\
+//             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
+//             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\
+//             PREFIX : <' + Server.host + '/>\
+//             INSERT DATA {\
+//             :alice\
+//             rdf:type        n:Person ;\
+//             n:name       "Alice" ;\
+//             n:mbox       <mailto:alice@work> ;\
+//             n:knows      :bob ;\
+//             .\
+//             :bob\
+//             rdf:type        n:Person ;\
+//             n:name       "Bob" ; \
+//             n:knows      :alice ;\
+//             n:mbox       <mailto:bob@home> ;\
+//             .\
+//             }';
+//             */
+//            var objects = [];
+//
+//            var st = getOperatorTags();
+//            getObjectsByTag(st, function(o) {
+//                objects.push(o);
+//            }, function() {
+//                //PREFIX : <' + Server.host + '/>\
+//                var query = '';
+//                /*'PREFIX n: <http://netention.org/>\
+//                 PREFIX d: <http://dbpedia.org/resource/>\
+//                 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
+//                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\
+//                 INSERT DATA {\n';*/
+//
+//                var skills = 0; //TODO rename this 'tags'
+//                var authors = {};
+//                for (var i = 0; i < objects.length; i++) {
+//                    var oo = objects[i];
+//                    var t = util.objTags(oo);
+//
+//                    var skillLevel, object;
+//                    for (var w = 0; w < st.length; w++) {
+//                        if (_.contains(t, st[w])) {
+//                            skillLevel = st[w];
+//                            t = _.without(t, st[w]);
+//                            object = t[0];
+//                            break;
+//                        }
+//                    }
+//                    if ((skillLevel) && (object)) {
+//                        skills++;
+//                        query += '<http://netention.org/' + oo.author + '> <http://netention.org/' + skillLevel + '> <http://dbpedia.org/resource/' + object + '> .\n';
+//                    }
+//                    if (authors[oo.author])
+//                        continue;
+//
+//                    var authorName = attention.object(oo.author);
+//                    if (authorName) {
+//                        authorName = authorName.name; // + (' ' + (authorName.email ? ('<' + authorName.email + '>') : ''));
+//                    }
+//                    else {
+//                        authorName = "Anonymous";
+//                    }
+//                    authors[oo.author] = authorName;
+//                }
+//                for (var aid in authors) {
+//                    var aname = authors[aid];
+//                    query += '<http://netention.org/' + aid + '> <foaf:name> "' + aname + '".\n';
+//                }
+//
+//                sendText(res, query);
+//
+//            });
+//
+//        });
+//
+//    });
 
     express.post('/read/text', function(req, res) {
         var text = req.body.text;
@@ -1358,7 +1353,57 @@ exports.start = function(options) {
         sendJSON(res, options.interestTime);
     });
 
-    /*express.post('/notice', function(request, response) {
+	if (options.permissions.enableAnonymous) {
+		//returns username and password for an anonymous account corresponding to the connector's IP address.
+		//if the account does not exist, it is created in the user database.
+		//TODO optional auto-expiration
+
+		console.log('Anonymous access enabled');
+
+		express.get('/user/anonymous/new', function(req, res) {
+
+			var ip = req.connection.remoteAddress;
+			var u = 'anon.' + ip;
+
+			//check if account exists; if so, send existing credentials
+			lockit.adapter.find('name', u, function(err, user) {
+				if (err) {
+					console.log('create anonymous user: error', err);
+					return;
+				}
+				if (!user) {
+					//console.log('anonymous user does not exist');
+					var randomPassword = util.uuid();
+
+					lockit.adapter.save(u,'anon@'+ip, randomPassword, function(err, user) {
+						//console.log('anonymous user created. err=', err, 'user=', user);
+
+						/*"emailVerificationTimestamp" : ISODate("2014-05-29T07:52:09.983Z"), "emailVerified" : true,
+						{ "name" : "anonymous", "email" : "anonymous@anonymous.null", "signupToken" : "d3a6aec4-ad70-4770-9841-8556193333be", "signupTimestamp" : ISODate("2014-05-29T17:48:36.992Z"), "signupTokenExpires" : ISODate("2014-05-30T17:48:36.993Z"), "failedLoginAttempts" : 0, "salt" : "7bb4796276950668a603118e3ea943e1", "derived_key" : "ef49f775532f12a55a47daea158ef9fcfe2076c0", "_id" : ObjectId("538772f446eba3ca0e2c460c") }*/
+
+						user.emailVerified = true;
+						user.anonPassword = randomPassword;
+						delete user.signupToken;
+						delete user.signupTokenExpires;
+						lockit.adapter.update(user, function() {
+							options.anonymousUserExists = true;
+							saveState();
+							sendJSON(res, { username: u, password: randomPassword });
+						});
+					});
+				}
+				else {
+					//console.log('anonymous user exists', user);
+					sendJSON(res, { username: u, password: user.anonPassword });
+				}
+
+			});
+
+		});
+	}
+
+
+	/*express.post('/notice', function(request, response) {
 
         //console.log(request.body.user.name);
         //console.log(request.body.user.email);
@@ -2057,44 +2102,7 @@ exports.start = function(options) {
             getObjectsByTag('Trust', function(to) {
                 $N.add(to);    
             }, function() {
-				
-                if (options.permissions.enableAnonymous && (!options.anonymousUserExists)) {
-                    setTimeout(function() {
-                        //TODO keep waiting until lockit.adapter.db exists.. since there is no callback
-                        //console.log(lockit.adapter.db);
 
-						//console.log('Looking for anonymous user');
-                        lockit.adapter.find('name', 'anonymous', function(err, user) {
-                            if (err) {
-                                console.log('create anonymous user: error', err);
-                                return;
-                            }
-                            if (!user) {
-                                //console.log('anonymous user does not exist');
-                                lockit.adapter.save('anonymous','anonymous@anonymous.null','anonymous', function(err, user) {
-                                    //console.log('anonymous user created. err=', err, 'user=', user);
-
-                                    /*"emailVerificationTimestamp" : ISODate("2014-05-29T07:52:09.983Z"), "emailVerified" : true,
-                                    { "name" : "anonymous", "email" : "anonymous@anonymous.null", "signupToken" : "d3a6aec4-ad70-4770-9841-8556193333be", "signupTimestamp" : ISODate("2014-05-29T17:48:36.992Z"), "signupTokenExpires" : ISODate("2014-05-30T17:48:36.993Z"), "failedLoginAttempts" : 0, "salt" : "7bb4796276950668a603118e3ea943e1", "derived_key" : "ef49f775532f12a55a47daea158ef9fcfe2076c0", "_id" : ObjectId("538772f446eba3ca0e2c460c") }*/
-
-                                    user.emailVerified = true;
-                                    delete user.signupToken;
-                                    delete user.signupTokenExpires;
-                                    lockit.adapter.update(user, function() {  
-                                        options.anonymousUserExists = true;
-                                        saveState();
-                                    });
-                                });                                
-                            }
-                            else {
-                                //console.log('anonymous user exists', user);
-                                options.anonymousUserExists = true;
-                                saveState();
-                            }
-                        });
-                    }, 500);
-                }
-                    
 				
 				if (!getAdminUsers()) {
 					console.error("No admin users specified; All users granted admin priveleges");

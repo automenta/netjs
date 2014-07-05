@@ -24,15 +24,21 @@ block content
           button(id="Register") Register
           script(src="lib/jquery/jquery.min.js")
           script(type="text/javascript").
-            $(document).ready(function() {
-                $("#LoginAnonymous").click(function() {
-                    $('form').hide();
-                    $('form').attr('autocomplete', 'off');
-                    $('#login').val('anonymous');
-                    $('#password').val('anonymous');
-                    $('form').submit();
-                });
+            $(document).ready(function() {			    
+              $("#LoginAnonymous").click(function() {
+                $.getJSON('/user/anonymous/new',
+                    function(account) {
+                        $('form').hide();
+                        $('form').attr('autocomplete', 'off');
+                        $('#login').val(account.username);
+                        $('#password').val(account.password);
+                        $('form').submit();
+                    })
+                    .fail(function() {
+                        alert('Anonymous access is not available.');
+                    })
                 $("#Register").click(function() {
                    window.location = '/signup';
                 });
+              });				
             });        

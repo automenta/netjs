@@ -34,6 +34,12 @@ addView({
 			return data;
 		}
 		
+		var roster = newDiv().addClass('Roster panel panel-default').appendTo(v);
+		var rosterHeading = $('<div class="panel-heading">Online <span class="badge">42</span></div>');
+		rosterHeading.append(newShoutLine().css('float', 'right').css('width', '40%').css('text-align', 'right'));
+		rosterHeading.append('<br/>');
+		roster.append(rosterHeading);
+		roster.append(newRosterWidget().addClass('panel-body'));
 		
 		
 		var categories = newDiv().addClass("CategoryPreviews panel panel-default").appendTo(v);
@@ -44,13 +50,7 @@ addView({
 		
 		React.renderComponent( CategoryPreviews(getCategory(category1)), col1[0] );
 		React.renderComponent( CategoryPreviews(getCategory(category2)), col2[0] );
-		
-		var roster = newDiv().addClass('Roster panel panel-default').appendTo(v);
-		var rosterHeading = $('<div class="panel-heading">Online <span class="badge">42</span></div>');
-		rosterHeading.append(newShoutLine().css('float', 'right').css('width', '40%').css('text-align', 'right'));
-		rosterHeading.append('<br/>');
-		roster.append(rosterHeading);
-		roster.append(newRosterWidget().addClass('panel-body'));
+
 		
 	},
 	stop: function() {
