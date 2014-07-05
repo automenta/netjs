@@ -39,7 +39,7 @@ module.exports = DB = function (collection, dbOptions) {
 				db.put(value, id)
 					.then(function (response) {
 						if (done)
-							done(null, response);
+							done(null, value);
 					})
 					.catch(function (err) {
 						if (done)
@@ -52,7 +52,7 @@ module.exports = DB = function (collection, dbOptions) {
 					if (compareFilter) {
 						value = compareFilter(existing, value);
 						if (value == null) {
-							return done(null, null);
+							return done(null, existing);
 						}
 					}
 					value._rev = existing._rev;

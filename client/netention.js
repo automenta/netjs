@@ -630,10 +630,18 @@ function netention(f) {
             var that = this;
 
             function n(y) {
-                if (!y)
+                if (!y) {
+					console.error('notice() null object');
                     return false;
+				}
 
-                var y = objExpand(y);
+				if (!y.id)
+                	y = objExpand(y);
+
+				if (!y.id) {
+					console.error('notice() invalid object', y);
+					return false;
+				}
 
                 if (y.removed) {
                     that.deleteObject(y, true);
@@ -747,23 +755,34 @@ function netention(f) {
                     onSuccess();
             } else {
                 if (this.socket) {
-                    this.socket.emit('pub', objCompact(object), function(err) {
-                        if (onErr)
-                            onErr(object);
-                        notify({
-                            title: 'Error saving:',
-                            text: err,
-                            type: 'error'
-                        });
-                    }, function() {
-                        $N.notice(object, suppressChange);
-                        if (!suppressChange) {
-                            if (!object.focus)
-                                $N.add(object);
-                            //$N.trigger('change:attention');
-                        }
-                        if (onSuccess)
-                            onSuccess();
+                    this.socket.emit('pub', objCompact(object), function(err, objProcessed) {
+                        if (err) {
+							if (onErr)
+                            	onErr(object);
+
+							notify({
+								title: 'Error saving:',
+								text: err,
+								type: 'error'
+							});
+						}
+						else {
+							if (objProcessed == null) {
+								//null means that the object was untransformed by the server,
+								//so server avoided sending it back
+								objProcessed = object;
+							}
+
+							$N.notice(objProcessed, suppressChange);
+
+							if (!suppressChange) {
+								if (!object.focus)
+									$N.add(objProcessed);
+								//$N.trigger('change:attention');
+							}
+							if (onSuccess)
+								onSuccess(objProcessed);
+						}
                     });
                 } else {
                     if (onErr)

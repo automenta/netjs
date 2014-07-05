@@ -2095,6 +2095,11 @@ function renameObjectFields(o, m) {
 
 /* returns a cloned version of the object, compacted */
 function objCompact(o) {
+	if (o.i!==undefined && o.id===undefined) {
+		console.error(o, ' already compacted');
+		console.log(new Error().stack);
+	}
+
     if (o.modifiedAt)
         if (o.modifiedAt === o.createdAt)
             delete o.modifiedAt;
@@ -2206,6 +2211,11 @@ exports.objExpandAll = objExpandAll;
 
 /** expands an object in-place, and returns it */
 function objExpand(o) {
+	if (o.id!==undefined && o.i===undefined) {
+		console.error(o, ' already expanded');
+		console.log(new Error().stack);
+	}
+
     renameObjectFields(o, true);
 
     if (o.removed) {

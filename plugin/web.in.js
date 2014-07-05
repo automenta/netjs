@@ -105,26 +105,13 @@ exports.plugin = function($N) {
 
 			//G+ filter
 			$N.addFilterSync('pub', function(x) {
-				console.log('filtering', x);
-
 				if ($N.objHasTag(x, 'GPlusObject') && !$N.objHasTag(x, 'RSSItem')) {
-					console.log('1');
 					var id = $N.objFirstValue(x, 'gplusID');
-					console.log('id');
 					$N.objAddTag(x, 'RSSItem');
-					console.log('tag');
 					$N.objAddValue(x, 'urlAddress', 'http://gplus-to-rss.appspot.com/rss/' + id);
-					console.log('value');
-					console.log('transformed', x);
 				}
-
-				console.log('returning');
-
 				return x;
 			});
-
-
-
 
             this.feeds = {};
 

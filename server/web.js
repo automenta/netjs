@@ -262,14 +262,13 @@ module.exports = function(options) {
     $N.noticeAll = noticeAll;
 
     function notice(o, whenFinished, socket) {
+		//assumes o is already expanded
 
         if (o._id)
             delete o._id;
-
-        o = util.objExpand(o);
-
-        /*(if (o.modifiedAt === undefined)
-            o.modifiedAt = o.createdAt;*/
+		if (!o.id) {
+			console.error('notice() invalid object', o);
+		}
 
         //attention.notice(o, 0.1);
 		$N.add(o, whenFinished);
@@ -656,8 +655,7 @@ module.exports = function(options) {
 	var filters = $N.filters = { };
 
     var pub = $N.pub = function(object, whenFinished, socket) {
-
-		object = util.objExpand(object);
+		//object assumed to already be expanded
 
 		var pubfilters = $N.filters['pub'];
 		if (pubfilters) {
@@ -668,10 +666,6 @@ module.exports = function(options) {
 		}
 
 		function broadcast(o) {
-			if (!o.removed) {
-				//o = plugins("prePub", o);
-				$N.emit('object:beforePub', o);
-			}
 
 			notice(o, whenFinished, socket);
 
@@ -1659,11 +1653,13 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 					unsub(socket, channel);
 				});
 
-				socket.on('pub', function(message, err, callback) {
+				socket.on('pub', function(obj, callback) {
+					var obj = $N.objExpand(obj);
+					var originalObject = _.clone(obj);
+
 					if (options.permissions['authenticate_to_create_objects'] !== false) {
 						if (!account) {
-							if (err) {
-								err('Not authenticated');
+							if (callback) {
 								callback('Not authenticated', null);
 							}
 						}
@@ -1671,11 +1667,10 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 
 					//TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
 
-					if (message.f) {
-						message = $N.objExpand(message);
-						focusHistory.push(message);
+					if (obj.f) {
+						focusHistory.push(obj);
 
-						$N.emit('focus', message);
+						$N.emit('focus', obj);
 
 						//remove elements in focusHistory that are older than focusHistoryMaxAge (seconds)
 						var now = Date.now();
@@ -1684,11 +1679,20 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 						});
 
 						if (callback)
-							callback();
+							callback(null, null);
 
 					}
-					else
-						pub(message, callback, socket);
+					else {
+						function cb(err, result) {
+							//if result==message, don't respond with it. set it to null and the client will interpret this as untransformed
+							if (util.objEqual(result, originalObject)) {
+								result = null;
+							}
+							callback(err, result);
+						}
+
+						pub(obj, cb, socket);
+					}
 
 				});
 
