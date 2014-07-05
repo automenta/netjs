@@ -14,13 +14,6 @@ a, a:visited {
     color: black;
 }
 
-#FocusStatus { 
-    opacity: 0.75; text-align: right !important; 
-    padding-top: 2px;
-	padding-bottom: 8px;
-    width: 100%;
-    float: left;
-}
 
 .focusMap {
     width: 98%;
@@ -877,9 +870,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     overflow: auto;
 	resize: vertical;
 }
-#FocusTagger .taggerContent {
-	padding-top: 2em;
-}
+
 #FocusTagger .taggerHeader {
     padding-bottom: 3px;
     margin-bottom: 0;
@@ -893,6 +884,11 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     max-width: 50%;
 	height: 100%;
 }
+#FocusEditWrap .panel-body {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 #FocusEditButtons {
     float: right;
     padding-top: 6px;
@@ -1641,9 +1637,6 @@ html > body .ui-pnotify {
     height: auto;
 }
 
-.ui-mainmenu {
-    font-size: 75%;    
-}
 
 #MainMenu .section {
    vertical-align: bottom;
@@ -1908,11 +1901,7 @@ div.olControlZoom {
     opacity: 0.5;
 }
 
-#tagSelectHeader {
-    padding-top: 0px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid gray;
-}
+
 #tagsCombo {
     margin-left: 2em;
     margin-right: 0.5em;

@@ -118,6 +118,7 @@ function renderCesiumMap(v) {
     if (!cesiumLoaded) {
         cesiumLoaded = true;
 
+		//this is a hack to make Cesium's require.js work with Netention's screwed up util/ client-server code-sharing
 		exports = undefined;
 		module = undefined;
 

@@ -4,19 +4,6 @@ addView({
 	icon: 'icon/view.us.svg',
 	start: function(v) {		
 
-		
-		function newBootstrapPanel(heading, content) {
-			var panel = newDiv().addClass('panel panel-default');
-			var panelHeading = $('<div class="panel-heading"></div>');
-			var panelContent = newDiv().addClass('panel-body');
-
-			panelHeading.append(heading);
-			panelContent.append(content);
-
-			panel.append(panelHeading, panelContent);
-			return panel;
-		}
-
 		var panel = newDiv().addClass('User ViewPage panel panel-default').appendTo(v);
 		var panelHeading = $('<div class="panel-heading"></div>').appendTo(panel);
 		

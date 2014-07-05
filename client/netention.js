@@ -1048,6 +1048,17 @@ function newPopup(title, p, isModal, existingDiv) {
         d.parent().css('border', 0);
     }
 
+	//Bootstrap Adaptation
+	d.parent().addClass('modal-dialog modal-content');
+	d.prev().addClass('modal-title modal-header');
+	var titleSpan = d.prev().find('span').first();
+	titleSpan.html( '<h4>' + titleSpan.text() + '</h4>' );
+
+	var closeButton = d.prev().find('button').first();
+	closeButton.attr('class', 'close');
+	closeButton.html('<i class="fa fa-times"></i>');
+
+
     return d;
 }
 

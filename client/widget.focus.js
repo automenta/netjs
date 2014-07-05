@@ -253,7 +253,9 @@ function renderFocus(skipSet) {
 
 
 function initFocusButtons() {
-    
+
+	var minSidebarWidthWhenToggledOn = 250; //px
+
 	$( "#FocusEditWrap" ).resizable({
 		handles: "e",
 		resize: function( event, ui ) {
@@ -270,7 +272,7 @@ function initFocusButtons() {
         }
         else {
 			$("#FocusEditWrap" ).css('width', $("#FocusEditWrap" ).css('width'));
-			$("#FocusEditWrap" ).css('width', $("#FocusEditWrap" ).width() + 25);
+			$("#FocusEditWrap" ).css('width', Math.max($("#FocusEditWrap" ).width(), minSidebarWidthWhenToggledOn) );
 			$("#FocusEditWrap" ).fadeIn();
 			reflowView();
         }
@@ -318,16 +320,16 @@ function initFocusButtons() {
     $('#FocusWhatButton').click(function() {
         var ft = $('#FocusTagger');
         
-        function hide() { $('#FocusTagger').hide(); }
+        function hide() { $('#FocusTaggerPanel').hide(); }
         
         if (ft.is(':visible')) {
             hide();
         }
         else {
-			ft.show();
+			$('#FocusTaggerPanel').show();
 			
             var taggerOptions = {
-                inDialog: false,
+                headerTarget: $('#FocusTaggerMenu'),
 				cancelButton: false,
                 addImmediately: function(t) {
                     objAddTag($N.focus(), t);

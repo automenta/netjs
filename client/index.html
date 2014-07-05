@@ -49,15 +49,28 @@
 
         <div id="FocusEditWrap"  style="display:none"  class="panel panel-default MenuPopout ui-mainmenu">
 			<div class="panel-body">
-				<div id="FocusEditButtons">
-					<a id="FocusWhatButton" class="ViewControl" title="What"><img src="icon/find.svg"></a>
-					<a id="FocusWhereButton" class="ViewControl" title="Where"><img src="icon/view.map.svg"></a>
-					<a id="FocusWhenButton" class="ViewControl" title="When"><img src="icon/view.time.svg"></a>
-					<a id="FocusWhoButton" class="ViewControl" title="Source"><img src="icon/view.us.svg"></a>
-					<a id="FocusHowButton" class="ViewControl" title="How"><img src="icon/view.graph.svg"></a>
+
+				<div>
+					<ul class="nav">
+						<li><button id="FocusWhatButton" class="btn btn-default btn-sm ViewControl" title="What"><img src="icon/find.svg"></button></li>
+						<li><button id="FocusWhereButton" class="btn btn-default btn-sm ViewControl" title="Where"><img src="icon/view.map.svg"></button></li>
+						<li><button id="FocusWhenButton" class="btn btn-default btn-sm ViewControl" title="When"><img src="icon/view.time.svg"></button></li>
+						<li><button id="FocusWhoButton" class="btn btn-default btn-sm ViewControl" title="Source"><img src="icon/view.us.svg"></button></li>
+						<li><button id="FocusHowButton" class="btn btn-default btn-sm ViewControl" title="How"><img src="icon/view.graph.svg"></button></li>
+					</ul>
 				</div>
-				<span id="FocusStatus"></span>
-				<div id="FocusTagger" style="display:none" class="ui-widget-content"></div>
+				<br/>
+				<div><span id="FocusStatus"></span></div>
+				<br/>
+				<div id="FocusTaggerPanel" style="display: none" class='panel panel-default'>
+					<div class="panel-heading">
+						Tags
+						<div id="FocusTaggerMenu" style="float: right"></div>
+					</div>
+					<div id="FocusTagger" class="panel-body">
+					</div>
+				</div>
+
 				<div id="FocusEdit"></div>
 			</div>
         </div>
@@ -123,7 +136,7 @@
 
 			<div id="OptionsMenu" class="btn-group">
 
-				  <div id="NotificationList" style="float: left"></div>
+				  <div id="NotificationList" style="float: left" class="ViewControl"></div>
 
 				  <button type="button" class="ViewControl btn btn-default dropdown-toggle" data-toggle="dropdown"  style="float: right">
 					<i class="fa fa-random fa-2x"></i>&nbsp;&nbsp;<span class="caret"></span>

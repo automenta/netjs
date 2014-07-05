@@ -1,6 +1,6 @@
 function newTagger(options, onFinished, tagRestrictions, maxTags) {    
     var selected;
-    var inDialog = true;
+    var headerTarget;
     var addImmediately = false;
 	var cancelButton = true;
     if (!options) {
@@ -14,6 +14,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
         inDialog = options.inDialog;
         addImmediately = options.addImmediately;
 		cancelButton = options.cancelButton;
+		headerTarget = options.headerTarget;
     }
     
     if (!selected)
@@ -157,13 +158,13 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
 
     
 
-    if (inDialog) {
+    if (headerTarget == undefined) {
         later(function() {        
             d.parent().before(selectBar);
         });
     }
     else {
-        d.prepend(selectBar);
+        headerTarget.html(selectBar);
     }
         
 
