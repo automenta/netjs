@@ -12,45 +12,41 @@
  JSON                                --------------|------
  JavaScript                          ----------------|----
  */
-//var memory = require('./memory.js');
 var util = require('../util/util.js');
+var EventEmitter = require('eventemitter2').EventEmitter2;
 var expressm = require('express');
-//var connect = require('connect');
 var cookie = require('cookie');
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
 var sys = require('util');
-//        , nodestatic = require('node-static')
-
 var request = require('request');
 var _ = require('lodash');
 var jsonpack = require('jsonpack');
 var jsonstream = require('JSONStream');
 //var pson= require('pson');
 
-var EventEmitter = require('eventemitter2').EventEmitter2;
 
-//
-//
-//
-//var cortexit = require('./cortexit.js');
-//var feature = require('./feature.js');
+module.exports = function(options) {
 
-
-/** 
- init - callback function that is invoked after the server is created but before it runs 
- */
-exports.start = function(options) {
-
+	if (!options) options = { };
 
     require('util').inherits(util.Ontology, EventEmitter);
 	EventEmitter.call(util, { wildcard: true, delimiter: ':' });
 
+	var dbOpts = {	};
+
+	if (options.db) {
+		if (options.db.backend)
+			dbOpts.db = require(options.db.backend);
+	}
+	else {
+		dbOpts.db = require('memdown');
+	}
 
 	var DB = require('../util/db.pouch.js');
-	var odb = DB("objects");
-	var sysdb = DB("sys");
+	var odb = DB("objects", dbOpts);
+	var sysdb = DB("sys", dbOpts);
 
     var $N = new util.Ontology(odb, ['User', 'Trust', 'Value']);
     $N = _.extend($N, util);
@@ -752,6 +748,9 @@ exports.start = function(options) {
 			name: options.database,
 			*/
 		};
+
+		security.backend = options.db.backend;
+
 		security.db.adapter = require('./lockit-pouchdb-adapter.js')(security);
 		security.emailSettings = options.email;
 
@@ -2032,7 +2031,7 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 
 	}
 	
-	if (options.client.webrtc) {
+	if (options.client && options.client.webrtc) {
 		$N.once('ready', function() {
 			var path = '/peer';
 
@@ -2052,11 +2051,11 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 				});
 				broadcastRoster();
 			});
-			nlog('WebRTC server: http://' + options.host + ':' + options.port + '' + path);
+			nlog('WebRTC server: http://' + options.web.host + ':' + options.web.port + '' + path);
 		});
 	}
 
-	if (options.db.web) {
+	if (options.db && options.db.web) {
 		$N.once('ready', function() {
 			require('./db.pouch.web.js').start(options.db.web);
 		});

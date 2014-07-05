@@ -23,7 +23,11 @@ var Adapter = module.exports = function (config) {
 	this.config = config;
 	this.collection = config.db.collection;
 
-	this.db = new PouchDB(this.collection, {});
+	var dbOpt = { };
+	if (config.db.backend)
+		dbOpt.db = require(config.db.backend);
+
+	this.db = new PouchDB(this.collection, dbOpt);
 
 };
 

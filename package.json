@@ -40,6 +40,7 @@
     "lockit": "",
     "lockit-utils": "",
     "lodash": "",
+	"memdown": "",
     "natural": "",
     "parted": "",
     "peer": "floatdrop/peerjs-server#express",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "qunit": "",
+    "mocha": "",
     "always": ""
   },
   "scripts": {
