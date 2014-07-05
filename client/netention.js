@@ -1012,9 +1012,13 @@ function newPopup(title, p, isModal, existingDiv) {
         close: function() {
             d.remove();
         },
+		closeOnEscape: true,
+		minHeight: 110,
+		//these require jqueryui-events which are currently not included for efficiency reason
         show: 'fade',
         hide: 'fade' //'drop'
     }, p||{});
+
     if (isModal)
         p.modal = true;
 

@@ -23,7 +23,14 @@ function getTagIcon(t) {
 
 function newPopupObjectEdit(n, p) {
     var e = newObjectEdit(n, true);
-    newPopup('Edit', p).append(e);
+    var p = newPopup('Edit', p).append(e);
+	var nameInput = e.find('.nameInput').detach();
+
+	//hack to make the text input functional above the dialog's original draggable title area
+	nameInput.css('z-index', '10').css('width', '90%').css('position', 'absolute').css('margin', '5px');
+	p.parent().prepend(nameInput);
+	p.draggable({ handle: ".ui-dialog-titlebar" });
+
     return e;
 }
 
@@ -354,7 +361,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         // https://github.com/xoxco/jQuery-Tags-Input#options
                         defaultText: 'Tag..',
                         minChars: 2,
-                        width: '8%',
+                        width: '15%',
                         height: '1em',
                         onAddTag: function(t) {
                             //addedTags[t] = true;  
@@ -398,7 +405,6 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                     });
                     
                 });
-                widgetsToAdd.push(tagInput);
 
 
                 whenSaved.push(function(y) {
@@ -435,57 +441,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
         var ts = $('<div/>').addClass('tagSuggestions').appendTo(tsw);
         
-        widgetsToAdd.push(newEle('div').append('&nbsp;').attr('style','height:1em;clear:both'));
-
-        if (x.value) {
-            var tags = []; //tags & properties, actually
-
-            var tt = null;
-            for (var i = 0; i < x.value.length; i++) {
-                var t = x.value[i];
-
-                if (excludeTags)
-                    if (_.contains(excludeTags, t.id))
-                        continue;
-
-                tags.push(t.id);
-                tt = newTagValueWidget(x, i, t, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange);
-                widgetsToAdd.push(tt);
-            }
-            if (tt !== null) {
-                //hide the last tag section's down button
-                tt.find('.moveDown').hide();
-            }
-
-            var missingProp = [];
-            //Add missing required properties, min: >=1 (with their default values) of known objects:
-
-            if (!x.readonly) {
-                for (var i = 0; i < tags.length; i++) {
-                    var t = $N.class[tags[i]];
-                    if (!t)
-                        continue;
-
-                    var prop = t.property;
-                    if (!prop)
-                        continue;
-                    
-                    _.each(prop, function(P, pid) {
-                        if (P.min)
-                            if (P.min > 0)
-                                if (!_.contains(tags, pid))
-                                    missingProp.push(pid);                        
-                    });
-                    
-                };
-            }
-
-            missingProp.forEach(function(p) {
-                widgetsToAdd.push(newTagValueWidget(x, i + x.value.length, {
-                    id: p
-                }, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange));
-            });
-        }
+        //widgetsToAdd.push(newEle('div').append('&nbsp;').attr('style','height:1em;clear:both'));
 
 
         var ontoSearcher;
@@ -743,6 +699,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             widgetsToAdd.push(addButtonWrap);
 
+
+
             var scopeSelect = null;
             if (!objHasTag(getEditedFocus(), 'User')) {
                 scopeSelect = $('<select style="float:right"/>').append(
@@ -797,10 +755,65 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });
 
             addButtonWrap.append(saveButton);
+
             if (scopeSelect)
                 addButtonWrap.append(scopeSelect);
 
+			if (tagInput)
+				addButtonWrap.append(tagInput);
+
         }
+
+        if (x.value) {
+            var tags = []; //tags & properties, actually
+
+            var tt = null;
+            for (var i = 0; i < x.value.length; i++) {
+                var t = x.value[i];
+
+                if (excludeTags)
+                    if (_.contains(excludeTags, t.id))
+                        continue;
+
+                tags.push(t.id);
+                tt = newTagValueWidget(x, i, t, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange);
+                widgetsToAdd.push(tt);
+            }
+            if (tt !== null) {
+                //hide the last tag section's down button
+                tt.find('.moveDown').hide();
+            }
+
+            var missingProp = [];
+            //Add missing required properties, min: >=1 (with their default values) of known objects:
+
+            if (!x.readonly) {
+                for (var i = 0; i < tags.length; i++) {
+                    var t = $N.class[tags[i]];
+                    if (!t)
+                        continue;
+
+                    var prop = t.property;
+                    if (!prop)
+                        continue;
+
+                    _.each(prop, function(P, pid) {
+                        if (P.min)
+                            if (P.min > 0)
+                                if (!_.contains(tags, pid))
+                                    missingProp.push(pid);
+                    });
+
+                };
+            }
+
+            missingProp.forEach(function(p) {
+                widgetsToAdd.push(newTagValueWidget(x, i + x.value.length, {
+                    id: p
+                }, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange));
+            });
+        }
+
 
         D.append(widgetsToAdd);
     }
