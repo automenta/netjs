@@ -37,19 +37,17 @@ module.exports = function(options) {
 
 	var dbOpts = {	};
 
-	if (options.db) {
-		if (options.db.backend)
-			dbOpts.db = require(options.db.backend);
-	}
-	else {
-		dbOpts.db = require('memdown');
+	if (!options.db) {
+		options.db = { type: 'levelup', backend: 'memdown' };
+
+		if (options.web)
+			console.warn('Using in-memory \'LevelUp/MemDown\' database; activity will not be saved');
 	}
 
-	//var DB = require('../util/db.pouch.js');
-	var DB = require('../util/db.levelup.js');
+	var DB = require('../util/db.' + options.db.type + '.js');
 
-	var odb = DB("objects", dbOpts);
-	var sysdb = DB("sys", dbOpts);
+	var odb = DB("objects", options.db);
+	var sysdb = DB("sys", options.db);
 
     var $N = new util.Ontology(odb, ['User', 'Trust', 'Value']);
     $N = _.extend($N, util);
@@ -776,10 +774,11 @@ module.exports = function(options) {
 			*/
 		};
 
-		security.backend = options.db.backend;
+		if (options.db.type == 'levelup')
+			security.db.adapter = require('./lockit-levelup-adapter.js')(security, options.db);
+		else if (options.db.type == 'pouch')
+			security.db.adapter = require('./lockit-pouchdb-adapter.js')(security, options.db);
 
-		//security.db.adapter = require('./lockit-pouchdb-adapter.js')(security);
-		security.db.adapter = require('./lockit-levelup-adapter.js')(security);
 
 		security.emailSettings = options.email;
 

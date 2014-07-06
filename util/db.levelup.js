@@ -7,10 +7,15 @@ if (typeof window != 'undefined') {
 } else {
 	_ = require('lodash');
 
-	levelup = require('levelup');
-	levelQuery = require('level-queryengine');
-    jsonqueryEngine = require('jsonquery-engine');
-    //pairs = require('pairs'),
+	try {
+		levelup = require('levelup');
+		levelQuery = require('level-queryengine');
+		jsonqueryEngine = require('jsonquery-engine');
+	}
+	catch (e) {
+		console.error('LevelUp Database Interface requires modules: levelup, level-queryengine, jsonquery-engine');
+		process.exit(1);
+	}
 
 
 	server = true;
@@ -21,9 +26,16 @@ module.exports = DB = function (collection, dbOptions) {
 
 	if (dbOptions === undefined) dbOptions = {};
 
+	if (dbOptions.backend)
+		dbOptions.db = require(dbOptions.backend);
+
 	dbOptions.valueEncoding = 'json';
 
-	var rawDB = levelup(collection,dbOptions);
+	var rawDB = (dbOptions.backend === 'memdown') ?
+		levelup(dbOptions)
+		: levelup(collection,dbOptions);
+
+
 	var db = levelQuery(rawDB);
 	db.query.use(jsonqueryEngine());
 
@@ -56,6 +68,26 @@ module.exports = DB = function (collection, dbOptions) {
 
 				db.ensureIndex('author');
 				db.ensureIndex('tagList');
+
+//
+//				if (dbOptions.web) {
+//					$N.once('ready', function() {
+//						dbOptions.web.https = dbOptions.web.port;
+//						console.log('starting levelweb');
+//						require('levelweb/lib')(dbOptions.web);
+//						/*({
+//							host: argv.host,
+//							https: argv.https,
+//							protocol: argv.protocol,
+//							client: argv.client,
+//							server: argv.server,
+//							location: argv._[0],
+//							encoding: argv.encoding,
+//							valueEncoding: argv.valueEncoding || argv.encoding,
+//							keyEncoding:argv.keyEncoding
+//						})*/
+//					});
+//				}
 			}
 			else if (collection === 'users') {
 				db.ensureIndex('name');

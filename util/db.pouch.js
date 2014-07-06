@@ -7,7 +7,15 @@ if (typeof window != 'undefined') {
 } else {
 	_ = require('lodash');
 	graphlib = require("graphlib");
-	PouchDB = require('pouchdb');
+
+	try {
+		PouchDB = require('pouchdb');
+	}
+	catch (e) {
+		console.error('PouchDB Database Interface requires modules: pouchdb [express-pouchdb corser]');
+		process.exit(1);
+	}
+
 	server = true;
 }
 
@@ -27,9 +35,9 @@ module.exports = DB = function (collection, dbOptions) {
 
 		start: function ($N) {
 			if (collection == 'objects') {
-				if (options.db && options.db.web) {
+				if (dbOptions.web) {
 					$N.once('ready', function() {
-						require('./db.pouch.web.js').start(options.db.web);
+						require('./db.pouch.web.js').start(dbOptions.web);
 					});
 				}
 

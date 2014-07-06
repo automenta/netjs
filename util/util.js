@@ -5,7 +5,6 @@ if (typeof window != 'undefined') {
 } else {
     _ = require('lodash');
     graphlib = require("graphlib");
-	PouchDB = require('pouchdb');
 	server = true;
 }
 

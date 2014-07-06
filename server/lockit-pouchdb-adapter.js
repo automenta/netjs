@@ -1,9 +1,7 @@
-var uuid = require('node-uuid');
 var pwd = require('couch-pwd');
 var ms = require('ms');
-var moment = require('moment');
 
-
+var util = require('../util/util.js');
 
 /**
  * Adapter constructor function.
@@ -61,14 +59,15 @@ var Adapter = module.exports = function (config) {
 Adapter.prototype.save = function (name, email, pw, done) {
 	var that = this;
 
-	var now = moment().toDate();
+	var now = new Date(); //moment().toDate();
 	var timespan = ms(that.config.signup.tokenExpiration);
-	var future = moment().add(timespan, 'ms').toDate();
+	var future = new Date(new Date().getTime() + timespan);//  moment().add(timespan, 'ms').toDate();
 
 	var user = {
 		name: name,
 		email: email,
-		signupToken: uuid.v4(),
+		signupToken: util.uuid()+util.uuid(),
+		//signupToken: uuid.v4(),
 		signupTimestamp: now,
 		signupTokenExpires: future,
 		failedLoginAttempts: 0
