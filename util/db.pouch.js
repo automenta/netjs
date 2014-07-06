@@ -23,8 +23,37 @@ module.exports = DB = function (collection, dbOptions) {
 
 	var idb = {
 
-		start: function () {
-			//CURRENTLY NOT CALLED
+		db: db,
+
+		start: function ($N) {
+			if (collection == 'objects') {
+				if (options.db && options.db.web) {
+					$N.once('ready', function() {
+						require('./db.pouch.web.js').start(options.db.web);
+					});
+				}
+
+				idb.tagView = newView('tag', function (doc) {
+					if (doc.value) {
+						var v = doc.value;
+						for (var i = 0; i < v.length; i++) {
+							if (v[i].id)
+								emit(v[i].id);
+						}
+					}
+				});
+				idb.modifiedAtView = newView('modifiedAt', function (doc) {
+					if (doc.modifiedAt)
+						emit(doc.modifiedAt);
+					else if (doc.createdAt)
+						emit(doc.createdAt);
+				});
+				idb.authorView = newView('author', function (doc) {
+					if (doc.author)
+						emit(doc.author);
+				});
+
+			}
 			return this;
 		},
 
@@ -222,27 +251,6 @@ module.exports = DB = function (collection, dbOptions) {
 
 		return ddoc;
 	}
-
-	idb.tagView = newView('tag', function (doc) {
-		if (doc.value) {
-			var v = doc.value;
-			for (var i = 0; i < v.length; i++) {
-				if (v[i].id)
-					emit(v[i].id);
-			}
-		}
-	});
-	idb.modifiedAtView = newView('modifiedAt', function (doc) {
-		if (doc.modifiedAt)
-			emit(doc.modifiedAt);
-		else if (doc.createdAt)
-			emit(doc.createdAt);		
-	});
-	idb.authorView = newView('author', function (doc) {
-		if (doc.author)
-			emit(doc.author);
-	});
-	
 
 	return idb;
 }

@@ -45,14 +45,16 @@ module.exports = function(options) {
 		dbOpts.db = require('memdown');
 	}
 
-	var DB = require('../util/db.pouch.js');
+	//var DB = require('../util/db.pouch.js');
+	var DB = require('../util/db.levelup.js');
+
 	var odb = DB("objects", dbOpts);
 	var sysdb = DB("sys", dbOpts);
 
     var $N = new util.Ontology(odb, ['User', 'Trust', 'Value']);
     $N = _.extend($N, util);
 
-
+	odb.start($N);
 
     if (!options.id)
         options.id = util.uuid();
@@ -102,7 +104,7 @@ module.exports = function(options) {
 
     var saveState = $N.saveState = function(onSaved, onError) {
 		var state = {
-			id: 'state',
+			state: 'state',
 			interestTime: options.interestTime,
 			clientState: options.clientState,
 			users: options.users,
@@ -776,7 +778,9 @@ module.exports = function(options) {
 
 		security.backend = options.db.backend;
 
-		security.db.adapter = require('./lockit-pouchdb-adapter.js')(security);
+		//security.db.adapter = require('./lockit-pouchdb-adapter.js')(security);
+		security.db.adapter = require('./lockit-levelup-adapter.js')(security);
+
 		security.emailSettings = options.email;
 
 		security.appname = options.name;
@@ -1441,6 +1445,11 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 						var randomPassword = util.uuid();
 
 						lockit.adapter.save(u,'anon@'+ip, randomPassword, function(err, user) {
+							if (err) {
+								console.error('Saving anonymous user: ', err);
+								return;
+							}
+
 							//console.log('anonymous user created. err=', err, 'user=', user);
 
 							/*"emailVerificationTimestamp" : ISODate("2014-05-29T07:52:09.983Z"), "emailVerified" : true,
@@ -1684,9 +1693,15 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 					}
 					else {
 						function cb(err, result) {
-							//if result==message, don't respond with it. set it to null and the client will interpret this as untransformed
-							if (util.objEqual(result, originalObject)) {
-								result = null;
+							if (err) {
+								console.error('pub: ', err);
+							}
+							else {
+
+								//if result==message, don't respond with it. set it to null and the client will interpret this as untransformed
+								if (util.objEqual(result, originalObject)) {
+									result = null;
+								}
 							}
 
 							callback(err, result);
@@ -2094,11 +2109,6 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 		});
 	}
 
-	if (options.db && options.db.web) {
-		$N.once('ready', function() {
-			require('./db.pouch.web.js').start(options.db.web);
-		});
-	}
 	
     process.on('uncaughtException', function(err) {
         console.error(err);

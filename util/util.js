@@ -829,6 +829,11 @@ var Ontology = function(db, tagInclude, target) {
 	var qsetPending = [];
 	var qsetWorking = false;
 	function queueSet(x, callback) {
+		if (!x.id) {
+			if (callback)
+				return callback('Missing ID');
+		}
+
 		if (typeof (x.add) == "function") {
 			//get a non-object copy
 			x = _.clone(x);
@@ -2140,7 +2145,7 @@ function objCompact(o) {
     var k = _.keys(y);
     for (var i = 0; i < k.length; i++) {
         var K = k[i];
-        if ((K[0] === '_') || (K[0] == 'tagList')) {
+        if ((K[0] === '_') || (K == 'tagList')) {
             delete y[K];
             continue;
         }
