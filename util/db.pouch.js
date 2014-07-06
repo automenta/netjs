@@ -18,12 +18,13 @@ module.exports = DB = function (collection, dbOptions) {
 
 	var db = new PouchDB(collection, dbOptions);
 
-
-
+	//db.viewCleanup();
+	db.compact({});
 
 	var idb = {
 
 		start: function () {
+			//CURRENTLY NOT CALLED
 			return this;
 		},
 
@@ -33,6 +34,7 @@ module.exports = DB = function (collection, dbOptions) {
 					callback(null, x);
 			}).catch(callback);
 		},
+
 
 		set: function (id, value, done, compareFilter) {
 			function insert() {
@@ -212,6 +214,10 @@ module.exports = DB = function (collection, dbOptions) {
 		idb.set(id, ddoc, function(err, c) {
 			if (err)
 				console.error('newView', err);
+		}, function compare(existingView, newView) {
+			if (_.isEqual(existingView.views, newView.views)) {
+				return null;
+			}
 		});
 
 		return ddoc;
@@ -237,6 +243,7 @@ module.exports = DB = function (collection, dbOptions) {
 			emit(doc.author);
 	});
 	
+
 	return idb;
 }
 
