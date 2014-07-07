@@ -2145,6 +2145,12 @@ div.olControlZoom {
     border: none !important;
     box-shadow: none !important;
 }
+.reveal .fa {
+	font-family: "fontawesome" !important;
+}
+
+
+
 .usContainer {
     overflow: auto;
     display: table;

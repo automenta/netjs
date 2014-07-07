@@ -79,13 +79,18 @@ addView({
 });
 
 
+_revealLoaded = false;
+
 addView({
 	id: 'slides',
 	name: 'Slides',
 	icon: 'icon/view.trends.svg',
 	start: function (vv) {
+		//hack to prevent reveal from clobbering mainmenu
+		vv.css('top', $('#MainMenu').height());
+		vv.css('margin-top', 0);
 
-		if (!this._revealLoaded) {
+		if (!_revealLoaded) {
 			loadCSS("lib/reveal.js/css/reveal.min.css");
 			loadCSS("lib/reveal.js/css/theme/simple.css");
 			$LAB
@@ -103,7 +108,7 @@ addView({
 
 
 		function d() {
-			that.revealLoaded = true;
+			_revealLoaded = true;
 			var u = $('<div class="reveal"></div>');
 			var v = $('<div class="slides"></div>');
 			v.appendTo(u);
@@ -133,6 +138,7 @@ addView({
 
 				Reveal.initialize({
 					dependencies: [
+						/*
 						// Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
 						{
 							src: '/lib/reveal.js/lib/js/classList.js',
@@ -140,6 +146,7 @@ addView({
 								return !document.body.classList;
 							}
 						},
+						*/
 						/*// Interpret Markdown in <section> elements
 						{
 							src: '/lib/reveal.js/plugin/markdown/marked.js',
@@ -211,10 +218,8 @@ addView({
 					// Transition style for full page backgrounds
 					backgroundTransition: 'default', // default/linear/none,
 
-					embedded: true
+					embedded: true,
 
-				});
-				Reveal.initialize({
 
 					// The "normal" size of the presentation, aspect ratio will be preserved
 					// when the presentation is scaled to fit different resolutions. Can be
@@ -269,6 +274,7 @@ addView({
 
 	},
 	stop: function() {
+		Reveal.removeEventListeners();
 	}
 });
 
