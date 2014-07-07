@@ -1,4 +1,4 @@
-/*
+﻿/*
  Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
  For licensing, see LICENSE.html or http://ckeditor.com/license
 */
@@ -71,4 +71,4 @@ b.getContentElement("OptionsTab","IgnoreWordsNumbers");c.IgnoreMixedCaseWords=b.
 !1);!parseInt(d.IgnoreWordsNumbers,10)?c.IgnoreWordsNumbers.setValue("",!1):c.IgnoreWordsNumbers.setValue("checked",!1);!parseInt(d.IgnoreMixedCaseWords,10)?c.IgnoreMixedCaseWords.setValue("",!1):c.IgnoreMixedCaseWords.setValue("checked",!1);!parseInt(d.IgnoreDomainNames,10)?c.IgnoreDomainNames.setValue("",!1):c.IgnoreDomainNames.setValue("checked",!1);d.IgnoreAllCapsWords=!c.IgnoreAllCapsWords.getValue()?0:1;d.IgnoreWordsNumbers=!c.IgnoreWordsNumbers.getValue()?0:1;d.IgnoreMixedCaseWords=!c.IgnoreMixedCaseWords.getValue()?
 0:1;d.IgnoreDomainNames=!c.IgnoreDomainNames.getValue()?0:1;c.IgnoreAllCapsWords.getElement().$.lastChild.innerHTML=a.LocalizationComing.IgnoreAllCapsWords;c.IgnoreWordsNumbers.getElement().$.lastChild.innerHTML=a.LocalizationComing.IgnoreWordsWithNumbers;c.IgnoreMixedCaseWords.getElement().$.lastChild.innerHTML=a.LocalizationComing.IgnoreMixedCaseWords;c.IgnoreDomainNames.getElement().$.lastChild.innerHTML=a.LocalizationComing.IgnoreDomainNames},onHide:function(){e.postMessage.unbindHandler(i);if(p)try{p.focus()}catch(a){}}}});
 CKEDITOR.dialog.on("resize",function(b){var b=b.data,c=b.dialog,d=CKEDITOR.document.getById(a.iframeNumber+"_"+c._.currentTabId);"checkspell"==c._.name&&(a.bnr?d&&d.setSize("height",b.height-310):d&&d.setSize("height",b.height-220))});CKEDITOR.on("dialogDefinition",function(b){if("checkspell"===b.data.name){var c=b.data.definition;a.onLoadOverlay=new r({opacity:"1",background:"#fff",target:c.dialog.parts.tabs.getParent().$});a.onLoadOverlay.setEnable();c.dialog.on("cancel",function(){c.dialog.getParentEditor().config.wsc_onClose.call(this.document.getWindow().getFrame());
-a.div_overlay.setDisable();a.onLoadOverlay.setDisable();return!1},this,null,-1)}})})();   
+a.div_overlay.setDisable();a.onLoadOverlay.setDisable();return!1},this,null,-1)}})})();

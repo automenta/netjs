@@ -1,4 +1,4 @@
-/*
+﻿/*
  Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
  For licensing, see LICENSE.md or http://ckeditor.com/license
 */
@@ -23,4 +23,4 @@ label:b.tabIndex,id:"advTabIndex",requiredContent:"a[tabindex]",width:"80px",max
 "default":"",id:"advCSSClasses",setup:h,commit:j},{type:"text",label:b.charset,requiredContent:"a[charset]","default":"",id:"advCharset",setup:h,commit:j}]},{type:"hbox",widths:["45%","55%"],children:[{type:"text",label:b.rel,requiredContent:"a[rel]","default":"",id:"advRel",setup:h,commit:j},{type:"text",label:b.styles,requiredContent:"a{cke-xyz}","default":"",id:"advStyles",validate:CKEDITOR.dialog.validate.inlineStyle(g.lang.common.invalidInlineStyle),setup:h,commit:j}]}]}]}],onShow:function(){var a=
 this.getParentEditor(),b=a.getSelection(),c=null;(c=l.getSelectedLink(a))&&c.hasAttribute("href")?b.getSelectedElement()||b.selectElement(c):c=null;a=l.parseLinkAttributes(a,c);this._.selectedElement=c;this.setupContent(a)},onOk:function(){var a={};this.commitContent(a);var b=g.getSelection(),c=l.getLinkAttributes(g,a);if(this._.selectedElement){var e=this._.selectedElement,d=e.data("cke-saved-href"),f=e.getHtml();e.setAttributes(c.set);e.removeAttributes(c.removed);if(d==f||"email"==a.type&&-1!=
 f.indexOf("@"))e.setHtml("email"==a.type?a.email.address:c.set["data-cke-saved-href"]),b.selectElement(e);delete this._.selectedElement}else b=b.getRanges()[0],b.collapsed&&(a=new CKEDITOR.dom.text("email"==a.type?a.email.address:c.set["data-cke-saved-href"],g.document),b.insertNode(a),b.selectNodeContents(a)),c=new CKEDITOR.style({element:"a",attributes:c.set}),c.type=CKEDITOR.STYLE_INLINE,c.applyToRange(b,g),b.select()},onLoad:function(){g.config.linkShowAdvancedTab||this.hidePage("advanced");g.config.linkShowTargetTab||
-this.hidePage("target")},onFocus:function(){var a=this.getContentElement("info","linkType");a&&"url"==a.getValue()&&(a=this.getContentElement("info","url"),a.select())}}})})(); c 
+this.hidePage("target")},onFocus:function(){var a=this.getContentElement("info","linkType");a&&"url"==a.getValue()&&(a=this.getContentElement("info","url"),a.select())}}})})();

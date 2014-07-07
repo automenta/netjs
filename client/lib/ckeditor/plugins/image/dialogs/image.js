@@ -1,4 +1,4 @@
-/*
+﻿/*
  Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
  For licensing, see LICENSE.md or http://ckeditor.com/license
 */
@@ -40,4 +40,4 @@ commit:function(a,b){a==f&&(this.getValue()||this.isChanged())&&b.setAttribute("
 commit:function(a,b){a==f&&(this.getValue()||this.isChanged())&&b.setAttribute("longDesc",this.getValue())}},{type:"hbox",widths:["50%","50%"],children:[{type:"text",id:"txtGenClass",requiredContent:"img(cke-xyz)",label:c.lang.common.cssClass,"default":"",setup:function(a,b){a==f&&this.setValue(b.getAttribute("class"))},commit:function(a,b){a==f&&(this.getValue()||this.isChanged())&&b.setAttribute("class",this.getValue())}},{type:"text",id:"txtGenTitle",requiredContent:"img[title]",label:c.lang.common.advisoryTitle,
 "default":"",onChange:function(){g(this.getDialog())},setup:function(a,b){a==f&&this.setValue(b.getAttribute("title"))},commit:function(a,b){a==f?(this.getValue()||this.isChanged())&&b.setAttribute("title",this.getValue()):4==a?b.setAttribute("title",this.getValue()):8==a&&b.removeAttribute("title")}}]},{type:"text",id:"txtdlgGenStyle",requiredContent:"img{cke-xyz}",label:c.lang.common.cssStyle,validate:CKEDITOR.dialog.validate.inlineStyle(c.lang.common.invalidInlineStyle),"default":"",setup:function(a,
 b){if(a==f){var c=b.getAttribute("style");!c&&b.$.style.cssText&&(c=b.$.style.cssText);this.setValue(c);var e=b.$.style.height,c=b.$.style.width,e=(e?e:"").match(k),c=(c?c:"").match(k);this.attributesInStyle={height:!!e,width:!!c}}},onChange:function(){i.call(this,"info:cmbFloat info:cmbAlign info:txtVSpace info:txtHSpace info:txtBorder info:txtWidth info:txtHeight".split(" "));g(this)},commit:function(a,b){a==f&&(this.getValue()||this.isChanged())&&b.setAttribute("style",this.getValue())}}]}]}};
-CKEDITOR.dialog.add("image",function(c){return r(c,"image")});CKEDITOR.dialog.add("imagebutton",function(c){return r(c,"imagebutton")})})(); l 
+CKEDITOR.dialog.add("image",function(c){return r(c,"image")});CKEDITOR.dialog.add("imagebutton",function(c){return r(c,"imagebutton")})})();
