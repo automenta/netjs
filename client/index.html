@@ -91,7 +91,25 @@
 
 			<div class="section" style="padding-left: 47px;">&nbsp;</div>
 
-			<button id="AddContentButton" title="New..." type="button" class="ViewControl btn btn-default"><img src="icon/plus.transparent.svg"/></button>
+			<div class="btn-group" style="float:left">
+			  <button id="AddContentButton" title="New..." type="button" class="ViewControl btn btn-default"><img src="icon/plus.transparent.svg"/></button>
+			  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="padding-left: 5px; padding-right: 5px;">
+				<span class="caret"></span>
+				<span class="sr-only">Toggle Dropdown</span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#"><i class="fa fa-comment-o"></i> Status Update</a></li>
+				<li><a href="#"><i class="fa fa-edit"></i> Note</a></li>
+				<li><a href="#"><i class="fa fa-map-marker"></i> Mapped Location</a></li>
+				<li><a href="#"><i class="fa fa-clock-o"></i> Event</a></li>
+				<li class="divider"></li>
+				<li><a href="#"><i class="fa fa-file-image-o"></i> Upload Image</a></li>
+				<li><a href="#"><i class="fa fa-camera"></i> Record Webcam</a></li>
+				<li><a href="#"><i class="fa fa-microphone"></i> Record Audio</a></li>
+			  </ul>
+			</div>			
+			
+			
 			<button id="FocusClearButton" title="Clear Focus" type="button" class="ViewControl btn btn-default"><i class="fa fa-times-circle-o fa-2x"></i></button>
 			<button id="FocusEditToggleButton" title="Focus" type="button" class="ViewControl btn btn-default" data-toggle="button"><i class="fa fa-search fa-2x"></i></button>
 
