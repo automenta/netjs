@@ -39,10 +39,15 @@ module.exports = function(options) {
 
 	if (!options.db) {
 		options.db = { type: 'levelup', backend: 'memdown' };
+	}
 
+
+
+	if (options.backend == 'memdown') {
 		if (options.web)
 			console.warn('Using in-memory \'LevelUp/MemDown\' database; activity will not be saved');
 	}
+
 
 	var DB = require('../util/db.' + options.db.type + '.js');
 
@@ -881,10 +886,12 @@ module.exports = function(options) {
 		});*/
 
 		lockit.on('logout', function(user, res) {
+			/*console.log('logout');
 			res.clearCookie('account');
 			res.clearCookie('clientID');
 			res.clearCookie('otherSelves');
 			res.redirect('/');
+			console.log('logout done');*/
 		});
 
 
