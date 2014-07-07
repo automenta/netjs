@@ -22,6 +22,8 @@ if (typeof window != 'undefined') {
 
 module.exports = DB = function (collection, dbOptions) {
 
+	var revisions = false;
+
 	if (dbOptions === undefined) dbOptions = {};
 
 	var db = new PouchDB(collection, dbOptions);
@@ -73,9 +75,19 @@ module.exports = DB = function (collection, dbOptions) {
 		},
 
 
+		setAll: function(values, done) {
+			if (revisions) {
+				console.error('with revisions=true, setAll() may not work');
+			}
+
+			db.bulkDocs(values, done);
+		},
+
 		set: function (id, value, done, compareFilter) {
+			var opts = { _id: id };
+
 			function insert() {
-				db.put(value, id)
+				db.put(value, opts)
 					.then(function (response) {
 						if (done)
 							done(null, value);
@@ -86,20 +98,28 @@ module.exports = DB = function (collection, dbOptions) {
 					});
 			}
 
-			db.get(id).then(function (existing) {
-				if (existing) {
-					if (compareFilter) {
-						value = compareFilter(existing, value);
-						if (value == null) {
-							return done(null, existing);
+			if (!revisions) {
+				//if not revisions, no need to check existing document
+				opts.new_edits = false;
+				insert();
+				return;
+			}
+			else {
+				db.get(id).then(function (existing) {
+					if (existing) {
+						if (compareFilter) {
+							value = compareFilter(existing, value);
+							if (value == null) {
+								return done(null, existing);
+							}
 						}
+						value._rev = existing._rev;
 					}
-					value._rev = existing._rev;
-				}
-				insert();
-			}).catch(function (err) {
-				insert();
-			});
+					insert();
+				}).catch(function (err) {
+					insert();
+				});
+			}
 		},
 
 		getAllByFieldValue: function (field, value, callback) {

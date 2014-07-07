@@ -838,6 +838,8 @@ var Ontology = function(db, tagInclude, target) {
 			x = _.clone(x);
 		}
 
+		x._id = x.id;
+
 
 		if (callback)
 			x._callback = callback;
@@ -861,11 +863,32 @@ var Ontology = function(db, tagInclude, target) {
 				return false;
 			}
 
-			var x = qsetPending.pop();
-
-			upsert(x);
+			if (that.db.setAll) {
+				var remaining = qsetPending;
+				qsetPending = [];
+				upsertAll(remaining);
+			}
+			else {
+				var x = qsetPending.pop();
+				upsert(x);
+			}
 
 			return true;
+		}
+
+
+
+		function upsertAll(a) {
+
+			var callbacks = _.compact(_.pluck(a, '_callback'));
+
+			function n(err, result) {
+				next(err, result);
+				for (var i = 0; i < callbacks.length; i++)
+					callbacks[i](err, result);
+			}
+
+			that.db.setAll(a, n);
 		}
 
 		function upsert(x) {
@@ -874,11 +897,11 @@ var Ontology = function(db, tagInclude, target) {
 			var nextCallback = x._callback||function(){};
 			delete x._callback;
 
-
 			function n(err, result) {
 				next(err, result);
 				nextCallback(err, result);
 			}
+
 
 			that.db.set(x.id, x, n, function(existing, value) {
 

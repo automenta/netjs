@@ -884,15 +884,10 @@ module.exports = function(options) {
 
 		/*lockit.on('login', function(user, res, target) {
 		});*/
-
+		/*
 		lockit.on('logout', function(user, res) {
-			/*console.log('logout');
-			res.clearCookie('account');
-			res.clearCookie('clientID');
-			res.clearCookie('otherSelves');
-			res.redirect('/');
-			console.log('logout done');*/
 		});
+		*/
 
 
 		express.get('/', function(req, res) {
