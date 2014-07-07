@@ -2125,9 +2125,20 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 
 	require('./default.js').plugin($N).start();
 
-    
+
+	var ready = false;
+
+	$N.ready = function(f) {
+		if (!ready)
+			$N.once('ready', f);
+		else {
+			f();
+		}
+	}
+
     loadState(function() {
         //first load existing users
+
         getObjectsByTag('User', function(to) {    
             $N.add(to);    
         }, function() {
@@ -2142,8 +2153,9 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 					$N.emit("security:info", "No admin users specified; All users granted admin priveleges");
 				}				
 
-                
+                ready = true;
 				$N.emit('ready');
+
 
 				
                 if (options.start)

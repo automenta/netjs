@@ -26,10 +26,15 @@ describe('web.js', function () {
 
 		it('get and set object', function (done) {
 
-			$N.once('ready', function () {
+			$N.ready(function () {
+
 				$N.add(new $N.nobject("x"), function (err, result) {
+
 					if (err) {
 						console.error(err);
+						assert(false, err);
+						done();
+						return;
 					}
 
 					assert(err == null);
@@ -37,8 +42,8 @@ describe('web.js', function () {
 					$N.get("x", function (err, x) {
 						if (err) {
 							assert(false, err);
-						} else
-							done();
+						}
+						done();
 					});
 
 				});
@@ -48,45 +53,47 @@ describe('web.js', function () {
 		});
 
 		it('publish with filter', function (done) {
-			var exampleFilter = function (input) {
-				return Q.Promise(function (resolve, reject, notify) {
-					resolve(input + input);
-				});
-			}
+			$N.ready(function () {
 
-			/*
-			function syncFilter(f) {
-				return function (input) {
+				var exampleFilter = function (input) {
 					return Q.Promise(function (resolve, reject, notify) {
-						resolve(f(input));
+						resolve(input + input);
 					});
-				};
-			}
+				}
 
-			$N.addFilter('pub', syncFilter(function (f) {
-				f.name = f.name + f.name;
-				return f;
-			}));*/
-			$N.addFilterSync('pub', function (f) {
-				f.name = f.name + f.name;
-				return f;
-			});
+				/*
+				function syncFilter(f) {
+					return function (input) {
+						return Q.Promise(function (resolve, reject, notify) {
+							resolve(f(input));
+						});
+					};
+				}
 
-			var y = new $N.nobject("y");
-			y.setName('y');
-			$N.pub(y, function() {
-
-				$N.get("y", function (err, y) {
-					if (err) {
-						assert(false, err);
-					} else {
-						assert(y.name === 'yy');
-					}
-					done();
+				$N.addFilter('pub', syncFilter(function (f) {
+					f.name = f.name + f.name;
+					return f;
+				}));*/
+				$N.addFilterSync('pub', function (f) {
+					f.name = f.name + f.name;
+					return f;
 				});
 
-			});
+				var y = new $N.nobject("y");
+				y.setName('y');
+				$N.pub(y, function() {
 
+					$N.get("y", function (err, y) {
+						if (err) {
+							assert(false, err);
+						} else {
+							assert(y.name === 'yy');
+						}
+						done();
+					});
+
+				});
+			});
 
 		});
 
