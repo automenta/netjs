@@ -1351,6 +1351,7 @@ div.objectView .metadataReplyButton {
 }
 .ui-dialog .ui-dialog-content {
     padding: 4px !important;
+	width: auto !important;	
 }
 .ui-widget {
     font-family: inherit !important;
@@ -2407,9 +2408,10 @@ svg {
     margin: 0;
     padding: 0;
 }
+
+
 .htmlview {
     overflow: auto;
-    max-height: 12em;
     overflow: auto;
     resize: vertical;
     height: auto;

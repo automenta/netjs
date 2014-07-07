@@ -337,7 +337,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         if (editable) {
             
             if ((x.name) || (hideWidgets!==true)) {
-                nameInput = $('<input/>').attr('type', 'text').attr('placeholder', 'Title').attr('x-webkit-speech', 'x-webkit-speech').addClass('nameInput').addClass('nameInputWide');
+                nameInput = $('<input/>').attr('type', 'text').attr('placeholder', 'Title').attr('x-webkit-speech', 'x-webkit-speech').addClass('form-control input-lg nameInput nameInputWide');
                 nameInput.val(x.name === true ? '' : x.name);
                 widgetsToAdd.push(nameInput);
                 if (onNameEdit) {
@@ -363,8 +363,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         // https://github.com/xoxco/jQuery-Tags-Input#options
                         defaultText: 'Tag..',
                         minChars: 2,
-                        width: '15%',
-                        height: '1em',
+                        width: 'auto',
+                        height: 'auto',
                         onAddTag: function(t) {
                             //addedTags[t] = true;  
                             update(objAddTag(getEditedFocus(), t));
@@ -393,7 +393,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                                         return x;
                                     });
                                     response(results);
-                              }
+                              },
+							create: function() {
+								tagInput.next().find('input').addClass('form-control').css('border', '1px solid gray');
+								tagInput.next().css('border', '0');
+								tagInput.next().find().css('border', '0');
+							}
+							
                         }
                         /*onChange: function(elem, elem_tags) {
                                 var languages = ['php','ruby','javascript'];
@@ -493,10 +499,10 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
 
         if ((hideWidgets !== true) && (!x.readonly)) {
-            var addButtonWrap = newDiv().addClass('tagSection').addClass('tagSectionControl');
+            var menuWrap = newDiv().addClass('nav');
 
 
-            var addButtons = newEle('span').appendTo(addButtonWrap);
+            var addButtons = newEle('span').appendTo(menuWrap);
 
             var whatButton = $('<button title="What?"><img src="/icon/rrze/information.png"></button>').click(function() {
 				var p;
@@ -678,14 +684,15 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });
 
             addButtons.append(whatButton, howButton, whenButton, whereButton, whoButton, drawButton, webcamButton, uploadButton);
-
-            widgetsToAdd.push(addButtonWrap);
+ 			addButtons.find('button').addClass("btn btn-default");
+			
+            D.prepend(menuWrap);
 
 
 
             var scopeSelect = null;
             if (!objHasTag(getEditedFocus(), 'User')) {
-                scopeSelect = $('<select style="float:right"/>').append(
+                scopeSelect = $('<select class="form-control" style="width:auto;float:right"/>').append(
                         //store on server but only for me
                         '<option value="2">Private</option>',
                         //store on server but share with who i follow
@@ -706,7 +713,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 }
             }
 
-            var saveButton = $('<button style="float:right"><b>Save</b></button>').click(function() {
+            var saveButton = $('<button class="btn btn-primary" style="float:right"><b>Save</b></button>').click(function() {
                 
                 var e = getEditedFocus();
                 
@@ -736,13 +743,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 D.parent().dialog('close');
             });
 
-            addButtonWrap.append(saveButton);
-
-            if (scopeSelect)
-                addButtonWrap.append(scopeSelect);
-
-			if (tagInput)
-				addButtonWrap.append(tagInput);
+			var mwb = newDiv().css('float', 'right');			
+            mwb.append(saveButton);
+            if (scopeSelect)    mwb.append(scopeSelect);
+			if (tagInput)		mwb.append(tagInput);
+			
+			menuWrap.append(mwb);
 
         }
 
