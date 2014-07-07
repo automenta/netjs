@@ -902,7 +902,6 @@ var Ontology = function(db, tagInclude, target) {
 				nextCallback(err, result);
 			}
 
-
 			that.db.set(x.id, x, n, function(existing, value) {
 
 

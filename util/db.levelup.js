@@ -36,6 +36,7 @@ module.exports = DB = function (collection, dbOptions) {
 		: levelup(collection,dbOptions);
 
 
+
 	var db = levelQuery(rawDB);
 	db.query.use(jsonqueryEngine());
 
@@ -117,6 +118,7 @@ module.exports = DB = function (collection, dbOptions) {
 			var query = { };
 			query[field] = value;
 
+
 			var results =  [];
  		    db.query(query)
 				.on('data', function(d) {
@@ -138,7 +140,7 @@ module.exports = DB = function (collection, dbOptions) {
 				.on('data', function(d) {
 					results.push(d);
 				})
-				.on('stats', function (stats) {
+				.on('end', function () {
 					callback(null, results);
 				});
 		},
@@ -193,7 +195,7 @@ module.exports = DB = function (collection, dbOptions) {
 		getAll: function (callback) {
 			var result = [];
 
-			rawdb.createValueStream()
+			rawDB.createValueStream()
 			  .on('data', function (data) {
 				  result.push(data);
 			  })

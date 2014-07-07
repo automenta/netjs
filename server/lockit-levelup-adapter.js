@@ -21,10 +21,7 @@ var Adapter = module.exports = function (config, dboptions) {
 
 	this.config = config;
 
-	if (dboptions.backend == 'memdown')
-		this.db = levelup({db:require('memdown'), valueEncoding: 'json'});
-	else
-		this.db = levelup("users", { valueEncoding: 'json'});
+	this.db = levelup("users", { backend:dboptions.backend, valueEncoding: 'json'});
 };
 
 
