@@ -504,7 +504,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             var addButtons = newEle('span').appendTo(menuWrap);
 
-            var whatButton = $('<button title="What?"><img src="/icon/rrze/information.png"></button>').click(function() {
+            var whatButton = $('<button title="What?"><i class="fa fa-plus-square"/></button>').click(function() {
 				var p;
 				var taggerOptions;
 				if (configuration.device == configuration.MOBILE) {
@@ -578,31 +578,31 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 				
             });
 
-            var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><img src="/icon/rrze/quote.png"></button>').click(function() {
+            var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><i class="fa fa-edit"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'html', ''));
             });
 
-            var whenButton = $('<button title="When?" id="AddWhenButton" ><img src="/icon/clock.png"></button>').click(function() {
+            var whenButton = $('<button title="When?" id="AddWhenButton" ><i class="fa fa-clock-o"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'timepoint', ''));
             });;
 
-            var whereButton = $('<button title="Where?"><img src="/icon/rrze/globe.png"></button>').click(function() {
+            var whereButton = $('<button title="Where?"><i class="fa fa-map-marker"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'spacepoint', {}));
             });
 
-            var whoButton = $('<button disabled title="Who?" id="AddWhoButton"><img src="/icon/rrze/user-group.png"></button>');
+            var whoButton = $('<button disabled title="Who?" id="AddWhoButton"><i class="fa fa-user"/></button>');
 
-            var drawButton = $('<button title="Draw"><img src="/icon/rrze/pen.png"/></button>').click(function() {
+            var drawButton = $('<button title="Draw"><i class="fa fa-pencil"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'sketch', ''));
             });
 
-            var webcamButton = $('<button title="Webcam"><img src="/icon/play.png"/></button>').click(function() {
+            var webcamButton = $('<button title="Webcam"><i class="fa fa-camera"/></button>').click(function() {
                 newWebcamWindow(function(imgURL) {
                     update(objAddValue(getEditedFocus(), 'image', imgURL));
                 });
             });
 
-            var uploadButton = $('<button title="Add Media (Upload or Link)"><img src="/icon/rrze/dial-in.png"/></button>').click(function() {
+            var uploadButton = $('<button title="Add Media (Upload or Link)"><i class="fa fa-file-picture-o"/></button>').click(function() {
 
 
                 function attachURL(url) {
