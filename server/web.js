@@ -132,6 +132,8 @@ module.exports = function(options) {
             if (err || !state) {
                 //nlog("No previous system state found");
 				$N.emit('initialize');
+				if (!options.users)
+					options.users = { };
             }
             else {
                 var now = Date.now();
@@ -507,8 +509,10 @@ module.exports = function(options) {
             return undefined;
         if (req.session) {
             var sessionID = req.session._ctx.cookies['express:sess'];            
-			if (req.session.name)
-            	return req.session.name;
+			if (req.session.name) {
+            	var key = req.session.name;
+				return key;
+			}
         }
 
         return undefined;
@@ -547,11 +551,14 @@ module.exports = function(options) {
         }
 
         //otherwise create an initial user for that key
+
+		//TODO do this on login
         if (!cid) {
             cid = util.uuid();
             options.users[key] = [cid];
             saveState();
         }
+
         
         return cid;
     }
@@ -899,6 +906,7 @@ module.exports = function(options) {
 			res.cookie('clientID', getCurrentClientID(account));
 			res.cookie('otherSelves', possibleClients.join(','));
 
+			console.log('/', account, getCurrentClientID(account), options.users );
 			res.sendfile('./client/index.html');
 		});
 

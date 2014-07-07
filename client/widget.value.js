@@ -226,13 +226,16 @@ newTagValueWidget.html = function(x, index, v, prop, editable, d, events) {
             dd = addReadOnly();
         }
         else {
-            dd = newDiv().attr('contenteditable','true').appendTo(d);
+            //dd = newDiv().attr('contenteditable','true').appendTo(d);
+			dd = newEle('textarea').ckeditor().appendTo(d);
+
             if (v.value)
                 dd.html(v.value);
         }
 
         events.onSave.push(function(y) {
-            objAddValue(y, prop.id, dd.html(), v.strength);
+            //objAddValue(y, prop.id, dd.html(), v.strength);
+			objAddValue(y, prop.id, dd.val(), v.strength);
         });        
     }
     
