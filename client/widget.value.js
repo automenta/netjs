@@ -25,6 +25,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     var d = newDiv().addClass('tagSectionItem').appendTo(e);
     applyTagStrengthClass(e, strength);
 
+	/*
     if (editable) {
         if (configuration.device !== configuration.MOBILE) {
             d.hover(function() {
@@ -34,6 +35,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
             });
         }
     }
+	*/
 
     var tagLabel = newEle('span', true);
     tagLabel.innerHTML = tag;
@@ -453,10 +455,10 @@ newTagValueWidget.tag = function(x, index, v, prop, editable, d, events) {
              tagLabel.append(pb);*/
 
 
-            var pdw = newDiv().addClass('tagSuggestionsWrap').appendTo(d);
-            var pd = newDiv().addClass('tagSuggestions').appendTo(pdw);
+            var pd = newDiv().addClass('tagSuggestions');
 
             var pp = TAG.property;
+			var count = 0;
             _.each(pp, function(PP, ppv) {
                 //TODO dont include if max present reached
                 if (PP.max)
@@ -474,7 +476,12 @@ newTagValueWidget.tag = function(x, index, v, prop, editable, d, events) {
                 });
 
                 pd.append(appv, '&nbsp;');
+				count++;
             });
+			if (count > 0) {
+				pd.appendTo(newDiv().addClass('tagSuggestionsWrap well well-sm').appendTo(d));
+			}
+			
 
         }
 

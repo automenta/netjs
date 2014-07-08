@@ -178,6 +178,7 @@ div.olMapViewport {
     /* may not be necessary anymore since adding .TagButtonIcon */
     height: 1em;
     margin-right: 0.25em;
+	margin-bottom: 5px;
 }
 .tagLabelProperties {
     margin-left: 2em;
@@ -210,10 +211,7 @@ div.olMapViewport {
     font-size: 70%;    
 }
 
-/*.tagSectionHover {
-    border: 1px solid blue;
-    background-color: rgba(255,255,255,0.1);
-}*/
+
 
 .createSubObjectButton {
     font-size: 80%;
@@ -278,6 +276,9 @@ div.olMapViewport {
 }
 .tagSectionEditable {
 }
+.tagSectionEditable .well {
+	margin-bottom: 5px !important;
+}
 
 .ObjectEditDiv .tagButtons button {
     border: 0;
@@ -332,6 +333,10 @@ div.olMapViewport {
     left: 0 !important;
 }
 
+/*.tagSectionHover {
+    border: 1px solid blue;
+    background-color: rgba(255,255,255,0.1);
+}*/
 .tagSectionHovered {
     background-color: rgba(255, 255, 255, 0.8);
 }
@@ -567,12 +572,6 @@ div.olMapViewport {
 }
 
 
-.tagSuggestionsWrap {
-    overflow: auto;
-    max-width: 100%;
-    margin-left: 1em;
-    clear: both;
-}
 
 div.tagsinput {
     padding-bottom: 0 !important;
@@ -587,21 +586,25 @@ div.tagsinput input {
 
 
 .mainTagSuggestions {
-    width: 98% !important;
+    width: 100% !important;
     float: left !important;
     clear: none !important;
     margin: 0 !important;
     margin-bottom: 8px;
 }
 
+
+.tagSuggestionsWrap {
+    overflow: auto;
+    max-width: 100%;
+    margin: 5px;
+    clear: both;
+}
 .tagSuggestions {
     margin: 0em;
-    margin-top: 5px;
-    margin-bottom: 5px;
     overflow: auto;
     display: table;
     table-layout: fixed;
-    opacity:0.85;
 }
 .tagSuggestions a {
     text-decoration: none;
