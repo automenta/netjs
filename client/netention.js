@@ -133,7 +133,7 @@ function netention(f) {
                 targetID = target.id;
             }
 
-            if (configuration.connection == 'local') {
+            if (configuration.connection == 'static') {
                 var os = $N.get('otherSelves');
                 os.push(targetID);
 
@@ -421,7 +421,7 @@ function netention(f) {
 
             //var X = _.clone($N.object[id]);
             
-            if (configuration.connection !== 'local') {
+            if (configuration.connection !== 'static') {
                 if ((!this.socket) && (!localOnly)) {
                     notify({
                         title: 'Unable to delete: Not connected, must login.'
@@ -749,7 +749,7 @@ function netention(f) {
         },
         pub: function(object, onErr, onSuccess, suppressChange) {            
                                     
-            if (configuration.connection == 'local') {
+            if (configuration.connection == 'static') {
                 $N.notice(object);
                 if (onSuccess)
                     onSuccess();
@@ -852,7 +852,7 @@ function netention(f) {
 
         },
         saveAll: function() {
-            if (configuration.connection == 'local') {
+            if (configuration.connection == 'static') {
                 localStorage.self = JSON.stringify($N.attributes);
                 localStorage.obj = JSON.stringify($N.attention);
             }
@@ -860,7 +860,7 @@ function netention(f) {
         //TODO rename to 'load initial objects' or something
         getLatestObjects: function(num, onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
-            if (configuration.connection == 'local') {
+            if (configuration.connection == 'static') {
                 $N.loadAll();
                 onFinished();
                 return;
@@ -873,7 +873,7 @@ function netention(f) {
         },
         getUserObjects: function(onFinished) {
             //$.getJSON('/object/tag/User/json', function(users) {
-            if (configuration.connection == 'local') {
+            if (configuration.connection == 'static') {
                 $N.loadAll();
                 onFinished();
                 return;
@@ -885,7 +885,7 @@ function netention(f) {
             });
         },
         getAuthorObjects: function(userID, onFinished) {
-            if (configuration.connection == 'local') {
+            if (configuration.connection == 'static') {
                 onFinished();
                 return;
             }

@@ -2277,7 +2277,7 @@ svg {
 .Share .ShareSidebar {
     width: 20%;
     float: left;
-    position: fixed;
+    position: relative;
     max-height:90%;
     overflow:auto;
     left: 0;
