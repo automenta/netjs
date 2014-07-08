@@ -2,62 +2,140 @@ exports.options = {
     "id": null,
     "name": "Netention",
     "description": "http://netention.org",
-    "host": "localhost",
-    "port": "8080",
-    
     
     "memoryUpdateIntervalMS": 10 * 60 * 1000 /* 10 minutes */,
-    "httpCompress": false /* enable this on production servers, but disable if local */,
+
+	web: {
+		"host": "localhost",
+		"port": "8080",
+        "connection": "websocket", //'websocket' or 'static'
+		"httpCompress": false,
+		"webrtc": true, //webrtc server
+		"password": ""  //HTTP simple authentication; leave blank to deactivate
+	},	    
     
-    "password": "",
+	
+	/*
+	//E-mail verification needs an e-mail account to mail from
+    "email": {
+        service: 'Gmail',
+        auth: {
+          user: '___@gmail.com',
+          pass: ''
+        }
+    },
+	*/
+
+
     
+	
+	//LevelUp/LevelDown 
+	//	status: working	
+	db: {
+		type: 'levelup'
+	},
+	
+	
+	
+	/*
+	//LevelUp/MemDown - in-memory storage (activity is not saved)
+	//	status: working
+	db: null,
+	*/
+	
+	/*
+	//PouchDB - runs on LevelUp but adds revisions and other CouchDB features
+	//	status: working
+	db: {
+		type: 'pouch',
+
+		//optional pouchdb web server (w/ Fauxton management GUI)
+		"web": {
+			port: 8081
+		},
+	},
+	*/
+	
+	
+	/*
+	//redis - doesnt work yet
+	db: {
+		type: 'levelup',
+		backend: 'redisdown',
+		require: 'redis' //hiredis is native binding to redis
+	},
+	*/
+	
+	
+	/*
+	//rocksdb
+	db: {
+		type: 'levelup',
+		backend: 'level-rocksdb'
+	},
+	*/
+	
+	
+	//lmdb
+	//	status: working
+	/*
+	db: {
+		type: 'levelup',
+		backend: 'lmdb'
+		//https://github.com/rvagg/lmdb#options
+	},    
+	*/
+	
     "plugins": {
-        "_rss.js": {},
-        "_irc.js": {}
     },
     
+	//admin=0, authenticated=1, anonymous=2, unauthenticated(public)=3
     "permissions": {
+		"view_public_object": 2,
+		
+		"create_object": 2,
+		
+		"delete_own_object": 2,
+		
+		"delete_anything": 0,
+		
+		"connect": 2,		 //3 == allow public use, 2 == require login (even if anonymous)
         "enableAnonymous": true,
+		
         "authenticate_to_configure_plugins": false,
         "authenticate_to_create_objects": false,
         "authenticate_to_delete_objects": false,
         "authenticate_to_proxy_http": false,
         "authenticate_to_create_profiles": false,
-        "anyone_to_enable_or_disable_plugin": true
+        "anyone_to_enable_or_disable_plugin": true,
     },
+	
     "client": {    
-        "connection": "websocket",
-        "webrtc": {port: 8081},
+        "autoLoginDefaultProfile": true, //should always be true
+		
+        "webrtc": true,
+        "ui": "ui.mobile.js",
+        "initialView": "wall",
 
-        "defaultAvatarIcon": "/theme/default-avatar.jpg",
+		"avatarMenuDisplayInitially": true,
+		"focusEditDisplayStartup": true,
         "favicon": null,
         "loginLogo": "/theme/login-logo.png",
-
-        "ui": "ui.mobile.js",
-        "initialView": "us",
-        "avatarMenuDisplayInitially": false,
-        
+        "defaultAvatarIcon": "/theme/default-avatar.jpg",
         "wikiStartPage": "Life",
-        
         "showPlanOnSelfPage": true,
-        "defaultTheme": "_cybernetic",
-        
-        "autoLoginDefaultProfile": true,
-        "requireIdentity": true,
+        "defaultTheme": "_bootswatch.cerulean",
         "maxStartupObjects": 8192,
-        
         "defaultMapMode2D": true,
         "mapDefaultLocation": [40.44, -80.0],
-        
         "ontologySearchIntervalMS": 1500,
-        
+        "viewlockDefault": false,
         "viewUpdateTime": [
             /* mobile: [ min update interval (ms), debounce time (ms), 1st view debounce time (ms) ]  */
-            [550, 100, 450],
+            [150, 50, 250],
             /* desktop: [ min update interval (ms), debounce time (ms) ], 1st view debounce time (ms) */
-            [150, 10, 100]
+            [0, 0, 100]
         ],
-        
         "views": [
             "us",
             "map",
@@ -70,15 +148,16 @@ exports.options = {
             "main",
             "trends",
             "time",
-            "notebook"
+            "notebook",
+			"wall",
+			"slides"
         ],
-        "newUserProperties": [],
-        
+        "newUserProperties": ["walletRipple"],
         "shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
-        "shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Human', 'Animal'],
-       
+        "shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Animal'],
         "defaultScope": 7
-    },
+	},
+	
     start: function($N) {
     }
 }

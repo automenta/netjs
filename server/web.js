@@ -925,6 +925,9 @@ module.exports = function(options) {
 				js += 'configuration.siteName=\'' + options.name + '\';\n';
 				js += 'configuration.siteDescription=\'' + options.description + '\';\n';
 				js += 'configuration.requireIdentity=' + (options.permissions.connect < 3) + ';\n';
+				js += 'configuration.connection=\'' + (options.web.connection) + '\';\n';
+				js += 'configuration.webrtc=\'' + (options.web.webrtc) + '\';\n';
+				
 				js += data;
 				res.send(js);
 			});
@@ -2094,7 +2097,7 @@ express.get('/object/latest/:num/:format', compression, function(req, res) {
 
 	}
 	
-	if (options.client && options.client.webrtc) {
+	if (options.web && options.web.webrtc) {
 		$N.once('ready', function() {
 			var path = '/peer';
 
