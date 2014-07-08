@@ -961,7 +961,7 @@ function netention(f) {
 
     if (configuration.connection == 'websocket') {
         $N.connect(null, function() {
-            f("/ontology/json", $N);
+            f("/ontology.json", $N);
         });
     } else {
         window.addEventListener("beforeunload", function(e) {
@@ -973,7 +973,7 @@ function netention(f) {
              */
         });
 
-        f("ontology.static.json", $N);
+        f("ontology.json", $N);
     }
 
     later(function() {
