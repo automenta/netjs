@@ -903,6 +903,10 @@ module.exports = function(options) {
 		});
 		*/
 
+		
+		var ejs = require('ejs');
+		var indexTemplateSrc = fs.readFileSync('client/index.html', 'utf8');
+		var indexTemplate = ejs.compile(indexTemplateSrc,{});		
 
 		express.get('/', function(req, res) {
 			
@@ -916,7 +920,12 @@ module.exports = function(options) {
 				res.cookie('otherSelves', possibleClients.join(','));
 			}
 			
-			res.sendfile('./client/index.html');
+			//res.sendfile('./client/index.html');
+			res.end(indexTemplate({
+				title: options.name,
+				description: options.description,
+				allowSearchEngineIndexing: false
+			}));
 		});
 
 		express.get('/client_configuration.js', function(req, res) {
@@ -1906,6 +1915,7 @@ module.exports = function(options) {
 					});
 
 					socket.on('disconnect', function() {
+						$N.emit('client:disconnect', socket.clientID);
 						updateUserConnection(socket.clientID, null, socket);
 					});
 
@@ -2132,7 +2142,10 @@ module.exports = function(options) {
 					if (v.webRTC)
 						v.webRTC = _.without(v.webRTC, id);					
 				});
-				broadcastRoster();
+				
+				//TODO emit an event instead of calling this function
+				if ($N.broadcastRoster)
+					$N.broadcastRoster();
 			});
 			nlog('WebRTC server: http://' + options.web.host + ':' + options.web.port + '' + path);
 		});

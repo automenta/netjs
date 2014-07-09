@@ -20,19 +20,6 @@ cd node-v0.10.24/
 sudo npm -g install always
 ```
 
-###MongoDB
-http://mongodb.org
-
-These packages facilitate the development process:
-*   git
-*   build-essential (includes GCC/G++)
-*   libreoffice (for viewing & editing included documents, spreadsheets, & presentations in doc/ folder)
-
-Install them with:
-```
-sudo apt-get install build-essential git mongodb
-```
-
 Instructions
 ------------
 
@@ -45,6 +32,10 @@ npm i http://github.com/automenta/netjs/archive/master.tar.gz
 or...
 ```
 git clone https://github.com/automenta/netjs.git ; cd netjs ; npm install
+```
+or for a fast, small copy without version history:
+```
+git clone --depth 1 https://github.com/automenta/netjs.git ; cd netjs ; npm install
 ```
 
 ###The following commands run from the *directory where Netention is installed* (ex: 'netjs')

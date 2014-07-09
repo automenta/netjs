@@ -79,28 +79,45 @@ module.exports = DB = function (collection, dbOptions) {
 			if (revisions) {
 				console.error('with revisions=true, setAll() may not work');
 			}
+			
+			console.log('--seta;;',values);				
 
 			db.bulkDocs(values, done);
 		},
 
 		set: function (id, value, done, compareFilter) {
-			var opts = { _id: id };
+			var opts = { };
+			value._id = id;
 
 			function insert() {
-				db.put(value, opts)
+				opts.docs = [value];
+				
+				db.bulkDocs(opts, done);				
+				
+				/*
+				db.put(value, opts, function(err, result) {
+					console.log('put', err, result, value, opts);
+					done(err, result);
+				});
+				*/
+				/*
 					.then(function (response) {
+						
 						if (done)
 							done(null, value);
 					})
 					.catch(function (err) {
+						console.log('not inserted', err, value, opts);
+						
 						if (done)
 							done(err, null);
 					});
+				*/
 			}
 
 			if (!revisions) {
 				//if not revisions, no need to check existing document
-				opts.new_edits = false;
+				//opts.new_edits = false;
 				insert();
 				return;
 			}

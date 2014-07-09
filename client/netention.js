@@ -125,6 +125,8 @@ function netention(f) {
             if (!target)
                 return;
             
+			console.log('Websocket connect', target);
+			
             var previousID = $N.id();
 
             var targetID = target;
@@ -138,7 +140,7 @@ function netention(f) {
                 os.push(targetID);
 
                 $N.set('clientID', targetID);
-                $N.save('otherSelves', _.unique(os));
+                $N.set('otherSelves', _.unique(os));
 
                 $N.trigger('change:attention');
                 updateBrand(); //TODO use backbone Model instead of global fucntion            
@@ -153,7 +155,7 @@ function netention(f) {
                         
                         var os = $N.get('otherSelves');
                         os.push(nextID);
-                        $N.save('otherSelves', _.unique(os));
+                        $N.set('otherSelves', _.unique(os));
 
                         $N.clear();
                         
@@ -181,6 +183,8 @@ function netention(f) {
             }
         },
         connect: function(targetID, whenConnected) {
+			console.log('Websocket start');
+			
             var originalTargetID = targetID;
             var suppliedObject = null;
             if (targetID) {
@@ -202,7 +206,7 @@ function netention(f) {
                     }
                 }
             } else {
-                $N.save('clientID', targetID);
+                $N.set('clientID', targetID);
             }
 
             function reconnect() {
@@ -614,10 +618,10 @@ function netention(f) {
         focus: function() {
             return this.get('focus');
         },
-        notice: function(x, suppressChange) {
+        notice: function(x, suppressChange, noSave) {
             
             if (!Array.isArray(x)) {
-                return $N.notice([x]);
+                return $N.notice([x], suppressChange, noSave);
             }
             
             var that = this;
@@ -662,8 +666,8 @@ function netention(f) {
                         }
                     }
                 }
-                
-                $N.add(y);
+
+                $N.add(y, undefined, noSave);
 
                 function objTagObjectToTag(x) {
                     var p = {};
@@ -830,41 +834,32 @@ function netention(f) {
                 withResults(attention);
             });
         },
-        save: function(key, value) {
+        /*save: function(key, value) {
             $N.set(key, value);
             localStorage[key] = JSON.stringify(value);
-        },
+        },*/
+		
         loadAll: function() {
-            var loadedSelf = localStorage['self'] || "{ }";
-            var loadedAttention = localStorage['obj'] || "{ }";
-            if (loadedSelf) {
-                _.extend($N.attributes, JSON.parse(loadedSelf));
-                $N.attention = JSON.parse(loadedAttention);
-            } else {
-            }
-			
+
 			$N.db.getAll(function(err, objects) {
 				if (err) {
 					console.error('loadAll: ' , err);
 					return;
-				}				
-				$N.notice(objects);
+				}			
+				console.log('Loaded ', objects.length, 'objects from local browser');
+				$N.notice(objects, false, true);
 			});
 
         },
+		
         saveAll: function() {
-            if (configuration.connection == 'static') {
-                localStorage.self = JSON.stringify($N.attributes);
-                localStorage.obj = JSON.stringify($N.attention);
-            }
+
         },
+		
         //TODO rename to 'load initial objects' or something
         getLatestObjects: function(num, onFinished) {
-            //$.getJSON('/object/tag/User/json', function(users) {
             if (configuration.connection == 'static') {
-                $N.loadAll();
-                onFinished();
-                return;
+                return onFinished();
             }
 
             $.getJSON('/object/latest/' + num + '/json', function(objs) {
@@ -876,8 +871,7 @@ function netention(f) {
             //$.getJSON('/object/tag/User/json', function(users) {
             if (configuration.connection == 'static') {
                 $N.loadAll();
-                onFinished();
-                return;
+                return onFinished();
             }
 
             $.getJSON('/object/tag/User/json', function(objs) {

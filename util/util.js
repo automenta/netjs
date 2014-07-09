@@ -826,7 +826,6 @@ var Ontology = function(db, tagInclude, target) {
 	that.db = db;
 
 	var qsetPending = [];
-	var qsetWorking = false;
 	function queueSet(x, callback) {
 		if (!x.id) {
 			if (callback)
@@ -848,7 +847,7 @@ var Ontology = function(db, tagInclude, target) {
 		if (tagList.length > 0)
 			x.tagList = tagList;
 
-		if (qsetWorking) {
+		if (qsetPending.length > 0) {
 			qsetPending.push(x);
 			return;
 		}
@@ -859,7 +858,6 @@ var Ontology = function(db, tagInclude, target) {
 
 		function next() {
 			if (qsetPending.length == 0) {
-				qsetWorking = false;
 				return false;
 			}
 
@@ -887,13 +885,11 @@ var Ontology = function(db, tagInclude, target) {
 				for (var i = 0; i < callbacks.length; i++)
 					callbacks[i](err, result);
 			}
-
+			
 			that.db.setAll(a, n);
 		}
 
 		function upsert(x) {
-			qsetWorking = true;
-
 			var nextCallback = x._callback||function(){};
 			delete x._callback;
 
@@ -1023,7 +1019,7 @@ var Ontology = function(db, tagInclude, target) {
         }
     };
 
-    that.add = function(x, whenFinished) {
+    that.add = function(x, whenFinished, noSave) {
         //updates all cached fields, indexes
         //can be called repeatedly to update existing object with that ID
         if (!x)
@@ -1155,8 +1151,12 @@ var Ontology = function(db, tagInclude, target) {
             }
 
 			//add to DB
-			queueSet(x, whenFinished);
-			return;
+			
+			if (!noSave) {
+				queueSet(x, whenFinished);
+				return;
+			}
+			
         }
 		if (whenFinished)
 			whenFinished(null, x);

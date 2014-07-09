@@ -568,10 +568,12 @@ function setTheme(t) {
     if (!_.contains(_.keys(themes), t))
         t = configuration.defaultTheme;
 
+	/*
     var oldTheme = $N.get('theme');
     if (oldTheme !== t) {
         $N.save('theme', t);
     }
+	*/
 
     $('.themecss').remove();
 
@@ -896,16 +898,7 @@ $(document).ready(function() {
                     $('#LoadingSplash2').hide();
 
 
-                    var alreadyLoggedIn = false;
-                    if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {
-                        var otherSelves = _.filter($N.get("otherSelves"), function(f) {
-                            return $N.getObject(f) != null;
-                        });
-                        if (otherSelves.length >= 1) {
-                            $N.become(otherSelves[0]);
-                            alreadyLoggedIn = true;
-                        }
-                    }
+
 
 
                     var w = new Workspace();
@@ -922,21 +915,31 @@ $(document).ready(function() {
 						$N.sessionStart();
 					}
 					else {
-						if (!alreadyLoggedIn) {
-							/*if (isAnonymous()) {
-								//show profile chooser
-								openSelectProfileModal("Anonymous Profiles");
-							}
-							else*/ if ($N.myself() === undefined) {
-								if (configuration.requireIdentity)
-									openSelectProfileModal("Start a New Profile");
-								else {
-									//$N.sessionStart();
-								}
-							}
-						} 					
-
 						$('#NotificationArea').html('Connecting...');
+					
+						if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {
+							var otherSelves = _.filter($N.get("otherSelves"), function(f) {
+								return $N.getObject(f) != null;
+							});
+							if (otherSelves.length >= 1) {
+								$N.become(otherSelves[0]);
+								return;
+							}
+						}					
+					
+						if (isAnonymous()) {
+							//show profile chooser
+							openSelectProfileModal("Anonymous Profiles");
+						}
+						else if ($N.myself() === undefined) {
+							if (configuration.requireIdentity)
+								openSelectProfileModal("Start a New Profile");
+							else {
+								$N.sessionStart();
+							}
+						}
+
+
 					}
 
 
