@@ -897,7 +897,7 @@ $(document).ready(function() {
 
 
                     var alreadyLoggedIn = false;
-                    if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'local')) {
+                    if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {
                         var otherSelves = _.filter($N.get("otherSelves"), function(f) {
                             return $N.getObject(f) != null;
                         });
@@ -916,22 +916,28 @@ $(document).ready(function() {
 						openSelectProfileModal("Start a New Profile");
 					}*/
 
-                    if (!alreadyLoggedIn) {
-                        if (isAnonymous()) {
-                            //show profile chooser
-                            openSelectProfileModal("Anonymous Profiles");
-                        }
-                        else if ($N.myself() === undefined) {
-                            if (configuration.requireIdentity)
-                                openSelectProfileModal("Start a New Profile");
-                            else {
-								$N.sessionStart();
-                            }
-                        }
-                    }
+                   
 
-                    $('#NotificationArea').html('Connecting...');
+					if (configuration.connection == 'static') {
+						$N.sessionStart();
+					}
+					else {
+						if (!alreadyLoggedIn) {
+							/*if (isAnonymous()) {
+								//show profile chooser
+								openSelectProfileModal("Anonymous Profiles");
+							}
+							else*/ if ($N.myself() === undefined) {
+								if (configuration.requireIdentity)
+									openSelectProfileModal("Start a New Profile");
+								else {
+									//$N.sessionStart();
+								}
+							}
+						} 					
 
+						$('#NotificationArea').html('Connecting...');
+					}
 
 
                     //initKeyboard();

@@ -300,46 +300,39 @@ function netention(f) {
             return socket;
         },
         setWebRTC: function(id, enabled) {
-            this.socket.emit('webRTC', id, enabled);
+			if (this.socket)
+            	this.socket.emit('webRTC', id, enabled);
         },
         updateRoster: function() {
-            $.getJSON('/users/connected/json', function(r) {
-                $N.set('roster', r);
-                $N.trigger('change:roster');
-            });
+			if (configuration.connection!=='static') {
+				$.getJSON('/users/connected/json', function(r) {
+					$N.set('roster', r);
+					$N.trigger('change:roster');
+				});
+			}
         },
         indexOntology: function() {
             var that = this;
             that.addAll(that.ontologyProperties);
             that.addAll(that.ontologyClasses);
 
-            /*var remaining = _.pluck(o.class, 'id');
-            var batchSize = 32;
-            function nextBatch() {
-                var next = remaining.splice(0, batchSize);
-                if (next.length === 0)
-                    return;*/
-                    later(function() {
-                        for (var i = 0; i < that.ontologyClasses.length; i++) {
-                            var c = that.ontologyClasses[i];                        
-                            if (!c) return;
+			later(function() {
+				for (var i = 0; i < that.ontologyClasses.length; i++) {
+					var c = that.ontologyClasses[i];                        
+					if (!c) return;
 
-                            that.ontoIndex.add({
-                                id: c.id,
-                                name: c.name,
-                                description: c.description
-                            });
+					that.ontoIndex.add({
+						id: c.id,
+						name: c.name,
+						description: c.description
+					});
 
-                            if (c.icon)
-                                defaultIcons[c.id] = c.icon;                    
-                        }               
-                    });
+					if (c.icon)
+						defaultIcons[c.id] = c.icon;                    
+				}               
+			});
 
-            /*    setImmediate(nextBatch);
-            }                
-            setImmediate(nextBatch);*/
-
-            that.trigger('change:tags');
+            //that.trigger('change:tags');
             
         },
         loadOntology: function(url, f) {
@@ -624,7 +617,7 @@ function netention(f) {
         notice: function(x, suppressChange) {
             
             if (!Array.isArray(x)) {
-                return this.notice([x]);
+                return $N.notice([x]);
             }
             
             var that = this;
@@ -639,7 +632,7 @@ function netention(f) {
                 	y = objExpand(y);
 
 				if (!y.id) {
-					console.error('notice() invalid object', y);
+					//console.error('notice() invalid object', y);
 					return false;
 				}
 
@@ -849,6 +842,14 @@ function netention(f) {
                 $N.attention = JSON.parse(loadedAttention);
             } else {
             }
+			
+			$N.db.getAll(function(err, objects) {
+				if (err) {
+					console.error('loadAll: ' , err);
+					return;
+				}				
+				$N.notice(objects);
+			});
 
         },
         saveAll: function() {

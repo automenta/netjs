@@ -48,13 +48,13 @@ function openSelectProfileModal(title) {
     }
     
     $('#LoadingSplashTitle').html(
-            (configuration.connection == 'local') ?
+            (configuration.connection == 'static') ?
             '' :
             s
             );
     
     $('#LoadingSplashTitle').append(
-            (configuration.connection == 'local') ?
+            (configuration.connection == 'static') ?
             '' :
             ' (<a href="/logout">Logout</a>)'
             );

@@ -202,7 +202,7 @@ module.exports = DB = function (collection, dbOptions) {
 					if (err) {
 						callback(err, null);
 					} else {
-						callback(null, response.map(function (row) {
+						callback(null, response.rows.map(function (row) {
 							return row.doc;
 						}));
 					}

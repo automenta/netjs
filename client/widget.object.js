@@ -702,15 +702,15 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         '<option value="7a">Anonymous</option>' ).
                         val(getEditedFocus().scope);
 
-                if (configuration.connection == 'local')
+                /*if (configuration.connection == 'static')
                     scopeSelect.attr('disabled', 'disabled');
-                else {
+                else {*/
                     scopeSelect.change(function() {
                         var e = getEditedFocus();
                         e.scope = scopeSelect.val();
                         update(e);
                     });
-                }
+                //}
             }
 
             var saveButton = $('<button class="btn btn-primary" style="float:right"><b>Save</b></button>').click(function() {
