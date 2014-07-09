@@ -309,8 +309,6 @@ function _updateView(force) {
     updateBrand();
     renderFocus(true);
 
-    //s.saveLocal();
-
     var view = $N.get('currentView');
     if (!view) {
         if (configuration.initialView) {
@@ -912,7 +910,13 @@ $(document).ready(function() {
                    
 
 					if (configuration.connection == 'static') {
-						$N.sessionStart();
+						$N.loadAll(function() {
+							if ($N.myself() === undefined) {
+								openSelectProfileModal("Start a New Profile");
+							} else {
+								$N.sessionStart();
+							}								
+						});
 					}
 					else {
 						$('#NotificationArea').html('Connecting...');

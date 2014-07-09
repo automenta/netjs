@@ -44,6 +44,7 @@ function netention(f) {
             this.clearTransients();
             this.set('clientID', 'undefined');
 			this.messages = [];
+			this.connections = { };			
         },
         clearTransients: function() {
             this.set('layer', {
@@ -125,7 +126,7 @@ function netention(f) {
             if (!target)
                 return;
             
-			console.log('Websocket connect', target);
+			console.log('Becoming', target);
 			
             var previousID = $N.id();
 
@@ -141,11 +142,8 @@ function netention(f) {
 
                 $N.set('clientID', targetID);
                 $N.set('otherSelves', _.unique(os));
-
-                $N.trigger('change:attention');
-                updateBrand(); //TODO use backbone Model instead of global fucntion            
-
-                $N.startURLRouter();
+				
+				$N.sessionStart();
             } else {
                 this.socket.emit('become', typeof target === "string" ? target : objCompact(target), function(nextID) {
                     if (nextID) {
@@ -182,6 +180,7 @@ function netention(f) {
                 });
             }
         },
+		
         connect: function(targetID, whenConnected) {
 			console.log('Websocket start');
 			
@@ -315,6 +314,14 @@ function netention(f) {
 				});
 			}
         },
+		
+		addConnection: function(c) {
+			$N.connections[c.id()] = c;			
+			var menuitem = $('<li><a href="#">' + c.name() + '</a></li>');							 
+			$('#ConnectionList').after(menuitem);
+			c.update();
+		},
+		
         indexOntology: function() {
             var that = this;
             that.addAll(that.ontologyProperties);
@@ -513,6 +520,7 @@ function netention(f) {
         
         //called after connection establishd
         sessionStart: function() {
+			$N.saveAll();
             updateBrand(); //TODO use backbone Model instead of global function
 
             updateViewLock(0);
@@ -839,7 +847,12 @@ function netention(f) {
             localStorage[key] = JSON.stringify(value);
         },*/
 		
-        loadAll: function() {
+        loadAll: function(callback) {
+
+			try {
+				_.extend($N.attributes, JSON.parse(localStorage['$N'] || "{}"));
+			}
+			catch(e) { $N.attr = { }};
 
 			$N.db.getAll(function(err, objects) {
 				if (err) {
@@ -848,12 +861,14 @@ function netention(f) {
 				}			
 				console.log('Loaded ', objects.length, 'objects from local browser');
 				$N.notice(objects, false, true);
+
+				callback();
 			});
 
         },
 		
         saveAll: function() {
-
+			localStorage['$N'] = JSON.stringify($N.attributes);
         },
 		
         //TODO rename to 'load initial objects' or something
@@ -868,26 +883,26 @@ function netention(f) {
             });
         },
         getUserObjects: function(onFinished) {
-            //$.getJSON('/object/tag/User/json', function(users) {
             if (configuration.connection == 'static') {
-                $N.loadAll();
-                return onFinished();
+					onFinished();	
             }
-
-            $.getJSON('/object/tag/User/json', function(objs) {
-                $N.notice(objs);
-                onFinished();
-            });
+			else {
+				$.getJSON('/object/tag/User/json', function(objs) {
+					$N.notice(objs);
+					onFinished();
+				});
+			}
         },
         getAuthorObjects: function(userID, onFinished) {
             if (configuration.connection == 'static') {
                 onFinished();
-                return;
             }
-            $.getJSON('/object/author/' + userID + '/json', function(j) {
-                $N.notice(j);
-                onFinished();
-            });
+			else {
+				$.getJSON('/object/author/' + userID + '/json', function(j) {
+					$N.notice(j);
+					onFinished();
+				});
+			}
         },
         startURLRouter: function() {
             if (!this.backboneStarted) {
