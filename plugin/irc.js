@@ -4,16 +4,17 @@ var _ = require('lodash');
 exports.plugin = function($N) {
     return {
         name: 'IRC',
-        description: 'Awareness of IRC Channels',
+        description: 'Internet Relay Chat',
         options: {},
         version: '1.0',
-        author: 'http://$N.org',
+        author: 'http://netention.org',
         start: function(options) {
             function tolower(s) {
                 return s.toLowerCase();
             }
             options.readChannels = _.map(options.readChannels, tolower);
             options.writeChannels = _.map(options.writeChannels, tolower);
+			options.allChannels = _.union(options.readChannels, options.writeChannels);
 
             this.options = options;
 
@@ -76,9 +77,9 @@ exports.plugin = function($N) {
                 try {
                     var m = JSON.parse(text);
                     if (m.id) {
-                        m.origin = 'irc://' + options.server + '/' + from;
+                        m.author = 'irc://' + options.server + '/' + from;
 
-                        if (m.origin != myOrigin) {
+                        if (m.author != myorigin) {
                             $N.getObjectByID(m.id, function(err, d) {
                                 var newer = false; //if d.length == 1, newer = (m.lastModified > d.created)
                                 if (err) {
@@ -87,7 +88,7 @@ exports.plugin = function($N) {
                                 }
                                 else {
                                     //only replace if existing object's origin matches
-                                    if (m.origin == d[0].origin) {
+                                    if (m.author == d[0].author) {
 
                                         if (m.removed) {
                                             //if (d[0].fromIRC) 
@@ -110,9 +111,10 @@ exports.plugin = function($N) {
                     if (!messageObject[t]) {
                         var name = to + ', ' + from + ': ' + text;
                         var m = new $N.nobject();
+						m.scope = 8; //advertise
                         messageObject[t] = m;
                         m.setName(to);
-                        m.origin = 'irc://' + options.server + '/' + to;
+                        m.author = 'irc://' + options.server + '/' + to;
                     }
                     else {
                         messageObject[t].modifiedAt = Date.now();
@@ -156,12 +158,25 @@ exports.plugin = function($N) {
             that.send = _.throttle(function(to, xjson) {
                 that.irc.say(to, xjson);
             }, messageSendDelayMS);
+			
+			$N.on('object:pub', function(o) {
+				if ((o.scope == 8) && (o.author.indexOf('irc://')!==0)) {
+					 _.each(options.allChannels, function(to) {
+						try {
+							that.send(to, o);
+						}
+						catch (e) {
+						}
+                	});
+				}
+				
+			});
 
         },
         onPub: function(x) {
             //avoid rebroadcast to origin
-            if (x.origin)
-                if (x.origin.indexOf('irc://' + this.options.server) == 0)
+            if (x.author)
+                if (x.author.indexOf('irc://') === 0)
                     return;
 
             x = $N.objCompact(x);

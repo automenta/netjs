@@ -274,7 +274,12 @@ function netention(f) {
                      });*/
 
                     socket.on('notice', function(n) {
-                        $N.notice(n);
+						try {
+							$N.notice(n);
+						}
+						catch (e) {
+							console.error(e);
+						}
                     });
 
                     socket.on('addTags', function(t, p) {
@@ -728,6 +733,13 @@ function netention(f) {
 					}
 				}
 				
+				if (y.scope == ObjScope.GlobalAdvertise) {
+					if (y.author!==$N.id()) {
+						later(function() {
+							$N.receive(y);
+						});
+					}
+				}				
 						 
                 return true;
             }
@@ -747,6 +759,9 @@ function netention(f) {
             if ((anythingChanged) && (!suppressChange)) {
                 if (anythingChangedFromOthers)
                     updateViewLock(viewUpdatesBuffered + 1);
+				
+
+						
                 this.trigger('change:attention');
             }
         },
@@ -948,6 +963,12 @@ function netention(f) {
         },
 
 		receive: function(message) {
+			var messageIDs = _.pluck($N.messages, 'id');
+			var existingIndex = messageIDs.indexOf(message.id);
+			if (existingIndex!=-1) {
+				$N.messages.splice(existingIndex,1);
+			}			
+			
 			$N.messages.push(message);
 			$N.trigger('change:messages');
 		}

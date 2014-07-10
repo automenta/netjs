@@ -705,8 +705,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         '<option value="5">Trusted</option>',
                         //store on server for public access (inter-server)
                         '<option value="7">Public</option>',
-                        '<option value="7a">Anonymous</option>' ).
-                        val(getEditedFocus().scope);
+                        '<option value="7a">Anonymous</option>',
+                        '<option value="8">Advertise</option>' ).
+						val(getEditedFocus().scope);
 
                 /*if (configuration.connection == 'static')
                     scopeSelect.attr('disabled', 'disabled');
