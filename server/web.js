@@ -155,7 +155,10 @@ module.exports = function(options) {
 		objectID, whenFinished, contentAddedToDeletedObject, byClientID) {
 
         if (byClientID) {
+			
             getObjectByID(objectID, function(err, o) {
+				o = o[0];
+								
                 if (!o) {
                     whenFinished('Does not exist');
                     return;
@@ -183,7 +186,8 @@ module.exports = function(options) {
         }
 
         //TODO move to 'removed' db collection
-
+		//TODO conslidate with $N.remove() like $N.add() already does
+			
 		odb.remove(objectID, function(err, docs) {
 
             if (err) {
@@ -194,6 +198,9 @@ module.exports = function(options) {
             else {
                 //broadcast removal of objectID
                 pub(objectRemoved(objectID));
+				
+				if (whenFinished)
+					whenFinished(null, objectID);
 
 				//TODO implement remove replies
 				/*
@@ -699,7 +706,7 @@ module.exports = function(options) {
 			}
 
 			if (scope >= util.ObjScope.ServerAll) {
-				if (socket)
+				if ((socket) && (socket.broadcast))
 					socket.broadcast.emit('notice', co); //send to everyone except originating socket
 				else
 					io.sockets.in('*').emit('notice', co); //send to everyone
@@ -1987,6 +1994,7 @@ module.exports = function(options) {
 							}
 						}
 					});
+					
 					socket.on('channelSend', function(channel, message) {
 						channelAdd(channel, message, true, true);
 					});

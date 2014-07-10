@@ -30,9 +30,12 @@ var CategoryPreviews = React.createClass({
 			  return(
 					<Panel header={(<h3><TagButton tagID={tag.id}></TagButton>&nbsp;<a title={"New " + tag.id + "..."} href={"#/tag/" + tag.id + "/new_instance"}>+</a></h3>)}>
 					{
-						tag.object.map(function(o) {
-							return <ObjectMedia id={o}></ObjectMedia>
-						})
+						tag.object.length > 0 ?
+							tag.object.map(function(o) {
+								return <ObjectMedia id={o}></ObjectMedia>
+							})
+							:
+							"None yet."
 					}
 					{
 						tag.more ? <div className="MoreLink"><a href={"#browse/tag/" + tag.id}>More...</a></div> : <div></div>

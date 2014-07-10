@@ -11,6 +11,7 @@ var ObjectMedia = React.createClass({
 			id = id.id;
 
 		var name = object ? object.name : id;
+		var author = object ? $N.label(object.author) : '';
 		var icon = object ? objIcon(object) : getTagIcon(null);
 		var desc = object ? objDescription(object,64) : '';
 
@@ -20,6 +21,7 @@ var ObjectMedia = React.createClass({
 			  </a>
 			  <div className="media-body">
 				<h4 className="media-heading"><a href={"#/object/"+id}>{name}</a></h4>
+				by {author}<br/>
 				{desc}
 			  </div>
 			</div>;

@@ -67,6 +67,8 @@ addView({
 
 			var currentUserFilter = function (o) {
 				o = $N.instance[o];
+				if (!o) return false;
+				
 				if (o.subject)
 					if (o.subject != currentUser) return false;
 
@@ -109,11 +111,12 @@ addView({
 				if ($N.getTag('DoLearn') || ((o != 'Do') && (o != 'Learn') && (o != 'Teach'))) {
 					var sdd = newDiv();
 
-					panelContentLeft.append(
-						newBootstrapPanel(O.name, sdd));
 
 					//not a 3-vector system
-					var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]').appendTo(sdd);
+					var header = newTagButton(O, addTheTag(O)).addClass('goalRowHeading').append('&nbsp;[+]');
+
+					panelContentLeft.append(
+						newBootstrapPanel(header, sdd));
 
 					var nn = _.filter($N.objectsWithTag(O, false, true), currentUserFilter);
 
@@ -124,9 +127,9 @@ addView({
 							var ss = newObjectView(G, {
 								showAuthorIcon: false,
 								showAuthorName: false,
-								showMetadataLine: false,
+								showMetadataLine: true,
 								showActionPopupButton: false,
-								titleClickMode: 'edit'
+								titleClickMode: (G.author == $N.id() ? 'edit' : 'view')
 							}).removeClass("ui-widget-content ui-corner-all").addClass('objectViewBorderless');
 							if (G.name == O.name) {
 								ss.find('h1 a').html('&gt;&gt;');

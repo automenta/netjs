@@ -142,7 +142,7 @@ function getAvatarURL(s, style) {
 //(function is globalalized for optimization purposes)
 function _onTagButtonClicked() {
     var ti = $(this).attr('taguri');
-    var t = $N.class[ti];
+    var t = $N.class[ti] || $N.instance[ti];
     if (t)
         newPopupObjectView(t, true);
     return false;
@@ -164,6 +164,12 @@ function newTagButton(t, onClicked, isButton, dom) {
             var to = $N.class[t];
             if (to)
                 t = to;
+			else {
+				//try if instance
+				var ti = $N.instance[t];
+				if (ti)
+					t = ti;
+			}
         }
         if (t.id) {
             ti = getTagIcon(t.id);

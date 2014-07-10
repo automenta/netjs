@@ -708,7 +708,7 @@ function netention(f) {
 					for (var i = 0; i < y.value.length; i++) {
 						var c = y.value[i].id;
 						if (isPrimitive(c)) continue;
-						if ((!$N.class[c]) && (!$N.property[c])) {
+						if ((!$N.class[c]) && (!$N.property[c]) && (!$N.instance[c])) {
 							that.addAll([{
 								id: c, name: c, extend: 'text'
 							}]);

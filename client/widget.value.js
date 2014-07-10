@@ -1,5 +1,5 @@
 function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange) {
-    var tag = t.id;
+	var tag = t.id;
 
     var strength = t.strength;
     if (t.readonly)
@@ -7,10 +7,12 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     if (strength === undefined)
         t.strength = strength = 1.0;
     var T = $N.object[tag] || { id: tag };
-    var isProp = T._property;
-    var isClass = T._class;
     var isPrim = isPrimitive(tag);
+    var isProp = T._property;
+    var isClass = T._class!==undefined;
+	var isInstance = (!isPrim) && (!isProp) && (!isClass);
     
+	
     var events = {
         onSave: whenSaved,
         onAdd: onAdd,
@@ -127,9 +129,11 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         //tagLabel.hide();    
         type = tag;
     }
+	else if (isInstance) {
+		type = 'instance';
+	}
+	
 
-    if (T.name)
-        tagLabel.innerHTML = T.name;
    
     if (isProp) {
         type = T.extend;
@@ -146,17 +150,41 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         newTagValueWidget.tag(x, index, t, T, editable, d, events);        
     }    
 
-    if (editable) {
-        $('<img src="' + getTagIcon(tag) + '"/>').prependTo($(tagLabel));
-    }
-    else if (!isPrim)
-        tagLabel.innerHTML += ':&nbsp;';
+	if (!isInstance) {
+		if (T.name)
+			tagLabel.innerHTML = T.name;
+		if (editable) {
+			$('<img src="' + getTagIcon(tag) + '"/>').prependTo($(tagLabel));
+		}
+		else if (!isPrim)
+			tagLabel.innerHTML += ':&nbsp;';
+	}
+	else {
+		tagLabel.innerHTML='';
+	}
+	
 
     if (t.description)
         d.append('<ul>' + t.description + '</ul>');
 
     return e;
 }
+
+newTagValueWidget.instance = function(x, index, v, prop, editable, d, events) {
+	
+	var value = prop.id;
+	var V = $N.instance[value];
+
+    var ii = newTagButton(V).appendTo(d);
+
+    if (editable) {
+        events.onSave.push(function(y) {
+            objAddValue(y, value, null, v.strength);
+        });
+    } else {
+    }
+};
+
 
 newTagValueWidget.boolean = function(x, index, v, prop, editable, d, events) {
     var value = v.value;
