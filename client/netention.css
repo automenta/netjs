@@ -2073,11 +2073,11 @@ div.olControlZoom {
 */
 
 .HUDTopLeft, .HUDTopRight {
-    position: fixed;
+    position: absolute;
     top: 8px;
     z-index: 5000;
     font-size: 75%;
-    opacity: 0.75;
+    opacity: 0.85;
     max-width:40%;
 }
 .HUDTopLeft {

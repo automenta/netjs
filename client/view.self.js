@@ -154,7 +154,7 @@ addView({
 				var nn = _.filter($N.objectsWithTag(['Do', 'Learn', 'Teach']), currentUserFilter);
 
 				var d = newDiv();
-				panelContentRight.append(newBootstrapPanel('Know',d));
+				panelContentRight.append(newBootstrapPanel(null,d));
 
 				function rangeToTags(x, newValue) {
 					objRemoveTag(x, 'Do');

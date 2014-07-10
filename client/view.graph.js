@@ -76,7 +76,8 @@ addView({
 		var ssg = ss.find("g").first(); //$("#content svg g");
 		//var ssg2 = ssg.next(); //$("#content svg g");
 
-		$('#svgroot').svg()
+		$('#svgroot').svg();
+		
 		var SVG = $('#svgroot').svg('get');
 
 		var sketchPoly = SVG.polyline([], {
@@ -326,7 +327,7 @@ addView({
 		});
 		cc.mousemove(function (m) {
 			if (sketching) {
-				var nextPoint = [m.clientX, m.clientY];
+				var nextPoint = [m.offsetX, m.offsetY];
 				/* 			<polyline fill="none" stroke="blue" stroke-width="5" points="450,250 */
 
 				function addNextPoint() {

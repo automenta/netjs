@@ -119,7 +119,7 @@ exports.plugin = function($N) {
                 },
                 {id: 'Link', name: 'Link', description: 'A link or edge in a graph or network',
                     value: {
-                        'incidentObject': {name: 'Linking', extend: 'object'}
+                        'incidentObject': {name: 'Next', extend: 'object'}
                     },
                     extend: ['Concept']
                 },

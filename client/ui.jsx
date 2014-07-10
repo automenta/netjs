@@ -1110,10 +1110,13 @@ $.extend({
 
 function newBootstrapPanel(heading, content) {
 	var panel = newDiv().addClass('panel panel-default');
-	var panelHeading = $('<div class="panel-heading"></div>').append(heading);
 	var panelContent = newDiv().addClass('panel-body').append(content);
+	if (heading) {
+		var panelHeading = $('<div class="panel-heading"></div>').append(heading);
+		panel.append(panelHeading);
+	}
+	panel.append(panelContent);		
 
-	panel.append(panelHeading, panelContent);
 	return panel;
 }
 

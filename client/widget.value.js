@@ -155,6 +155,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 			tagLabel.innerHTML = T.name;
 		if (editable) {
 			$('<img src="' + getTagIcon(tag) + '"/>').prependTo($(tagLabel));
+			tagLabel.innerHTML += '&nbsp;';
 		}
 		else if (!isPrim)
 			tagLabel.innerHTML += ':&nbsp;';

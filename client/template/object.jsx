@@ -10,8 +10,8 @@ var ObjectMedia = React.createClass({
 		if (typeof id !== "string")
 			id = id.id;
 
-		var name = object ? object.name : id;
-		var author = object ? $N.label(object.author) : '';
+		var name = object ? $N.label(object,'?') : id;
+		var author = object ? $N.label(object.author,'?') : '?';
 		var icon = object ? objIcon(object) : getTagIcon(null);
 		var desc = object ? objDescription(object,64) : '';
 
