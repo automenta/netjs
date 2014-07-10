@@ -1,5 +1,10 @@
-var server;
-if (typeof window != 'undefined') {
+var server = false;
+try {
+	process.title;	server = true;
+}
+catch(e) { }
+
+if ((!server) && (typeof window != 'undefined')) {
     exports = {}; //functions used by both client and server
 	server = false;
 } else {

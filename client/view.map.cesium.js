@@ -88,7 +88,7 @@ function renderCesiumMap(v) {
 				if (materialCache[iconURL])
 					material = materialCache[iconURL];			
 				else {
-					materialCache[iconURL] = material = new Cesium.Material({
+					materialCache[iconURL] = material = new Cesium.Material({						
 					  fabric : {						  
 						type : 'Image',
 						uniforms : {

@@ -1,8 +1,12 @@
-var server;
 var DB;
-if (typeof window != 'undefined') {
-	exports = {}; //functions used by both client and server
-	module = {};
+var server = false;
+try {
+	process.title;	server = true;
+}
+catch(e) { }
+
+if ((!server) && (typeof window != 'undefined')) {
+    exports = {}; //functions used by both client and server
 	server = false;
 } else {
 	_ = require('lodash');

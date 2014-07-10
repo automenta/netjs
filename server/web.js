@@ -32,7 +32,7 @@ module.exports = function(options) {
 
 	if (!options) options = { };
 
-    require('util').inherits(util.Ontology, EventEmitter);
+    sys.inherits(util.Ontology, EventEmitter);
 	EventEmitter.call(util, { wildcard: true, delimiter: ':' });
 
 	var dbOpts = {	};
@@ -47,7 +47,6 @@ module.exports = function(options) {
 		if (options.web)
 			console.warn('Using in-memory \'LevelUp/MemDown\' database; activity will not be saved');
 	}
-
 
 	var DB = require('../util/db.' + options.db.type + '.js');
 
