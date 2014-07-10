@@ -128,7 +128,7 @@ function netention(f) {
             if (!target)
                 return;
             
-			console.log('Becoming', target);
+			//console.log('Becoming', target);
 			
             var previousID = $N.id();
 
@@ -360,11 +360,17 @@ function netention(f) {
 
         },
         searchOntology: function(query, ontocache) {
-            var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
+            query = query.toLowerCase();
+			
+			var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
             var results = {};
+			
+			//HACK for 3-letter ontology words
+			if (query.indexOf('can')!=-1)
+				results['Can']=1;			
+			
             for (var i = 0; i < terms.length; i++) {
                 var T = terms[i];
-
                 var r = ontocache[T];
 
                 if (!r)
@@ -710,7 +716,7 @@ function netention(f) {
 						if (isPrimitive(c)) continue;
 						if ((!$N.class[c]) && (!$N.property[c]) && (!$N.instance[c])) {
 							that.addAll([{
-								id: c, name: c, extend: 'text'
+								id: c, name: c, extend: null
 							}]);
 							
 							that.ontoIndex.add({

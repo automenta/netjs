@@ -14,6 +14,7 @@ var ObjectMedia = React.createClass({
 		var author = object ? $N.label(object.author,'?') : '?';
 		var icon = object ? objIcon(object) : getTagIcon(null);
 		var desc = object ? objDescription(object,64) : '';
+		var when = object ? $.timeago(objWhen(object)) : '';
 
 	  	return <div className="media">
 			  <a className="pull-left" href="#">
@@ -21,7 +22,7 @@ var ObjectMedia = React.createClass({
 			  </a>
 			  <div className="media-body">
 				<h4 className="media-heading"><a href={"#/object/"+id}>{name}</a></h4>
-				by {author}<br/>
+				by {author} {when}<br/>
 				{desc}
 			  </div>
 			</div>;

@@ -28,7 +28,7 @@ var CategoryPreviews = React.createClass({
 		{				
 			tags.map(function(tag) {
 			  return(
-					<Panel header={(<h3><TagButton tagID={tag.id}></TagButton>&nbsp;<a title={"New " + tag.id + "..."} href={"#/tag/" + tag.id + "/new_instance"}>+</a></h3>)}>
+					<Panel header={(<h3><TagButton tagID={tag.id}></TagButton>&nbsp;<a title={"New " + tag.id + "..."} href={"#/tag/" + tag.id + "/new"}>+</a></h3>)}>
 					{
 						tag.object.length > 0 ?
 							tag.object.map(function(o) {

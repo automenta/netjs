@@ -5,11 +5,18 @@ addView({
 	start: function (v) {
 		v.addClass('ViewPage');
 
-		var browse = $('<table cellpadding="0" cellspacing="0" border="0" class="display" style="width:100%"></table>');
-		browse.addClass('ViewPage');
-		browse.appendTo(v);
-
+		var browse;
+		
 		function update() {
+			if (browse) {
+				browse = null;
+				v.html('');
+			}
+			
+			browse = $('<table cellpadding="0" cellspacing="0" border="0" class="display" style="width:100%"></table>');
+			browse.addClass('ViewPage');
+			browse.appendTo(v);
+			
 			var rr = getRelevant("Recent", "Public", "Any", $N, 10000, null);
 
 
@@ -65,7 +72,7 @@ addView({
 						newObjectView(data[0], {
 							scale: 0.5,
 							depthRemaining: 0,
-							startMinimized: true,
+							startMinimized: false,
 							showAuthorName: false,
 							transparent: true
 						})
@@ -78,7 +85,6 @@ addView({
 		
 		v.onChange = update;
 		update();
-
 		
 		return v;
 	},

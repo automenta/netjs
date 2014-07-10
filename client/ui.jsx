@@ -735,6 +735,7 @@ $(document).ready(function() {
                         "object/:id": "showObject",
                         "object/:id/focus": "focus",
                         "tag/:tag": "tag",
+                        "tag/:tag/new": "tagNew",						
                         //"new/with/tags/:t":     "newWithTags",
                         "example": "completeExample",
                         "user/:userid": "user",
@@ -778,6 +779,11 @@ $(document).ready(function() {
                     user: function(userid) {
                         $N.set('currentView', {view: 'user', userid: userid});
                     },
+                    tagNew: function(tag) {
+						var n = new $N.nobject();
+						n.addTag(tag);
+						newPopupObjectEdit(n);
+                    },					
                     read: function(url) {
                         later(function() {
                             viewRead(url);

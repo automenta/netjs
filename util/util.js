@@ -824,6 +824,8 @@ var Ontology = function(db, tagInclude, target) {
     var that = target ? target : this;
 
 	that.db = db;
+	
+	var operatorTags = ['Value','Not','Trust','Distrust'];
 
 	var qsetPending = [];
 	function queueSet(x, callback) {
@@ -1228,7 +1230,7 @@ var Ontology = function(db, tagInclude, target) {
             }
         }
 
-        //'subject' handling, creates .inout edges for each object link from the object's subject to the values of those object properties
+        //'subject' handling, creates .inout edges for each object tag from the object's subject to the values of those object properties
         if (x.subject) {
             //if (x.subject && that.instance[x.subject] && (that.instance[x.subject].author === x.author)) {
             if (x.subject === x.author) {
@@ -1239,29 +1241,14 @@ var Ontology = function(db, tagInclude, target) {
                     x.inout[x.subject] = { };
 
                 if (x.value) {
-                    var firstTag = null;
-                    for (var j = 0; j < x.value.length; j++) {
-                        var vi = x.value[j];
-                        var vid = vi.id;
-
-                        var objValue = false;
-
-                        if ((isPrimitive(vid) && (vid === "object" )))
-                            objValue = true;
-
-                        if ((that.class[vid]) && (firstTag===null))
-                            firstTag = vid;
-
-                        var vidp = that.property[vid];
-                        if (vidp && (vidp.extend === 'object'))
-                            objValue = true;
-
-                        if (objValue) {
-                            var target = vi.value;
-
-                            x.inout[x.subject][target] = (firstTag || true);
-                        }
-                    }
+					//index an instance reference if the first tag is an operator
+					if ((tags.length >=2 ) && (operatorTags.indexOf(tags[0])!=-1)) {
+						var operator = tags[0];
+						for (var j = 1; j < tags.length; j++) {
+							var target = tags[j];
+							x.inout[x.subject][target] = operator;
+						}
+					}
                 }
             }
             else {

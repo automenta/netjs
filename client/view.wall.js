@@ -5,7 +5,7 @@ addView({
 	start: function(v) {		
 		v.addClass('ViewPage Wall');
 		
-		var objPerCategory = 3;
+		var objPerCategory = 8;
 
 		function objNewest(objArray, n) {
 			objArray.sort(function(a, b) {
@@ -14,9 +14,9 @@ addView({
 			return objArray.slice(0, n);
 		}
 
-		var category1 = ['Learn', 'Teach', 'Do'];
-		var category2 = ['Can', 'Need'];
-
+		var category1 = configuration.shareTags;
+		var category2 = configuration.shareCategories;
+		var category3 = configuration.knowTags;
 
 		function getCategory(tags) {
 			var data = { tag: [] };
@@ -35,7 +35,7 @@ addView({
 		}
 		
 		var roster = newDiv().addClass('Roster panel panel-default').appendTo(v);
-		var rosterHeading = $('<div class="panel-heading">Online <span class="badge">42</span></div>');
+		var rosterHeading = $('<div class="panel-heading">Online</div>'/* <span class="badge">42</span></div>*/);
 		rosterHeading.append(newShoutLine().css('float', 'right').css('width', '40%').css('text-align', 'right'));
 		rosterHeading.append('<br/>');
 		roster.append(rosterHeading);
@@ -47,10 +47,11 @@ addView({
 		var categoryBody = newDiv().addClass('panel-body').appendTo(categories);
 		var col1 = newDiv().appendTo(categoryBody);
 		var col2 = newDiv().appendTo(categoryBody);
+		var col3 = newDiv().appendTo(categoryBody);
 		
 		React.renderComponent( CategoryPreviews(getCategory(category1)), col1[0] );
 		React.renderComponent( CategoryPreviews(getCategory(category2)), col2[0] );
-
+		React.renderComponent( CategoryPreviews(getCategory(category3)), col3[0] );
 		
 	},
 	stop: function() {

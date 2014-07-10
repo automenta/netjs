@@ -7,15 +7,16 @@ function renderCesiumMap(v) {
     var cc = {};
 	var viewer, scene, layers, primitives, ellipsoid;
 	var plist = [];
-
-    function render() {
+	var materialCache = { };
+	
+    function init() {
 		
         var ee = duid();
         var vv = newDiv(ee);
         vv.attr('class', 'cesiumContainer');
         v.append(vv);
 		
-
+		
         viewer = cc.cesium = new Cesium.CesiumWidget(ee);
 		scene = viewer.scene;
 
@@ -24,7 +25,8 @@ function renderCesiumMap(v) {
 		layers = scene.imageryLayers;
 		
 		ellipsoid = scene.globe;
-
+		
+/*
         // Move the primitive that the mouse is over to the top.
         var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
 
@@ -38,7 +40,7 @@ function renderCesiumMap(v) {
 					}
 				}
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-		
+*/		
 		
         later(updateMap);
     }
@@ -63,7 +65,6 @@ function renderCesiumMap(v) {
 
         var octagonVertexAngle = 3.1415 * 2.0 / 8.0;
 
-        var imageMaterials = {};
 
         function newCircle(lat, lon, radiusMeters, vertexAngle, r, g, b, a, iconURL) {
 			
@@ -82,24 +83,24 @@ function renderCesiumMap(v) {
 			
             if (!iconURL)
                 iconURL = defaultIcons['unknown'];
+
             if (iconURL) {
-                if (imageMaterials[iconURL]) {
-                    material = imageMaterials[iconURL];
-                }
-                else {                    
-					imageMaterials[iconURL] = material = new Cesium.Material({
-					  fabric : {
+				if (materialCache[iconURL])
+					material = materialCache[iconURL];			
+				else {
+					materialCache[iconURL] = material = new Cesium.Material({
+					  fabric : {						  
 						type : 'Image',
 						uniforms : {
 						  image : iconURL,
-					      repeat : {
+						  repeat : {
 							x : 1,
-        					y : 1
-						  }
+							y : 1
+						  }							
 						}
 					  }
 					});
-                }
+				}
             }
             else {
                 material = Cesium.Material.fromType('Color');
@@ -216,16 +217,24 @@ function renderCesiumMap(v) {
 
         $LAB
 			.script("http://cesiumjs.org/Cesium/Build/Cesium/Cesium.js")
-			.wait(render);
+			.wait(init);
 
     }
     else {
-        render();
+        init();
     }
 
     cc.onChange = function() {
         updateMap();
     };
+	cc.stop = function() {
+		v.html('');
+		
+		_.values(materialCache, function(m) { m.destroy(); });
+		//scene.destroy();
+		viewer.destroy();		
+	};
+	
 
     return cc;
 }

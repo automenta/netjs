@@ -152,8 +152,9 @@ exports.options = {
 			"slides"
         ],
         "newUserProperties": ["walletRipple"],
-        "shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need', 'Teach', 'Learn'],
+        "shareTags": ['Offer', 'Sell', 'Lend', 'Rent', 'Swap', 'GiveAway', 'Need'],
         "shareCategories": ['Food', 'Service', 'Volunteer', 'Shelter', 'Tools', 'Health', 'Transport', 'Animal'],
+		"knowTags": ['Learn', 'Teach', 'Do'],		
         "defaultScope": 7
 	},
 	
