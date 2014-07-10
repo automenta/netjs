@@ -3,12 +3,12 @@ addView({
 	name: 'Map',
 	icon: 'icon/view.map.svg',
 	start: function(v) {		
-		var mm = {};
 
 		browseTagFilters = {};	//TEMPORARY
 
 		var typeSelect;
 
+		var mm;
 		function updateMap() {
 			v.empty();
 
@@ -48,13 +48,10 @@ addView({
 				 mm.onChange = m.onChange;       
 				 mm.location = m.location;*/
 
-				var m = renderLeafletMap(v);
-				mm.onChange = m.onChange;
+				mm = renderLeafletMap(v);
 			}
 			else {
-				var m = renderCesiumMap(v);
-				if (m.onChange)
-					mm.onChange = m.onChange;
+				mm = renderCesiumMap(v);
 			}
 
 			$('.leaflet-control-container .leaflet-top.leaflet-left').append(mapControl);
@@ -666,7 +663,7 @@ function renderLeafletMap(v) {
     updateMap();
 
     map.onChange = updateMap;
-    map.destroy = function() {
+    map.stop = function() {
         map = null;
     }
 

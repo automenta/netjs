@@ -342,7 +342,6 @@ function _updateView(force) {
         updateViewLock(0);
     }
 
-
     if (!force) {
         if ((currentView) && (view === lastView)) {
             if (currentView.onChange) {
@@ -383,9 +382,7 @@ function _updateView(force) {
 
 	if (views[view]) {
 		indent();
-		currentView = views[view];
-		currentView.start(v);
-		v.append(currentView);
+		currentView = views[view].start(v);
 	}
 	else {
 		v.html('Unknown view: ' + view);
@@ -803,7 +800,7 @@ $(document).ready(function() {
 				
                     $('#AvatarButton').addClass('ViewBusy');
                     later(function() {
-                        _updateView($N.get('currentView'));
+                        _updateView();
                         if (firstView) {
                             updateView = _.debounce(throttledUpdateView, viewDebounceMS);
                             firstView = false;
