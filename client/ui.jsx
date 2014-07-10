@@ -381,67 +381,6 @@ function _updateView(force) {
         updateIndent($('#MainMenu').is(":visible"));
     }
 
-/*
-    if (view === 'browse') {
-        indent();
-        currentView = newListView(v);
-    }
-    else if (view === 'us') {
-        indent();
-        currentView = newUsView(v);
-    }
-    else if (view === 'map') {
-        v.addClass('overflow-hidden');
-        v.addClass('nobg');
-        currentView = newMapView(v);
-    }
-    else if (view === 'trends') {
-        indent();
-        currentView = newTrendsView(v);
-    }
-    else if (view === 'graph') {
-        v.addClass('overflow-hidden');
-        indent(); //should improve rendering performance, to avoid compositing the menu when it redraws        
-        currentView = newGraphView(v);
-    }
-    else if (view === 'wiki') {
-        indent();
-        currentView = newWikiView(v);
-    }
-    else if (view === 'options') {
-        indent();
-        currentView = renderOptions(s, o, v);
-    }
-    else if (view === 'forum') {
-        indent();
-        currentView = newForumView(v);
-    }
-    else if (view === 'share') {
-        indent();
-        currentView = newShareView(v);
-    }
-    else if (view === 'templates') {
-        indent();
-        currentView = newTemplatesView(v);
-    }
-    else if (view === 'user') {
-        indent();
-        currentView = newUserView(v, param ? param.userid : null);
-    }
-    else if (view === 'main') {
-        indent();
-        currentView = newMainView(v);
-    }
-    else if (view === 'time') {
-        indent();
-        currentView = newTimeView(v);
-    }
-    else if (view === 'notebook') {
-        indent();
-        currentView = newNotebookView(v);
-    }
-    else {
-	*/
 	if (views[view]) {
 		indent();
 		currentView = views[view];
@@ -803,6 +742,7 @@ $(document).ready(function() {
                         "example": "completeExample",
                         "user/:userid": "user",
                         ":view": "view",
+						":view/tag/:tag": "viewTag",
                         "read/*url": "read"
                                 //"search/:query/:page":  "query"   // #search/kiwis/p7
                     },
@@ -827,6 +767,17 @@ $(document).ready(function() {
                     view: function(view) {						
                         $N.set('currentView', view);
                     },
+                    viewTag: function(view, tag) {						
+                        $N.set('currentView', view);
+						
+						var tf = new $N.nobject();
+						tf.addTag(tag);						
+						$N.setFocus(tf);
+						
+						//show sidebar
+						if (!$('#FocusEditWrap').is(':visible')) 
+							$('#FocusEditToggleButton').click();        
+                    },					
                     user: function(userid) {
                         $N.set('currentView', {view: 'user', userid: userid});
                     },
