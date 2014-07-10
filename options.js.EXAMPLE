@@ -114,7 +114,6 @@ exports.options = {
         "autoLoginDefaultProfile": true, //should always be true
 		
         "webrtc": true,
-        "ui": "ui.mobile.js",
         "initialView": "wall",
 
 		"avatarMenuDisplayInitially": true,

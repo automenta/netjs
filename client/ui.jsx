@@ -873,93 +873,93 @@ $(document).ready(function() {
                 setInterval(updatePrompt, 7000);
                 updatePrompt();
                 */
+				
+				initUI();
                 
-                $.getScript(configuration.ui, function(data) {
 
-                    var ii = identity();
+				var ii = identity();
 
-                    if (ii === ID_AUTHENTICATED) {
-                        $('#NotificationArea').html('Authorized.');
-                    }
-                    else if (ii === ID_ANONYMOUS) {
-                        $('#NotificationArea').html('Anonymous.');
-                    }
-                    else {
-                        $('#NotificationArea').html('Read-only public access.');
-                        /*$('.loginlink').click(function() {
-                         $('#LoadingSplash').show();
-                         nn.hide();
-                         });*/
-                    }
+				if (ii === ID_AUTHENTICATED) {
+					$('#NotificationArea').html('Authorized.');
+				}
+				else if (ii === ID_ANONYMOUS) {
+					$('#NotificationArea').html('Anonymous.');
+				}
+				else {
+					$('#NotificationArea').html('Read-only public access.');
+					/*$('.loginlink').click(function() {
+					 $('#LoadingSplash').show();
+					 nn.hide();
+					 });*/
+				}
 
-                    $('#View').show();
-                    $('#LoadingSplash2').hide();
-
+				$('#View').show();
+				$('#LoadingSplash2').hide();
 
 
 
 
-                    var w = new Workspace();
-                    $N.router = w;
-					
-					/*
-					if (($N.myself()===undefined) && (identity()!=ID_UNKNOWN)) {
-						openSelectProfileModal("Start a New Profile");
-					}*/
 
-                   
+				var w = new Workspace();
+				$N.router = w;
 
-					if (configuration.connection == 'static') {
-						$N.loadAll(function() {
-							if ($N.myself() === undefined) {
-								openSelectProfileModal("Start a New Profile");
-							} else {
-								$N.sessionStart();
-							}								
+				/*
+				if (($N.myself()===undefined) && (identity()!=ID_UNKNOWN)) {
+					openSelectProfileModal("Start a New Profile");
+				}*/
+
+
+
+				if (configuration.connection == 'static') {
+					$N.loadAll(function() {
+						if ($N.myself() === undefined) {
+							openSelectProfileModal("Start a New Profile");
+						} else {
+							$N.sessionStart();
+						}								
+					});
+				}
+				else {
+					$('#NotificationArea').html('Connecting...');
+
+					if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {
+						var otherSelves = _.filter($N.get("otherSelves"), function(f) {
+							return $N.getObject(f) != null;
 						});
+						if (otherSelves.length >= 1) {
+							$N.become(otherSelves[0]);
+							return;
+						}
+					}					
+
+					if (isAnonymous()) {
+						//show profile chooser
+						openSelectProfileModal("Anonymous Profiles");
 					}
-					else {
-						$('#NotificationArea').html('Connecting...');
-					
-						if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {
-							var otherSelves = _.filter($N.get("otherSelves"), function(f) {
-								return $N.getObject(f) != null;
-							});
-							if (otherSelves.length >= 1) {
-								$N.become(otherSelves[0]);
-								return;
-							}
-						}					
-					
-						if (isAnonymous()) {
-							//show profile chooser
-							openSelectProfileModal("Anonymous Profiles");
+					else if ($N.myself() === undefined) {
+						if (configuration.requireIdentity)
+							openSelectProfileModal("Start a New Profile");
+						else {
+							$N.sessionStart();
 						}
-						else if ($N.myself() === undefined) {
-							if (configuration.requireIdentity)
-								openSelectProfileModal("Start a New Profile");
-							else {
-								$N.sessionStart();
-							}
-						}
-
-
 					}
 
 
-                    //initKeyboard();
+				}
+
+
+				//initKeyboard();
 
 
 
-                    //USEFUL FOR DEBUGGING EVENTS:
-                    /*
-                     $N.on('change:attention', function() { console.log('change:attention'); });
-                     $N.on('change:currentView', function() { console.log('change:currentView'); });
-                     $N.on('change:tags', function() { console.log('change:tags'); });
-                     $N.on('change:focus', function() { console.log('change:focus', $N.focus() ); });
-                     */
+				//USEFUL FOR DEBUGGING EVENTS:
+				/*
+				 $N.on('change:attention', function() { console.log('change:attention'); });
+				 $N.on('change:currentView', function() { console.log('change:currentView'); });
+				 $N.on('change:tags', function() { console.log('change:tags'); });
+				 $N.on('change:focus', function() { console.log('change:focus', $N.focus() ); });
+				 */
 
-                });
 
             });
         });
@@ -969,6 +969,171 @@ $(document).ready(function() {
 
 
 });
+
+
+function initUI() {
+
+	/*
+	$('#MainMenu input').click(function(x) {
+		var b = $(this);
+		var v = b.attr('id');
+		if ((b.attr('type') === 'text') || (b.attr('type') === 'checkbox'))
+			return;
+		$('#ViewControls').buttonset('refresh');
+		$N.save('currentView', v);
+		showAvatarMenu(false);
+	});
+	*/
+
+	$('#AvatarButtonMini').click(function() {
+		var vm = $('#MainMenu');
+		var shown = vm.is(':visible');
+		showAvatarMenu(!shown);
+	});
+	$('#close-menu').click(function() {
+		var vm = $('#MainMenu');
+		var shown = vm.is(':visible');
+		showAvatarMenu(!shown);
+	});
+	$('#avatar-img').click(function() {
+		showAvatarMenu(false);
+	});
+
+
+	$('#AddContentButton').click(function() {
+		var o = objNew();
+		var focus = $N.focus();
+		if (focus)
+			if (focus.value)
+				o.value = focus.value;
+		newPopupObjectEdit(o, {title: 'New...', width: '50%'});
+	});
+	$('#SelectProfileButton').click(function() {
+		openSelectProfileModal();
+		return false;
+	});
+	$('#EditProfileButton').click(function() {
+		newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));    
+		return false;
+	});
+
+	var _mainChatWindow = null;
+	$('#ToggleChatButton').click(function() {
+		if (!_mainChatWindow) {
+			_mainChatWindow = newChannelPopup('!main');
+			_mainChatWindow.bind('dialogclose', function(event) {
+				_mainChatWindow.dialog('close');        
+				_mainChatWindow.remove();
+				_mainChatWindow = null;
+			});
+		}
+		else {
+			_mainChatWindow.dialog('close');   
+		}
+
+		return false;
+	})
+
+
+	$('#AvatarButton').hover(function() {
+		$('#IdentityPopout').fadeIn();
+	}, function() {
+		$('#IdentityPopout').fadeOut();    
+	});
+
+	initFocusButtons();
+
+	setViewLock(configuration.viewlockDefault);
+
+	//$('#Roster').append(newRosterWidget());
+
+
+	later(function() {
+		//Setup Notification Menu
+		(function () {
+			React.renderComponent(
+				NotificationMenu(),
+				$('#NotificationList')[0]
+			);
+
+			//for testing messsages
+			/*setInterval(function() {
+				$N.receive({id:('a'+Date.now()), name: uuid(), type:"urgent"});
+			}, 1000);*/
+		})();
+	});
+}
+
+function updateIndent(viewmenushown) {
+    if (viewmenushown) {
+        $('.view-indented').addClass('view-indented-more');
+    }
+    else {
+        $('.view-indented').removeClass('view-indented-more');
+    }
+    reflowView();
+}
+
+function toggleAvatarMenu() {    showAvatarMenu(!$('#MainMenu').is(':visible'));  }
+
+function showAvatarMenu(b) {
+    var vm = $('#MainMenu');
+    if (!b) {
+        $('#close-menu').hide();
+        $('#AvatarButton').hide();
+        vm.fadeOut();
+        $('#AvatarButtonMini').show();
+        updateIndent(false);
+    }
+    else {
+        $('#AvatarButtonMini').hide();
+        vm.fadeIn();
+        $('#close-menu').show();
+        $('#AvatarButton').show();
+        updateIndent(true);
+    }
+}
+
+function openSelectProfileModal(title) {
+    if (!title)
+        title = 'Profiles';
+    //var d = newPopup(title, {width: '450px', modal: true});
+    
+    $('#LoadingSplash').show();
+    
+    var s;
+    var ident = identity();
+    if (ident == ID_AUTHENTICATED) {
+        s = 'Authenticated: ' + getCookie('account');
+    }
+    else if (ident == ID_ANONYMOUS) {
+        s = 'Anonymous';
+    }
+    else {
+        s = 'Unidentified';
+    }
+    
+    $('#LoadingSplashTitle').html(
+            (configuration.connection == 'static') ?
+            '' :
+            s
+            );
+    
+    $('#LoadingSplashTitle').append(
+            (configuration.connection == 'static') ?
+            '' :
+            ' (<a href="/logout">Logout</a>)'
+            );
+    $('#AuthSelect').hide();
+    $('#ProfileSelect').html(newProfileWidget());
+}
+
+  
+
+
+
+
+
 
 
 //http://stackoverflow.com/questions/918792/use-jquery-to-change-an-html-tag

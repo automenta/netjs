@@ -862,7 +862,8 @@ function netention(f) {
 				console.log('Loaded ', objects.length, 'objects from local browser');
 				$N.notice(objects, false, true);
 
-				callback();
+				if (callback)
+					callback();
 			});
 
         },
