@@ -818,7 +818,7 @@ module.exports = function(options) {
 			express.disable('x-powered-by');
 
 			express.use(lockit.router);
-
+			express.use(require('corser').create());
 		}
 
 

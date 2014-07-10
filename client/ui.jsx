@@ -352,9 +352,9 @@ function _updateView(force) {
         }
     }
     if (currentView) {
-        if (currentView.destroy)  //DEPRECATED
+        if (currentView.destroy)  //DEPRECATED, use stop()
             currentView.destroy();
-        if (currentView.stop)  //DEPRECATED
+        if (currentView.stop)
             currentView.stop();
     }
         
@@ -911,6 +911,8 @@ $(document).ready(function() {
 
 
 				if (configuration.connection == 'static') {
+					$('.websocket').hide();
+				
 					$N.loadAll(function() {
 						if ($N.myself() === undefined) {
 							openSelectProfileModal("Start a New Profile");
@@ -919,7 +921,9 @@ $(document).ready(function() {
 						}								
 					});
 				}
-				else {
+				else if (configuration.connection == 'websocket') {
+					$('.websocket').show();
+					
 					$('#NotificationArea').html('Connecting...');
 
 					if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {

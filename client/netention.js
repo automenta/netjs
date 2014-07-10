@@ -53,8 +53,10 @@ function netention(f) {
             });
             this.set('focus', new nobject());
 
-			var mainChannel = $N.addChannel('main');
-			mainChannel.createdAt = 1382087985419;
+			if (configuration.connection == 'websocket') {
+				var mainChannel = $N.addChannel('main');
+				mainChannel.createdAt = 1382087985419;
+			}
 
 		},
         //deprecated
@@ -555,6 +557,7 @@ function netention(f) {
                     });
             }
 
+			updateView();
 
         },
 
