@@ -66,7 +66,7 @@ addView({
 			var operators = getOperatorTags();
 
 			var currentUserFilter = function (o) {
-				o = $N.getObject(o);
+				o = $N.instance[o];
 				if (o.subject)
 					if (o.subject != currentUser) return false;
 
@@ -120,7 +120,7 @@ addView({
 					if (nn.length > 0) {
 						var uu = $('<ul></ul>');
 						_.each(nn, function (g) {
-							var G = $N.getObject(g);
+							var G = $N.instance[g];
 							var ss = newObjectView(G, {
 								showAuthorIcon: false,
 								showAuthorName: false,
@@ -194,7 +194,7 @@ addView({
 				newRightColDiv().appendTo(d).append(kb);
 
 				_.each(nn, function (x) {
-					var X = $N.getObject(x);
+					var X = $N.instance[x];
 					var lc = newLeftColDiv().appendTo(d);
 					var rc = newRightColDiv().appendTo(d);
 
@@ -360,7 +360,7 @@ function newAuthorCombo(currentUser, includeAll) {
             if (uid == $N.myself().id)
                 return; //skip self
 
-        var u = $N.getObject(uid);
+        var u = $N.instance[uid];
         if (u) {
             var o = $('<option value="' + u.id + '">' + u.name + '</option>').appendTo(userSelect);
             if (currentUser == u.id)
@@ -575,7 +575,7 @@ function newSelfTagList(s, user, c) {
 
     function newTagWidget(x, i) {
         var name
-        var o = $N.getObject(i);
+        var o = $N.instance[i];
         if (o) {
             var tags = objTags(o);
             var otherTags = _.without(tags, x);

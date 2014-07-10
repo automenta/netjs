@@ -6,74 +6,80 @@ addView({
 		v.addClass('ViewPage');
 
 		var browse = $('<table cellpadding="0" cellspacing="0" border="0" class="display" style="width:100%"></table>');
+		browse.addClass('ViewPage');
 		browse.appendTo(v);
 
-		var rr = getRelevant("Recent", "Public", "Any", $N, 10000, null);
+		function update() {
+			var rr = getRelevant("Recent", "Public", "Any", $N, 10000, null);
 
 
-		var data = rr[0].map(function(o) {
-			var O = $N.instance[o];
-			return [O, O.name||'?', objWhen(O), $N.label(O.author)||O.name ]
-		});
-		
+			var data = rr[0].map(function(o) {
+				var O = $N.instance[o];
+				return [O, O.name||'?', objWhen(O), $N.label(O.author)||O.name ]
+			});			
+			
+			var table = browse.dataTable({
+				"data": data,
+				"columns": [
+					{ "title": "NObject", class:"" },
+					{ "title": "Name" },
+					{ "title": "When" },
+					{ "title": "Author" },
+				],
+				"deferRender": true,
 
-		browse.dataTable({
-			"data": data,
-			"columns": [
-				{ "title": "NObject", class:"" },
-				{ "title": "Name" },
-				{ "title": "When" },
-				{ "title": "Author" },
-        	],
-			"deferRender": true,
-
-			//http://www.datatables.net/extensions/scroller/examples
-			/*
-			"scrollY": "200px",
-			"dom": "frtiS",
-			'scrollCollapse': true,
-			*/
-			"searching": true,
-			"lengthChange": true,
-			"paging":   true,
-			"ordering": true,
-
-			"columnDefs": [
-			   {
-					"targets": [ 0 ],
-					"visible": false,
-					"searchable": false
-				},
-				/*{
-					// The `data` parameter refers to the data for the cell (defined by the
-					// `data` option, which defaults to the column being worked with, in
-					// this case `data: 0`.
-					"render": function (data, type, row) {
-						return '';
+				//http://www.datatables.net/extensions/scroller/examples
+				/*
+				"scrollY": "200px",
+				"dom": "frtiS",
+				'scrollCollapse': true,
+				*/
+				"searching": true,
+				"lengthChange": true,
+				"paging":   true,
+				"ordering": true,
+				"order": [2, 'desc'],
+				"columnDefs": [
+				   {
+						"targets": [ 0 ],
+						"visible": false,
+						"searchable": false
 					},
-					"targets": 1
-				},*/
+					/*{
+						// The `data` parameter refers to the data for the cell (defined by the
+						// `data` option, which defaults to the column being worked with, in
+						// this case `data: 0`.
+						"render": function (data, type, row) {
+							return '';
+						},
+						"targets": 1
+					},*/
 
 
-        	],
-			"createdRow": function ( row, data, index ) {
-				/*if ( data[5].replace(/[\$,]/g, '') * 1 > 4000 ) {
-					$('td', row).eq(5).addClass('highlight');
-				}*/
-				$('td', row).eq(0).html(
-					newObjectView(data[0], {
-						scale: 0.5,
-						depthRemaining: 0,
-						startMinimized: true,
-						showAuthorName: false,
-						transparent: true
-					})
-				);
-				$('td', row).eq(1).html( $.timeago(new Date( data[2])) );
-			}
-		});
+				],
+				"createdRow": function ( row, data, index ) {
+					/*if ( data[5].replace(/[\$,]/g, '') * 1 > 4000 ) {
+						$('td', row).eq(5).addClass('highlight');
+					}*/
+					$('td', row).eq(0).html(
+						newObjectView(data[0], {
+							scale: 0.5,
+							depthRemaining: 0,
+							startMinimized: true,
+							showAuthorName: false,
+							transparent: true
+						})
+					);
+					$('td', row).eq(1).html( $.timeago(new Date( data[2])) );
+				}
+			});			
+					
+		}
+		
+		v.onChange = update;
+		update();
 
-		browse.addClass('ViewPage');
+		
 		return v;
 	},
 	stop: function (v) {}

@@ -1713,7 +1713,7 @@ module.exports = function(options) {
 
 						//TODO SECURITY make sure that client actually owns the object. this requires looking up existing object and comparing its author field
 
-						if (obj.f) {
+						if (obj.focus) {
 							focusHistory.push(obj);
 
 							$N.emit('focus', obj);

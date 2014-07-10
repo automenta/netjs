@@ -1094,9 +1094,9 @@ function _addObjectViewPopupMenu(authored, target) {
 
 
 var subjectTag = {
-    'Like': { objSuffix: '_Likes', objTag: 'Value', objName: 'Likes', property: 'values' },
-    'Dislike': { objSuffix: '_Dislikes', objTag: 'Not', objName: 'Dislikes', property: 'nots' },
-    'Trust': { objSuffix: '_Trusts', objTag: 'Trust', objName: 'Trusts', property: 'trusts' }
+    'Like': { objSuffix: '_Likes', objTag: 'Value', objName: 'Likes' },
+    'Dislike': { objSuffix: '_Dislikes', objTag: 'Not', objName: 'Dislikes'},
+    'Trust': { objSuffix: '_Trusts', objTag: 'Trust', objName: 'Trusts' }
 };
 
 function _newSubjectTagButtonClick() {
@@ -1112,17 +1112,22 @@ function _newSubjectTagButtonClick() {
     if (!defaultLikes) {
         defaultLikes = new $N.nobject(defaultLikesID, data.objName, data.objTag);
         defaultLikes.author = defaultLikes.subject = $N.id();
-        defaultLikes.add(data.property, x);
+        defaultLikes.addTag(x);
     }
     else {
         //TODO use getObject if it will return a nobject
         defaultLikes = new $N.nobject(defaultLikes);                    
         //TODO check if existing
-        defaultLikes.add(data.property, x);
+        defaultLikes.addTag(x);
         defaultLikes.touch();
     }
     
-    $N.pub(defaultLikes);
+    $N.pub(defaultLikes, null, function(x) {
+		notify({
+			title: data.objTag,
+			text: 'Saved'
+		});
+	});
     
     return false;
 }

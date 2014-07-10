@@ -322,24 +322,10 @@ exports.plugin = function($N) {
                 //{id: 'Friend', name: 'Friend', extend: ['Social'] },
                 //{id: 'Enemy', name: 'Enemy', extend: ['Social']},
 
-                {id: 'Know', name: 'Know', value: {
-                        'knowledge': {name: 'Knowledge', extend: 'object'}
-                    },
-                    extend: ['Action']
-                },
-                {id: 'Trust', name: 'Trust', value: {
-                        'trusts': {name: 'in', extend: 'object', tag: 'User', min: 1}
-                    },
-                    extend: ['Action'], icon: '/icon/trade.png'},
-                {id: 'Distrust', name: 'Distrust', value: {
-                        'distrusts': {name: 'in', extend: 'object', tag: 'User', min: 1}
-                    },
-                    extend: ['Action'] },
-                {id: 'Value', name: 'Value', description: 'Represents valuing, preference, or having importance',
-                    value: {
-                        'values': {name: 'in', extend: 'object', min: 1}
-                    },
-                    extend: ['Action'] },
+                {id: 'Know', name: 'Know', extend: ['Action'] },
+                {id: 'Trust', name: 'Trust', extend: ['Action'], icon: '/icon/trade.png'},
+                {id: 'Distrust', name: 'Distrust', extend: ['Action'] },
+                {id: 'Value', name: 'Value', description: 'Represents like, valuing, preference, or having importance', extend: ['Action'] },
 
                 {id: 'Access', name: 'Access', extend: ['Concept']},
                 {id: 'Can', name: 'Can', extend: ['Access'], icon: '/icon/can.png',
