@@ -1020,6 +1020,9 @@ function initUI() {
 			}, 1000);*/
 		})();
 	});
+	$('#NotificationList').click(function() {
+		$('#NotificationList i').removeClass('blink');
+	});
 }
 
 function updateIndent(viewmenushown) {

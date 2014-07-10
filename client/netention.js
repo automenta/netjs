@@ -971,6 +971,7 @@ function netention(f) {
 			
 			$N.messages.push(message);
 			$N.trigger('change:messages');
+			$('#NotificationList i').addClass('blink');
 		}
     });
 

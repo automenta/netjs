@@ -31,6 +31,8 @@ var NotificationMenu = React.createClass({
   	$N.router.navigate("#/us",{trigger:true});
   },
 
+
+  
   render: function() {
   	var maxMessages = 4;
 
@@ -63,7 +65,7 @@ var NotificationMenu = React.createClass({
 
 	//var STYLES = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
 	return (
-	  <DropdownButton onClick={this.handleShowMore} bsStyle="default" title={getTitle()}>
+	  <DropdownButton bsStyle="default" title={getTitle()}>
 	  	{items}
 	  </DropdownButton>
 	);
