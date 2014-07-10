@@ -246,16 +246,16 @@ addView({
 		$('<button title="Scroll to Bottom">&DownArrow;</button>').appendTo(viewMenu).click(scrollbottom);
 		viewMenu.append(input.children());
 
+		this.onChange = function() {
+			later(function() {
+				updateContent(_myNewObject);     
+				if (_myNewObject)
+					scrollbottom();
+				_myNewObject = null;
+			})
+		};		
 
 		return this;
-	},
-	onChange: function() {
-		later(function() {
-			updateContent(_myNewObject);     
-			if (_myNewObject)
-				scrollbottom();
-			_myNewObject = null;
-		})
 	},
 	stop: function() {
 		_.values(this.rootsUnaffected).forEach(function(x) {
