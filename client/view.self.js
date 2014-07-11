@@ -76,31 +76,25 @@ addView({
 			};
 
 			function addTheTag(T) {
-				if ((T.id === 'Trust') || (T.id === 'Distrust') || (T.id === 'Value')) {
-					return function () {
-						var x = objNew();
-						x.name = T.name;
-						x.author =
-							x.subject = $N.id();
-						x.addTag(T.id);
+				return function () {
+					var d = newPopup("Add " + T.name, {
+						width: 800,
+						height: 600,
+						modal: true
+					});
+					d.append(newTagger([], function (results) {
+						var property;
+						if ((T.id == 'Do') || (T.id == 'Learn') || (T.id == 'Teach'))
+							property = 'know';
+						else
+							property = _.keys(T.property)[0]; //first property of the tag
+						
+						saveAddedTags(results, T.id, property);
 
-						newPopupObjectEdit(x);
-					}
-				} else {
-					return function () {
-						var d = newPopup("Add " + T.name, {
-							width: 800,
-							height: 600,
-							modal: true
+						later(function () {
+							d.dialog('close');
 						});
-						d.append(newTagger([], function (results) {
-							saveAddedTags(results, T.id);
-
-							later(function () {
-								d.dialog('close');
-							});
-						}));
-					}
+					}));
 				}
 			}
 
@@ -127,7 +121,7 @@ addView({
 							var ss = newObjectView(G, {
 								showAuthorIcon: false,
 								showAuthorName: false,
-								showMetadataLine: true,
+								showMetadataLine: false,
 								showActionPopupButton: false,
 								titleClickMode: (G.author == $N.id() ? 'edit' : 'view')
 							}).removeClass("ui-widget-content ui-corner-all").addClass('objectViewBorderless');
@@ -297,9 +291,11 @@ function newGoalWidget(g) {
     return d;
 }
 
-function saveAddedTags(gt, tag, when) {
+function saveAddedTags(gt, tag, property, when) {
     _.each(gt, function (g) {
-        var G = $N.tag(g);
+		
+		var T = $N.class[tag];
+        var G = $N.object[g];
         var ng = objNew();
 
         if (when) {
@@ -310,32 +306,31 @@ function saveAddedTags(gt, tag, when) {
                 objAddValue(ng, 'spacepoint', location);
         }
 
+		var Tname = T.name;
+		if ((T.id == 'Learn') || (T.id == 'Do') || (T.id == 'Teach'))
+			Tname = 'Know';
+		
         ng.own();
-        if (G)
-            ng = objName(ng, G.name);
-        else
-            ng = objName(ng, g);
-
+        ng.subject = $N.myself().id;		
+        ng = objName(ng, Tname + ': ' + (G ? G.name : g));
         ng = objAddTag(ng, tag);
-        ng = objAddTag(ng, g);
-        ng.subject = $N.myself().id;
+        ng = objAddValue(ng, property, g);		
         
 
         $N.pub(ng, function (err) {
             notify({
-                title: 'Unable to save Goal.',
-                type: 'Error'
+                title: 'Error: Unable to save.',
+                type: 'Error',
+				text: ng.name
             });
         }, function () {
             notify({
-                title: 'Goal saved (' + ng.id.substring(0, 6) + ')'
+                title: 'Saved',
+				text: ng.name
             });
-            $N.notice(ng);
         });
 
     });
-
-    //saveSelf();
 
 }
 

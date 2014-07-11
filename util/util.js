@@ -955,14 +955,15 @@ var Ontology = function(db, tagInclude, target) {
         }
         that.dgraph.addEdge = function(e, a, b, v) {
             invalidateGraphDistance(v);
+
             try {
                 graphlib.Digraph.prototype.addEdge.apply(that.dgraph, arguments);
             }
             catch (err) {
-                if (that.instance[a]===undefined) {
+                if (that.object[a]===undefined) {
                     console.error('missing source, buffering until', a);
                 }
-                if (that.instance[b]===undefined) {
+                if (that.object[b]===undefined) {
                     console.error('missing target, buffering until', b);
                 }
                 console.error('unable to add edge:',err,e,a,b,v);
@@ -1143,7 +1144,7 @@ var Ontology = function(db, tagInclude, target) {
 
                 var existing = false;
                 if (that.instance[x.id]) {
-                    //existing, unindex first				
+                    //existing, unindex first		
                     unindexInstance(x, true);
                     existing = true;
                 }
@@ -1436,7 +1437,8 @@ var Ontology = function(db, tagInclude, target) {
     }
 
     function unindexInstance(x, keepGraphNode) {
-        if (!keepGraphNode) {
+
+		if (!keepGraphNode) {
 
             try {
                 var dedges = that.dgraph.incidentEdges(x.id);

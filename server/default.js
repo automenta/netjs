@@ -117,9 +117,9 @@ exports.plugin = function($N) {
                     },
                     extend: ['Thing']
                 },
-                {id: 'Link', name: 'Link', description: 'A link or edge in a graph or network',
+                {id: 'Link', name: 'Link', description: 'A directed link, edge, or hyperedge in a graph or network',
                     value: {
-                        'incidentObject': {name: 'Next', extend: 'object'}
+                        'next': {name: '', extend: 'object'} //incident objects
                     },
                     extend: ['Concept']
                 },
@@ -322,7 +322,11 @@ exports.plugin = function($N) {
                 //{id: 'Friend', name: 'Friend', extend: ['Social'] },
                 //{id: 'Enemy', name: 'Enemy', extend: ['Social']},
 
-                {id: 'Know', name: 'Know', extend: ['Action'] },
+                {id: 'Know', name: 'Know', extend: ['Action'] ,
+				 	value: {
+						'know': {name: '', extend: 'object' }
+                    }   
+				},
                 {id: 'Trust', name: 'Trust', extend: ['Action'], icon: '/icon/trade.png',
 				 	value: {  
 						'trust': {name: '', extend: 'object' }    
@@ -333,18 +337,18 @@ exports.plugin = function($N) {
 						'distrust': {name: '', extend: 'object' }    
 					},
 				},
-                {id: 'Value', name: 'Value', description: 'Represents like, valuing, preference, or having importance', extend: ['Action'],
+                {id: 'Value', name: 'Like', description: 'Represents like, valuing, preference, or having importance', extend: ['Action'],
                     value: {
 						'value': {name: '', extend: 'object' }
                     }  				
 				},
-                {id: 'Not', name: 'Not', extend: ['Concept'], icon: '/icon/not.png',
+                {id: 'Not', name: 'Dislike', extend: ['Action'], icon: '/icon/not.png',
                     value: {
 						'not': {name: '', extend: 'object' }
                     }  
 				},
 
-                {id: 'Access', name: 'Access', extend: ['Concept']},
+                {id: 'Access', name: 'Access', extend: ['Action']},
                 {id: 'Can', name: 'Can', extend: ['Access'], icon: '/icon/can.png',
                 	description: 'Something offer, offered, offering, share, shared, sharing, provide, providing, able',
                     value: {

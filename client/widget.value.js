@@ -179,7 +179,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 newTagValueWidget.instance = function(x, index, v, prop, editable, d, events) {
 	
 	var value = prop.id;
-	var V = $N.instance[value];
+	var V = $N.object[value];
 
     var ii = newTagButton(V).appendTo(d);
 
