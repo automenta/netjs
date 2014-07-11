@@ -22,7 +22,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     if (!Array.isArray(selected))
         selected = [selected];
     
-    var tags = _.clone(selected);
+    var tags = _.clone(selected) || [];
 
     var d = newDiv();
     var t = newDiv('TagSelectWidget'); //target for the browser instances
@@ -30,23 +30,25 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
 
     var currentBrowser = null;
 
-    var clearButton = $('<button title="Clear the selected tags">Clear</button>').addClass('halfTransparent');
+    var clearButton = $('<button title="Clear the selected tags">Clear</button>');
     
-    var b = $('<button><b>OK</b></button>');
+    var b = $('<button class="btn-primary"><b>OK</b></button>');
 	if (!cancelButton)
 		b.hide();
 
-    var tagsCombo = $('<span></span>').attr('id', 'tagsCombo');
+    var tagsCombo = $('<span></span>').attr('id', 'tagsCombo').addClass('well well-sm');
     tagsCombo.update = function() {
         tagsCombo.empty();
         if (tags.length === 0) {
+			tagsCombo.hide();
             clearButton.hide();
             b.text('Cancel');
         }
         else {
-            clearButton.show();
-            
-            b.html('<b>Select</b>');                
+			tagsCombo.show();
+			clearButton.show();			                        
+            b.html('<b>Select</b>');
+			
             for (var i = 0; i < tags.length; i++)
                 tagsCombo.append(newTagButton(tags[i]));
         }
@@ -81,30 +83,16 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
 		});
     }
 
-    var selectBar = $('<div/>').attr('id', 'tagSelectHeader').addClass('taggerHeader ui-widget-content');
+    var selectBar = $('<div/>').attr('id', 'tagSelectHeader').addClass('taggerHeader');
     
-    var modeFunctions = {};
-    var modeSelect = $('<select autofocus/>')
-        .appendTo(selectBar)
-        .change(function() {
-            var k = modeSelect.val();
-            var f = modeFunctions[k];
-            if (f) {
-                later(function() {
-                    loadBrowser(f);                            
-                });
-            }
-        });
-    var optionCount = 0;
+	var modeFunctions = [];
     function addOption(label, browserFunction) {
-        /*var b = $('<button>' + label + '</button>');
-         b.click(function() {
-         loadBrowser(browserFunction);
-         });
-         selectBar.append(b);*/
-        $('<option value="' + optionCount + '">' + label + '</option>').appendTo(modeSelect);
-        modeFunctions[optionCount] = browserFunction;
-        optionCount++;
+        var b = $('<button type="button">' + label + '</button>')
+					.appendTo(selectBar)
+					.click(function() {
+						loadBrowser(browserFunction);
+					});				
+		modeFunctions.push(browserFunction);
     }
     if (!tagRestrictions) {
         addOption('Index', newTreeBrowser);
@@ -134,7 +122,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     }
 
 	if (!options.addImmediately) {
-		var saveBar = $('<span/>');
+		var saveBar = $('<span/>').css('float', 'right');
 		tagsCombo.update();	
 		saveBar.append(tagsCombo);
 
@@ -171,6 +159,8 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     t.attr('style', 'clear: both');
     d.append(t);
 
+	selectBar.find('button').addClass('btn btn-default');
+	
     //default
     if (modeFunctions[0])
         loadBrowser(modeFunctions[0]);

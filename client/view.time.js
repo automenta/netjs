@@ -144,7 +144,7 @@ addView({
 						var tti = dd[dd.length - 1].start.getTime();
 						var d = newPopup("Add a Goal at " + new Date(tti), {width: 800, height: 600, modal: true});
 						d.append(newTagger([], function(results) {
-							saveAddedTags(results, 'Goal', tti);
+							saveAddedTags(results, 'Goal', 'goal', tti);
 							later(function() {
 								d.dialog('close');
 							});
@@ -271,7 +271,7 @@ function newTimeViewGridster(v) {
             addbutton.click(function() {
                 var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
                 d.append(newTagger([], function(results) {
-                    saveAddedTags(results, 'Goal', tti + timeUnitLengthMS / 2);
+                    saveAddedTags(results, 'Goal', 'goal', tti + timeUnitLengthMS / 2);
 
                     //now = _.unique(now.concat(results));
                     later(function() {
@@ -466,7 +466,7 @@ function newGoalList(target, user, centroids) {
             addbutton.click(function() {
                 var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
                 d.append(newTagger([], function(results) {
-                    saveAddedTags(results, 'Goal', tti + timeUnitLengthMS / 2);
+                    saveAddedTags(results, 'Goal', 'goal', tti + timeUnitLengthMS / 2);
 
                     //now = _.unique(now.concat(results));
                     later(function() {

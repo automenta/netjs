@@ -266,6 +266,7 @@ exports.plugin = function($N) {
 
                 {id: 'Goal', name: 'Goal', description: 'A goal, dream, project, program, plan, opportunity, or deliverable',
                     value: {
+						'goal': {name: '', extend: 'object' },
                         /*'repeatPeriod': {name: 'Repeat period (sec)', extend: 'real', unit: 'time'},
                          'repeatDelay': {name: 'Repeat phase (sec)', extend: 'real', unit: 'time'},
                          'repeatStarted': {name: 'Repeat started', extend: 'timepoint', readonly: true},*/
@@ -279,8 +280,7 @@ exports.plugin = function($N) {
                         'goalDeadline': {name: 'Deadline', extend: 'timepoint', max: 1},
                         'goalCost': {name: 'Cost', extend: 'real', default: 0, units: currencyUnits},
                         'goalBudgeted': {name: 'Budgeted', description: 'How much funding currently budgeted toward this', extend: 'real', default: 0, units: currencyUnits},
-                        'goalObjective': {name: 'Objective', extend: 'html', description: 'What to accomplish and how to measure progress'}
-
+                        'goalObjective': {name: 'Objective', extend: 'html', description: 'What to accomplish and how to measure progress'}				 	
                         //status: not started, planning, in progress, completed
                     },
                     extend: ['Concept']

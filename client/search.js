@@ -187,7 +187,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         if (x.hidden)
             continue;
 
-        if (x.replyTo)  //TODO make this conditoin optional
+        if (x.replyTo)  //TODO make this condition optional
             continue;
 
         var xx = null;

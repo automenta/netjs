@@ -343,7 +343,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         if (editable) {
             
             if ((x.name) || (hideWidgets!==true)) {
-                nameInput = $('<input/>').attr('type', 'text').attr('placeholder', 'Title').attr('x-webkit-speech', 'x-webkit-speech').addClass('form-control input-lg nameInput nameInputWide');
+                nameInput = $('<input type="text"/>').attr('placeholder', 'Title').attr('x-webkit-speech', 'x-webkit-speech').addClass('form-control input-lg nameInput nameInputWide');
                 nameInput.val(x.name === true ? '' : x.name);
                 widgetsToAdd.push(nameInput);
                 if (onNameEdit) {
@@ -401,7 +401,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                                     response(results);
                               },
 							create: function() {
-								tagInput.next().find('input').addClass('form-control').css('border', '1px solid gray');
+								tagInput.next().find('input').addClass('form-control');
 								tagInput.next().css('border', '0');
 								tagInput.next().find().css('border', '0');
 							}
@@ -513,21 +513,9 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var whatButton = $('<button title="What?"><i class="fa fa-plus-square"/></button>').click(function() {
 				var p;
 				var taggerOptions;
-				if (configuration.device == configuration.MOBILE) {
 					p = newPopup('Select Tags for ' + nameInput.val(), true, true);
 					taggerOptions = [];
-				}
-				else {
-					taggerOptions = {
-                		inDialog: false,
-						cancelButton: false,
-                		addImmediately: function(t) {
-                    		update(objAddTag(getEditedFocus(), t));
-                		}
-            		};
-					whatButton.attr('disabled', 'disabled');
-				}
-				
+			
 				var tagger = newTagger(taggerOptions, function(t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
@@ -543,44 +531,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 					if (p && p.dialog) p.dialog('close');
                 });
 				
-				if (configuration.device == configuration.DESKTOP) {
-					tagger.css('float', 'left').css('width', '25%')
-						.css('height', '98.5%').css('position', 'absolute')
-						.css('direction', 'rtl').css('text-align', 'left');
-					tagger.find('#TagSelectWidget')
-						.css('overflow-y', 'auto')//.css('zoom', '75%')
-						.css('overflow-x', 'hidden')
-						.css('height', '90%');
 
-					D //.css('margin-left', '26%')
-						.css('float', 'right')
-						.css('padding-left', '5px');
-					
-					D.before(tagger);					
-
-					function updateSize() {
-						var dialogWidth = D.parent().width();
-						var remainingWidth = dialogWidth - tagger.width() - 7 /* margin */;
-						D.css('width', remainingWidth + 'px');
-					}
-					
-					tagger.resizable({
-						handles: "e",
-						resize: updateSize						
-					});
-					
-					D.parent().dialog({
-						resize: updateSize
-					});
-					
-					updateSize();
-										
-				}
-				else {
-					p.append(tagger);
-				}
-				
-
+				p.append(tagger);
 				
             });
 
@@ -814,6 +766,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
     }
 
     update(ix);
+	
 
     return D;
 }

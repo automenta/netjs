@@ -903,11 +903,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 	resize: vertical;
 }
 
-#FocusTagger .taggerHeader {
-    padding-bottom: 3px;
-    margin-bottom: 0;
-	position: absolute;
-	width: 90%;	
+.taggerHeader {
+	padding: 5px;
 }
 
 #FocusEditWrap {

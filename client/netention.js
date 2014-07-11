@@ -308,7 +308,6 @@ function netention(f) {
 
                 });
             }
-
             return socket;
         },
         setWebRTC: function(id, enabled) {
@@ -1063,9 +1062,9 @@ function newPopup(title, p, isModal, existingDiv) {
 
         p = {
             width: clientWidth - leftMargin - margin,
-            height: clientHeight - margin * 3,
+            height: clientHeight - margin * 4,
             //position: [leftMargin, margin]
-            position: {my: "center", at: "center", of: document}
+            position: {my: "center", at: "center", of: window}
         };
     }
 

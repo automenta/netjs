@@ -1,12 +1,12 @@
 function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange) {
-	var tag = t.id;
+	var tag = t.id || t;
 
     var strength = t.strength;
     if (t.readonly)
         editable = false;
     if (strength === undefined)
         t.strength = strength = 1.0;
-    var T = $N.object[tag] || { id: tag };
+    var T = $N.object[tag] || { id: tag, name: tag };
     var isPrim = isPrimitive(tag);
     var isProp = T._property;
     var isClass = T._class!==undefined;
@@ -179,7 +179,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 newTagValueWidget.instance = function(x, index, v, prop, editable, d, events) {
 	
 	var value = prop.id;
-	var V = $N.object[value];
+	var V = $N.object[value] || value;
 
     var ii = newTagButton(V).appendTo(d);
 
