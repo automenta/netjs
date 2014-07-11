@@ -609,16 +609,16 @@ addView({
 					}
 				}
 
-				if (includeEdges['Trust'] || includeEdges['Value'] || includeEdges['Not'] || includeEdges['Other']) {
+				if (includeEdges['trust'] || includeEdges['value'] || includeEdges['not'] || includeEdges['other']) {
 
 					function edgeType(e) {
 						if (!e) return 'Other';
 						if (typeof e === "number")
 							return 'Other';
 						if (typeof e === "string") {
-							if (e === 'Trust') return 'Trust';
-							if (e === 'Value') return 'Value';
-							if (e === 'Not') return 'Not';
+							if (e === 'trust') return 'trust';
+							if (e === 'value') return 'value';
+							if (e === 'not') return 'not';
 						}
 						return 'Other';
 					 }
@@ -648,14 +648,14 @@ addView({
 
 						var stroke;
 						var strokeWidth = Math.max(1.0, thickLine * s);
-						if (et === 'Trust') {
+						if (et === 'trust') {
 							stroke = 'rgba(40,' + parseInt(p(s, 0.7, 1.0)*255) + ',40,' + p(s,0.5, 0.9) + ')';
 						}
-						else if (et === 'Value') {
+						else if (et === 'value') {
 							stroke = 'orange';
 							strokeWidth /= 2;
 						}
-						else if (et === 'Not') {
+						else if (et === 'not') {
 							stroke = 'red';
 							strokeWidth /= 2;
 						}
@@ -691,13 +691,16 @@ addView({
 						}
 
 						var outEdges = $N.dgraph.outEdges(x.id);
+						
 						for (var j = 0; j < outEdges.length; j++) {
 							var e = outEdges[j];
 							var target = $N.dgraph.target(e);
+							
 
 							if (hasEdge(x.id, target, e)===true) continue;
 
 							var ev = getEdgeVisual(e);
+							
 							if (ev)
 								addEdge(x.id, target, ev, e);
 						}
@@ -934,7 +937,7 @@ addView({
 		var edgeMenu = newDiv().addClass('HUDTopRight').appendTo(nd);
 		edgeMenu.css('text-align','right');
 
-		var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'Trust', 'Value', 'Not', 'Other' ];
+		var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'trust', 'value', 'not', 'other' ];
 		_.each(edgeTypes, function (e) {
 			var includeCheck = $('<input type="checkbox"/>');
 			includeCheck.click(function () {

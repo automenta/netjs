@@ -323,23 +323,42 @@ exports.plugin = function($N) {
                 //{id: 'Enemy', name: 'Enemy', extend: ['Social']},
 
                 {id: 'Know', name: 'Know', extend: ['Action'] },
-                {id: 'Trust', name: 'Trust', extend: ['Action'], icon: '/icon/trade.png'},
-                {id: 'Distrust', name: 'Distrust', extend: ['Action'] },
-                {id: 'Value', name: 'Value', description: 'Represents like, valuing, preference, or having importance', extend: ['Action'] },
+                {id: 'Trust', name: 'Trust', extend: ['Action'], icon: '/icon/trade.png',
+				 	value: {  
+						'trust': {name: '', extend: 'object' }    
+					},
+				},
+                {id: 'Distrust', name: 'Distrust', extend: ['Action'],
+					value: {  
+						'distrust': {name: '', extend: 'object' }    
+					},
+				},
+                {id: 'Value', name: 'Value', description: 'Represents like, valuing, preference, or having importance', extend: ['Action'],
+                    value: {
+						'value': {name: '', extend: 'object' }
+                    }  				
+				},
+                {id: 'Not', name: 'Not', extend: ['Concept'], icon: '/icon/not.png',
+                    value: {
+						'not': {name: '', extend: 'object' }
+                    }  
+				},
 
                 {id: 'Access', name: 'Access', extend: ['Concept']},
                 {id: 'Can', name: 'Can', extend: ['Access'], icon: '/icon/can.png',
-                            description: 'Something offer, offered, offering, share, shared, sharing, provide, providing, able'
-                    },
+                	description: 'Something offer, offered, offering, share, shared, sharing, provide, providing, able',
+                    value: {
+						'can': {name: '', extend: 'object' }
+                    }                
+				},
                 {id: 'Need', name: 'Need', extend: ['Access'], icon: '/icon/need.png',
-                            description: 'Something want, wanted, wanting, need, needed, needing, seek, seeking, request, requested, requesting',
-                            value: {
+                    description: 'Something want, wanted, wanting, need, needed, needing, seek, seeking, request, requested, requesting',
+                    value: {
+						'need': {name: '', extend: 'object' }
                         //'repeatNeed': {name: 'Repeat', extend: 'timerepeat' },
                     }
                 },
-                {id: 'Not', name: 'Not', extend: ['Concept'], icon: '/icon/not.png',
-                       value: {  'nots': {name: 'in', extend: 'object' }    },
-                },
+
 
                 {id: 'Offer', name: 'Offer', extend: ['Can'], icon: '/icon/can.png'},
                 {id: 'Sell', name: 'Sell', extend: ['Can'], icon: '/icon/can.png'},

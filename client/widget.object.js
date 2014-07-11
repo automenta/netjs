@@ -1101,9 +1101,9 @@ function _addObjectViewPopupMenu(authored, target) {
 
 
 var subjectTag = {
-    'Like': { objSuffix: '_Likes', objTag: 'Value', objName: 'Likes' },
-    'Dislike': { objSuffix: '_Dislikes', objTag: 'Not', objName: 'Dislikes'},
-    'Trust': { objSuffix: '_Trusts', objTag: 'Trust', objName: 'Trusts' }
+    'Like': { objSuffix: '_Likes', objTag: 'Value', objProperty: 'value', objName: 'Likes' },
+    'Dislike': { objSuffix: '_Dislikes', objTag: 'Not', objProperty: 'not', objName: 'Dislikes'},
+    'Trust': { objSuffix: '_Trusts', objTag: 'Trust', objProperty: 'trust', objName: 'Trusts' }
 };
 
 function _newSubjectTagButtonClick() {
@@ -1119,13 +1119,12 @@ function _newSubjectTagButtonClick() {
     if (!defaultLikes) {
         defaultLikes = new $N.nobject(defaultLikesID, data.objName, data.objTag);
         defaultLikes.author = defaultLikes.subject = $N.id();
-        defaultLikes.addTag(x);
+		defaultLikes.add(data.objProperty, x);
     }
     else {
-        //TODO use getObject if it will return a nobject
-        defaultLikes = new $N.nobject(defaultLikes);                    
-        //TODO check if existing
-        defaultLikes.addTag(x);
+        //TODO use getObject if it will return a nobject object
+        defaultLikes = new $N.nobject(defaultLikes); //wrap it
+        defaultLikes.add(data.objProperty, x);
         defaultLikes.touch();
     }
     

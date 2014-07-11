@@ -159,6 +159,11 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 		}
 		else if (!isPrim)
 			tagLabel.innerHTML += ':&nbsp;';
+
+		//if T.name is empty, use arrow symbol
+		if (T.name === '')
+			tagLabel.innerHTML = '<i class="fa fa-long-arrow-right"></i>';
+		
 	}
 	else {
 		tagLabel.innerHTML='';

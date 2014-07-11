@@ -830,7 +830,7 @@ var Ontology = function(db, tagInclude, target) {
 
 	that.db = db;
 	
-	var operatorTags = ['Value','Not','Trust','Distrust'];
+	var graphEdge = ['value', 'not', 'distrust', 'trust'];
 
 	var qsetPending = [];
 	function queueSet(x, callback) {
@@ -1143,10 +1143,11 @@ var Ontology = function(db, tagInclude, target) {
 
                 var existing = false;
                 if (that.instance[x.id]) {
-                    //existing, unindex first
+                    //existing, unindex first				
                     unindexInstance(x, true);
                     existing = true;
                 }
+				
 
                 that.instance[x.id] = x;
                 delete that.class[x.id];
@@ -1246,15 +1247,16 @@ var Ontology = function(db, tagInclude, target) {
                     x.inout[x.subject] = { };
 
                 if (x.value) {
-					//index an instance reference if the first tag is an operator
-					if ((tags.length >=2 ) && (operatorTags.indexOf(tags[0])!=-1)) {
-						var operator = tags[0];
-						for (var j = 1; j < tags.length; j++) {
-							var target = tags[j];
-							x.inout[x.subject][target] = operator;
-						}
-					}
-                }
+                     for (var j = 0; j < x.value.length; j++) {
+                         var vi = x.value[j];
+                         var vid = vi.id;
+ 
+						 if (graphEdge.indexOf(vid)!==-1) {
+                             var target = vi.value; 
+                             x.inout[x.subject][target] = vid;
+                         }
+                     }                
+ 				}
             }
             else {
                console.log('Error validating object making subject claim', x);
