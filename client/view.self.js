@@ -315,8 +315,7 @@ function saveAddedTags(gt, tag, property, when) {
         ng = objName(ng, Tname + ': ' + (G ? G.name : g));
         ng = objAddTag(ng, tag);
         ng = objAddValue(ng, property, g);		
-        
-
+        		
         $N.pub(ng, function (err) {
             notify({
                 title: 'Error: Unable to save.',

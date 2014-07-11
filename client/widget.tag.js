@@ -4,7 +4,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     var addImmediately = false;
 	var cancelButton = true;
     if (!options) {
-        
+        options = {};
     }
     else if (Array.isArray(options)) {
         selected = options;

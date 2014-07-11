@@ -17,6 +17,10 @@ select {
 	height: 2em;
 }
 
+.ui-dialog-content {
+	clear:both;
+}
+
 /* @group Blink */
 
 .blink {

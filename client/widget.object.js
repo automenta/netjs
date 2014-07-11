@@ -166,9 +166,9 @@ function newTagButton(t, onClicked, isButton, dom) {
                 t = to;
 			else {
 				//try if instance
-				var ti = $N.instance[t];
-				if (ti)
-					t = ti;
+				var tii = $N.instance[t];
+				if (tii)
+					t = tii;
 			}
         }
         if (t.id) {
@@ -188,13 +188,13 @@ function newTagButton(t, onClicked, isButton, dom) {
     
     b.setAttribute('class', 'tagLink');
     b.style.backgroundImage="url(" + ti + ")";
-    
+    	
     if (t && (t.name)) {
-        b.innerHTML = t.name;
+        b.innerHTML = t.name || t.id;
         b.setAttribute('taguri', t.id || (t + ''));
     }
     else {
-        b.innerHTML = t;
+        b.innerHTML = t.id || t;
     }
         
     if (!onClicked)

@@ -182,7 +182,7 @@ newTagValueWidget.instance = function(x, index, v, prop, editable, d, events) {
 	var V = $N.object[value] || value;
 
     var ii = newTagButton(V).appendTo(d);
-
+	
     if (editable) {
         events.onSave.push(function(y) {
             objAddValue(y, value, null, v.strength);
@@ -1073,10 +1073,7 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
     }
     else {
         if (t.value) {
-            var V = $N.object[t.value];
-            var target = t.value;
-            
-            d.append(newEle('a').data('target', target).html( (V) ? (V.name || V.id) : '?' ).click(_objectLinkClick));
+			d.append(newTagButton(t.value));
         }
     }
 };
