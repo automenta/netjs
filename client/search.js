@@ -145,7 +145,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var ft;
     if (focus) {
         semantic = 'Relevant';
-        ft = objTags(focus);
+        ft = objTags(focus, false, $N.class);
 
         //exclude tile layers from filter
         ft = _.filter(ft, function(t) {
@@ -177,7 +177,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var SORT_NEAR = (sort === 'Near');
     var SORT_RECENT = (sort === 'Recent');
 
-    var focusTagStrength = objTagStrength(focus, false);
+    var focusTagStrength = objTagStrength(focus, false, false, $N.class);
     
     var instances = 0;
     for (var k in $N.instance) {
@@ -193,7 +193,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
         var xx = null;
 
         if (preFilter) {
-            xx = objTagStrength(x, false);
+            xx = objTagStrength(x, false, false, $N.class);
             if (!preFilter(x, xx))
                 continue;
         }
@@ -339,7 +339,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                 if (r > 0) {
                     if (ft.length > 0) {
                         if (xx===null)
-                             xx = objTagStrength(x, false);
+                             xx = objTagStrength(x, false, false, $N.class);
                         r *= objTagStrengthRelevance(xx, focusTagStrength);
                     }
                 }

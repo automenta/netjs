@@ -160,6 +160,8 @@ function netention(f) {
                         $N.clear();
                         
                         $N.clearTransients();
+						
+						$N.indexOntology();
                         
                         $N.getUserObjects(function() {
 							$('#NotificationArea').html('Loading my objects...');
@@ -557,7 +559,6 @@ function netention(f) {
 
             $N.updateRoster();
 
-            $N.indexOntology();
 
             if (configuration.webrtc) {
                 $LAB
