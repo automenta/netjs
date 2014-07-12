@@ -4,12 +4,18 @@
 <head>
 	<title>Netention (Polymer)</title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-	<script src="/lib/polymer/components/platform/platform.js"></script>
-	<link rel="import" href="/lib/polymer/components/font-roboto/roboto.html">
-	<link rel="import" href="/lib/polymer/components/core-header-panel/core-header-panel.html">
-	<link rel="import" href="/lib/polymer/components/core-toolbar/core-toolbar.html">
-	<link rel="import" href="/lib/polymer/components/paper-tabs/paper-tabs.html">
+	<script src="/lib/polymer/platform/platform.js"></script>
+  	<link rel="import" href="/lib/polymer/core-icons/core-icons.html">	
+	<link rel="import" href="/lib/polymer/font-roboto/roboto.html">
+	<link rel="import" href="/lib/polymer/core-header-panel/core-header-panel.html">
+	<link rel="import" href="/lib/polymer/core-toolbar/core-toolbar.html">
+	<link rel="import" href="/lib/polymer/core-splitter/core-splitter.html">
+	<link rel="import" href="/lib/polymer/paper-checkbox/paper-checkbox.html">
+	<link rel="import" href="/lib/polymer/paper-icon-button/paper-icon-button.html">
+	<link rel="import" href="/lib/polymer/paper-tabs/paper-tabs.html">
 	<style>
+		@import url("/lib/fontawesome/css/font-awesome.min.css");
+		
 		html,
 		body {
 			height: 100%;
@@ -81,14 +87,24 @@
 <body unresolved touch-action="auto">
 	<core-header-panel>
 		<core-toolbar>
+			<paper-icon-button class="brand" iconSrc=""></paper-icon-button>
+			
+			<!--<paper-checkbox class="white" checked></paper-checkbox>-->
+			<paper-icon-button><i class="fa fa-search fa-2x"></i></paper-icon-button>
+			
 			<paper-tabs id="tabs" selected="all" valueattr="name" self-end>
 				<paper-tab name="all">ALL</paper-tab>
-				<paper-tab name="favorites">FAVORITES</paper-tab>
+				<paper-tab name="favorites"><i class="fa fa-search fa-2x"></i></paper-tab>
 			</paper-tabs>
 		</core-toolbar>
 
 		<!-- main page content will go here -->
-
+<div class="container" horizontal="" layout="" style="width: 100%; overflow: hidden;">
+    <div style="min-width: 128px; overflow: hidden; width: 99px;">left</div>
+    <core-splitter direction="left" minsize="128"></core-splitter>
+    <div flex="" style="overflow: hidden;">right</div>
+  </div>
+		
 	</core-header-panel>
 
 	<script>
@@ -101,8 +117,23 @@
 		function initUI() {
 		}
 		function initSessionUI() {
+			updateBrand();
 		}
 		
+		function updateBrand() {
+			var avatarURL;
+			
+			if (!$N.myself()) {
+				avatarURL = configuration.defaultAvatarIcon;
+			}
+			else {
+				$('.brand').attr('alt',$N.myself().name);
+				avatarURL = getAvatarURL($N.myself());
+			}
+
+			$('.brand').attr('iconSrc', avatarURL);
+			//$('#toggle-img').attr('src', avatarURL);
+		}		
 	</script>
 </body>
 

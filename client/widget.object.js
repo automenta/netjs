@@ -1,24 +1,3 @@
-//t is either a tag ID, or an object with zero or more tags
-function getTagIcon(t) {
-    if (!t)
-        return defaultIcons.unknown;
-
-    if (t.id) {
-        //try all the tags, return the first
-        if (t.value) {
-            for (var x = 0; x < t.value.length; x++) {
-                if (isPrimitive(t.value[x].id))
-                    continue;
-                var r = getTagIcon(t.value[x].id);
-                if (r)
-                    return r;
-            }
-        }
-        return defaultIcons.unknown;
-    } else {
-        return defaultIcons[t] || defaultIcons.unknown;
-    }
-}
 
 
 function newPopupObjectEdit(n, p) {
@@ -107,33 +86,6 @@ function newAvatarImage(s) {
         "style": 'background-image:url(' + getAvatarURL(s) + ')',
         'title': (s ? s.name : '')
     });
-}
-
-function getAvatarURL(s, style) {
-    if (!style)
-        style = 'retro';
-    /*
-     Gravatar Styles
-     404: do not load any image if none is associated with the email hash, instead return an HTTP 404 (File Not Found) response
-     mm: (mystery-man) a simple, cartoon-style silhouetted outline of a person (does not vary by email hash)
-     identicon: a geometric pattern based on an email hash
-     monsterid: a generated 'monster' with different colors, faces, etc
-     wavatar: generated faces with differing features and backgrounds
-     retro: awesome generated, 8-bit arcade-style pixelated faces
-     blank: a transparent PNG image (border added to HTML below for demonstration purposes)    
-     */
-	if (typeof s === "string") {
-		var i = $N.instance[s];
-		if (i)
-			s = i;
-	}		
-		
-    if (s) {
-        var e = objFirstValue(s, 'email');
-        var emailHash = e ? MD5(e) : (s.id ? MD5(s.id) : MD5(s.toString()) );
-        return "http://www.gravatar.com/avatar/" + emailHash + '?d=' + style;
-    }
-    return configuration.defaultAvatarIcon;
 }
 
 
