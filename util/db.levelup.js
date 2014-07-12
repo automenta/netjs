@@ -55,6 +55,26 @@ module.exports = DB = function (collection, dbOptions) {
 		return value;
 	}
 
+	function postfilter(value) {
+		delete value._modifiedAtDesc;
+		delete value._id;
+		
+		var inoutcount = 0;
+		if (value.inout) {
+			for (var x in value.inout) {
+				for (var y in value.inout[x])
+					inoutcount++;					
+			}
+			if (inoutcount == 0)
+				delete value.inoutcount;
+		}
+		
+		return value;		
+	}
+	function postfilterAll(values) {
+		return values.map(postfilter);
+	}
+	
 	var idb = {
 
 		db: db,
@@ -104,7 +124,11 @@ module.exports = DB = function (collection, dbOptions) {
 		},
 
 		get: function (id, callback) {
-			db.get(id, callback);
+			db.get(id, function(err, x) {
+				if (!err && x)
+					x = postfilter(x);
+				callback(err, x);
+			});
 		},
 
 
@@ -126,7 +150,7 @@ module.exports = DB = function (collection, dbOptions) {
 			var results =  [];
  		    db.query(query)
 				.on('data', function(d) {
-					results.push(d);
+					results.push(postfilter(d));
 				})
 				.on('end', function () {
 					callback(null, results);
@@ -142,7 +166,7 @@ module.exports = DB = function (collection, dbOptions) {
 			var query = { tagList: { $in: tag } };
  		    db.query(query)
 				.on('data', function(d) {
-					results.push(d);
+					results.push(postfilter(d));
 				})
 				.on('end', function () {
 					callback(null, results);
@@ -162,7 +186,7 @@ module.exports = DB = function (collection, dbOptions) {
 					return callback(err);
 				}
 				else if (x)
-					results.push(x);
+					results.push(postfilter(x));
 				else
 					return callback(null, results);
 			});
@@ -184,6 +208,8 @@ module.exports = DB = function (collection, dbOptions) {
 				.on('data', function(x) {
 					if (!x.id) return;
 
+					x = postfilter(x);
+					
 					perObject(null, x);
 					count++;
 					if (count == max)
@@ -201,7 +227,7 @@ module.exports = DB = function (collection, dbOptions) {
 
 			rawDB.createValueStream()
 			  .on('data', function (data) {
-				  result.push(data);
+				  result.push(postfilter(data));
 			  })
 			  .on('error', function (err) {
 				  callback(err, null);
