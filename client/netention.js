@@ -534,41 +534,7 @@ function netention(f) {
         
         //called after connection establishd
         sessionStart: function() {
-			$N.saveAll();
-            updateBrand(); //TODO use backbone Model instead of global function
-
-            updateViewLock(0);
-
-            $N.startURLRouter();
-
-            $('#NotificationArea').remove();
-
-            if (configuration.avatarMenuDisplayInitially)
-                showAvatarMenu(true);
-            else
-                showAvatarMenu(false);
-
-            later(function() {
-                notify({
-                    title: 'Connected.',
-                    type: 'success',
-                    delay: 2000
-                });                        
-            });
-
-            $N.updateRoster();
-
-
-            if (configuration.webrtc) {
-                $LAB
-                    .script("/lib/peerjs/peer.min.js")
-                    .script("/webrtc.js")
-                    .wait(function() {
-                        initWebRTC(configuration.webrtc); 
-                    });
-            }
-
-			updateView();
+			initSessionUI();
 
         },
 
@@ -758,7 +724,8 @@ function netention(f) {
             }
             if ((anythingChanged) && (!suppressChange)) {
                 if (anythingChangedFromOthers)
-                    updateViewLock(viewUpdatesBuffered + 1);
+					if (window.updateViewLock) //TEMPORARY, use an emit to decouple this
+                    	updateViewLock(viewUpdatesBuffered + 1);
 				
 
 						
@@ -1018,14 +985,195 @@ function netention(f) {
         f("ontology.json", $N);
     }
 
-    later(function() {
-        setTheme($N.get('theme'));        
-    });
 
 }
 
+$(document).ready(function() {
 
-//apparently is faster than $('<div/>');
+    netention(function(schemaURL, $N) {
+        $('#NotificationArea').html('System loaded.');
+
+        $N.loadOntology(schemaURL, function() {
+            $('#NotificationArea').html('Ontology ready. Loading objects...');
+
+            $N.getUserObjects(function() {
+                
+                //SETUP ROUTER
+                var Workspace = Backbone.Router.extend({
+                    routes: {
+                        "new": "new",
+                        "me": "me", // #help
+                        "help": "help", // #help
+                        "query/:query": "query", // #search/kiwis
+                        "object/:id": "showObject",
+                        "object/:id/focus": "focus",
+                        "tag/:tag": "tag",
+                        "tag/:tag/new": "tagNew",						
+                        //"new/with/tags/:t":     "newWithTags",
+                        "example": "completeExample",
+                        "user/:userid": "user",
+                        ":view": "view",
+						":view/tag/:tag": "viewTag",
+                        "read/*url": "read"
+                                //"search/:query/:page":  "query"   // #search/kiwis/p7
+                    },
+                    me: function() {
+                        commitFocus($N.myself());
+                    },
+                    completeExample: function() {
+                        commitFocus(exampleObject);
+                    },
+                    showObject: function(id) {
+                        var x = $N.object[id];
+                        if (x) {
+                            newPopupObjectView(x);
+                        }
+                        else {
+                            notify({
+                             	title: 'Unknown object',
+                             	text: id
+                             });
+                        }
+                    },
+                    view: function(view) {						
+                        $N.set('currentView', view);
+                    },
+                    viewTag: function(view, tag) {						
+                        $N.set('currentView', view);
+						
+						var tf = new $N.nobject();
+						tf.addTag(tag);						
+						$N.setFocus(tf);
+						
+						//show sidebar
+						if (!$('#FocusEditWrap').is(':visible')) 
+							$('#FocusEditToggleButton').click();        
+                    },					
+                    user: function(userid) {
+                        $N.set('currentView', {view: 'user', userid: userid});
+                    },
+                    tagNew: function(tag) {
+						var n = new $N.nobject();
+						n.addTag(tag);
+						newPopupObjectEdit(n);
+                    },					
+                    read: function(url) {
+                        later(function() {
+                            viewRead(url);
+                        });
+                    }
+
+                });
+
+
+
+				
+				initUI();
+                
+
+				var ii = identity();
+
+				if (ii === ID_AUTHENTICATED) {
+					$('#NotificationArea').html('Authorized.');
+				}
+				else if (ii === ID_ANONYMOUS) {
+					$('#NotificationArea').html('Anonymous.');
+				}
+				else {
+					$('#NotificationArea').html('Read-only public access.');
+					/*$('.loginlink').click(function() {
+					 $('#LoadingSplash').show();
+					 nn.hide();
+					 });*/
+				}
+
+				$('#View').show();
+				$('#LoadingSplash2').hide();
+
+
+
+
+
+				var w = new Workspace();
+				$N.router = w;
+
+				/*
+				if (($N.myself()===undefined) && (identity()!=ID_UNKNOWN)) {
+					openSelectProfileModal("Start a New Profile");
+				}*/
+
+
+
+				if (configuration.connection == 'static') {
+					$('.websocket').hide();
+				
+					$N.loadAll(function() {
+						if ($N.myself() === undefined) {
+							openSelectProfileModal("Start a New Profile");
+						} else {
+							$N.sessionStart();
+						}								
+					});
+				}
+				else if (configuration.connection == 'websocket') {
+					$('.websocket').show();
+					
+					$('#NotificationArea').html('Connecting...');
+
+					if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {
+						var otherSelves = _.filter($N.get("otherSelves"), function(f) {
+							return $N.getObject(f) != null;
+						});
+						if (otherSelves.length >= 1) {
+							$N.become(otherSelves[0]);
+							return;
+						}
+					}					
+
+					if (isAnonymous()) {
+						//show profile chooser
+						openSelectProfileModal("Anonymous Profiles");
+					}
+					else if ($N.myself() === undefined) {
+						if (configuration.requireIdentity)
+							openSelectProfileModal("Start a New Profile");
+						else {
+							$N.sessionStart();
+						}
+					}
+
+
+				}
+
+
+				//initKeyboard();
+
+
+
+				//USEFUL FOR DEBUGGING EVENTS:
+				/*
+				 $N.on('change:attention', function() { console.log('change:attention'); });
+				 $N.on('change:currentView', function() { console.log('change:currentView'); });
+				 $N.on('change:tags', function() { console.log('change:tags'); });
+				 $N.on('change:focus', function() { console.log('change:focus', $N.focus() ); });
+				 */
+
+
+            });
+        });
+
+
+    });
+
+
+});
+
+
+//function later(f) {     setImmediate(f); }
+window.later = setImmediate;
+
+
+//faster than $('<div/>');
 function newDiv(id) {
     var e = newEle('div');
     if (id)
