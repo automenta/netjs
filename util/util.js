@@ -124,8 +124,8 @@ nobject.prototype.touch = function() {
     objTouch(this);
     return this;
 };
-nobject.prototype.add = function(k, v, strength) {
-    return objAddValue(this, k, v, strength);
+nobject.prototype.addValue = nobject.prototype.add = function(tagID, value, strength) {
+    return objAddValue(this, tagID, value, strength);
 };
 /*x.objSpacePoint = function(latitude, longitude) {
  return objSpacePointLatLng
@@ -133,7 +133,7 @@ nobject.prototype.add = function(k, v, strength) {
 
 //CLIENT-ONLY
 nobject.prototype.own = function() {
-    if (self)
+    if ($N)
         this.author = $N.id();
     return this;
 };

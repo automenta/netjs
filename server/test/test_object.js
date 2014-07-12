@@ -1,41 +1,74 @@
-/*test( "hello test", function() {
-  ok( 1 == "1", "Equality passed!" );
-  ok( 0 == "1", "Failed!" );
-});*/
+var assert = require("assert");
+var _ = require('lodash');
 
-test("New objects", function() {
-    ok( objNew().id, "Generate ID randomly when none specified" );
-
-    var s = "specificID";
-    strictEqual(s, objNew(s).id, "object ID may be specifid");
+var util = require('../../util/util.js');
 
 
-    ok( objNew().createdAt, "Has createdAt metadata");
-    
-    strictEqual( objNew("id").id, "id", "New Object with supplied ID" );
-    strictEqual( objNew("id", "name").name, "name", "New Object with supplied name" );
+describe("new objects", function() {
+	
+	var $N = util.Ontology();
+	
+	it("object operations", function() {
+		assert( new $N.nobject().id, "Generate ID randomly when none specified" );
+
+		assert( (new $N.nobject()).createdAt, "Has createdAt metadata");
+
+		assert( (new $N.nobject("id")).id == "id", "New Object with supplied ID" );
+		assert( (new $N.nobject("id", "name")).name == "name", "New Object with supplied name" );
+	});
 });
 
-test("Object compact & expand", function() {
-	var x = objNew();
-	x.add({id: 'tag1',strength: 1});
-	x.add({id: 'tag1',strength: 0.5});
-	x.add('tag2');
 
-	var y = objCompact(x);
-	ok(y.v.length == 3);
-	ok(typeof y.v[0] == "string"); //the first should be turned into a string since it has strenght==1 (the default)
-	ok(typeof y.v[1] != "string");
-	ok(typeof y.v[2] == "string");
-	//ok(true, JSON.stringify(y));
+describe("Object compact & expand", function() {
 
-	var z = objExpand(y);
-	ok(z.value.length == 3);
-	//ok(true, JSON.stringify(z));
+	var $N = util.Ontology();
+	
+	function testExpand(x) {
+		var y = util.objCompact(x);
 
+		var z = util.objExpand(y);
+		
+		assert(z.value.length == x.value.length);
+			
+		assert(_.isEqual(z.value, x.value));
+		assert(x.id == z.id);
+		assert(x.name == z.name);
+		assert(x.createdAt == z.createdAt);		
+		assert(x.author == z.author);		
+	}
+	
+	
+	it("object with tags & values", function() {
+	
+		var x = new $N.nobject("id", "name");
+		x.addTag('tag1');
+		x.addTag('tag1', 0.5);
+		x.addTag('tag2');
+		
+		var y = util.objCompact(x);
+		
+		assert(y.v.length == 3);
+		assert(typeof y.v[0] === "string"); //the first should be turned into a string since it has strenght==1 (the default)
+		assert(typeof y.v[1] !== "string");
+		assert(typeof y.v[2] === "string");
+		
+		testExpand(x);
+	});
+	
+	it("object 2", function() {
+	
+		var x = new $N.nobject("id", "name");
+		x.author = 'me';
+		x.addTag('tag1');
+		
+		testExpand(x);
+	});	
 });
 
-test("Object editing", function() {
+//TODO update these
+
+/*
+describe("Object editing", function() {
        
     var x = objNew();
     var y = { id: 'tag'  };
@@ -64,7 +97,7 @@ test("Object editing", function() {
     
 });
 
-test("Tag calclulations", function() {
+describe("Tag calclulations", function() {
     var x = objNew();
     objAddValue(x, { id: 'integer', value: 5 }); //should not be counted
     objAddValue(x, { id: 'Earthquake', strength: 1.0, value: [ ] }); 
@@ -87,3 +120,4 @@ test("Tag calclulations", function() {
     //deepEqual( objTagRelevance(x, y), 0.8, 'tag relevancy: when some tags present' );
     
 });
+*/
