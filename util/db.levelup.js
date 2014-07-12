@@ -58,7 +58,8 @@ module.exports = DB = function (collection, dbOptions) {
 	function postfilter(value) {
 		delete value._modifiedAtDesc;
 		delete value._id;
-		
+		delete value.tagList;
+
 		var inoutcount = 0;
 		if (value.inout) {
 			for (var x in value.inout) {

@@ -276,15 +276,17 @@ module.exports = function(options) {
 
     function notice(o, whenFinished, socket) {
 		//assumes o is already expanded
-
-        if (o._id)
-            delete o._id;
+		
 		if (!o.id) {
 			console.error('notice() invalid object', o);
+			return;
 		}
-
+		
+        if (o._id)
+            delete o._id;
+		
         //attention.notice(o, 0.1);
-		$N.add(o, whenFinished);
+		$N.add(_.cloneDeep(o), whenFinished);
     }
     $N.notice = notice;
 
@@ -720,7 +722,7 @@ module.exports = function(options) {
 			}
 
 			o = new $N.nobject(o);
-
+			
 			if (!o.removed)
 				$N.emit('object:pub', o);
 			else
@@ -1706,6 +1708,7 @@ module.exports = function(options) {
 					});
 
 					socket.on('pub', function(obj, callback) {
+						
 						var obj = $N.objExpand(obj);
 						var originalObject = _.cloneDeep(obj);
 
