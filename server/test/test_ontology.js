@@ -5,12 +5,23 @@ var util = require('../../util/util.js');
 var DB = require('../../util/db.levelup.js');
 
 
-//TODO update this
+function newOntology() {
+	var odb = DB('objects', { type: 'levelup', backend: 'memdown' } );
+    return util.Ontology(odb, true);
+}
+
+var class1 = {
+	id: 'Class1',
+	description: 'A test class, with value in array form',
+	extend: [],
+	value: [            
+		"testProperty"
+	]
+};
+
 
 describe("Ontology", function() {
-	
-	var odb = DB('objects', { type: 'levelup', backend: 'memdown' } );
-    var $N = util.Ontology(odb, true);
+	var $N = newOntology();
     	
 	it("ontology add/remove", function() {
 
@@ -49,14 +60,7 @@ describe("Ontology", function() {
 		{  assert($N.property[prop1.id].id === prop1.id, "property present in ontology");  }
 
 
-		var class1 = {
-			id: 'Class1',
-			description: 'A test class, with value in array form',
-			extend: [],
-			value: [            
-				"testProperty"
-			]
-		};
+
 		$N.add(class1);
 		{ 
 			assert($N.class[class1.id].id === class1.id, "class present in ontology");  
@@ -107,56 +111,107 @@ describe("Ontology", function() {
 		$N.remove(data2);
 		{   assert( _.keys($N.tagged['Class1']).length === 0, "removing instance unindexes by its tags" );  }
 	
-	});        
-    
+		
+		$N.clear();		
+		assert(0 == $N.dgraph.order(), "Dgraph empty after clear()");
+		assert(0 == $N.ugraph.order(), "Ugraph empty after clear()");
+		
+	});           
+
+	it("Directed Graph in, out", function() {
+		var a = new $N.nobject("a");
+		var b = new $N.nobject("b");
+
+		$N.add(a);
+		$N.add(b);    
+		assert(2 == $N.dgraph.order(), "Digraph has 2 nodes after adding 2");
+		assert(2 == $N.ugraph.order(), "UGraph has 2 nodes after adding 2");
+
+		a.value = [ { id: 'html', value: '..' }];    
+		$N.add(a);    
+		assert(2 == $N.dgraph.order(), "Digraph has same number of nodes after reindexing existing object");
+
+		$N.remove(a);
+		assert(1 == $N.dgraph.order(), "Digraph has 1 node after removing 1 node");
+
+		a.out = { "b": 1};
+		$N.add(a);
+		assert(1 == $N.dgraph.edges().length, "Digraph has 1 edge after adding node with outgoing edge");    
+		assert(0 == $N.ugraph.edges().length, "Ugraph has 0 edges after adding node with outgoing edge");
+
+		var c = new $N.nobject("c");
+		a.out = { "c": true };
+		$N.add(a);
+		$N.add(c);
+		assert(3 == $N.dgraph.order());
+		assert(1 == $N.dgraph.edges().length, "the one existing edge replaced");
+		assert($N.dgraph.edge("|a|c"), "edge value");
+		assert("a" == $N.dgraph.predecessors("c")[0], "a is predecessor of c");
+
+		//test in edges
+		c.in = { "b": 1 };
+		$N.add(c);
+		assert(2 == $N.dgraph.edges().length, "additional edge, b->c");
+
+		delete c.in;
+		$N.add(c);
+		assert(1 == $N.dgraph.edges().length, "removed income edge");
+
+		//test removal of all nodes, should be no edges
+		$N.remove(a).remove(b).remove(c);
+		assert(0 == $N.dgraph.edges().length, "no edges when no nodes in graph");
+	});    
+	
+
+	
+});
+
+describe("Ontology getTagged", function() {
+	
+	var $N = newOntology();
+
+	it("ontology getTagged", function() {
+		
+		$N.clear();
+		
+		var a = new $N.nobject("a");
+		a.addValue("trust", "y");
+		a.subject = a.author = 'x';
+		
+		$N.add(a);
+		
+		assert($N.instance['a'], "a identified as instance");
+		assert($N.instance['x'], "x identified as instance");
+		assert($N.instance['y'], "y identified as instance");
+		assert(1 == $N.dgraph.edges().length, "edge 'a know b' inferred");
+		assert(3 == $N.dgraph.order(), "a, b, & x identified as instances");
+		
+		
+		var tags = $N.getTags(a);
+		
+		assert(tags.length==3);
+		assert(_.contains(tags,'trust'));
+		assert(_.contains(tags,'y'));
+		assert(_.contains(tags,'x'));
+		
+		$N.add(class1);
+		
+		a.addTag("Class1");
+		$N.add(a);
+		
+		
+		tags = $N.getTags(a);
+		
+		assert(tags.length === 4, 'a now has Class1 tag');
+		assert(tags.indexOf('Class1')!==-1);
+		
+		
+		
+	});
+	
 });
 
 /*
-test("Directed Graph in, out", function() {
-    var $N = new Ontology(true);        
-    var a = new nobject("a");
-    var b = new nobject("b");
-
-    $N.add(a).add(b);    
-    strictEqual(2, $N.dgraph.order(), "Digraph has 2 nodes after adding 2");
-    strictEqual(2, $N.ugraph.order(), "UGraph has 2 nodes after adding 2");
-    
-    a.value = [ { id: 'html', value: '..' }];    
-    $N.add(a);    
-    strictEqual(2, $N.dgraph.order(), "Digraph has same number of nodes after reindexing existing object");
-    
-    $N.remove(a);
-    strictEqual(1, $N.dgraph.order(), "Digraph has 1 node after removing 1 node");
-    
-    a.out = { "b": 1};
-    $N.add(a);
-    strictEqual(1, $N.dgraph.edges().length, "Digraph has 1 edge after adding node with outgoing edge");    
-    strictEqual(0, $N.ugraph.edges().length, "Ugraph has 0 edges after adding node with outgoing edge");
-    
-    var c = new nobject("c");
-    a.out = { "c": true };
-    $N.add(a);
-    $N.add(c);
-    strictEqual(3, $N.dgraph.order());
-    strictEqual(1, $N.dgraph.edges().length, "the one existing edge replaced");
-    strictEqual(true, $N.dgraph.edge("|a|c"), "edge value");
-    strictEqual("a", $N.dgraph.predecessors("c")[0], "a is predecessor of c");
-        
-    //test in edges
-    c.in = { "b": 1 };
-    $N.add(c);
-    strictEqual(2, $N.dgraph.edges().length, "additional edge, b->c");
-    
-    delete c.in;
-    $N.add(c);
-    strictEqual(1, $N.dgraph.edges().length, "removed income edge");
-    
-    //test removal of all nodes, should be no edges
-    $N.remove(a).remove(b).remove(c);
-    strictEqual(0, $N.dgraph.edges().length, "no edges when no nodes in graph");
-    
-});
-
 test("Trust Network", function() {
     var $N = new Ontology(true);
     $N.graphDistanceTag = [ "Trust" ];

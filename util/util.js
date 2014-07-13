@@ -376,7 +376,7 @@ exports.objIncidentTags = objIncidentTags;
 
 
 
-function objTags(x, includePrimitives, knownClasses) {
+function objTags(x, includePrimitives) {
     // objTags(x) -> array of tags involved (except those with strength==0)
     if (!x.value)
         return [];
@@ -393,20 +393,7 @@ function objTags(x, includePrimitives, knownClasses) {
                 if (isPrimitive(t))
                     continue;
 
-            newValues[t] = true;
-			
-			
-			//extract object value tags
-			if (knownClasses) {
-				if (vv.value) {
-					var V = vv.value;
-					if (typeof V === 'string') {
-						if (knownClasses[V]) {
-							newValues[V] = true; 
-						}
-					}
-				}
-			}
+            newValues[t] = true;						
         }
     }
 
@@ -424,7 +411,7 @@ function objProperties(x) {
 exports.objProperties = objProperties;
 
 
-function objTagStrength(x, normalize, noProperties, knownClasses) {
+function objTagStrength(x, normalize, noProperties) {
     // objTags(x) -> array of tags involved
     var t = {};
     if (!x.value)
@@ -445,20 +432,7 @@ function objTagStrength(x, normalize, noProperties, knownClasses) {
             if ($N.property[ii])
                 continue;
         }
-		else {
-		
-			//extract object value tags
-			if (knownClasses) {
-				if (vv.value) {
-					var V = vv.value;
-					if (typeof V === 'string') {
-						if (knownClasses[V]) {
-							t[V] = s; 
-						}
-					}
-				}
-			}				
-		}
+
 		
         if (!t[ii])
             t[ii] = s;
@@ -889,7 +863,7 @@ var Ontology = function(db, tagInclude, target) {
 		if (callback)
 			x._callback = callback;
 
-		var tagList = objTags(x, false, that.class);	//provides an index for faster DB querying ($in)
+		var tagList = that.getTags(x);	//provides an index for faster DB querying ($in)
 		if (tagList.length > 0)
 			x.tagList = tagList;
 
@@ -1243,7 +1217,7 @@ var Ontology = function(db, tagInclude, target) {
     function indexInstance(x, keepGraphNode, isInstance) {
         if (isInstance) {
 
-            var tags = objTags(x, false, that.class);
+            var tags = that.getTags(x);
             for (var i = 0; i < tags.length; i++) {
                 var t = tags[i];
                 if (!that.tagged[t])
@@ -1527,7 +1501,7 @@ var Ontology = function(db, tagInclude, target) {
             delete x.reply;
             delete that.reply[x.id];
 
-            var tags = objTags(x, false, that.class);
+            var tags = that.getTags(x);
             for (var i = 0; i < tags.length; i++) {
                 var t = tags[i];
                 if (that.tagged[t])
@@ -1592,6 +1566,40 @@ var Ontology = function(db, tagInclude, target) {
         return _.values(r);
     };
 
+	that.getTagStrength = function(x, normalize) {
+		var tags = objTagStrength(x, normalize, false);
+		
+		//Infer additional tags
+		
+		//1. from object values
+		if (x.value) {
+			for (var i = 0; i < x.value.length; i++) {
+				var vv = x.value[i];
+				if (vv.value) {
+					var V = vv.value;
+					if (typeof V === 'string') {
+						if ((that.class[V]) || (that.instance[V])) {
+							tags[V] = 1.0;
+						}
+					}
+				}
+			}
+		}
+		
+		//2. include subject
+		if (x.subject) {
+			tags[x.subject] = 1.0;;
+		}
+		
+		return tags;
+	};
+
+	//getTags: return a list of an objects tags, according to as much as can be inferred from this ontology	
+	that.getTags = function(x) {
+		return _.keys(that.getTagStrength(x));
+	};
+	
+	
     //deprecated
     that.getSubTags = function(s) {
         if (typeof s === "string")
@@ -1599,6 +1607,7 @@ var Ontology = function(db, tagInclude, target) {
         return s.subclass;
     };
 
+	
 	that.getAllByTag = function(t, includeSubTags, callback) {
         if ((typeof t === "object") && !Array.isArray(t))
             t = [t.id];
