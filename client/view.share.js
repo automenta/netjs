@@ -2,7 +2,7 @@ addView({
 	id: 'share',
 	name: 'Share',
 	icon: 'icon/view.share.svg',
-	start: function(v) {		
+	start: function(v) {
 		var shareTags = configuration.shareTags;
 		var shareCategories = configuration.shareCategories;
 		var allShareTags = _.union(shareTags, shareCategories);
@@ -156,9 +156,9 @@ addView({
 			var me = $N.myself();
 			if (me) {
 
-				var editButton = $("<button title='Edit Profile'><img style='height: 1.0em; vertical-align: middle' src='" + getAvatarURL($N.myself()) + "'/>" + $N.myself().name + "</button>");
+				var editButton = $("<button title='Edit Profile'><img style='height: 1.0em; vertical-align: middle' src='" + getAvatarURL($N.myself()) + "'/>" + $N.myself().name + '</button>');
 				editButton.click(function() {
-					newPopup("Profile", true, true).append(newObjectEdit($N.myself(), true));
+					newPopup('Profile', true, true).append(newObjectEdit($N.myself(), true));
 				});
 
 				editButton.appendTo(selfmenu);
@@ -190,7 +190,7 @@ addView({
 				//$('body').timeago('refresh');
 			}, (!onlyUsers) ? function(x, tags) {
 				for (var i in tags) {
-					if (allShareTags.indexOf(i)!==-1)
+					if (allShareTags.indexOf(i) !== -1)
 						return true;
 				}
 				return false;

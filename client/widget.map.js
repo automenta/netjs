@@ -10,9 +10,9 @@ function setGeolocatedLocation(map, onUpdated) {
         }
     });
 
-    geolocate.events.register("locationupdated", geolocate, onUpdated);
+    geolocate.events.register('locationupdated', geolocate, onUpdated);
 
-    geolocate.events.register("locationfailed", this, function() {
+    geolocate.events.register('locationfailed', this, function() {
         OpenLayers.Console.log('Location detection failed');
     });
 
@@ -55,7 +55,7 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
         }
     }
 
-    
+
     map.location = function() {
         return {lat: location.lat, lon: location.lng};
     };
@@ -82,7 +82,7 @@ function initLocationChooserMap(target, location, zoom, geolocate) {
     map.onDestroy = function() {
         map = null;
     };
-    
+
     return map;
 }
 
@@ -92,8 +92,8 @@ function initLocationChooserMapOL(target, location, zoom, geolocate) {
     /*if ((!location) && (geolocate!=false))
      geolocate = true;*/
 
-    var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
-    var toProjection = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+    var fromProjection = new OpenLayers.Projection('EPSG:4326'); // Transform from WGS 1984
+    var toProjection = new OpenLayers.Projection('EPSG:900913'); // to Spherical Mercator Projection
 
 
     var m = new OpenLayers.Map({
@@ -106,11 +106,11 @@ function initLocationChooserMapOL(target, location, zoom, geolocate) {
         center: [-12356463.476333, 5621521.4854095]
     });
     var mapnik = new OpenLayers.Layer.OSM();
-    var vector = new OpenLayers.Layer.Vector("Editable Vectors", {});
+    var vector = new OpenLayers.Layer.Vector('Editable Vectors', {});
     m.vector = vector;
 
     m.addLayers([
-        mapnik, vector //, gphy, gmap, gsat, ghyb, /*veroad, veaer, vehyb,*/ 
+        mapnik, vector //, gphy, gmap, gsat, ghyb, /*veroad, veaer, vehyb,*/
     ]);
 
     m.setCenter(new OpenLayers.LonLat(0, 0), defaultZoomLevel);
@@ -171,7 +171,7 @@ function initLocationChooserMapOL(target, location, zoom, geolocate) {
 
 
 
-    m.events.register("click", m, function(e) {
+    m.events.register('click', m, function(e) {
         var oll = m.getLonLatFromViewPortPx(e.xy);
         setLocation(oll);
     });

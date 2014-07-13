@@ -1,8 +1,8 @@
 function newMainView(v) {
     var d = newDiv().css('overflow', 'hidden').css('height', '100%').appendTo(v);
-    
+
     $LAB
-        .script("lib/gridster/jquery.gridster.with-extras.min.js")
+        .script('lib/gridster/jquery.gridster.with-extras.min.js')
         .wait(function() {
             //<script src="lib/gridster/jquery.gridster.with-extras.min.js" type="text/javascript" async></script>
 
@@ -45,7 +45,7 @@ function newMainView(v) {
             var cols = 3;
 
             var m = $('<li class="ui-widget-content mainViewButton"></li>');
-            $.get('/doc/index.html', function(h) { m.html(h); } );
+            $.get('/doc/index.html', function(h) { m.html(h); });
 
             gridster.add_widget(m, 2, 4, 1, 1);
 
@@ -82,7 +82,7 @@ function newMainView(v) {
 
             });
 
-            
+
         });
 
 

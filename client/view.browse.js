@@ -2,38 +2,38 @@ addView({
 	id: 'browse',
 	name: 'Browse',
 	icon: 'icon/view.browse.svg',
-	start: function (v) {
+	start: function(v) {
 		v.addClass('ViewPage');
 
 		var browse;
-		
+
 		function update() {
 			if (browse) {
 				browse = null;
 				v.html('');
 			}
-			
+
 			browse = $('<table cellpadding="0" cellspacing="0" border="0" class="display" style="width:100%"></table>');
 			browse.addClass('ViewPage');
 			browse.appendTo(v);
-			
-			var rr = getRelevant("Recent", "Public", "Any", $N, 10000, null);
+
+			var rr = getRelevant('Recent', 'Public', 'Any', $N, 10000, null);
 
 
 			var data = rr[0].map(function(o) {
 				var O = $N.instance[o];
-				return [O, O.name||'?', objWhen(O), $N.label(O.author)||O.name ]
-			});			
-			
+				return [O, O.name || '?', objWhen(O), $N.label(O.author) || O.name];
+			});
+
 			var table = browse.dataTable({
-				"data": data,
-				"columns": [
-					{ "title": "NObject", class:"" },
-					{ "title": "Name" },
-					{ "title": "When" },
-					{ "title": "Author" },
+				'data': data,
+				'columns': [
+					{ 'title': 'NObject', class: '' },
+					{ 'title': 'Name' },
+					{ 'title': 'When' },
+					{ 'title': 'Author' }
 				],
-				"deferRender": true,
+				'deferRender': true,
 
 				//http://www.datatables.net/extensions/scroller/examples
 				/*
@@ -41,17 +41,17 @@ addView({
 				"dom": "frtiS",
 				'scrollCollapse': true,
 				*/
-				"searching": true,
-				"lengthChange": true,
-				"paging":   true,
-				"ordering": true,
-				"order": [2, 'desc'],
-				"columnDefs": [
+				'searching': true,
+				'lengthChange': true,
+				'paging': true,
+				'ordering': true,
+				'order': [2, 'desc'],
+				'columnDefs': [
 				   {
-						"targets": [ 0 ],
-						"visible": false,
-						"searchable": false
-					},
+						'targets': [0],
+						'visible': false,
+						'searchable': false
+					}
 					/*{
 						// The `data` parameter refers to the data for the cell (defined by the
 						// `data` option, which defaults to the column being worked with, in
@@ -64,7 +64,7 @@ addView({
 
 
 				],
-				"createdRow": function ( row, data, index ) {
+				'createdRow': function(row, data, index ) {
 					/*if ( data[5].replace(/[\$,]/g, '') * 1 > 4000 ) {
 						$('td', row).eq(5).addClass('highlight');
 					}*/
@@ -77,18 +77,18 @@ addView({
 							transparent: true
 						})
 					);
-					$('td', row).eq(1).html( $.timeago(new Date( data[2])) );
+					$('td', row).eq(1).html($.timeago(new Date(data[2])));
 				}
-			});			
-					
+			});
+
 		}
-		
+
 		v.onChange = update;
 		update();
-		
+
 		return v;
 	},
-	stop: function (v) {}
+	stop: function(v) {}
 });
 
 
@@ -98,17 +98,17 @@ addView({
 	id: 'slides',
 	name: 'Slides',
 	icon: 'icon/view.trends.svg',
-	start: function (vv) {
+	start: function(vv) {
 		//hack to prevent reveal from clobbering mainmenu
 		vv.css('top', $('#MainMenu').height());
 		vv.css('margin-top', 0);
 
 		if (!_revealLoaded) {
-			loadCSS("lib/reveal.js/css/reveal.min.css");
-			loadCSS("lib/reveal.js/css/theme/simple.css");
+			loadCSS('lib/reveal.js/css/reveal.min.css');
+			loadCSS('lib/reveal.js/css/theme/simple.css');
 			$LAB
-				.script("lib/reveal.js/lib/js/head.min.js")
-				.script("lib/reveal.js/js/reveal.min.js")
+				.script('lib/reveal.js/lib/js/head.min.js')
+				.script('lib/reveal.js/js/reveal.min.js')
 				.wait(d);
 
 			/*<!-- REVEAL.js -->
@@ -129,13 +129,13 @@ addView({
 
 			//var mainCol = $('<section>').appendTo(v);
 
-			renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function (s, v, xxrr) {
+			renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
 				var elements = [];
 				for (var i = 0; i < xxrr.length; i++) {
 					var x = xxrr[i][0];
 
 					var o = newObjectView(x, {
-						onRemoved: function () {},
+						onRemoved: function() {},
 						depthRemaining: 4,
 						transparent: true
 					});
@@ -146,7 +146,7 @@ addView({
 
 			});
 
-			later(function () {
+			later(function() {
 
 
 				Reveal.initialize({
@@ -180,10 +180,10 @@ addView({
 						{
 							src: '/lib/reveal.js/plugin/zoom-js/zoom.js',
 							async: true,
-							condition: function () {
+							condition: function() {
 								return !!document.body.classList;
 							}
-						},
+						}
 						// Speaker notes
 						//{ src: '/lib/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
 
@@ -318,10 +318,10 @@ function renderItems(v, maxItems, perItems, preFilter) {
      var v = $(this).val();
      s.set('list-semantic', v);
      updateView();
-     });    
+     });
      semanticFilter.val(semantic);
      o.append(semanticFilter);
-     
+
      var sortSelect = $('<select><option>Recent</option><option>Near</option><option>Spacetime</option></select>'); //<option>By Author</option>
      sortSelect.change(function() {
      var v = $(this).val();
@@ -337,7 +337,7 @@ function renderItems(v, maxItems, perItems, preFilter) {
      requestUserSupport('Proximity Filter');
      });
      o.append(proxFilter);
-     
+
      var timeFilter = $('<select><option>Anytime</option><option>Recent 1m</option><option>Recent 5m</option><option>Recent 30m</option><option>Recent 1h</option><option>Recent 24h</option></select>');
      timeFilter.change(function() {
      requestUserSupport('Time Filter');
@@ -359,7 +359,7 @@ function renderItems(v, maxItems, perItems, preFilter) {
 
 
 function renderBrowse(v, cssClass, afterCreated, filterEach) {
-	renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function (s, v, xxrr) {
+	renderItems(v, BROWSE_ITEMS_MAX_DISPLAYED, function(s, v, xxrr) {
 		var elements = [];
 		for (var i = 0; i < xxrr.length; i++) {
 			var x = xxrr[i][0];
@@ -388,33 +388,33 @@ function renderBrowse(v, cssClass, afterCreated, filterEach) {
 }
 
 function renderBrowseList(v) {
-	renderBrowse(v, function (numitems) {
+	renderBrowse(v, function(numitems) {
 		return 'objectListItem';
 	});
 	v = null;
 }
 
 function renderBrowseGrid3(v) {
-	renderBrowse(v, function (numitems) {
+	renderBrowse(v, function(numitems) {
 			if (numitems > 2)
 				return 'objectGridItem3 tiled';
 			if (numitems > 1)
 				return 'objectGridItem2 tiled';
 			return 'objectListItem';
 		}, reflowView,
-		function (w) {
+		function(w) {
 			return newDiv().append(w);
 		});
 	v = null;
 }
 
 function renderBrowseGrid2(v) {
-	renderBrowse(v, function (numitems) {
+	renderBrowse(v, function(numitems) {
 			if (numitems > 1)
 				return 'objectGridItem2 tiled';
 			return 'objectListItem';
 		}, reflowView,
-		function (w) {
+		function(w) {
 			return newDiv().append(w);
 		});
 	v = null;
@@ -438,7 +438,7 @@ function newListView(v) {
 	modeSelect.append(listOption, gridOption, grid2Option);
 
 	modeSelect.append('<option value="slides">Slides</option>');
-	modeSelect.change(function () {
+	modeSelect.change(function() {
 		var v = $(this).val();
 		if (v === 'list')
 			listRenderer = renderBrowseList;
@@ -458,7 +458,7 @@ function newListView(v) {
 	}
 
 	var textsizeSlider = $('<input type="range" name="points" min="1" value="16" max="32">');
-	textsizeSlider.change(function (x) {
+	textsizeSlider.change(function(x) {
 		updateFont($(this).val());
 		if ((listRenderer === renderBrowseGrid2) || (listRenderer === renderBrowseGrid3)) {
 			reflowView();
@@ -482,7 +482,7 @@ function newListView(v) {
 	update();
 
 	listRenderer.onChange = update;
-	listRenderer.destroy = function () {
+	listRenderer.destroy = function() {
 		listRenderer = null;
 		v = null;
 	};

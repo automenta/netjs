@@ -2,7 +2,7 @@ addView({
 	id: 'graph',
 	name: 'Network',
 	icon: 'icon/view.graph.svg',
-	start: function (v) {
+	start: function(v) {
 
 		var GRAPH_MAX_NODES = 200;
 
@@ -32,26 +32,26 @@ addView({
 			maxHeight = 400;
 
 		//var svgCanvas = d3.select("#" + eid).append("svg")
-		var svgCanvas = d3.select(nd[0]).append("svg")
+		var svgCanvas = d3.select(nd[0]).append('svg')
 			.attr('id', 'svgroot')
-			.attr("version", "1.1")
-			.attr("width", "100%")
-			.attr("height", "100%");
+			.attr('version', '1.1')
+			.attr('width', '100%')
+			.attr('height', '100%');
 
 		// build the arrow.
-		svgCanvas.append("svg:defs").selectAll("marker")
-			.data(["end"])      // Different link/path types can be defined here
-		  .enter().append("svg:marker")    // This section adds in the arrows
-			.attr("id", String)
-			.attr("viewBox", "0 -5 10 10")
-			.attr("refX", 30)
-			.attr("refY", 0)
-			.attr("markerWidth", 3)
-			.attr("markerHeight", 3)
-			.attr("orient", "auto")
-			.attr("class", "graphArrowhead")
-		  .append("svg:path")
-			.attr("d", "M0,-5L10,0L0,5");
+		svgCanvas.append('svg:defs').selectAll('marker')
+			.data(['end'])      // Different link/path types can be defined here
+		  .enter().append('svg:marker')    // This section adds in the arrows
+			.attr('id', String)
+			.attr('viewBox', '0 -5 10 10')
+			.attr('refX', 30)
+			.attr('refY', 0)
+			.attr('markerWidth', 3)
+			.attr('markerHeight', 3)
+			.attr('orient', 'auto')
+			.attr('class', 'graphArrowhead')
+		  .append('svg:path')
+			.attr('d', 'M0,-5L10,0L0,5');
 
 		//svg = d3.select("#" + eid + " svg").append('g');
 		var svg = svgCanvas.append('g');
@@ -72,12 +72,12 @@ addView({
 			.size([maxWidth, maxHeight]);
 
 		var cc = nd;
-		var ss = nd.find("svg"); //$("#content svg");
-		var ssg = ss.find("g").first(); //$("#content svg g");
+		var ss = nd.find('svg'); //$("#content svg");
+		var ssg = ss.find('g').first(); //$("#content svg g");
 		//var ssg2 = ssg.next(); //$("#content svg g");
 
 		$('#svgroot').svg();
-		
+
 		var SVG = $('#svgroot').svg('get');
 
 		var sketchPoly = SVG.polyline([], {
@@ -90,7 +90,7 @@ addView({
 		var nodeIndex = {};
 		var edgeIndex = { };
 
-		var defaultIcon = getTagIcon("unknown");
+		var defaultIcon = getTagIcon('unknown');
 
 		function addNode(i, name, color, width, height, icon, shape, spacepoint) {
 			if (!icon)
@@ -117,9 +117,9 @@ addView({
 		}
 
 		function hasEdge(from, to, edgeType) {
-			var edgeID = from+'|'+to;
+			var edgeID = from + '|' + to;
 			if (edgeType)
-				edgeID+='|'+edgeType;
+				edgeID += '|' + edgeType;
 
 			if (edgeIndex[edgeID] !== undefined)
 				return true;
@@ -155,11 +155,11 @@ addView({
 
 		var defaultNodeSize = 34;
 		var defaultTagSize = 56;
-		var defaultColor = "rgba(180,180,180,0.3)"; //#ccc";
-		var tagColor = "rgba(150,150,150,0.2)";
-		var highlightColor = "rgba(200,200,200,0.5)";
+		var defaultColor = 'rgba(180,180,180,0.3)'; //#ccc";
+		var tagColor = 'rgba(150,150,150,0.2)';
+		var highlightColor = 'rgba(200,200,200,0.5)';
 		var thickLine = 8.0;
-		var thinLine = thickLine/2.0;
+		var thinLine = thickLine / 2.0;
 		var sketchResolution = 6.0;
 
 		var scale = 1.0;
@@ -173,7 +173,7 @@ addView({
 		var touched = null;
 
 		var ended = false;
-		force.on("end", function () {
+		force.on('end', function() {
 			ended = true;
 		});
 
@@ -187,7 +187,7 @@ addView({
 			if (!d) return;
 
 			d.fixed = (layout !== 'ForceDirected');
-			visual.select('circle').attr("class", "");
+			visual.select('circle').attr('class', '');
 			visual.select('.graphSelectionMenu').remove();
 		}
 
@@ -215,33 +215,33 @@ addView({
 			var circle = visual.select('circle');
 			var menu = visual.append('g').attr('class', 'graphSelectionMenu');
 
-			circle.attr("class", "graphNodeSelected");
+			circle.attr('class', 'graphNodeSelected');
 
-			menu.append("rect")
-				 .attr("x", function(d) { return d.width; })
-				 .attr("y", function(d) { return -10; })
-				 .attr("width", function(d) { return 20; } )
-				 .attr("height", function(d) { return 20; } )
-				 .style("fill", function(d) { return 'lightgray'; })
-				 .style("stroke", function(d) { return 'black'; })
-				 .style("stroke-width", function(d) { return 1; })
+			menu.append('rect')
+				 .attr('x', function(d) { return d.width; })
+				 .attr('y', function(d) { return -10; })
+				 .attr('width', function(d) { return 20; })
+				 .attr('height', function(d) { return 20; })
+				 .style('fill', function(d) { return 'lightgray'; })
+				 .style('stroke', function(d) { return 'black'; })
+				 .style('stroke-width', function(d) { return 1; })
 				 .on('click', function() {
 					//var b = this.getBBox();
 					var b = this.getCTM();
 					var s = ssg[0].getCTM();
-					tx = (s.e - b.e) + ($(document).width()/2.0);
-					ty = (s.f - b.f) + ($(document).height()/2.0);
+					tx = (s.e - b.e) + ($(document).width() / 2.0);
+					ty = (s.f - b.f) + ($(document).height() / 2.0);
 					//scale *= 2.0;
 					updateSVGTransform();
 				 });
-			menu.append("rect")
-				 .attr("x", function(d) { return -10; })
-				 .attr("y", function(d) { return -d.width-20; })
-				 .attr("width", function(d) { return 20; } )
-				 .attr("height", function(d) { return 20; } )
-				 .style("fill", function(d) { return 'lightgray'; })
-				 .style("stroke", function(d) { return 'black'; })
-				 .style("stroke-width", function(d) { return 1; })
+			menu.append('rect')
+				 .attr('x', function(d) { return -10; })
+				 .attr('y', function(d) { return -d.width - 20; })
+				 .attr('width', function(d) { return 20; })
+				 .attr('height', function(d) { return 20; })
+				 .style('fill', function(d) { return 'lightgray'; })
+				 .style('stroke', function(d) { return 'black'; })
+				 .style('stroke-width', function(d) { return 1; })
 				 .on('click', function() {
 					if (selectedID)
 						newPopupObjectView(selectedID);
@@ -264,7 +264,7 @@ addView({
 			}
 		}
 
-		ss.mousewheel(function (evt) {
+		ss.mousewheel(function(evt) {
 			var direction = evt.deltaY;
 
 			if (direction > 0) {
@@ -276,11 +276,11 @@ addView({
 			updateSVGTransform();
 		});
 
-		cc.bind("contextmenu", function (e) {
+		cc.bind('contextmenu', function(e) {
 			return false;
 		});
 
-		cc.mousedown(function (m) {
+		cc.mousedown(function(m) {
 			if (m.which === 3) {
 				sketching = true;
 				startDragPoint = [m.clientX, m.clientY];
@@ -296,7 +296,7 @@ addView({
 			}
 
 		});
-		cc.mouseup(function (m) {
+		cc.mouseup(function(m) {
 			if (sketching) {
 				if (touched) {
 					sketchEnd = touched;
@@ -325,7 +325,7 @@ addView({
 			dragging = sketching = false;
 			lastPoint = null;
 		});
-		cc.mousemove(function (m) {
+		cc.mousemove(function(m) {
 			if (sketching) {
 				var nextPoint = [m.offsetX, m.offsetY];
 				/* 			<polyline fill="none" stroke="blue" stroke-width="5" points="450,250 */
@@ -376,7 +376,7 @@ addView({
 		function savePositions() {
 			nodePositions = {};
 			if (node) {
-				node.attr("transform", function (d) {
+				node.attr('transform', function(d) {
 					nodePositions[d.objectID] = [d.x, d.y];
 				});
 			}
@@ -384,7 +384,7 @@ addView({
 
 		function loadPositions() {
 			if (node) {
-				node.attr("transform", function (d) {
+				node.attr('transform', function(d) {
 					var existingPosition = nodePositions[d.objectID];
 					if (existingPosition) {
 						d.x = existingPosition[0];
@@ -394,13 +394,13 @@ addView({
 			}
 		}
 
-		nd.onChange = function () {
+		nd.onChange = function() {
 			savePositions();
 
 			force.stop();
 
-			svg.selectAll(".node").remove();
-			svg.selectAll(".link").remove();
+			svg.selectAll('.node').remove();
+			svg.selectAll('.link').remove();
 
 			var nodeTags = { };
 
@@ -408,11 +408,11 @@ addView({
 			nodeIndex = {};
 			edgeIndex = {};
 
-			renderItems(v, GRAPH_MAX_NODES, function (s, v, xxrr) {
+			renderItems(v, GRAPH_MAX_NODES, function(s, v, xxrr) {
 
 				var minTime, maxTime;
 				if (timeline) {
-					var times = _.map(xxrr, function (o) {
+					var times = _.map(xxrr, function(o) {
 						return objTime(o[0]);
 					});
 					minTime = _.min(times);
@@ -425,21 +425,21 @@ addView({
 					if (ots) {
 						var maxScale = undefined;
 						for (var i in ots) {
-							if (nodeScale[i]!==undefined) {
+							if (nodeScale[i] !== undefined) {
 								if (maxScale === undefined)
 									maxScale = nodeScale[i];
 								else
-									maxScale = Math.max(maxScale,nodeScale[i]);
+									maxScale = Math.max(maxScale, nodeScale[i]);
 							}
 						}
-						if (maxScale!==undefined)
+						if (maxScale !== undefined)
 							size *= maxScale;
 					}
 
 					if (size <= 0)
 						return;
 
-					var N = addNode(x.id, x.name || "", defaultColor, size, size, objIcon(x), 'circle', geographic ? objSpacePointLatLng(x) : null);
+					var N = addNode(x.id, x.name || '', defaultColor, size, size, objIcon(x), 'circle', geographic ? objSpacePointLatLng(x) : null);
 
 					if (timeline) {
 						if (minTime !== maxTime) {
@@ -613,9 +613,9 @@ addView({
 
 					function edgeType(e) {
 						if (!e) return 'Other';
-						if (typeof e === "number")
+						if (typeof e === 'number')
 							return 'Other';
-						if (typeof e === "string") {
+						if (typeof e === 'string') {
 							if (e === 'trust') return 'trust';
 							if (e === 'value') return 'value';
 							if (e === 'not') return 'not';
@@ -632,24 +632,24 @@ addView({
 						if (!includeEdges[et]) return null;
 
 						var s = null;
-						if (typeof edgeValue === "number") s = edgeValue;
+						if (typeof edgeValue === 'number') s = edgeValue;
 						else {
 							var values = _.values(edgeValue);
 							for (var i = 0; i < values.length; i++) {
-								if (typeof values[i] === "number")
+								if (typeof values[i] === 'number')
 									s = (s === null) ? values[i] : Math.max(values[i], s);
 							}
 						}
 						if (s === null) s = 1.0;
 
 						function p(s, min, max) {
-							return s*(max-min) + min;
+							return s * (max - min) + min;
 						}
 
 						var stroke;
 						var strokeWidth = Math.max(1.0, thickLine * s);
 						if (et === 'trust') {
-							stroke = 'rgba(40,' + parseInt(p(s, 0.7, 1.0)*255) + ',40,' + p(s,0.5, 0.9) + ')';
+							stroke = 'rgba(40,' + parseInt(p(s, 0.7, 1.0) * 255) + ',40,' + p(s, 0.5, 0.9) + ')';
 						}
 						else if (et === 'value') {
 							stroke = 'orange';
@@ -661,7 +661,7 @@ addView({
 						}
 						else {
 							var g = p(s, 0.4, 0.5);
-							stroke = 'rgba(' + parseInt(g*255) + ',' + parseInt(g*255) + ',' + parseInt(g*255) + ',' + g + ')';
+							stroke = 'rgba(' + parseInt(g * 255) + ',' + parseInt(g * 255) + ',' + parseInt(g * 255) + ',' + g + ')';
 						}
 
 						var q = {
@@ -683,7 +683,7 @@ addView({
 							var e = inEdges[j];
 							var source = $N.dgraph.source(e);
 
-							if (hasEdge(source, x.id, e)===true) continue;
+							if (hasEdge(source, x.id, e) === true) continue;
 
 							var ev = getEdgeVisual(e);
 							if (ev)
@@ -691,16 +691,16 @@ addView({
 						}
 
 						var outEdges = $N.dgraph.outEdges(x.id);
-						
+
 						for (var j = 0; j < outEdges.length; j++) {
 							var e = outEdges[j];
 							var target = $N.dgraph.target(e);
-							
 
-							if (hasEdge(x.id, target, e)===true) continue;
+
+							if (hasEdge(x.id, target, e) === true) continue;
 
 							var ev = getEdgeVisual(e);
-							
+
 							if (ev)
 								addEdge(x.id, target, ev, e);
 						}
@@ -711,10 +711,10 @@ addView({
 							var incidentNodes = $N.ugraph.incidentNodes(e);
 
 							var order = incidentNodes[0] < incidentNodes[1];
-							var a = order ? incidentNodes[1] : incidentNodes[0] ;
-							var b = order ? incidentNodes[0] : incidentNodes[1] ;
+							var a = order ? incidentNodes[1] : incidentNodes[0];
+							var b = order ? incidentNodes[0] : incidentNodes[1];
 
-							if (hasEdge(a, b, e)===true) continue;
+							if (hasEdge(a, b, e) === true) continue;
 
 
 							var ev = getEdgeVisual(e, true);
@@ -732,21 +732,21 @@ addView({
 					.nodes(nodes)
 					.links(edges)
 					.drag()
-						.on("dragstart", function () { oncell = true;})
-						.on("dragend",   function () { oncell = false; });
+						.on('dragstart', function() { oncell = true;})
+						.on('dragend', function() { oncell = false; });
 
 
-				node = svg.selectAll(".node").data(nodes).enter().append("g").attr("class", "node");
+				node = svg.selectAll('.node').data(nodes).enter().append('g').attr('class', 'node');
 
-				var link = svg.selectAll(".link")
+				var link = svg.selectAll('.link')
 					.data(edges)
-					.enter().append("line")
-					.attr("class", "link")
-					.attr("marker-end", function(l) {
+					.enter().append('line')
+					.attr('class', 'link')
+					.attr('marker-end', function(l) {
 						if (l.style)
 							if (l.style.undirected)
 								return '';
-						return "url(#end)";
+						return 'url(#end)';
 					});
 
 
@@ -759,32 +759,32 @@ addView({
 				 .attr("width", function(d) { return d.width; } )
 				 .attr("height", function(d) { return d.height; } )
 				 .style("fill", function(d) { return d.color; });*/
-				node.append("circle").each(function (d) {
+				node.append('circle').each(function(d) {
 					d3.select(this).attr({
-						x: -d.width/2,
-						y: -d.width/2,
+						x: -d.width / 2,
+						y: -d.width / 2,
 						r: d.width,
 						fill: d.color
 					});
 				});
-				node.append("image").each(function (d) {
+				node.append('image').each(function(d) {
 					var iconSize = d.width;
 					d3.select(this).attr({
-						"xlink:href": d.icon,
-						x: -iconSize/2,
-						y: -iconSize/2,
+						'xlink:href': d.icon,
+						x: -iconSize / 2,
+						y: -iconSize / 2,
 						width: iconSize,
 						height: iconSize
 					});
 				});
-				node.append("text").each(function (d) {
+				node.append('text').each(function(d) {
 					d3.select(this).attr({
-						dx: -d.width/2,
-						dy: "4em"
+						dx: -d.width / 2,
+						dy: '4em'
 					}).text(d.name);
 				});
 
-				svg.selectAll(".node").each(function(n) {
+				svg.selectAll('.node').each(function(n) {
 					if (n.objectID === selectedID) {
 						selected = n;
 						selectedVisual = this;
@@ -796,8 +796,8 @@ addView({
 					var sw = ((l.style) && (l.style.strokeWidth)) ? l.style.strokeWidth : 3;
 					var s = ((l.style) && (l.style.stroke)) ? l.style.stroke : 'black';
 					d3.select(this).attr({
-						"stroke-width": sw,
-						"stroke": s
+						'stroke-width': sw,
+						'stroke': s
 					});
 				});
 
@@ -808,33 +808,33 @@ addView({
 
 					var sw = d.source.width;
 					var tw = d.target.width;
-					return sw+tw;
+					return sw + tw;
 				});
 				force.charge(function(d) {
-					return -(d.width*12.0);
+					return -(d.width * 12.0);
 				});
 				force.chargeDistance(1000);
 				force.theta(0.5); //default=0.8
 
 
-				force.on("tick", function () {
-					node.attr("transform", function (d) {
+				force.on('tick', function() {
+					node.attr('transform', function(d) {
 						if (timeline) {
 							if (d.fixedX !== undefined)
 								d.x = d.fixedX;
 						}
 						if (geographic) {
 							//TODO project
-							if ((d.lon!==undefined) && (d.lat!==undefined)) {
+							if ((d.lon !== undefined) && (d.lat !== undefined)) {
 								d.x = d.lon * 35;
 								d.y = d.lat * -50;
 							}
 						}
-						return "translate(" + d.x + "," + d.y + ")";
+						return 'translate(' + d.x + ',' + d.y + ')';
 					});
 
 					link.each(function(d) {
-						if (d.link===undefined)
+						if (d.link === undefined)
 							d.link = d3.select(this);
 						d.link.attr({
 							x1: d.source.x,
@@ -847,23 +847,23 @@ addView({
 				});
 
 
-				node.on("mouseover", function (d) {
+				node.on('mouseover', function(d) {
 					if (d3.event.defaultPrevented)
 						return; // ignore drag
 					var oid = d.objectID;
 					if (oid)
 						touched = oid;
 
-					d3.select(this).select('circle').style("fill", highlightColor);
+					d3.select(this).select('circle').style('fill', highlightColor);
 				});
-				node.on("mouseout", function (d) {
+				node.on('mouseout', function(d) {
 					if (d3.event.defaultPrevented)
 						return; // ignore drag
 					touched = null;
-					d3.select(this).select('circle').style("fill", d.color);
+					d3.select(this).select('circle').style('fill', d.color);
 				});
 
-				node.on("click", function (d) {
+				node.on('click', function(d) {
 					if (d3.event.defaultPrevented)
 						return; // ignore drag
 					selectNode(d, d3.select(this));
@@ -874,7 +874,7 @@ addView({
 				node.call(force.drag);
 				force.start();
 
-				var fixed = (layout!=='ForceDirected');
+				var fixed = (layout !== 'ForceDirected');
 				node.each(function(d) {
 				   d.fixed = fixed;
 				});
@@ -883,7 +883,7 @@ addView({
 					selectNode();
 
 					_.each(nodeTags, function(v, k) {
-						if (nodeScale[k]===undefined) {
+						if (nodeScale[k] === undefined) {
 							var nc = newDiv();
 							var v = 1; //(nodeScale[k]!==undefined) ? nodeScale[k] : 1;
 							var sl = $('<input type="range" min="0" max="5" step="0.1" value="' + v + '"/>')
@@ -918,7 +918,7 @@ addView({
 		modeSelect.append('<option value="Network">Network</option>');
 		modeSelect.append('<option value="Geographic">Geographic</option>');
 		modeSelect.append('<option value="Timeline">Timeline</option>');
-		modeSelect.change(function () {
+		modeSelect.change(function() {
 			timeline = $(this).val() == 'Timeline';
 			geographic = $(this).val() == 'Geographic';
 			nd.onChange();
@@ -927,20 +927,20 @@ addView({
 		var layoutSelect = $('<select/>').appendTo(submenu);
 		layoutSelect.append('<option value="ForceDirected">Force Directed</option>');
 		layoutSelect.append('<option value="None">None</option>');
-		layoutSelect.change(function () {
+		layoutSelect.change(function() {
 			layout = $(this).val();
 			nd.onChange();
 		});
-		layout = "ForceDirected";
+		layout = 'ForceDirected';
 
 
 		var edgeMenu = newDiv().addClass('HUDTopRight').appendTo(nd);
-		edgeMenu.css('text-align','right');
+		edgeMenu.css('text-align', 'right');
 
-		var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'trust', 'value', 'not', 'other' ];
-		_.each(edgeTypes, function (e) {
+		var edgeTypes = ['Type', 'Author', 'Object', 'Subject', 'Reply', 'trust', 'value', 'not', 'other'];
+		_.each(edgeTypes, function(e) {
 			var includeCheck = $('<input type="checkbox"/>');
-			includeCheck.click(function () {
+			includeCheck.click(function() {
 				includeEdges[e] = (includeCheck.is(':checked'));
 				nd.onChange();
 			});

@@ -79,7 +79,7 @@ module.exports = function(options) {
         var p = require('../plugin/' + v).plugin;
         if (typeof (p) == "function")
             p = p($N);
-        else if (p != undefined) {
+        else if (!p) {
             console.error(v + ' plugin format needs upgraded');
             return;
         }
@@ -98,7 +98,7 @@ module.exports = function(options) {
         var pluginOption = {};
 
         _.each(options.plugins, function(po, file) {
-            if (po.enable != false)
+            if (po.enable !== false)
                 startPlugin(file, po);
         });
     }
@@ -321,7 +321,7 @@ module.exports = function(options) {
 				whenFinished(err, null);
 			}
 			else {
-				if (doc!=null)
+				if (doc)
 					whenFinished(null, unpack([doc]));
 				else
 					whenFinished(null, null);
@@ -395,7 +395,7 @@ module.exports = function(options) {
                 docs.forEach(function(d) {
                     var ts = util.objTagStrength(d);
                     for (var dt in ts) {
-                        if (totals[dt] == undefined)
+                        if (totals[dt] === undefined)
                             totals[dt] = 0;
                         totals[dt] += ts[dt];
                     }
@@ -877,11 +877,11 @@ module.exports = function(options) {
 
 			io.set('log level', 0);                    // reduce logging
 			io.set('transports', [// enable all transports (optional if you want flashsocket)
-				'websocket'
+				'websocket',
 		//        , 'flashsocket'
-				, 'htmlfile'
-				, 'xhr-polling'
-				, 'jsonp-polling'
+				'htmlfile',
+				'xhr-polling',
+				'jsonp-polling'
 			]);
 			//io.set("polling duration", 5);
 		}		
@@ -1558,7 +1558,7 @@ module.exports = function(options) {
 							return;
 						}
 					}
-					rres.writeHead(200, {'Content-Type': 'text/html'})
+					rres.writeHead(200, {'Content-Type': 'text/html'});
 
 					var page = '';
 					res.on("data", function(chunk) {
@@ -1574,7 +1574,7 @@ module.exports = function(options) {
 							var bodyclasses = $('body').attr('class').split(' ');
 							for (var i = 0; i < bodyclasses.length; i++) {
 								var bc = bodyclasses[i];
-								if (bc.indexOf('page-') == 0) {
+								if (bc.indexOf('page-') === 0) {
 									redirector = bc.substring(5);
 								}
 							}
@@ -1638,7 +1638,7 @@ module.exports = function(options) {
 					if (connectedUsers[oldID]) {
 						delete connectedUsers[oldID].sockets[socket.id];
 					}
-					if (_.keys(connectedUsers[oldID].sockets) == 0)
+					if (_.keys(connectedUsers[oldID].sockets) === 0)
 						delete connectedUsers[oldID];
 				}
 				if (nextID) {
@@ -1841,7 +1841,7 @@ module.exports = function(options) {
 							});
 						}
 
-						var keyRequired = (options.permissions['authenticate_to_create_profiles'] != false);
+						var keyRequired = (options.permissions['authenticate_to_create_profiles'] !== false);
 						if (!targetObject) {
 							var selves = getClientSelves(account);
 							if (_.contains(selves, target)) {
@@ -2023,7 +2023,7 @@ module.exports = function(options) {
 
 			function updateInterestTime() {
 				//reprocess all clientState's to current time
-				for (c in options.clientState) {
+				for (var c in options.clientState) {
 					var cl = options.clientState[c];
 					updateInterests(c, cl);
 				}

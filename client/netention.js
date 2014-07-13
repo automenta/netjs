@@ -1,3 +1,4 @@
+"use strict";
 /*!
  * netention.js v1.2 - client-side functionality
  * Attentionated by @automenta and @rezn8d
@@ -37,14 +38,14 @@ function identity() {
 
 
 function netention(f) {
-    
+
     var $NClient = Backbone.Model.extend({
         reset: function() {
             this.channels = { };
             this.clearTransients();
             this.set('clientID', 'undefined');
 			this.messages = [];
-			this.connections = { };			
+			this.connections = { };
         },
         clearTransients: function() {
             this.set('layer', {
@@ -69,11 +70,11 @@ function netention(f) {
         ////DEPRECATED
         objects: function() {
             return this.instance;
-        }, 
+        },
         //deprecated
         getObject: function(id) {
             return this.instance[id];
-        }, 
+        },
         //deprecated
         object: function(id) {
             return this.instance[id];
@@ -85,7 +86,7 @@ function netention(f) {
         //deprecated
         getProperty: function(p) {
             return this.property[p];
-        },        
+        },
 
         deleteSelf: function(clientID) {
             var os = this.get('otherSelves');
@@ -108,7 +109,7 @@ function netention(f) {
         getIncidentTags: function(userid, oneOfTags) {
             return objIncidentTags(this.instance, oneOfTags, userid);
         },
-        
+
         layer: function() {
             return this.get('layer');
         },
@@ -127,13 +128,13 @@ function netention(f) {
         become: function(target) {
             if (!target)
                 return;
-            
+
 			//console.log('Becoming', target);
-			
+
             var previousID = $N.id();
 
             var targetID = target;
-            if (typeof (target) !== "string") {
+            if (typeof (target) !== 'string') {
                 this.add(target);
                 targetID = target.id;
             }
@@ -144,25 +145,25 @@ function netention(f) {
 
                 $N.set('clientID', targetID);
                 $N.set('otherSelves', _.unique(os));
-				
+
 				$N.sessionStart();
             } else {
-                this.socket.emit('become', typeof target === "string" ? target : objCompact(target), function(nextID) {
+                this.socket.emit('become', typeof target === 'string' ? target : objCompact(target), function(nextID) {
                     if (nextID) {
 
                         $N.set('clientID', nextID);
                         setCookie('clientID', nextID);
-                        
+
                         var os = $N.get('otherSelves');
                         os.push(nextID);
                         $N.set('otherSelves', _.unique(os));
 
                         $N.clear();
-                        
+
                         $N.clearTransients();
-						
+
 						$N.indexOntology();
-                        
+
                         $N.getUserObjects(function() {
 							$('#NotificationArea').html('Loading my objects...');
                             $N.getAuthorObjects(nextID, function() {
@@ -170,13 +171,13 @@ function netention(f) {
                                 $N.getLatestObjects(1000, function() {
                                     $N.sessionStart();
                                 }, true);
-                            });                        
+                            });
                         });
 
                     } else {
                         notify({
                             title: 'Unable to switch profile',
-                            text: (typeof (target) === "string" ? target : target.id),
+                            text: (typeof (target) === 'string' ? target : target.id),
                             type: 'Error'
                         });
 
@@ -184,14 +185,14 @@ function netention(f) {
                 });
             }
         },
-		
+
         connect: function(targetID, whenConnected) {
 			console.log('Websocket start');
-			
+
             var originalTargetID = targetID;
             var suppliedObject = null;
             if (targetID) {
-                if (typeof (targetID) !== "string") {
+                if (typeof (targetID) !== 'string') {
                     suppliedObject = targetID;
                     targetID = suppliedObject.id;
                 }
@@ -251,7 +252,7 @@ function netention(f) {
                          title: 'Disconnected.'
                          });*/
 
-                        var p = newPopup("Disconnected", true, true).addClass('ReconnectDialog');
+                        var p = newPopup('Disconnected', true, true).addClass('ReconnectDialog');
                         var disconnectButton = $('<button><h1>&duarr;<br/>Reconnect</h1></button>').appendTo(p).click(function() {
                             location.reload();
                         });
@@ -261,13 +262,13 @@ function netention(f) {
                     /*socket.on('reconnecting', function() {
                      notify({
                      title: 'Reconnecting..'
-                     }); 
+                     });
                      });*/
                     /*
                      socket.on('reconnect', function() {
                      notify({
                      title: 'Reconnected.'
-                     }); 
+                     });
                      init();
                      });*/
 
@@ -295,14 +296,14 @@ function netention(f) {
 					socket.on('p2p', function(r) {
                         $N.set('p2p', r);
                     });
-                    
+
                     socket.on('channelMessage', function(channel, message) {
                         if (!$N.channels[channel])
                             $N.channels[channel] = [];
                         $N.channels[channel].push(message);
                         $N.trigger('channel:' + channel, message);
                     });
-                    
+
 
                     reconnect();
 
@@ -315,21 +316,21 @@ function netention(f) {
             	this.socket.emit('webRTC', id, enabled);
         },
         updateRoster: function() {
-			if (configuration.connection!=='static') {
+			if (configuration.connection !== 'static') {
 				$.getJSON('/users/connected/json', function(r) {
 					$N.set('roster', r);
 					$N.trigger('change:roster');
 				});
 			}
         },
-		
+
 		addConnection: function(c) {
-			$N.connections[c.id()] = c;			
-			var menuitem = $('<li><a href="#">' + c.name() + '</a></li>');							 
+			$N.connections[c.id()] = c;
+			var menuitem = $('<li><a href="#">' + c.name() + '</a></li>');
 			$('#ConnectionList').after(menuitem);
 			c.update();
 		},
-		
+
         indexOntology: function() {
             var that = this;
             that.addAll(that.ontologyProperties);
@@ -337,7 +338,7 @@ function netention(f) {
 
 			later(function() {
 				for (var i = 0; i < that.ontologyClasses.length; i++) {
-					var c = that.ontologyClasses[i];                        
+					var c = that.ontologyClasses[i];
 					if (!c) return;
 
 					that.ontoIndex.add({
@@ -347,12 +348,12 @@ function netention(f) {
 					});
 
 					if (c.icon)
-						defaultIcons[c.id] = c.icon;                    
-				}               
+						defaultIcons[c.id] = c.icon;
+				}
 			});
 
             //that.trigger('change:tags');
-            
+
         },
         loadOntology: function(url, f) {
             var that = this;
@@ -360,21 +361,21 @@ function netention(f) {
             $.getJSON(url, function(o) {
                 that.ontologyProperties = objExpandAll(o.property);
                 that.ontologyClasses = objExpandAll(o.class);
-            
+
                 f();
             });
 
         },
         searchOntology: function(query, ontocache) {
             query = query.toLowerCase();
-			
+
 			var terms = this.ontoIndex.pipeline.run(lunr.tokenizer(query));
             var results = {};
-			
+
 			//HACK for 3-letter ontology words
-			if (query.indexOf('can')!=-1)
-				results['Can']=1;			
-			
+			if (query.indexOf('can') != -1)
+				results['Can'] = 1;
+
             for (var i = 0; i < terms.length; i++) {
                 var T = terms[i];
                 var r = ontocache[T];
@@ -406,28 +407,28 @@ function netention(f) {
 
         /*geolocate : function(ex) {
          objSetFirstValue(this.myself(), 'spacepoint', {lat: ex[0], lon: ex[1], planet: 'Earth'} );
-         
+
          var that = this;
          this.pub(this.myself(), function(err) {
          notify({
          title: 'Unable to share location.',
          text: err,
-         type: 'Error'                        
-         });              
-         
+         type: 'Error'
+         });
+
          }, function() {
          notify({
          title: 'Geolocated.',
          text: that.myself().geolocation
-         });              
+         });
          that.saveLocal();
-         
-         });    
+
+         });
          },*/
 
         deleteObject: function(x, localOnly) {
             var id;
-            if (typeof x === "string")
+            if (typeof x === 'string')
                 id = x;
             else
                 id = x.id;
@@ -438,7 +439,7 @@ function netention(f) {
                 localOnly = true;
 
             //var X = _.clone($N.object[id]);
-            
+
             if (configuration.connection !== 'static') {
                 if ((!this.socket) && (!localOnly)) {
                     notify({
@@ -449,20 +450,20 @@ function netention(f) {
             } else
                 localOnly = true;
 
-            function removeLocal() {                
+            function removeLocal() {
                 if (!$N.object[id])
                     return false;
-                
+
                 //console.log(X.id, 'deleting replies:', X.reply);
                 /*
-                _.keys(X.reply).forEach(function(r) {                    
+                _.keys(X.reply).forEach(function(r) {
                     //console.log('deleting reply:', X.reply[r], r, X.reply[r].author !== $N.id());
                     $N.deleteObject(r, X.reply[r].author !== $N.id());
                 });
                 */
 
                 that.remove(id);
-                
+
                 return true;
             }
 
@@ -475,7 +476,7 @@ function netention(f) {
                         notify({
                             title: 'Deleted',
                             text: id,
-                            addclass: "stack-bottomleft",
+                            addclass: 'stack-bottomleft',
                             stack: stack_bottomleft
                         });
 
@@ -494,7 +495,7 @@ function netention(f) {
                         notify({
                             title: 'Deleted',
                             text: id,
-                            addclass: "stack-bottomleft",
+                            addclass: 'stack-bottomleft',
                             stack: stack_bottomleft
                         });
                         $N.trigger('change:attention');
@@ -504,7 +505,7 @@ function netention(f) {
             return true;
 
         },
-        
+
         /*getPlugins: function(withPlugins) {
             var that = this;
             this.socket.emit('getPlugins', function(p) {
@@ -517,21 +518,21 @@ function netention(f) {
         setPlugin: function(pid, enabled, callback) {
             this.socket.emit('setPlugin', pid, enabled, callback);
         },*/
-        
+
         /*getGoals: function(from, to, mineOnly ) {
          var that = this;
-         
+
          if (from == null) {
          return _.where(_.map(this.objectsWithTag('Goal'), function(id) { return that.getObject(id); } ), { delay: 0 });
          }
-         
-         return _.filter(_.map(this.objectsWithTag('Goal'), function(id) { return that.getObject(id); } ), function(x) { 
+
+         return _.filter(_.map(this.objectsWithTag('Goal'), function(id) { return that.getObject(id); } ), function(x) {
          if (x.delay == 0) return false;
          var w = x.when || 0;
          return ((w >= from) && (w < to));
          } );
          },*/
-        
+
         //called after connection establishd
         sessionStart: function() {
 			initSessionUI();
@@ -607,11 +608,11 @@ function netention(f) {
             return this.get('focus');
         },
         notice: function(x, suppressChange, noSave) {
-            
+
             if (!Array.isArray(x)) {
                 return $N.notice([x], suppressChange, noSave);
             }
-            
+
             var that = this;
 
             function n(y) {
@@ -632,16 +633,16 @@ function netention(f) {
                     that.deleteObject(y, true);
                     return true;
                 }
-                
+
                 //skip existing with an older modificatin/creation time
                 var existing = $N.object[y.id];
                 if (existing) {
                     var lastModified = y.modifiedAt || y.createdAt || null;
 
-                    if (lastModified!==null) {
+                    if (lastModified !== null) {
                         var existingLastModified = existing.modifiedAt || existing.createdAt || null;
-                        if (existingLastModified!==null) {
-                            
+                        if (existingLastModified !== null) {
+
                             if ($N.id() === y.author) {
                                 if (lastModified <= existingLastModified)
                                     return false;
@@ -650,7 +651,7 @@ function netention(f) {
                                 if (lastModified < existingLastModified)
                                     return false;
                             }
-                            
+
                         }
                     }
                 }
@@ -678,7 +679,7 @@ function netention(f) {
                 if (objHasTag(y, 'Tag')) {
                     that.add([objTagObjectToTag(y)]);
                 }
-				
+
 				//add missing tags to ontology and index
 				//TODO guess type if it's property
 				if (y.value) {
@@ -689,7 +690,7 @@ function netention(f) {
 							that.addAll([{
 								id: c, name: c, extend: null
 							}]);
-							
+
 							that.ontoIndex.add({
 								id: c,
 								name: c
@@ -698,15 +699,15 @@ function netention(f) {
 
 					}
 				}
-				
+
 				if (y.scope == ObjScope.GlobalAdvertise) {
-					if (y.author!==$N.id()) {
+					if (y.author !== $N.id()) {
 						later(function() {
 							$N.receive(y);
 						});
 					}
-				}				
-						 
+				}
+
                 return true;
             }
 
@@ -717,7 +718,7 @@ function netention(f) {
                 if (!x[i].focus) {
                     if (n(x[i])) {
                         anythingChanged = true;
-                        if (x[i].author!==$N.id())
+                        if (x[i].author !== $N.id())
                             anythingChangedFromOthers = true;
                     }
                 }
@@ -726,9 +727,9 @@ function netention(f) {
                 if (anythingChangedFromOthers)
 					if (window.updateViewLock) //TEMPORARY, use an emit to decouple this
                     	updateViewLock(viewUpdatesBuffered + 1);
-				
 
-						
+
+
                 this.trigger('change:attention');
             }
         },
@@ -743,8 +744,8 @@ function netention(f) {
                 this.socket.emit('unsubscribe', channel);
             }
         },
-        pub: function(object, onErr, onSuccess, suppressChange) {            
-                                    
+        pub: function(object, onErr, onSuccess, suppressChange) {
+
             if (configuration.connection == 'static') {
                 $N.notice(object);
                 if (onSuccess)
@@ -763,7 +764,7 @@ function netention(f) {
 							});
 						}
 						else {
-							if (objProcessed == null) {
+							if (objProcessed === null) {
 								//null means that the object was untransformed by the server,
 								//so server avoided sending it back
 								objProcessed = object;
@@ -802,7 +803,7 @@ function netention(f) {
                 _.each(this.tagged, function(v, k) {
                     if ($N.property[k]) return;
                     if (v)
-                        tagCount[k] = _.keys(v).length; 
+                        tagCount[k] = _.keys(v).length;
                 });
             }
             else {
@@ -815,9 +816,9 @@ function netention(f) {
                         if (oi.author !== myID)
                             return;
 
-                    //TODO use the simple counting method as above; 
+                    //TODO use the simple counting method as above;
                     //separate the weighted counting into another function or by an optional parameter
-                    
+
                     var ts = objTagStrength(oi);
                     for (var i in ts) {
                         if (!tagCount[i])
@@ -837,19 +838,19 @@ function netention(f) {
             $N.set(key, value);
             localStorage[key] = JSON.stringify(value);
         },*/
-		
+
         loadAll: function(callback) {
 
 			try {
-				_.extend($N.attributes, JSON.parse(localStorage['$N'] || "{}"));
+				_.extend($N.attributes, JSON.parse(localStorage.$N || '{}'));
 			}
-			catch(e) { $N.attr = { }};
+			catch (e) { $N.attr = { }; }
 
 			$N.db.getAll(function(err, objects) {
 				if (err) {
 					console.error('loadAll: ' , err);
 					return;
-				}			
+				}
 				console.log('Loaded ', objects.length, 'objects from local browser');
 				$N.notice(objects, false, true);
 
@@ -858,11 +859,11 @@ function netention(f) {
 			});
 
         },
-		
+
         saveAll: function() {
-			localStorage['$N'] = JSON.stringify($N.attributes);
+			localStorage.$N = JSON.stringify($N.attributes);
         },
-		
+
         //TODO rename to 'load initial objects' or something
         getLatestObjects: function(num, onFinished) {
             if (configuration.connection == 'static') {
@@ -876,7 +877,7 @@ function netention(f) {
         },
         getUserObjects: function(onFinished) {
             if (configuration.connection == 'static') {
-					onFinished();	
+					onFinished();
             }
 			else {
 				$.getJSON('/object/tag/User/json', function(objs) {
@@ -898,15 +899,15 @@ function netention(f) {
         },
         startURLRouter: function() {
             if (!this.backboneStarted) {
-				
+
                 this.backboneStarted = true;
 				Backbone.history.start();
-				
+
                 $N.on('change:attention', updateView);
                 $N.on('change:currentView', updateView);
                 $N.on('change:tags', updateView);
-                $N.on('change:focus', updateView);				
-				
+                $N.on('change:focus', updateView);
+
             }
         },
         getChannel: function(channel, callback) {
@@ -914,7 +915,7 @@ function netention(f) {
                 callback($N.channels[channel]);
             }
         },
-		
+
 		addChannel: function(channel) {
 			var o = new $N.nobject('!' + channel);
 			o.add('chat', { channel: channel });
@@ -924,7 +925,7 @@ function netention(f) {
 			$N.notice(o);
 			return o;
 		},
-		
+
         channelSend: function(channel, m) {
             $N.socket.emit('channelSend', channel, m);
         },
@@ -932,19 +933,19 @@ function netention(f) {
 		receive: function(message) {
 			var messageIDs = _.pluck($N.messages, 'id');
 			var existingIndex = messageIDs.indexOf(message.id);
-			if (existingIndex!=-1) {
-				$N.messages.splice(existingIndex,1);
-			}			
-			
+			if (existingIndex != -1) {
+				$N.messages.splice(existingIndex, 1);
+			}
+
 			$N.messages.push(message);
 			$N.trigger('change:messages');
 			$('#NotificationList i').addClass('blink');
 		}
     });
 
-	var odb = DB('objects' /*{ adapter: 'memory' }*/ );
+	var odb = DB('objects' /*{ adapter: 'memory' }*/);
     $N = new Ontology(odb, true, _.extend(new $NClient(), exports));
-    
+
 
 
     $N.ontoIndex = lunr(function() {
@@ -955,8 +956,8 @@ function netention(f) {
         this.field('properties');
         this.ref('id');
     });
-    	
-	
+
+
     $N.toString = function() {
         return JSON.stringify(this);
     };
@@ -970,19 +971,19 @@ function netention(f) {
 
     if (configuration.connection == 'websocket') {
         $N.connect(null, function() {
-            f("/ontology.json", $N);
+            f('/ontology.json', $N);
         });
     } else {
-        window.addEventListener("beforeunload", function(e) {
+        window.addEventListener('beforeunload', function(e) {
             $N.saveAll();
             /*var confirmationMessage = "Saved everything";
-             
+
              (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
              return confirmationMessage;                                //Webkit, Safari, Chrome etc.
              */
         });
 
-        f("ontology.json", $N);
+        f('ontology.json', $N);
     }
 
 
@@ -997,24 +998,24 @@ $(document).ready(function() {
             $('#NotificationArea').html('Ontology ready. Loading objects...');
 
             $N.getUserObjects(function() {
-                
+
                 //SETUP ROUTER
                 var Workspace = Backbone.Router.extend({
                     routes: {
-                        "new": "new",
-                        "me": "me", // #help
-                        "help": "help", // #help
-                        "query/:query": "query", // #search/kiwis
-                        "object/:id": "showObject",
-                        "object/:id/focus": "focus",
-                        "tag/:tag": "tag",
-                        "tag/:tag/new": "tagNew",						
+                        'new': 'new',
+                        'me': 'me', // #help
+                        'help': 'help', // #help
+                        'query/:query': 'query', // #search/kiwis
+                        'object/:id': 'showObject',
+                        'object/:id/focus': 'focus',
+                        'tag/:tag': 'tag',
+                        'tag/:tag/new': 'tagNew',
                         //"new/with/tags/:t":     "newWithTags",
-                        "example": "completeExample",
-                        "user/:userid": "user",
-                        ":view": "view",
-						":view/tag/:tag": "viewTag",
-                        "read/*url": "read"
+                        'example': 'completeExample',
+                        'user/:userid': 'user',
+                        ':view': 'view',
+						':view/tag/:tag': 'viewTag',
+                        'read/*url': 'read'
                                 //"search/:query/:page":  "query"   // #search/kiwis/p7
                     },
                     me: function() {
@@ -1035,20 +1036,20 @@ $(document).ready(function() {
                              });
                         }
                     },
-                    view: function(view) {						
+                    view: function(view) {
                         $N.set('currentView', view);
                     },
-                    viewTag: function(view, tag) {						
+                    viewTag: function(view, tag) {
                         $N.set('currentView', view);
-						
+
 						var tf = new $N.nobject();
-						tf.addTag(tag);						
+						tf.addTag(tag);
 						$N.setFocus(tf);
-						
+
 						//show sidebar
-						if (!$('#FocusEditWrap').is(':visible')) 
-							$('#FocusEditToggleButton').click();        
-                    },					
+						if (!$('#FocusEditWrap').is(':visible'))
+							$('#FocusEditToggleButton').click();
+                    },
                     user: function(userid) {
                         $N.set('currentView', {view: 'user', userid: userid});
                     },
@@ -1056,7 +1057,7 @@ $(document).ready(function() {
 						var n = new $N.nobject();
 						n.addTag(tag);
 						newPopupObjectEdit(n);
-                    },					
+                    },
                     read: function(url) {
                         later(function() {
                             viewRead(url);
@@ -1067,9 +1068,9 @@ $(document).ready(function() {
 
 
 
-				
+
 				initUI();
-                
+
 
 				var ii = identity();
 
@@ -1106,37 +1107,37 @@ $(document).ready(function() {
 
 				if (configuration.connection == 'static') {
 					$('.websocket').hide();
-				
+
 					$N.loadAll(function() {
 						if ($N.myself() === undefined) {
-							openSelectProfileModal("Start a New Profile");
+							openSelectProfileModal('Start a New Profile');
 						} else {
 							$N.sessionStart();
-						}								
+						}
 					});
 				}
 				else if (configuration.connection == 'websocket') {
 					$('.websocket').show();
-					
+
 					$('#NotificationArea').html('Connecting...');
 
 					if ((configuration.autoLoginDefaultProfile) || (configuration.connection == 'static')) {
-						var otherSelves = _.filter($N.get("otherSelves"), function(f) {
-							return $N.getObject(f) != null;
+						var otherSelves = _.filter($N.get('otherSelves'), function(f) {
+							return $N.getObject(f);
 						});
 						if (otherSelves.length >= 1) {
 							$N.become(otherSelves[0]);
 							return;
 						}
-					}					
+					}
 
 					if (isAnonymous()) {
 						//show profile chooser
-						openSelectProfileModal("Anonymous Profiles");
+						openSelectProfileModal('Anonymous Profiles');
 					}
 					else if ($N.myself() === undefined) {
 						if (configuration.requireIdentity)
-							openSelectProfileModal("Start a New Profile");
+							openSelectProfileModal('Start a New Profile');
 						else {
 							$N.sessionStart();
 						}
@@ -1186,7 +1187,7 @@ function newDiv(id) {
 function newEle(e, dom) {
     var d = document.createElement(e);
     if (dom)
-        return d;    
+        return d;
     return $(d);
 }
 
@@ -1224,18 +1225,18 @@ function getAvatarURL(s, style) {
      monsterid: a generated 'monster' with different colors, faces, etc
      wavatar: generated faces with differing features and backgrounds
      retro: awesome generated, 8-bit arcade-style pixelated faces
-     blank: a transparent PNG image (border added to HTML below for demonstration purposes)    
+     blank: a transparent PNG image (border added to HTML below for demonstration purposes)
      */
-	if (typeof s === "string") {
+	if (typeof s === 'string') {
 		var i = $N.instance[s];
 		if (i)
 			s = i;
-	}		
-		
+	}
+
     if (s) {
         var e = objFirstValue(s, 'email');
-        var emailHash = e ? MD5(e) : (s.id ? MD5(s.id) : MD5(s.toString()) );
-        return "http://www.gravatar.com/avatar/" + emailHash + '?d=' + style;
+        var emailHash = e ? MD5(e) : (s.id ? MD5(s.id) : MD5(s.toString()));
+        return 'http://www.gravatar.com/avatar/' + emailHash + '?d=' + style;
     }
     return configuration.defaultAvatarIcon;
 }
@@ -1247,7 +1248,7 @@ function newPopup(title, p, isModal, existingDiv) {
     }
 
     var d = existingDiv ? existingDiv : newDiv();
-        
+
     d.attr('title', title);
 
     $('body').append(d);
@@ -1265,7 +1266,7 @@ function newPopup(title, p, isModal, existingDiv) {
             width: clientWidth - leftMargin - margin,
             height: clientHeight - margin * 4,
             //position: [leftMargin, margin]
-            position: {my: "center", at: "center", of: window}
+            position: {my: 'center', at: 'center', of: window}
         };
     }
 
@@ -1279,7 +1280,7 @@ function newPopup(title, p, isModal, existingDiv) {
 		//these require jqueryui-events which are currently not included for efficiency reason
         show: 'fade',
         hide: 'fade' //'drop'
-    }, p||{});
+    }, p || {});
 
     if (isModal)
         p.modal = true;
@@ -1319,7 +1320,7 @@ function newPopup(title, p, isModal, existingDiv) {
 	d.prev().addClass('modal-title modal-header navbar navbar-default');
 	var titleSpan = d.prev().find('span').first();
 	titleSpan.css('height', '1.5em');
-	titleSpan.html( '<a class="navbar-brand" style="padding: 0">' + titleSpan.text() + '</a>' );
+	titleSpan.html('<a class="navbar-brand" style="padding: 0">' + titleSpan.text() + '</a>');
 
 
 	var closeButton = d.prev().find('button').first();
@@ -1335,7 +1336,7 @@ function isAnonymous() {
 }
 
 function getCookie(name) {
-    var nameEQ = name + "=";
+    var nameEQ = name + '=';
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];

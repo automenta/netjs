@@ -1,3 +1,5 @@
+"use strict";
+
 /** Search and NLP (natural language processing) support */
 
 var englishInvalidKeywords = /^and|or|to|the|if|it|with|which|an|how|why|what|where|when|that|can|will|object$/;
@@ -51,6 +53,7 @@ function updateTagSuggestions(t, mt, onAdd, getEditedFocus, ontocache) {
     });
 }
 
+/*
 function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
     t = getKeywords(t);
 
@@ -107,23 +110,23 @@ function updateTagSuggestionsOLD(t, mt, onAdd, getEditedFocus) {
         })();
     }
 }
-
+*/
 
 function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
     var myid = $N.id();
     var now = Date.now();
     var focus = $N.focus();
-    
+
     var when = null;
     var location = objSpacePointLatLng($N.myself());
 
     var relevance = {};
-    
+
     var focusName = focus ? focus.name : undefined;
     if (focusName === true)
         focusName = undefined;
-            
+
     var focusWho = focus ? focus.who : undefined;
     if (focusWho) {
         if (_.keys(focusWho).length === 0)
@@ -131,7 +134,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     }
 
     var focusWhen = focus ? focus.when : undefined;
-    if (focusWhen) {        
+    if (focusWhen) {
         sort = 'Recent';
         when = focusWhen;
     }
@@ -178,7 +181,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
     var SORT_RECENT = (sort === 'Recent');
 
     var focusTagStrength = objTagStrength(focus, false, false, $N.class);
-    
+
     var instances = 0;
     for (var k in $N.instance) {
         var x = $N.instance[k];
@@ -204,7 +207,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                 allowed = false;
                 for (var i = 0; i < ii.length; i++) {
                     var inc = ii[i];
-                    if (tags[inc]!==undefined) {
+                    if (tags[inc] !== undefined) {
                         allowed = true;
                         break;
                     }
@@ -213,7 +216,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             if (ee.length > 0) {
                 for (var i = 0; i < ee.length; i++) {
                     var exc = ee[i];
-                    if (tags[exc]!==undefined) {
+                    if (tags[exc] !== undefined) {
                         allowed = false;
                         break;
                     }
@@ -246,15 +249,15 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
             if (focus.userRelation) {
                 if (x.author) {
-                    if (myid===x.author)
+                    if (myid === x.author)
                         continue;
-                    
+
                     if (focus.userRelation.itrust) {
                         //do I trust the author of the object?
                         if ($N.getTrust(myid, x.author) <= 0)
                             continue;
                     }
-                    
+
                     if (focus.userRelation.trustme) {
                         //do I trust the author of the object?
                         if ($N.getTrust(x.author, myid) <= 0)
@@ -274,7 +277,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
             if (w === null)
                 continue;
-            
+
             var ageSeconds = Math.abs(now - w) / 1000.0;
             //r = Math.exp(-ageSeconds/10000.0);
             r = 1.0 / (1.0 + ageSeconds / 60.0);
@@ -302,7 +305,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
             }
             var timeDistance = Math.abs(now - x.when) / 1000.0; //seconds
             var spaceDistance = geoDist(location, llx) * 1000.0; //meters
-            //r = Math.exp(-(timeDistance + spaceDistance)/10000.0);            
+            //r = Math.exp(-(timeDistance + spaceDistance)/10000.0);
             r = 1.0 / (1.0 + ((timeDistance / 60.0) + spaceDistance));
         }
 
@@ -319,7 +322,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
                         continue;
                     }
                 }
-                
+
                 if (r > 0) {
                     if (when) {
                         var f = when[0];
@@ -338,7 +341,7 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
 
                 if (r > 0) {
                     if (ft.length > 0) {
-                        if (xx===null)
+                        if (xx === null)
                              xx = objTagStrength(x, false, false, $N.class);
                         r *= objTagStrengthRelevance(xx, focusTagStrength);
                     }
@@ -363,17 +366,17 @@ function getRelevant(sort, scope, semantic, s, maxItems, preFilter) {
      o.prepend('<span>Too many: 1..' + maxItems + ' of ' + relevant.length + '</span>');
      }
      else {
-     
+
      }
      */
 
     var relevantItems = _.first(relevant, maxItems);
      $('#FocusStatus').html('Focus: ' + relevantItems.length + ' / ' + instances);
-     
+
     if (relevant.length > relevantItems.length)
         $('#FocusStatus').append('<i>&nbsp;+' + (relevant.length - relevantItems.length) + ' more</li>');
-     
-    return [ relevantItems, relevance ];
+
+    return [relevantItems, relevance];
 }
 
 

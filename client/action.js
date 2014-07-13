@@ -31,22 +31,22 @@ function getMultiLine(title, value, ifEntered, ifNotEntered) {
         modal: true,
         title: title,
         buttons: {
-            "OK": function() {
+            'OK': function() {
                 var text = textarea.val();
                 ifEntered(text);
-                $(this).dialog("close");
+                $(this).dialog('close');
             },
             Cancel: function() {
                 if (ifNotEntered)
                     ifNotEntered();
-                $(this).dialog("close");
+                $(this).dialog('close');
             }
         },
         close: function() {
             d.remove();
         }
     });
-    d.dialog("open");
+    d.dialog('open');
 }
 
 var acceptsSelectionOfOne = function(s) {
@@ -63,7 +63,7 @@ var acceptsSelectionOfManyOwnedByMe = function(s) {
     var myid = $N.id();
     for (var i = 0; i < s.length; i++) {
         var S = s[i];
-        if (S.author!=myid)
+        if (S.author != myid)
             return false;
     }
     return true;
@@ -81,7 +81,7 @@ addAction({
         var oid = x.id;
 
         //TODO consider screen geometry in creating the dialog
-        newPopup("Edit " + oid, {width: 375, height: 450, position: 'center'}).append(newObjectEdit(x, true));
+        newPopup('Edit ' + oid, {width: 375, height: 450, position: 'center'}).append(newObjectEdit(x, true));
     }
 });
 addAction({
@@ -107,7 +107,7 @@ addAction({
 
         $N.pub(y);
 
-        return "Cloned to " + y.id;
+        return 'Cloned to ' + y.id;
     }
 });
 
@@ -121,21 +121,21 @@ addAction({
     }
 });
 addAction({menu: 'Object', name: 'Anonymize'});
-addAction({menu: 'Object', name: 'Refresh', 
+addAction({menu: 'Object', name: 'Refresh',
     description: 'Publishes existing objects into the network for re-analysis.',
-    accepts: acceptsSelectionOfManyOwnedByMe, 
+    accepts: acceptsSelectionOfManyOwnedByMe,
     run: function(selection) {
         _.each(selection, function(x) {
             if (x.author === $N.id()) {
 				$N.pub(x);
 			}
 		});
-	}	
+	}
 });
 addAction({menu: 'Object', name: 'Focus', description: 'Sets focus on these objects'});
-addAction({menu: 'Object', name: 'Touch', 
+addAction({menu: 'Object', name: 'Touch',
     description: 'Sets the modification date of objects to now.',
-    accepts: acceptsSelectionOfManyOwnedByMe, 
+    accepts: acceptsSelectionOfManyOwnedByMe,
     run: function(selection) {
         _.each(selection, function(x) {
             if (x.author === $N.id()) {
@@ -143,7 +143,7 @@ addAction({menu: 'Object', name: 'Touch',
 				$N.pub(x);
 			}
 		});
-	}	
+	}
 });
 addAction({menu: 'Object', name: 'Encrypt...'});
 addAction({menu: 'Object', name: 'Decrypt...'});
@@ -162,10 +162,10 @@ addAction({menu: 'Object', name: 'Delete',
             _.each(selection, function(x) {
                 if ((x.author == $N.id()) || (x.author == undefined)) {
                     if ($N.deleteObject(x))
-                        return "Deleted " + selection.length + ' object(s).';
+                        return 'Deleted ' + selection.length + ' object(s).';
                 }
                 else {
-                    notify("Can not delete: Not author of object " + x.id);
+                    notify('Can not delete: Not author of object ' + x.id);
                 }
             });
         }
@@ -220,7 +220,7 @@ addAction({menu: 'Tag', name: 'Favorite (toggle)', accepts: acceptsSelectionOfOn
                 title: 'Error updating Favorite',
                 text: err,
                 type: 'Error'
-            })
+            });
         }, function() {
             $N.notice(x);
         });
@@ -237,7 +237,7 @@ addAction({menu: 'Meaning', name: 'Identify Entities', description: 'NLP "who, w
     run: function(selection) {
         var text = ''; //TODO get text from concatenating all objects in the selectioncheck
 
-        var p = newPopup("Read...", {width: 375, minHeight: 450, modal: true, position: 'center'}).
+        var p = newPopup('Read...', {width: 375, minHeight: 450, modal: true, position: 'center'}).
                 append(newTextReader(text, function(data) {
                     for (var t in data) {
                         var D = data[t];
@@ -280,7 +280,7 @@ addAction({menu: 'Visual', name: 'Apply CSS Style...',
             });
         });
 
-        return "Styles applied.";
+        return 'Styles applied.';
     }
 
 });
@@ -335,7 +335,7 @@ addAction({menu: 'Share', name: 'To Craigslist'});
  speak metadata
  maximize
  visit link (open new browser tab)
- client plugin interface for others: 
+ client plugin interface for others:
  parameters displayed whether editable or not
  icon
  action function

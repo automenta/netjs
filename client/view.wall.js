@@ -2,9 +2,9 @@ addView({
 	id: 'wall',
 	name: 'Home',
 	icon: 'icon/view.main.svg',
-	start: function(v) {		
+	start: function(v) {
 		v.addClass('ViewPage Wall');
-		
+
 		var objPerCategory = 8;
 
 		function objNewest(objArray, n) {
@@ -33,26 +33,26 @@ addView({
 			});
 			return data;
 		}
-		
+
 		var roster = newDiv().addClass('Roster panel panel-default').appendTo(v);
 		var rosterHeading = $('<div class="panel-heading">Online</div>'/* <span class="badge">42</span></div>*/);
 		rosterHeading.append(newShoutLine().css('float', 'right').css('width', '40%').css('text-align', 'right'));
 		rosterHeading.append('<br/>');
 		roster.append(rosterHeading);
 		roster.append(newRosterWidget().addClass('panel-body'));
-		
-		
-		var categories = newDiv().addClass("CategoryPreviews panel panel-default").appendTo(v);
+
+
+		var categories = newDiv().addClass('CategoryPreviews panel panel-default').appendTo(v);
 		categories.append('<div class="panel-heading">News</div>');
 		var categoryBody = newDiv().addClass('panel-body').appendTo(categories);
 		var col1 = newDiv().appendTo(categoryBody);
 		var col2 = newDiv().appendTo(categoryBody);
 		var col3 = newDiv().appendTo(categoryBody);
-		
-		React.renderComponent( CategoryPreviews(getCategory(category1)), col1[0] );
-		React.renderComponent( CategoryPreviews(getCategory(category2)), col2[0] );
-		React.renderComponent( CategoryPreviews(getCategory(category3)), col3[0] );
-		
+
+		React.renderComponent(CategoryPreviews(getCategory(category1)), col1[0]);
+		React.renderComponent(CategoryPreviews(getCategory(category2)), col2[0]);
+		React.renderComponent(CategoryPreviews(getCategory(category3)), col3[0]);
+
 	},
 	stop: function() {
 	}
@@ -72,7 +72,7 @@ function newShoutLine() {
 			o = o.add(tag);
 
 		$N.pub(o, null, function() {
-			notify({title:'Published', text: name});
+			notify({title: 'Published', text: name});
 		});
 	}
 

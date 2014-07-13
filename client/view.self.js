@@ -2,16 +2,16 @@ addView({
 	id: 'us',
 	name: 'Users',
 	icon: 'icon/view.us.svg',
-	start: function(v) {		
+	start: function(v) {
 
 		var panel = newDiv().addClass('User ViewPage panel panel-default').appendTo(v);
 		var panelHeading = $('<div class="panel-heading"></div>').appendTo(panel);
-		
+
 		panelHeading.append('<br/>');
-		
+
 		var panelContent = newDiv().addClass('panel-body').appendTo(panel);
 		panel.append(panelContent);
-		
+
 		var s = self;
 		var plan = getPlan();
 
@@ -36,39 +36,39 @@ addView({
 			panelContent.empty();
 			var panelContentLeft = newDiv().addClass('col-md-6').appendTo(panelContent);
 			var panelContentRight = newDiv().addClass('col-md-6').appendTo(panelContent);
-			
+
 			var goalList = newDiv();
-			
+
 			//generate panelHeading
 			panelHeading.empty();
-			
-			var avatarButton = $('<span/>').appendTo(panelHeading);			
+
+			var avatarButton = $('<span/>').appendTo(panelHeading);
 			newAvatarImage(currentUser).appendTo(avatarButton);
-			
+
 			var userSelect = newAuthorCombo(currentUser);
-			userSelect.change(function (v) {
+			userSelect.change(function(v) {
 				updateUsView(userSelect.val());
 			});
 			panelHeading.append(userSelect);
-			
-			
+
+
 			var exportButton = $('<button title="Generate Resume"><i class="fa fa-trophy"></i></button>');
-			exportButton.click(function () {
+			exportButton.click(function() {
 				$N.saveAll();
 				//window.open('/#user/' + currentUser);
 				//$N.router.navigate('/#user/' + currentUser, {trigger: true});
 				newPopupObjectEdit(newSelfSummary(currentUser), true);
 			});
-			
+
 			panelHeading.append(exportButton);
-			
+
 
 			var operators = getOperatorTags();
 
-			var currentUserFilter = function (o) {
+			var currentUserFilter = function(o) {
 				o = $N.instance[o];
 				if (!o) return false;
-				
+
 				if (o.subject)
 					if (o.subject != currentUser) return false;
 
@@ -76,29 +76,29 @@ addView({
 			};
 
 			function addTheTag(T) {
-				return function () {
-					var d = newPopup("Add " + T.name, {
+				return function() {
+					var d = newPopup('Add ' + T.name, {
 						width: 800,
 						height: 600,
 						modal: true
 					});
-					d.append(newTagger([], function (results) {
+					d.append(newTagger([], function(results) {
 						var property;
 						if ((T.id == 'Do') || (T.id == 'Learn') || (T.id == 'Teach'))
 							property = 'know';
 						else
 							property = _.keys(T.property)[0]; //first property of the tag
-						
+
 						saveAddedTags(results, T.id, property);
 
-						later(function () {
+						later(function() {
 							d.dialog('close');
 						});
 					}));
 				}
 			}
 
-			_.each(operators, function (o) {
+			_.each(operators, function(o) {
 				var O = $N.class[o];
 
 
@@ -116,7 +116,7 @@ addView({
 
 					if (nn.length > 0) {
 						var uu = $('<ul></ul>');
-						_.each(nn, function (g) {
+						_.each(nn, function(g) {
 							var G = $N.instance[g];
 							var ss = newObjectView(G, {
 								showAuthorIcon: false,
@@ -124,7 +124,7 @@ addView({
 								showMetadataLine: false,
 								showActionPopupButton: false,
 								titleClickMode: (G.author == $N.id() ? 'edit' : 'view')
-							}).removeClass("ui-widget-content ui-corner-all").addClass('objectViewBorderless');
+							}).removeClass('ui-widget-content ui-corner-all').addClass('objectViewBorderless');
 							if (G.name == O.name) {
 								ss.find('h1 a').html('&gt;&gt;');
 								ss.find('h1').replaceTag($('<div style="float: left">'), true);
@@ -148,7 +148,7 @@ addView({
 				var nn = _.filter($N.objectsWithTag(['Do', 'Learn', 'Teach']), currentUserFilter);
 
 				var d = newDiv();
-				panelContentRight.append(newBootstrapPanel(null,d));
+				panelContentRight.append(newBootstrapPanel(null, d));
 
 				function rangeToTags(x, newValue) {
 					objRemoveTag(x, 'Do');
@@ -190,13 +190,13 @@ addView({
 
 				newRightColDiv().appendTo(d).append(kb);
 
-				_.each(nn, function (x) {
+				_.each(nn, function(x) {
 					var X = $N.instance[x];
 					var lc = newLeftColDiv().appendTo(d);
 					var rc = newRightColDiv().appendTo(d);
 
 					var nameLink = $('<a">' + X.name + '</a>');
-					nameLink.click(function () {
+					nameLink.click(function() {
 						newPopupObjectView(x);
 					});
 					var colorSquare = $('<span>&nbsp;&nbsp;&nbsp;</span>&nbsp;');
@@ -211,7 +211,7 @@ addView({
 
 					var SLIDER_CHANGE_MS = 500;
 
-					var updateTags = _.throttle(function () {
+					var updateTags = _.throttle(function() {
 						rangeToTags(X, parseFloat(slider.val()));
 						$N.pub(X);
 					}, SLIDER_CHANGE_MS);
@@ -225,9 +225,9 @@ addView({
 					}
 					updateColor();
 
-					slider.change(function () {
+					slider.change(function() {
 						updateColor();
-						later(function () {
+						later(function() {
 							updateTags();
 						});
 					});
@@ -256,7 +256,7 @@ addView({
 		}
 
 	},
-	stop: function() {
+	stop : function() {
 	}
 });
 	

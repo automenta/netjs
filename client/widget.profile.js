@@ -2,10 +2,10 @@
 
 function newProfileWidget() {
     var d = newDiv();
-    
+
 
     function closeDialog() {
-        //d.parent().dialog('close');            
+        //d.parent().dialog('close');
         $('#LoadingSplash').hide();
     }
 
@@ -50,9 +50,9 @@ function newProfileWidget() {
         }
     }
 
-	if (identity()===ID_UNKNOWN) {
+	if (identity() === ID_UNKNOWN) {
 		$('#LoadingSplashTitle').html('<a href="/login">Login</a>');
-	}	
+	}
     else if (c === 0) {
         d.empty().append(newNewProfileWidget(function(user) {
             become(user);
@@ -187,11 +187,11 @@ function newRosterWidget(full) {
     }
 
     var d = newDiv();
-    
+
     var wasAttached = false;
-    
+
     var updateRosterDisplay = function() {
-        
+
         var attached = d.closest(document.documentElement).length > 0;
         if ((!attached) && (wasAttached)) {
            $N.off('change:roster', this);
@@ -200,26 +200,26 @@ function newRosterWidget(full) {
         else {
             wasAttached = true;
         }
-        
+
         var r = $N.get('roster');
         d.empty();
         if (!r)
-            return;        
+            return;
 
         _.keys(r).forEach(function(uid) {
             var U = $N.instance[uid];
             if (U) {
-                if ((full && (uid!=$N.id())) || (!full)) {
+                if ((full && (uid != $N.id())) || (!full)) {
                     var a = newAvatarImage(U).appendTo(d);
                     a.click(function() {
                         newPopupObjectView(U);
                     });
-                    if (full && configuration.webrtc && (uid!=$N.id())) {
+                    if (full && configuration.webrtc && (uid != $N.id())) {
                         var webrtc = r[uid];
                         if (Array.isArray(webrtc)) {
                             a.css('padding-left', '1.85em');
                             webrtc.forEach(function(i) {
-                                newEle('button').html('&gt;').attr('title', 'Private Call ' + i).data('webrtc', [uid,i])
+                                newEle('button').html('&gt;').attr('title', 'Private Call ' + i).data('webrtc', [uid, i])
                                     .click(function() {
                                         var w = $(this).data('webrtc');
                                         newWebRTCCall(w[1]);
@@ -230,18 +230,18 @@ function newRosterWidget(full) {
                         }
                     }
                 }
-                
+
             }
         });
     };
 
-    $N.on("change:roster", updateRosterDisplay);
+    $N.on('change:roster', updateRosterDisplay);
 
     d.destroy = function() {
-        $N.off("change:roster", updateRosterDisplay);
+        $N.off('change:roster', updateRosterDisplay);
     };
-    
-    
+
+
     updateRosterDisplay();
 
     return d;

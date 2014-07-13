@@ -2,20 +2,20 @@
 
 
 function renderOptions(s, o, v) {
-   
+
     $('#Options').show();
 
 
     //v.append('<h1>Theme</h1>');
     //v.append(themeSelect);
-    
+
     v.append('<h1>Plugins</h1>');
-    
+
     var plugins = newDiv();
-   
+
     updatePlugins(plugins);
     v.append(plugins);
-    
+
     /*
                         <!--
                         <li class="dropdown-submenu">
@@ -34,7 +34,7 @@ function renderOptions(s, o, v) {
                         <!--<li><a href="/#/new">New</a></li><br/>-->
                         <!-- <li><a href="/#/tags"><img alt="tags: src="icon/back-to-ou.png"/>Tags</a></li> -->
                         <a href="/#/help">Help</a>
-                        
+
                         <br/>
                         <div id="ViewOptions"></div>
                         <div id="ViewSelect" class="ViewSelectNormal"></div>
@@ -42,10 +42,10 @@ function renderOptions(s, o, v) {
                     <!-- <a class="btn" href="#">Location</a> -->
                 </div>
     */
-    
+
 }
 
-            function updatePlugins(p) {                
+            function updatePlugins(p) {
                 $N.getPlugins(function(pl) {
 
                     p.empty();
@@ -68,17 +68,17 @@ function renderOptions(s, o, v) {
                                     var b = $('<button>Disable</button>');
                                     b.click(function() {
                                        $N.setPlugin(k, false, function(err) {
-                                            if (!err)  {
+                                            if (!err) {
                                                 updatePlugins(p);
                                                 //notify
                                             }
                                             else {
                                                 notify({
                                                     title: 'Unable to configure plugin',
-                                                    text: err                       
-                                                }); 
+                                                    text: err
+                                                });
                                             }
-                                       }); 
+                                       });
                                     });
                                     pd.append('<span>Currently enabled.</span>&nbsp;');
                                     pd.append(b);
@@ -89,20 +89,20 @@ function renderOptions(s, o, v) {
                                     var b = $('<button>Enable</button>');
                                     b.click(function() {
                                        $N.setPlugin(k, true, function(err) {
-                                            if (!err)  {
+                                            if (!err) {
                                                 updatePlugins(p);
                                                 //notify
                                             }
                                             else {
                                                 notify({
                                                     title: 'Unable to configure plugin',
-                                                    text: err                       
-                                                }); 
+                                                    text: err
+                                                });
                                             }
-                                       }); 
+                                       });
                                     });
                                     pd.append('<span>Currently disabled.</span>&nbsp;');
-                                    pd.append(b);                            
+                                    pd.append(b);
                                 }
                             }
                             else {
@@ -110,8 +110,8 @@ function renderOptions(s, o, v) {
                             }
         //                    var ps = $('<div class="PluginSettings"></div>');
         //                    if (pu.valid) {
-        //                        
-        //                            
+        //
+        //
         //                        //ps.append(px);
         //                    }
         //                    else {
@@ -125,14 +125,14 @@ function renderOptions(s, o, v) {
                     }
                 });
             }
-            
+
             /*$(document).ready(function(){
                 netention(function(self) {
-                    
+
                     $('#PluginList').html('Loading...');
                     $N.on('change:plugins', updatePlugins);
                     $N.getPlugins();
-                    
-                    
+
+
                 });
             });*/

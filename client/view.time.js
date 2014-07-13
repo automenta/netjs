@@ -2,13 +2,13 @@ addView({
 	id: 'time',
 	name: 'Time',
 	icon: 'icon/view.time.svg',
-	start: function(v) {		
-    
+	start: function(v) {
+
 		//            <script src="lib/timeline/timeline-min.js" type="text/javascript"></script>
 		var twrap = newDiv().appendTo(v);
 
 			$LAB
-				.script("lib/timeline/timeline-min.js")
+				.script('lib/timeline/timeline-min.js')
 				.wait(function() {
 					var timeline = new links.Timeline(v[0]);
 
@@ -26,7 +26,7 @@ addView({
 						'end': Date.now() + 2 * 24 * 60 * 60 * 1000, /* 2 days */
 						'zoomMin': 60 * 1000, /* 1 min */
 						'groupsChangeable': false,
-						'animate': 0,
+						'animate': 0
 					};
 
 					var times = {};
@@ -125,7 +125,7 @@ addView({
 							var uid = $(this).attr('uid');
 							newPopupObjectView($N.getObject(uid));
 							return false;
-						});                        
+						});
 					}
 
 					links.events.addListener(timeline, 'ready', function() {
@@ -142,7 +142,7 @@ addView({
 					links.events.addListener(timeline, 'add', function() {
 						var dd = timeline.getData();
 						var tti = dd[dd.length - 1].start.getTime();
-						var d = newPopup("Add a Goal at " + new Date(tti), {width: 800, height: 600, modal: true});
+						var d = newPopup('Add a Goal at ' + new Date(tti), {width: 800, height: 600, modal: true});
 						d.append(newTagger([], function(results) {
 							saveAddedTags(results, 'Goal', 'goal', tti);
 							later(function() {
@@ -165,10 +165,10 @@ addView({
 
 		return twrap;
 	},
-	stop: function(v) {		
+	stop: function(v) {
 	}
 });
-	
+
 
 //DEPRECATED:
 function newTimeViewGridster(v) {
@@ -255,7 +255,7 @@ function newTimeViewGridster(v) {
             var m = ts.getMinutes();
             if (m === 0)
                 m = '00';
-            ts = ts.getHours() + ":" + m;
+            ts = ts.getHours() + ':' + m;
         }
         else {
             ts = ts.toDateString();
@@ -269,7 +269,7 @@ function newTimeViewGridster(v) {
             var tti = time;
             var tts = ts;
             addbutton.click(function() {
-                var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
+                var d = newPopup('Add a Goal at ' + tts, {width: 800, height: 600, modal: true});
                 d.append(newTagger([], function(results) {
                     saveAddedTags(results, 'Goal', 'goal', tti + timeUnitLengthMS / 2);
 
@@ -367,11 +367,11 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
          if (ts.getHours() != 0) {
          ts = ts.getHours() + ":00";
          }
-         
+
          var d = newDiv().addClass('alternatingDiv').append('<span class="goalRowHeading">' + ts + '</span>');
-         
+
          var addbutton = $('<button title="Add Tag">[+]</button>').appendTo(d);
-         
+
          var y = function() {
          var tti = ti;
          var tts = ts;
@@ -379,7 +379,7 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
          var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
          d.append(newTagger([], function(results) {
          saveAddedTags(results, 'Goal', tti + timeUnitLengthMS / 2);
-         
+
          //now = _.unique(now.concat(results));
          later(function() {
          d.dialog('close');
@@ -390,12 +390,12 @@ function foreachGoal(numTimeSegments, timeUnitLengthMS, user, onTimeSegment) {
          });
          };
          y();
-         
+
          _.each(goals, function(g) {
          var ogg = objTags(g);
          if (_.contains(ogg, 'GoalCentroid'))
          return;
-         
+
          var gg = newObjectView(g).addClass("miniGoalSummary");
          d.append(gg);
          });
@@ -449,7 +449,7 @@ function newGoalList(target, user, centroids) {
             var m = ts.getMinutes();
             if (m === 0)
                 m = '00';
-            ts = ts.getHours() + ":" + m;
+            ts = ts.getHours() + ':' + m;
         }
         else {
             ts = ts.toDateString();
@@ -464,7 +464,7 @@ function newGoalList(target, user, centroids) {
             var tti = ti;
             var tts = ts;
             addbutton.click(function() {
-                var d = newPopup("Add a Goal at " + tts, {width: 800, height: 600, modal: true});
+                var d = newPopup('Add a Goal at ' + tts, {width: 800, height: 600, modal: true});
                 d.append(newTagger([], function(results) {
                     saveAddedTags(results, 'Goal', 'goal', tti + timeUnitLengthMS / 2);
 
@@ -484,7 +484,7 @@ function newGoalList(target, user, centroids) {
             if (_.contains(ogg, 'GoalCentroid'))
                 return;
 
-            var gg = newObjectView(g).addClass("miniGoalSummary");
+            var gg = newObjectView(g).addClass('miniGoalSummary');
             d.append(gg);
         });
 
@@ -493,7 +493,7 @@ function newGoalList(target, user, centroids) {
             _.each(_.filter(centroids, function(c) {
                 return (c.when >= ti) && (c.when < ti + timeUnitLengthMS);
             }), function(g) {
-                newObjectView(g).addClass("miniGoalSummary centroidSummary").appendTo(d);
+                newObjectView(g).addClass('miniGoalSummary centroidSummary').appendTo(d);
             });
         }
 

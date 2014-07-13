@@ -2,7 +2,7 @@ addView({
 	id: 'forum',
 	name: 'Forum',
 	icon: 'icon/view.chat.svg',
-	start: function(v) {		
+	start: function(v) {
 		var oldestNewObjectMS = 10 * 60 * 1000; //10 min
 
 		var content = v;//newDiv().addClass('ChatViewContent');
@@ -10,7 +10,7 @@ addView({
 		var updates = newDiv().addClass('ChatViewUpdates').addClass('ui-widget-content');
 
 		//v.append(content);
-		//v.append(input);    
+		//v.append(input);
 		v.append(updates);
 
 		var nearBottom = false;
@@ -71,7 +71,7 @@ addView({
 
 			var toDisplayWithReplies = $N.getAllReplies(toDisplay);
 
-			var added = _.difference(toDisplayWithReplies, displayedObjects);        
+			var added = _.difference(toDisplayWithReplies, displayedObjects);
 			var removed = _.difference(displayedObjects, toDisplayWithReplies);
 			var newlyChanged = _.filter(toDisplayWithReplies, function(D) {
 				var dd = D.modifiedAt || D.createdAt;
@@ -218,7 +218,7 @@ addView({
 			changed = [];
 
 			if (force)
-				if (typeof force != "boolean") {
+				if (typeof force != 'boolean') {
 					var scrollToObject = force;
 					//existing scroll position should be good if it's a reply
 					if (scrollToObject.replyTo)
@@ -230,15 +230,15 @@ addView({
 
 		this.updateFocus = function updateFocus() {
 			_myNewObject = $N.focus();
-		}
-		
+		};
+
 
 		$N.on('change:focus', this.updateFocus);
 
 		updateContent(true);
 
 		setTimeout(function() {
-			later(scrollbottom);        
+			later(scrollbottom);
 		},250);
 
 		var viewMenu = $('#ViewMenu');
@@ -248,12 +248,12 @@ addView({
 
 		this.onChange = function() {
 			later(function() {
-				updateContent(_myNewObject);     
+				updateContent(_myNewObject);
 				if (_myNewObject)
 					scrollbottom();
 				_myNewObject = null;
-			})
-		};		
+			});
+		};
 
 		return this;
 	},
@@ -269,7 +269,7 @@ addView({
 		newObjects = null;
 		rootsUnaffected = null;
 		modifiedDate = null;
-		changed = null;		
+		changed = null;
 		*/
 	}
 });

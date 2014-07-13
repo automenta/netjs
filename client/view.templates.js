@@ -1,7 +1,7 @@
 function newTemplatesView(v) {
 	var d = newDiv().appendTo(v);
 
-	var sidebar= newDiv().addClass('goalviewSidebar').appendTo(d);
+	var sidebar = newDiv().addClass('goalviewSidebar').appendTo(d);
 
 	var templates = $N.objectsWithTag('Template');
 	_.each(templates, function(t) {

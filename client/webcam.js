@@ -20,7 +20,7 @@ function newWebcamWindow(onFinished) {
     var recordButton = $('<button>Record</button>').appendTo(x);
     recordButton.click(function() {
         webcamRecord(5, 0.3, function(path) {
-            x.dialog("close");
+            x.dialog('close');
             onFinished(path);
         });
     });
@@ -41,9 +41,9 @@ function webcamAvailable() {
 
 var videoShooter;
 function webcamStart(previewTarget, gifWidth, gifHeight, ready) {
-    
-    navigator.getMedia=navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia||navigator.msGetUserMedia;
-    
+
+    navigator.getMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
     if (navigator.getMedia) {
 
         var startStreaming = function() {
@@ -62,7 +62,7 @@ function webcamStart(previewTarget, gifWidth, gifHeight, ready) {
                 $(videoElement).css({
                     //position: 'absolute',
                     width: gifWidth + cropDimens.width + 'px',
-                    height: gifHeight + cropDimens.height + 'px',
+                    height: gifHeight + cropDimens.height + 'px'
                     //left: -Math.floor(cropDimens.width / 2) + 'px',
                     //top: -Math.floor(cropDimens.height / 2) + 'px'
                 });
@@ -87,8 +87,8 @@ function webcamStart(previewTarget, gifWidth, gifHeight, ready) {
          <script src="lib/gumhelper/gumhelper.js"></script>
          <script src="lib/animated_gif/Animated_GIF.min.js"></script> */
         $LAB
-                .script("lib/gumhelper/gumhelper.js")
-                .script("lib/animated_gif/Animated_GIF.min.js")
+                .script('lib/gumhelper/gumhelper.js')
+                .script('lib/animated_gif/Animated_GIF.min.js')
                 .wait(startStreaming);
 
         /*$(window).on('orientationchange', function() {
@@ -124,7 +124,7 @@ function webcamRecord(numFrames, frameInterval, whenUploaded) {
         /*var submission = composer.inputs.reduce(function(data, input) {
          return (data[input.name] = input.value, data);
          }, { picture: picture });*/
-        $('#WebcamStatus').html('Picture size:' + picture.length + ", Uploading...");
+        $('#WebcamStatus').html('Picture size:' + picture.length + ', Uploading...');
 
         var submission = {
             image: picture,
@@ -136,7 +136,7 @@ function webcamRecord(numFrames, frameInterval, whenUploaded) {
         f.ajaxSubmit({
             data: submission,
             success: function(data) {
-                $('#WebcamStatus').html("Finished.");
+                $('#WebcamStatus').html('Finished.');
                 whenUploaded(data);
             }
         });

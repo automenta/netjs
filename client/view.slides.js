@@ -1,10 +1,10 @@
 function renderSlides(s, o, v) {
     //http://twitter.github.com/bootstrap/javascript.html#carousel
-    
+
     var c = $('<div></div>');
     c.addClass('carousel');
     c.addClass('slide');
-    
+
     var i = $('<div></div>');
     i.addClass('carousel-inner');
 
@@ -15,11 +15,11 @@ function renderSlides(s, o, v) {
         x.appendTo(i);
     }
     c.append(i);
-    
-    
+
+
     c.append('<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>');
     c.append('<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>');
-    
+
 
     v.append(c);
 

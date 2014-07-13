@@ -1,3 +1,5 @@
+
+/*jslint ass: true, bitwise: true, browser: true, closure: true, continue: true, couch: true, debug: true, devel: true, eqeq: true, evil: true, forin: true, indent: 4, maxerr: 50, maxlen: 250, newcap: true, node: true, nomen: true, passfail: true, plusplus: true, regexp: true, rhino: true, sloppy: true, stupid: true, sub: true, todo: true, unparam: true, vars: true, white: true */
 var server = false;
 try {
 	process.title;	server = true;
@@ -12,6 +14,7 @@ if ((!server) && (typeof window != 'undefined')) {
     graphlib = require("graphlib");
 	server = true;
 }
+
 
 
 
@@ -816,7 +819,7 @@ function objIsClass(x) {
             return true;
 
         if ((typeof x.extend) === "string") {
-            return (!isPrimitive(x.extend))
+            return (!isPrimitive(x.extend));
         }
 
         if (Array.isArray(x.extend))
@@ -858,6 +861,8 @@ exports.objEqual = objEqual;
 
 /** an interface for interacting with nobjects and ontology */
 var Ontology = function(db, tagInclude, target) {
+	"use strict";
+	
     var that = target ? target : this;
 
 	that.db = db;
@@ -898,7 +903,7 @@ var Ontology = function(db, tagInclude, target) {
 
 
 		function next() {
-			if (qsetPending.length == 0) {
+			if (qsetPending.length === 0) {
 				return false;
 			}
 
@@ -951,7 +956,7 @@ var Ontology = function(db, tagInclude, target) {
 			});
 		}
 
-	};
+	}
 
     //resets to empty state
     //TODO unify with the clearInstances function to not duplicate code
@@ -1009,8 +1014,8 @@ var Ontology = function(db, tagInclude, target) {
             try {
                 graphlib.Digraph.prototype.delEdge.apply(that.dgraph, arguments);
             }
-            catch (e) {
-                console.error('unable to remove edge:',e);
+            catch (err) {
+                console.error('unable to remove edge:',err);
             }
         };
 
@@ -1636,7 +1641,7 @@ var Ontology = function(db, tagInclude, target) {
         r = _.keys(r);
         if (fullObject)
             return r.map(function(s) {
-                return $N.instance[s]
+                return $N.instance[s];
             });
         else
             return r;
@@ -2457,26 +2462,22 @@ var MD5 = function(string) {
     function FF(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(F(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
-    }
-    ;
+    }    
 
     function GG(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(G(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
     }
-    ;
 
     function HH(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(H(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
     }
-    ;
-
+	
     function II(a, b, c, d, x, s, ac) {
         a = AddUnsigned(a, AddUnsigned(AddUnsigned(I(b, c, d), x), ac));
         return AddUnsigned(RotateLeft(a, s), b);
     }
-    ;
 
     function ConvertToWordArray(string) {
         var lWordCount;
@@ -2500,7 +2501,6 @@ var MD5 = function(string) {
         lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
         return lWordArray;
     }
-    ;
 
     function WordToHex(lValue) {
         var WordToHexValue = "",
@@ -2513,7 +2513,6 @@ var MD5 = function(string) {
         }
         return WordToHexValue;
     }
-    ;
 
     function Utf8Encode(string) {
         string = string.replace(/\r\n/g, "\n");
@@ -2538,7 +2537,6 @@ var MD5 = function(string) {
 
         return utftext;
     }
-    ;
 
     var x = Array();
     var k, AA, BB, CC, DD, a, b, c, d;

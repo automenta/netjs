@@ -66,7 +66,7 @@ module.exports = DB = function (collection, dbOptions) {
 				for (var y in value.inout[x])
 					inoutcount++;					
 			}
-			if (inoutcount == 0)
+			if (inoutcount === 0)
 				delete value.inoutcount;
 		}
 		
@@ -179,8 +179,6 @@ module.exports = DB = function (collection, dbOptions) {
 			var results =  [];
 
 			var stream = this.streamNewest(max, function(err, x) {
-				if (stream == null) return;
-
 				if (err) {
 					stream.end();
 					stream = null;
@@ -285,5 +283,5 @@ module.exports = DB = function (collection, dbOptions) {
 	};
 
 	return idb;
-}
+};
 

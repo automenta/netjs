@@ -8,24 +8,24 @@ function renderCesiumMap(v) {
 	var viewer, scene, layers, primitives, ellipsoid;
 	var plist = [];
 	var materialCache = { };
-	
+
     function init() {
-		
+
         var ee = duid();
         var vv = newDiv(ee);
         vv.attr('class', 'cesiumContainer');
         v.append(vv);
-		
-		
+
+
         viewer = cc.cesium = new Cesium.CesiumWidget(ee);
 		scene = viewer.scene;
 
 		primitives = scene.primitives;
 
 		layers = scene.imageryLayers;
-		
+
 		ellipsoid = scene.globe;
-		
+
 /*
         // Move the primitive that the mouse is over to the top.
         var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
@@ -40,8 +40,8 @@ function renderCesiumMap(v) {
 					}
 				}
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-*/		
-		
+*/
+
         later(updateMap);
     }
 
@@ -67,36 +67,36 @@ function renderCesiumMap(v) {
 
 
         function newCircle(lat, lon, radiusMeters, vertexAngle, r, g, b, a, iconURL) {
-			
+
 			var circle = new Cesium.CircleGeometry({
-			  	center : Cesium.Cartesian3.fromDegrees(lon, lat),
-			  	radius : radiusMeters,
+			  	center: Cesium.Cartesian3.fromDegrees(lon, lat),
+			  	radius: radiusMeters,
 				granularity: vertexAngle
 			});
 			var geometry = Cesium.CircleGeometry.createGeometry(circle);
-			
+
 			var instance = new Cesium.GeometryInstance({
-			  	geometry : geometry
+			  	geometry: geometry
 			});
-			
+
 			var material = null;
-			
+
             if (!iconURL)
                 iconURL = defaultIcons['unknown'];
 
             if (iconURL) {
 				if (materialCache[iconURL])
-					material = materialCache[iconURL];			
+					material = materialCache[iconURL];
 				else {
-					materialCache[iconURL] = material = new Cesium.Material({						
-					  fabric : {						  
-						type : 'Image',
-						uniforms : {
-						  image : iconURL,
-						  repeat : {
-							x : 1,
-							y : 1
-						  }							
+					materialCache[iconURL] = material = new Cesium.Material({
+					  fabric: {
+						type: 'Image',
+						uniforms: {
+						  image: iconURL,
+						  repeat: {
+							x: 1,
+							y: 1
+						  }
 						}
 					  }
 					});
@@ -109,18 +109,18 @@ function renderCesiumMap(v) {
                     green: g,
                     blue: b,
                     alpha: a
-                };				
+                };
             }
-			
+
 			var poly = new Cesium.Primitive({
-			  geometryInstances : instance,
-			  appearance : new Cesium.EllipsoidSurfaceAppearance({
-				material : material
+			  geometryInstances: instance,
+			  appearance: new Cesium.EllipsoidSurfaceAppearance({
+				material: material
 			  })
 			});
-			
+
 			scene.primitives.add(poly);
-						
+
             return poly;
         }
 
@@ -202,7 +202,7 @@ function renderCesiumMap(v) {
 		}
 
 	}
-	
+
 	//var dataSource = new Cesium.GeoJsonDataSource();
 
     //ensure Cesium loaded
@@ -212,11 +212,11 @@ function renderCesiumMap(v) {
 		//this is a hack to make Cesium's require.js work with Netention's screwed up util/ client-server code-sharing
 		exports = undefined;
 		module = undefined;
-		
+
         loadCSS('http://cesiumjs.org/Cesium/Build/Cesium/Widgets/CesiumWidget/CesiumWidget.css');
 
         $LAB
-			.script("http://cesiumjs.org/Cesium/Build/Cesium/Cesium.js")
+			.script('http://cesiumjs.org/Cesium/Build/Cesium/Cesium.js')
 			.wait(init);
 
     }
@@ -229,12 +229,12 @@ function renderCesiumMap(v) {
     };
 	cc.stop = function() {
 		v.html('');
-		
+
 		_.values(materialCache, function(m) { m.destroy(); });
 		//scene.destroy();
-		viewer.destroy();		
+		viewer.destroy();
 	};
-	
+
 
     return cc;
 }
@@ -242,7 +242,7 @@ function renderCesiumMap(v) {
 
 //var dataURL = 'geo/data/hibakusha.geojson';
 		var dataURL = 'geo/data/f03.0.0.1.geojson';
-		
+
 		dataSource.loadUrl(dataURL).then(function() {
 			//new Cesium.DataSourceDisplay(viewer.get_scene(), [dataSource]);
 
@@ -291,7 +291,7 @@ function renderCesiumMap(v) {
 							width : 100, // default: undefined
 							height : 25 // default: undefined
 							scaleByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
-							
+
 						});
 					}
 					else if (O.polygon) {
@@ -315,9 +315,9 @@ function renderCesiumMap(v) {
 		var blackMarble = layers.addImageryProvider(new Cesium.TileMapServiceImageryProvider({
 			url : 'http://cesiumjs.org/blackmarble',
 			//url: 'http://a.tile.openweathermap.org/map/temp',
-		}));	
+		}));
 
-		
+
 		//minx="-20037508.340000" miny="-20037508.340000" maxx="20037508.340000" maxy="20037508.340000"/>
         //var sw = Cesium.Cartographic.fromDegrees(parseFloat(-20037508.340000), parseFloat(-20037508.340000));
         //var ne = Cesium.Cartographic.fromDegrees(parseFloat(20037508.340000), parseFloat(20037508.340000));
@@ -330,13 +330,13 @@ function renderCesiumMap(v) {
 			_extent: ext
 		}));
 
-		
+
 		var proxy = new Cesium.DefaultProxy('http://localhost:9292');
 		proxy.getURL = function(resource) {
 			//package: corsproxy
         	return this.proxy + '/' + (resource.substring(7));
 	    };
-		
+
 
 		var osm = new Cesium.OpenStreetMapImageryProvider({
 			_url : 'http://tile.openstreetmap.org/',
@@ -379,7 +379,7 @@ function renderCesiumMap(v) {
 			extent: nasaEXT,
 			proxy: proxy
 		}));
-	
+
 		//http://cesiumjs.org/Cesium/Build/Documentation/GeoJsonDataSource.html_data
 		//http://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=CZML.html&label=undefined
 

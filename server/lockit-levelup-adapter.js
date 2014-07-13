@@ -152,7 +152,7 @@ Adapter.prototype.update = function (user, done) {
 		}
 		return done(null, u);
 	});
-}
+};
 
 
 /**

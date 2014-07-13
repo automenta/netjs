@@ -1,3 +1,4 @@
+"use strict";
 
 
 function newPopupObjectEdit(n, p) {
@@ -17,7 +18,7 @@ function newPopupObjectEdit(n, p) {
 
 function newPopupObjectView(_x, p, ovParams) {
     var x;
-    if (typeof (_x) == "string")
+    if (typeof (_x) == 'string')
         x = $N.object[_x];
     else
         x = _x;
@@ -27,13 +28,13 @@ function newPopupObjectView(_x, p, ovParams) {
         return;
     }
 
-    if (ovParams===undefined) {
+    if (ovParams === undefined) {
         ovParams = {
             depthRemaining: 4,
             nameClickable: false
         };
     }
-    
+
     var d = newPopup(x.name, p);
     var s = newObjectView(x, ovParams);
     s.css('border', 'none');
@@ -49,7 +50,7 @@ function newPopupObjectViews(objectIDs) {
         return newPopupObjectView(objectIDs[0]);
 
     var objects = objectIDs.map(function(i) {
-        if (typeof i === "string")
+        if (typeof i === 'string')
             return $N.getObject(i);
         else
             return i;
@@ -75,15 +76,15 @@ function newPopupObjectViews(objectIDs) {
             e.prepend('WARNING: Too many objects selected.  Only showing the first ' + maxDisplayableObjects + '.<br/>');
         }
     });
-    return newPopup(displayedObjects + " Object" + ((displayedObjects > 1) ? 's' : ''), true).append(e);
+    return newPopup(displayedObjects + ' Object' + ((displayedObjects > 1) ? 's' : ''), true).append(e);
 
 }
 
 
 function newAvatarImage(s) {
     return newDiv().attr({
-        "class": 'AvatarIcon',
-        "style": 'background-image:url(' + getAvatarURL(s) + ')',
+        'class': 'AvatarIcon',
+        'style': 'background-image:url(' + getAvatarURL(s) + ')',
         'title': (s ? s.name : '')
     });
 }
@@ -110,7 +111,7 @@ function newTagImage(ti) {
 
 function newTagButton(t, onClicked, isButton, dom) {
     var ti = null;
-    
+
     if (t) {
         if (!t.id) {
             var to = $N.class[t];
@@ -137,10 +138,10 @@ function newTagButton(t, onClicked, isButton, dom) {
     else {
         b = newEle('a', true);
     }
-    
+
     b.setAttribute('class', 'tagLink');
-    b.style.backgroundImage="url(" + ti + ")";
-    	
+    b.style.backgroundImage = 'url(' + ti + ')';
+
     if (t && (t.name)) {
         b.innerHTML = t.name || t.id;
         b.setAttribute('taguri', t.id || (t + ''));
@@ -148,12 +149,12 @@ function newTagButton(t, onClicked, isButton, dom) {
     else {
         b.innerHTML = t.id || t;
     }
-        
+
     if (!onClicked)
         onClicked = _onTagButtonClicked;
-    
+
     b.onclick = onClicked;
-    
+
     if (dom)
         return b;
     return $(b);
@@ -202,9 +203,9 @@ function newReplyWidget(onReply, onCancel) {
  *  TODO - use a parameter object like newObjectView
  */
 function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags, onNameEdit) {
-    if (typeof ix === "string")
+    if (typeof ix === 'string')
         ix = $N.instance[ix];
-    
+
     var D = newDiv().addClass('ObjectEditDiv');
     var headerTagButtons = ix.tagSuggestions || [];
     var ontocache = {};
@@ -219,12 +220,12 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             if (!editable)
                 return x;
 
-            var na = nameInput ? nameInput.val() : "";
+            var na = nameInput ? nameInput.val() : '';
 
             var n = objNew(x.id, na);
             n.createdAt = x.createdAt;
             n.author = x.author;
-            
+
             //copy all metadata
 
             if (x.subject)
@@ -240,7 +241,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             if (x.with) n.with = x.with;
             if (x.inout)
                 n.inout = x.inout;
-            
+
             n.scope = x.scope || configuration.defaultScope;
 
             //TODO copy any other metadata
@@ -293,14 +294,14 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         widgetsToAdd = [];
 
         if (editable) {
-            
-            if ((x.name) || (hideWidgets!==true)) {
+
+            if ((x.name) || (hideWidgets !== true)) {
                 nameInput = $('<input type="text"/>').attr('placeholder', 'Title').attr('x-webkit-speech', 'x-webkit-speech').addClass('form-control input-lg nameInput nameInputWide');
                 nameInput.val(x.name === true ? '' : x.name);
                 widgetsToAdd.push(nameInput);
                 if (onNameEdit) {
                     //nameInput.keyup(onNameEdit);
-                    nameInput.change(onNameEdit);                    
+                    nameInput.change(onNameEdit);
                     nameInput.keyup(function(e) {
                         if (e.keyCode == 13)
                             onNameEdit.apply($(this));
@@ -312,10 +313,10 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 tagInput = $('<input name="tags" class="tags"/>');
                 //$('#tags').importTags('foo,bar,baz');
                 //$('#tags').addTag('foo');
-                
+
                 var tagSearchCache = { };
                 var addedTags = {};
-                
+
                 later(function() {
                     tagInput.tagsInput({
                         // https://github.com/xoxco/jQuery-Tags-Input#options
@@ -324,20 +325,20 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         width: 'auto',
                         height: 'auto',
                         onAddTag: function(t) {
-                            //addedTags[t] = true;  
+                            //addedTags[t] = true;
                             update(objAddTag(getEditedFocus(), t));
                         },
                         onRemoveTag: function(t) {
                             delete addedTags[t];
                         },
-                        
+
                         //autocomplete_url: 'http://missingajax',
                         autocomplete: {
-                            selectFirst:true,
-                            width:'100px',
-                            autoFill:true,
+                            selectFirst: true,
+                            width: '100px',
+                            autoFill: true,
                             //source: ['this','real','tags'],
-                            source: function( request, response ) {
+                            source: function(request, response ) {
                                     var term = request.term;
                                     var results = $N.searchOntology(term, tagSearchCache);
                                     results = results.map(function(r) {
@@ -357,7 +358,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 								tagInput.next().css('border', '0');
 								tagInput.next().find().css('border', '0');
 							}
-							
+
                         }
                         /*onChange: function(elem, elem_tags) {
                                 var languages = ['php','ruby','javascript'];
@@ -369,13 +370,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         //autocomplete: { }
                         //autocomplete_url:'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
                     });
-                    
+
                 });
 
 
                 whenSaved.push(function(y) {
                     objName(y, nameInput.val());
-                    
+
                     for (var i in addedTags) {
                         objAddTag(y, i);
                     }
@@ -406,7 +407,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
         widgetsToAdd.push(tsw);
 
         var ts = $('<div/>').addClass('tagSuggestions').appendTo(tsw);
-        
+
         //widgetsToAdd.push(newEle('div').append('&nbsp;').attr('style','height:1em;clear:both'));
 
 
@@ -467,7 +468,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 				var taggerOptions;
 					p = newPopup('Select Tags for ' + nameInput.val(), true, true);
 					taggerOptions = [];
-			
+
 				var tagger = newTagger(taggerOptions, function(t) {
                     var y = getEditedFocus();
                     for (var i = 0; i < t.length; i++) {
@@ -479,13 +480,13 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 						}
                     }
                     update(y);
-					
+
 					if (p && p.dialog) p.dialog('close');
                 });
-				
+
 
 				p.append(tagger);
-				
+
             });
 
             var howButton = $('<button title="How/Why?" id="AddDescriptionButton"><i class="fa fa-edit"/></button>').click(function() {
@@ -494,7 +495,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
             var whenButton = $('<button title="When?" id="AddWhenButton" ><i class="fa fa-clock-o"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'timepoint', ''));
-            });;
+            });
 
             var whereButton = $('<button title="Where?"><i class="fa fa-map-marker"/></button>').click(function() {
                 update(objAddValue(getEditedFocus(), 'spacepoint', {}));
@@ -556,7 +557,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
 
                 var x = newPopup('Add Media', {
                     modal: true,
-                    width: "50%"
+                    width: '50%'
                 });
                 x.append(y);
 
@@ -594,8 +595,8 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             });
 
             addButtons.append(whatButton, howButton, whenButton, whereButton, whoButton, drawButton, webcamButton, uploadButton);
- 			addButtons.find('button').addClass("btn btn-default");
-			
+ 			addButtons.find('button').addClass('btn btn-default');
+
             D.prepend(menuWrap);
 
 
@@ -610,7 +611,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                         //store on server for public access (inter-server)
                         '<option value="7">Public</option>',
                         '<option value="7a">Anonymous</option>',
-                        '<option value="8">Advertise</option>' ).
+                        '<option value="8">Advertise</option>').
 						val(getEditedFocus().scope);
 
                 /*if (configuration.connection == 'static')
@@ -625,20 +626,20 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             }
 
             var saveButton = $('<button class="btn btn-primary" style="float:right"><b>Save</b></button>').click(function() {
-                
+
                 var e = getEditedFocus();
-                
-                if (e.scope === '7a') {                    
+
+                if (e.scope === '7a') {
                     e.scope = 7;
                 }
                 else {
                     e.author = $N.id();
                 }
-                
+
                 e.scope = parseInt(e.scope);
-                
+
                 objTouch(e);
-                
+
                 $N.pub(e, function(err) {
                     notify({
                         title: 'Unable to save.',
@@ -654,11 +655,11 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                 D.parent().dialog('close');
             });
 
-			var mwb = newDiv().css('float', 'right');			
+			var mwb = newDiv().css('float', 'right');
             mwb.append(saveButton);
-            if (scopeSelect)    mwb.append(scopeSelect);
-			if (tagInput)		mwb.append(tagInput);
-			
+            if (scopeSelect) mwb.append(scopeSelect);
+			if (tagInput)	mwb.append(tagInput);
+
 			menuWrap.append(mwb);
 
         }
@@ -703,7 +704,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
                                     missingProp.push(pid);
                     });
 
-                };
+                }
             }
 
             missingProp.forEach(function(p) {
@@ -718,7 +719,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
     }
 
     update(ix);
-	
+
 
     return D;
 }
@@ -746,8 +747,8 @@ function applyTagStrengthClass(e, s) {
 
 function newReplyPopup(x, onReplied) {
     x = $N.instance[x];
-    
-    var pp = newPopup("Reply to: " + x.name);
+
+    var pp = newPopup('Reply to: ' + x.name);
 
     function closeReplyDialog() {
         pp.dialog('close');
@@ -773,12 +774,12 @@ function newReplyPopup(x, onReplied) {
                     title: 'Error replying (' + x.id.substring(0, 6) + ')',
                     text: err,
                     type: 'Error'
-                })
+                });
             }, function() {
                 //$N.notice(rr);
                 notify({
                     title: 'Replied (' + x.id.substring(0, 6) + ')'
-                })
+                });
             });
 
             if (onReplied)
@@ -803,7 +804,7 @@ function newSimilaritySummary(x) {
             count++;
         }
     }
-    if (count == 0)
+    if (count === 0)
         return newDiv();
 
 
@@ -814,7 +815,7 @@ function newSimilaritySummary(x) {
                 var stf = v.strength || 1.0;
                 var st = parseFloat(stf * 100.0).toFixed(1);
                 var o = $N.getObject(v.value);
-                var name = o ? o.name : "?";
+                var name = o ? o.name : '?';
                 var li = $('<li></li>').appendTo(d);
                 var lia = $('<a>' + _s(name, 32, true) /*+ ' (' + st + '%) */ + '</a>').appendTo(li);
                 li.append('&nbsp;');
@@ -828,7 +829,7 @@ function newSimilaritySummary(x) {
     }
 
     function newSimilarityAreaMap(s) {
-        var d = newDiv().css("clear", "both");
+        var d = newDiv().css('clear', 'both');
 
         var width = 100;
         var height = 100;
@@ -841,11 +842,11 @@ function newSimilaritySummary(x) {
                 });
 
         var div = d3.selectAll(d.toArray())
-                .style("position", "relative")
-                .style("width", (width) + "%")
-                .style("height", "10em")
-                .style("left", 0 + "px")
-                .style("top", 0 + "px");
+                .style('position', 'relative')
+                .style('width', (width) + '%')
+                .style('height', '10em')
+                .style('left', 0 + 'px')
+                .style('top', 0 + 'px');
 
         var data = {
             name: '',
@@ -864,28 +865,28 @@ function newSimilaritySummary(x) {
 
         var color = d3.scale.category20c();
 
-        var node = div.datum(data).selectAll(".node")
+        var node = div.datum(data).selectAll('.node')
                 .data(treemap.nodes)
-                .enter().append("div")
-                .attr("class", "node")
-                .style("position", "absolute")
-                .style("border", "1px solid gray")
-                .style("overflow", "hidden")
-                .style("cursor", "crosshair")
-                .style("text-align", "center")
+                .enter().append('div')
+                .attr('class', 'node')
+                .style('position', 'absolute')
+                .style('border', '1px solid gray')
+                .style('overflow', 'hidden')
+                .style('cursor', 'crosshair')
+                .style('text-align', 'center')
                 .call(position)
                 .on('click', function(d) {
                     newPopupObjectView(d.id);
                 })
-                .style("background", function(d) {
+                .style('background', function(d) {
                     return color(d.name);
                 })
                 .text(function(d) {
                     return d.children ? null : d.name;
                 });
 
-        d3.selectAll("input").on("change", function change() {
-            var value = this.value === "count" ? function() {
+        d3.selectAll('input').on('change', function change() {
+            var value = this.value === 'count' ? function() {
                 return 1;
             } : function(d) {
                 return d.size;
@@ -899,17 +900,17 @@ function newSimilaritySummary(x) {
         });
 
         function position() {
-            this.style("left", function(d) {
-                return (d.x) + "%";
+            this.style('left', function(d) {
+                return (d.x) + '%';
             })
-                    .style("top", function(d) {
-                        return (d.y) + "%";
+                    .style('top', function(d) {
+                        return (d.y) + '%';
                     })
-                    .style("width", function(d) {
-                        return d.dx + "%";
+                    .style('width', function(d) {
+                        return d.dx + '%';
                     })
-                    .style("height", function(d) {
-                        return d.dy + "%";
+                    .style('height', function(d) {
+                        return d.dy + '%';
                     });
         }
         return d;
@@ -963,7 +964,7 @@ function _objectViewEdit() {
     }
     newPopupObjectEdit(x, true);
     return false;
-};
+}
 
 function _objectViewContext() {
     var that = $(this);
@@ -988,18 +989,18 @@ function _objectViewContext() {
 
     $(this).after(that.popupmenu);
     return false;
-};
+}
 
 function _addObjectViewPopupMenu(authored, target) {
     if (authored) {
         newEle('button').text('+').attr({
-            title: "Edit",
+            title: 'Edit',
             class: 'ObjectViewPopupButton'
         }).click(_objectViewEdit).appendTo(target);
     }
 
     newEle('button').html('&gt;').attr({
-        title: "Actions...",
+        title: 'Actions...',
         class: 'ObjectViewPopupButton'
     }).appendTo(target).click(_objectViewContext);
 }
@@ -1013,7 +1014,7 @@ var subjectTag = {
 
 function _newSubjectTagButtonClick() {
     var data = $(this).data();
-    
+
     var x = $N.instance[$(this).parent().parent().attr('xid')];
     if (!x) return;
     x = x.id;
@@ -1032,14 +1033,14 @@ function _newSubjectTagButtonClick() {
         defaultLikes.add(data.objProperty, x);
         defaultLikes.touch();
     }
-    
+
     $N.pub(defaultLikes, null, function(x) {
 		notify({
 			title: data.objTag,
 			text: 'Saved'
 		});
 	});
-    
+
     return false;
 }
 
@@ -1061,18 +1062,18 @@ function newObjectView(x, options) {
     var scale = options.scale;
     var depthRemaining = options.depthRemaining || 1;
     var depth = options.depth || depthRemaining;
-    var nameClickable = (options.nameClickable != undefined) ? options.nameClickable : true;
-    var showName = (options.showName != undefined) ? options.showName : true;
-    var showAuthorIcon = (options.showAuthorIcon != undefined) ? options.showAuthorIcon : true;
-    var showAuthorName = (options.showAuthorName != undefined) ? options.showAuthorName : true;
-    var hideAuthorNameAndIconIfZeroDepth = (options.hideAuthorNameAndIconIfZeroDepth != undefined) ? options.hideAuthorNameAndIconIfZeroDepth : false;
-    var showMetadataLine = (options.showMetadataLine != undefined) ? options.showMetadataLine : true;
-    var showActionPopupButton = (options.showActionPopupButton != undefined) ? options.showActionPopupButton : true;
-    var showReplyButton = (options.showReplyButton != undefined) ? options.showReplyButton : true;
-    var showSelectionCheck = (options.showSelectionCheck != undefined) ? options.showSelectionCheck : true;
-    var titleClickMode = (options.titleClickMode != undefined) ? options.titleClickMode : 'view';
-    var showTime = (options.showTime != undefined) ? options.showTime : true;
-    var transparent = (options.transparent != undefined) ? options.transparent : false;
+    var nameClickable = (options.nameClickable !== undefined) ? options.nameClickable : true;
+    var showName = (options.showName !== undefined) ? options.showName : true;
+    var showAuthorIcon = (options.showAuthorIcon !== undefined) ? options.showAuthorIcon : true;
+    var showAuthorName = (options.showAuthorName !== undefined) ? options.showAuthorName : true;
+    var hideAuthorNameAndIconIfZeroDepth = (options.hideAuthorNameAndIconIfZeroDepth !== undefined) ? options.hideAuthorNameAndIconIfZeroDepth : false;
+    var showMetadataLine = (options.showMetadataLine !== undefined) ? options.showMetadataLine : true;
+    var showActionPopupButton = (options.showActionPopupButton !== undefined) ? options.showActionPopupButton : true;
+    var showReplyButton = (options.showReplyButton !== undefined) ? options.showReplyButton : true;
+    var showSelectionCheck = (options.showSelectionCheck !== undefined) ? options.showSelectionCheck : true;
+    var titleClickMode = (options.titleClickMode !== undefined) ? options.titleClickMode : 'view';
+    var showTime = (options.showTime !== undefined) ? options.showTime : true;
+    var transparent = (options.transparent !== undefined) ? options.transparent : false;
     var xid = x.id;
     var replyCallback = options.replyCallback ? function(rx) { options.replyCallback(rx); } : null;
     var startMinimized = (options.startMinimized != undefined) ? options.startMinimized : false;
@@ -1130,7 +1131,7 @@ function newObjectView(x, options) {
             cd.prepend('Unable to find PDF source.');
         }
     }*/
-    
+
 
     var d = newDiv().attr({
         'xid': xid,
@@ -1138,18 +1139,18 @@ function newObjectView(x, options) {
     });
 
     if (!transparent)
-        d.addClass("ui-widget-content ui-corner-all");
+        d.addClass('ui-widget-content ui-corner-all');
 
     var oStyle = x.style;
     if (scale !== undefined)
-        d.attr('style', "font-size:" + ((scale) ? ((0.5 + scale) * 100.0 + '%') : ("100%")) + (oStyle ? '; ' + oStyle : ''));
+        d.attr('style', 'font-size:' + ((scale) ? ((0.5 + scale) * 100.0 + '%') : ('100%')) + (oStyle ? '; ' + oStyle : ''));
 
     var xn = x.name || '';
     if (x._class)
         xn += ' (tag)';
     if (x._property)
         xn += ' (property)';
-    
+
     var authorID = x.author;
 
     //d.append(cd);
@@ -1172,31 +1173,31 @@ function newObjectView(x, options) {
     }
 
 
-    
-    function minimize() {       
-        d.addClass('ObjectViewMinimized');       
+
+    function minimize() {
+        d.addClass('ObjectViewMinimized');
         d.removeClass('ObjectViewMaximized');
     }
-    
+
     function maximize() {
         d.removeClass('ObjectViewMinimized');
         d.addClass('ObjectViewMaximized');
         ensureMaximized();
     }
-    
+
     function toggleMaxMin() {
-        if (d.hasClass('ObjectViewMinimized'))                
+        if (d.hasClass('ObjectViewMinimized'))
             maximize();
         else
             minimize();
         reflowView();
         return false;
-    }       
-    
+    }
+
 
     //Name
     if (showName) {
-        
+
         var haxn = newEle('div').addClass('TitleLine').appendTo(d);
         if (startMinimized)
             haxn.click(toggleMaxMin);
@@ -1206,7 +1207,7 @@ function newObjectView(x, options) {
 
         if (!nameClickable) {
             haxn.append(xxn);
-        } else {        
+        } else {
             haxn.append(newEle('a').html(xxn).click(function() {
                 if ((xauthor === $N.id()) && (titleClickMode === 'edit'))
                     newPopupObjectEdit(xid, true);
@@ -1230,7 +1231,7 @@ function newObjectView(x, options) {
                         haxn.prepend(an, ': ');
                     } else {
                         haxn.prepend(newEle('a').html(an).click(function() {
-                            newPopupObjectView(a, true);         
+                            newPopupObjectView(a, true);
                             return false;
                         }), ':&nbsp;');
                     }
@@ -1238,15 +1239,15 @@ function newObjectView(x, options) {
             }
         }
     }
-    
+
     var maximized = false;
-    
+
     function ensureMaximized() {
         if (maximized)
             return;
-        
+
         maximized = true;
-        
+
         if (replies)
             replies.detach();
 
@@ -1255,11 +1256,11 @@ function newObjectView(x, options) {
         if (showSelectionCheck) {
             selectioncheck = newEle('input').attr({
                 'type': 'checkbox',
-                'class':'ObjectSelection'
+                'class': 'ObjectSelection'
             }).click(_refreshActionContext);
         }
 
-        var buttons = newDiv().attr('class','tagButtons ObjectViewButtons').prependTo(d);       
+        var buttons = newDiv().attr('class', 'tagButtons ObjectViewButtons').prependTo(d);
 
         if (showActionPopupButton)
             _addObjectViewPopupMenu($N.id() === x.author, buttons);
@@ -1267,7 +1268,7 @@ function newObjectView(x, options) {
         if (selectioncheck)
             buttons.prepend(selectioncheck);
 
-        
+
         if ((showMetadataLine) && (!x._class) && (!x._property)) {
             var mdl = newMetadataLine(x, showTime).appendTo(d);
 
@@ -1279,12 +1280,12 @@ function newObjectView(x, options) {
                     	return false;
                 	}),
 					' ',
-                    newSubjectTagButton("Like", "fa-thumbs-o-up", subjectTag.Like),
+                    newSubjectTagButton('Like', 'fa-thumbs-o-up', subjectTag.Like),
 					' ',
-                    newSubjectTagButton("Dislike", "fa-thumbs-o-down", subjectTag.Dislike ),
+                    newSubjectTagButton('Dislike', 'fa-thumbs-o-down', subjectTag.Dislike),
 					' ',
-                    newSubjectTagButton("Trust", "fa-check", subjectTag.Trust )
-                );                                    
+                    newSubjectTagButton('Trust', 'fa-check', subjectTag.Trust)
+                );
             }
         }
 
@@ -1301,10 +1302,10 @@ function newObjectView(x, options) {
             replies.appendTo(d);
 
     }
-    
+
     var r = x.reply;
     if (r) {
-        var vr = _.values(r);        
+        var vr = _.values(r);
 
         if (vr.length > 0) {
             if (!replies) {
@@ -1339,15 +1340,15 @@ function newObjectView(x, options) {
             replies = null;
         }
     }
-    
-    
+
+
     if (startMinimized) {
         minimize();
     }
     else {
         maximize();
-    }    
-    
+    }
+
     return d;
 }
 
@@ -1355,9 +1356,9 @@ function addNewObjectDetails(x, d, excludeTags) {
     if (x.value) {
         for (var i = 0; i < x.value.length; i++) {
             var t = x.value[i];
-            
+
             if (excludeTags)
-                if (excludeTags.indexOf(t.id)!==-1)
+                if (excludeTags.indexOf(t.id) !== -1)
                     continue;
 
             if (x._class) {
@@ -1369,9 +1370,8 @@ function addNewObjectDetails(x, d, excludeTags) {
                 if (!$N.property[t.id] && !isPrimitive(t.id))
                     continue;   //non-property tags are like classes, shown in metadata line
             }
-                
-            tt = newTagValueWidget(x, i, t, false);
-            d.append(tt);
+
+            d.append(newTagValueWidget(x, i, t, false));
         }
     }
 }
@@ -1381,9 +1381,9 @@ function newSpaceLink(spacepoint) {
     var lat = _n(spacepoint.lat);
     var lon = _n(spacepoint.lon);
     var mll = objSpacePointLatLng($N.myself());
-    
+
     var spacelink = newEle('a', true);
-    
+
     var text = '';
     if (mll) {
         var dist = '?';
@@ -1395,13 +1395,13 @@ function newSpaceLink(spacepoint) {
         if (dist === 0)
             text = ('[ Here ]');
         else
-            text = ('[' + _n(lat,2) + ',' + _n(lon, 2) + ':  ' + _n(dist) + ' km away]');
+            text = ('[' + _n(lat, 2) + ',' + _n(lon, 2) + ':  ' + _n(dist) + ' km away]');
     } else {
-        text = ('[' + _n(lat,2) + ',' + _n(lon,2) + ']');
-    }          
-    
+        text = ('[' + _n(lat, 2) + ',' + _n(lon, 2) + ']');
+    }
+
     spacelink.innerHTML = text;
-    
+
     return spacelink;
 }
 
@@ -1419,7 +1419,7 @@ function newMetadataLine(x, showTime) {
     var mdline = newDiv().addClass('MetadataLine');
 
     var e = [];
-    
+
     var ots = objTagStrength(x, false);
     for (var t in ots) {
         var s = ots[t];
@@ -1427,7 +1427,7 @@ function newMetadataLine(x, showTime) {
             continue;
 
         var tt = $N.class[t];
-        
+
         var taglink = newTagButton(tt || t, false, undefined, true);
         taglink.classList.add(getTagStrengthClass(s));
 
@@ -1436,7 +1436,7 @@ function newMetadataLine(x, showTime) {
     }
 
     var spacepoint = objSpacePoint(x);
-    if (spacepoint) {       
+    if (spacepoint) {
         e.push(newSpaceLink(spacepoint));
         e.push(' ');
     }
@@ -1448,23 +1448,23 @@ function newMetadataLine(x, showTime) {
             e.push($.timeago(new Date(ww)));
         }
     }
-    
+
     var numIn = $N.dgraph.inEdges(x.id);
     var numOut = $N.dgraph.outEdges(x.id);
     if ((numIn.length > 0) || (numOut.length > 0)) {
         e.push(' ');
-    }    
-    
-    if (numIn.length > 0) {
-        e.push( newA('&Larr;' + numIn.length, 'In links') );
     }
-    
+
+    if (numIn.length > 0) {
+        e.push(newA('&Larr;' + numIn.length, 'In links'));
+    }
+
     if (numOut.length > 0) {
         if (numIn.length > 0)
             e.push('|');
-        e.push( newA(numOut.length + '&Rarr;', 'Out links') );
+        e.push(newA(numOut.length + '&Rarr;', 'Out links'));
     }
-        
+
     mdline.append(e);
     return mdline;
 }

@@ -3,17 +3,17 @@ var webrtc;
 var channelsOpen = { };
 
 function newChannelPopup(channel) {
-	
+
 	if (channelsOpen[channel]) {
 		var w = channelsOpen[channel];
 		w.dialog('close');
 		delete channelsOpen[channel];
 		return;
 	}
-	
+
 	var o = $N.instance[channel];
 	if (!o) return;
-    
+
     var s = newPopupObjectView(o, {title: channel, width: '50%'}, {
         showMetadataLine: false,
         showName: false,
@@ -24,45 +24,45 @@ function newChannelPopup(channel) {
     /*if (configuration.webrtc) {
         s.append(newWebRTCRoster());
     }*/
-	
+
 	channelsOpen[channel] = s;
-	
+
     s.bind('dialogclose', function() {
 		delete channelsOpen[channel];
 	});
-    
+
     return s;
 }
 
 function newChatWidget(onSend, options) {
     var c = newDiv();
-    
-    options = options || { 
+
+    options = options || {
         localEcho: true
-    };        
-    
+    };
+
     var history = [];
     var log = newDiv().addClass('ChatLog').appendTo(c);
-            
+
     var input = newDiv().addClass('ChatInput').appendTo(c);
-    
+
     var textInput = $('<input type="text"/>').appendTo(input);
     textInput.keydown(function(e) {
        if (e.keyCode === 13) {
            var m = $(this).val();
            onSend(m);
            if (options.localEcho)
-              c.receive({a:$N.id(),m:m}); //local echo
+              c.receive({a: $N.id(), m: m}); //local echo
            $(this).val('');
        }
     });
-    
+
     function chatlineclick() {
         var line = $(this).parent();
         var n = new $N.nobject();
-        n.setName( line.find('span').html() );
-        
-        newPopupObjectEdit(n);        
+        n.setName(line.find('span').html());
+
+        newPopupObjectEdit(n);
     }
 
     var scrollbottom = function() {
@@ -71,7 +71,7 @@ function newChatWidget(onSend, options) {
 
     function newChatLine(l) {
         var d = newDiv();
-        
+
         if (l.a) {
             var A = $N.instance[l.a];
             if (A) {
@@ -81,35 +81,35 @@ function newChatWidget(onSend, options) {
                 d.append(newEle('a').html(l.a + ': '));
             }
         }
-        
+
         d.append(newEle('span').html(l.m));
-        
+
         //TODO scroll to bottom
-        
+
         return d;
     }
-    
+
     function updateLog() {
         log.empty();
         for (var i = 0; i < history.length; i++) {
             var h = history[i];
             log.append(newChatLine(h));
-        }            
-        scrollbottom();        
+        }
+        scrollbottom();
     }
     updateLog();
-    
+
     function appendLog(m) {
         history.push(m);
         log.append(newChatLine(m));
         scrollbottom();
     }
-    
+
     c.receive = function(m) {
        appendLog(m);
-       
-       if (m.a!==$N.id()) {
-           var aname = $N.label(m.a);         
+
+       if (m.a !== $N.id()) {
+           var aname = $N.label(m.a);
            notify({title: aname, text: m.m });
        }
     };
@@ -117,7 +117,7 @@ function newChatWidget(onSend, options) {
         textInput.val('Disconnected');
         textInput.attr('disabled', 'disabled');
     };
-    
+
     return c;
 }
 
@@ -125,10 +125,10 @@ function initWebRTC(w) {
     if (webrtc) {
         webrtc.destroy();
     }
-    
-    webrtc = new Peer( {host: window.location.hostname, port: window.location.port, path: '/peer'});
+
+    webrtc = new Peer({host: window.location.hostname, port: window.location.port, path: '/peer'});
     webrtc.connects = {};
-    
+
     // stun.stunprotocol.org (UDP and TCP ports 3478).
     /* https://gist.github.com/yetithefoot/7592580
      *  {url:'stun:stun01.sipphone.com'},
@@ -150,63 +150,63 @@ function initWebRTC(w) {
         {url:'stun:stun.voipstunt.com'},
         {url:'stun:stun.voxgratia.org'},
         {url:'stun:stun.xten.com'},
-     * 
+     *
      */
 	var currentID;
     webrtc.on('open', function(id) {
         $N.setWebRTC(id, true);
         currentID = id;
     });
-    
-    
+
+
     webrtc.on('connection', function(conn) {
         //TODO get remote peer's user's name
         var remotePeer = conn.peer;
         var remoteUser = getWebRTCUser(remotePeer);
         var remoteUserName = $N.label(remoteUser, remotePeer);
-        
-        notify({title:'Connecting', text: remoteUserName });
+
+        notify({title: 'Connecting', text: remoteUserName });
         var callWidget = newWebRTCCall(remotePeer, conn);
         webrtc.connects[remotePeer] = callWidget;
-        
+
     });
     webrtc.on('call', function(call) {
         if (webrtc.connects[call.peer]) {
             webrtc.connects[call.peer].onCallIncoming(call);
-        }        
+        }
     });
-    
-    
-    webrtc.on('error', function(e) { 
-        console.error('WebRTC', error) 
+
+
+    webrtc.on('error', function(e) {
+        console.error('WebRTC', error);
     });
-    webrtc.on('close', function() { 
+    webrtc.on('close', function() {
         $N.setWebRTC(currentID, false);
-        //console.log('WebRTC off') 
+        //console.log('WebRTC off')
     });
-    
+
 }
 
 function newWebRTCRoster() {
     if (!webrtc) return;
-    
+
     var r = newDiv().addClass('WebRTCRoster');
     var peers = newRosterWidget(true).appendTo(r);
-        
+
     return r;
 }
 
 //find which user in the roster has this id and get the right name
 function getWebRTCUser(w) {
     var r = $N.get('roster');
-    
+
     for (var k in r) {
         var v = r[k];
         if (Array.isArray(v)) {
-            if (v.indexOf(w)!=-1) return k;
+            if (v.indexOf(w) != -1) return k;
         }
     }
-    
+
     return w;
 }
 
@@ -214,11 +214,11 @@ function newWebRTCCall(webrtcid, incoming) {
     var targetUser = getWebRTCUser(webrtcid);
 
     var currentCall, currentStream, currentData;
-    
+
     function hangup() {
         if (currentData) {
             if (webrtc.connects[webrtcid] === p)
-                webrtc.connects[webrtcid] = null;        
+                webrtc.connects[webrtcid] = null;
 
             chat.disable();
             if (currentStream)
@@ -235,17 +235,17 @@ function newWebRTCCall(webrtcid, incoming) {
             currentStream = null;
         }
     }
-    
+
     var p = newPopup('Call: ' + $N.label(targetUser, webrtcid));
     p.bind('dialogclose', hangup);
-    
+
     var chat = newChatWidget(function(m) {
         if (currentData) {
             currentData.send(m);
         }
     });
     chat.appendTo(p).hide();
-    
+
     var callButton = newEle('button').html('Start Video').appendTo(p);
     var answerButton = newEle('button').html('Answer Call').appendTo(p).hide();
     var myVideo = newEle('video').css('width', '48%').appendTo(p).hide();
@@ -260,9 +260,9 @@ function newWebRTCCall(webrtcid, incoming) {
         answerButton.hide();
         muteVideoButton.hide();
         stopVideoButton.hide();
-        p.append('Video not available');                        
+        p.append('Video not available');
     }
-    
+
     function endPreviousCall() {
         if (currentCall) {
             currentCall.close();
@@ -273,13 +273,13 @@ function newWebRTCCall(webrtcid, incoming) {
             currentStream = null;
         }
     }
-    
+
     function newCall(call, stream) {
         endPreviousCall();
         currentCall = call;
         currentStream = stream;
     }
-        
+
     function playRemoteVideo(stream) {
         myVideo.show();
         theirVideo.show();
@@ -287,7 +287,7 @@ function newWebRTCCall(webrtcid, incoming) {
         theirVideo[0].play();
         callButton.hide();
         answerButton.hide();
-        
+
         muteVideoButton.off().click(function() {
             if (currentStream) {
                 if (currentStream.getVideoTracks().length > 0)
@@ -298,43 +298,43 @@ function newWebRTCCall(webrtcid, incoming) {
                         !(currentStream.getAudioTracks()[0].enabled);
             }
         }).show();
-        
+
         function endcall() {
             endPreviousCall();
             theirVideo.hide();
             myVideo.hide();
             stopVideoButton.hide();
             muteVideoButton.hide();
-            callButton.html('Start Video').attr('disabled',null);
+            callButton.html('Start Video').attr('disabled', null);
             callButton.show();
         }
-        
+
         stopVideoButton.off().click(endcall).show();
-        
+
         if (currentCall)
             currentCall.on('close', endcall);
     }
-    
-    function onDataIncoming(m) { 
-        chat.receive({a:targetUser, m:m});
+
+    function onDataIncoming(m) {
+        chat.receive({a: targetUser, m: m});
     }
-       
+
     if (incoming) {
         currentData = incoming;
     }
     else {
         currentData = webrtc.connect(webrtcid);
     }
-    
-    currentData.on('open', function(){
+
+    currentData.on('open', function() {
         chat.show();
         webrtc.connects[webrtcid] = p;
         currentData.on('data', onDataIncoming);
     });
     currentData.on('close', hangup);
     currentData.on('error', hangup);
-    
-    
+
+
     callButton.off().click(function() {
         callButton.html('Waiting for answer..');
         callButton.attr('disabled', 'disabled');
@@ -345,12 +345,12 @@ function newWebRTCCall(webrtcid, incoming) {
                 call.on('stream', playRemoteVideo);
             }
             else
-                disableVideo();            
+                disableVideo();
         });
     });
-    
-    
-    
+
+
+
     p.onCallIncoming = function(call) {
         callButton.hide();
         answerButton.show().off().click(function() {
@@ -358,7 +358,7 @@ function newWebRTCCall(webrtcid, incoming) {
                 callButton.hide();
                 newCall(call, stream);
                 if (stream) {
-                    call.answer(stream);       
+                    call.answer(stream);
                     call.on('stream', playRemoteVideo);
                 }
                 else
@@ -367,33 +367,33 @@ function newWebRTCCall(webrtcid, incoming) {
         });
     };
     p.onClose = hangup;
-    
+
     return p;
-    
+
 }
 
 function webRTCVideo(callPeer, target, callback) {
-    navigator.getUserMedia = ( navigator.getUserMedia ||
+    navigator.getUserMedia = (navigator.getUserMedia ||
                            navigator.webkitGetUserMedia ||
                            navigator.mozGetUserMedia ||
                            navigator.msGetUserMedia);
 
     if (navigator.getUserMedia) {
-        navigator.getUserMedia (
+        navigator.getUserMedia(
 
             // constraints
             { video: true, audio: true },
 
             // successCallback
             function(localMediaStream) {
-               target.attr('src', window.URL.createObjectURL(localMediaStream));               
+               target.attr('src', window.URL.createObjectURL(localMediaStream));
                target[0].play();
-               
+
                var call = null;
                if (callPeer) {
                    call = webrtc.call(callPeer, localMediaStream);
                }
-               
+
                if (callback)
                    callback(localMediaStream, call);
             },
@@ -405,10 +405,10 @@ function webRTCVideo(callPeer, target, callback) {
             }
         );
     } else {
-        console.log("getUserMedia not supported");
+        console.log('getUserMedia not supported');
         callback(null);
-    }    
-    
+    }
+
 }
 
 //http://simplewebrtc.com/

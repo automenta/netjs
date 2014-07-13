@@ -5,7 +5,7 @@ function isFocusClear() {
 
     if (f.name)
         return false;
-    
+
     if (f.value)
         if (f.value.length > 0)
             return false;
@@ -23,7 +23,7 @@ function isFocusClear() {
 function clearFocus() {
     $('#FocusKeywords').val('');
     $N.setFocus({when: null, where: null});
-    
+
     //userRelation = null
     $('#FocusClearButton').hide();
 }
@@ -34,18 +34,18 @@ function renderFocus(skipSet) {
     if (!skipSet) {
         $N.setFocus($N.focus());
     }
-    
+
     var fe = $('#FocusEdit');
-    
-    if (_focusMap!=null)
+
+    if (_focusMap != null)
         _focusMap.detach();
-    
+
     fe.empty();
 
     var newFocusValue = $N.focus() || { };
-    
+
     //function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange, excludeTags, onNameChange) {
-    
+
     var noe = newObjectEdit(newFocusValue, true, true, function(xx) {
         $N.setFocus(xx);
         renderFocus();
@@ -89,11 +89,11 @@ function renderFocus(skipSet) {
         fe.append(tt);
     }
     */
-    
+
     if (newFocusValue.when) {
     }
 
-    
+
     if (newFocusValue.userRelation) {
         if (newFocusValue.userRelation.itrust) {
             fe.append('Sources I Trust<br/>');
@@ -107,14 +107,14 @@ function renderFocus(skipSet) {
 		$N.on('change:p2p', function(node) {
 			$N.trigger('change:focus');
 		});
-	
+
     var who = newFocusValue.who;
     if (who) {
-        var w = newDiv().addClass('SourceFilter');		
+        var w = newDiv().addClass('SourceFilter');
         var sources = _.compact($N.authors());
         sources.push(null);
-				
-		//peers	
+
+		//peers
 		/*
 		var peers = $N.get('p2p');
 		if (peers) {
@@ -123,11 +123,11 @@ function renderFocus(skipSet) {
 			});
 		}
 		*/
-		
+
         sources.forEach(function(s) {
             if (s === null)
                 s = 'Anonymous';
-            
+
             var cb = $('<input type="checkbox" disabled/>')
 				.change(function() {
 					var checked = cb.is(':checked');
@@ -139,71 +139,71 @@ function renderFocus(skipSet) {
 					$N.setFocus(newFocusValue);
 					return false;
 				});
-            
-			
+
+
 			var label = $N.label(s);
 			var sublabel = null;
-			
+
 			var sourceDiv = newDiv().html(label).appendTo(w)
 					.addClass('Source')
 					.click(function() {
-						cb.attr('disabled',null);
+						cb.attr('disabled', null);
 						cb.click();
-						return false;						
+						return false;
 					});
 			var buttons = newDiv().appendTo(sourceDiv).addClass('buttons');
-			
+
 			if (s[0] == '^') {
-				sublabel = "Network";
-			}			
+				sublabel = 'Network';
+			}
 			else if (s[0] == '!') {
-				sublabel = "Channel";
+				sublabel = 'Channel';
 				var c = newEle('button').html('&gt;').attr('title', 'Talk').click(function() {
 					newChannelPopup(s);
 					return false;
 				});
 				buttons.append(c);
 			}
-			else {	
+			else {
 				var S = $N.instance[s];
 				if (S) {
 					var tags = objTags(S);
-					if (tags.indexOf('Human')!== -1) {
-						sublabel = 'Human';					
+					if (tags.indexOf('Human') !== -1) {
+						sublabel = 'Human';
 					}
 				}
 			}
-			
-			
+
+
 			if (sublabel) {
 				sourceDiv.append(newDiv().html(sublabel).addClass('sublabel'));
 			}
-			
+
 			if (who[s]) {
-                cb.attr('checked','true');
-				sourceDiv.addClass('selected');				
+                cb.attr('checked', 'true');
+				sourceDiv.addClass('selected');
 			}
-			
-				
+
+
 			var icon = newAvatarImage(s);
 			if (icon)
 				sourceDiv.prepend(icon);
 			sourceDiv.prepend(cb);
-        });        
-		
+        });
 
-		
-	
-		
-		
+
+
+
+
+
         fe.append(w);
     }
-    
+
 
     var where = objSpacePointLatLng(newFocusValue);
-    if (where) {        
+    if (where) {
         if (_focusMap) {
-            fe.append(_focusMap);            
+            fe.append(_focusMap);
         }
         else {
             var uu = duid();
@@ -235,7 +235,7 @@ function renderFocus(skipSet) {
             _focusMap = null;
         }
     }
-    
+
     /*
     var tc = newTagCloud(function(filter) {
         later(function() {
@@ -244,7 +244,7 @@ function renderFocus(skipSet) {
                 f.addTag(t, v);
             });
             $N.setFocus(f);
-            renderFocus(true);            
+            renderFocus(true);
         });
     });
     fe.append(tc);
@@ -256,31 +256,31 @@ function initFocusButtons() {
 
 	var minSidebarWidthWhenToggledOn = 250; //px
 
-	$( "#FocusEditWrap" ).resizable({
-		handles: "e",
-		resize: function( event, ui ) {
-			$( "#FocusEditWrap" ).css('right', 'auto');
-			$( "#FocusEditWrap" ).css('left', '0');
+	$('#FocusEditWrap').resizable({
+		handles: 'e',
+		resize: function(event, ui ) {
+			$('#FocusEditWrap').css('right', 'auto');
+			$('#FocusEditWrap').css('left', '0');
 		}
 	});
 
-	
+
     $('#FocusEditToggleButton').click(function() {
         if ($('#FocusEditWrap').is(':visible')) {
             $('#FocusEditWrap').hide(); //fadeOut();
 			reflowView();
         }
         else {
-			$("#FocusEditWrap" ).css('width', $("#FocusEditWrap" ).css('width'));
-			$("#FocusEditWrap" ).css('width', Math.max($("#FocusEditWrap" ).width(), minSidebarWidthWhenToggledOn) );
-			$("#FocusEditWrap" ).fadeIn();
+			$('#FocusEditWrap').css('width', $('#FocusEditWrap').css('width'));
+			$('#FocusEditWrap').css('width', Math.max($('#FocusEditWrap').width(), minSidebarWidthWhenToggledOn));
+			$('#FocusEditWrap').fadeIn();
 			reflowView();
         }
     });
 	if (configuration.focusEditDisplayStartup) {
 		$('#FocusEditToggleButton').click();
 	}
-	
+
 
 
     $('#FocusClearButton').click(function() {
@@ -294,12 +294,12 @@ function initFocusButtons() {
         renderFocus();
     });
     */
-    
+
     $('#FocusWhenButton').click(function() {
         if (!objFirstValue($N.focus(), 'timerange')) {
             objAddValue($N.focus(), {id: 'timerange', value: {
-                from: Date.now()-(1000*24*60*60), 
-                to: Date.now(), 
+                from: Date.now() - (1000 * 24 * 60 * 60),
+                to: Date.now(),
                 slider: function(f, t) {
                     $N.focus().when = [f, t];
                     renderFocus();
@@ -319,15 +319,15 @@ function initFocusButtons() {
 	var tagger = null;
     $('#FocusWhatButton').click(function() {
         var ft = $('#FocusTagger');
-        
+
         function hide() { $('#FocusTaggerPanel').hide(); }
-        
+
         if (ft.is(':visible')) {
             hide();
         }
         else {
 			$('#FocusTaggerPanel').show();
-			
+
             var taggerOptions = {
                 headerTarget: $('#FocusTaggerMenu'),
 				cancelButton: false,
@@ -345,14 +345,14 @@ function initFocusButtons() {
 				});
 			}
 
-            
-        }        
+
+        }
 
     });
-    
+
     $('#FocusWhereButton').click(function() {
         if (!objSpacePointLatLng($N.focus())) {
-            /*focusValue.where = _.clone(objSpacePoint($N.myself()) || 
+            /*focusValue.where = _.clone(objSpacePoint($N.myself()) ||
              {lat: configuration.mapDefaultLocation[0] , lon: configuration.mapDefaultLocation[0], planet: 'Earth'});*/
             objSetFirstValue($N.focus(), 'spacepoint', {lat: configuration.mapDefaultLocation[0], lon: configuration.mapDefaultLocation[1], planet: 'Earth'});
             renderFocus();
@@ -374,7 +374,7 @@ function initFocusButtons() {
        else {
            delete $N.focus().who;
            renderFocus();
-       }           
+       }
     });
 
     $('#FocusHowButton').click(function() {
@@ -424,7 +424,7 @@ function newFocusTagTree(currentFocus, onTagChanged) {
 
                         strength(1.0);
                         /*
-                         
+
                          var sd = $('<span/>').addClass('tagButtons').addClass('tagButtonsLeft').appendTo(t.parent());
                          //2 placeholders to match the CSS nth child
                          $('<button style="display: none"></button>').appendTo(sd);
@@ -433,15 +433,15 @@ function newFocusTagTree(currentFocus, onTagChanged) {
                          var p50Button =  $('<button title="50%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.5); });
                          var p75Button =  $('<button title="75%">&nbsp;</button>').appendTo(sd).click(function() {  strength(0.75); });
                          var p100Button = $('<button title="100%">&nbsp;</button>').appendTo(sd).click(function() {  strength(1.0); });
-                         
+
                          p100Button.addClass('tagButtonSelected');
-                         
+
                          var bb = [p25Button, p50Button, p75Button, p100Button];
                          _.each(bb, function(b) {
                          b.click(function() {
                          _.each(bb, function(c) { c.removeClass('tagButtonSelected'); });
                          b.addClass('tagButtonSelected');
-                         
+
                          });
                          });*/
                     }
@@ -488,7 +488,7 @@ function newLayersWidget() {
 
                 function addKML(label, url) {
                     kmlFolder.children.push({
-                        label: ('<span url="' + url + '" class="KMLLayer">' + label + '</span>'),
+                        label: ('<span url="' + url + '" class="KMLLayer">' + label + '</span>')
                     });
                 }
                 addKML('HAARP', '/kml/haarp.kml');
@@ -625,7 +625,7 @@ function newLayersWidget() {
      function updateTypeCounts() {
      for (var t in stc) {
      $('a:contains("' + t + '")').append(' '+ stc[t]);
-     }    
+     }
      }
      */
 
@@ -634,8 +634,8 @@ function newLayersWidget() {
 function newTagCloud(onChanged) {
     var tagcloud = newDiv().addClass('FocusTagCloud');
     var browseTagFilters = {};
-    
-    var f =  $N.focus();
+
+    var f = $N.focus();
     var ft = objTagStrength(f, false);
     _.each(ft, function(v, t) {
       browseTagFilters[t] = v;
@@ -648,22 +648,22 @@ function newTagCloud(onChanged) {
         var counts = _.values(tagcount);
         var minc = _.min(counts);
         var maxc = _.max(counts);
-        if (minc!=maxc) {
+        if (minc != maxc) {
             _.each(tagcount, function(v, k) {
-                tagcount[k] = (v - minc) / (maxc-minc);
+                tagcount[k] = (v - minc) / (maxc - minc);
             });
         }
-        
+
         var tags = _.keys(tagcount);
-        tags.sort(function(a,b) {
-           return tagcount[b] - tagcount[a]; 
+        tags.sort(function(a, b) {
+           return tagcount[b] - tagcount[a];
         });
-        
+
         tagcloud.empty();
 
         tags.forEach(function(k) {
 
-            var t = $N.tag(k);          
+            var t = $N.tag(k);
 
             var name;
             if (t !== undefined) {
@@ -675,26 +675,26 @@ function newTagCloud(onChanged) {
 
             function plusone() {
                 var v = browseTagFilters[k];
-                if (v === -1.0)     delete browseTagFilters[k];
-                else if (v === undefined)   browseTagFilters[k] = +1;
-                onChanged(browseTagFilters);                
+                if (v === -1.0) delete browseTagFilters[k];
+                else if (v === undefined) browseTagFilters[k] = +1;
+                onChanged(browseTagFilters);
             }
             function minusone() {
                 var v = browseTagFilters[k];
-                if (v === 1.0)     delete browseTagFilters[k];
-                else if (v === undefined)   browseTagFilters[k] = -1;
-                onChanged(browseTagFilters);                
+                if (v === 1.0) delete browseTagFilters[k];
+                else if (v === undefined) browseTagFilters[k] = -1;
+                onChanged(browseTagFilters);
             }
-            
+
             var ab = newTagButton(k, function() { }, false);
-            
+
             ab.bind('contextmenu', function() { return false; });
-            
+
             ab.mousedown(function(e) {
                 var v = browseTagFilters[k];
                 if (e.button === 2) {
                     if (v === -1)
-                        plusone();   
+                        plusone();
                     else
                         minusone();
                     e.preventDefault();  // return false; also works
@@ -705,13 +705,13 @@ function newTagCloud(onChanged) {
                         minusone();
                     else
                         plusone();
-                    return false;                                    
+                    return false;
                 }
             });
-            
+
 
             var ti = tagcount[k];
-            ab.css('font-size', 120.0 * ( 0.8  + 0.2 * ti) + '%');            
+            ab.css('font-size', 120.0 * (0.8 + 0.2 * ti) + '%');
             //ab.css('float','left');
 
             ab.removeClass('tagFilterInclude tagFilterExclude');
@@ -724,17 +724,17 @@ function newTagCloud(onChanged) {
             else {
             }
 
-            if (browseTagFilters[k]!==-1.0)
+            if (browseTagFilters[k] !== -1.0)
                 var downButton = newEle('button').html('-').click(function() {
                      minusone();
                      return false;
                 });
-            if (browseTagFilters[k]!==1.0)
-                var upButton = newEle('button').html('+').click(function() {                
+            if (browseTagFilters[k] !== 1.0)
+                var upButton = newEle('button').html('+').click(function() {
                      plusone();
                      return false;
                 });
-            
+
             ab.prepend(downButton, upButton);
             tagcloud.append(newEle('div').append(ab));
 
@@ -752,27 +752,27 @@ function newTagCloud(onChanged) {
 
 /*
  //KML
- {        
+ {
  if ($N.layer)
  delete $N.layer().kml;
- 
+
  $("#KMLLayers input").change(function() {
  var t = $(this);
  var url = t.attr('url');
  var checked = t.is(':checked');
- 
+
  var l = $N.layer();
- 
+
  if (!l.kml) l.kml = [];
- 
+
  if (checked) {
  l.kml.push(url);
  l.kml = _.unique( l.kml );
  }
  else {
  l.kml = _.without( l.kml, url);
- }                      
- 
+ }
+
  $N.save('layer', l);
  $N.trigger('change:layer');
  });
@@ -788,17 +788,17 @@ function newTagCloud(onChanged) {
  $("#url-tree").jstree("open_node", this);
  return false;
  } else {
- 
+
  var embedLocation = (this).href;
  $('#View').empty();
  $('#View').html('<iframe src="' + embedLocation + '" frameBorder="0" id="embed-frame"></iframe>');
  $("#View").removeClass("ui-widget-content");
  $('#View').addClass('view-indented');
- 
+
  $('#close-iframe').show();
- 
+
  var vm = $('#MainMenu');
- 
+
  var shown = vm.is(':visible');
  showAvatarMenu(!shown);
  e.preventDefault();

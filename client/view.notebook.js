@@ -1,9 +1,9 @@
 function newNotebookView(v) {
     var d = newDiv().appendTo(v);
-    
-    loadCSS("lib/jquery.terminal/jquery.terminal.css");
+
+    loadCSS('lib/jquery.terminal/jquery.terminal.css');
     $LAB
-        .script("lib/jquery.terminal/jquery.terminal-0.9.0.min.js")
+        .script('lib/jquery.terminal/jquery.terminal-0.9.0.min.js')
         .wait(function() {
             //<script src="lib/jquery.terminal/jquery.terminal-0.9.0.min.js"></script>
 
@@ -15,7 +15,7 @@ function newNotebookView(v) {
                         var result = window.eval(command);
                         if (result != undefined) {
                             var s = result.toString();
-                            if (s === "[object Object]") {
+                            if (s === '[object Object]') {
                                 s = JSON.stringify(result, null, 4);
                             }
                             term.echo(s);
@@ -28,16 +28,16 @@ function newNotebookView(v) {
             }, {  //http://terminal.jcubic.pl/api_reference.php#
                 greetings: '',
                 name: 'Notebook',
-                height: "100%",
-                width: "100%",
+                height: '100%',
+                width: '100%',
                 prompt: '> ',
                 completion: function(term, string, callback) {
                     var fields = string.split('.');
-                    if ((fields.length <= 2) && (fields.length>=1)) {
+                    if ((fields.length <= 2) && (fields.length >= 1)) {
                         console.log(fields);
-                        if (fields[0].indexOf("(")!=-1) {
+                        if (fields[0].indexOf('(') != -1) {
                             //hack to avoid calling functions
-                            callback([]);                                                
+                            callback([]);
                         }
                         else {
                             var ev = eval(fields[0]);
@@ -47,25 +47,25 @@ function newNotebookView(v) {
                                     functions = _.union(functions, _.keys(ev.__proto__));
                                 callback(
                                     _.map(functions, function(t) { return fields[0] + '.' + t; })
-                                );                    
+                                );
                             }
                             else {
                             }
                         }
-                        callback([]);                
+                        callback([]);
                         return;
                     }
-                },
+                }
             });
             window.terminal = d;
-            d.resize("100%", "100%");
+            d.resize('100%', '100%');
 
             d.onChange = function() {
 
             };
-            
+
         });
 
-        
+
 	return d;
 }

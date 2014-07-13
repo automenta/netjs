@@ -2,7 +2,7 @@ addView({
 	id: 'map',
 	name: 'Map',
 	icon: 'icon/view.map.svg',
-	start: function(v) {		
+	start: function(v) {
 
 		browseTagFilters = {};	//TEMPORARY
 
@@ -45,7 +45,7 @@ addView({
 
 			if (map2d) {
 				/*var m = renderOLMap(s, o, v);
-				 mm.onChange = m.onChange;       
+				 mm.onChange = m.onChange;
 				 mm.location = m.location;*/
 
 				mm = renderLeafletMap(v);
@@ -115,7 +115,7 @@ function renderMapMarker(x, createMarkerFunction) {
         'NuclearFacility': function() {
             rad = 7000;
             op = 0.3;
-            //fill = '#ff0';                    
+            //fill = '#ff0';
         },
         'Human': function() {
             rad = 200;
@@ -128,13 +128,13 @@ function renderMapMarker(x, createMarkerFunction) {
         'GoalCentroid': function() {
             rad = 200;
             op = 0.3;
-            //fill = '#fa3';                    
+            //fill = '#fa3';
         },
         'Item': function() {
             rad = 50;
             op = 0.2;
-            //fill = '#3af';                    
-        },
+            //fill = '#3af';
+        }
     };
 
 
@@ -216,7 +216,7 @@ function renderLeafletMap(v) {
         edit: {
             featureGroup: drawnItems
         },
-        position: "bottomleft"
+        position: 'bottomleft'
     });
     map.addControl(drawControl);
 
@@ -249,7 +249,7 @@ function renderLeafletMap(v) {
 
         if (!i)
             return testIcon;
-        
+
         if (!icons[i]) {
             icons[i] = L.icon({
                 iconUrl: i,
@@ -312,7 +312,7 @@ function renderLeafletMap(v) {
     });
 
     function onEachFeature(feature, layer) {
-        var popupContent = "";
+        var popupContent = '';
 
         if (feature.properties) {
             var name = feature.properties.name || '';
@@ -328,8 +328,8 @@ function renderLeafletMap(v) {
         m.on('mouseover', function(e) {
             later(function() {
                 tooltip.css({
-                    left:e.originalEvent.clientX,
-                    top:e.originalEvent.clientY                     
+                    left: e.originalEvent.clientX,
+                    top: e.originalEvent.clientY
                 }).html(label.substring(0, 40)).show();
             });
         }).on('mouseout', function(e) {
@@ -425,7 +425,7 @@ function renderLeafletMap(v) {
                 layers: l.layer,
                 format: 'image/png',
                 transparent: true,
-                attribution: ""
+                attribution: ''
             };
             /*if (l.crs) {
              if (l.crs == 'EPSG4326')
@@ -441,7 +441,7 @@ function renderLeafletMap(v) {
             var options = {
                 attribution: ''
             };
-            if (typeof template != "string") {
+            if (typeof template != 'string') {
                 options = template;
                 template = options.template;
 
@@ -455,7 +455,7 @@ function renderLeafletMap(v) {
                 options.time = d.getFullYear() + '-' + m + '-' + r;
             }
             if (options.reprojected) {
-                if (options.format.indexOf("png") != -1) {
+                if (options.format.indexOf('png') != -1) {
                     //put PNG layers above, since they usually contain transparent image that could see through to a solid JPG layer beneath
                     options.zIndex = 101;
                 }
@@ -467,7 +467,7 @@ function renderLeafletMap(v) {
             var tl = L.tileLayer(template, options);
 
             if (options.reprojected) {
-                notify({title: "Map Re-projected", text: "The '" + T.name + "' layer uses an alternate map projection.  It may not appear aligned with other layers."});
+                notify({title: 'Map Re-projected', text: "The '" + T.name + "' layer uses an alternate map projection.  It may not appear aligned with other layers."});
                 tl.reprojects = true;
             }
 
@@ -478,7 +478,7 @@ function renderLeafletMap(v) {
         }
         else if (T.dbpediaLayer) {
             //https://github.com/kr1/Leaflet.dbpediaLayer/
-            var lay = L.dbPediaLayer({lang: 'en', includeCities: true})
+            var lay = L.dbPediaLayer({lang: 'en', includeCities: true});
             lay.addTo(map);
             onAdded(lay);
         }
@@ -499,7 +499,7 @@ function renderLeafletMap(v) {
     var markers = new WeakMap();
     function getMarker(x) {
         var existing = markers.get(x);
-        if ((existing!=null) && (existing!==undefined))
+        if ((existing != null) && (existing !== undefined))
             return existing;
         if (existing === undefined) {
             var s = objSpacePoint(x);
@@ -530,7 +530,7 @@ function renderLeafletMap(v) {
                         var g = 1 - r;
                         var b = 0;
                         var a = 1.0;
-                                                
+
                         var eqCircle = L.circle([s.lat, s.lon], rad, {
                             stroke: true,
                             color: 'black',
@@ -540,7 +540,7 @@ function renderLeafletMap(v) {
                             fillOpacity: op
                         });
 
-                        m.extraGeometry = [ eqCircle ];
+                        m.extraGeometry = [eqCircle];
 
                         //ipx = parseInt(10 + mag * 6.0);
                     }
@@ -559,16 +559,16 @@ function renderLeafletMap(v) {
         }
         return null;
     }
-    
+
     function updateMap() {
 
-        renderItems(v, MAP_MAX_ITEMS, function(s, v, xxrr) {            
+        renderItems(v, MAP_MAX_ITEMS, function(s, v, xxrr) {
             nobjectLayer.clearLayers();
-            
+
             for (var i = 0; i < xxrr.length; i++) {
                 var x = xxrr[i][0];
                 //var r = xxrr[i][1];
-                
+
                 var m = getMarker(x);
                 if (m) {
 					try {
@@ -583,7 +583,7 @@ function renderLeafletMap(v) {
                 }
 
             }
- 
+
         });
 
         var focus = $N.get('focus');
@@ -665,7 +665,7 @@ function renderLeafletMap(v) {
     map.onChange = updateMap;
     map.stop = function() {
         map = null;
-    }
+    };
 
     return map;
 }
@@ -699,7 +699,7 @@ L.FeatureSelect = L.Class.extend({
          clickable: false,
          zIndexOffset: 1000
          }).addTo(map);
-         
+
          map.on('move', this._checkIntersections, this);*/
 
         /*
@@ -718,11 +718,11 @@ L.FeatureSelect = L.Class.extend({
      _handleIntersection: function(layer) {
      if (!this.layers[L.stamp(layer)]) {
      this.layers[L.stamp(layer)] = layer;
-     
+
      this.justSelected.push(layer);
      }
      },
-     
+
      _handleNoIntersection: function(layer) {
      if (this.layers[L.stamp(layer)]) {
      delete this.layers[L.stamp(layer)];
@@ -764,7 +764,7 @@ L.FeatureSelect = L.Class.extend({
             var layergs = layerg.getLayers();
             for (var j = 0; j < layergs.length; j++) {
                 var layer = layergs[j];
-                var type = "Point";
+                var type = 'Point';
                 var coords = [0, 0];
                 if (layer.feature) {
                     coords = layer.feature.geometry.coordinates,
@@ -830,7 +830,7 @@ L.FeatureSelect = L.Class.extend({
          layers: this.justSelected
          });
          }
-         
+
          if (this.justUnselected.length) {
          this.fire('unselect', {
          layers: this.justUnselected

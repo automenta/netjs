@@ -1,3 +1,4 @@
+"use strict";
 function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, onChange, onStrengthChange, onOrderChange, whenSliderChange) {
 	var tag = t.id || t;
 
@@ -9,10 +10,10 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
     var T = $N.object[tag] || { id: tag, name: tag };
     var isPrim = isPrimitive(tag);
     var isProp = T._property;
-    var isClass = T._class!==undefined;
+    var isClass = T._class !== undefined;
 	var isInstance = (!isPrim) && (!isProp) && (!isClass);
-    
-	
+
+
     var events = {
         onSave: whenSaved,
         onAdd: onAdd,
@@ -45,7 +46,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
     if (!isPrim)
         d.append(tagLabel);
-    
+
     /*if (!isPrim)
         d.append(newTagButton(tag, false));*/
 
@@ -54,7 +55,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
         var tagButtons = newDiv().addClass('tagButtons');
         /*d.hover(function() {
-         //tagButtons.fadeIn();			
+         //tagButtons.fadeIn();
          }, function() {
          //tagButtons.fadeOut();
          });*/
@@ -66,7 +67,7 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
          tagButtons.fadeOut();
          }
          });
-         
+
          tagButtons.hide();*/
 
         if (index > 0) {
@@ -110,31 +111,31 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 
         var removeButton = $('<button title="Remove">x</button>').addClass('tagButton').appendTo(tagButtons)
                 .mousedown(function() {
-                    if (confirm("Remove " + tag + "?"))
+                    if (confirm('Remove ' + tag + '?'))
                         onRemove(index);
                 });
 
         d.append(tagButtons);
 
         //d.hover(function(){ tagButtons.fadeIn(200);}, function() { tagButtons.fadeOut(200);});
-        //d.hover(function(){ tagButtons.show();}, function() { tagButtons.hide();});                
+        //d.hover(function(){ tagButtons.show();}, function() { tagButtons.hide();});
         //tagButtons.hide();
     }
 
-    
+
     var defaultValue = null;
 
     var type;
     if (isPrim) {
-        //tagLabel.hide();    
+        //tagLabel.hide();
         type = tag;
     }
 	else if (isInstance) {
 		type = 'instance';
 	}
-	
 
-   
+
+
     if (isProp) {
         type = T.extend;
         if (T.default) {
@@ -142,13 +143,13 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
         }
         d.addClass('propertySection');
     }
-    
+
 
     if (newTagValueWidget[type]) {
-        newTagValueWidget[type](x, index, t, T, editable, d, events);        
+        newTagValueWidget[type](x, index, t, T, editable, d, events);
     } else if (tag) {
-        newTagValueWidget.tag(x, index, t, T, editable, d, events);        
-    }    
+        newTagValueWidget.tag(x, index, t, T, editable, d, events);
+    }
 
 	if (!isInstance) {
 		if (T.name)
@@ -163,12 +164,12 @@ function newTagValueWidget(x, index, t, editable, whenSaved, onAdd, onRemove, on
 		//if T.name is empty, use arrow symbol
 		if (T.name === '')
 			tagLabel.innerHTML = '<i class="fa fa-long-arrow-right"></i>';
-		
+
 	}
 	else {
-		tagLabel.innerHTML='';
+		tagLabel.innerHTML = '';
 	}
-	
+
 
     if (t.description)
         d.append('<ul>' + t.description + '</ul>');
@@ -749,7 +750,7 @@ newTagValueWidget.timerange = function(x, index, v, prop, editable, d, events) {
             
             var o = newDiv();
             
-            function update() {
+            var update = function() {
                 var f = parseFloat(fromSlide.val())/100.0;
                 var t = parseFloat(toSlide.val())/100.0;
                 
@@ -764,7 +765,7 @@ newTagValueWidget.timerange = function(x, index, v, prop, editable, d, events) {
             
             update();
             
-            function slideChanged() {                
+            var slideChanged = function() {
                 update();
                 
                 var pf = v.value.s ? v.value.s[0] : undefined;
@@ -973,7 +974,7 @@ newTagValueWidget.object = function(x, index, t, prop, editable, d, events) {
         
         var value = t.value;
 
-        function updateTS(x) {
+        var updateTS = function(x) {
             var X = $N.object[x] || {
                 name: x
             };

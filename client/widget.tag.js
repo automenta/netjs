@@ -1,4 +1,5 @@
-function newTagger(options, onFinished, tagRestrictions, maxTags) {    
+"use strict";
+function newTagger(options, onFinished, tagRestrictions, maxTags) {
     var selected;
     var headerTarget;
     var addImmediately = false;
@@ -16,12 +17,12 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
 		cancelButton = options.cancelButton;
 		headerTarget = options.headerTarget;
     }
-    
+
     if (!selected)
         selected = [];
     if (!Array.isArray(selected))
         selected = [selected];
-    
+
     var tags = _.clone(selected) || [];
 
     var d = newDiv();
@@ -31,7 +32,7 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     var currentBrowser = null;
 
     var clearButton = $('<button title="Clear the selected tags">Clear</button>');
-    
+
     var b = $('<button class="btn-primary"><b>OK</b></button>');
 	if (!cancelButton)
 		b.hide();
@@ -46,25 +47,25 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
         }
         else {
 			tagsCombo.show();
-			clearButton.show();			                        
+			clearButton.show();
             b.html('<b>Select</b>');
-			
+
             for (var i = 0; i < tags.length; i++)
                 tagsCombo.append(newTagButton(tags[i]));
         }
     };
     tagsCombo.update();
 
-    function onTagAdded(t) {        
+    function onTagAdded(t) {
         if (addImmediately) {
             addImmediately(t);
             return;
         }
-        
+
         if (maxTags)
             if (tags.length >= maxTags)
                 return;
-        
+
         tags = _.unique([t].concat(tags));
 
         if (maxTags)
@@ -84,14 +85,14 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
     }
 
     var selectBar = $('<div/>').attr('id', 'tagSelectHeader').addClass('taggerHeader');
-    
+
 	var modeFunctions = [];
     function addOption(label, browserFunction) {
         var b = $('<button type="button">' + label + '</button>')
 					.appendTo(selectBar)
 					.click(function() {
 						loadBrowser(browserFunction);
-					});				
+					});
 		modeFunctions.push(browserFunction);
     }
     if (!tagRestrictions) {
@@ -117,13 +118,13 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
                 if (T)
                     addOption(T.name, newObjectSelector(T));
             }
-            
+
         });
     }
 
 	if (!options.addImmediately) {
 		var saveBar = $('<span/>').css('float', 'right');
-		tagsCombo.update();	
+		tagsCombo.update();
 		saveBar.append(tagsCombo);
 
 		clearButton.click(function() {
@@ -134,33 +135,33 @@ function newTagger(options, onFinished, tagRestrictions, maxTags) {
 				}
 		});
 		saveBar.append(clearButton);
-		
-		if (maxTags!==1) {
+
+		if (maxTags !== 1) {
 			b.click(function() {
 				onFinished(tags);
 			}).appendTo(saveBar);
 		}
 
-		selectBar.append(saveBar);		
+		selectBar.append(saveBar);
 	}
 
-    
 
-    if (headerTarget == undefined) {
-        later(function() {        
+
+    if (headerTarget === undefined) {
+        later(function() {
             d.parent().before(selectBar);
         });
     }
     else {
         headerTarget.html(selectBar);
     }
-        
+
 
     t.attr('style', 'clear: both');
     d.append(t);
 
 	selectBar.find('button').addClass('btn btn-default');
-	
+
     //default
     if (modeFunctions[0])
         loadBrowser(modeFunctions[0]);
@@ -204,7 +205,7 @@ function newNeedsBrowser() {
 
 function newTreeBrowser(selected, onTagAdded) {
     var e = newDiv().addClass('SelfTimeTagTree');
-	
+
     $('.TagChoice').remove();
 
     var prefix = 'S_';
@@ -212,7 +213,7 @@ function newTreeBrowser(selected, onTagAdded) {
     var _onTagAddedFunc = function() {
         onTagAdded($(this).attr('id').substring(prefix.length));
     };
-    
+
 	later(function() {
 		newTagTree({
 			target: e,
@@ -220,7 +221,7 @@ function newTreeBrowser(selected, onTagAdded) {
 				var ti = getTagIcon(id) || defaultIcons.unknown;
 
 				return {
-					label: '<button id="' + prefix + id + '" class="TagChoice" style="background-image: url('+ ti + ')">' +
+					label: '<button id="' + prefix + id + '" class="TagChoice" style="background-image: url(' + ti + ')">' +
 						   content + '</button>'
 				};
 			},
@@ -243,7 +244,7 @@ function newTagTree(param) {
     var newTagLayerDiv = param.newTagDiv;
 
     a.empty();
-	
+
 
     var tree = newDiv();
 
@@ -283,7 +284,7 @@ function newTagTree(param) {
             name = xi = i;
 
         var children = i.subclass || [];
-        
+
         var label = name;
         if (stc[xi]) {
             if (stc[xi] > 0)
@@ -327,10 +328,10 @@ function newTagTree(param) {
         root.push(otherFolder);
     }
 
-    _.each($N.classRoot, function (c, cid) {
+    _.each($N.classRoot, function(c, cid) {
         subtree(T, c);
     });
-    
+
     othersubtree(T);
 
     if (addToTree)
@@ -338,7 +339,7 @@ function newTagTree(param) {
 
     tree.appendTo(a);
 
-    later(function () {
+    later(function() {
         //a.hide();
         a.tree({
             data: T,
@@ -357,11 +358,11 @@ function newTagTree(param) {
 
         if (param.onCreated)
 			param.onCreated(a);
-		
+
 
 	});
-	
-	
+
+
     return tree;
 
 }
@@ -372,38 +373,38 @@ function newTagTree(param) {
 function newObjectSelector(T) {
     var maxDisplayedObjects = 64;
     var updatePeriodMS = 300;
-    
+
     return function(selected, onTagAdded) {
         var e = newDiv();
         var keywordFilter = null;
-        
+
         var keywordInput = $('<input type="text" placeholder="Keywords"/>');
-        keywordInput.bind("propertychange keyup input paste", function() {
+        keywordInput.bind('propertychange keyup input paste', function() {
            keywordFilter = keywordInput.val().toLowerCase();
            if (keywordFilter.length === 0)
                keywordFilter = null;
            update();
         });
         e.append(keywordInput);
-        
+
         e.append('<hr/>');
-        
+
         var d = newDiv().appendTo(e);
-        
+
         function _update() {
             d.empty();
-            
+
             var tl = T ? $N.objectsWithTag(T, false) : _.keys($N.objects());
             if (keywordFilter) {
                 tl = _.filter(tl, function(x) {
                     var O = $N.object[x];
                     if (O.name)
-                        return (O.name.toLowerCase().indexOf(keywordFilter)!==-1);
+                        return (O.name.toLowerCase().indexOf(keywordFilter) !== -1);
                     return false;
                 });
             }
-            
-            ol = tl.slice(0, maxDisplayedObjects);
+
+            var ol = tl.slice(0, maxDisplayedObjects);
             if (ol.length < tl.length) {
                 d.append('Only displaying the first ' + ol.length + ' objects.  Please narrow the query.<br/><br/>');
             }
@@ -419,10 +420,10 @@ function newObjectSelector(T) {
                 d.append(s);
             });
         }
-        
+
         var update = _.throttle(_update, updatePeriodMS);
         update();
-        
+
         return e;
-    };    
+    };
 }

@@ -13,9 +13,9 @@ function newUserView(v, userid) {
 		var operatorTags = getOperatorTags();
 
 		function getKnowledgeCodeTags(userid) {
-		
+
 			var tags = $N.getIncidentTags(userid, operatorTags);
-				    
+
 			for (var k in tags) {
 				var l = tags[k];
 				tags[k] = _.map(tags[k], function(o) {
@@ -25,7 +25,7 @@ function newUserView(v, userid) {
 					var allTags = objTags(O, false);
 					for (var m = 0; m < allTags.length; m++) {
 						var s = allTags[m];
-						if (operatorTags.indexOf(s)==-1) {
+						if (operatorTags.indexOf(s) == -1) {
 							firstNonOperatorTag = s;
 							break;
 						}
@@ -40,7 +40,7 @@ function newUserView(v, userid) {
 				    l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
 				}*/
 			}
-		
+
 			var user = $N.object(userid);
 			tags['@'] = objSpacePointLatLng(user);
 			tags['name'] = user.name;
@@ -58,7 +58,7 @@ function newUserView(v, userid) {
 
 		var location = tags['@'];
 		if (location) {
-			x += '<div class="Location">' + _n(location[0],3) + ',' + _n(location[1],3) + '</div>';
+			x += '<div class="Location">' + _n(location[0], 3) + ',' + _n(location[1], 3) + '</div>';
 			delete tags['@'];
 		}
 
@@ -70,7 +70,7 @@ function newUserView(v, userid) {
 
 		x += '<hr/>';
 
-	
+
 		for (var j = 0; j < operatorTags.length; j++) {
 		   	var i = operatorTags[j];
 			if (!tags[i]) continue;
@@ -80,8 +80,8 @@ function newUserView(v, userid) {
 		    if (stt)
 		        il = stt.name;
 
-		    var color = 'black'; 
-		        
+		    var color = 'black';
+
 		    //x += '<b style="color: ' + color + '">' + il + '</b>: ';
 			x += '<div class="tagSection ' + i + '_section">';
 
@@ -106,20 +106,20 @@ function newUserView(v, userid) {
 		}
 
 		d.append(x);
-	
+
 		var textCode = getUserTextCode(tags, user);
 		if (textCode.length > 0) {
-			d.append('<h2>Tag Summary (Text)</h2><pre>' + textCode + '</pre><br/>');			
+			d.append('<h2>Tag Summary (Text)</h2><pre>' + textCode + '</pre><br/>');
 		}
 
 		var jsonCode = getUserJSONCode(userid);
 
 		function simplifyJSON(j) {
 			//http://stackoverflow.com/questions/11233498/json-stringify-without-quotes-on-properties
-			return j.replace(/\"([^(\")"]+)\":/g,"$1:");  //This will remove all the quotes to make more compact
+			return j.replace(/\"([^(\")"]+)\":/g, '$1:');  //This will remove all the quotes to make more compact
 		}
 
-		d.append('<h2>Tag Code (JSON)</h2><pre class="UserTagCode">' + simplifyJSON(JSON.stringify(jsonCode, null, 4)) + '</pre><br/>');			
+		d.append('<h2>Tag Code (JSON)</h2><pre class="UserTagCode">' + simplifyJSON(JSON.stringify(jsonCode, null, 4)) + '</pre><br/>');
 
 		var jsonCodeCompact = simplifyJSON(JSON.stringify(jsonCode));
 		d.append('<h2>Tag Code (JSON Compact)</h2>' + jsonCodeCompact + '<br/>');
@@ -135,7 +135,7 @@ function newUserView(v, userid) {
 		d.append('<h2>QR Code</h2>');
 		d.append(newDiv(jid));
 		new QRCode(document.getElementById(jid), { text: jsonCodeCompact,
-			width : 512, 
+			width : 512,
 			height : 512,
 			typeNumber : 40,
 			colorDark : "#000000",
@@ -145,10 +145,10 @@ function newUserView(v, userid) {
 		*/
 
 		if (configuration.connection === 'websocket') {
-			var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>' );
+			var jsonProfileLink = $('<a href="/object/author/' + userid + '/json">Download Profile (JSON)</a>');
 			d.append('<hr/>', jsonProfileLink, '<br/>');
 		}
-		
+
 		/*{
 			var email = "email address"
 			var subject = "subject"
@@ -162,7 +162,7 @@ function newUserView(v, userid) {
 	else {
 		d.append('index of users');
 	}
-	
+
 	return d;
 }
 
@@ -173,7 +173,7 @@ function newSelfSummary(userid) {
 
 	U = new nobject(U);
 
-	x.name = U.name
+	x.name = U.name;
 	if (U.id == $N.id()) {
 		x.name = x.name + ' (Summary)';
 	}
@@ -187,9 +187,9 @@ function newSelfSummary(userid) {
 	var operatorTags = getOperatorTags();
 
 	function getKnowledgeCodeTags(userid) {
-	
+
 		var tags = $N.getIncidentTags(userid, operatorTags);
-			    
+
 		for (var k in tags) {
 			var l = tags[k];
 			tags[k] = _.map(tags[k], function(o) {
@@ -199,7 +199,7 @@ function newSelfSummary(userid) {
 				var allTags = objTags(O, false);
 				for (var m = 0; m < allTags.length; m++) {
 					var s = allTags[m];
-					if (operatorTags.indexOf(s)==-1) {
+					if (operatorTags.indexOf(s) == -1) {
 						firstNonOperatorTag = s;
 						break;
 					}
@@ -214,7 +214,7 @@ function newSelfSummary(userid) {
 			    l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
 			}*/
 		}
-	
+
 		var user = $N.instance[userid];
 		tags['@'] = objSpacePointLatLng(U);
 		tags['name'] = user.name;
@@ -227,7 +227,7 @@ function newSelfSummary(userid) {
 
 	var textCode = getUserTextCode(tags, U);
 	if (textCode.length > 0) {
-		x.addDescription('<pre>\n' + textCode + '</pre>');			
+		x.addDescription('<pre>\n' + textCode + '</pre>');
 	}
 
 	/*var jsonCode = getUserJSONCode(userid);
@@ -245,15 +245,15 @@ function newSelfSummary(userid) {
 }
 
 function isKnowledgeTag(t) {
-	return ['Do','DoTeach','DoLearn','LearnDo','TeachDo', 'Teach', 'Learn'].indexOf(t)!=-1;
+	return ['Do', 'DoTeach', 'DoLearn', 'LearnDo', 'TeachDo', 'Teach', 'Learn'].indexOf(t) != -1;
 }
 
-function getUserJSONCode(user) { 
+function getUserJSONCode(user) {
 	var objects = _.filter($N.objects(), function(v, k) {
 		if (!objIsPublic(v)) return false;
 
 		return (v.author == user);
-	});	
+	});
 	objects = _.map(objects, function(o) {
 		var n = objCompact(o);
 		delete n.author;
@@ -287,7 +287,7 @@ function getUserJSONCodeOLD(tags, user) {
 	_.each(operatorObjects, function(o) {
 		var O = $N.getObject(o);
 		var Oc = objCompact(O);
-		jc['objects'].push(Oc);	
+		jc['objects'].push(Oc);
 	});
 
 	/*var operatorTags = getOperatorTags();
@@ -297,7 +297,7 @@ function getUserJSONCodeOLD(tags, user) {
 		if (isKnowledgeTag(i)) {
 			if (!jc['Know']) jc['Know'] = { };
 
-			if (!tags[i]) continue;			
+			if (!tags[i]) continue;
 			for (var y = 0; y < tags[i].length; y++) {
 				var oid = tags[i][y][2];
 				var O = $N.getObject(oid);
@@ -310,7 +310,7 @@ function getUserJSONCodeOLD(tags, user) {
 		}
 		else {
 
-			if (!tags[i]) continue;							
+			if (!tags[i]) continue;
 
 			jc[i] = [];
 			for (var y = 0; y < tags[i].length; y++) {
@@ -345,31 +345,31 @@ function getUserTextCode(tags, user) {
 	function getTitleString(tl) {
 		var name = tl[0];
 		var tagID = tl[3];
-		if (name!=tagID)
+		if (name != tagID)
 			return name + ' [' + tagID + ']';
 		return name;
 	}
 	function getValueString(O, exceptTags) {
 		var s = '';
 		_.each(O.value, function(v) {
-			if (exceptTags.indexOf(v.id)==-1) {
+			if (exceptTags.indexOf(v.id) == -1) {
 				if (v.value)
-					s+= '     ' + (v.id == 'textarea' ? '' : (v.id + ': ')) + JSON.stringify(v.value) + '\n';
+					s += '     ' + (v.id == 'textarea' ? '' : (v.id + ': ')) + JSON.stringify(v.value) + '\n';
 				else
-					s+= '     ' + v.id;
+					s += '     ' + v.id;
 			}
 		});
-		if (s.length > 0) s= '\n' + s;
+		if (s.length > 0) s = '\n' + s;
 		return s;
 	}
 
 	//Knowledge Tags
 	var header = 'Know                                    L=========D=========T\n';
 	var chartColumn = header.indexOf('L');
-	for (var j = operatorTags.length-1; j >=0; j--) {
+	for (var j = operatorTags.length - 1; j >= 0; j--) {
 	   	var i = operatorTags[j];
 		if (isKnowledgeTag(i)) {
-			if (!tags[i]) continue;			
+			if (!tags[i]) continue;
 			for (var y = 0; y < tags[i].length; y++) {
 				var oid = tags[i][y][2];
 				var O = $N.getObject(oid);
@@ -380,28 +380,28 @@ function getUserTextCode(tags, user) {
 				processed[oid] = true;
 
 				var line = getTitleString(tags[i][y]);
-				var spacePadding = chartColumn - line.length-2;
+				var spacePadding = chartColumn - line.length - 2;
 				for (var n = 0; n < spacePadding; n++)
 					line += ' ';
 				var knowLevel = knowTagsToRange(O);
 				var chartIndex = Math.round(knowLevel * 10);
 				for (var n = -10; n <= 10; n++) {
-					if (n == chartIndex) line += '|'
+					if (n == chartIndex) line += '|';
 					else line += '-';
 				}
-				
-				s += '  ' + (line + getValueString(O, ['Do','Learn', 'Teach', tags[i][y][3]] ) + '\n').trim() + '\n';
-				
+
+				s += '  ' + (line + getValueString(O, ['Do', 'Learn', 'Teach', tags[i][y][3]]) + '\n').trim() + '\n';
+
 			}
 		}
 	}
 	if (s.length > 0) s = header + s;
-	s = nameline + '\n'  + s;
+	s = nameline + '\n' + s;
 
 	for (var j = 0; j < operatorTags.length; j++) {
 	   	var i = operatorTags[j];
 		if (!isKnowledgeTag(i)) {
-			if (!tags[i]) continue;			
+			if (!tags[i]) continue;
 			s += i + '\n';
 			for (var y = 0; y < tags[i].length; y++) {
 				var oid = tags[i][y][2];
@@ -409,7 +409,7 @@ function getUserTextCode(tags, user) {
 
 				if (!objIsPublic(O)) continue;
 
-				s += '  ' + getTitleString(tags[i][y]) + getValueString(O, [i,tags[i][y][3]]) + '\n';				
+				s += '  ' + getTitleString(tags[i][y]) + getValueString(O, [i, tags[i][y][3]]) + '\n';
 			}
 		}
 	}
@@ -434,21 +434,21 @@ function knowTagsToRange(x) {
 		LEARN = null;
 	}
 	if (LEARN) {
-		var total = LEARN + DO;						
-		LEARN/=total;
-		DO/=total;
-		
+		var total = LEARN + DO;
+		LEARN /= total;
+		DO /= total;
+
 		return -1 * LEARN;
 	}
 	else if (TEACH) {
-		var total = TEACH + DO;						
-		TEACH/=total;
-		DO/=total;
-		
+		var total = TEACH + DO;
+		TEACH /= total;
+		DO /= total;
+
 		return 1 * TEACH;
 	}
 	else {
 		return 0;
-	}					
+	}
 }
 
