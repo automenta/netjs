@@ -60,6 +60,6 @@
     "mocha": ""
   },
   "scripts": {
-    "test": "mocha server/test/test_{web,object,ontology}.js ; grunt analyze"
+    "test": "mocha server/test/test_{web,object,ontology}.js"
   }
 }
