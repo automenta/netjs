@@ -31,6 +31,8 @@
     "jsdom": "",
     "jsonpack": "",
     "levelup": "",
+    "level-queryengine":"", 
+    "jsonquery-engine":"",
     "lockit": "",
     "lockit-utils": "",
     "lodash": "",
@@ -58,6 +60,6 @@
     "mocha": ""
   },
   "scripts": {
-    "test": "mocha server/test/test_{web,object,ontology}.js"
+    "test": "mocha server/test/test_{web,object,ontology}.js ; grunt analyze"
   }
 }
