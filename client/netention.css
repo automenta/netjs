@@ -3,7 +3,14 @@
  * Discombobulated by @rezn8d
  */
 
-
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    font-family: Arial, sans;
+}
 
 
 .ui-autocomplete {
@@ -104,16 +111,12 @@ select {
 .ContentScroll {
     overflow: auto;
 }
-#teamContent {
-    width: 100%;
-    overflow: none;
-    height: 95%;
-}
+
 .DataViewFilter {
     background: transparent;
     color: white;
 }
-div.olMapViewport {
+.olMapViewport {
     z-index: 1;
 }
 
@@ -191,21 +194,8 @@ div.olMapViewport {
     padding: 0;
     opacity: 1.0 !important;
 }
-.ObjectViewButtons button {
-    border: 0 !important;
-    background: transparent !important;
-}
-.ObjectViewButtons * {
-    margin: 0 !important;
-    padding: 0;
-    padding-left: 2px;
-    padding-right: 2px;
-    margin: 0;
-    vertical-align: middle;
-}
-.ObjectViewButtons input {
-    opacity: 0.5;
-}
+
+
 
 .tagDescription {
     width: 98.5%;
@@ -266,7 +256,7 @@ div.olMapViewport {
 }
 
 .ObjectEditDiv .tag100 .tagButtons {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .ObjectEditDiv .tag0 .tagButtons button, 
@@ -315,8 +305,7 @@ div.olMapViewport {
     font-size: 90%;
     font-weight: normal;
 }
-.tagSectionEditable {
-}
+
 .tagSectionEditable .well {
 	margin-bottom: 5px !important;
 }
@@ -378,9 +367,7 @@ div.olMapViewport {
     border: 1px solid blue;
     background-color: rgba(255,255,255,0.1);
 }*/
-.tagSectionHovered {
-    background-color: rgba(255, 255, 255, 0.8);
-}
+
 .tagLink, .TagChoice {
     padding-left: 1.1em !important;    
     background-size: auto 1em;
@@ -462,18 +449,17 @@ div.olMapViewport {
     position: absolute;
     width: 100%;
     height: 100%;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     background-color: rgba(0,0,0,0.3);
-    z-index: 1000000;
+    z-index: 100000;
 /*    background: url('/theme/cybernetic/p2p_banner.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     background-attachment: fixed;*/
-    width: 100%;
-    height: 100%;
+
 }
 #LoadingSplash ul {
     margin: 0;
@@ -527,12 +513,7 @@ div.olMapViewport {
     -webkit-filter: none !important;
 }
 
-.ui-pnotify.stack-bottomleft {
-    bottom: 25px;
-    left: 25px;
-    top: auto;
-    right: auto;
-}
+
 #Menu {
     display: none;
 }
@@ -575,9 +556,9 @@ div.olMapViewport {
 #FocusDescription {
     width: 97%;
 }
-#FocusDescriptionSection,
-#FocusMapSection {} #FocusMapSection,
-#FocusUploadSection,
+
+
+#FocusMapSection, #FocusUploadSection,
 .FocusSection {
     margin-top: 1.0em;
 }
@@ -642,7 +623,7 @@ div.tagsinput input {
     clear: both;
 }
 .tagSuggestions {
-    margin: 0em;
+    margin: 0;
     overflow: auto;
     display: table;
     table-layout: fixed;
@@ -660,7 +641,6 @@ div.tagsinput input {
 #MatchedTypes button {
     margin: 0.2em;
     opacity: 0.5;
-    font-variant: italic;
 }
 #footer-span {
     position: absolute;
@@ -676,35 +656,17 @@ div.tagsinput input {
 #ViewSelect {
     float: left;
 }
-/*!
- * Properly formatted CSS section
- * everything above this line needs cleaning and moved below ~ @rezn8d
- */
 
-/* Global Rules */
 
-/* * { outline:none; } */
-
-/* removed because it was taking ~8% of CSS processing accorindg to Chrome profiler */
-
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    overflow: hidden;
-    font-family: Arial, sans;
-}
 .nobg {
     background: #000000 !important;
     background-image: none !important;
 }
 .shadow {
-    moz-box-shadow: 0px 0px 24px #000000;
-    -webkit-box-shadow: 0px 0px 24px #000000;
     box-shadow: 0px 0px 24px #000000;
+    -moz-box-shadow: 0px 0px 24px #000000;
+    -webkit-box-shadow: 0px 0px 24px #000000;
     -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')";
-    //filter: progid: DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
 }
 .left {
     float: left;
@@ -821,12 +783,11 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }*/
 
 
-.ViewControl {outline:none; text-decoration:none; }
+.ViewControl { text-decoration:none; }
 .ViewControl span {
     z-index:1000;
     display:inline;
     opacity:0;
-    margin-top:1em;
     margin-left:0px;
     position:absolute;
     /*transition: opacity 1s;
@@ -842,16 +803,7 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
     pointer-events: none;
 }
 
-.PopoutControl img {
-    /*height: 23px !important;*/
-}
 
-/* User Control Panel */
-
-#ViewMenu {}
-/*.toggle-submenu-absolute {
-        position:absolute; top: 55px; left: 5px; width: 45px; max-width: 45px;
-}*/
 
 #ViewMenu button, #ViewMenu input {
     margin: 0;
@@ -1027,10 +979,8 @@ div.olControlZoom { top:auto !important; bottom:8px !important; }*/
 }
 
 #themeSelect {
-    width: 250px;
     clear: both;
     font-size: 1.2em;
-    padding: 3px;
 }
 /* Grid, List View */
 
@@ -1128,9 +1078,7 @@ div.objectView .metadataReplyButton {
     background-color: transparent;
     cursor: pointer;
 }
-.objectView .TitleLine  {
-    /*word-break: break-all;*/
-}
+
 
 .objectView h2 {
     font-size: 105%;
@@ -1418,7 +1366,6 @@ div.objectView .metadataReplyButton {
     color: black !important;
 }
 .WikiBrowser .hlist li {
-    margin: 0;
     display: inline;
     white-space: nowrap;
 }
@@ -1487,11 +1434,7 @@ div.objectView .metadataReplyButton {
 .SelfTimeFilled {
     background-color: rgba(125, 125, 125, 0.2);
 }
-.SelfTimeTagTree {}
-/*
-*   pNotify: jquery.pnotify.default.css
-* 	Version: 1.2.0. Link: http://pinesframework.org/pnotify/   
-*/
+
 
 .ui-pnotify {
     position: relative;
@@ -1716,10 +1659,8 @@ html > body .ui-pnotify {
         text-align: left;
     }
     #identity {
-        //float: left;
         text-align: left;
         position: fixed;
-        //top: 69px;
         top: 0px;
         right: 0px;
     }
@@ -1794,35 +1735,6 @@ div.olControlZoom {
 } 
 
 
-#welcomeoptions {} 
-
-.PluginID {
-    width: 14%;
-    left: auto;
-    float: left;
-    margin: 0.25em;
-    padding: 0.25em;
-    min-height: 5em;
-}
-.PluginSettings {
-    width: 50%;
-    float: right;
-}
-.PluginID h3 {
-    line-height: 15px;
-}
-.PluginID span {} .PluginEnabled {
-    background-color: rgba(128, 255, 128, 0.4);
-    border: 5px solid gray;
-}
-.PluginDisabled {
-    background-color: rgba(255, 128, 128, 0.4);
-    border: 5px solid gray;
-}
-.PluginInvalid {
-    color: gray;
-    border: 5px solid #ddd;
-}
 #FocusMainMenu button span {
     padding: 3px;
     margin: 0;

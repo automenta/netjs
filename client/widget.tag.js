@@ -1,6 +1,6 @@
 "use strict";
 function newTagger(options, onFinished, tagRestrictions, maxTags) {
-    var selected;
+    var selected, inDialog;
     var headerTarget;
     var addImmediately = false;
 	var cancelButton = true;
