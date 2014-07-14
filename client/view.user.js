@@ -12,41 +12,6 @@ function newUserView(v, userid) {
 
 		var operatorTags = getOperatorTags();
 
-		function getKnowledgeCodeTags(userid) {
-
-			var tags = $N.getIncidentTags(userid, operatorTags);
-
-			for (var k in tags) {
-				var l = tags[k];
-				tags[k] = _.map(tags[k], function(o) {
-					var O = $N.getObject(o);
-					var strength = objTagStrength(O, false);
-					var firstNonOperatorTag = null;
-					var allTags = objTags(O, false);
-					for (var m = 0; m < allTags.length; m++) {
-						var s = allTags[m];
-						if (operatorTags.indexOf(s) == -1) {
-							firstNonOperatorTag = s;
-							break;
-						}
-					}
-					return [O.name, strength[k], o, firstNonOperatorTag];
-				});
-				tags[k] = tags[k].sort(function(a, b) {
-					return b[1] - a[1];
-				});
-
-				/*for (var i = 0; i < l.length; i++) {
-				    l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
-				}*/
-			}
-
-			var user = $N.object(userid);
-			tags['@'] = objSpacePointLatLng(user);
-			tags['name'] = user.name;
-
-			return tags;
-		}
 
 		var tags = getKnowledgeCodeTags(userid);
 		var x = '';
@@ -186,41 +151,6 @@ function newSelfSummary(userid) {
 
 	var operatorTags = getOperatorTags();
 
-	function getKnowledgeCodeTags(userid) {
-
-		var tags = $N.getIncidentTags(userid, operatorTags);
-
-		for (var k in tags) {
-			var l = tags[k];
-			tags[k] = _.map(tags[k], function(o) {
-				var O = $N.getObject(o);
-				var strength = objTagStrength(O, false);
-				var firstNonOperatorTag = null;
-				var allTags = objTags(O, false);
-				for (var m = 0; m < allTags.length; m++) {
-					var s = allTags[m];
-					if (operatorTags.indexOf(s) == -1) {
-						firstNonOperatorTag = s;
-						break;
-					}
-				}
-				return [O.name, strength[k], o, firstNonOperatorTag];
-			});
-			tags[k] = tags[k].sort(function(a, b) {
-				return b[1] - a[1];
-			});
-
-			/*for (var i = 0; i < l.length; i++) {
-			    l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
-			}*/
-		}
-
-		var user = $N.instance[userid];
-		tags['@'] = objSpacePointLatLng(U);
-		tags['name'] = user.name;
-
-		return tags;
-	}
 
 	var tags = getKnowledgeCodeTags(userid);
 	delete tags['name'];
@@ -244,9 +174,43 @@ function newSelfSummary(userid) {
 	return x;
 }
 
-function isKnowledgeTag(t) {
-	return ['Do', 'DoTeach', 'DoLearn', 'LearnDo', 'TeachDo', 'Teach', 'Learn'].indexOf(t) != -1;
+
+function getKnowledgeCodeTags(userid) {
+
+	var tags = $N.getIncidentTags(userid, operatorTags);
+
+	for (var k in tags) {
+		var l = tags[k];
+		tags[k] = _.map(tags[k], function(o) {
+			var O = $N.getObject(o);
+			var strength = objTagStrength(O, false);
+			var firstNonOperatorTag = null;
+			var allTags = objTags(O, false);
+			for (var m = 0; m < allTags.length; m++) {
+				var s = allTags[m];
+				if (operatorTags.indexOf(s) == -1) {
+					firstNonOperatorTag = s;
+					break;
+				}
+			}
+			return [O.name, strength[k], o, firstNonOperatorTag];
+		});
+		tags[k] = tags[k].sort(function(a, b) {
+			return b[1] - a[1];
+		});
+
+		/*for (var i = 0; i < l.length; i++) {
+			l[i] = l[i].substring(l[i].indexOf('-')+1, l[i].length);
+		}*/
+	}
+
+	var user = $N.instance[userid];
+	tags['@'] = objSpacePointLatLng(U);
+	tags['name'] = user.name;
+
+	return tags;
 }
+
 
 function getUserJSONCode(user) {
 	var objects = _.filter($N.objects(), function(v, k) {
@@ -324,131 +288,7 @@ function getUserJSONCodeOLD(tags, user) {
 
 	return jc;
 }
-function dloc(l) {
-	return [parseFloat(l[0].toFixed(3)), parseFloat(l[1].toFixed(3))];
-}
 
-function objIsPublic(o) {
-	return (o.scope || configuration.defaultScope) >= ObjScope.Global;
-}
 
-function getUserTextCode(tags, user) {
-	var s = '';
-	var nameline = user.name + ' (' + user.id + ')';
-	var location = user.earthPoint();
-	if (location)
-		nameline += ' @' + JSON.stringify(dloc(location));
 
-	var operatorTags = getOperatorTags();
-	var processed = {};
-
-	function getTitleString(tl) {
-		var name = tl[0];
-		var tagID = tl[3];
-		if (name != tagID)
-			return name + ' [' + tagID + ']';
-		return name;
-	}
-	function getValueString(O, exceptTags) {
-		var s = '';
-		_.each(O.value, function(v) {
-			if (exceptTags.indexOf(v.id) == -1) {
-				if (v.value)
-					s += '     ' + (v.id == 'textarea' ? '' : (v.id + ': ')) + JSON.stringify(v.value) + '\n';
-				else
-					s += '     ' + v.id;
-			}
-		});
-		if (s.length > 0) s = '\n' + s;
-		return s;
-	}
-
-	//Knowledge Tags
-	var header = 'Know                                    L=========D=========T\n';
-	var chartColumn = header.indexOf('L');
-	for (var j = operatorTags.length - 1; j >= 0; j--) {
-	   	var i = operatorTags[j];
-		if (isKnowledgeTag(i)) {
-			if (!tags[i]) continue;
-			for (var y = 0; y < tags[i].length; y++) {
-				var oid = tags[i][y][2];
-				var O = $N.getObject(oid);
-
-				if (!objIsPublic(O)) continue;
-
-				if (processed[oid]) continue;
-				processed[oid] = true;
-
-				var line = getTitleString(tags[i][y]);
-				var spacePadding = chartColumn - line.length - 2;
-				for (var n = 0; n < spacePadding; n++)
-					line += ' ';
-				var knowLevel = knowTagsToRange(O);
-				var chartIndex = Math.round(knowLevel * 10);
-				for (var n = -10; n <= 10; n++) {
-					if (n == chartIndex) line += '|';
-					else line += '-';
-				}
-
-				s += '  ' + (line + getValueString(O, ['Do', 'Learn', 'Teach', tags[i][y][3]]) + '\n').trim() + '\n';
-
-			}
-		}
-	}
-	if (s.length > 0) s = header + s;
-	s = nameline + '\n' + s;
-
-	for (var j = 0; j < operatorTags.length; j++) {
-	   	var i = operatorTags[j];
-		if (!isKnowledgeTag(i)) {
-			if (!tags[i]) continue;
-			s += i + '\n';
-			for (var y = 0; y < tags[i].length; y++) {
-				var oid = tags[i][y][2];
-				var O = $N.getObject(oid);
-
-				if (!objIsPublic(O)) continue;
-
-				s += '  ' + getTitleString(tags[i][y]) + getValueString(O, [i, tags[i][y][3]]) + '\n';
-			}
-		}
-	}
-
-	return s;
-}
-
-function knowTagsToRange(x) {
-	var s = objTagStrength(x, false);
-
-	//if (s['DoLearn'])...
-
-	var DO = s['Do'] || 0;
-	var LEARN = s['Learn'] || 0;
-	var TEACH = s['Teach'] || 0;
-
-	//console.log(LEARN, DO, TEACH);
-
-	if (LEARN && TEACH) {
-		console.log(x + ' has conflicting Learn and Teach strengths');
-		TEACH = null;
-		LEARN = null;
-	}
-	if (LEARN) {
-		var total = LEARN + DO;
-		LEARN /= total;
-		DO /= total;
-
-		return -1 * LEARN;
-	}
-	else if (TEACH) {
-		var total = TEACH + DO;
-		TEACH /= total;
-		DO /= total;
-
-		return 1 * TEACH;
-	}
-	else {
-		return 0;
-	}
-}
 

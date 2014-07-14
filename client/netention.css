@@ -2486,9 +2486,12 @@ svg {
 	right: 0;
 }
 .User .panel-heading .AvatarIcon {
-	height: 2em;
-	width: 2em;
+	height: 4em;
+	width: 4em;
 	margin:0;
+}
+.User .panel-heading select {
+	font-size: 200%;
 }
 .User .panel-heading select, .User .panel-heading button  {
 	height: 2em;	
