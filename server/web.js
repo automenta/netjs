@@ -952,7 +952,7 @@ module.exports = function(options) {
 				js += 'configuration.siteDescription=\'' + options.description + '\';\n';
 				js += 'configuration.requireIdentity=' + (options.permissions.connect < 3) + ';\n';
 				js += 'configuration.connection=\'' + (options.web.connection) + '\';\n';
-				js += 'configuration.webrtc=\'' + (options.web.webrtc) + '\';\n';
+				js += 'configuration.webrtc=' + (options.web.webrtc) + ';\n';
 				
 				js += data;
 				res.send(js);

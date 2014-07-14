@@ -34,13 +34,15 @@ addView({
 			return data;
 		}
 
-		var roster = newDiv().addClass('Roster panel panel-default').appendTo(v);
-		var rosterHeading = $('<div class="panel-heading">Online</div>'/* <span class="badge">42</span></div>*/);
-		rosterHeading.append(newShoutLine().css('float', 'right').css('width', '40%').css('text-align', 'right'));
-		rosterHeading.append('<br/>');
-		roster.append(rosterHeading);
-		roster.append(newRosterWidget().addClass('panel-body'));
-
+		if ($N.roster) {
+			var roster = newDiv().addClass('Roster panel panel-default').appendTo(v);
+			var rosterHeading = $('<div class="panel-heading">Online</div>'/* <span class="badge">42</span></div>*/);
+			rosterHeading.append(newShoutLine().css('float', 'right').css('width', '40%').css('text-align', 'right'));
+			rosterHeading.append('<br/>');
+			roster.append(rosterHeading);
+			roster.append(newRosterWidget().addClass('panel-body'));
+		}
+		
 
 		var categories = newDiv().addClass('CategoryPreviews panel panel-default').appendTo(v);
 		categories.append('<div class="panel-heading">News</div>');

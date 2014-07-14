@@ -145,6 +145,7 @@ function netention(f) {
 
                 $N.set('clientID', targetID);
                 $N.set('otherSelves', _.unique(os));
+				
 
 				$N.sessionStart();
             } else {
@@ -940,6 +941,17 @@ function netention(f) {
 			$N.messages.push(message);
 			$N.trigger('change:messages');
 			$('#NotificationList i').addClass('blink');
+		},
+		
+		newUser: function(name) {
+			var u = uuid();
+			var uo = u;
+			var o = new nobject(uo, name);
+			o.author = uo;
+			o.scope = ObjScope.Global;
+			o.addTag('Human');
+			o.addTag('User');
+			return o;			
 		}
     });
 
@@ -1110,8 +1122,17 @@ $(document).ready(function() {
 
 					$N.loadAll(function() {
 						if ($N.myself() === undefined) {
-							openSelectProfileModal('Start a New Profile');
+							if (!configuration.enableAnonymous) {
+								openSelectProfileModal('Start a New Profile');
+							}
+							else {
+								//start a default anonymous user
+								var x = $N.newUser('Anonymous');
+								$N.become(x);
+							}							
 						} else {
+							$N.indexOntology();
+
 							$N.sessionStart();
 						}
 					});

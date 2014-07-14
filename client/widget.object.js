@@ -146,7 +146,7 @@ function newTagButton(t, onClicked, isButton, dom) {
         b.innerHTML = t.name || t.id;
         b.setAttribute('taguri', t.id || (t + ''));
     }
-    else {
+    else if (t) {
         b.innerHTML = t.id || t;
     }
 
@@ -466,7 +466,7 @@ function newObjectEdit(ix, editable, hideWidgets, onTagRemove, whenSliderChange,
             var whatButton = $('<button title="What?"><i class="fa fa-plus-square"/></button>').click(function() {
 				var p;
 				var taggerOptions;
-					p = newPopup('Select Tags for ' + nameInput.val(), true, true);
+					p = newPopup('Select Tags', true, true);
 					taggerOptions = [];
 
 				var tagger = newTagger(taggerOptions, function(t) {

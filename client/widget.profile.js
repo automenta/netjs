@@ -1,5 +1,40 @@
 //Personas (profile) widgets
 
+function openSelectProfileModal(title) {
+    if (!title)
+        title = 'Profiles';
+    //var d = newPopup(title, {width: '450px', modal: true});
+    
+    $('#LoadingSplash').show();
+    
+    var s;
+    var ident = identity();
+    if (ident == ID_AUTHENTICATED) {
+        s = 'Authenticated: ' + getCookie('account');
+    }
+    else if (ident == ID_ANONYMOUS) {
+        s = 'Anonymous';
+    }
+    else {
+        s = 'Unidentified';
+    }
+    
+    $('#LoadingSplashTitle').html(
+            (configuration.connection == 'static') ?
+            '' :
+            s
+            );
+    
+    $('#LoadingSplashTitle').append(
+            (configuration.connection == 'static') ?
+            '' :
+            ' (<a href="/logout">Logout</a>)'
+            );
+    $('#AuthSelect').hide();
+    $('#ProfileSelect').html(newProfileWidget());
+}
+
+
 function newProfileWidget() {
     var d = newDiv();
 
@@ -152,13 +187,7 @@ function newNewProfileWidget(whenFinished) {
         }
         var email = emailField.val();
 
-        var u = uuid();
-        var uo = u;
-        var o = new nobject(uo, name);
-        o.author = uo;
-        o.scope = ObjScope.Global;
-        o.addTag('Human');
-        o.addTag('User');
+		var o = $N.newUser(name);
 
         if (extraProperties) {
             for (var i = 0; i < extraProperties.length; i++) {

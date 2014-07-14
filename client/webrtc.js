@@ -178,7 +178,7 @@ function initWebRTC(w) {
 
 
     webrtc.on('error', function(e) {
-        console.error('WebRTC', error);
+        console.error('WebRTC', e);
     });
     webrtc.on('close', function() {
         $N.setWebRTC(currentID, false);

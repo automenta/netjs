@@ -614,8 +614,9 @@ $(document).ready(function() {
     whenResized();
 
 
-
-    $('title').html(configuration.siteName);
+	if ($('title').html().length === 0)
+    	$('title').html(configuration.siteName);
+		
     $('#loginLogo').attr('src', configuration.loginLogo);
     if (configuration.favicon)
         $('#favicon').attr('href', configuration.favicon);
@@ -915,39 +916,6 @@ function showAvatarMenu(b) {
     }
 }
 
-function openSelectProfileModal(title) {
-    if (!title)
-        title = 'Profiles';
-    //var d = newPopup(title, {width: '450px', modal: true});
-    
-    $('#LoadingSplash').show();
-    
-    var s;
-    var ident = identity();
-    if (ident == ID_AUTHENTICATED) {
-        s = 'Authenticated: ' + getCookie('account');
-    }
-    else if (ident == ID_ANONYMOUS) {
-        s = 'Anonymous';
-    }
-    else {
-        s = 'Unidentified';
-    }
-    
-    $('#LoadingSplashTitle').html(
-            (configuration.connection == 'static') ?
-            '' :
-            s
-            );
-    
-    $('#LoadingSplashTitle').append(
-            (configuration.connection == 'static') ?
-            '' :
-            ' (<a href="/logout">Logout</a>)'
-            );
-    $('#AuthSelect').hide();
-    $('#ProfileSelect').html(newProfileWidget());
-}
 
   
 

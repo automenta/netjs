@@ -80,8 +80,6 @@ module.exports = DB = function (collection, dbOptions) {
 				console.error('with revisions=true, setAll() may not work');
 			}
 			
-			console.log('--seta;;',values);				
-
 			db.bulkDocs(values, done);
 		},
 
@@ -90,8 +88,7 @@ module.exports = DB = function (collection, dbOptions) {
 			value._id = id;
 
 			function insert() {
-				opts.docs = [value];
-				
+				opts.doc = [value];
 				db.bulkDocs(opts, done);				
 				
 				/*
@@ -115,13 +112,17 @@ module.exports = DB = function (collection, dbOptions) {
 				*/
 			}
 
-			if (!revisions) {
+			//FOR UNKNOWN REASON The non-revision version of insert doesn't work here..
+			
+			
+			/* if (!revisions) {
 				//if not revisions, no need to check existing document
-				//opts.new_edits = false;
+				opts.new_edits = false;
 				insert();
 				return;
-			}
-			else {
+			}			
+			else  */
+			{
 				db.get(id).then(function (existing) {
 					if (existing) {
 						if (compareFilter) {
