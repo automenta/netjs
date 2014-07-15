@@ -88,15 +88,15 @@ module.exports = DB = function (collection, dbOptions) {
 			value._id = id;
 
 			function insert() {
-				opts.doc = [value];
-				db.bulkDocs(opts, done);				
+				//opts.doc = [value];
+				//db.bulkDocs(opts, done);				
 				
-				/*
-				db.put(value, opts, function(err, result) {
-					console.log('put', err, result, value, opts);
+				
+				db.put(value, function(err, result) {
+					//console.log('put', err, result, value, opts);
 					done(err, result);
 				});
-				*/
+				
 				/*
 					.then(function (response) {
 						
@@ -110,18 +110,17 @@ module.exports = DB = function (collection, dbOptions) {
 							done(err, null);
 					});
 				*/
-			}
-
-			//FOR UNKNOWN REASON The non-revision version of insert doesn't work here..
+			}			
 			
-			
-			/* if (!revisions) {
+			/*if (!revisions) {
 				//if not revisions, no need to check existing document
 				opts.new_edits = false;
 				insert();
 				return;
 			}			
-			else  */
+			else
+			*/
+			
 			{
 				db.get(id).then(function (existing) {
 					if (existing) {
@@ -133,9 +132,14 @@ module.exports = DB = function (collection, dbOptions) {
 						}
 						value._rev = existing._rev;
 					}
+					
 					insert();
-				}).catch(function (err) {
-					insert();
+				}).catch(function (err) {		
+					db.put(value, function(err, result) {
+						done(err, result);
+					});
+					
+					//insert();
 				});
 			}
 		},

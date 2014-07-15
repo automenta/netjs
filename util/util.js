@@ -850,12 +850,12 @@ var Ontology = function(db, tagInclude, target) {
 				return callback('Missing ID');
 		}
 
-		/*
+		
 		if (typeof (x.add) == "function") {
 			//get a non-object copy
 			x = _.clone(x);
 		}
-		*/
+		
 
 		x._id = x.id;
 
