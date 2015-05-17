@@ -940,7 +940,7 @@ var Ontology = function(db, tagInclude, target) {
 
         that.graphDistanceTag = ['Trust'];
 
-        that.dgraph = new graphlib.Digraph();
+        that.dgraph = new graphlib.Graph();
         that.ugraph = new graphlib.Graph();
 
         that.ugraph._nodes = that.dgraph._nodes = that.object; //both graphs use the same set of nodes
@@ -1280,11 +1280,17 @@ var Ontology = function(db, tagInclude, target) {
         //TODO index author, replyTo
 
         if (!keepGraphNode) {
-            that.dgraph._inEdges[x.id] = {};
-            that.dgraph._outEdges[x.id] = {};
-            that.ugraph._incidentEdges[x.id] = {};
-            //that.dgraph.addNode(x.id, x);
-            //that.ugraph.addNode(x.id, x);
+            try  {
+                if (x && x.id) {
+                        that.dgraph._inEdges[x.id] = {};
+                        that.dgraph._outEdges[x.id] = {};
+                        that.ugraph._incidentEdges[x.id] = {};
+                        //that.dgraph.addNode(x.id, x);
+                        //that.ugraph.addNode(x.id, x);
+                        }
+            } catch (e) { } //HACK 
+                        
+                    
         }
 
         {
@@ -1333,7 +1339,8 @@ var Ontology = function(db, tagInclude, target) {
         {
             var outs = x.out || {};
             if (that.dgraph.hasNode(x.id)) {
-                var existingOutEdges = that.dgraph.outEdges(x.id);
+                var existingOutEdges = that.dgraph.outEdges ? that.dgraph.outEdges(x.id) : [];
+                var existingOutEdges = existingOutEdges || [];
 
                 //remove non-existing edges
                 for (var i = 0; i < existingOutEdges.length; i++) {
@@ -1370,7 +1377,8 @@ var Ontology = function(db, tagInclude, target) {
             if (that.dgraph.hasNode(x.id)) {
 
                 var existingInEdges = that.dgraph.inEdges(x.id);
-
+                var existingInEdges = existingInEdges || [];
+                
                 //remove non-existing edges
                 for (var i = 0; i < existingInEdges.length; i++) {
                     var E = existingInEdges[i];
@@ -1406,22 +1414,28 @@ var Ontology = function(db, tagInclude, target) {
             var withs = x.with || {};
             if (that.ugraph.hasNode(x.id)) {
 
-                var existingEdges = that.ugraph.incidentEdges(x.id);
+                try {
+                
+                    var existingEdges = that.ugraph.incidentEdges(x.id);
 
-                //remove non-existing edges
-                for (var i = 0; i < existingEdges.length; i++) {
-                    var E = existingEdges[i];
-                    var nodes = that.ugraph.incidentNodes(E);
-                    var otherNode = (nodes[0] === x.id) ? nodes[1] : nodes[0];
-                    var value = that.ugraph.edge(E);
-                    if (withs[otherNode] === undefined) {
-                        delete value[x.id];
-                        if (_.keys(value).length === 0)
-                            that.ugraph.delEdge(E);
-                        else
-                            that.ugraph.edge(E, value);
+                    //remove non-existing edges
+                    for (var i = 0; i < existingEdges.length; i++) {
+                        var E = existingEdges[i];
+                        var nodes = that.ugraph.incidentNodes(E);
+                        var otherNode = (nodes[0] === x.id) ? nodes[1] : nodes[0];
+                        var value = that.ugraph.edge(E);
+                        if (withs[otherNode] === undefined) {
+                            delete value[x.id];
+                            if (_.keys(value).length === 0)
+                                that.ugraph.delEdge(E);
+                            else
+                                that.ugraph.edge(E, value);
+                        }
                     }
-                }
+                    }
+                    catch (e) {
+                    console.error('all this graph stuff needs replaced', e);
+                    }
             }
 
             //add existing edges

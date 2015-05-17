@@ -844,7 +844,7 @@ module.exports = function(options) {
 			compression = function(req, res, next){ next(); };
 		}
 
-		express.use(require('connect-dyncache')());
+		//express.use(require('connect-dyncache')());
 
 
 		var httpServer = http.createServer(express);
@@ -862,7 +862,7 @@ module.exports = function(options) {
 
 			//override serve to provide etag caching
 			express.get('/socket.io.cache.js', function(req, res){
-				res.autoEtag();
+				//res.autoEtag();
 				res.setHeader('Content-Type', 'application/javascript');
 				res.statusCode = 200;
 				res.end(socketIOclientSource);
@@ -875,7 +875,7 @@ module.exports = function(options) {
 				io.enable('browser client gzip');          // gzip the file
 			}
 
-			io.set('log level', 0);                    // reduce logging
+			io.set('log level', options.log);                    // reduce logging
 			io.set('transports', [// enable all transports (optional if you want flashsocket)
 				'websocket',
 		//        , 'flashsocket'
@@ -982,7 +982,7 @@ module.exports = function(options) {
 			express.get('/ontology.json', function(req, res) {
 				//var format = req.params.format;
 
-				res.autoEtag();
+				//res.autoEtag();
 				try { res.set('Content-type', 'text/json'); } catch (e) { }
 				res.end($N.ontologyJSON());
 
