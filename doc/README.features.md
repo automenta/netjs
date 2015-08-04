@@ -14,7 +14,7 @@
 
 # Web Server
 Designed to serve clients and connect to other servers and services to form an organic, decentralized P2P network of semantically relevant data exchange.
- * **HTTP AJAJ REST API** (_Express framework_)
+ * **HTTP AJAX REST API** (_Express framework_)
  * **WebSockets API** (_socket.io_)
    * Real-time server push
  * **WebRTC** Text, Audio, Video Secure Networking for Direct Browser->Browser Communication
