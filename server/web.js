@@ -781,10 +781,16 @@ module.exports = function(options) {
 
 
 		var bodyParser = require('body-parser');
-
+		var cookieParser = require('cookie-parser');
 		var cookieSession = require('cookie-session');
+		express.use(bodyParser.json());
+		express.use(bodyParser.urlencoded());
+		express.use(cookieParser());
+		express.use(cookieSession({
+		  secret: 'not so secret'
+		}));
 
-		if (options.web.connection!=='static') {
+		if (options.web.connection !== 'static') {
 			var security = require('./security.js');
 			security.db = {
 				collection: 'users',
@@ -813,19 +819,13 @@ module.exports = function(options) {
 			var Lockit = require('lockit');
 			//var lockitUtils = require('lockit-utils');
 			var lockit = new Lockit(security);
-			
-			var cookieParser = require('cookie-parser')("abc123__");			
+			express.use(lockit.router);
 
-			express.use(cookieParser);
-			express.use(cookieSession({
-				secret: 'abc123__'
-			}));
-
-			express.use(bodyParser.json({strict: false}));
+		
 			express.use(require('parted')()); //needed for file uploads
 			express.disable('x-powered-by');
 
-			express.use(lockit.router);
+
 			express.use(require('corser').create());
 		}
 

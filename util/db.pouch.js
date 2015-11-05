@@ -39,7 +39,7 @@ module.exports = DB = function (collection, dbOptions) {
 			if (collection == 'objects') {
 				if (dbOptions.web) {
 					$N.once('ready', function() {
-						require('./db.pouch.web.js').start(dbOptions.web);
+						require('../server/db.pouch.web.js').start(dbOptions.web);
 					});
 				}
 
