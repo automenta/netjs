@@ -31,17 +31,17 @@ exports.options = {
 	
 	//LevelUp/LevelDown 
 	//	status: working	
-	db: {
+	/*db: {
 		type: 'levelup'
-	},
+	},*/
 	
 	
 	
-	/*
+	
 	//LevelUp/MemDown - in-memory storage (activity is not saved)
 	//	status: working
 	db: null,
-	*/
+	
 	
 	/*
 	//PouchDB - runs on LevelUp but adds revisions and other CouchDB features
