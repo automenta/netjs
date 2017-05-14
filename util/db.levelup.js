@@ -35,6 +35,7 @@ module.exports = DB = function (collection, dbOptions) {
 
 	dbOptions.valueEncoding = 'json';
 
+    
 	var rawDB = (dbOptions.backend === 'memdown') ?
 		levelup(dbOptions)
 		: levelup(collection,dbOptions);
@@ -43,6 +44,7 @@ module.exports = DB = function (collection, dbOptions) {
 
 	var db = levelQuery(rawDB);
 	db.query.use(jsonqueryEngine());
+
 
 	function prefilter(value) {
 		if (!value.modifiedAt)

@@ -190,9 +190,9 @@ describe("Ontology getTagged", function() {
 		var tags = $N.getTags(a);
 		
 		assert(tags.length==3);
-		assert(_.contains(tags,'trust'));
-		assert(_.contains(tags,'y'));
-		assert(_.contains(tags,'x'));
+		assert(-1!==_.indexOf(tags,'trust'));
+		assert(-1!==_.indexOf(tags,'y'));
+		assert(-1!==_.indexOf(tags,'x'));
 		
 		$N.add(class1);
 		

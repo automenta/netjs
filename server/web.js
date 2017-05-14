@@ -516,11 +516,18 @@ module.exports = function(options) {
         if (!req)
             return undefined;
         if (req.session) {
-            var sessionID = req.session._ctx.cookies['express:sess'];            
-			if (req.session.name) {
-            	var key = req.session.name;
-				return key;
-			}
+            
+            
+            const cc = req.session._ctx.req.cookies;
+            
+            
+            if (cc) {
+                var sessionID = cc['session']; //express:sess'];            
+                if (req.session.name) {
+                    var key = req.session.name;
+                    return key;
+                }
+            }
         }
 
         return undefined;
@@ -583,7 +590,7 @@ module.exports = function(options) {
         }
         else {
             options.users[key].push(uid);
-            options.users[key] = _.unique(options.users[key]);
+            options.users[key] = _.union(options.users[key]);
         }
 
         //HACK clean users?
@@ -844,7 +851,7 @@ module.exports = function(options) {
 			compression = function(req, res, next){ next(); };
 		}
 
-		express.use(require('connect-dyncache')());
+		//express.use(require('connect-dyncache')());
 
 
 		var httpServer = http.createServer(express);
@@ -857,12 +864,12 @@ module.exports = function(options) {
 			var io = require('socket.io')(httpServer, {
 			});
 
-			var socketIOclientSource = fs.readFileSync(require.resolve('socket.io/node_modules/socket.io-client/socket.io.js'), 'utf-8');
+			var socketIOclientSource = fs.readFileSync(require.resolve('socket.io-client/socket.io.js'), 'utf-8');
 			var socketIOclientGenerated = new Date();
 
 			//override serve to provide etag caching
 			express.get('/socket.io.cache.js', function(req, res){
-				res.autoEtag();
+				//res.autoEtag();
 				res.setHeader('Content-Type', 'application/javascript');
 				res.statusCode = 200;
 				res.end(socketIOclientSource);
@@ -982,7 +989,7 @@ module.exports = function(options) {
 			express.get('/ontology.json', function(req, res) {
 				//var format = req.params.format;
 
-				res.autoEtag();
+				//res.autoEtag();
 				try { res.set('Content-type', 'text/json'); } catch (e) { }
 				res.end($N.ontologyJSON());
 
@@ -1659,8 +1666,8 @@ module.exports = function(options) {
 				if (enabled) {
 					if (!u.webRTC)
 						u.webRTC = [];
-					u.webRTC.push(webrtcID);
-					u.webRTC = _.unique(u.webRTC);
+					u.webRTC.push(webrtcID); //TODO use Set
+					u.webRTC = _.union(u.webRTC);
 				}
 				else {
 					if (u.webRTC) {
@@ -1844,7 +1851,7 @@ module.exports = function(options) {
 						var keyRequired = (options.permissions['authenticate_to_create_profiles'] !== false);
 						if (!targetObject) {
 							var selves = getClientSelves(account);
-							if (_.contains(selves, target)) {
+							if (_.indexOf(selves, target)!==-1) {
 								if (onResult)
 									onResult(targetObjectID);
 							}
@@ -1886,7 +1893,7 @@ module.exports = function(options) {
 							//Authenticated and clientID specified, check that the user actually owns that clientID
 							var possibleClients = getClientSelves(account);
 							if (possibleClients) {
-								if (_.contains(possibleClients, cid)) {
+								if (-1!==_.indexOf(possibleClients, cid)) {
 								}
 								else {
 									cid = possibleClients[possibleClients.length - 1];
@@ -1987,7 +1994,7 @@ module.exports = function(options) {
 						}
 						else {
 							var os = getClientSelves(account);
-							if (_.contains(os, objectID)) {
+							if (-1!==_.indexOf(os, objectID)) {
 								deleteObject(objectID, whenFinished, null, socket.clientID);
 							}
 							else {
